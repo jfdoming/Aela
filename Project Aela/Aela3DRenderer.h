@@ -18,7 +18,6 @@
 #include "AelaWindow.h"
 #include "AelaError.h"
 #include "controls.hpp"
-// wtfffrff
 
 class Aela3DBasicShadowRenderer {
 	public:
@@ -114,8 +113,6 @@ class Aela3DRenderer {
 		std::vector<AelaModel> models;
 
 		void addFlag(Aela3DRendererFlag flag);
-		void renderShadows();
-		void renderTextures();
 
 		void setupRendering();
 		void setupGLFeatures();
