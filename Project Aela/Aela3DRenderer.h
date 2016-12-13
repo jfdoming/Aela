@@ -18,7 +18,7 @@
 #include "AelaWindow.h"
 #include "AelaError.h"
 #include "controls.hpp"
-// wtf
+// wtfffrff
 
 class Aela3DBasicShadowRenderer {
 	public:
