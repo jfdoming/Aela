@@ -97,5 +97,5 @@ void Aela3DBasicRenderer::renderShadows(AelaModel * model) {
 }
 
 void Aela3DBasicRenderer::renderTextures(AelaModel * model) {
-	textureRenderer.renderTextures(model);
+	//textureRenderer.renderTextures(model);
 }

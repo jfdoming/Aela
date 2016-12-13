@@ -34,7 +34,8 @@ class Aela3DBasicTextureRenderer {
 
 		}
 
-		void renderTextures(AelaModel * model);
+		void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthMatrixID, GLuint programID,
+			GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID);
 };
 
 class Aela3DBasicRenderer {

@@ -71,16 +71,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glfw-3.2.1.bin.WIN32\include\GLFW;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glfw-3.2.1.bin.WIN32\lib-vc2015;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\SDL2-2.0.5\include;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glfw-3.2.1.bin.WIN32\include\GLFW;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\SDL2-2.0.5\lib\x86;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glfw-3.2.1.bin.WIN32\lib-vc2015;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\SDL2-2.0.5\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\SDL2-2.0.5\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -93,7 +93,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\SDL2-2.0.5\include;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\AntTweakBar-1.16\include;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glfw-3.2.1.bin.WIN32\include\GLFW;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glm-0.9.7.1;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glew-1.13.0\include;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\assimp-3.0.1270\include;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\bullet-2.81-rev2613\src;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\SDL2-2.0.5\include;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glm-0.9.7.1;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glew-1.13.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -126,7 +126,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\SDL2-2.0.5\include;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\AntTweakBar-1.16\include;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glm-0.9.7.1;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glew-1.13.0\include;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\assimp-3.0.1270\include;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\bullet-2.81-rev2613\src;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Robert\Documents\Visual Studio 2015\Libraries\SDL2-2.0.5\include;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glm-0.9.7.1;C:\Users\Robert\Documents\Visual Studio 2015\Libraries\glew-1.13.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
