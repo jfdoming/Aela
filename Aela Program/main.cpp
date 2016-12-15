@@ -6,6 +6,7 @@
 #include "SDL.h"
 #include <iostream>
 
+
 int main(int argc, char *args[]) {
 	using namespace Aela;
 	start();
