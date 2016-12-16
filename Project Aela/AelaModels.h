@@ -16,6 +16,9 @@
 #include "texture.hpp"
 
 class AelaModel {
+	private:
+		float xPosition, yPosition, zPosition;
+		glm::vec3 position;
 	public:
 		std::vector<glm::vec3> vertices;
 		std::vector<glm::vec2> uvs;
@@ -23,11 +26,11 @@ class AelaModel {
 		std::vector<unsigned short> indices;
 		GLuint texture;
 
-		float xPosition, yPosition;
-
 		AelaModel() {
 			xPosition = 0;
 			yPosition = 0;
+			zPosition = 0;
+			position = glm::vec3(0.0, 0.0, 0.0);
 		}
 
 		~AelaModel() {
@@ -36,6 +39,9 @@ class AelaModel {
 
 		bool loadModel(std::string path);
 		bool loadTexture(std::string path);
+		void setPosition(float setX, float setY, float setZ);
+		glm::vec3 getPosition();
+		void getPosition(float * setXPosition, float * setYPosition, float * setZPosition);
 		glm::vec3 * getVertices();
 		glm::vec2 * getUVs();
 		glm::vec3 * getNormals();

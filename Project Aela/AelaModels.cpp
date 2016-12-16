@@ -18,6 +18,23 @@ bool AelaModel::loadTexture(std::string path) {
 	return (texture != NULL);
 }
 
+void AelaModel::setPosition(float setX, float setY, float setZ) {
+	xPosition = setX;
+	yPosition = setY;
+	zPosition = setZ;
+	position = glm::vec3(setX, setY, setZ);
+}
+
+glm::vec3 AelaModel::getPosition() {
+	return position;
+}
+
+void AelaModel::getPosition(float * setXPosition, float * setYPosition, float * setZPosition) {
+	*setXPosition = xPosition;
+	*setYPosition = yPosition;
+	*setZPosition = zPosition;
+}
+
 glm::vec3 * AelaModel::getVertices() {
 	return &vertices[0];
 }

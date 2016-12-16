@@ -2,12 +2,12 @@
 
 void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthMatrixID, GLuint programID,
 	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID) {
+
 	// This loads our buffers.
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, model->getVertexSize() * sizeof(glm::vec3), model->getVertices(), GL_STATIC_DRAW);
-	// std::cout << model->getVertices().size()
 
 	GLuint uvbuffer;
 	glGenBuffers(1, &uvbuffer);
@@ -26,8 +26,6 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 
 	// Render to the screen
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	// glViewport(0, 0, windowWidth, windowHeight); // Render on the whole framebuffer, complete from the lower left corner to the upper right
-
 	glEnable(GL_CULL_FACE);
 
 
@@ -51,23 +49,16 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 	// Use our shader
 	glUseProgram(programID);
 
+	glm::vec3 position = model->getPosition();
+
 	// Compute the MVP matrix from keyboard and mouse input
 	glm::mat4 ProjectionMatrix = getProjectionMatrix();
 	glm::mat4 ViewMatrix = getViewMatrix();
-	// ViewMatrix = glm::lookAt(glm::vec3(14,6,4), glm::vec3(0,1,0), glm::vec3(0,1,0));
-	glm::mat4 ModelMatrix = glm::mat4(1.0);
+	glm::mat4 ModelMatrix = glm::translate(glm::mat4(1.0), position);
 	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+	glm::mat4 depthBiasMVP = biasMatrix * depthMVP;
 
-	glm::mat4 biasMatrix(
-		0.5, 0.0, 0.0, 0.0,
-		0.0, 0.5, 0.0, 0.0,
-		0.0, 0.0, 0.5, 0.0,
-		0.5, 0.5, 0.5, 1.0
-	);
-
-	glm::mat4 depthBiasMVP = biasMatrix*depthMVP;
-
-	// Send our transformation to the currently bound shader, 
+	// Send our transformation to the currently bound shader 
 	// in the "MVP" uniform
 	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
 	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
@@ -84,7 +75,6 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
-	//ghgggghhhhhhhhh
 	glUniform1i(shadowMapID, 1);
 
 	// 1rst attribute buffer : vertices
@@ -137,26 +127,6 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
-
-
-	// Optionally render the shadowmap (for debug only)
-
-	// Render only on a corner of the window (or we we won't see the real rendering...)
-	//glViewport(0, 0, 512, 512);
-
-	//// Use our shader
-	//glUseProgram(quad_programID);
-
-	//// Bind our texture in Texture Unit 0
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, depthTexture);
-	//// Set our "renderedTexture" sampler to user Texture Unit 0
-	//glUniform1i(texID, 0);
-
-	//// You have to disable GL_COMPARE_R_TO_TEXTURE above in order to see anything !
-	////glDrawArrays(GL_TRIANGLES, 0, 6); // 2*3 indices starting at 0 -> 2 triangles
-	//glDisableVertexAttribArray(0);
-
 	glDeleteBuffers(1, &vertexbuffer);
 	glDeleteBuffers(1, &uvbuffer);
 	glDeleteBuffers(1, &normalbuffer);

@@ -48,6 +48,37 @@ void Aela3DRenderer::setWindow(AelaWindow * setWindow) {
 }
 
 void Aela3DRenderer::render() {
+
+	// Temporary, for bug testing.
+	float xPosition, yPosition, zPosition;
+	models[1].getPosition(&xPosition, &yPosition, &zPosition);
+
+	if (basicRenderer.getWindow()->keyPressed(80)) {
+		xPosition -= 0.01;
+	}
+
+	if (basicRenderer.getWindow()->keyPressed(79)) {
+		xPosition += 0.01;
+	}
+
+	if (basicRenderer.getWindow()->keyPressed(82)) {
+		zPosition += 0.01;
+	}
+
+	if (basicRenderer.getWindow()->keyPressed(81)) {
+		zPosition -= 0.01;
+	}
+
+	if (basicRenderer.getWindow()->keyPressed(229)) {
+		yPosition += 0.01;
+	}
+
+	if (basicRenderer.getWindow()->keyPressed(228)) {
+		yPosition -= 0.01;
+	}
+
+	models[1].setPosition(xPosition, yPosition, zPosition);
+
 	// Clear the screen.
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// This says "render to our framebuffer".
@@ -59,6 +90,10 @@ void Aela3DRenderer::render() {
 
 	for (int whichModel = 0; whichModel < models.size(); whichModel++) {
 		basicRenderer.renderShadows(&models[whichModel]);
+	}
+	for (int whichModel = 0; whichModel < models.size(); whichModel++) {
 		basicRenderer.renderTextures(&models[whichModel]);
 	}
+
+	basicRenderer.getWindow()->updateBuffer();
 }
