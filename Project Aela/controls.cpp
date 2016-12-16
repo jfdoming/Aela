@@ -107,6 +107,11 @@ void computeMatricesFromInputs(AelaWindow * window) {
 		position += straightUp * deltaTime * currentSpeed;
 	}
 
+	if (window->keyPressed(224)) {
+		position -= straightUp * deltaTime * currentSpeed;
+	}
+
+
 	float FoV = initialFoV;
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units

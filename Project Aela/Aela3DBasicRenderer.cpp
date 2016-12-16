@@ -2,19 +2,19 @@
 
 void Aela3DBasicRenderer::setupBasicRendering() {
 	setupVertexArrayID();
+	setupShaders();
 
 	// Note: getFrameBufferName() should be called before setupDepthTexture().
 	getFrameBufferName();
 	setupDepthTexture();
 
 	setupQuadVertexBuffer();
-	setupShaders();
 	getIDs();
 }
 
 void Aela3DBasicRenderer::setupVertexArrayID() {
-	glGenVertexArrays(1, &VertexArrayID);
-	glBindVertexArray(VertexArrayID);
+	glGenVertexArrays(1, &vertexArrayID);
+	glBindVertexArray(vertexArrayID);
 }
 
 void Aela3DBasicRenderer::setupShaders() {
@@ -23,28 +23,30 @@ void Aela3DBasicRenderer::setupShaders() {
 	quad_programID = LoadShaders("shaders/Passthrough.vertexshader", "shaders/SimpleTexture.fragmentshader");
 	texID = glGetUniformLocation(quad_programID, "texture");
 	programID = LoadShaders("shaders/ShadowMapping.vertexshader", "shaders/ShadowMapping.fragmentshader");
-	// This gets a handle for the "LightPosition" uniform.
-	GLuint lightInvDirID = glGetUniformLocation(programID, "LightInvDirection_worldspace");
 }
 
 void Aela3DBasicRenderer::getIDs() {
 	depthMatrixID = glGetUniformLocation(depthProgramID, "depthMVP");
 
 	// This gets a handle for the "myTextureSampler" uniform.
-	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
+	textureID = glGetUniformLocation(programID, "myTextureSampler");
 
 	// This gets a handle for the "MVP" uniform.
-	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
-	GLuint ViewMatrixID = glGetUniformLocation(programID, "V");
-	GLuint ModelMatrixID = glGetUniformLocation(programID, "M");
-	GLuint DepthBiasID = glGetUniformLocation(programID, "DepthBiasMVP");
-	GLuint ShadowMapID = glGetUniformLocation(programID, "shadowMap");
+	matrixID = glGetUniformLocation(programID, "MVP");
+	viewMatrixID = glGetUniformLocation(programID, "V");
+	modelMatrixID = glGetUniformLocation(programID, "M");
+	depthBiasID = glGetUniformLocation(programID, "DepthBiasMVP");
+	shadowMapID = glGetUniformLocation(programID, "shadowMap");
+
+	// This gets a handle for the "LightPosition" uniform.
+	lightInvDirID = glGetUniformLocation(programID, "LightInvDirection_worldspace");
+
 }
 
 void Aela3DBasicRenderer::getFrameBufferName() {
 	// This is the framebuffer (which regroups 0, 1 or more textures as well as 0 or 1 depth buffers).
-	glGenFramebuffers(1, &FramebufferName);
-	glBindFramebuffer(GL_FRAMEBUFFER, FramebufferName);
+	glGenFramebuffers(1, &framebufferName);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebufferName);
 }
 
 void Aela3DBasicRenderer::setupDepthTexture() {
@@ -67,8 +69,6 @@ void Aela3DBasicRenderer::setupDepthTexture() {
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		AelaErrorHandling::windowError("Aela 3D",
 			"There was a problem setting up the framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
-	} else {
-		AelaErrorHandling::windowError("Yay!", "OpenGL Initialisation went well!");
 	}
 }
 
@@ -89,7 +89,7 @@ void Aela3DBasicRenderer::setupQuadVertexBuffer() {
 }
 
 GLuint * Aela3DBasicRenderer::getFramebuffer() {
-	return &FramebufferName;
+	return &framebufferName;
 }
 
 void Aela3DBasicRenderer::renderShadows(AelaModel * model) {
@@ -97,5 +97,6 @@ void Aela3DBasicRenderer::renderShadows(AelaModel * model) {
 }
 
 void Aela3DBasicRenderer::renderTextures(AelaModel * model) {
-	//textureRenderer.renderTextures(model, depthMatrixID, programID);
+	textureRenderer.renderTextures(model, depthMatrixID, programID, matrixID, modelMatrixID, viewMatrixID,
+		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID);
 }

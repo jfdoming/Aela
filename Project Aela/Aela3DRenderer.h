@@ -31,18 +31,36 @@ class Aela3DBasicShadowRenderer {
 class Aela3DBasicTextureRenderer {
 	public:
 		Aela3DBasicTextureRenderer() {
-
+			biasMatrix = glm::mat4(
+				0.5, 0.0, 0.0, 0.0,
+				0.0, 0.5, 0.0, 0.0,
+				0.0, 0.0, 0.5, 0.0,
+				0.5, 0.5, 0.5, 1.0
+			);
 		}
 
 		void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthMatrixID, GLuint programID,
 			GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID);
+
+	private:
+		glm::mat4 biasMatrix;
 };
 
 class Aela3DBasicRenderer {
 	public:
 		Aela3DBasicRenderer() {
-			FramebufferName = 0;
+			framebufferName = 0;
+		}
 
+		~Aela3DBasicRenderer() {
+			// This cleans all VBOs and shaders.
+			glDeleteProgram(programID);
+			glDeleteProgram(depthProgramID);
+			glDeleteProgram(quad_programID);
+			glDeleteFramebuffers(1, &framebufferName);
+			glDeleteTextures(1, &depthTexture);
+			glDeleteBuffers(1, &quad_vertexbuffer);
+			glDeleteVertexArrays(1, &vertexArrayID);
 		}
 
 		void renderShadows(AelaModel * model);
@@ -57,10 +75,10 @@ class Aela3DBasicRenderer {
 		Aela3DBasicShadowRenderer shadowRenderer;
 		Aela3DBasicTextureRenderer textureRenderer;
 
-		GLuint VertexArrayID, depthProgramID, depthMatrixID, quad_programID, texID, programID;
-		GLuint TextureID, MatrixID, ViewMatrixID, ModelMatrixID, DepthBiasID, ShadowMapID, lightInvDirID;
+		GLuint vertexArrayID, depthProgramID, depthMatrixID, quad_programID, texID, programID;
+		GLuint textureID, matrixID, viewMatrixID, modelMatrixID, depthBiasID, shadowMapID, lightInvDirID;
 		GLuint depthTexture;
-		GLuint FramebufferName;
+		GLuint framebufferName;
 		GLuint quad_vertexbuffer;
 
 		AelaWindow * window;
@@ -90,16 +108,33 @@ class Aela3DRenderer {
 	public:
 		Aela3DRenderer(AelaWindow * windowToSet) {
 			// TEMPORARY! This won't exist once models are moved elsewhere.
-			models.resize(2);
+			models.resize(5);
 			models[0].loadTexture("textures/uvmap.DDS");
 			models[1].loadTexture("textures/beretta.DDS");
+			models[2].loadTexture("textures/mug.dds");
+			//models[3].loadTexture("textures/laptop.dds");
+			models[3].loadTexture("textures/missile.dds");
+			models[4].loadTexture("textures/cat.dds");
 
 			// This laods the models from OBJ files.
 			models[0].loadModel("models/room_thickwalls.obj");
 			models[1].loadModel("models/beretta.obj");
+			models[2].loadModel("models/mug.obj");
+			//models[3].loadModel("models/laptop.obj");
+			models[3].loadModel("models/missile.obj");
+			models[4].loadModel("models/cat.obj");
+
+			// This sets model position.
+			models[1].setPosition(10, 0, 0);
+			models[2].setPosition(0, 10, 15);
+			models[4].setPosition(0, 0, -15);
+
 			setWindow(windowToSet);
 			setupRendering();
+		}
 
+		~Aela3DRenderer() {
+			models.resize(0);
 		}
 
 		void render();
