@@ -12,6 +12,7 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
+// lol
 // This includes GLFW.
 // #include <glfw3.h>
 
