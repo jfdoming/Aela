@@ -74,5 +74,6 @@ int startAela() {
 }
 
 void Aela::start() {
-	startAela();
+	int errorCode = startAela();
+	std::cout << "Program exited with error code " << errorCode << std::endl;
 }
