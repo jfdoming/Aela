@@ -55,12 +55,14 @@ void computeMatricesFromInputs(AelaWindow * window) {
 	window->getCursorPositionInWindow(&xpos, &ypos);
 
 	// Reset mouse position for next frame
-	window->setCursorPositionInWindow(1024 / 2, 768 / 2);
+	int width, height;
+	window->getWindowDimensions(&width, &height);
+	window->setCursorPositionInWindow(width / 2, height / 2);
 
 
 	// Compute new orientation
-	horizontalAngle += mouseSpeed * float(1024 / 2 - xpos);
-	verticalAngle += mouseSpeed * float(768 / 2 - ypos);
+	horizontalAngle += mouseSpeed * float(width / 2 - xpos);
+	verticalAngle += mouseSpeed * float(height / 2 - ypos);
 
 
 	// Direction : Spherical coordinates to Cartesian coordinates conversion

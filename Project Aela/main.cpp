@@ -31,7 +31,7 @@ using namespace glm;
 #include "AelaError.h"
 #include "Aela3D.h"
 
-// This is the functions that starts Aela and contains its loops.
+// This is the function that starts Aela and contains its loops.
 int startAela() {
 	// This is TEMPORARY and sets the window width and height.
 	int windowWidth = 1024, windowHeight = 768;
@@ -74,5 +74,6 @@ int startAela() {
 }
 
 void Aela::start() {
-	startAela();
+	int errorCode = startAela();
+	std::cout << "Program exited with error code " << errorCode << std::endl;
 }
