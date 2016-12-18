@@ -108,12 +108,13 @@ class Aela3DRenderer {
 	public:
 		Aela3DRenderer(AelaWindow * windowToSet) {
 			// TEMPORARY! This won't exist once models are moved elsewhere.
-			models.resize(5);
+			models.resize(6);
 			models[0].loadTexture("textures/uvmap.DDS");
 			models[1].loadTexture("textures/beretta.DDS");
 			models[2].loadTexture("textures/mug.dds");
 			models[3].loadTexture("textures/missile.dds");
 			models[4].loadTexture("textures/cat.dds");
+			models[5].loadTexture("textures/big_marble.dds");
 
 			// This loads the models from OBJ files.
 			models[0].loadModel("models/room_thickwalls.obj");
@@ -121,11 +122,13 @@ class Aela3DRenderer {
 			models[2].loadModel("models/mug.obj");
 			models[3].loadModel("models/missile.obj");
 			models[4].loadModel("models/cat.obj");
+			models[5].loadModel("models/big_marble.obj");
 
 			// This sets model position.
 			models[1].setPosition(10, 0, 0);
 			models[2].setPosition(0, 10, 15);
 			models[4].setPosition(0, 0, -15);
+			models[5].setPosition(10, 20, 10);
 
 			setWindow(windowToSet);
 			setupRendering();

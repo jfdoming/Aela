@@ -3,7 +3,7 @@
 
 void AelaWindow::addProperty(AelaWindowFlag flag) {
 	bool flagExists = false;
-	for (int i = 0; i < flags.size(); i++) {
+	for (unsigned int i = 0; i < flags.size(); i++) {
 		if (flags[i] == flag) {
 			flagExists = true;
 			AelaErrorHandling::windowError("Flag exists.");
@@ -39,7 +39,7 @@ bool AelaWindow::createWindow(int setWidth, int setHeight, int setXPosition, int
 	openGLFlag = SDL_WINDOW_MOUSE_FOCUS;
 
 	// This starts looking at the flags inputted as parameters.
-	for (int i = 0; i < flags.size(); i++) {
+	for (unsigned int i = 0; i < flags.size(); i++) {
 		if (flags[i] == AelaWindowFlag::AELA_WINDOW_RESIZABLE) {
 			resizableFlag = SDL_WINDOW_RESIZABLE;
 		} else if (flags[i] == AelaWindowFlag::AELA_WINDOW_SHOWN) {
@@ -119,7 +119,7 @@ bool AelaWindow::quitCheck() {
 }
 
 bool AelaWindow::keyPressed(int ASCII_Code) {
-	return keystates[ASCII_Code];
+	return (keystates[ASCII_Code] == 1);
 }
 
 void AelaWindow::showCursor() {

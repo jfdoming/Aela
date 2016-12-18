@@ -2,7 +2,7 @@
 
 void Aela3DRenderer::addFlag(Aela3DRendererFlag flag) {
 	bool flagExists = false;
-	for (int i = 0; i < flags.size(); i++) {
+	for (unsigned int i = 0; i < flags.size(); i++) {
 		if (flags[i] == flag) {
 			flagExists = true;
 			break;
@@ -54,27 +54,27 @@ void Aela3DRenderer::render() {
 	models[1].getPosition(&xPosition, &yPosition, &zPosition);
 
 	if (basicRenderer.getWindow()->keyPressed(80)) {
-		xPosition -= 0.01;
+		xPosition -= 0.01f;
 	}
 
 	if (basicRenderer.getWindow()->keyPressed(79)) {
-		xPosition += 0.01;
+		xPosition += 0.01f;
 	}
 
 	if (basicRenderer.getWindow()->keyPressed(82)) {
-		zPosition += 0.01;
+		zPosition += 0.01f;
 	}
 
 	if (basicRenderer.getWindow()->keyPressed(81)) {
-		zPosition -= 0.01;
+		zPosition -= 0.01f;
 	}
 
 	if (basicRenderer.getWindow()->keyPressed(229)) {
-		yPosition += 0.01;
+		yPosition += 0.01f;
 	}
 
 	if (basicRenderer.getWindow()->keyPressed(228)) {
-		yPosition -= 0.01;
+		yPosition -= 0.01f;
 	}
 
 	models[1].setPosition(xPosition, yPosition, zPosition);
@@ -88,10 +88,10 @@ void Aela3DRenderer::render() {
 	glViewport(0, 0, basicRenderer.windowWidth, basicRenderer.windowHeight);
 	computeMatricesFromInputs(basicRenderer.getWindow());
 
-	for (int whichModel = 0; whichModel < models.size(); whichModel++) {
+	for (unsigned int whichModel = 0; whichModel < models.size(); whichModel++) {
 		basicRenderer.renderShadows(&models[whichModel]);
 	}
-	for (int whichModel = 0; whichModel < models.size(); whichModel++) {
+	for (unsigned int whichModel = 0; whichModel < models.size(); whichModel++) {
 		basicRenderer.renderTextures(&models[whichModel]);
 	}
 

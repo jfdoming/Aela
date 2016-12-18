@@ -60,7 +60,7 @@ bool loadOBJ(
 				std::string vertex1, vertex2, vertex3;
 				unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
 				int numberOfSlashes = 0;
-				for (int i = 0; i < line.length(); i++) {
+				for (unsigned int i = 0; i < line.length(); i++) {
 					if (line.at(i) == '/') {
 						numberOfSlashes++;
 					}
