@@ -12,7 +12,6 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-// lol
 // This includes GLFW.
 // #include <glfw3.h>
 
@@ -21,7 +20,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 using namespace glm;
 
-// This inlcudes all of the 3D headers required.
+// This includes all of the 3D headers required.
 #include "shader.hpp"
 #include "texture.hpp"
 #include "controls.hpp"
