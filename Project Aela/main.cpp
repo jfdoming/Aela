@@ -31,8 +31,15 @@ using namespace glm;
 #include "AelaError.h"
 #include "Aela3D.h"
 
+#include "ResourceManager.h"
+
 // This is the function that starts Aela and contains its loops.
 int startAela() {
+	// TESTING FROM JULIAN PLEASE IGNORE
+	Aela::ResourceManager mgr(5);
+	mgr.loadText("text.txt");
+	// STOP IGNORING NOW
+
 	// This is TEMPORARY and sets the window width and height.
 	int windowWidth = 1024, windowHeight = 768;
 	// This is also TEMPORARY and sets the window starting position.
