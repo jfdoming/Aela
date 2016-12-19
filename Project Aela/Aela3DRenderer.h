@@ -16,7 +16,6 @@
 #include "shader.hpp"
 #include "AelaModels.h"
 #include "AelaWindow.h"
-#include "AelaError.h"
 #include "controls.hpp"
 
 class Aela3DBasicShadowRenderer {

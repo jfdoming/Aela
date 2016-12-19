@@ -1,4 +1,5 @@
 #include "Aela3DRenderer.h"
+#include "Aela2DRenderer.h"
 
 void Aela3DBasicRenderer::setupBasicRendering() {
 	setupVertexArrayID();
@@ -99,4 +100,6 @@ void Aela3DBasicRenderer::renderShadows(AelaModel * model) {
 void Aela3DBasicRenderer::renderTextures(AelaModel * model) {
 	textureRenderer.renderTextures(model, depthMatrixID, programID, matrixID, modelMatrixID, viewMatrixID,
 		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID);
+
+	renderTexture(window, *(model->getTexture()), programID);
 }
