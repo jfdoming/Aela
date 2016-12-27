@@ -134,7 +134,10 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 }
 
 // This function renders a 2D texture in 3D space. It could be used for billboards.
-void Aela3DBasicTextureRenderer::renderTextureIn3DSpace(AelaWindow * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position) {
+// For billboards, use getPositionOfCamera() to make the texture look at the camera.
+// To specify a rotation for the camera as a vec3, use the texture's position and add the direction (position + direction) for the lookAt parameter.
+// Note: for the lookAt parameter, position + glm::vec3(0.0, 0.0, 1.0) will not rotate the texture. Use this for no rotation.
+void Aela3DBasicTextureRenderer::renderTextureIn3DSpace(AelaWindow * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
 	glUseProgram(programID);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -192,7 +195,12 @@ void Aela3DBasicTextureRenderer::renderTextureIn3DSpace(AelaWindow * window, boo
 		glm::mat4 RotationMatrix = getViewMatrix();
 		glm::mat4 ProjectionMatrix = getProjectionMatrix();
 		glm::mat4 ViewMatrix = getViewMatrix();
-		glm::mat4 ModelMatrix = (glm::translate(glm::mat4(1.0), position));
+		// CHANGE
+		glm::mat4 ModelMatrix = glm::lookAt(position, lookAt, glm::vec3(0, 1, 0));
+		if (inverseRotation) {
+			ModelMatrix = glm::inverse(ModelMatrix);
+		}
+		// * (glm::translate(glm::mat4(1.0), position))
 		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
 		// Send our transformation to the currently bound shader 

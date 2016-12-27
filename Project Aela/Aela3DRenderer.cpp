@@ -94,6 +94,9 @@ void Aela3DRenderer::render() {
 	for (unsigned int whichModel = 0; whichModel < models.size(); whichModel++) {
 		basicRenderer.renderTextures(&models[whichModel]);
 	}
+	for (unsigned int whichBillboard = 0; whichBillboard < billboards.size(); whichBillboard++) {
+		basicRenderer.renderBillboard(&billboards[whichBillboard]);
+	}
 
 	basicRenderer.getWindow()->updateBuffer();
 }

@@ -100,10 +100,14 @@ void Aela3DBasicRenderer::renderShadows(AelaModel * model) {
 void Aela3DBasicRenderer::renderTextures(AelaModel * model) {
 	textureRenderer.renderTextures(model, depthMatrixID, programID, matrixID, modelMatrixID, viewMatrixID,
 		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID);
-
-	renderTextureIn3DSpace((model->getTexture()), false, model->getPosition());
 }
 
-void Aela3DBasicRenderer::renderTextureIn3DSpace(GLuint * texture, bool cullFaces, glm::vec3 position) {
-	textureRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, position);
+void Aela3DBasicRenderer::renderTextureIn3DSpace(GLuint * texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
+	// Note: for regular texture rendering, use:
+	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
+	textureRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, position, lookAt, inverseRotation);
+}
+
+void Aela3DBasicRenderer::renderBillboard(AelaBillboard * billboard) {
+	textureRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, billboard->getPosition(), getPositionOfCamera(), true);
 }
