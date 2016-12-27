@@ -101,5 +101,9 @@ void Aela3DBasicRenderer::renderTextures(AelaModel * model) {
 	textureRenderer.renderTextures(model, depthMatrixID, programID, matrixID, modelMatrixID, viewMatrixID,
 		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID);
 
-	renderTexture(window, *(model->getTexture()), programID);
+	renderTextureIn3DSpace((model->getTexture()), false, model->getPosition());
+}
+
+void Aela3DBasicRenderer::renderTextureIn3DSpace(GLuint * texture, bool cullFaces, glm::vec3 position) {
+	textureRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, position);
 }

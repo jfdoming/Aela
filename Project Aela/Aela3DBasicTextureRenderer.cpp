@@ -132,3 +132,106 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 	glDeleteBuffers(1, &normalbuffer);
 	glDeleteBuffers(1, &elementbuffer);
 }
+
+// This function renders a 2D texture in 3D space. It could be used for billboards.
+void Aela3DBasicTextureRenderer::renderTextureIn3DSpace(AelaWindow * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position) {
+	glUseProgram(programID);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	if (cullFaces) {
+		glEnable(GL_CULL_FACE);
+	} else {
+		glDisable(GL_CULL_FACE);
+	}
+
+	glm::vec3 vertices[3];
+	glm::vec2 uvs[3];
+
+	for (int i = 0; i < 2; i++) {
+		if (i == 0) {
+			vertices[0] = glm::vec3(1.0, 1.0, 0.0);
+			vertices[1] = glm::vec3(1.0, -1.0, 0.0);
+			vertices[2] = glm::vec3(-1.0, 1.0, 0.0);
+			uvs[0] = glm::vec2(0.0, 0.0);
+			uvs[1] = glm::vec2(0.0, 1.0);
+			uvs[2] = glm::vec2(1.0, 0.0);
+		} else {
+			vertices[0] = glm::vec3(-1.0, -1.0, 0.0);
+			vertices[1] = glm::vec3(-1.0, 1.0, 0.0);
+			vertices[2] = glm::vec3(1.0, -1.0, 0.0);
+			uvs[0] = glm::vec2(1.0, 1.0);
+			uvs[1] = glm::vec2(1.0, 0.0);
+			uvs[2] = glm::vec2(0.0, 1.0);
+		}
+
+		// Bind our texture in Texture Unit 0
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		// Set our "myTextureSampler" sampler to user Texture Unit 0
+		glUniform1i(textureID, 0);
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, depthTexture);
+		glUniform1i(shadowMapID, 1);
+
+		GLuint vertexbuffer;
+		// Generate 1 buffer, put the resulting identifier in vertexbuffer
+		glGenBuffers(1, &vertexbuffer);
+		// The following commands will talk about our 'vertexbuffer' buffer
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		// Give our vertices to OpenGL.
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+
+		GLuint uvbuffer;
+		glGenBuffers(1, &uvbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
+
+		// Compute the MVP matrix from keyboard and mouse input
+		glm::mat4 RotationMatrix = getViewMatrix();
+		glm::mat4 ProjectionMatrix = getProjectionMatrix();
+		glm::mat4 ViewMatrix = getViewMatrix();
+		glm::mat4 ModelMatrix = (glm::translate(glm::mat4(1.0), position));
+		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
+		// Send our transformation to the currently bound shader 
+		// in the "MVP" uniform
+		glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
+		glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+		glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+
+		// 1rst attribute buffer : vertices
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glVertexAttribPointer(
+			0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+
+
+		);
+
+		// 2nd attribute buffer : UVs
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glVertexAttribPointer(
+			1,                                // attribute
+			2,                                // size
+			GL_FLOAT,                         // type
+			GL_FALSE,                         // normalized?
+			0,                                // stride
+			(void*)0                          // array buffer offset
+		);
+
+		// Draw the triangle !
+		glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDeleteBuffers(1, &vertexbuffer);
+		glDeleteBuffers(1, &uvbuffer);
+	}
+}

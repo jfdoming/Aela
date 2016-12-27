@@ -31,21 +31,19 @@ using namespace glm;
 #include "AelaError.h"
 #include "Aela3D.h"
 
-#include "ResourceManager.h"
+void runningLoop();
+
+AelaWindow window;
+Aela3DRenderer renderer3D;
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
-	// TESTING FROM JULIAN PLEASE IGNORE
-	Aela::ResourceManager mgr(5);
-	mgr.loadText("text.txt");
-	// STOP IGNORING NOW
 
 	// This is TEMPORARY and sets the window width and height.
 	int windowWidth = 1024, windowHeight = 768;
 	// This is also TEMPORARY and sets the window starting position.
 	int windowXPosition = 50, windowYPosition = 50;
 
-	AelaWindow window;
 	window.addProperty(AelaWindowFlag::AELA_WINDOW_SHOWN);
 	window.addProperty(AelaWindowFlag::AELA_WINDOW_OPENGL);
 	bool windowCreationSuccess = window.createWindow(windowWidth, windowHeight, windowXPosition, windowYPosition, "Aela Engine");
@@ -67,8 +65,12 @@ int startAela() {
 		return -1;
 	}
 
-	Aela3DRenderer renderer3D(&window);
+	renderer3D.setup(&window);
+	runningLoop();
+	return 0;
+}
 
+void runningLoop() {
 	// This is the program's running loop.
 	do {
 		window.updateWindowEvents();
@@ -77,7 +79,6 @@ int startAela() {
 		renderer3D.render();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 
-	return 0;
 }
 
 void Aela::start() {
