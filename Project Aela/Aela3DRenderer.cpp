@@ -77,6 +77,10 @@ void Aela3DRenderer::render() {
 		yPosition -= 0.01f;
 	}
 
+	if (basicRenderer.getWindow()->keyPressed(56)) {
+		models[1].setProperty(AelaModelProperty::Y_ROTATION, (models[1].getProperty(AelaModelProperty::Y_ROTATION) + (3.14159f / 2.0f * getTimeInterval()) / 1000.0f));
+	}
+
 	models[1].setPosition(xPosition, yPosition, zPosition);
 
 	// Clear the screen.

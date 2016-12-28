@@ -34,6 +34,7 @@ void Aela3DBasicShadowRenderer::renderShadows(AelaModel * model, GLuint depthPro
 	glUseProgram(depthProgramID);
 
 	glm::vec3 lightInvDir = glm::vec3(0.5f, 2, 2);
+	glm::vec3 position = model->getPosition();
 
 	// Compute the MVP matrix from the light's point of view
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
@@ -44,7 +45,7 @@ void Aela3DBasicShadowRenderer::renderShadows(AelaModel * model, GLuint depthPro
 	//glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));
 
 	glm::mat4 depthModelMatrix = glm::mat4(1.0);
-	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix; // * glm::translate(glm::mat4(1.0), position)
 
 	// Send our transformation to the currently bound shader, 
 	// in the "MVP" uniform

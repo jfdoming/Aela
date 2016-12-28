@@ -1,4 +1,8 @@
 #include "Aela3DRenderer.h"
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include "controls.hpp"
 
 void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthMatrixID, GLuint programID,
 	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID) {
@@ -50,19 +54,23 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 	glUseProgram(programID);
 
 	glm::vec3 position = model->getPosition();
+	glm::vec3 rotation = model->getRotation();
+
+	// gOrientation1.y += (3.14159f / 2.0f * getTimeInterval()) / 1000.0f;
 
 	// Compute the MVP matrix from keyboard and mouse input
-	glm::mat4 ProjectionMatrix = getProjectionMatrix();
-	glm::mat4 ViewMatrix = getViewMatrix();
-	glm::mat4 ModelMatrix = glm::translate(glm::mat4(1.0), position);
-	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+	glm::mat4 projectionMatrix = getProjectionMatrix();
+	glm::mat4 viewMatrix = getViewMatrix();
+	glm::mat4 rotationMatrix = glm::eulerAngleYXZ(rotation.y, rotation.x, rotation.z);
+	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), position) * rotationMatrix;
+	glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 	glm::mat4 depthBiasMVP = biasMatrix * depthMVP;
 
 	// Send our transformation to the currently bound shader 
 	// in the "MVP" uniform
 	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
-	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
-	glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
+	glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
 	glUniformMatrix4fv(depthBiasID, 1, GL_FALSE, &depthBiasMVP[0][0]);
 
 	glUniform3f(lightInvDirID, lightInvDir.x, lightInvDir.y, lightInvDir.z);

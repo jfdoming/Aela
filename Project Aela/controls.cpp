@@ -12,6 +12,8 @@ using namespace glm;
 glm::mat4 ViewMatrix;
 glm::mat4 ProjectionMatrix;
 
+bool windowFocus = true;
+
 glm::mat4 getViewMatrix() {
 	return ViewMatrix;
 }
@@ -26,6 +28,20 @@ glm::vec3 getPositionOfCamera() {
 	return position;
 }
 
+clock_t currentTime = clock(), lastTime;
+float deltaTime;
+
+clock_t getTime() {
+	return currentTime;
+}
+
+float getTimeInterval() {
+	if (windowFocus) {
+		std::cout << deltaTime << ";\n";
+	}
+	return deltaTime;
+}
+
 // Initial horizontal angle : toward -Z
 float horizontalAngle = 3.14f;
 // Initial vertical angle : none
@@ -37,17 +53,17 @@ float speed = 0.003f; // 3 units per tick -or- approx. 0.003 units per second
 float superSpeed = 0.006f;
 float currentSpeed = 0.0f;
 float mouseSpeed = 0.005f;
-clock_t currentTime = clock(), lastTime;
 
 
 
 void computeMatricesFromInputs(AelaWindow * window) {
 	if (window->isFocused()) {
+		windowFocus = true;
 		lastTime = currentTime;
 
 		// Compute time difference between current and last frame
 		currentTime = clock();
-		float deltaTime = float(currentTime - lastTime);
+		deltaTime = float(currentTime - lastTime);
 
 		if (window->keyPressed(225)) {
 			currentSpeed = superSpeed;
@@ -129,8 +145,7 @@ void computeMatricesFromInputs(AelaWindow * window) {
 			position + direction, // and looks here : at the same position, plus "direction"
 			up                  // Head is up (set to 0,-1,0 to look upside-down)
 		);
-
-		// For the next frame, the "last time" will be "now"
-		lastTime = currentTime;
+	} else {
+		windowFocus = false;
 	}
 }
