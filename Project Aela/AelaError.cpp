@@ -9,7 +9,7 @@ void AelaErrorHandling::AelaErrorHandler::requestProgramClose() {
 void AelaErrorHandling::AelaErrorHandler::throwError(AelaSimpleError error) {
 	AelaErrorMessageType type = error.getType();
 	if (type == AELA_ERROR_CONSOLE_WINDOW) {
-		std::cout << "Aela Engine Error! " << error.getTitle() << ": " << error.getMessage() << "\n";
+		std::cout << "Aela Engine Message! " << error.getTitle() << ": " << error.getMessage() << "\n";
 	} else if (type == AELA_ERROR_CONSOLE_INTERNAL) {
 		// Implementation for an internal console within the engine/game must be added.
 	} else if (type == AELA_ERROR_WINDOW) {

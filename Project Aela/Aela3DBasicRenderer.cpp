@@ -20,10 +20,10 @@ void Aela3DBasicRenderer::setupVertexArrayID() {
 
 void Aela3DBasicRenderer::setupShaders() {
 	// This creates and compiles the GLSL program from the shaders.
-	depthProgramID = LoadShaders("shaders/DepthRTT.vertexshader", "shaders/DepthRTT.fragmentshader");
-	quad_programID = LoadShaders("shaders/Passthrough.vertexshader", "shaders/SimpleTexture.fragmentshader");
+	depthProgramID = loadShaders("shaders/DepthRTT.vertexshader", "shaders/DepthRTT.fragmentshader");
+	quad_programID = loadShaders("shaders/Passthrough.vertexshader", "shaders/SimpleTexture.fragmentshader");
 	texID = glGetUniformLocation(quad_programID, "texture");
-	programID = LoadShaders("shaders/ShadowMapping.vertexshader", "shaders/ShadowMapping.fragmentshader");
+	programID = loadShaders("shaders/ShadowMapping.vertexshader", "shaders/ShadowMapping.fragmentshader");
 }
 
 void Aela3DBasicRenderer::getIDs() {
