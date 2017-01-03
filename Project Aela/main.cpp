@@ -31,6 +31,7 @@ using namespace glm;
 #include "AelaError.h"
 #include "Aela3D.h"
 
+<<<<<<< HEAD
 void runningLoop();
 
 AelaWindow window;
@@ -40,11 +41,24 @@ AelaTimeManager timeManager;
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
+=======
+#include "ResourceManager.h"
+
+// This is the function that starts Aela and contains its loops.
+int startAela() {
+	// TESTING FROM JULIAN PLEASE IGNORE
+	Aela::ResourceManager mgr(5);
+	std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
+	std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
+	// STOP IGNORING NOW
+
+>>>>>>> origin/master
 	// This is TEMPORARY and sets the window width and height.
 	int windowWidth = 1024, windowHeight = 768;
 	// This is also TEMPORARY and sets the window starting position.
 	int windowXPosition = 50, windowYPosition = 50;
 
+	AelaWindow window;
 	window.addProperty(AelaWindowFlag::AELA_WINDOW_SHOWN);
 	window.addProperty(AelaWindowFlag::AELA_WINDOW_OPENGL);
 	bool windowCreationSuccess = window.createWindow(windowWidth, windowHeight, windowXPosition, windowYPosition, "Aela Engine");
@@ -65,6 +79,7 @@ int startAela() {
 		return -1;
 	}
 
+<<<<<<< HEAD
 	renderer3D.setup(&window);
 	renderer3D.setTimeManager(&timeManager);
 	controls.setWindow(&window);
@@ -72,8 +87,10 @@ int startAela() {
 	runningLoop();
 	return 0;
 }
+=======
+	Aela3DRenderer renderer3D(&window);
+>>>>>>> origin/master
 
-void runningLoop() {
 	// This is the program's running loop.
 	do {
 		timeManager.updateTime();
@@ -83,6 +100,7 @@ void runningLoop() {
 
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 
+	return 0;
 }
 
 void Aela::start() {

@@ -1,55 +1,56 @@
-#include "stdafx.h"
 #include "Resource.h"
 #include "AelaError.h"
 #include <fstream>
 
-// utility function
-std::ifstream open(string src) {
-	std::ifstream in(src);
+// utility functions
+int open(std::ifstream &in, const char * src) {
+	in = std::ifstream(src);
 	if (!in.is_open()) {
 		std::cerr << "Failed to open file \"" << src << "\" for reading!\n";
-		return;
 	}
-	return in;
+	return 0;
 }
 
-string read(std::ifstream *in, int count) {
-	string val;
-	char c;
-	int iterations;
-	while (iterations++ < count && *in >> std::noskipws >> c) {
-		val += c;
-	}
-	return val;
-}
+// Resource classes implementation
 
-Aela::Resource::Resource(string src): src(src) {
+Aela::Resource::Resource(const char * src): src(src) {
 }
 
 Aela::Resource::~Resource() {
 }
 
-Aela::TextResource::TextResource(string src) : Resource(src) {
-	std::ifstream in = open(src);
-	string line;
-	while (std::getline(in, line)) {
-		data += line;
-	}
+Aela::TextResource::TextResource(const char * src) : Resource(src) {
+	std::ifstream in;
+	open(in, src);
+
+	char line[AELA_RESOURCE_DEFAULT_BUFFER_SIZE];
+	do {
+		in.getline(line, AELA_RESOURCE_DEFAULT_BUFFER_SIZE);
+		strcat_s(data, line);
+	} while (!in.eof());
+
 	in.close();
 }
 
 Aela::TextResource::~TextResource() {
 }
 
-Aela::TextureResource::TextureResource(string src) : Resource(src) {
-	std::ifstream in = open(src);
-	string val;
-	read(&in, 4);
+#define AELA_RESOURCE_DDS_HEADERSIZE 128
+
+Aela::TextureResource::TextureResource(const char * src) : Resource(src) {
+	std::ifstream in;
+	open(in, src);
+
+	char header[AELA_RESOURCE_DDS_HEADERSIZE];
+	in.read(header, AELA_RESOURCE_DDS_HEADERSIZE);
+	std::cout << "yo: \"" << header << "\"\n" << std::endl;
 	in.close();
 }
 
 Aela::TextureResource::~TextureResource() {
 }
+
+/*
 GLuint loadDDS(std::string filePath) {
 	unsigned char fileHeader[124];
 	FILE * imageFile;
@@ -141,3 +142,4 @@ GLuint loadDDS(std::string filePath) {
 	free(buffer);
 	return textureID;
 }
+*/

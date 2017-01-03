@@ -2,28 +2,34 @@
 
 #include "stdafx.h"
 
-namespace Aela {
-	class Resource {
-		public:
-		string src;
+#define AELA_RESOURCE_DEFAULT_BUFFER_SIZE 8192
 
-		Resource(string src);
+namespace Aela {
+	class AELA_EXPORT Resource {
+		public:
+		const char * src;
+
+		Resource(const char * src);
 		~Resource();
 	};
 
-	class TextResource : public Resource {
+	class AELA_EXPORT TextResource : public Resource {
 		public:
-		string data = "";
+		std::string data = "";
 
-		TextResource(string src);
+		TextResource(const char * src);
 		~TextResource();
+
+		char * getData() {
+			data.c_str();
+		}
 	};
 
 	class TextureResource : public Resource {
 		public:
 		GLuint data = 0;
 
-		TextureResource(string src);
+		TextureResource(const char * src);
 		~TextureResource();
 	};
 }
