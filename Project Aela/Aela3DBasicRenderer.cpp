@@ -1,4 +1,5 @@
 #include "Aela3DRenderer.h"
+#include "Aela2DRenderer.h"
 
 void Aela3DBasicRenderer::setupBasicRendering() {
 	setupVertexArrayID();
@@ -19,10 +20,10 @@ void Aela3DBasicRenderer::setupVertexArrayID() {
 
 void Aela3DBasicRenderer::setupShaders() {
 	// This creates and compiles the GLSL program from the shaders.
-	depthProgramID = LoadShaders("shaders/DepthRTT.vertexshader", "shaders/DepthRTT.fragmentshader");
-	quad_programID = LoadShaders("shaders/Passthrough.vertexshader", "shaders/SimpleTexture.fragmentshader");
+	depthProgramID = loadShaders("shaders/DepthRTT.vertexshader", "shaders/DepthRTT.fragmentshader");
+	quad_programID = loadShaders("shaders/Passthrough.vertexshader", "shaders/SimpleTexture.fragmentshader");
 	texID = glGetUniformLocation(quad_programID, "texture");
-	programID = LoadShaders("shaders/ShadowMapping.vertexshader", "shaders/ShadowMapping.fragmentshader");
+	programID = loadShaders("shaders/ShadowMapping.vertexshader", "shaders/ShadowMapping.fragmentshader");
 }
 
 void Aela3DBasicRenderer::getIDs() {
@@ -99,4 +100,14 @@ void Aela3DBasicRenderer::renderShadows(AelaModel * model) {
 void Aela3DBasicRenderer::renderTextures(AelaModel * model) {
 	textureRenderer.renderTextures(model, depthMatrixID, programID, matrixID, modelMatrixID, viewMatrixID,
 		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID);
+}
+
+void Aela3DBasicRenderer::renderTextureIn3DSpace(GLuint * texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
+	// Note: for regular texture rendering, use:
+	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
+	textureRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, position, lookAt, inverseRotation);
+}
+
+void Aela3DBasicRenderer::renderBillboard(AelaBillboard * billboard) {
+	textureRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, billboard->getPosition(), getPositionOfCamera(), true);
 }

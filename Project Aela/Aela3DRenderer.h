@@ -15,8 +15,8 @@
 #include "AelaError.h"
 #include "shader.hpp"
 #include "AelaModels.h"
+#include "AelaBillboards.h"
 #include "AelaWindow.h"
-#include "AelaError.h"
 #include "controls.hpp"
 
 class Aela3DBasicShadowRenderer {
@@ -39,8 +39,9 @@ class Aela3DBasicTextureRenderer {
 			);
 		}
 
-		void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthMatrixID, GLuint programID,
+		void renderTextures(AelaModel * model, GLuint depthMatrixID, GLuint programID,
 			GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID);
+		void renderTextureIn3DSpace(AelaWindow * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
 
 	private:
 		glm::mat4 biasMatrix;
@@ -50,6 +51,11 @@ class Aela3DBasicRenderer {
 	public:
 		Aela3DBasicRenderer() {
 			framebufferName = 0;
+			flipMatrix = glm::mat3(
+				-1.0, 0.0, 0.0,
+				0.0, -1.0, 0.0,
+				0.0, 0.0, -1.0
+			);
 		}
 
 		~Aela3DBasicRenderer() {
@@ -65,6 +71,8 @@ class Aela3DBasicRenderer {
 
 		void renderShadows(AelaModel * model);
 		void renderTextures(AelaModel * model);
+		void renderTextureIn3DSpace(GLuint * texture, bool cullTexture, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
+		void renderBillboard(AelaBillboard * billboard);
 		void setupBasicRendering();
 		void setWindow(AelaWindow * setWindow);
 		AelaWindow * getWindow();
@@ -92,6 +100,8 @@ class Aela3DBasicRenderer {
 			1.0f,  1.0f, 0.0f,
 		};
 
+		glm::mat3 flipMatrix;
+
 		void setupVertexArrayID();
 		void setupShaders();
 		void getIDs();
@@ -106,7 +116,43 @@ enum class Aela3DRendererFlag {
 
 class Aela3DRenderer {
 	public:
+		Aela3DRenderer() {
+			
+		}
+
 		Aela3DRenderer(AelaWindow * windowToSet) {
+			temporarilySetupModels();
+			setWindow(windowToSet);
+			setupRendering();
+		}
+
+		~Aela3DRenderer() {
+			models.resize(0);
+		}
+
+		void setup(AelaWindow * windowToSet) {
+			temporarilySetupModels();
+			setWindow(windowToSet);
+			setupRendering();
+		}
+
+		void setWindow(AelaWindow * setWindow);
+		void render();
+
+	private:
+		std::vector<Aela3DRendererFlag> flags;
+		Aela3DBasicRenderer basicRenderer;
+
+
+		// TEMPORARY!
+		std::vector<AelaModel> models;
+		std::vector<AelaBillboard> billboards;
+
+		void addFlag(Aela3DRendererFlag flag);
+		void setupRendering();
+		void setupGLFeatures();
+		bool setupGLEW();
+		void temporarilySetupModels() {
 			// TEMPORARY! This won't exist once models are moved elsewhere.
 			models.resize(6);
 			models[0].loadTexture("textures/uvmap.DDS");
@@ -130,30 +176,8 @@ class Aela3DRenderer {
 			models[4].setPosition(0, 0, -15);
 			models[5].setPosition(10, 20, 10);
 
-			setWindow(windowToSet);
-			setupRendering();
+			billboards.resize(1);
+			billboards[0].loadTexture("textures/uvmap.DDS");
 		}
-
-		~Aela3DRenderer() {
-			models.resize(0);
-		}
-
-		void render();
-
-	private:
-		std::vector<Aela3DRendererFlag> flags;
-		Aela3DBasicRenderer basicRenderer;
-
-
-		// TEMPORARY!
-		std::vector<AelaModel> models;
-
-		void addFlag(Aela3DRendererFlag flag);
-
-		void setupRendering();
-		void setupGLFeatures();
-		bool setupGLEW();
-
-		void setWindow(AelaWindow * setWindow);
 		
 };

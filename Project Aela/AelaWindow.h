@@ -17,7 +17,7 @@ class AelaWindow {
 		// These are typical window properties.
 		int windowWidth, windowHeight;
 		std::string windowName;
-		bool resizable, visibility, borderless, maximized, taskbarVisibility;
+		bool resizable, visibility, borderless, maximized, taskbarVisibility, hasFocus;
 
 		// This is the SDL_Window used by this class.
 		SDL_Window * window;
@@ -28,10 +28,13 @@ class AelaWindow {
 		SDL_GLContext openGLContext;
 		const Uint8 * keystates;
 
+		// Window events.
+		SDL_Event occur;
+
 	public:
 		// These are the constructors.
 		AelaWindow() {
-
+			hasFocus = true;
 		}
 
 		// These are the behaviours.
@@ -48,6 +51,7 @@ class AelaWindow {
 		void setCursorPositionGlobally(int x, int y);
 		bool quitCheck();
 		bool keyPressed(int ASCII_Code);
+		bool isFocused();
 		static void showCursor();
 		static void hideCursor();
 };

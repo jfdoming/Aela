@@ -16,100 +16,101 @@ using namespace std;
 #include <GL/glew.h>
 
 #include "shader.hpp"
+#include "AelaError.h"
 
-GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_path) {
+GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath) {
 
-	// Create the shaders
-	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-	GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+	// This creates the shaders.
+	GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+	GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-	// Read the Vertex Shader code from the file
-	std::string VertexShaderCode;
-	std::ifstream VertexShaderStream(vertex_file_path, std::ios::in);
-	if (VertexShaderStream.is_open()) {
-		std::string Line = "";
-		while (getline(VertexShaderStream, Line))
-			VertexShaderCode += "\n" + Line;
-		VertexShaderStream.close();
-	}
-	else {
-		printf("Impossible to open %s. Are you in the right directory ? Don't forget to read the FAQ !\n", vertex_file_path);
-		getchar();
+	// This will read the vertex shader code.
+	std::string vertexShaderCode;
+	std::ifstream vertexShaderStream(vertexShaderPath);
+
+	if (vertexShaderStream.is_open()) {
+		std::string line = "";
+		while (getline(vertexShaderStream, line)) {
+			vertexShaderCode += "\n" + line;
+		}
+		vertexShaderStream.close();
+	} else {
+		AelaErrorHandling::windowError("Aela Shader Reader", "There was a problem finding the requested vertex shader:\n" + vertexShaderPath);
 		return 0;
 	}
 
-	// Read the Fragment Shader code from the file
-	std::string FragmentShaderCode;
-	std::ifstream FragmentShaderStream(fragment_file_path, std::ios::in);
-	if (FragmentShaderStream.is_open()) {
-		std::string Line = "";
-		while (getline(FragmentShaderStream, Line))
-			FragmentShaderCode += "\n" + Line;
-		FragmentShaderStream.close();
+	// Read the fragment shader code from the file
+	std::string fragmentShaderCode;
+	std::ifstream fragmentShaderStream(fragmentShaderPath);
+	if (fragmentShaderStream.is_open()) {
+		std::string line = "";
+		while (getline(fragmentShaderStream, line)) {
+			fragmentShaderCode += "\n" + line;
+		}
+		fragmentShaderStream.close();
+	} else {
+		AelaErrorHandling::windowError("Aela Shader Reader", "There was a problem finding the requested fragment shader:\n" + fragmentShaderPath);
+		return 0;
 	}
 
-	GLint Result = GL_FALSE;
-	int InfoLogLength;
+	GLint result = GL_FALSE;
+	int logLength;
 
+	// This compiles the vertex shader.
+	AelaErrorHandling::consoleWindowError("Aela Shader Reader", "The vertex shader " + vertexShaderPath + " is compiling...");
+	char const * vertexCodeAsChar = vertexShaderCode.c_str();
+	glShaderSource(vertexShaderID, 1, &vertexCodeAsChar, NULL);
+	glCompileShader(vertexShaderID);
 
-	// Compile Vertex Shader
-	printf("Compiling shader : %s\n", vertex_file_path);
-	char const * VertexSourcePointer = VertexShaderCode.c_str();
-	glShaderSource(VertexShaderID, 1, &VertexSourcePointer, NULL);
-	glCompileShader(VertexShaderID);
+	// This retrieves any errors related to the vertex shader compilation.
+	glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(vertexShaderID, GL_INFO_LOG_LENGTH, &logLength);
 
-	// Check Vertex Shader
-	glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
-	glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-	if (InfoLogLength > 0) {
-		std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
-		glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-		printf("%s\n", &VertexShaderErrorMessage[0]);
+	if (logLength > 0) {
+		std::vector<char> vertexShaderErrorMessage(logLength + 1);
+		glGetShaderInfoLog(vertexShaderID, logLength, NULL, &vertexShaderErrorMessage[0]);
+		std::string messageAsString(vertexShaderErrorMessage.begin(), vertexShaderErrorMessage.end());
+		AelaErrorHandling::consoleWindowError("Aela Shader Reader", vertexShaderPath + " had an error: " + messageAsString);
 	}
 
+	// This compiles the fragment shader.
+	AelaErrorHandling::consoleWindowError("Aela Shader Reader", "The fragment shader " + fragmentShaderPath + " is compiling...");
+	char const * fragmentCodeAsChar = fragmentShaderCode.c_str();
+	glShaderSource(fragmentShaderID, 1, &fragmentCodeAsChar, NULL);
+	glCompileShader(fragmentShaderID);
 
-
-	// Compile Fragment Shader
-	printf("Compiling shader : %s\n", fragment_file_path);
-	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
-	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer, NULL);
-	glCompileShader(FragmentShaderID);
-
-	// Check Fragment Shader
-	glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
-	glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-	if (InfoLogLength > 0) {
-		std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
-		glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-		printf("%s\n", &FragmentShaderErrorMessage[0]);
+	// This retrieves any errors related to the fragment shader compilation.
+	glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(fragmentShaderID, GL_INFO_LOG_LENGTH, &logLength);
+	if (logLength > 0) {
+		std::vector<char> fragmentShaderErrorMessage(logLength + 1);
+		glGetShaderInfoLog(fragmentShaderID, logLength, NULL, &fragmentShaderErrorMessage[0]);
+		std::string messageAsString(fragmentShaderErrorMessage.begin(), fragmentShaderErrorMessage.end());
+		AelaErrorHandling::consoleWindowError("Aela Shader Reader", fragmentShaderPath + " had an error: " + messageAsString);
 	}
 
+	// This links the shaders with OpenGL.
+	AelaErrorHandling::consoleWindowError("Aela Shader Reader is linking shaders with OpenGL.");
+	GLuint programID = glCreateProgram();
+	glAttachShader(programID, vertexShaderID);
+	glAttachShader(programID, fragmentShaderID);
+	glLinkProgram(programID);
 
-
-	// Link the program
-	printf("Linking program\n");
-	GLuint ProgramID = glCreateProgram();
-	glAttachShader(ProgramID, VertexShaderID);
-	glAttachShader(ProgramID, FragmentShaderID);
-	glLinkProgram(ProgramID);
-
-	// Check the program
-	glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
-	glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-	if (InfoLogLength > 0) {
-		std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
-		glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-		printf("%s\n", &ProgramErrorMessage[0]);
+	// This checks for any linking-related errors.
+	glGetProgramiv(programID, GL_LINK_STATUS, &result);
+	glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &logLength);
+	if (logLength > 0) {
+		std::vector<char> finalProgramErrorMessage(logLength + 1);
+		glGetProgramInfoLog(programID, logLength, NULL, &finalProgramErrorMessage[0]);
+		std::string messageAsString(finalProgramErrorMessage.begin(), finalProgramErrorMessage.end());
+		AelaErrorHandling::consoleWindowError("Aela Shader Reader", "Shader program linking had an error: " + messageAsString);
 	}
 
-
-	glDetachShader(ProgramID, VertexShaderID);
-	glDetachShader(ProgramID, FragmentShaderID);
-
-	glDeleteShader(VertexShaderID);
-	glDeleteShader(FragmentShaderID);
-
-	return ProgramID;
+	glDetachShader(programID, vertexShaderID);
+	glDetachShader(programID, fragmentShaderID);
+	glDeleteShader(vertexShaderID);
+	glDeleteShader(fragmentShaderID);
+	return programID;
 }
 
 

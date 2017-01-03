@@ -19,8 +19,8 @@ void Aela3DRenderer::setupRendering() {
 }
 
 void Aela3DRenderer::setupGLFeatures() {
-	// This gives us a dark blue background
-	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+	// This specifies a background colour.
+	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
 
 	// This enabes depth comparisons/depth testing.
 	glEnable(GL_DEPTH_TEST);
@@ -77,6 +77,11 @@ void Aela3DRenderer::render() {
 		yPosition -= 0.01f;
 	}
 
+	// Rotation.
+	if (basicRenderer.getWindow()->keyPressed(56)) {
+		models[1].setProperty(AelaModelProperty::Y_ROTATION, (models[1].getProperty(AelaModelProperty::Y_ROTATION) + (3.14159f / 2.0f * getTimeInterval()) / 1000.0f));
+	}
+
 	models[1].setPosition(xPosition, yPosition, zPosition);
 
 	// Clear the screen.
@@ -93,6 +98,9 @@ void Aela3DRenderer::render() {
 	}
 	for (unsigned int whichModel = 0; whichModel < models.size(); whichModel++) {
 		basicRenderer.renderTextures(&models[whichModel]);
+	}
+	for (unsigned int whichBillboard = 0; whichBillboard < billboards.size(); whichBillboard++) {
+		basicRenderer.renderBillboard(&billboards[whichBillboard]);
 	}
 
 	basicRenderer.getWindow()->updateBuffer();

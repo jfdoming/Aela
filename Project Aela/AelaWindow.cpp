@@ -93,7 +93,18 @@ void AelaWindow::updateBuffer() {
 }
 
 void AelaWindow::updateWindowEvents() {
+	SDL_PollEvent(&occur);
 	keystates = SDL_GetKeyboardState(NULL);
+	if (occur.type == SDL_WINDOWEVENT) {
+		switch (occur.window.event) {
+		case SDL_WINDOWEVENT_FOCUS_GAINED:
+			hasFocus = true;
+			break;
+		case SDL_WINDOWEVENT_FOCUS_LOST:
+			hasFocus = false;
+			break;
+		}
+	}
 }
 
 void AelaWindow::getCursorPositionInWindow(int * x, int * y) {
@@ -113,8 +124,6 @@ void AelaWindow::setCursorPositionGlobally(int x, int y) {
 }
 
 bool AelaWindow::quitCheck() {
-	SDL_Event occur;
-	SDL_PollEvent(&occur);
 	return occur.type == SDL_QUIT;
 }
 
@@ -128,4 +137,8 @@ void AelaWindow::showCursor() {
 
 void AelaWindow::hideCursor() {
 	SDL_ShowCursor(SDL_DISABLE);
+}
+
+bool AelaWindow::isFocused() {
+	return hasFocus;
 }
