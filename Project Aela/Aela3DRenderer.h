@@ -17,7 +17,8 @@
 #include "AelaModels.h"
 #include "AelaBillboards.h"
 #include "AelaWindow.h"
-#include "controls.hpp"
+#include "Aela3DCamera.h"
+#include "AelaControls.h"
 
 class Aela3DBasicShadowRenderer {
 	public:
@@ -42,9 +43,11 @@ class Aela3DBasicTextureRenderer {
 		void renderTextures(AelaModel * model, GLuint depthMatrixID, GLuint programID,
 			GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID);
 		void renderTextureIn3DSpace(AelaWindow * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
+		void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);
 
 	private:
 		glm::mat4 biasMatrix;
+		glm::mat4 viewMatrix, projectionMatrix;
 };
 
 class Aela3DBasicRenderer {
@@ -75,6 +78,7 @@ class Aela3DBasicRenderer {
 		void renderBillboard(AelaBillboard * billboard);
 		void setupBasicRendering();
 		void setWindow(AelaWindow * setWindow);
+		void setCamera(Aela3DCamera * camera);
 		AelaWindow * getWindow();
 		GLuint * getFramebuffer();
 		int windowWidth, windowHeight;
@@ -90,6 +94,7 @@ class Aela3DBasicRenderer {
 		GLuint quad_vertexbuffer;
 
 		AelaWindow * window;
+		Aela3DCamera * camera;
 
 		const GLfloat g_quad_vertex_buffer_data[18] = {
 			-1.0f, -1.0f, 0.0f,
@@ -123,6 +128,7 @@ class Aela3DRenderer {
 		Aela3DRenderer(AelaWindow * windowToSet) {
 			temporarilySetupModels();
 			setWindow(windowToSet);
+			basicRenderer.setCamera(&camera);
 			setupRendering();
 		}
 
@@ -137,12 +143,15 @@ class Aela3DRenderer {
 		}
 
 		void setWindow(AelaWindow * setWindow);
+		void setTimeManager(AelaTimeManager * setTime);
+		void updateCameraUsingControls(AelaControlManager * controls);
 		void render();
 
 	private:
 		std::vector<Aela3DRendererFlag> flags;
 		Aela3DBasicRenderer basicRenderer;
-
+		Aela3DCamera camera;
+		AelaTimeManager * timeManager;
 
 		// TEMPORARY!
 		std::vector<AelaModel> models;
@@ -176,6 +185,7 @@ class Aela3DRenderer {
 			models[4].setPosition(0, 0, -15);
 			models[5].setPosition(10, 20, 10);
 
+			// This sets up a billboard.
 			billboards.resize(1);
 			billboards[0].loadTexture("textures/uvmap.DDS");
 		}
