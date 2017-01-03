@@ -37,7 +37,8 @@ using namespace glm;
 int startAela() {
 	// TESTING FROM JULIAN PLEASE IGNORE
 	Aela::ResourceManager mgr(5);
-	mgr.loadText("text.txt");
+	std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
+	std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
 	// STOP IGNORING NOW
 
 	// This is TEMPORARY and sets the window width and height.

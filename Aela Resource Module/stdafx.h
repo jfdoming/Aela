@@ -19,12 +19,10 @@
 #include <cstdint>
 #include <gl/GL.h>
 
-#define COMPILE_MYLIBRARY
+#define AELA_COMPILE
 
-using std::string;
-
-#ifdef COMPILE_MYLIBRARY
-#define MYLIBRARY_EXPORT __declspec(dllexport)
+#ifdef AELA_COMPILE
+#define AELA_EXPORT __declspec(dllexport)
 #else
-#define MYLIBRARY_EXPORT __declspec(dllimport)
+#define AELA_EXPORT __declspec(dllimport)
 #endif

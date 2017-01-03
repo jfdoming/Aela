@@ -6,7 +6,7 @@
 
 // This enum is used for the types of errors:
 //		Console Window Errors:
-//			Errors that appear in a seperate window .
+//			Errors that appear in a seperate window.
 //			The window looks like the Operating System's terminal.
 //			Example: A window that looks like cmd in Windows.
 //		Console Internal Errors:
