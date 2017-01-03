@@ -30,19 +30,14 @@ using namespace glm;
 #include "AelaWindow.h"
 #include "AelaError.h"
 #include "Aela3D.h"
+#include "ResourceManager.h"
 
-<<<<<<< HEAD
-void runningLoop();
+int runningLoop();
 
 AelaWindow window;
 Aela3DRenderer renderer3D;
 AelaControlManager controls;
 AelaTimeManager timeManager;
-
-// This is the function that starts Aela and contains its loops.
-int startAela() {
-=======
-#include "ResourceManager.h"
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -52,7 +47,6 @@ int startAela() {
 	std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
 	// STOP IGNORING NOW
 
->>>>>>> origin/master
 	// This is TEMPORARY and sets the window width and height.
 	int windowWidth = 1024, windowHeight = 768;
 	// This is also TEMPORARY and sets the window starting position.
@@ -79,7 +73,6 @@ int startAela() {
 		return -1;
 	}
 
-<<<<<<< HEAD
 	renderer3D.setup(&window);
 	renderer3D.setTimeManager(&timeManager);
 	controls.setWindow(&window);
@@ -87,17 +80,15 @@ int startAela() {
 	runningLoop();
 	return 0;
 }
-=======
 	Aela3DRenderer renderer3D(&window);
->>>>>>> origin/master
 
+int runningLoop() {
 	// This is the program's running loop.
 	do {
 		timeManager.updateTime();
 		window.updateWindowEvents();
 		renderer3D.updateCameraUsingControls(&controls);
 		renderer3D.render();
-
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 
 	return 0;
