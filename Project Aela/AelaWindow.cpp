@@ -123,12 +123,16 @@ void AelaWindow::setCursorPositionGlobally(int x, int y) {
 	SDL_WarpMouseGlobal(x, y);
 }
 
+std::string AelaWindow::getWindowName() {
+	return windowName;
+}
+
 bool AelaWindow::quitCheck() {
 	return occur.type == SDL_QUIT;
 }
 
-bool AelaWindow::keyPressed(int ASCII_Code) {
-	return (keystates[ASCII_Code] == 1);
+bool AelaWindow::keyPressed(int SDL_Code) {
+	return (keystates[SDL_Code] == 1);
 }
 
 void AelaWindow::showCursor() {

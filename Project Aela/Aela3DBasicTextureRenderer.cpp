@@ -4,6 +4,7 @@
 #include <glm/gtx/euler_angles.hpp>
 #include "AelaControls.h"
 
+// This sets matrices.
 void Aela3DBasicTextureRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
 	viewMatrix = setViewMatrix;
 	projectionMatrix = setProjectionMatrix;
@@ -11,6 +12,7 @@ void Aela3DBasicTextureRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 
 
 void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthMatrixID, GLuint programID,
 	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID) {
+
 	// This loads buffers.
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
@@ -36,44 +38,42 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glEnable(GL_CULL_FACE);
 
+	// This is positioning/rotation of light and the model.
 	glm::vec3 lightInvDir = glm::vec3(0.5f, 2, 2);
+	glm::vec3 position = model->getPosition();
+	glm::vec3 rotation = model->getRotation();
 
-	// This calculates the MVP matrix using the light's point of view.
+	// This calculates the MVP matrix using the light's point of view. Note: glm::ortho creates a matrix.
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-	// CHANGE/DO SOMETHING WITH THIS
-	// or, for spot light :
+	// USe this if you want a spot light. Otherwise, use the code above.
 	//glm::vec3 lightPos(5, 20, 20);
 	//glm::mat4 depthProjectionMatrix = glm::perspective<float>(45.0f, 1.0f, 2.0f, 50.0f);
 	//glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));
 
+	// These are more matrices.
 	glm::mat4 depthModelMatrix = glm::mat4(1.0);
 	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
 
-	// This sends our transformations to the shader.
+	// This sends the transformations to the shader.
 	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthMVP[0][0]);
 	glUseProgram(programID);
 
-	glm::vec3 position = model->getPosition();
-	glm::vec3 rotation = model->getRotation();
-
-	// gOrientation1.y += (3.14159f / 2.0f * getTimeInterval()) / 1000.0f;
 	// This computes more matrices.
 	glm::mat4 rotationMatrix = glm::eulerAngleYXZ(rotation.y, rotation.x, rotation.z);
 	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), position) * rotationMatrix;
 	glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 	glm::mat4 depthBiasMVP = biasMatrix * depthMVP;
 
-	// This sends our transformations to the shader.
+	// This sends more transformations to the shader.
 	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
 	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
 	glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
 	glUniformMatrix4fv(depthBiasID, 1, GL_FALSE, &depthBiasMVP[0][0]);
-
 	glUniform3f(lightInvDirID, lightInvDir.x, lightInvDir.y, lightInvDir.z);
 
-	// This binds the texture to "slot" zero.
+	// This binds the texture to "slot" zero. A similar thing happens to the depth texture.
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, *model->getTexture());
 	glUniform1i(textureID, 0);
@@ -86,15 +86,15 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glVertexAttribPointer(
-		// Attribute
+		// Attribute.
 		0,
-		// Size
+		// Size.
 		3,
-		// Type
+		// Type.
 		GL_FLOAT,
-		// Is it normalized?
+		// Is the vertex normalized?
 		GL_FALSE,
-		// Stride
+		// Stride.
 		0,
 		// Array buffer offset.
 		(void*)0
@@ -103,38 +103,20 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 	// These are attributes for the UV buffer.
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-	glVertexAttribPointer(
-		1,
-		2,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*)0
-	);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
 	// These are attributes for the normal buffer.
 	glEnableVertexAttribArray(2);
 	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-	glVertexAttribPointer(
-		2,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*)0
-	);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
 	// This binds the index buffer.
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
 	// This draws the elements to the screen.
-	glDrawElements(
-		GL_TRIANGLES,
-		model->getIndexSize(),
-		GL_UNSIGNED_SHORT,
-		(void*)0
-	);
+	glDrawElements(GL_TRIANGLES, model->getIndexSize(), GL_UNSIGNED_SHORT, (void*) 0);
 
+	// This deletes buffers.
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
@@ -209,7 +191,7 @@ void Aela3DBasicTextureRenderer::renderTextureIn3DSpace(AelaWindow * window, boo
 		glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
 		glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
 
-		// Buffer attributes.
+		// Vertex buffer attributes.
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 		glVertexAttribPointer(
@@ -227,18 +209,15 @@ void Aela3DBasicTextureRenderer::renderTextureIn3DSpace(AelaWindow * window, boo
 			(void*)0
 		);
 
+		// UV buffer attributes.
 		glEnableVertexAttribArray(1);
 		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-		glVertexAttribPointer(
-			1,
-			2,
-			GL_FLOAT,
-			GL_FALSE,
-			0,
-			(void*)0
-		);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
+		// This draws triangles!
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		// This deletes stuff from the memory.
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDeleteBuffers(1, &vertexbuffer);

@@ -82,6 +82,7 @@ GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath)
 	// This retrieves any errors related to the fragment shader compilation.
 	glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &result);
 	glGetShaderiv(fragmentShaderID, GL_INFO_LOG_LENGTH, &logLength);
+
 	if (logLength > 0) {
 		std::vector<char> fragmentShaderErrorMessage(logLength + 1);
 		glGetShaderInfoLog(fragmentShaderID, logLength, NULL, &fragmentShaderErrorMessage[0]);
@@ -90,7 +91,7 @@ GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath)
 	}
 
 	// This links the shaders with OpenGL.
-	AelaErrorHandling::consoleWindowError("Aela Shader Reader is linking shaders with OpenGL.");
+	AelaErrorHandling::consoleWindowError("Aela Shader Reader", "Aela Shader Reader is linking shaders with OpenGL.");
 	GLuint programID = glCreateProgram();
 	glAttachShader(programID, vertexShaderID);
 	glAttachShader(programID, fragmentShaderID);

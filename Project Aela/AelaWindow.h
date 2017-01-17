@@ -35,6 +35,7 @@ class AelaWindow {
 		// These are the constructors.
 		AelaWindow() {
 			hasFocus = true;
+			windowName = "Aela Window";
 		}
 
 		// These are the behaviours.
@@ -49,8 +50,9 @@ class AelaWindow {
 		void getCursorPositionGlobally(int * x, int * y);
 		void setCursorPositionInWindow(int x, int y);
 		void setCursorPositionGlobally(int x, int y);
+		std::string getWindowName();
 		bool quitCheck();
-		bool keyPressed(int ASCII_Code);
+		bool keyPressed(int SDL_Code);
 		bool isFocused();
 		static void showCursor();
 		static void hideCursor();

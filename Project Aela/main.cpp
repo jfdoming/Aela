@@ -30,7 +30,7 @@ using namespace glm;
 #include "AelaWindow.h"
 #include "AelaError.h"
 #include "Aela3D.h"
-#include "ResourceManager.h"
+// #include "ResourceManager.h"
 
 int runningLoop();
 
@@ -42,9 +42,9 @@ AelaTimeManager timeManager;
 // This is the function that starts Aela and contains its loops.
 int startAela() {
 	// TESTING FROM JULIAN PLEASE IGNORE
-	Aela::ResourceManager mgr(5);
-	std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
-	std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
+	// Aela::ResourceManager mgr(5);
+	// std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
+	// std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
 	// STOP IGNORING NOW
 
 	// This is TEMPORARY and sets the window width and height.
@@ -52,12 +52,10 @@ int startAela() {
 	// This is also TEMPORARY and sets the window starting position.
 	int windowXPosition = 50, windowYPosition = 50;
 
-	AelaWindow window;
 	window.addProperty(AelaWindowFlag::AELA_WINDOW_SHOWN);
 	window.addProperty(AelaWindowFlag::AELA_WINDOW_OPENGL);
 	bool windowCreationSuccess = window.createWindow(windowWidth, windowHeight, windowXPosition, windowYPosition, "Aela Engine");
 	window.getWindowPosition(&windowXPosition, &windowYPosition);
-	std::cout << windowXPosition << " " << windowYPosition << "\n";
 
 	if (windowCreationSuccess == false) {
 		return -1;
@@ -80,7 +78,6 @@ int startAela() {
 	runningLoop();
 	return 0;
 }
-	Aela3DRenderer renderer3D(&window);
 
 int runningLoop() {
 	// This is the program's running loop.

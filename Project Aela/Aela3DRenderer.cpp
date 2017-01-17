@@ -97,13 +97,6 @@ void Aela3DRenderer::render() {
 
 	basicRenderer.setCamera(&camera);
 
-	glm::mat4 garbage = camera.getViewMatrix();
-	std::cout << "-------\n";
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			std::cout << garbage[i][j] << "\n";
-		}
-	}
 	for (unsigned int whichModel = 0; whichModel < models.size(); whichModel++) {
 		basicRenderer.renderShadows(&models[whichModel]);
 	}

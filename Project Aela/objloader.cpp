@@ -84,7 +84,6 @@ bool loadOBJ(
 					AelaErrorHandling::windowError("Aela OBJ Model Loader", "The requested model's normal (vn) information is missing.\nTry exporting the model with different information.");
 
 				} else {
-					std::cout << numberOfSlashes << " - " << line << " is no\n";
 					AelaErrorHandling::windowError("Aela OBJ Model Loader", "The formatting of the face ('f') section of the OBJ file\nis not the same that the loader uses.\nSupport for more formats will be added soon.");
 					return false;
 				}

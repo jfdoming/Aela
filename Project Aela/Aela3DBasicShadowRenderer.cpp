@@ -1,7 +1,10 @@
 #include "Aela3DRenderer.h"
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 void Aela3DBasicShadowRenderer::renderShadows(AelaModel * model, GLuint depthProgramID, GLuint depthMatrixID) {
-	// This loads our buffers.
+	// This loads the shadow renderer's buffers.
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -22,58 +25,49 @@ void Aela3DBasicShadowRenderer::renderShadows(AelaModel * model, GLuint depthPro
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, model->getIndexSize() * sizeof(unsigned short), model->getIndices(), GL_STATIC_DRAW);
 
-
-	// We don't use bias in the shader, but instead we draw back faces, 
-	// which are already separated from the front faces by a small distance 
-	// (if your geometry is made this way)
+	// This culls triangles.
 	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK); // Cull back-facing triangles -> draw only front-facing triangles
+	glCullFace(GL_BACK);
 
-
-						 // This says "use this shader".
+	// This says "use this shader".
 	glUseProgram(depthProgramID);
 
+	// These are positions and rotations for light and the model.
 	glm::vec3 lightInvDir = glm::vec3(0.5f, 2, 2);
 	glm::vec3 position = model->getPosition();
+	glm::vec3 rotation = model->getRotation();
 
-	// Compute the MVP matrix from the light's point of view
+	// This calculates the MVP (model view projection) matrix from the view of the light. Note: glm::ortho creates a mtrix.
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	// or, for spot light :
-	//glm::vec3 lightPos(5, 20, 20);
-	//glm::mat4 depthProjectionMatrix = glm::perspective<float>(45.0f, 1.0f, 2.0f, 50.0f);
-	//glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));
+	
+	// This is for a spotlight, use either this or the code above.
+	// glm::vec3 lightPos(5, 20, 20);
+	// glm::mat4 depthProjectionMatrix = glm::perspective<float>(45.0f, 1.0f, 2.0f, 50.0f);
+	// glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));
 
-	glm::mat4 depthModelMatrix = glm::mat4(1.0);
-	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix; // * glm::translate(glm::mat4(1.0), position)
 
-	// Send our transformation to the currently bound shader, 
-	// in the "MVP" uniform
+	// gOrientation1.y += (3.14159f / 2.0f * getTimeInterval()) / 1000.0f;
+	// This computes more matrices.
+	glm::mat4 rotationMatrix = glm::eulerAngleYXZ(rotation.y, rotation.x, rotation.z);
+	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), position) * rotationMatrix;
+	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * modelMatrix;
+
+	// This sends all transformations to the shader.
 	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthMVP[0][0]);
 
-	// 1st attribute buffer : vertices
+	// These are the vertex attributes.
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glVertexAttribPointer(
-		0,  // The attribute we want to configure
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride
-		(void*)0            // array buffer offset
-	);
+	glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-	// Index buffer
+	// This is the index buffer.
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
-	// Draw the triangles !
-	glDrawElements(
-		GL_TRIANGLES,      // mode
-		model->getIndexSize(),    // count
-		GL_UNSIGNED_SHORT, // type
-		(void*)0           // element array buffer offset
-	);
+	// This draws the elements.
+	glDrawElements(GL_TRIANGLES, model->getIndexSize(), GL_UNSIGNED_SHORT, (void*) 0);
 
+	// This frees the buffers from the memory. Delete this if you want to screw over your users.
 	glDisableVertexAttribArray(0);
 	glDeleteBuffers(1, &vertexbuffer);
 	glDeleteBuffers(1, &uvbuffer);

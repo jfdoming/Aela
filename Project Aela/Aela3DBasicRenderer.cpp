@@ -9,7 +9,7 @@ void Aela3DBasicRenderer::setupBasicRendering() {
 	getFrameBufferName();
 	setupDepthTexture();
 
-	setupQuadVertexBuffer();
+	//setupQuadVertexBuffer();
 	getIDs();
 }
 
@@ -21,8 +21,17 @@ void Aela3DBasicRenderer::setupVertexArrayID() {
 void Aela3DBasicRenderer::setupShaders() {
 	// This creates and compiles the GLSL program from the shaders.
 	depthProgramID = loadShaders("shaders/DepthRTT.vertexshader", "shaders/DepthRTT.fragmentshader");
-	quad_programID = loadShaders("shaders/Passthrough.vertexshader", "shaders/SimpleTexture.fragmentshader");
-	texID = glGetUniformLocation(quad_programID, "texture");
+
+	// Note: The shaders below are commented out. Basically, these shaders are from the OpenGL tutorial and are used for
+	// the rendering of quads + the getting of the rendered image of the 3D space, applying effects to it and displaying
+	// the modified rendered image with effects to the screen. Currently, these shaders are not necessary to have but I will
+	// in the future add a feature in which a shader called "effects" will modify the rendered image before it is displayed.
+	// By default, this effects shader will do nothing but a modder or game program can modify the effects shader to add cool
+	// effects to the rendered image, such as a drunk or high effect like in some famous openworld game named after the stealing
+	// of a certain vehicle.
+
+	// quad_programID = loadShaders("shaders/Passthrough.vertexshader", "shaders/SimpleTexture.fragmentshader");
+	// texID = glGetUniformLocation(quad_programID, "texture");
 	programID = loadShaders("shaders/ShadowMapping.vertexshader", "shaders/ShadowMapping.fragmentshader");
 }
 

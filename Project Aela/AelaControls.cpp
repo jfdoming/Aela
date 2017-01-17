@@ -28,7 +28,6 @@ void AelaControlManager::computeMatricesWithInputs(Aela3DCamera * camera) {
 	// This will only run if the window is focused.
 	if (window->isFocused()) {
 		windowFocus = true;
-		std::cout << "sdsd\n";
 		float deltaTime = timeManager->getTimeBetweenFrames();
 
 		// This is temporarily hard-coded and enables going fast.
@@ -37,7 +36,6 @@ void AelaControlManager::computeMatricesWithInputs(Aela3DCamera * camera) {
 		} else {
 			currentSpeed = speed;
 		}
-
 		// This gets the cursor's position.
 		int xpos, ypos;
 		window->getCursorPositionInWindow(&xpos, &ypos);
