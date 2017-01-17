@@ -30,21 +30,9 @@ using namespace glm;
 #include "AelaWindow.h"
 #include "AelaError.h"
 #include "Aela3D.h"
-<<<<<<< HEAD
-// #include "ResourceManager.h"
-=======
-<<<<<<< HEAD
-// #include "ResourceManager.h"
-=======
-<<<<<<< HEAD
 
 #include "Resource Management\ResourceManager.h"
 #include "Resource Management\TextureLoader.h"
-=======
-#include "ResourceManager.h"
->>>>>>> origin/master
->>>>>>> origin/master
->>>>>>> origin/master
 
 int runningLoop();
 
@@ -56,16 +44,10 @@ AelaTimeManager timeManager;
 // This is the function that starts Aela and contains its loops.
 int startAela() {
 	// TESTING FROM JULIAN PLEASE IGNORE
-<<<<<<< HEAD
 	// Aela::ResourceManager mgr(5);
 	// std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
 	// std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
-=======
-<<<<<<< HEAD
-	// Aela::ResourceManager mgr(5);
-	// std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
-	// std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
-=======
+
 	Aela::ResourceManager mgr(5);
 	//std::cout << "ResourceManager Test for Text files " << (mgr.loadTexture("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
 	//std::cout << "Text value: " << (static_cast<Aela::TextureResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
@@ -73,8 +55,6 @@ int startAela() {
 	std::ifstream stream;
 	stream.open("textures/cat.dds");
 	textTest.load(stream);
->>>>>>> origin/master
->>>>>>> origin/master
 	// STOP IGNORING NOW
 
 	// This is TEMPORARY and sets the window width and height.

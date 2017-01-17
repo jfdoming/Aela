@@ -9,8 +9,13 @@ ResourceManager::ResourceManager(int resourceCount) {
 ResourceManager::~ResourceManager() {
 }
 
-bool ResourceManager::load(std::string src, bool crucial, ResourceLoader loader) {
-	Resource * res = loader.load(src);
+bool ResourceManager::load(std::string src, bool crucial, ResourceLoader * loader) {
+	std::ifstream in;
+	in.open(src);
+
+	Resource * res = loader->load(in);
+	in.close();
+
 	//std::cout << &res << std::endl;
 	resources.emplace(res->src, res);
 	//std::cout << "meme: \"" << (NULL == &resources.at(src)) << "\"" << std::endl;
