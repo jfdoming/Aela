@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "Resource.h"
+#include "ResourceLoader.h"
 #include <unordered_map>
 
 namespace Aela {
@@ -23,7 +24,7 @@ namespace Aela {
 			/*
 			 * Read in text from a text file and store it as a Resource, accessible using obtain(string).
 			 */
-			virtual bool loadTexture(std::string src, bool crucial) final;
+			virtual bool load(std::string src, bool crucial, ResourceLoader loader) final;
 
 			/*
 			* Obtain the specified resource for use in the application.
