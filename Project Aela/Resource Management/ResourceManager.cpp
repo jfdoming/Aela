@@ -9,8 +9,8 @@ ResourceManager::ResourceManager(int resourceCount) {
 ResourceManager::~ResourceManager() {
 }
 
-bool ResourceManager::loadTexture(std::string src, bool crucial) {
-	TextureResource * res = new TextureResource(src);
+bool ResourceManager::load(std::string src, bool crucial, ResourceLoader loader) {
+	Resource * res = loader.load(src);
 	//std::cout << &res << std::endl;
 	resources.emplace(res->src, res);
 	//std::cout << "meme: \"" << (NULL == &resources.at(src)) << "\"" << std::endl;
