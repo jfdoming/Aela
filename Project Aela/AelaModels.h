@@ -15,11 +15,14 @@
 #include "vboindexer.hpp"
 #include "texture.hpp"
 
+#ifndef AELA_3D_PROPERTY
+#define AELA_3D_PROPERTY
 // This enum is used in an AelaModel function to change a single property.
-enum class AelaModelProperty {
+enum class Aela3DProperty {
 	X_POSITION, Y_POSITION, Z_POSITION,
 	X_ROTATION, Y_ROTATION, Z_ROTATION
 };
+#endif
 
 class AelaModel {
 	private:
@@ -57,17 +60,19 @@ class AelaModel {
 
 		// Positioning getters and setters.
 		void setPosition(float setX, float setY, float setZ);
+		void setPosition(glm::vec3 setPosition);
 		glm::vec3 getPosition();
 		void getPosition(float * setXPosition, float * setYPosition, float * setZPosition);
 
 		// Rotation getters and setters.
 		void setRotation(float setX, float setY, float setZ);
+		void setRotation(glm::vec3 setRotation);
 		glm::vec3 getRotation();
 		void getRotation(float * setXPosition, float * setYPosition, float * setZPosition);
 
 		// A function used for changing any single transformation-related property.
-		void setProperty(AelaModelProperty property, float value);
-		float getProperty(AelaModelProperty property);
+		void setProperty(Aela3DProperty property, float value);
+		float getProperty(Aela3DProperty property);
 
 		glm::vec3 * getVertices();
 		glm::vec2 * getUVs();

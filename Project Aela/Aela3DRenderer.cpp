@@ -47,8 +47,11 @@ void Aela3DRenderer::setWindow(AelaWindow * setWindow) {
 	basicRenderer.setWindow(setWindow);
 }
 
-void Aela3DRenderer::render() {
+void Aela3DRenderer::setTimeManager(AelaTimeManager * setTime) {
+	timeManager = setTime;
+}
 
+void Aela3DRenderer::render() {
 	// Temporary, for bug testing.
 	float xPosition, yPosition, zPosition;
 	models[1].getPosition(&xPosition, &yPosition, &zPosition);
@@ -79,20 +82,28 @@ void Aela3DRenderer::render() {
 
 	// Rotation.
 	if (basicRenderer.getWindow()->keyPressed(56)) {
-		models[1].setProperty(AelaModelProperty::Y_ROTATION, (models[1].getProperty(AelaModelProperty::Y_ROTATION) + (3.14159f / 2.0f * getTimeInterval()) / 1000.0f));
+		models[1].setProperty(Aela3DProperty::Y_ROTATION, (models[1].getProperty(Aela3DProperty::Y_ROTATION) + (3.14159f / 2.0f * timeManager->getTimeBetweenFrames()) / 1000.0f));
 	}
 
 	models[1].setPosition(xPosition, yPosition, zPosition);
 
 	// Clear the screen.
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// This says "render to our framebuffer".
+	// This says "render to the framebuffer".
 	glBindFramebuffer(GL_FRAMEBUFFER, *basicRenderer.getFramebuffer());
 	// This tells OpenGL to render to the entire framebuffer (top-left corner to bottom-right).
 	// Changing this can be used for split screen multiplayer gaming.
 	glViewport(0, 0, basicRenderer.windowWidth, basicRenderer.windowHeight);
-	computeMatricesFromInputs(basicRenderer.getWindow());
 
+	basicRenderer.setCamera(&camera);
+
+	glm::mat4 garbage = camera.getViewMatrix();
+	std::cout << "-------\n";
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			std::cout << garbage[i][j] << "\n";
+		}
+	}
 	for (unsigned int whichModel = 0; whichModel < models.size(); whichModel++) {
 		basicRenderer.renderShadows(&models[whichModel]);
 	}
@@ -104,4 +115,8 @@ void Aela3DRenderer::render() {
 	}
 
 	basicRenderer.getWindow()->updateBuffer();
+}
+
+void Aela3DRenderer::updateCameraUsingControls(AelaControlManager * controls) {
+	controls->computeMatricesWithInputs(&camera);
 }

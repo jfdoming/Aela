@@ -23,16 +23,27 @@ using namespace glm;
 // This includes all of the 3D headers required.
 #include "shader.hpp"
 #include "texture.hpp"
-#include "controls.hpp"
+#include "AelaControls.h"
 #include "objloader.hpp"
 #include "vboindexer.hpp"
 #include "Aela_Engine.h"
 #include "AelaWindow.h"
 #include "AelaError.h"
 #include "Aela3D.h"
+<<<<<<< HEAD
 
 #include "Resource Management\ResourceManager.h"
 #include "Resource Management\TextureLoader.h"
+=======
+#include "ResourceManager.h"
+>>>>>>> origin/master
+
+int runningLoop();
+
+AelaWindow window;
+Aela3DRenderer renderer3D;
+AelaControlManager controls;
+AelaTimeManager timeManager;
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -65,21 +76,28 @@ int startAela() {
 		window.hideCursor();
 	}
 
-	// Initialize GLEW.
-	glewExperimental = true; // Needed for core profile
+	// This initializes GLEW.
+	glewExperimental = true;
 	if (glewInit() != GLEW_OK) {
 		AelaErrorHandling::windowError("OpenGL Extension Wrangler", "OpenGL Extension Wrangler failed to initialise!");
-		getchar();
 		return -1;
 	}
 
+	renderer3D.setup(&window);
+	renderer3D.setTimeManager(&timeManager);
+	controls.setWindow(&window);
+	controls.setTimeManager(&timeManager);
+	runningLoop();
+	return 0;
+}
 	Aela3DRenderer renderer3D(&window);
 
+int runningLoop() {
 	// This is the program's running loop.
 	do {
+		timeManager.updateTime();
 		window.updateWindowEvents();
-		computeMatricesFromInputs(&window);
-
+		renderer3D.updateCameraUsingControls(&controls);
 		renderer3D.render();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 
