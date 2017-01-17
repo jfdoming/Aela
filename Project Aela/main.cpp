@@ -31,14 +31,19 @@ using namespace glm;
 #include "AelaError.h"
 #include "Aela3D.h"
 
-#include "ResourceManager.h"
+#include "Resource Management\ResourceManager.h"
+#include "Resource Management\TextureLoader.h"
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
 	// TESTING FROM JULIAN PLEASE IGNORE
 	Aela::ResourceManager mgr(5);
-	std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
-	std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
+	//std::cout << "ResourceManager Test for Text files " << (mgr.loadTexture("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
+	//std::cout << "Text value: " << (static_cast<Aela::TextureResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
+	Aela::TextureLoader textTest;
+	std::ifstream stream;
+	stream.open("textures/cat.dds");
+	textTest.load(stream);
 	// STOP IGNORING NOW
 
 	// This is TEMPORARY and sets the window width and height.
