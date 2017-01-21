@@ -1,4 +1,4 @@
-#include "AelaError.h"
+#include "ErrorHandler.h"
 
 AelaErrorHandling::AelaErrorHandler AelaErrorHandling::errorHandler;
 

@@ -1,16 +1,16 @@
-#include "Aela3DRenderer.h"
+#include "Renderer3D.h"
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
-#include "AelaControls.h"
+#include "ControlManager.h"
 
 // This sets matrices.
-void Aela3DBasicTextureRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
+void Basic3DTextureRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
 	viewMatrix = setViewMatrix;
 	projectionMatrix = setProjectionMatrix;
 }
 
-void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthMatrixID, GLuint programID,
+void Basic3DTextureRenderer::renderTextures(Model3D * model, GLuint depthMatrixID, GLuint programID,
 	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID) {
 
 	// This loads buffers.
@@ -130,7 +130,7 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 // For billboards, use getPositionOfCamera() to make the texture look at the camera.
 // To specify a rotation for the camera as a vec3, use the texture's position and add the direction (position + direction) for the lookAt parameter.
 // Note: for the lookAt parameter, position + glm::vec3(0.0, 0.0, 1.0) will not rotate the texture. Use this for no rotation.
-void Aela3DBasicTextureRenderer::renderTextureIn3DSpace(AelaWindow * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
+void Basic3DTextureRenderer::renderTextureIn3DSpace(Window * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
 	glUseProgram(programID);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

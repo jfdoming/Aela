@@ -1,7 +1,7 @@
-#include "Aela3DRenderer.h"
-#include "Aela2DRenderer.h"
+#include "Renderer3D.h"
+#include "2DRenderer.h"
 
-void Aela3DBasicRenderer::setupBasicRendering() {
+void Basic3DRenderer::setupBasicRendering() {
 	setupVertexArrayID();
 	setupShaders();
 
@@ -13,14 +13,14 @@ void Aela3DBasicRenderer::setupBasicRendering() {
 	getIDs();
 }
 
-void Aela3DBasicRenderer::setupVertexArrayID() {
+void Basic3DRenderer::setupVertexArrayID() {
 	glGenVertexArrays(1, &vertexArrayID);
 	glBindVertexArray(vertexArrayID);
 }
 
-void Aela3DBasicRenderer::setupShaders() {
+void Basic3DRenderer::setupShaders() {
 	// This creates and compiles the GLSL program from the shaders.
-	depthProgramID = loadShaders("shaders/DepthRTT.vertexshader", "shaders/DepthRTT.fragmentshader");
+	depthProgramID = loadShaders("res/shaders/DepthRTT.vertexshader", "res/shaders/DepthRTT.fragmentshader");
 
 	// Note: The shaders below are commented out. Basically, these shaders are from the OpenGL tutorial and are used for
 	// the rendering of quads + the getting of the rendered image of the 3D space, applying effects to it and displaying
@@ -30,12 +30,12 @@ void Aela3DBasicRenderer::setupShaders() {
 	// effects to the rendered image, such as a drunk or high effect like in some famous openworld game named after the stealing
 	// of a certain vehicle.
 
-	// quad_programID = loadShaders("shaders/Passthrough.vertexshader", "shaders/SimpleTexture.fragmentshader");
+	// quad_programID = loadShaders("res/shaders/Passthrough.vertexshader", "res/shaders/SimpleTexture.fragmentshader");
 	// texID = glGetUniformLocation(quad_programID, "texture");
-	programID = loadShaders("shaders/ShadowMapping.vertexshader", "shaders/ShadowMapping.fragmentshader");
+	programID = loadShaders("res/shaders/ShadowMapping.vertexshader", "res/shaders/ShadowMapping.fragmentshader");
 }
 
-void Aela3DBasicRenderer::getIDs() {
+void Basic3DRenderer::getIDs() {
 	depthMatrixID = glGetUniformLocation(depthProgramID, "depthMVP");
 
 	// This gets a handle for the "myTextureSampler" uniform.
@@ -53,13 +53,13 @@ void Aela3DBasicRenderer::getIDs() {
 
 }
 
-void Aela3DBasicRenderer::getFrameBufferName() {
+void Basic3DRenderer::getFrameBufferName() {
 	// This is the framebuffer (which regroups 0, 1 or more textures as well as 0 or 1 depth buffers).
 	glGenFramebuffers(1, &framebufferName);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebufferName);
 }
 
-void Aela3DBasicRenderer::setupDepthTexture() {
+void Basic3DRenderer::setupDepthTexture() {
 	// This is a depth texture (for shadows), which is slower than a depth buffer but may be sampled later in a shader.
 	glGenTextures(1, &depthTexture);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
@@ -82,48 +82,48 @@ void Aela3DBasicRenderer::setupDepthTexture() {
 	}
 }
 
-void Aela3DBasicRenderer::setWindow(AelaWindow * setWindow) {
+void Basic3DRenderer::setWindow(Window * setWindow) {
 	window = setWindow;
 	window->getWindowDimensions(&windowWidth, &windowHeight);
 }
 
-void Aela3DBasicRenderer::setCamera(Aela3DCamera * setCamera) {
+void Basic3DRenderer::setCamera(Camera3D * setCamera) {
 	camera = setCamera;
 }
 
-AelaWindow * Aela3DBasicRenderer::getWindow() {
+Window * Basic3DRenderer::getWindow() {
 	return window;
 }
 
-void Aela3DBasicRenderer::setupQuadVertexBuffer() {
+void Basic3DRenderer::setupQuadVertexBuffer() {
 	// This will bind our quad vertex buffer data.
 	glGenBuffers(1, &quad_vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
 }
 
-GLuint * Aela3DBasicRenderer::getFramebuffer() {
+GLuint * Basic3DRenderer::getFramebuffer() {
 	return &framebufferName;
 }
 
-void Aela3DBasicRenderer::renderShadows(AelaModel * model) {
-	shadowRenderer.renderShadows(model, depthProgramID, depthMatrixID);
+void Basic3DRenderer::shade(Model3D * model) {
+	modelShader.shade(model, depthProgramID, depthMatrixID);
 }
 
-void Aela3DBasicRenderer::renderTextures(AelaModel * model) {
+void Basic3DRenderer::renderTextures(Model3D * model) {
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	textureRenderer.renderTextures(model, depthMatrixID, programID, matrixID, modelMatrixID, viewMatrixID,
 		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID);
 }
 
-void Aela3DBasicRenderer::renderTextureIn3DSpace(GLuint * texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
+void Basic3DRenderer::renderTextureIn3DSpace(GLuint * texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
 	// Note: for regular texture rendering, use:
 	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	textureRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, position, lookAt, inverseRotation);
 }
 
-void Aela3DBasicRenderer::renderBillboard(AelaBillboard * billboard) {
+void Basic3DRenderer::renderBillboard(Billboard * billboard) {
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	textureRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, billboard->getPosition(), camera->getPosition(), true);
 }

@@ -1,5 +1,5 @@
 #include "Resource.h"
-#include "AelaError.h"
+#include "../ErrorHandler.h"
 #include <fstream>
 
 // utility functions

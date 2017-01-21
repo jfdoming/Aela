@@ -1,6 +1,6 @@
-#include "Aela3DRenderer.h"
+#include "Renderer3D.h"
 
-void Aela3DRenderer::addFlag(Aela3DRendererFlag flag) {
+void Renderer3D::addFlag(Renderer3DFlag flag) {
 	bool flagExists = false;
 	for (unsigned int i = 0; i < flags.size(); i++) {
 		if (flags[i] == flag) {
@@ -13,12 +13,12 @@ void Aela3DRenderer::addFlag(Aela3DRendererFlag flag) {
 	}
 }
 
-void Aela3DRenderer::setupRendering() {
+void Renderer3D::setupRendering() {
 	setupGLFeatures();
 	basicRenderer.setupBasicRendering();
 }
 
-void Aela3DRenderer::setupGLFeatures() {
+void Renderer3D::setupGLFeatures() {
 	// This specifies a background colour.
 	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
 
@@ -32,7 +32,7 @@ void Aela3DRenderer::setupGLFeatures() {
 	glEnable(GL_CULL_FACE);
 }
 
-bool Aela3DRenderer::setupGLEW() {
+bool Renderer3D::setupGLEW() {
 	// Initialize GLEW.
 	glewExperimental = true; // Needed for core profile
 	if (glewInit() != GLEW_OK) {
@@ -43,15 +43,15 @@ bool Aela3DRenderer::setupGLEW() {
 	return true;
 }
 
-void Aela3DRenderer::setWindow(AelaWindow * setWindow) {
+void Renderer3D::setWindow(Window * setWindow) {
 	basicRenderer.setWindow(setWindow);
 }
 
-void Aela3DRenderer::setTimeManager(AelaTimeManager * setTime) {
+void Renderer3D::setTimeManager(TimeManager * setTime) {
 	timeManager = setTime;
 }
 
-void Aela3DRenderer::render() {
+void Renderer3D::render() {
 	// Temporary, for bug testing.
 	float xPosition, yPosition, zPosition;
 	models[1].getPosition(&xPosition, &yPosition, &zPosition);
@@ -82,7 +82,7 @@ void Aela3DRenderer::render() {
 
 	// Rotation.
 	if (basicRenderer.getWindow()->keyPressed(56)) {
-		models[1].setProperty(Aela3DProperty::Y_ROTATION, (models[1].getProperty(Aela3DProperty::Y_ROTATION) + (3.14159f / 2.0f * timeManager->getTimeBetweenFrames()) / 1000.0f));
+		models[1].setProperty(Model3DProperty::Y_ROTATION, (models[1].getProperty(Model3DProperty::Y_ROTATION) + (3.14159f / 2.0f * timeManager->getTimeBetweenFrames()) / 1000.0f));
 	}
 
 	models[1].setPosition(xPosition, yPosition, zPosition);
@@ -98,7 +98,7 @@ void Aela3DRenderer::render() {
 	basicRenderer.setCamera(&camera);
 
 	for (unsigned int whichModel = 0; whichModel < models.size(); whichModel++) {
-		basicRenderer.renderShadows(&models[whichModel]);
+		basicRenderer.shade(&models[whichModel]);
 	}
 	for (unsigned int whichModel = 0; whichModel < models.size(); whichModel++) {
 		basicRenderer.renderTextures(&models[whichModel]);
@@ -110,6 +110,6 @@ void Aela3DRenderer::render() {
 	basicRenderer.getWindow()->updateBuffer();
 }
 
-void Aela3DRenderer::updateCameraUsingControls(AelaControlManager * controls) {
+void Renderer3D::updateCameraUsingControls(ControlManager * controls) {
 	controls->computeMatricesWithInputs(&camera);
 }

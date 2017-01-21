@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include "ResourceLoader.h"
 
@@ -8,4 +8,4 @@ namespace Aela {
 		bool isValid(std::ifstream &in);
 		Resource* load(std::ifstream &in);
 	};
-}
+}*/

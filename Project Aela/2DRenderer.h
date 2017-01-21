@@ -11,7 +11,7 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-#include "AelaWindow.h"
-#include "AelaError.h"
+#include "Window.h"
+#include "ErrorHandler.h"
 
 // This space is left empty for implementation.

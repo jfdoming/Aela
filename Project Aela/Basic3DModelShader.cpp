@@ -1,9 +1,9 @@
-#include "Aela3DRenderer.h"
+#include "Renderer3D.h"
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
-void Aela3DBasicShadowRenderer::renderShadows(AelaModel * model, GLuint depthProgramID, GLuint depthMatrixID) {
+void Basic3DModelShader::shade(Model3D * model, GLuint depthProgramID, GLuint depthMatrixID) {
 	// This loads the shadow renderer's buffers.
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);

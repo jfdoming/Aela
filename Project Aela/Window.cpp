@@ -1,7 +1,7 @@
-#include "AelaWindow.h"
-#include "AelaError.h"
+#include "Window.h"
+#include "ErrorHandler.h"
 
-void AelaWindow::addProperty(AelaWindowFlag flag) {
+void Window::addProperty(WindowFlag flag) {
 	bool flagExists = false;
 	for (unsigned int i = 0; i < flags.size(); i++) {
 		if (flags[i] == flag) {
@@ -11,21 +11,21 @@ void AelaWindow::addProperty(AelaWindowFlag flag) {
 		}
 	}
 	if (flagExists == false) {
-		if (flag == AelaWindowFlag::AELA_WINDOW_RESIZABLE) {
-			flags.insert(flags.begin() + flags.size(), AelaWindowFlag::AELA_WINDOW_RESIZABLE);
-		} else if (flag == AelaWindowFlag::AELA_WINDOW_SHOWN) {
-			flags.insert(flags.begin() + flags.size(), AelaWindowFlag::AELA_WINDOW_SHOWN);
-		} else if (flag == AelaWindowFlag::AELA_WINDOW_BORDERLESS) {
-			flags.insert(flags.begin() + flags.size(), AelaWindowFlag::AELA_WINDOW_BORDERLESS);
-		} else if (flag == AelaWindowFlag::AELA_WINDOW_MINIMIZED) {
-			flags.insert(flags.begin() + flags.size(), AelaWindowFlag::AELA_WINDOW_MINIMIZED);
-		} else if (flag == AelaWindowFlag::AELA_WINDOW_OPENGL) {
-			flags.insert(flags.begin() + flags.size(), AelaWindowFlag::AELA_WINDOW_OPENGL);
+		if (flag == WindowFlag::AELA_WINDOW_RESIZABLE) {
+			flags.insert(flags.begin() + flags.size(), WindowFlag::AELA_WINDOW_RESIZABLE);
+		} else if (flag == WindowFlag::AELA_WINDOW_SHOWN) {
+			flags.insert(flags.begin() + flags.size(), WindowFlag::AELA_WINDOW_SHOWN);
+		} else if (flag == WindowFlag::AELA_WINDOW_BORDERLESS) {
+			flags.insert(flags.begin() + flags.size(), WindowFlag::AELA_WINDOW_BORDERLESS);
+		} else if (flag == WindowFlag::AELA_WINDOW_MINIMIZED) {
+			flags.insert(flags.begin() + flags.size(), WindowFlag::AELA_WINDOW_MINIMIZED);
+		} else if (flag == WindowFlag::AELA_WINDOW_OPENGL) {
+			flags.insert(flags.begin() + flags.size(), WindowFlag::AELA_WINDOW_OPENGL);
 		}
 	}
 }
 
-bool AelaWindow::createWindow(int setWidth, int setHeight, int setXPosition, int setYPosition, std::string setName) {
+bool Window::createWindow(int setWidth, int setHeight, int setXPosition, int setYPosition, std::string setName) {
 	// This sets general object properties.
 	windowName = setName.c_str();
 	windowWidth = setWidth;
@@ -40,15 +40,15 @@ bool AelaWindow::createWindow(int setWidth, int setHeight, int setXPosition, int
 
 	// This starts looking at the flags inputted as parameters.
 	for (unsigned int i = 0; i < flags.size(); i++) {
-		if (flags[i] == AelaWindowFlag::AELA_WINDOW_RESIZABLE) {
+		if (flags[i] == WindowFlag::AELA_WINDOW_RESIZABLE) {
 			resizableFlag = SDL_WINDOW_RESIZABLE;
-		} else if (flags[i] == AelaWindowFlag::AELA_WINDOW_SHOWN) {
+		} else if (flags[i] == WindowFlag::AELA_WINDOW_SHOWN) {
 			shownFlag = SDL_WINDOW_SHOWN;
-		} else if (flags[i] == AelaWindowFlag::AELA_WINDOW_BORDERLESS) {
+		} else if (flags[i] == WindowFlag::AELA_WINDOW_BORDERLESS) {
 			borderlessFlag = SDL_WINDOW_BORDERLESS;
-		} else if (flags[i] == AelaWindowFlag::AELA_WINDOW_MINIMIZED) {
+		} else if (flags[i] == WindowFlag::AELA_WINDOW_MINIMIZED) {
 			minimizedFlag = SDL_WINDOW_MINIMIZED;
-		} else if (flags[i] == AelaWindowFlag::AELA_WINDOW_OPENGL) {
+		} else if (flags[i] == WindowFlag::AELA_WINDOW_OPENGL) {
 			openGLFlag = SDL_WINDOW_OPENGL;
 		}
 	}
@@ -71,16 +71,16 @@ bool AelaWindow::createWindow(int setWidth, int setHeight, int setXPosition, int
 	return true;
 }
 
-void AelaWindow::getWindowDimensions(int * widthVariable, int * heightVariable) {
+void Window::getWindowDimensions(int * widthVariable, int * heightVariable) {
 	*widthVariable = windowWidth;
 	*heightVariable = windowHeight;
 }
 
-void AelaWindow::getWindowPosition(int * xPositionVariable, int * yPositionVariable) {
+void Window::getWindowPosition(int * xPositionVariable, int * yPositionVariable) {
 	SDL_GetWindowPosition(window, xPositionVariable, yPositionVariable);
 }
 
-bool AelaWindow::makeWindowOpenGLContext() {
+bool Window::makeWindowOpenGLContext() {
 	openGLContext = SDL_GL_CreateContext(window);
 	if (openGLContext == NULL) {
 		return false;
@@ -88,11 +88,11 @@ bool AelaWindow::makeWindowOpenGLContext() {
 	return true;
 }
 
-void AelaWindow::updateBuffer() {
+void Window::updateBuffer() {
 	SDL_GL_SwapWindow(window);
 }
 
-void AelaWindow::updateWindowEvents() {
+void Window::updateWindowEvents() {
 	SDL_PollEvent(&occur);
 	keystates = SDL_GetKeyboardState(NULL);
 	if (occur.type == SDL_WINDOWEVENT) {
@@ -107,42 +107,42 @@ void AelaWindow::updateWindowEvents() {
 	}
 }
 
-void AelaWindow::getCursorPositionInWindow(int * x, int * y) {
+void Window::getCursorPositionInWindow(int * x, int * y) {
 	SDL_GetMouseState(x, y);
 }
 
-void AelaWindow::getCursorPositionGlobally(int * x, int * y) {
+void Window::getCursorPositionGlobally(int * x, int * y) {
 	SDL_GetGlobalMouseState(x, y);
 }
 
-void AelaWindow::setCursorPositionInWindow(int x, int y) {
+void Window::setCursorPositionInWindow(int x, int y) {
 	SDL_WarpMouseInWindow(window, x, y);
 }
 
-void AelaWindow::setCursorPositionGlobally(int x, int y) {
+void Window::setCursorPositionGlobally(int x, int y) {
 	SDL_WarpMouseGlobal(x, y);
 }
 
-std::string AelaWindow::getWindowName() {
+std::string Window::getWindowName() {
 	return windowName;
 }
 
-bool AelaWindow::quitCheck() {
+bool Window::quitCheck() {
 	return occur.type == SDL_QUIT;
 }
 
-bool AelaWindow::keyPressed(int SDL_Code) {
+bool Window::keyPressed(int SDL_Code) {
 	return (keystates[SDL_Code] == 1);
 }
 
-void AelaWindow::showCursor() {
+void Window::showCursor() {
 	SDL_ShowCursor(SDL_ENABLE);
 }
 
-void AelaWindow::hideCursor() {
+void Window::hideCursor() {
 	SDL_ShowCursor(SDL_DISABLE);
 }
 
-bool AelaWindow::isFocused() {
+bool Window::isFocused() {
 	return hasFocus;
 }

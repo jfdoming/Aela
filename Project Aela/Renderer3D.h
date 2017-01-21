@@ -12,26 +12,26 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-#include "AelaError.h"
+#include "ErrorHandler.h"
 #include "shader.hpp"
-#include "AelaModels.h"
-#include "AelaBillboards.h"
-#include "AelaWindow.h"
-#include "Aela3DCamera.h"
-#include "AelaControls.h"
+#include "Models.h"
+#include "Billboards.h"
+#include "Window.h"
+#include "Camera3D.h"
+#include "ControlManager.h"
 
-class Aela3DBasicShadowRenderer {
+class Basic3DModelShader {
 	public:
-		Aela3DBasicShadowRenderer() {
+		Basic3DModelShader() {
 
 		}
 
-		void renderShadows(AelaModel * model, GLuint depthProgramID, GLuint depthMatrixID);
+		void shade(Model3D * model, GLuint depthProgramID, GLuint depthMatrixID);
 };
 
-class Aela3DBasicTextureRenderer {
+class Basic3DTextureRenderer {
 	public:
-		Aela3DBasicTextureRenderer() {
+		Basic3DTextureRenderer() {
 			biasMatrix = glm::mat4(
 				0.5, 0.0, 0.0, 0.0,
 				0.0, 0.5, 0.0, 0.0,
@@ -40,9 +40,9 @@ class Aela3DBasicTextureRenderer {
 			);
 		}
 
-		void renderTextures(AelaModel * model, GLuint depthMatrixID, GLuint programID,
+		void renderTextures(Model3D * model, GLuint depthMatrixID, GLuint programID,
 			GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID);
-		void renderTextureIn3DSpace(AelaWindow * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
+		void renderTextureIn3DSpace(Window * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
 		void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);
 
 	private:
@@ -50,9 +50,9 @@ class Aela3DBasicTextureRenderer {
 		glm::mat4 viewMatrix, projectionMatrix;
 };
 
-class Aela3DBasicRenderer {
+class Basic3DRenderer {
 	public:
-		Aela3DBasicRenderer() {
+		Basic3DRenderer() {
 			framebufferName = 0;
 			flipMatrix = glm::mat3(
 				-1.0, 0.0, 0.0,
@@ -61,7 +61,7 @@ class Aela3DBasicRenderer {
 			);
 		}
 
-		~Aela3DBasicRenderer() {
+		~Basic3DRenderer() {
 			// This cleans all VBOs and shaders.
 			glDeleteProgram(programID);
 			glDeleteProgram(depthProgramID);
@@ -72,20 +72,20 @@ class Aela3DBasicRenderer {
 			glDeleteVertexArrays(1, &vertexArrayID);
 		}
 
-		void renderShadows(AelaModel * model);
-		void renderTextures(AelaModel * model);
+		void shade(Model3D * model);
+		void renderTextures(Model3D * model);
 		void renderTextureIn3DSpace(GLuint * texture, bool cullTexture, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
-		void renderBillboard(AelaBillboard * billboard);
+		void renderBillboard(Billboard * billboard);
 		void setupBasicRendering();
-		void setWindow(AelaWindow * setWindow);
-		void setCamera(Aela3DCamera * camera);
-		AelaWindow * getWindow();
+		void setWindow(Window * setWindow);
+		void setCamera(Camera3D * camera);
+		Window * getWindow();
 		GLuint * getFramebuffer();
 		int windowWidth, windowHeight;
 
 	private:
-		Aela3DBasicShadowRenderer shadowRenderer;
-		Aela3DBasicTextureRenderer textureRenderer;
+		Basic3DModelShader modelShader;
+		Basic3DTextureRenderer textureRenderer;
 
 		GLuint vertexArrayID, depthProgramID, depthMatrixID, quad_programID, texID, programID;
 		GLuint textureID, matrixID, viewMatrixID, modelMatrixID, depthBiasID, shadowMapID, lightInvDirID;
@@ -93,8 +93,8 @@ class Aela3DBasicRenderer {
 		GLuint framebufferName;
 		GLuint quad_vertexbuffer;
 
-		AelaWindow * window;
-		Aela3DCamera * camera;
+		Window * window;
+		Camera3D * camera;
 
 		const GLfloat g_quad_vertex_buffer_data[18] = {
 			-1.0f, -1.0f, 0.0f,
@@ -115,69 +115,69 @@ class Aela3DBasicRenderer {
 		void getFrameBufferName();
 };
 
-enum class Aela3DRendererFlag {
+enum class Renderer3DFlag {
 	RENDER_SHADOWS, RENDER_TEXTURES
 };
 
-class Aela3DRenderer {
+class Renderer3D {
 	public:
-		Aela3DRenderer() {
+		Renderer3D() {
 			
 		}
 
-		Aela3DRenderer(AelaWindow * windowToSet) {
+		Renderer3D(Window * windowToSet) {
 			temporarilySetupModels();
 			setWindow(windowToSet);
 			basicRenderer.setCamera(&camera);
 			setupRendering();
 		}
 
-		~Aela3DRenderer() {
+		~Renderer3D() {
 			models.resize(0);
 		}
 
-		void setup(AelaWindow * windowToSet) {
+		void setup(Window * windowToSet) {
 			temporarilySetupModels();
 			setWindow(windowToSet);
 			setupRendering();
 		}
 
-		void setWindow(AelaWindow * setWindow);
-		void setTimeManager(AelaTimeManager * setTime);
-		void updateCameraUsingControls(AelaControlManager * controls);
+		void setWindow(Window * setWindow);
+		void setTimeManager(TimeManager * setTime);
+		void updateCameraUsingControls(ControlManager * controls);
 		void render();
 
 	private:
-		std::vector<Aela3DRendererFlag> flags;
-		Aela3DBasicRenderer basicRenderer;
-		Aela3DCamera camera;
-		AelaTimeManager * timeManager;
+		std::vector<Renderer3DFlag> flags;
+		Basic3DRenderer basicRenderer;
+		Camera3D camera;
+		TimeManager * timeManager;
 
 		// TEMPORARY!
-		std::vector<AelaModel> models;
-		std::vector<AelaBillboard> billboards;
+		std::vector<Model3D> models;
+		std::vector<Billboard> billboards;
 
-		void addFlag(Aela3DRendererFlag flag);
+		void addFlag(Renderer3DFlag flag);
 		void setupRendering();
 		void setupGLFeatures();
 		bool setupGLEW();
 		void temporarilySetupModels() {
 			// TEMPORARY! This won't exist once models are moved elsewhere.
 			models.resize(6);
-			models[0].loadTexture("textures/uvmap.DDS");
-			models[1].loadTexture("textures/beretta.DDS");
-			models[2].loadTexture("textures/mug.dds");
-			models[3].loadTexture("textures/missile.dds");
-			models[4].loadTexture("textures/cat.dds");
-			models[5].loadTexture("textures/big_marble.dds");
+			models[0].loadTexture("res/textures/uvmap.DDS");
+			models[1].loadTexture("res/textures/beretta.DDS");
+			models[2].loadTexture("res/textures/mug.dds");
+			models[3].loadTexture("res/textures/missile.dds");
+			models[4].loadTexture("res/textures/cat.dds");
+			models[5].loadTexture("res/textures/big_marble.dds");
 
 			// This loads the models from OBJ files.
-			models[0].loadModel("models/room_thickwalls.obj");
-			models[1].loadModel("models/beretta.obj");
-			models[2].loadModel("models/mug.obj");
-			models[3].loadModel("models/missile.obj");
-			models[4].loadModel("models/cat.obj");
-			models[5].loadModel("models/big_marble.obj");
+			models[0].loadModel("res/models/room_thickwalls.obj");
+			models[1].loadModel("res/models/beretta.obj");
+			models[2].loadModel("res/models/mug.obj");
+			models[3].loadModel("res/models/missile.obj");
+			models[4].loadModel("res/models/cat.obj");
+			models[5].loadModel("res/models/big_marble.obj");
 
 			// This sets model position.
 			models[1].setPosition(10, 0, 0);
@@ -187,7 +187,7 @@ class Aela3DRenderer {
 
 			// This sets up a billboard.
 			billboards.resize(1);
-			billboards[0].loadTexture("textures/uvmap.DDS");
+			billboards[0].loadTexture("res/textures/uvmap.DDS");
 		}
 		
 };

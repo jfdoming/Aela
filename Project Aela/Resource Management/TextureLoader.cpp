@@ -1,4 +1,4 @@
-#include "TextureLoader.h"
+/*#include "TextureLoader.h"
 
 #define AELA_RESOURCE_TEXTURE_HEADER_SIZE 128
 
@@ -34,7 +34,7 @@ Resource* Aela::TextureLoader::load(std::ifstream &in) {
 
 	// This allocates memory for the buffer using malloc() and reads the rest of the file.
 	buffer = new unsigned char[bufferSize * sizeof(unsigned char)];
-	in.get(buffer, bufferSize)
+	in.get(buffer, bufferSize);
 
 	// This closes the file.
 	fclose(imageFile);
@@ -54,7 +54,7 @@ Resource* Aela::TextureLoader::load(std::ifstream &in) {
 		default:
 			delete[] buffer;
 			return 0;
-	}
+,,	}
 
 	// This creates an OpenGL texture.
 	GLuint textureID;
@@ -95,3 +95,4 @@ Resource* Aela::TextureLoader::load(std::ifstream &in) {
 
 	return res;
 }
+*/

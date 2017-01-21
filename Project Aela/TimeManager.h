@@ -1,9 +1,9 @@
 #pragma once
 #include "time.h"
 
-class AelaTimeManager {
+class TimeManager {
 	public:
-		AelaTimeManager() {
+		TimeManager() {
 			updateTime();
 		}
 		

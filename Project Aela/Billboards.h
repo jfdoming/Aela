@@ -14,13 +14,13 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-class AelaBillboard {
+class Billboard {
 	public:
-		AelaBillboard() {
+		Billboard() {
 
 		}
 
-		AelaBillboard(glm::vec3 setPosition, GLuint setTexture) {
+		Billboard(glm::vec3 setPosition, GLuint setTexture) {
 			position = setPosition;
 			texture = setTexture;
 		}

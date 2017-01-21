@@ -1,6 +1,6 @@
-#include "AelaModels.h"
+#include "Models.h"
 
-bool AelaModel::loadModel(std::string path) {
+bool Model3D::loadModel(std::string path) {
 	std::vector<glm::vec3> tempVertices;
 	std::vector<glm::vec2> tempUVs;
 	std::vector<glm::vec3> tempNormals;
@@ -13,140 +13,140 @@ bool AelaModel::loadModel(std::string path) {
 	}
 }
 
-bool AelaModel::loadTexture(std::string path) {
+bool Model3D::loadTexture(std::string path) {
 	texture = loadDDS(path);
 	return (texture != NULL);
 }
 
-void AelaModel::setPosition(float setX, float setY, float setZ) {
+void Model3D::setPosition(float setX, float setY, float setZ) {
 	xPosition = setX;
 	yPosition = setY;
 	zPosition = setZ;
 	position = glm::vec3(setX, setY, setZ);
 }
 
-void AelaModel::setPosition(glm::vec3 setPosition) {
+void Model3D::setPosition(glm::vec3 setPosition) {
 	position = setPosition;
 	xPosition = position.x;
 	yPosition = position.y;
 	zPosition = position.z;
 }
 
-glm::vec3 AelaModel::getPosition() {
+glm::vec3 Model3D::getPosition() {
 	return position;
 }
 
-void AelaModel::getPosition(float * setXPosition, float * setYPosition, float * setZPosition) {
+void Model3D::getPosition(float * setXPosition, float * setYPosition, float * setZPosition) {
 	*setXPosition = xPosition;
 	*setYPosition = yPosition;
 	*setZPosition = zPosition;
 }
 
-glm::vec3 * AelaModel::getVertices() {
+glm::vec3 * Model3D::getVertices() {
 	return &vertices[0];
 }
 
-glm::vec2 * AelaModel::getUVs() {
+glm::vec2 * Model3D::getUVs() {
 	return &uvs[0];
 }
 
-glm::vec3 * AelaModel::getNormals() {
+glm::vec3 * Model3D::getNormals() {
 	return &normals[0];
 }
 
-unsigned short * AelaModel::getIndices() {
+unsigned short * Model3D::getIndices() {
 	return &indices[0];
 }
 
-int AelaModel::getVertexSize() {
+int Model3D::getVertexSize() {
 	return vertices.size();
 }
 
-int AelaModel::getUVSize() {
+int Model3D::getUVSize() {
 	return uvs.size();
 }
 
-int AelaModel::getNormalSize() {
+int Model3D::getNormalSize() {
 	return normals.size();
 }
 
-int AelaModel::getIndexSize() {
+int Model3D::getIndexSize() {
 	return indices.size();
 }
 
-GLuint * AelaModel::getTexture() {
+GLuint * Model3D::getTexture() {
 	return &texture;
 }
 
-void AelaModel::setRotation(float setX, float setY, float setZ) {
+void Model3D::setRotation(float setX, float setY, float setZ) {
 	xRotation = setX;
 	yRotation = setY;
 	zRotation = setZ;
 	rotation = glm::vec3(setX, setY, setZ);
 }
 
-void AelaModel::setRotation(glm::vec3 setRotation) {
+void Model3D::setRotation(glm::vec3 setRotation) {
 	rotation = setRotation;
 	xRotation = rotation.x;
 	yRotation = rotation.y;
 	zRotation = rotation.z;
 }
 
-glm::vec3 AelaModel::getRotation() {
+glm::vec3 Model3D::getRotation() {
 	return rotation;
 }
 
-void AelaModel::getRotation(float * setXPosition, float * setYPosition, float * setZPosition) {
+void Model3D::getRotation(float * setXPosition, float * setYPosition, float * setZPosition) {
 	*setXPosition = xRotation;
 	*setYPosition = yRotation;
 	*setZPosition = zRotation;
 }
 
 
-void AelaModel::setProperty(Aela3DProperty property, float value) {
-	if (property == Aela3DProperty::X_POSITION) {
+void Model3D::setProperty(Model3DProperty property, float value) {
+	if (property == Model3DProperty::X_POSITION) {
 		xPosition = value;
 		position = glm::vec3(xPosition, yPosition, zPosition);
 	}
-	if (property == Aela3DProperty::Y_POSITION) {
+	if (property == Model3DProperty::Y_POSITION) {
 		yPosition = value;
 		position = glm::vec3(xPosition, yPosition, zPosition);
 	}
-	if (property == Aela3DProperty::Z_POSITION) {
+	if (property == Model3DProperty::Z_POSITION) {
 		zPosition = value;
 		position = glm::vec3(xPosition, yPosition, zPosition);
 	}
-	if (property == Aela3DProperty::X_ROTATION) {
+	if (property == Model3DProperty::X_ROTATION) {
 		xRotation = value;
 		rotation = glm::vec3(xRotation, yRotation, zRotation);
 	}
-	if (property == Aela3DProperty::Y_ROTATION) {
+	if (property == Model3DProperty::Y_ROTATION) {
 		yRotation = value;
 		rotation = glm::vec3(xRotation, yRotation, zRotation);
 	}
-	if (property == Aela3DProperty::Z_ROTATION) {
+	if (property == Model3DProperty::Z_ROTATION) {
 		zRotation = value;
 		rotation = glm::vec3(xRotation, yRotation, zRotation);
 	}
 }
 
-float AelaModel::getProperty(Aela3DProperty property) {
-	if (property == Aela3DProperty::X_POSITION) {
+float Model3D::getProperty(Model3DProperty property) {
+	if (property == Model3DProperty::X_POSITION) {
 		return xPosition;
 	}
-	if (property == Aela3DProperty::Y_POSITION) {
+	if (property == Model3DProperty::Y_POSITION) {
 		return yPosition;
 	}
-	if (property == Aela3DProperty::Z_POSITION) {
+	if (property == Model3DProperty::Z_POSITION) {
 		return zPosition;
 	}
-	if (property == Aela3DProperty::X_ROTATION) {
+	if (property == Model3DProperty::X_ROTATION) {
 		return xRotation;
 	}
-	if (property == Aela3DProperty::Y_ROTATION) {
+	if (property == Model3DProperty::Y_ROTATION) {
 		return yRotation;
 	}
-	if (property == Aela3DProperty::Z_ROTATION) {
+	if (property == Model3DProperty::Z_ROTATION) {
 		return zRotation;
 	}
 }
