@@ -1,9 +1,16 @@
-#include "Aela3DRenderer.h"
+/*
+* Name: Project Aela's 3D Model Shader
+* Author: Ekkon Games
+* Date: October 2016
+* Description: A class used by Aela's Basic 3D Renderer to shade 3D models.
+*/
+
+#include "Renderer.h"
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
-void Aela3DBasicShadowRenderer::renderShadows(AelaModel * model, GLuint depthProgramID, GLuint depthMatrixID) {
+void Basic3DModelShader::shade(Model3D * model, GLuint depthProgramID, GLuint depthMatrixID) {
 	// This loads the shadow renderer's buffers.
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);

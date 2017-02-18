@@ -1,4 +1,11 @@
-#include "AelaError.h"
+/*
+* Name: Project Aela's Error Handler
+* Author: Ekkon Games
+* Date: October 2016
+* Description: A namespace with classes that handles error messages.
+*/
+
+#include "ErrorHandler.h"
 
 AelaErrorHandling::AelaErrorHandler AelaErrorHandling::errorHandler;
 

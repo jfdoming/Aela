@@ -1,16 +1,24 @@
-#include "Aela3DRenderer.h"
+/*
+* Name: Project Aela's 3D Texture Renderer
+* Author: Ekkon Games
+* Date: October 2016
+* Description: A class used by Aela's Basic Renderer to render the triangles of
+*              3D models as well as their shadows.
+*/
+
+#include "Renderer.h"
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
-#include "AelaControls.h"
+#include "ControlManager.h"
 
 // This sets matrices.
-void Aela3DBasicTextureRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
+void Basic3DTextureRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
 	viewMatrix = setViewMatrix;
 	projectionMatrix = setProjectionMatrix;
 }
 
-void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthMatrixID, GLuint programID,
+void Basic3DTextureRenderer::renderTextures(Model3D * model, GLuint depthMatrixID, GLuint programID,
 	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID) {
 
 	// This loads buffers.
@@ -47,7 +55,7 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-	// USe this if you want a spot light. Otherwise, use the code above.
+	// Use this if you want a spot light. Otherwise, use the code above.
 	//glm::vec3 lightPos(5, 20, 20);
 	//glm::mat4 depthProjectionMatrix = glm::perspective<float>(45.0f, 1.0f, 2.0f, 50.0f);
 	//glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));
@@ -130,7 +138,7 @@ void Aela3DBasicTextureRenderer::renderTextures(AelaModel * model, GLuint depthM
 // For billboards, use getPositionOfCamera() to make the texture look at the camera.
 // To specify a rotation for the camera as a vec3, use the texture's position and add the direction (position + direction) for the lookAt parameter.
 // Note: for the lookAt parameter, position + glm::vec3(0.0, 0.0, 1.0) will not rotate the texture. Use this for no rotation.
-void Aela3DBasicTextureRenderer::renderTextureIn3DSpace(AelaWindow * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
+void Basic3DTextureRenderer::renderTextureIn3DSpace(Window * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
 	glUseProgram(programID);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

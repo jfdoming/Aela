@@ -1,3 +1,10 @@
+/*
+* Name: Project Aela's Model Class
+* Author: Ekkon Games
+* Date: November 2016
+* Description: A class used by Aela's Renderer to store properties of a model.
+*/
+
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
@@ -15,16 +22,16 @@
 #include "vboindexer.hpp"
 #include "texture.hpp"
 
-#ifndef AELA_3D_PROPERTY
-#define AELA_3D_PROPERTY
-// This enum is used in an AelaModel function to change a single property.
-enum class Aela3DProperty {
+#ifndef AELA_MODEL_3D_PROPERTY
+#define AELA_MODEL_3D_PROPERTY
+// This enum is used in an Model3D function to change a single property.
+enum class Model3DProperty {
 	X_POSITION, Y_POSITION, Z_POSITION,
 	X_ROTATION, Y_ROTATION, Z_ROTATION
 };
 #endif
 
-class AelaModel {
+class Model3D {
 	private:
 		// Translation.
 		float xPosition, yPosition, zPosition;
@@ -40,7 +47,7 @@ class AelaModel {
 		std::vector<unsigned short> indices;
 		GLuint texture;
 
-		AelaModel() {
+		Model3D() {
 			xPosition = 0;
 			yPosition = 0;
 			zPosition = 0;
@@ -51,7 +58,7 @@ class AelaModel {
 			rotation = glm::vec3(0.0, 0.0, 0.0);
 		}
 
-		~AelaModel() {
+		~Model3D() {
 			glDeleteTextures(1, &texture);
 		}
 
@@ -71,8 +78,8 @@ class AelaModel {
 		void getRotation(float * setXPosition, float * setYPosition, float * setZPosition);
 
 		// A function used for changing any single transformation-related property.
-		void setProperty(Aela3DProperty property, float value);
-		float getProperty(Aela3DProperty property);
+		void setProperty(Model3DProperty property, float value);
+		float getProperty(Model3DProperty property);
 
 		glm::vec3 * getVertices();
 		glm::vec2 * getUVs();

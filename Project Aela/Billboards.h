@@ -1,4 +1,9 @@
-// This is a header-only class for billboards.
+/*
+* Name: Project Aela's Billboard class.
+* Author: Ekkon Games
+* Date: October 2016
+* Description: A header-only class used to store properties of a billboard.
+*/
 
 #pragma once
 #include "texture.hpp"
@@ -14,13 +19,13 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-class AelaBillboard {
+class Billboard {
 	public:
-		AelaBillboard() {
+		Billboard() {
 
 		}
 
-		AelaBillboard(glm::vec3 setPosition, GLuint setTexture) {
+		Billboard(glm::vec3 setPosition, GLuint setTexture) {
 			position = setPosition;
 			texture = setTexture;
 		}

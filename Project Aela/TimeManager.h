@@ -1,9 +1,20 @@
+/*
+* Name: Project Aela's Time Manager
+* Author: Ekkon Games
+* Date: November 2016
+* Description: A header-only class for time management.
+*/
+
 #pragma once
 #include "time.h"
 
-class AelaTimeManager {
+// WARNING! PLEASE READ!
+// The use of CLOCKS_PER_SECOND (that you get from time.h) is unimplemented! Implement this in order to
+// get time accurately!!!! Or use chronos.
+
+class TimeManager {
 	public:
-		AelaTimeManager() {
+		TimeManager() {
 			updateTime();
 		}
 		

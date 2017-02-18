@@ -1,10 +1,19 @@
+/*
+* Name: Project Aela's Window Class
+* Author: Ekkon Games
+* Date: October 2016
+* Description: A class that uses SDL to form a window.
+*/
+
 #pragma once
+#include "ErrorHandler.h"
 #include <iostream>
 #include <string>
 #include <vector>
+#include "Rect.h"
 #include "SDL.h"
 
-enum class AelaWindowFlag {
+enum class WindowFlag {
 	AELA_WINDOW_RESIZABLE, AELA_WINDOW_NON_RESIZABLE,
 	AELA_WINDOW_SHOWN, AELA_WINDOW_HIDDEN,
 	AELA_WINDOW_BORDERLESS,
@@ -12,7 +21,7 @@ enum class AelaWindowFlag {
 	AELA_WINDOW_OPENGL
 };
 
-class AelaWindow {
+class Window {
 	private:
 		// These are typical window properties.
 		int windowWidth, windowHeight;
@@ -23,7 +32,7 @@ class AelaWindow {
 		SDL_Window * window;
 
 		// These are the enumerators for the window flags.
-		std::vector<AelaWindowFlag> flags;
+		std::vector<WindowFlag> flags;
 
 		SDL_GLContext openGLContext;
 		const Uint8 * keystates;
@@ -33,15 +42,16 @@ class AelaWindow {
 
 	public:
 		// These are the constructors.
-		AelaWindow() {
+		Window() {
 			hasFocus = true;
 			windowName = "Aela Window";
 		}
 
 		// These are the behaviours.
-		void addProperty(AelaWindowFlag flag);
+		void addProperty(WindowFlag flag);
 		bool createWindow(int setWidth, int setHeight, int setXPosition, int setYPosition, std::string setName);
 		void getWindowDimensions(int * widthVariable, int * heightVariable);
+		Rect<int> * getWindowDimensions();
 		void getWindowPosition(int * xPositionVariable, int * yPositionVariable);
 		bool makeWindowOpenGLContext();
 		void updateBuffer();

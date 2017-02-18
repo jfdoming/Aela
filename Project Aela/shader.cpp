@@ -16,7 +16,7 @@ using namespace std;
 #include <GL/glew.h>
 
 #include "shader.hpp"
-#include "AelaError.h"
+#include "ErrorHandler.h"
 
 GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath) {
 

@@ -1,3 +1,10 @@
+/*
+ * Name: Project Aela - Main
+ * Author: Ekkon Games
+ * Date: November 2016
+ * Description: Project Aela's main.cpp file.
+*/
+
 // This includes standard headers.
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,26 +27,30 @@
 #include <glm/gtc/matrix_transform.hpp>
 using namespace glm;
 
-// This includes all of the 3D headers required.
+// These are headers of some loading functions. They will eventually be moved into the Resource Manager.
 #include "shader.hpp"
 #include "texture.hpp"
-#include "AelaControls.h"
 #include "objloader.hpp"
 #include "vboindexer.hpp"
+
+// These are headers that are part of Project Aela.
+#include "ControlManager.h"
 #include "Aela_Engine.h"
-#include "AelaWindow.h"
-#include "AelaError.h"
-#include "Aela3D.h"
+#include "Window.h"
+#include "ErrorHandler.h"
+#include "Renderer.h"
+#include "TimeManager.h"
 
 #include "Resource Management\ResourceManager.h"
 #include "Resource Management\TextureLoader.h"
 
 int runningLoop();
 
-AelaWindow window;
-Aela3DRenderer renderer3D;
-AelaControlManager controls;
-AelaTimeManager timeManager;
+// These are global objects who's classes come from Project Aela.
+Window window;
+Renderer renderer3D;
+ControlManager controls;
+TimeManager timeManager;
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -48,13 +59,13 @@ int startAela() {
 	// std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
 	// std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
 
-	Aela::ResourceManager mgr(5);
+	//Aela::ResourceManager mgr(5);
 	//std::cout << "ResourceManager Test for Text files " << (mgr.loadTexture("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
 	//std::cout << "Text value: " << (static_cast<Aela::TextureResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
-	Aela::TextureLoader textTest;
-	std::ifstream stream;
-	stream.open("textures/cat.dds");
-	textTest.load(stream);
+	//Aela::TextureLoader textTest;
+	//std::ifstream stream;
+	//stream.open("res/textures/cat.dds");
+	//textTest.load(stream);
 	// STOP IGNORING NOW
 
 	// This is TEMPORARY and sets the window width and height.
@@ -62,12 +73,13 @@ int startAela() {
 	// This is also TEMPORARY and sets the window starting position.
 	int windowXPosition = 50, windowYPosition = 50;
 
-	window.addProperty(AelaWindowFlag::AELA_WINDOW_SHOWN);
-	window.addProperty(AelaWindowFlag::AELA_WINDOW_OPENGL);
+	window.addProperty(WindowFlag::AELA_WINDOW_SHOWN);
+	window.addProperty(WindowFlag::AELA_WINDOW_OPENGL);
 	bool windowCreationSuccess = window.createWindow(windowWidth, windowHeight, windowXPosition, windowYPosition, "Aela Engine");
 	window.getWindowPosition(&windowXPosition, &windowYPosition);
 
 	if (windowCreationSuccess == false) {
+		AelaErrorHandling::windowError("Aela Window", "The Aela Window failed to initialise!");
 		return -1;
 	} else {
 		window.makeWindowOpenGLContext();
@@ -81,12 +93,19 @@ int startAela() {
 		return -1;
 	}
 
-	renderer3D.setup(&window);
+	// This tells to ControlManager to prevent the camera from being inverted.
+	controls.setProperty(ControlManagerProperty::ALLOW_UPSIDE_DOWN_CAMERA, 0);
+
+	// This passes the window and time manager to the renderer and control manager.
+	renderer3D.setup3D(&window);
+	renderer3D.setup2D(&window);
 	renderer3D.setTimeManager(&timeManager);
 	controls.setWindow(&window);
 	controls.setTimeManager(&timeManager);
-	runningLoop();
-	return 0;
+
+	// This starts the running loop. What else would you think it does?
+	bool value = runningLoop();
+	return value;
 }
 
 int runningLoop() {
@@ -97,7 +116,6 @@ int runningLoop() {
 		renderer3D.updateCameraUsingControls(&controls);
 		renderer3D.render();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
-
 	return 0;
 }
 

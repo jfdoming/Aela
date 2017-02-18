@@ -1,7 +1,7 @@
 #include <stdio.h>
 // #include <stdlib.h>
 #include <string>
-#include "AelaError.h"
+#include "ErrorHandler.h"
 #ifndef GLEW_STATIC
 #define GLEW_STATIC
 #endif
@@ -12,6 +12,20 @@
 #define FOURCC_DXT3 0x33545844 // Equivalent to "DXT3" in ASCII
 #define FOURCC_DXT5 0x35545844 // Equivalent to "DXT5" in ASCII
 
+// This function should probably be moved somewhere else. Maybe it should be moved into
+// a header file called "useful_functions.h". For now, it exists here.
+// Edit: this function isn't even being used in this file anymore. I'm keeping it here
+// so that it may be moved elsewhere.
+std::string getPartOfString(std::string string, unsigned int start, unsigned int length) {
+	std::string returnValue = "";
+	for (int i = start; i < start + length; i++) {
+		returnValue += string.at(i);
+	}
+	return returnValue;
+}
+
+// This is the function for loading DDS files. It uses C functions and unsigned chars since
+// that's what OpenGL wants to use. Using std::string and std::fstream would make things more complex.
 GLuint loadDDS(std::string filePath) {
 	unsigned char fileHeader[124];
 	FILE * imageFile;
