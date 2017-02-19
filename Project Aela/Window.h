@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "Rect.h"
 #include "SDL.h"
 
 enum class WindowFlag {
@@ -43,6 +44,7 @@ class Window {
 		void addProperty(WindowFlag flag);
 		bool createWindow(int setWidth, int setHeight, int setXPosition, int setYPosition, std::string setName);
 		void getWindowDimensions(int * widthVariable, int * heightVariable);
+		Rect<int> * getWindowDimensions();
 		void getWindowPosition(int * xPositionVariable, int * yPositionVariable);
 		bool makeWindowOpenGLContext();
 		void updateBuffer();

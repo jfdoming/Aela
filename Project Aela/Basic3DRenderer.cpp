@@ -1,5 +1,4 @@
-#include "Renderer3D.h"
-#include "2DRenderer.h"
+#include "Basic3DRenderer.h"
 
 void Basic3DRenderer::setupBasicRendering() {
 	setupVertexArrayID();
@@ -9,7 +8,7 @@ void Basic3DRenderer::setupBasicRendering() {
 	getFrameBufferName();
 	setupDepthTexture();
 
-	//setupQuadVertexBuffer();
+	// setupQuadVertexBuffer();
 	getIDs();
 }
 
@@ -82,6 +81,41 @@ void Basic3DRenderer::setupDepthTexture() {
 	}
 }
 
+void Basic3DRenderer::resetDepthTexture() {
+	//glGenTextures(1, &depthTexture);
+
+	//// This tells openGL that future functions will reference this texture.
+	//glBindTexture(GL_TEXTURE_2D, depthTexture);
+
+	//// This sets the pixel atorage mode.
+	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	glDeleteTextures(1, &depthTexture);
+	GLuint clearTexture;
+	glGenTextures(1, &clearTexture);
+	glBindTexture(GL_TEXTURE_2D, clearTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, windowWidth, windowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, clearTexture, 0);
+	depthTexture = clearTexture;
+
+	// There is no colour output in the bound framebuffer, only depth.
+	glDrawBuffer(GL_NONE);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		AelaErrorHandling::windowError("Aela 3D",
+			"There was a problem setting up the framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
+	}
+
+	/*depthBiasID = glGetUniformLocation(programID, "DepthBiasMVP");
+	shadowMapID = glGetUniformLocation(programID, "shadowMap");*/
+}
+
 void Basic3DRenderer::setWindow(Window * setWindow) {
 	window = setWindow;
 	window->getWindowDimensions(&windowWidth, &windowHeight);
@@ -126,4 +160,12 @@ void Basic3DRenderer::renderTextureIn3DSpace(GLuint * texture, bool cullFaces, g
 void Basic3DRenderer::renderBillboard(Billboard * billboard) {
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	textureRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, billboard->getPosition(), camera->getPosition(), true);
+}
+
+void Basic3DRenderer::clearDepthTexture() {
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferName);
+	glFramebufferTexture(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, depthTexture, 0); //Only need to do this once.
+	glDrawBuffer(GL_COLOR_ATTACHMENT0); //Only need to do this once.
+	GLuint clearColor[4] = { 0, 0, 0, 0 };
+	glClearBufferuiv(GL_COLOR, 0, clearColor);
 }

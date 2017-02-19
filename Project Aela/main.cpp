@@ -1,3 +1,10 @@
+/*
+ * Name: Project Aela
+ * Author: Ekkon Games
+ * Date: November 2016
+ * Description: Project Aela's main.cpp file.
+*/
+
 // This includes standard headers.
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,16 +27,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 using namespace glm;
 
-// This includes all of the 3D headers required.
+// These are headers of some loading functions. They will eventually be moved into the Resource Manager.
 #include "shader.hpp"
 #include "texture.hpp"
-#include "ControlManager.h"
 #include "objloader.hpp"
 #include "vboindexer.hpp"
+
+// These are headers that are part of Project Aela.
+#include "ControlManager.h"
 #include "Aela_Engine.h"
 #include "Window.h"
 #include "ErrorHandler.h"
-#include "Aela3D.h"
+#include "AelaRendering.h"
 #include "TimeManager.h"
 
 #include "Resource Management\ResourceManager.h"
@@ -37,8 +46,9 @@ using namespace glm;
 
 int runningLoop();
 
+// These are global objects who's classes come from Project Aela.
 Window window;
-Renderer3D renderer3D;
+Renderer renderer3D;
 ControlManager controls;
 TimeManager timeManager;
 
@@ -87,7 +97,8 @@ int startAela() {
 	controls.setProperty(ControlManagerProperty::ALLOW_UPSIDE_DOWN_CAMERA, 0);
 
 	// This passes the window and time manager to the renderer and control manager.
-	renderer3D.setup(&window);
+	renderer3D.setup3D(&window);
+	renderer3D.setup2D(&window);
 	renderer3D.setTimeManager(&timeManager);
 	controls.setWindow(&window);
 	controls.setTimeManager(&timeManager);

@@ -76,6 +76,11 @@ void Window::getWindowDimensions(int * widthVariable, int * heightVariable) {
 	*heightVariable = windowHeight;
 }
 
+Rect<int> * Window::getWindowDimensions() {
+	Rect<int> returnValue(0, 0, windowWidth, windowHeight);
+	return &returnValue;
+}
+
 void Window::getWindowPosition(int * xPositionVariable, int * yPositionVariable) {
 	SDL_GetWindowPosition(window, xPositionVariable, yPositionVariable);
 }

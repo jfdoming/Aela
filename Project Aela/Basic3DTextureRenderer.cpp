@@ -1,4 +1,4 @@
-#include "Renderer3D.h"
+#include "Renderer.h"
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -47,7 +47,7 @@ void Basic3DTextureRenderer::renderTextures(Model3D * model, GLuint depthMatrixI
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-	// USe this if you want a spot light. Otherwise, use the code above.
+	// Use this if you want a spot light. Otherwise, use the code above.
 	//glm::vec3 lightPos(5, 20, 20);
 	//glm::mat4 depthProjectionMatrix = glm::perspective<float>(45.0f, 1.0f, 2.0f, 50.0f);
 	//glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));

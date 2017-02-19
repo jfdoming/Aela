@@ -149,4 +149,5 @@ float Model3D::getProperty(Model3DProperty property) {
 	if (property == Model3DProperty::Z_ROTATION) {
 		return zRotation;
 	}
+	return 0;
 }

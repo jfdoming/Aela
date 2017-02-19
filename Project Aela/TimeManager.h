@@ -1,6 +1,8 @@
 #pragma once
 #include "time.h"
 
+// The use of CLOCKS_PER_SECOND (that you get from time.h) is unimplemented! Implement this in order to
+// get time accurately!!!!
 class TimeManager {
 	public:
 		TimeManager() {

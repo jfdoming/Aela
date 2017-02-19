@@ -13,5 +13,20 @@
 
 #include "Window.h"
 #include "ErrorHandler.h"
+#include "Rect.h"
+#include "shader.hpp"
 
 // This space is left empty for implementation.
+
+class Basic2DRenderer {
+	public:
+		Basic2DRenderer() {
+
+		}
+
+		void setup();
+		void renderTexture(GLuint texture, Rect<int> * windowDimensions, Rect<int> * output);
+
+	private:
+		GLuint programID, textureID, positionID;
+};

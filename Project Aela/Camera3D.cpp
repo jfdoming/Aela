@@ -95,6 +95,7 @@ float Camera3D::getProperty(Model3DProperty property) {
 	if (property == Model3DProperty::Z_ROTATION) {
 		return zRotation;
 	}
+	return 0;
 }
 
 glm::mat4 Camera3D::getViewMatrix() {
