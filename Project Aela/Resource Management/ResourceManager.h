@@ -24,12 +24,14 @@ namespace Aela {
 			/*
 			 * Read in text from a text file and store it as a Resource, accessible using obtain(string).
 			 */
-			virtual bool load(std::string src, bool crucial, ResourceLoader * loader) final;
+			virtual bool load(std::string src, bool crucial, ResourceLoader* loader) final;
 
 			/*
 			* Obtain the specified resource for use in the application.
 			*/
 			Resource& obtain(std::string src);
+
+			template <class T> T& obtain(std::string src);
 
 			// error handling
 			std::string getNewCrucialInvalidResourceKey();
@@ -38,5 +40,6 @@ namespace Aela {
 			std::unordered_map<std::string, Resource*> resources;
 			std::vector<std::string> invalidResourceKeys;
 			std::string crucialInvalidResourceKey = "";
+			ResourceLoader * loader;
 	};
 }

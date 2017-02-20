@@ -1,11 +1,11 @@
-#pragma once
-
 /*
-* Name: Rectangle Class
+* Rectangle Class
 * Author: Robert Ciborowski
 * Date: February 4th, 2017
 * Description: A simple header-only class for rectangles.
 */
+
+#pragma once
 
 template <class T> class Rect {
 	public:

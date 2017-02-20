@@ -22,9 +22,15 @@ bool ResourceManager::load(std::string src, bool crucial, ResourceLoader * loade
 	return true;
 }
 
-Resource& ResourceManager::obtain(std::string src) {
+Resource & ResourceManager::obtain(std::string src) {
 	//std::cout << "meme: \"" << (NULL == &(resources.find(src))) << "\"" << std::endl;
 	Resource * ref = resources.at(src);
+	return *ref;
+}
+
+template <class T> T& ResourceManager::obtain(std::string src) {
+	//std::cout << "meme: \"" << (NULL == &(resources.find(src))) << "\"" << std::endl;
+	T * ref = resources.at(src);
 	return *ref;
 }
 

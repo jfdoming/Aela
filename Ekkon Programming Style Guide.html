@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ekkon Programming Style Guide</title>
+</head>
+<body>
+	<h1>Ekkon Programming Style Guide</h1>
+	<i>Note that this style guide is not a complete reference. It builds upon ideas that are seen as common practice, listing only the styles that Ekkon has changed. Refer to the <a href="https://google.github.io/styleguide/cppguide.html">Google C++ style guide</a> for any missing rules. Questions may be forwarded to <a href="mailto:bobbyewy@gmail.com">bobbyewy@gmail.com</a>.</i>
+
+	<h2>Documentation</h2>
+	Every header file must have its own comment header at the top. This must be above <pre style="display:inline"><code>#include</code></pre>s and other compiler directives.
+	A header should be layed out as follows:
+
+<pre><code>/*
+ * Class: Rectangle
+ * Author: John Doe
+ * Date: 01/05/2016
+ * Description: A simple header-only class for rectangles. More
+                sample text to demonstrate newlines.
+ */</code></pre>
+
+	Dates must be in the form <pre style="display:inline"><code>DD/MM/YYYY</code></pre>. However, the day may be omitted if it is not known.
+
+	<h2>Files and File Structure</h2>
+	Every source file must have one header file to match. Header files must contain one and only one class.
+	Source files may not declare classes; they must implement class functions as follows:
+
+<pre><code>void Rectangle:operate() {
+
+}</code></pre>
+
+	Every header file must have the <pre style="display:inline"><code>#pragma once</code></pre> directive immediately below its comment header, only preceded by a single blank line. <b>Do not use header guards!</b> They are an old convention left over from compilers that did not provide similar directives.
+
+<pre><code>/*
+ * ...
+ */
+
+#pragma once
+
+// do not do this
+#ifndef CLASSNAME_HEADER_GUARD
+#define CLASSNAME_HEADER_GUARD
+...
+#endif</code></pre>
+
+	<h2>Functions</h2>
+	Always indent function bodies properly. Braces should be <b>on the same line</b> as the function.
+
+<pre><code>void operate() {
+}
+
+// do not do this
+void operate()
+{
+}</code></pre>
+
+	If a function has no parameters, do not specify void.
+<pre><code>// do not do this
+void operate(void);</code></pre>
+
+	<h2>Pointers and References</h2>
+	Pointers must be declared as follows:
+
+<pre><code>int* pointer1;</code></pre>
+
+	Pointer dereferences must have no space between the * and variable name. Obtaining a pointer must also be done in similar fashion.
+
+<pre><code>int value1 = *pointer1;
+int pointer2 = &value1;</code></pre>
+
+	References must be formatted in the same way.
+	
+<pre><code>int& value2 = value1;</code></pre>
+
+</body>
+</html>
