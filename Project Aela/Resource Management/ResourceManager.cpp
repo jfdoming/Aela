@@ -9,11 +9,15 @@ ResourceManager::ResourceManager(int resourceCount) {
 ResourceManager::~ResourceManager() {
 }
 
-bool ResourceManager::load(std::string src, bool crucial, ResourceLoader * loader) {
+void ResourceManager::bindLoader(ResourceLoader* loader) {
+	this->loader = loader;
+}
+
+bool ResourceManager::load(std::string src, bool crucial) {
 	std::ifstream in;
 	in.open(src);
 
-	Resource * res = loader->load(in);
+	Resource* res = loader->load(in);
 	in.close();
 
 	//std::cout << &res << std::endl;
@@ -22,15 +26,9 @@ bool ResourceManager::load(std::string src, bool crucial, ResourceLoader * loade
 	return true;
 }
 
-Resource & ResourceManager::obtain(std::string src) {
-	//std::cout << "meme: \"" << (NULL == &(resources.find(src))) << "\"" << std::endl;
-	Resource * ref = resources.at(src);
-	return *ref;
-}
-
 template <class T> T& ResourceManager::obtain(std::string src) {
 	//std::cout << "meme: \"" << (NULL == &(resources.find(src))) << "\"" << std::endl;
-	T * ref = resources.at(src);
+	T* ref = resources.at(src);
 	return *ref;
 }
 

@@ -21,16 +21,16 @@ namespace Aela {
 			 * in that group will cease and the method will return false, resulting in not all resources being loaded).
 			 */
 
+			void bindLoader(ResourceLoader* loader);
+
 			/*
 			 * Read in text from a text file and store it as a Resource, accessible using obtain(string).
 			 */
-			virtual bool load(std::string src, bool crucial, ResourceLoader* loader) final;
+			bool load(std::string src, bool crucial);
 
 			/*
 			* Obtain the specified resource for use in the application.
 			*/
-			Resource& obtain(std::string src);
-
 			template <class T> T& obtain(std::string src);
 
 			// error handling
@@ -40,6 +40,6 @@ namespace Aela {
 			std::unordered_map<std::string, Resource*> resources;
 			std::vector<std::string> invalidResourceKeys;
 			std::string crucialInvalidResourceKey = "";
-			ResourceLoader * loader;
+			ResourceLoader* loader;
 	};
 }

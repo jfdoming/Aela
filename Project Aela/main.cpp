@@ -38,7 +38,7 @@ using namespace glm;
 #include "Aela_Engine.h"
 #include "Window.h"
 #include "ErrorHandler.h"
-#include "AelaRendering.h"
+#include "Renderer.h"
 #include "TimeManager.h"
 
 #include "Resource Management\ResourceManager.h"
@@ -58,7 +58,9 @@ int startAela() {
 	Aela::ResourceManager mgr(5);
 	// std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
 	// std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
-	std::cout << "ResourceManager Test for Text files " << (mgr.load("text.txt", false, ) ? "succeeded!" : "failed!") << std::endl;
+	Aela::OBJLoader loader;
+	mgr.bindLoader(&loader);
+	std::cout << "ResourceManager Test for Text files " << (mgr.load("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
 	std::cout << "Text value: " << mgr.obtain<Aela::TextureResource>("res/textures/beretta.DDS").src << std::endl;
 
 	//Aela::ResourceManager mgr(5);
