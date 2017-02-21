@@ -34,6 +34,12 @@ Aela::TextureResource::TextureResource(std::string src) : Resource(src) {
 Aela::TextureResource::~TextureResource() {
 }
 
+Aela::OBJResource::OBJResource(std::string src) : Resource(src) {
+}
+
+Aela::OBJResource::~OBJResource() {
+}
+
 /*
 GLuint loadDDS(std::string filePath) {
 	unsigned char fileHeader[124];
