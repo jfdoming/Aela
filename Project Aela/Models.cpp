@@ -21,7 +21,7 @@ bool Model3D::loadModel(std::string path) {
 }
 
 bool Model3D::loadTexture(std::string path) {
-	texture = loadDDS(path);
+	texture = loadDDSToGLuint(path);
 	return (texture != NULL);
 }
 

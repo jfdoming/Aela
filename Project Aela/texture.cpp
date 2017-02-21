@@ -164,18 +164,18 @@ Texture loadDDSToTexture(std::string filePath) {
 	// This finds the proper format.
 	unsigned int format;
 	switch (fourCCType) {
-	case FOURCC_DXT1:
-		format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-		break;
-	case FOURCC_DXT3:
-		format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
-		break;
-	case FOURCC_DXT5:
-		format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
-		break;
-	default:
-		free(buffer);
-		return 0;
+		case FOURCC_DXT1:
+			format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+			break;
+		case FOURCC_DXT3:
+			format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+			break;
+		case FOURCC_DXT5:
+			format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+			break;
+		default:
+			free(buffer);
+			return texture;
 	}
 
 	// This creates an OpenGL texture.
@@ -209,5 +209,7 @@ Texture loadDDSToTexture(std::string filePath) {
 
 	}
 	free(buffer);
-	return textureID;
+	texture.setTexture(textureID);
+	texture.setDimensions(0, 0, imageWidth, imageHeight);
+	return texture;
 }

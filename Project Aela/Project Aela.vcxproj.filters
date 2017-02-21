@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{790e8aaa-302c-4a28-b886-03a1ba69cab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{a95d82c0-2a20-4b57-b7bf-b946e6224146}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Resource_Manager">
+      <UniqueIdentifier>{4c5a3fe7-8acf-4237-98a8-459dd8d4ab1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Control Manager">
+      <UniqueIdentifier>{9ff4e75a-97dd-407f-bdcc-4d7185e7c40f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Time Manager">
+      <UniqueIdentifier>{acb8403c-7624-4d65-b356-5816efbdbc8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Window">
+      <UniqueIdentifier>{2f98d2ff-1bf9-43a1-9e50-4801862c48fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Error Handler">
+      <UniqueIdentifier>{8fa0cd36-8623-4070-8992-a4acc4ab3eba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{85f37673-de86-4118-9ebf-063de9afbc65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\3D">
+      <UniqueIdentifier>{7582ebd5-762f-40fc-9525-20094c4fb166}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\3D\Camera3D">
+      <UniqueIdentifier>{3dd079d9-c7b7-487c-a5ce-0f2b17ce05bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\3D\3D Renderer">
+      <UniqueIdentifier>{247e39bc-abf4-4136-ae24-37161b6a17df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer">
+      <UniqueIdentifier>{fe16d524-0594-4fc7-8e2b-f40288d34271}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\3D\Billboards">
+      <UniqueIdentifier>{ecc7cefe-a181-4a48-bd01-a56d97378ded}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\3D\Models">
+      <UniqueIdentifier>{a716ec3e-468d-45d0-a491-74cb98069e59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\2D">
+      <UniqueIdentifier>{79242ccc-4346-46ed-a71e-d607bc7b6af2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\2D\2D_Renderer">
+      <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\2D\Menu_System">
+      <UniqueIdentifier>{d0fea2af-0289-4e1c-a08e-a89b4eef77e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Useful">
+      <UniqueIdentifier>{b4397253-6ff4-4af3-90c1-ff5a98406f94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Useful\Rect">
+      <UniqueIdentifier>{13d45639-33e5-4ca4-8b2c-0da47b83162a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\3D\Texture">
+      <UniqueIdentifier>{4dd661f4-e90b-4822-98d7-0a222023f326}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="objloader.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="vboindexer.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shader.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\Resource.cpp">
+      <Filter>Source Files\Resource_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\ResourceLoader.cpp">
+      <Filter>Source Files\Resource_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\ResourceManager.cpp">
+      <Filter>Source Files\Resource_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\TextureLoader.cpp">
+      <Filter>Source Files\Resource_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlManager.cpp">
+      <Filter>Source Files\Control Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera3D.cpp">
+      <Filter>Source Files\Rendering\3D\Camera3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source Files\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorHandler.cpp">
+      <Filter>Source Files\Error Handler</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic3DRenderer.cpp">
+      <Filter>Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic3DModelShader.cpp">
+      <Filter>Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Models.cpp">
+      <Filter>Source Files\Rendering\3D\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic3DTextureRenderer.cpp">
+      <Filter>Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic2DRenderer.cpp">
+      <Filter>Source Files\Rendering\2D\2D_Renderer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="shader.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Aela_Engine.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="objloader.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="vboindexer.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\Resource.h">
+      <Filter>Source Files\Resource_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\ResourceLoader.h">
+      <Filter>Source Files\Resource_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\ResourceManager.h">
+      <Filter>Source Files\Resource_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\stdafx.h">
+      <Filter>Source Files\Resource_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\TextureLoader.h">
+      <Filter>Source Files\Resource_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlManager.h">
+      <Filter>Source Files\Control Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera3D.h">
+      <Filter>Source Files\Rendering\3D\Camera3D</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Source Files\Time Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Source Files\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorHandler.h">
+      <Filter>Source Files\Error Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="Billboards.h">
+      <Filter>Source Files\Rendering\3D\Billboards</Filter>
+    </ClInclude>
+    <ClInclude Include="Models.h">
+      <Filter>Source Files\Rendering\3D\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Source Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>Source Files\Useful\Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="Basic2DRenderer.h">
+      <Filter>Source Files\Rendering\2D\2D_Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Basic3DRenderer.h">
+      <Filter>Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Source Files\Rendering\3D\Texture</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Release\res\shaders\DepthRTT.fragmentshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\DepthRTT.vertexshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\ShadowMapping.fragmentshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
+      <Filter>shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -47,7 +47,7 @@ class Billboard {
 		}
 
 		void loadTexture(std::string path) {
-			texture = loadDDS(path);
+			texture = loadDDSToGLuint(path);
 		}
 
 	private:

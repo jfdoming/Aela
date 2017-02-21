@@ -41,7 +41,7 @@ Aela::OBJResource::~OBJResource() {
 }
 
 /*
-GLuint loadDDS(std::string filePath) {
+GLuint loadDDSToGLuint(std::string filePath) {
 	unsigned char fileHeader[124];
 	FILE * imageFile;
 
