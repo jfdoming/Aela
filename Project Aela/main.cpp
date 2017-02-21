@@ -1,7 +1,8 @@
 /*
+<<<<<<< HEAD
  * Name: Project Aela - Main
  * Author: Ekkon Games
- * Date: November 2016
+ * Date: October 2016
  * Description: Project Aela's main.cpp file.
 */
 
@@ -30,7 +31,6 @@ using namespace glm;
 // These are headers of some loading functions. They will eventually be moved into the Resource Manager.
 #include "shader.hpp"
 #include "texture.hpp"
-#include "ControlManager.h"
 #include "objloader.hpp"
 #include "vboindexer.hpp"
 
@@ -56,17 +56,21 @@ TimeManager timeManager;
 // This is the function that starts Aela and contains its loops.
 int startAela() {
 	// TESTING FROM JULIAN PLEASE IGNORE
-	// Aela::ResourceManager mgr(5);
+	Aela::ResourceManager mgr(5);
 	// std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
 	// std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
+	// Aela::TextLoader loader;
+	// mgr.bindLoader(&loader);
+	// std::cout << "ResourceManager Test for Text files " << (mgr.load("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
+	// std::cout << "Text value: " << mgr.obtain<Aela::TextureResource>("res/textures/beretta.DDS").src << std::endl;
 
-	//Aela::ResourceManager mgr(5);
-	//std::cout << "ResourceManager Test for Text files " << (mgr.loadTexture("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
-	//std::cout << "Text value: " << (static_cast<Aela::TextureResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
-	//Aela::TextureLoader textTest;
-	//std::ifstream stream;
-	//stream.open("res/textures/cat.dds");
-	//textTest.load(stream);
+	// Aela::ResourceManager mgr(5);
+	// std::cout << "ResourceManager Test for Text files " << (mgr.loadTexture("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
+	// std::cout << "Text value: " << (static_cast<Aela::TextureResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
+	// Aela::TextureLoader textTest;
+	// std::ifstream stream;
+	// stream.open("res/textures/cat.dds");
+	// textTest.load(stream);
 	// STOP IGNORING NOW
 
 	// This is TEMPORARY and sets the window width and height.

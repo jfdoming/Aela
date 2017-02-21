@@ -1,10 +1,3 @@
-/*
-* Name: Project Aela's 2D Renderer
-* Author: Ekkon Games
-* Date: February 2017
-* Description: A class used by Aela's Renderer to render textures as 2D objects.
-*/
-
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
