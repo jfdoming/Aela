@@ -30,6 +30,7 @@ using namespace glm;
 // These are headers of some loading functions. They will eventually be moved into the Resource Manager.
 #include "shader.hpp"
 #include "texture.hpp"
+#include "ControlManager.h"
 #include "objloader.hpp"
 #include "vboindexer.hpp"
 

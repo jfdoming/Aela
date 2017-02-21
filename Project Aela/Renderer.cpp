@@ -1,7 +1,7 @@
 /*
 * Name: Project Aela's Renderer
 * Author: Ekkon Games
-* Date: November 2016
+* Date: October 2016
 * Description: A class used for interacting between Aela's renderers.
 */
 

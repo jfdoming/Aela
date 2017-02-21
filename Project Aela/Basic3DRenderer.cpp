@@ -7,6 +7,7 @@
 */
 
 #include "Basic3DRenderer.h"
+#include "Basic2DRenderer.h"
 
 void Basic3DRenderer::setupBasicRendering() {
 	setupVertexArrayID();

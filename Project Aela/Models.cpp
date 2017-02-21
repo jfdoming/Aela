@@ -109,7 +109,6 @@ void Model3D::getRotation(float * setXPosition, float * setYPosition, float * se
 	*setZPosition = zRotation;
 }
 
-
 void Model3D::setProperty(Model3DProperty property, float value) {
 	if (property == Model3DProperty::X_POSITION) {
 		xPosition = value;

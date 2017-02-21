@@ -5,7 +5,7 @@
 * Description: A class used by Aela's Basic 3D Renderer to shade 3D models.
 */
 
-#include "Renderer.h"
+#include "Renderer3D.h"
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
