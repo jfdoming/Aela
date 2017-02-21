@@ -8,8 +8,9 @@ namespace Aela {
 		bool isValid(std::ifstream &in);
 		Resource* load(std::ifstream &in);
 	};
-}*/
+}
 
+/*
 bool loadOBJ(
 	const char * path,
 	std::vector<glm::vec3> & out_vertices,
@@ -33,3 +34,4 @@ bool loadAssImp(
 	std::vector<glm::vec2> & uvs,
 	std::vector<glm::vec3> & normals
 );
+*/
