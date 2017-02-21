@@ -3,6 +3,7 @@
 #endif
 
 #include <GL/glew.h>
+#include "Texture.h"
 
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
@@ -17,6 +18,7 @@
 
 // Load a .DDS file using GLFW's own loader
 GLuint loadDDS(std::string filePath);
+Texture loadDDS(std::string filePath);
 
 // This function should probably be moved somewhere else. Maybe it should be moved into
 // a header file called "useful_functions.h". For now, it exists here.
