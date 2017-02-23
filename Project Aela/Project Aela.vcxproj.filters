@@ -121,6 +121,9 @@
     <ClCompile Include="Basic2DRenderer.cpp">
       <Filter>Source Files\Rendering\2D\2D_Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader.hpp">
@@ -203,5 +206,7 @@
     <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
       <Filter>shaders</Filter>
     </None>
+    <None Include="..\Release\res\shaders\quad.fragmentshader" />
+    <None Include="..\Release\res\shaders\quad.vertexshader" />
   </ItemGroup>
 </Project>

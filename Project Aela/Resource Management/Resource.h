@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include <GL/glew.h>
 #include <GLM/glm.hpp>
+#include <vector>
 
 #define AELA_RESOURCE_DEFAULT_BUFFER_SIZE 8192
 

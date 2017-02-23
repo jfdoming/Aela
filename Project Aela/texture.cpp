@@ -191,6 +191,9 @@ Texture loadDDSToTexture(std::string filePath) {
 	unsigned int blockSize = (format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
 	unsigned int offset = 0;
 
+	// These variables store the dimensions of the texture before they are modified.
+	int actualTextureWidth = imageWidth, actualTextureHeight = imageHeight;
+
 	// This loads the mipmaps.
 	for (unsigned int level = 0; level < mipMapAmount && (imageWidth || imageHeight); level++) {
 		unsigned int size = ((imageWidth + 3) / 4) * ((imageHeight + 3) / 4) * blockSize;
@@ -210,6 +213,6 @@ Texture loadDDSToTexture(std::string filePath) {
 	}
 	free(buffer);
 	texture.setTexture(textureID);
-	texture.setDimensions(0, 0, imageWidth, imageHeight);
+	texture.setDimensions(0, 0, actualTextureWidth, actualTextureHeight);
 	return texture;
 }

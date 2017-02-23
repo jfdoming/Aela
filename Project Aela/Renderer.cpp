@@ -126,12 +126,11 @@ void Renderer::render() {
 		basic3DRenderer.renderBillboard(&billboards[whichBillboard]);
 	}
 
-	if (temporaryTexture == NULL) {
-		temporaryTexture = loadDDS("res/textures/cat.DDS");
+	if (!temporaryTexture.isInitialised()) {
+		temporaryTexture = loadDDSToTexture("res/textures/test.dds");
 	}
-	// Rect<int> output(0, 0, 512, 1024);
-	Rect<int> output(50, 50, 512, 974);
-	basic2DRenderer.renderTexture(temporaryTexture, window->getWindowDimensions(), &output);
+	Rect<int> output(0, 0, 1024, 60);
+	basic2DRenderer.renderTexture(&temporaryTexture, window->getWindowDimensions(), &output);
 
 	basic3DRenderer.getWindow()->updateBuffer();
 }

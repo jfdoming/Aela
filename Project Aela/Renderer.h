@@ -75,11 +75,10 @@ class Renderer {
 		TimeManager * timeManager;
 		Window * window;
 
-		// TEMPORARY!
+		// TEMPORARY!!!!!!!!!!!!!!
 		std::vector<Model3D> models;
 		std::vector<Billboard> billboards;
-
-		GLuint temporaryTexture = NULL;
+		Texture temporaryTexture;
 
 		void addFlag(Renderer3DFlag flag);
 		void setup3DRendering();

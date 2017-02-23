@@ -41,7 +41,7 @@ class Texture {
 		}
 
 		bool isInitialised() {
-			return (dimensions.getX() > 0 && dimensions.getY() > 0 && dimensions.getWidth() > 0 && dimensions.getHeight() > 0 && texture != NULL);
+			return (dimensions.getWidth() > 0 && dimensions.getHeight() > 0 && texture != NULL);
 		}
 
 	private:

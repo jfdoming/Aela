@@ -15,6 +15,7 @@
 #include "ErrorHandler.h"
 #include "Rect.h"
 #include "shader.hpp"
+#include "Texture.h"
 
 // This space is left empty for implementation.
 
@@ -25,8 +26,8 @@ class Basic2DRenderer {
 		}
 
 		void setup();
-		void renderTexture(GLuint texture, Rect<int> * windowDimensions, Rect<int> * output);
+		void renderTexture(Texture * texture, Rect<int> * windowDimensions, Rect<int> * output);
 
 	private:
-		GLuint programID, textureID, positionID;
+		GLuint programID, textureID, positionID, quad_VertexArrayID, quad_vertexbuffer, textureDimensionsID, windowDimensionsID, boundingBoxID;
 };
