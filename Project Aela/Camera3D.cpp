@@ -25,7 +25,7 @@ glm::vec3 Camera3D::getPosition() {
 	return position;
 }
 
-void Camera3D::getPosition(float * setXPosition, float * setYPosition, float * setZPosition) {
+void Camera3D::getPosition(float* setXPosition, float* setYPosition, float* setZPosition) {
 	*setXPosition = xPosition;
 	*setYPosition = yPosition;
 	*setZPosition = zPosition;
@@ -49,7 +49,7 @@ glm::vec3 Camera3D::getRotation() {
 	return rotation;
 }
 
-void Camera3D::getRotation(float * setXPosition, float * setYPosition, float * setZPosition) {
+void Camera3D::getRotation(float* setXPosition, float* setYPosition, float* setZPosition) {
 	*setXPosition = xRotation;
 	*setYPosition = yRotation;
 	*setZPosition = zRotation;

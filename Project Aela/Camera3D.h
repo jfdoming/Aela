@@ -43,13 +43,13 @@ class Camera3D {
 		void setPosition(float setX, float setY, float setZ);
 		void setPosition(glm::vec3 setPosition);
 		glm::vec3 getPosition();
-		void getPosition(float * setXPosition, float * setYPosition, float * setZPosition);
+		void getPosition(float* setXPosition, float* setYPosition, float* setZPosition);
 
 		// Rotation getters and setters.
 		void setRotation(float setX, float setY, float setZ);
 		void setRotation(glm::vec3 setRotation);
 		glm::vec3 getRotation();
-		void getRotation(float * setXPosition, float * setYPosition, float * setZPosition);
+		void getRotation(float* setXPosition, float* setYPosition, float* setZPosition);
 
 		// A function used for changing any single transformation-related property.
 		void setProperty(Model3DProperty property, float value);

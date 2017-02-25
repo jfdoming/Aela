@@ -37,7 +37,7 @@
 
 #pragma once
 
-// do not do this
+// Do not do this.
 #ifndef CLASSNAME_HEADER_GUARD
 #define CLASSNAME_HEADER_GUARD
 ...
@@ -49,14 +49,18 @@
 <pre><code>void operate() {
 }
 
-// do not do this
+// Do not do this.
 void operate()
 {
 }</code></pre>
 
 	If a function has no parameters, do not specify void.
-<pre><code>// do not do this
+<pre><code>// Do not do this.
 void operate(void);</code></pre>
+
+	When declaring funtions in header files, name the parameters.
+<pre><code>// Do not do this.
+void operate(int, float);</code></pre>
 
 	<h2>Pointers and References</h2>
 	Pointers must be declared as follows:

@@ -23,9 +23,9 @@ void AelaErrorHandling::AelaErrorHandler::throwError(AelaSimpleError error) {
 		// This must save the error message text as a string and then converting to a c string.
 		// Doing error.getTitle().c_str() returns nothing for some amazing reason.
 		std::string titleAsString = error.getTitle();
-		const char * titleAsChars = titleAsString.c_str();
+		const char* titleAsChars = titleAsString.c_str();
 		std::string messageAsString = error.getMessage();
-		const char * messageAsChars = messageAsString.c_str();
+		const char* messageAsChars = messageAsString.c_str();
 
 		SDL_MessageBoxData messageboxdata = {
 			SDL_MESSAGEBOX_INFORMATION, /* .flags */

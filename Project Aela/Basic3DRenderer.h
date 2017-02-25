@@ -31,7 +31,7 @@ public:
 
 	}
 
-	void shade(Model3D * model, GLuint depthProgramID, GLuint depthMatrixID);
+	void shade(Model3D* model, GLuint depthProgramID, GLuint depthMatrixID);
 };
 
 class Basic3DTextureRenderer {
@@ -45,9 +45,9 @@ public:
 		);
 	}
 
-	void renderTextures(Model3D * model, GLuint depthMatrixID, GLuint programID,
+	void renderTextures(Model3D* model, GLuint depthMatrixID, GLuint programID,
 		GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID);
-	void renderTextureIn3DSpace(Window * window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
+	void renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
 	void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);
 
 private:
@@ -77,18 +77,18 @@ public:
 		glDeleteVertexArrays(1, &vertexArrayID);
 	}
 
-	void shade(Model3D * model);
-	void renderTextures(Model3D * model);
+	void shade(Model3D* model);
+	void renderTextures(Model3D* model);
 	void clearDepthTexture();
-	void renderTextureIn3DSpace(GLuint * texture, bool cullTexture, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
-	void renderBillboard(Billboard * billboard);
+	void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
+	void renderBillboard(Billboard* billboard);
 	void setupBasicRendering();
-	void setWindow(Window * setWindow);
-	void setCamera(Camera3D * camera);
+	void setWindow(Window* setWindow);
+	void setCamera(Camera3D* camera);
 	void setupDepthTexture();
 	void resetDepthTexture();
-	Window * getWindow();
-	GLuint * getFramebuffer();
+	Window* getWindow();
+	GLuint* getFramebuffer();
 	int windowWidth, windowHeight;
 
 private:
@@ -101,8 +101,8 @@ private:
 	GLuint framebufferName;
 	GLuint quad_vertexbuffer;
 
-	Window * window;
-	Camera3D * camera;
+	Window* window;
+	Camera3D* camera;
 
 	const GLfloat g_quad_vertex_buffer_data[18] = {
 		-1.0f, -1.0f, 0.0f,

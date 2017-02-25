@@ -78,17 +78,17 @@ bool Window::createWindow(int setWidth, int setHeight, int setXPosition, int set
 	return true;
 }
 
-void Window::getWindowDimensions(int * widthVariable, int * heightVariable) {
+void Window::getWindowDimensions(int* widthVariable, int* heightVariable) {
 	*widthVariable = windowWidth;
 	*heightVariable = windowHeight;
 }
 
-Rect<int> * Window::getWindowDimensions() {
+Rect<int>* Window::getWindowDimensions() {
 	Rect<int> returnValue(0, 0, windowWidth, windowHeight);
 	return &returnValue;
 }
 
-void Window::getWindowPosition(int * xPositionVariable, int * yPositionVariable) {
+void Window::getWindowPosition(int* xPositionVariable, int* yPositionVariable) {
 	SDL_GetWindowPosition(window, xPositionVariable, yPositionVariable);
 }
 
@@ -119,11 +119,11 @@ void Window::updateWindowEvents() {
 	}
 }
 
-void Window::getCursorPositionInWindow(int * x, int * y) {
+void Window::getCursorPositionInWindow(int* x, int* y) {
 	SDL_GetMouseState(x, y);
 }
 
-void Window::getCursorPositionGlobally(int * x, int * y) {
+void Window::getCursorPositionGlobally(int* x, int* y) {
 	SDL_GetGlobalMouseState(x, y);
 }
 

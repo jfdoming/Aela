@@ -124,16 +124,16 @@ void Basic3DRenderer::resetDepthTexture() {
 	shadowMapID = glGetUniformLocation(programID, "shadowMap");*/
 }
 
-void Basic3DRenderer::setWindow(Window * setWindow) {
+void Basic3DRenderer::setWindow(Window* setWindow) {
 	window = setWindow;
 	window->getWindowDimensions(&windowWidth, &windowHeight);
 }
 
-void Basic3DRenderer::setCamera(Camera3D * setCamera) {
+void Basic3DRenderer::setCamera(Camera3D* setCamera) {
 	camera = setCamera;
 }
 
-Window * Basic3DRenderer::getWindow() {
+Window* Basic3DRenderer::getWindow() {
 	return window;
 }
 
@@ -144,28 +144,28 @@ void Basic3DRenderer::setupQuadVertexBuffer() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
 }
 
-GLuint * Basic3DRenderer::getFramebuffer() {
+GLuint* Basic3DRenderer::getFramebuffer() {
 	return &framebufferName;
 }
 
-void Basic3DRenderer::shade(Model3D * model) {
+void Basic3DRenderer::shade(Model3D* model) {
 	modelShader.shade(model, depthProgramID, depthMatrixID);
 }
 
-void Basic3DRenderer::renderTextures(Model3D * model) {
+void Basic3DRenderer::renderTextures(Model3D* model) {
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	textureRenderer.renderTextures(model, depthMatrixID, programID, matrixID, modelMatrixID, viewMatrixID,
 		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID);
 }
 
-void Basic3DRenderer::renderTextureIn3DSpace(GLuint * texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
+void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
 	// Note: for regular texture rendering, use:
 	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	textureRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, position, lookAt, inverseRotation);
 }
 
-void Basic3DRenderer::renderBillboard(Billboard * billboard) {
+void Basic3DRenderer::renderBillboard(Billboard* billboard) {
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	textureRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, billboard->getPosition(), camera->getPosition(), true);
 }

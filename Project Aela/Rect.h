@@ -39,7 +39,7 @@ template <class T> class Rect {
 			height = setHeight;
 		}
 
-		void getValues(T * setX, T * setY, T * setWidth, T * setHeight) {
+		void getValues(T* setX, T* setY, T* setWidth, T* setHeight) {
 			*setX = xPosition;
 			*setY = yPosition;
 			*setWidth = width;

@@ -1,5 +1,4 @@
 /*
-<<<<<<< HEAD
  * Name: Project Aela - Main
  * Author: Ekkon Games
  * Date: October 2016

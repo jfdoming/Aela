@@ -43,25 +43,25 @@ glm::vec3 Model3D::getPosition() {
 	return position;
 }
 
-void Model3D::getPosition(float * setXPosition, float * setYPosition, float * setZPosition) {
+void Model3D::getPosition(float* setXPosition, float* setYPosition, float* setZPosition) {
 	*setXPosition = xPosition;
 	*setYPosition = yPosition;
 	*setZPosition = zPosition;
 }
 
-glm::vec3 * Model3D::getVertices() {
+glm::vec3* Model3D::getVertices() {
 	return &vertices[0];
 }
 
-glm::vec2 * Model3D::getUVs() {
+glm::vec2* Model3D::getUVs() {
 	return &uvs[0];
 }
 
-glm::vec3 * Model3D::getNormals() {
+glm::vec3* Model3D::getNormals() {
 	return &normals[0];
 }
 
-unsigned short * Model3D::getIndices() {
+unsigned short* Model3D::getIndices() {
 	return &indices[0];
 }
 
@@ -81,7 +81,7 @@ int Model3D::getIndexSize() {
 	return indices.size();
 }
 
-GLuint * Model3D::getTexture() {
+GLuint* Model3D::getTexture() {
 	return &texture;
 }
 
@@ -103,7 +103,7 @@ glm::vec3 Model3D::getRotation() {
 	return rotation;
 }
 
-void Model3D::getRotation(float * setXPosition, float * setYPosition, float * setZPosition) {
+void Model3D::getRotation(float* setXPosition, float* setYPosition, float* setZPosition) {
 	*setXPosition = xRotation;
 	*setYPosition = yRotation;
 	*setZPosition = zRotation;

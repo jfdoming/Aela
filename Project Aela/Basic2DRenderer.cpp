@@ -8,7 +8,7 @@
 #include "Basic2DRenderer.h"
 
 void Basic2DRenderer::setup() {
-	programID = loadShaders("res/shaders/quad.vertexshader", "res/shaders/quad.fragmentshader");
+	programID = loadShaders("res/shaders/2D.vertexshader", "res/shaders/2D.fragmentshader");
 	textureID = glGetUniformLocation(programID, "quadTexture");
 	positionID = glGetUniformLocation(programID, "positionOfTextureOnScreen");
 	textureDimensionsID = glGetUniformLocation(programID, "textureDimensions");
@@ -18,12 +18,14 @@ void Basic2DRenderer::setup() {
 	glGenBuffers(1, &quad_vertexbuffer);
 }
 
-void Basic2DRenderer::renderTexture(Texture * texture, Rect<int> * windowDimensions, Rect<int> * output) {
+void Basic2DRenderer::renderTexture(Texture* texture, Rect<int>* windowDimensions) {
 	// Due to the way that OpenGL seems to flip the texture, the shader needs to flip it back
 	// and show the texture's opposite side. Or the renderer could just send normal data.
 	// GL_CULL_FACE needs to be disabled if one uses the first option.
 	glDisable(GL_CULL_FACE);
 	glBindVertexArray(quad_VertexArrayID);
+
+	Rect<unsigned int>* output = texture->getOutput();
 
 	int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
 	float topLeftX = (float) (-1 + ((float) output->getX() / (windowWidth / 2))),
@@ -40,7 +42,7 @@ void Basic2DRenderer::renderTexture(Texture * texture, Rect<int> * windowDimensi
 		bottomRightX,  bottomRightY, 0.0f
 	};
 
-	int textureWidth = texture->getDimensions().getWidth(), textureHeight = texture->getDimensions().getHeight();
+	int textureWidth = texture->getDimensions()->getWidth(), textureHeight = texture->getDimensions()->getHeight();
 
 	glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);

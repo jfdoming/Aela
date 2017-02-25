@@ -26,7 +26,7 @@ class Basic2DRenderer {
 		}
 
 		void setup();
-		void renderTexture(Texture * texture, Rect<int> * windowDimensions, Rect<int> * output);
+		void renderTexture(Texture* texture, Rect<int>* windowDimensions);
 
 	private:
 		GLuint programID, textureID, positionID, quad_VertexArrayID, quad_vertexbuffer, textureDimensionsID, windowDimensionsID, boundingBoxID;

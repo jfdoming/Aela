@@ -30,17 +30,17 @@ class ControlManager {
 		}
 
 		// These are setters and getters of the control manager.
-		void setWindow(Window * setWindow);
-		void setTimeManager(TimeManager * setTime);
+		void setWindow(Window* setWindow);
+		void setTimeManager(TimeManager* setTime);
 		void setCameraUpsideDownAllowance(bool allowUpsdideDown);
 		void setProperty(ControlManagerProperty property, float value);
 
 		// This computes matrices for a Camera3D.
-		void computeMatricesWithInputs(Camera3D * camera);
+		void computeMatricesWithInputs(Camera3D* camera);
 
 	private:
-		TimeManager * timeManager;
-		Window * window;
+		TimeManager* timeManager;
+		Window* window;
 		bool windowFocus;
 
 		// Speed: 0.001f is 1 unit per tick.

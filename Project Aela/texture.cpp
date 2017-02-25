@@ -29,7 +29,7 @@ std::string getPartOfString(std::string string, unsigned int start, unsigned int
 // that's what OpenGL wants to use. Using std::string and std::fstream would make things more complex.
 GLuint loadDDSToGLuint(std::string filePath) {
 	unsigned char fileHeader[124];
-	FILE * imageFile;
+	FILE* imageFile;
 
 	// This will try to open the DDS file.
 	fopen_s(&imageFile, filePath.c_str(), "rb");
@@ -55,7 +55,7 @@ GLuint loadDDSToGLuint(std::string filePath) {
 	unsigned int linearSize = *(unsigned int*) &(fileHeader[16]);
 	unsigned int mipMapAmount = *(unsigned int*) &(fileHeader[24]);
 	unsigned int fourCCType = *(unsigned int*) &(fileHeader[80]);
-	unsigned char * buffer;
+	unsigned char* buffer;
 	unsigned int bufferSize;
 	
 	// This checks to see how large the bufferSize will be, including all mip-maps.
@@ -122,7 +122,7 @@ GLuint loadDDSToGLuint(std::string filePath) {
 Texture loadDDSToTexture(std::string filePath) {
 	Texture texture;
 	unsigned char fileHeader[124];
-	FILE * imageFile;
+	FILE* imageFile;
 
 	// This will try to open the DDS file.
 	fopen_s(&imageFile, filePath.c_str(), "rb");
@@ -148,7 +148,7 @@ Texture loadDDSToTexture(std::string filePath) {
 	unsigned int linearSize = *(unsigned int*) &(fileHeader[16]);
 	unsigned int mipMapAmount = *(unsigned int*) &(fileHeader[24]);
 	unsigned int fourCCType = *(unsigned int*) &(fileHeader[80]);
-	unsigned char * buffer;
+	unsigned char* buffer;
 	unsigned int bufferSize;
 
 	// This checks to see how large the bufferSize will be, including all mip-maps.
@@ -212,7 +212,7 @@ Texture loadDDSToTexture(std::string filePath) {
 
 	}
 	free(buffer);
-	texture.setTexture(textureID);
+	texture.setTexture(&textureID);
 	texture.setDimensions(0, 0, actualTextureWidth, actualTextureHeight);
 	return texture;
 }

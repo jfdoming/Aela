@@ -58,7 +58,7 @@ GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath)
 
 	// This compiles the vertex shader.
 	AelaErrorHandling::consoleWindowError("Aela Shader Reader", "The vertex shader " + vertexShaderPath + " is compiling...");
-	char const * vertexCodeAsChar = vertexShaderCode.c_str();
+	char const* vertexCodeAsChar = vertexShaderCode.c_str();
 	glShaderSource(vertexShaderID, 1, &vertexCodeAsChar, NULL);
 	glCompileShader(vertexShaderID);
 
@@ -75,7 +75,7 @@ GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath)
 
 	// This compiles the fragment shader.
 	AelaErrorHandling::consoleWindowError("Aela Shader Reader", "The fragment shader " + fragmentShaderPath + " is compiling...");
-	char const * fragmentCodeAsChar = fragmentShaderCode.c_str();
+	char const* fragmentCodeAsChar = fragmentShaderCode.c_str();
 	glShaderSource(fragmentShaderID, 1, &fragmentCodeAsChar, NULL);
 	glCompileShader(fragmentShaderID);
 

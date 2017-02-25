@@ -20,15 +20,15 @@ using namespace glm;
 // 'int': forcing value to bool 'true' or 'false' (performance warning)
 #pragma warning(disable : 4800)
 
-void ControlManager::setWindow(Window * setWindow) {
+void ControlManager::setWindow(Window* setWindow) {
 	window = setWindow;
 }
 
-void ControlManager::setTimeManager(TimeManager * setTime) {
+void ControlManager::setTimeManager(TimeManager* setTime) {
 	timeManager = setTime;
 }
 
-void ControlManager::computeMatricesWithInputs(Camera3D * camera) {
+void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 	// This will only run if the window is focused.
 	if (window->isFocused()) {
 		windowFocus = true;

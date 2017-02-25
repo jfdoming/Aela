@@ -32,13 +32,17 @@ enum class Renderer3DFlag {
 	RENDER_SHADOWS, RENDER_TEXTURES
 };
 
+enum class RendererInformation {
+	VENDOR, RENDERER, OPENGL_VERSION, GLSL_VERSION, OPENGL_EXTENSIONS
+};
+
 class Renderer {
 	public:
 		Renderer() {
 			
 		}
 
-		Renderer(Window * windowToSet) {
+		Renderer(Window* windowToSet) {
 			temporarilySetupModels();
 			setWindow(windowToSet);
 			basic3DRenderer.setCamera(&camera);
@@ -49,36 +53,51 @@ class Renderer {
 			models.resize(0);
 		}
 
-		void setup3D(Window * windowToSet) {
+		void setup3D(Window* windowToSet) {
 			setupGLFeatures();
 			temporarilySetupModels();
 			setWindow(windowToSet);
 			setup3DRendering();
 		}
 
-		void setup2D(Window * windowToSet) {
+		void setup2D(Window* windowToSet) {
 			setupGLFeatures();
 			setWindow(windowToSet);
 			setup2DRendering();
 		}
 
-		void setWindow(Window * setWindow);
-		void setTimeManager(TimeManager * setTime);
-		void updateCameraUsingControls(ControlManager * controls);
+		void setWindow(Window* setWindow);
+		void setTimeManager(TimeManager* setTime);
+		void updateCameraUsingControls(ControlManager* controls);
 		void render();
+
+		std::string getInformation(RendererInformation infoToGet);
+		Window* getWindow();
+		TimeManager* getTimeManager();
+		Camera3D* getCamera();
+
 
 	private:
 		std::vector<Renderer3DFlag> flags;
 		Basic3DRenderer basic3DRenderer;
 		Basic2DRenderer basic2DRenderer;
 		Camera3D camera;
-		TimeManager * timeManager;
-		Window * window;
+		TimeManager* timeManager;
+		Window* window;
 
 		// TEMPORARY!!!!!!!!!!!!!!
 		std::vector<Model3D> models;
 		std::vector<Billboard> billboards;
 		Texture temporaryTexture;
+
+		// This is a list of textures for the renderer to render in 2D.
+		// Please see the definition of add2DTextureToRender() for more info.
+		std::vector<Texture*> texturesToRenderIn2D;
+
+		void add2DTextureToRender(Texture* texture);
+		void add2DTextureToRender(Texture* texture, int index);
+		void removeTexture(int index);
+		Texture* get2DTexture(int index);
 
 		void addFlag(Renderer3DFlag flag);
 		void setup3DRendering();
@@ -112,6 +131,5 @@ class Renderer {
 			// This sets up a billboard.
 			billboards.resize(1);
 			billboards[0].loadTexture("res/textures/uvmap.DDS");
-		}
-		
+		}		
 };

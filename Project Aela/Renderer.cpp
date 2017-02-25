@@ -16,7 +16,7 @@ void Renderer::addFlag(Renderer3DFlag flag) {
 		}
 	}
 	if (!flagExists) {
-
+		flags.insert(flags.begin(), flag);
 	}
 }
 
@@ -55,12 +55,12 @@ bool Renderer::setupGLEW() {
 	return true;
 }
 
-void Renderer::setWindow(Window * setWindow) {
+void Renderer::setWindow(Window* setWindow) {
 	basic3DRenderer.setWindow(setWindow);
 	window = setWindow;
 }
 
-void Renderer::setTimeManager(TimeManager * setTime) {
+void Renderer::setTimeManager(TimeManager* setTime) {
 	timeManager = setTime;
 }
 
@@ -125,16 +125,94 @@ void Renderer::render() {
 	for (unsigned int whichBillboard = 0; whichBillboard < billboards.size(); whichBillboard++) {
 		basic3DRenderer.renderBillboard(&billboards[whichBillboard]);
 	}
-
+	
+	// This is a demonstration of 2D rendering and is temporary.
+	// This will be moved elsewhere once the menu system is set up.
 	if (!temporaryTexture.isInitialised()) {
 		temporaryTexture = loadDDSToTexture("res/textures/test.dds");
+		add2DTextureToRender(&temporaryTexture);
 	}
-	Rect<int> output(0, 0, 1024, 60);
-	basic2DRenderer.renderTexture(&temporaryTexture, window->getWindowDimensions(), &output);
+	Rect<unsigned int> output(0, 0, 1024, 60);
+	temporaryTexture.setOutput(&output);
 
+	// This is how one would delete a 2D texture.
+	// temporaryTexture.deleteTexture();
+	// removeTexture(0);
+
+	for (unsigned int whichTexture = 0; whichTexture < texturesToRenderIn2D.size(); whichTexture++) {
+		basic2DRenderer.renderTexture(texturesToRenderIn2D[whichTexture], window->getWindowDimensions());
+	}
 	basic3DRenderer.getWindow()->updateBuffer();
 }
 
-void Renderer::updateCameraUsingControls(ControlManager * controls) {
+// Q: Why do these "add texture" functions exist?
+// A: How 2D Rendering works in a Renderer is pretty simple. The programmer adds a texture
+//    to the list of textures to be rendered. Afterwards, those textures become rendered
+//    within the render() function in the order that they are in the std::vector. Please
+//    note that the pointers to these textures are stored, so use removeTexture() before
+//    deleting a texture that was added to the texture list.
+void Renderer::add2DTextureToRender(Texture* texture) {
+	texturesToRenderIn2D.insert(texturesToRenderIn2D.begin(), texture);
+}
+
+void Renderer::add2DTextureToRender(Texture* texture, int index) {
+	texturesToRenderIn2D.insert(texturesToRenderIn2D.begin() + index, texture);
+}
+
+Texture* Renderer::get2DTexture(int index) {
+	if ((unsigned) index < texturesToRenderIn2D.size()) {
+		return texturesToRenderIn2D[index];
+	} else {
+		AelaErrorHandling::consoleWindowError("Aela Renderer", "A 2D texture that doesn't exist is trying to be obtained.");
+		return NULL;
+	}
+}
+
+void Renderer::removeTexture(int index) {
+	if ((unsigned) index < texturesToRenderIn2D.size()) {
+		texturesToRenderIn2D.erase(texturesToRenderIn2D.begin() + index);
+	} else {
+		AelaErrorHandling::consoleWindowError("Aela Renderer", "A 2D texture that doesn't exist is trying to be removed.");
+	}
+}
+
+void Renderer::updateCameraUsingControls(ControlManager* controls) {
 	controls->computeMatricesWithInputs(&camera);
+}
+
+std::string Renderer::getInformation(RendererInformation infoToGet) {
+	char* info;
+	switch (infoToGet) {
+		case RendererInformation::VENDOR:
+			info = (char*) glGetString(GL_VENDOR);
+			break;
+		case RendererInformation::RENDERER:
+			info = (char*) glGetString(GL_RENDERER);
+			break;
+		case RendererInformation::OPENGL_VERSION:
+			info = (char*) glGetString(GL_VERSION);
+			break;
+		case RendererInformation::GLSL_VERSION:
+			info = (char*) glGetString(GL_SHADING_LANGUAGE_VERSION);
+			break;
+		case RendererInformation::OPENGL_EXTENSIONS:
+			info = (char*) glGetString(GL_EXTENSIONS);
+			break;
+		default:
+			info = "This information is not currently availabe.";
+			break;
+	}
+	return (std::string) info;
+}
+
+Window* Renderer::getWindow() {
+	return window;
+}
+
+TimeManager* Renderer::getTimeManager() {
+	return timeManager;
+}
+
+Camera3D* Renderer::getCamera() {
+	return &camera;
 }

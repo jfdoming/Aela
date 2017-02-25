@@ -26,14 +26,14 @@ Resource* Aela::TextureLoader::load(std::ifstream &in) {
 	unsigned int linearSize = *(unsigned int*) &(textureHeader[16]);
 	unsigned int mipMapAmount = *(unsigned int*) &(textureHeader[24]);
 	unsigned int fourCCType = *(unsigned int*) &(textureHeader[80]);
-	unsigned char * buffer;
+	unsigned char* buffer;
 	unsigned int bufferSize;
 	
 	// This checks to see how large the bufferSize will be, including all mip-maps.
-	bufferSize = mipMapAmount > 1 ? linearSize * 2 : linearSize;
+	bufferSize = mipMapAmount > 1 ? linearSize* 2 : linearSize;
 
 	// This allocates memory for the buffer using malloc() and reads the rest of the file.
-	buffer = new unsigned char[bufferSize * sizeof(unsigned char)];
+	buffer = new unsigned char[bufferSize* sizeof(unsigned char)];
 	in.get(buffer, bufferSize);
 
 	// This closes the file.
@@ -88,7 +88,7 @@ Resource* Aela::TextureLoader::load(std::ifstream &in) {
 	}
 	delete[] buffer;
 
-	TextureResource * res = new TextureResource("");
+	TextureResource* res = new TextureResource("");
 	res->data = textureID;
 
 	std::cout << "texture id: " << res->data << std::endl;
