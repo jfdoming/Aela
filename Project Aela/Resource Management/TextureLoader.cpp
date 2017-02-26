@@ -1,6 +1,4 @@
-/*#include "TextureLoader.h"
-
-#define AELA_RESOURCE_TEXTURE_HEADER_SIZE 128
+#include "TextureLoader.h"
 
 using namespace Aela;
 
@@ -26,35 +24,32 @@ Resource* Aela::TextureLoader::load(std::ifstream &in) {
 	unsigned int linearSize = *(unsigned int*) &(textureHeader[16]);
 	unsigned int mipMapAmount = *(unsigned int*) &(textureHeader[24]);
 	unsigned int fourCCType = *(unsigned int*) &(textureHeader[80]);
-	unsigned char* buffer;
+	char* buffer;
 	unsigned int bufferSize;
 	
 	// This checks to see how large the bufferSize will be, including all mip-maps.
-	bufferSize = mipMapAmount > 1 ? linearSize* 2 : linearSize;
+	bufferSize = mipMapAmount > 1 ? linearSize * 2 : linearSize;
 
 	// This allocates memory for the buffer using malloc() and reads the rest of the file.
-	buffer = new unsigned char[bufferSize* sizeof(unsigned char)];
+	buffer = new char[bufferSize * sizeof(unsigned char)];
 	in.get(buffer, bufferSize);
-
-	// This closes the file.
-	fclose(imageFile);
 
 	// This finds the proper format.
 	unsigned int format;
 	switch (fourCCType) {
-		case FOURCC_DXT1:
+		case CompressionAlgorithms::FOURCC_DXT1:
 			format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
 			break;
-		case FOURCC_DXT3:
+		case CompressionAlgorithms::FOURCC_DXT3:
 			format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
 			break;
-		case FOURCC_DXT5:
+		case CompressionAlgorithms::FOURCC_DXT5:
 			format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
 			break;
 		default:
 			delete[] buffer;
 			return 0;
-,,	}
+	}
 
 	// This creates an OpenGL texture.
 	GLuint textureID;
@@ -95,4 +90,3 @@ Resource* Aela::TextureLoader::load(std::ifstream &in) {
 
 	return res;
 }
-*/
