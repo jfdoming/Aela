@@ -77,13 +77,13 @@ void AelaErrorHandling::consoleInternalError(std::string title, std::string mess
 }
 
 void AelaErrorHandling::windowError(std::string message) {
-	// This oputputs an error using the operating system's error message window.
+	// This outputs an error using the operating system's error message window.
 	AelaSimpleError simpleError(AELA_ERROR_WINDOW, message);
 	errorHandler.throwError(simpleError);
 }
 
 void AelaErrorHandling::windowError(std::string title, std::string message) {
-	// This oputputs an error using the operating system's error message window.
+	// This outputs an error using the operating system's error message window.
 	AelaSimpleError simpleError(AELA_ERROR_WINDOW, title, message);
 	errorHandler.throwError(simpleError);
 }
