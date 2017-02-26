@@ -45,7 +45,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		int xpos, ypos;
 		window->getCursorPositionInWindow(&xpos, &ypos);
 
-		// This teleports the cursor back to the middle of the window.
+		// This moves the cursor back to the middle of the window.
 		int width, height;
 		window->getWindowDimensions(&width, &height);
 		window->setCursorPositionInWindow(width / 2, height / 2);

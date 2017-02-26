@@ -30,7 +30,7 @@ using namespace glm;
 // These are headers of some loading functions. They will eventually be moved into the Resource Manager.
 #include "shader.hpp"
 #include "texture.hpp"
-#include "objloader.hpp"
+#include "objloader_old.hpp"
 #include "vboindexer.hpp"
 
 // These are headers that are part of Project Aela.
@@ -40,22 +40,25 @@ using namespace glm;
 #include "ErrorHandler.h"
 #include "Renderer.h"
 #include "TimeManager.h"
+#include "Scenes/SceneManager.h"
 
-#include "Resource Management\ResourceManager.h"
-#include "Resource Management\TextureLoader.h"
+#include "Resource Management/ResourceManager.h"
+#include "Resource Management/TextureLoader.h"
 
 int runningLoop();
 
 // These are global objects who's classes come from Project Aela.
 Window window;
 Renderer renderer3D;
-ControlManager controls;
+ControlManager controlManager;
 TimeManager timeManager;
+
+Aela::SceneManager sceneManager;
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
 	// TESTING FROM JULIAN PLEASE IGNORE
-	Aela::ResourceManager mgr(5);
+	//Aela::ResourceManager mgr(5);
 	// std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
 	// std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
 	// Aela::TextLoader loader;
@@ -98,14 +101,14 @@ int startAela() {
 	}
 
 	// This tells to ControlManager to prevent the camera from being inverted.
-	controls.setProperty(ControlManagerProperty::ALLOW_UPSIDE_DOWN_CAMERA, 0);
+	controlManager.setProperty(ControlManagerProperty::ALLOW_UPSIDE_DOWN_CAMERA, 0);
 
 	// This passes the window and time manager to the renderer and control manager.
 	renderer3D.setup3D(&window);
 	renderer3D.setup2D(&window);
 	renderer3D.setTimeManager(&timeManager);
-	controls.setWindow(&window);
-	controls.setTimeManager(&timeManager);
+	controlManager.setWindow(&window);
+	controlManager.setTimeManager(&timeManager);
 
 	// This starts the running loop. What else would you think it does?
 	bool value = runningLoop();
@@ -117,7 +120,15 @@ int runningLoop() {
 	do {
 		timeManager.updateTime();
 		window.updateWindowEvents();
-		renderer3D.updateCameraUsingControls(&controls);
+		renderer3D.updateCameraUsingControls(&controlManager);
+
+		// TODO Robert please verify that this is the correct place to do this
+		Aela::Scene* currentScene = sceneManager.getCurrentScene();
+		if (currentScene != NULL) {
+			currentScene->update();
+			currentScene->render();
+		}
+
 		renderer3D.render();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 	return 0;

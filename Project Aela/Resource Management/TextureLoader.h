@@ -3,6 +3,7 @@
 #include "ResourceLoader.h"
 
 #define AELA_RESOURCE_TEXTURE_HEADER_SIZE 128
+#define AELA_RESOURCE_TEXTURE_HEADER_START "DDS "
 
 namespace Aela {
 	enum CompressionAlgorithms {

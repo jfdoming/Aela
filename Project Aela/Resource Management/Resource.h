@@ -1,3 +1,10 @@
+/*
+* Class: Resource
+* Author: Julian Dominguez-Schatz
+* Date: 01/01/2017
+* Description: Keeps track of the scene system.
+*/
+
 #pragma once
 
 #include "stdafx.h"
@@ -5,14 +12,11 @@
 #include <GLM/glm.hpp>
 #include <vector>
 
-#define AELA_RESOURCE_DEFAULT_BUFFER_SIZE 8192
-
 namespace Aela {
 	class Resource {
 		public:
-		std::string src;
 
-		Resource(std::string src);
+		Resource();
 		~Resource();
 	};
 
@@ -20,7 +24,7 @@ namespace Aela {
 	public:
 		GLuint data = 0;
 
-		TextureResource(std::string src);
+		TextureResource();
 		~TextureResource();
 	};
 
@@ -30,7 +34,7 @@ namespace Aela {
 		std::vector<glm::vec2> UVs;
 		std::vector<glm::vec3> normals;
 
-		OBJResource(std::string src);
+		OBJResource();
 		~OBJResource();
 	};
 }

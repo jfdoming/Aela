@@ -22,11 +22,11 @@
 
 using namespace Aela;
 
-bool Aela::OBJLoader::isValid(std::ifstream &in) {
+bool Aela::OBJLoader::isValid(std::ifstream& in) {
 	return in.is_open();
 }
 
-Resource* Aela::OBJLoader::load(std::ifstream &in) {
+Resource* Aela::OBJLoader::load(std::ifstream& in) {
 	std::vector<unsigned int> vertexIndexes, uvIndexes, normalIndexes;
 	std::vector<glm::vec3> temp_vertices;
 	std::vector<glm::vec2> temp_uvs;
@@ -97,7 +97,7 @@ Resource* Aela::OBJLoader::load(std::ifstream &in) {
 		return false;
 	}
 
-	OBJResource * res = new OBJResource("");
+	OBJResource* res = new OBJResource();
 	for (unsigned int i = 0; i < vertexIndexes.size(); i++) {
 		// This will get the indexes.
 		unsigned int vertexIndex = vertexIndexes[i];

@@ -11,9 +11,6 @@
     <Filter Include="shaders">
       <UniqueIdentifier>{a95d82c0-2a20-4b57-b7bf-b946e6224146}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Resource_Manager">
-      <UniqueIdentifier>{4c5a3fe7-8acf-4237-98a8-459dd8d4ab1b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Control Manager">
       <UniqueIdentifier>{9ff4e75a-97dd-407f-bdcc-4d7185e7c40f}</UniqueIdentifier>
     </Filter>
@@ -56,29 +53,32 @@
     <Filter Include="Source Files\Rendering\2D\Menu_System">
       <UniqueIdentifier>{d0fea2af-0289-4e1c-a08e-a89b4eef77e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Useful">
-      <UniqueIdentifier>{b4397253-6ff4-4af3-90c1-ff5a98406f94}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Useful\Rect">
-      <UniqueIdentifier>{13d45639-33e5-4ca4-8b2c-0da47b83162a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Rendering\3D\Texture">
       <UniqueIdentifier>{4dd661f4-e90b-4822-98d7-0a222023f326}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Resource_Manager\General">
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{b4397253-6ff4-4af3-90c1-ff5a98406f94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils\Rect">
+      <UniqueIdentifier>{13d45639-33e5-4ca4-8b2c-0da47b83162a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Resources">
+      <UniqueIdentifier>{4c5a3fe7-8acf-4237-98a8-459dd8d4ab1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Resources\General">
       <UniqueIdentifier>{cb7abe93-6258-4d39-8dc8-384cf49cc4c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Resource_Manager\Textures">
+    <Filter Include="Source Files\Resources\Textures">
       <UniqueIdentifier>{30df1193-7aa1-4ab1-9705-4c611fae2564}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Resource_Manager\Objects">
+    <Filter Include="Source Files\Resources\Objects">
       <UniqueIdentifier>{36930cce-2bfc-4bfd-9ab5-347c9c20b485}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes">
+      <UniqueIdentifier>{a2c255d3-1d7d-45e9-a41c-66d64f9c529c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="objloader.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="vboindexer.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -122,19 +122,28 @@
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Resource Management\Resource.cpp">
-      <Filter>Source Files\Resource_Manager\General</Filter>
+      <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
     <ClCompile Include="Resource Management\ResourceLoader.cpp">
-      <Filter>Source Files\Resource_Manager\General</Filter>
+      <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
     <ClCompile Include="Resource Management\ResourceManager.cpp">
-      <Filter>Source Files\Resource_Manager\General</Filter>
+      <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
     <ClCompile Include="Resource Management\TextureLoader.cpp">
-      <Filter>Source Files\Resource_Manager\Textures</Filter>
+      <Filter>Source Files\Resources\Textures</Filter>
     </ClCompile>
     <ClCompile Include="Resource Management\OBJLoader.cpp">
-      <Filter>Source Files\Resource_Manager\Objects</Filter>
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="objloader_old.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\SceneManager.cpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -146,9 +155,6 @@
     </ClInclude>
     <ClInclude Include="Aela_Engine.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="objloader.hpp">
-      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="vboindexer.hpp">
       <Filter>Common</Filter>
@@ -178,7 +184,7 @@
       <Filter>Source Files\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Rect.h">
-      <Filter>Source Files\Useful\Rect</Filter>
+      <Filter>Source Files\Utils\Rect</Filter>
     </ClInclude>
     <ClInclude Include="Basic2DRenderer.h">
       <Filter>Source Files\Rendering\2D\2D_Renderer</Filter>
@@ -190,22 +196,34 @@
       <Filter>Source Files\Rendering\3D\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Resource Management\Resource.h">
-      <Filter>Source Files\Resource_Manager\General</Filter>
+      <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
     <ClInclude Include="Resource Management\ResourceLoader.h">
-      <Filter>Source Files\Resource_Manager\General</Filter>
+      <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
     <ClInclude Include="Resource Management\ResourceManager.h">
-      <Filter>Source Files\Resource_Manager\General</Filter>
+      <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
     <ClInclude Include="Resource Management\stdafx.h">
-      <Filter>Source Files\Resource_Manager\General</Filter>
+      <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
     <ClInclude Include="Resource Management\TextureLoader.h">
-      <Filter>Source Files\Resource_Manager\Textures</Filter>
+      <Filter>Source Files\Resources\Textures</Filter>
     </ClInclude>
     <ClInclude Include="Resource Management\OBJLoader.h">
-      <Filter>Source Files\Resource_Manager\Objects</Filter>
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="objloader_old.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene.h">
+      <Filter>Source Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\SceneManager.h">
+      <Filter>Source Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\stdafx.h">
+      <Filter>Source Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

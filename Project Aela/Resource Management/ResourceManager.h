@@ -4,6 +4,7 @@
 #include "Resource.h"
 #include "ResourceLoader.h"
 #include <unordered_map>
+#include <vector>
 
 namespace Aela {
 	class ResourceManager {
@@ -31,7 +32,7 @@ namespace Aela {
 			/*
 			* Obtain the specified resource for use in the application.
 			*/
-			template <class T> T& obtain(std::string src);
+			template <class T> T* obtain(std::string src);
 
 			// error handling
 			std::string getNewCrucialInvalidResourceKey();

@@ -7,7 +7,7 @@
 
 #include <glm/glm.hpp>
 
-#include "objloader.hpp"
+#include "objloader_old.hpp"
 #include "ErrorHandler.h"
 
 // Very, VERY simple OBJ loader.

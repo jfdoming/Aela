@@ -18,7 +18,7 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-#include "objloader.hpp"
+#include "objloader_old.hpp"
 #include "vboindexer.hpp"
 #include "texture.hpp"
 

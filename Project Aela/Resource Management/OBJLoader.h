@@ -5,8 +5,8 @@
 namespace Aela {
 	class OBJLoader : public ResourceLoader {
 	public:
-		bool isValid(std::ifstream &in);
-		Resource* load(std::ifstream &in);
+		bool isValid(std::ifstream& in);
+		Resource* load(std::ifstream& in);
 	};
 }
 
