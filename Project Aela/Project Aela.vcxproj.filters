@@ -65,6 +65,15 @@
     <Filter Include="Source Files\Rendering\3D\Texture">
       <UniqueIdentifier>{4dd661f4-e90b-4822-98d7-0a222023f326}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Resource_Manager\General">
+      <UniqueIdentifier>{cb7abe93-6258-4d39-8dc8-384cf49cc4c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Resource_Manager\Textures">
+      <UniqueIdentifier>{30df1193-7aa1-4ab1-9705-4c611fae2564}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Resource_Manager\Objects">
+      <UniqueIdentifier>{36930cce-2bfc-4bfd-9ab5-347c9c20b485}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="objloader.cpp">
@@ -81,18 +90,6 @@
     </ClCompile>
     <ClCompile Include="texture.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\Resource.cpp">
-      <Filter>Source Files\Resource_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\ResourceLoader.cpp">
-      <Filter>Source Files\Resource_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\ResourceManager.cpp">
-      <Filter>Source Files\Resource_Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\TextureLoader.cpp">
-      <Filter>Source Files\Resource_Manager</Filter>
     </ClCompile>
     <ClCompile Include="ControlManager.cpp">
       <Filter>Source Files\Control Manager</Filter>
@@ -124,6 +121,21 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="Resource Management\Resource.cpp">
+      <Filter>Source Files\Resource_Manager\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\ResourceLoader.cpp">
+      <Filter>Source Files\Resource_Manager\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\ResourceManager.cpp">
+      <Filter>Source Files\Resource_Manager\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\TextureLoader.cpp">
+      <Filter>Source Files\Resource_Manager\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\OBJLoader.cpp">
+      <Filter>Source Files\Resource_Manager\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader.hpp">
@@ -140,21 +152,6 @@
     </ClInclude>
     <ClInclude Include="vboindexer.hpp">
       <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource Management\Resource.h">
-      <Filter>Source Files\Resource_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource Management\ResourceLoader.h">
-      <Filter>Source Files\Resource_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource Management\ResourceManager.h">
-      <Filter>Source Files\Resource_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource Management\stdafx.h">
-      <Filter>Source Files\Resource_Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource Management\TextureLoader.h">
-      <Filter>Source Files\Resource_Manager</Filter>
     </ClInclude>
     <ClInclude Include="ControlManager.h">
       <Filter>Source Files\Control Manager</Filter>
@@ -191,6 +188,24 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Source Files\Rendering\3D\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\Resource.h">
+      <Filter>Source Files\Resource_Manager\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\ResourceLoader.h">
+      <Filter>Source Files\Resource_Manager\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\ResourceManager.h">
+      <Filter>Source Files\Resource_Manager\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\stdafx.h">
+      <Filter>Source Files\Resource_Manager\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\TextureLoader.h">
+      <Filter>Source Files\Resource_Manager\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\OBJLoader.h">
+      <Filter>Source Files\Resource_Manager\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
