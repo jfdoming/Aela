@@ -133,9 +133,6 @@
     <ClCompile Include="Resource Management\TextureLoader.cpp">
       <Filter>Source Files\Resources\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="Resource Management\OBJLoader.cpp">
-      <Filter>Source Files\Resources\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="objloader_old.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -210,9 +207,6 @@
     <ClInclude Include="Resource Management\TextureLoader.h">
       <Filter>Source Files\Resources\Textures</Filter>
     </ClInclude>
-    <ClInclude Include="Resource Management\OBJLoader.h">
-      <Filter>Source Files\Resources\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="objloader_old.hpp">
       <Filter>Common</Filter>
     </ClInclude>
@@ -239,7 +233,11 @@
     <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
       <Filter>shaders</Filter>
     </None>
-    <None Include="..\Release\res\shaders\quad.fragmentshader" />
-    <None Include="..\Release\res\shaders\quad.vertexshader" />
+    <None Include="..\Release\res\shaders\2D.fragmentshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D.vertexshader">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

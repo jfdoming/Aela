@@ -7,6 +7,9 @@
 *.vcxproj
 vcxproj/
 
+# Don't ignore this!
+![Rr]elease/res/shaders/
+
 # User-specific files
 *.suo
 *.user
