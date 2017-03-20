@@ -1,5 +1,5 @@
 /*
-* Name: Project Aela's Control Manager
+* Class: Control Manager
 * Author: Ekkon Games
 * Date: November 2016
 * Description: A class that manages user controls.
@@ -12,12 +12,14 @@
 #include "TimeManager.h"
 #include <time.h>
 
+// These enums are used to set properties for the control manager.
 enum class ControlManagerProperty {
 	ALLOW_UPSIDE_DOWN_CAMERA,
 	CAMERA_TRANSLATION_SPEED, CAMERA_TRANSLATION_SUPER_SPEED,
 	CAMERA_ROTATION_SPEED
 };
 
+// This is the Control Manager class.
 class ControlManager {
 	public:
 		ControlManager() {
@@ -39,8 +41,11 @@ class ControlManager {
 		void computeMatricesWithInputs(Camera3D* camera);
 
 	private:
+		// These are pointers to other Aela classes.
 		TimeManager* timeManager;
 		Window* window;
+
+		// This stores the window's state.
 		bool windowFocus;
 
 		// Speed: 0.001f is 1 unit per tick.
@@ -49,5 +54,6 @@ class ControlManager {
 		// This keeps track of whether the camera shoudl be allowed to be upside down.
 		bool allowUpsideDownCamera;
 
+		// This is used when computing controls.
 		const glm::vec3 straightUp = glm::vec3(0, 0.5, 0);
 };

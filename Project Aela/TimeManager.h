@@ -22,7 +22,7 @@ class TimeManager {
 			// This updates the time and the time difference between the current and the last frame.
 			lastTime = currentTime;
 			currentTime = clock();
-			deltaTime = float(currentTime - lastTime);
+			deltaTime = float(currentTime - lastTime) * (CLOCKS_PER_SEC / 1000);
 		}
 
 		clock_t getCurrentTime() {

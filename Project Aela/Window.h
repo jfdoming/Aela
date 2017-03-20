@@ -40,6 +40,8 @@ class Window {
 		// Window events.
 		SDL_Event occur;
 
+		Rect<unsigned int> windowDimensions;
+
 	public:
 		// These are the constructors.
 		Window() {
@@ -51,7 +53,7 @@ class Window {
 		void addProperty(WindowFlag flag);
 		bool createWindow(int setWidth, int setHeight, int setXPosition, int setYPosition, std::string setName);
 		void getWindowDimensions(int* widthVariable, int* heightVariable);
-		Rect<int>* getWindowDimensions();
+		Rect<unsigned int>* getWindowDimensions();
 		void getWindowPosition(int* xPositionVariable, int* yPositionVariable);
 		bool makeWindowOpenGLContext();
 		void updateBuffer();

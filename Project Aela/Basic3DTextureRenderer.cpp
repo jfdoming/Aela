@@ -18,8 +18,9 @@ void Basic3DTextureRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setP
 	projectionMatrix = setProjectionMatrix;
 }
 
-void Basic3DTextureRenderer::renderTextures(Model3D* model, GLuint depthMatrixID, GLuint programID,
-	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID, GLuint depthTexture, GLuint shadowMapID) {
+void Basic3DTextureRenderer::renderTextures(Model3D* model, GLuint frameBuffer, GLuint programID, GLuint depthMatrixID,
+	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID,
+	GLuint depthTexture, GLuint shadowMapID) {
 
 	// This loads buffers.
 	GLuint vertexbuffer;
@@ -43,6 +44,9 @@ void Basic3DTextureRenderer::renderTextures(Model3D* model, GLuint depthMatrixID
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, model->getIndexSize() * sizeof(unsigned short), model->getIndices(), GL_STATIC_DRAW);
 
 	// This binds the framebuffer.
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glClearColor(0.9f, 0.2f, 0.9f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glEnable(GL_CULL_FACE);
 
@@ -138,9 +142,11 @@ void Basic3DTextureRenderer::renderTextures(Model3D* model, GLuint depthMatrixID
 // For billboards, use getPositionOfCamera() to make the texture look at the camera.
 // To specify a rotation for the camera as a vec3, use the texture's position and add the direction (position + direction) for the lookAt parameter.
 // Note: for the lookAt parameter, position + glm::vec3(0.0, 0.0, 1.0) will not rotate the texture. Use this for no rotation.
-void Basic3DTextureRenderer::renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint textureID, GLuint programID, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID, GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
+void Basic3DTextureRenderer::renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint textureID,
+	GLuint programID, GLuint frameBuffer, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID,
+	GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
 	glUseProgram(programID);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
 	if (cullFaces) {
 		glEnable(GL_CULL_FACE);

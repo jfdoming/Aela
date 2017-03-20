@@ -1,5 +1,5 @@
 /*
-* Name: Rectangle Class
+* Class: Rectangle
 * Author: Robert Ciborowski
 * Date: February 4th, 2017
 * Description: A simple header-only class for rectangles.

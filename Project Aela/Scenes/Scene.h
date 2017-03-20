@@ -12,8 +12,13 @@ namespace Aela {
 	public:
 		int id;
 
-		virtual void update() = 0;
-		virtual void render() = 0;
+		void funky();
+
+		template <typename T, typename C>
+		void otherFunc(T (C::*func)());
+
+		void update();
+		void render();
 
 		Scene(int id);
 		~Scene();

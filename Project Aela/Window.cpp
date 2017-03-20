@@ -83,9 +83,9 @@ void Window::getWindowDimensions(int* widthVariable, int* heightVariable) {
 	*heightVariable = windowHeight;
 }
 
-Rect<int>* Window::getWindowDimensions() {
-	Rect<int> returnValue(0, 0, windowWidth, windowHeight);
-	return &returnValue;
+Rect<unsigned int>* Window::getWindowDimensions() {
+	windowDimensions.setValues(0, 0, windowWidth, windowHeight);
+	return &windowDimensions;
 }
 
 void Window::getWindowPosition(int* xPositionVariable, int* yPositionVariable) {

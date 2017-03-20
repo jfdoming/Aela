@@ -20,27 +20,27 @@ class Texture {
 			dimensions.setValues(0, 0, 0, 0);
 		}
 
-		void setDimensions(Rect<unsigned int>* dimensions) {
+		void setDimensions(Rect<int>* dimensions) {
 			this->dimensions = *dimensions;
 		}
 
-		void setDimensions(unsigned int x, unsigned int y, unsigned int width, unsigned int height) {
+		void setDimensions(int x, int y, int width, int height) {
 			dimensions.setValues(x, y, width, height);
 		}
 
-		void setOutput(Rect<unsigned int>* output) {
+		void setOutput(Rect<int>* output) {
 			this->output = *output;
 		}
 
-		void setOutput(unsigned int x, unsigned int y, unsigned int width, unsigned int height) {
+		void setOutput(int x, int y, int width, int height) {
 			output.setValues(x, y, width, height);
 		}
 
-		Rect<unsigned int>* getDimensions() {
+		Rect<int>* getDimensions() {
 			return &dimensions;
 		}
 
-		Rect<unsigned int>* getOutput() {
+		Rect<int>* getOutput() {
 			return &output;
 		}
 
@@ -55,8 +55,8 @@ class Texture {
 			glDeleteTextures(1, &texture);
 		}
 
-		GLuint getTexture() {
-			return texture;
+		GLuint* getTexture() {
+			return &texture;
 		}
 
 		bool isInitialised() {
@@ -64,7 +64,7 @@ class Texture {
 		}
 
 	private:
-		Rect<unsigned int> dimensions;
-		Rect<unsigned int> output;
+		Rect<int> dimensions;
+		Rect<int> output;
 		GLuint texture = NULL;
 };

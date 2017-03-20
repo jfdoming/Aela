@@ -27,6 +27,7 @@
 #include "ControlManager.h"
 #include "Basic3DRenderer.h"
 #include "Basic2DRenderer.h"
+#include "TextManager.h"
 
 enum class Renderer3DFlag {
 	RENDER_SHADOWS, RENDER_TEXTURES
@@ -53,29 +54,28 @@ class Renderer {
 			models.resize(0);
 		}
 
-		void setup3D(Window* windowToSet) {
-			setupGLFeatures();
-			temporarilySetupModels();
-			setWindow(windowToSet);
-			setup3DRendering();
-		}
+		void setup3D();
+		void setup2D();
 
-		void setup2D(Window* windowToSet) {
-			setupGLFeatures();
-			setWindow(windowToSet);
-			setup2DRendering();
-		}
+		void setWindow(Window* window);
+		void setTimeManager(TimeManager* timeManager);
+		void setTextManager(TextManager* textManager);
 
-		void setWindow(Window* setWindow);
-		void setTimeManager(TimeManager* setTime);
-		void updateCameraUsingControls(ControlManager* controls);
-		void render();
+		void startRenderingFrame();
+		void render3DModels();
+		void renderBillboards();
+		void render2DTexture(Texture* texture);
+		void renderTextToTexture(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour);
+		void endRenderingFrame();
+
+		// TEMPORARY!!!!!!!!!!!!!!
+		void calculateModelData();
 
 		std::string getInformation(RendererInformation infoToGet);
 		Window* getWindow();
 		TimeManager* getTimeManager();
 		Camera3D* getCamera();
-
+		void updateCameraUsingControls(ControlManager* controls);
 
 	private:
 		std::vector<Renderer3DFlag> flags;
@@ -84,20 +84,13 @@ class Renderer {
 		Camera3D camera;
 		TimeManager* timeManager;
 		Window* window;
+		TextManager* textManager;
 
 		// TEMPORARY!!!!!!!!!!!!!!
 		std::vector<Model3D> models;
 		std::vector<Billboard> billboards;
 		Texture temporaryTexture;
-
-		// This is a list of textures for the renderer to render in 2D.
-		// Please see the definition of add2DTextureToRender() for more info.
-		std::vector<Texture*> texturesToRenderIn2D;
-
-		void add2DTextureToRender(Texture* texture);
-		void add2DTextureToRender(Texture* texture, int index);
-		void removeTexture(int index);
-		Texture* get2DTexture(int index);
+		Texture temporaryTexture2;
 
 		void addFlag(Renderer3DFlag flag);
 		void setup3DRendering();

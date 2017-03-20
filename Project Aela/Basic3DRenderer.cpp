@@ -11,11 +11,7 @@
 void Basic3DRenderer::setupBasicRendering() {
 	setupVertexArrayID();
 	setupShaders();
-
-	// Note: getFrameBufferName() should be called before setupDepthTexture().
-	getFrameBufferName();
-	setupDepthTexture();
-
+	setupFrameBuffers();
 	// setupQuadVertexBuffer();
 	getIDs();
 }
@@ -60,13 +56,11 @@ void Basic3DRenderer::getIDs() {
 
 }
 
-void Basic3DRenderer::getFrameBufferName() {
-	// This is the framebuffer (which regroups 0, 1 or more textures as well as 0 or 1 depth buffers).
-	glGenFramebuffers(1, &framebufferName);
-	glBindFramebuffer(GL_FRAMEBUFFER, framebufferName);
-}
+void Basic3DRenderer::setupFrameBuffers() {
+	// This is the depth framebuffer.
+	glGenFramebuffers(1, &depthFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthFrameBuffer);
 
-void Basic3DRenderer::setupDepthTexture() {
 	// This is a depth texture (for shadows), which is slower than a depth buffer but may be sampled later in a shader.
 	glGenTextures(1, &depthTexture);
 	glBindTexture(GL_TEXTURE_2D, depthTexture);
@@ -84,20 +78,36 @@ void Basic3DRenderer::setupDepthTexture() {
 
 	// This is a safety check that makes sure that our frame buffer is okay.
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		AelaErrorHandling::windowError("Aela 3D",
-			"There was a problem setting up the framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
+		AelaErrorHandling::windowError("Project Aela 3D Rendering",
+			"There was a problem setting up the depth framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
 	}
+
+	// This is the colour framebuffer.
+	glGenFramebuffers(1, &colourFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, colourFrameBuffer);
+
+	glGenTextures(1, colourFrameBufferTexture.getTexture());
+	glBindTexture(GL_TEXTURE_2D, *(colourFrameBufferTexture.getTexture()));
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1280, 720, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	/* Clamping to edges is important to prevent artifacts when scaling */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	/* Linear filtering usually looks best for text */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	colourFrameBufferTexture.setDimensions(0, 0, 1280, 720);
+	colourFrameBufferTexture.setOutput(0, 0, 280, 220);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(colourFrameBufferTexture.getTexture()), 0);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		AelaErrorHandling::windowError("Project Aela 3D Rendering",
+			"There was a problem setting up the colour framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
+	}
+
 }
 
 void Basic3DRenderer::resetDepthTexture() {
-	//glGenTextures(1, &depthTexture);
-
-	//// This tells openGL that future functions will reference this texture.
-	//glBindTexture(GL_TEXTURE_2D, depthTexture);
-
-	//// This sets the pixel atorage mode.
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
 	glDeleteTextures(1, &depthTexture);
 	GLuint clearTexture;
 	glGenTextures(1, &clearTexture);
@@ -119,9 +129,6 @@ void Basic3DRenderer::resetDepthTexture() {
 		AelaErrorHandling::windowError("Aela 3D",
 			"There was a problem setting up the framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
 	}
-
-	/*depthBiasID = glGetUniformLocation(programID, "DepthBiasMVP");
-	shadowMapID = glGetUniformLocation(programID, "shadowMap");*/
 }
 
 void Basic3DRenderer::setWindow(Window* setWindow) {
@@ -144,17 +151,21 @@ void Basic3DRenderer::setupQuadVertexBuffer() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
 }
 
-GLuint* Basic3DRenderer::getFramebuffer() {
-	return &framebufferName;
+GLuint* Basic3DRenderer::getColourFrameBuffer() {
+	return &depthFrameBuffer;
+}
+
+Texture* Basic3DRenderer::getColourFrameBufferTexture() {
+	return &colourFrameBufferTexture;
 }
 
 void Basic3DRenderer::shade(Model3D* model) {
-	modelShader.shade(model, depthProgramID, depthMatrixID);
+	modelShader.shade(model, depthProgramID, depthMatrixID, depthFrameBuffer);
 }
 
 void Basic3DRenderer::renderTextures(Model3D* model) {
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	textureRenderer.renderTextures(model, depthMatrixID, programID, matrixID, modelMatrixID, viewMatrixID,
+	textureRenderer.renderTextures(model, colourFrameBuffer, programID, depthMatrixID, matrixID, modelMatrixID, viewMatrixID,
 		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID);
 }
 
@@ -162,18 +173,10 @@ void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, gl
 	// Note: for regular texture rendering, use:
 	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	textureRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, position, lookAt, inverseRotation);
+	textureRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, programID, colourFrameBuffer, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, position, lookAt, inverseRotation);
 }
 
 void Basic3DRenderer::renderBillboard(Billboard* billboard) {
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	textureRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), textureID, programID, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, billboard->getPosition(), camera->getPosition(), true);
-}
-
-void Basic3DRenderer::clearDepthTexture() {
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, framebufferName);
-	glFramebufferTexture(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, depthTexture, 0); //Only need to do this once.
-	glDrawBuffer(GL_COLOR_ATTACHMENT0); //Only need to do this once.
-	GLuint clearColor[4] = { 0, 0, 0, 0 };
-	glClearBufferuiv(GL_COLOR, 0, clearColor);
+	textureRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), textureID, programID, colourFrameBuffer, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, billboard->getPosition(), camera->getPosition(), true);
 }

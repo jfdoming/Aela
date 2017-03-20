@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <iostream>
+#include <string>
 
 // This makes GLEW Static to avoid errors.
 #ifndef GLEW_STATIC
@@ -49,9 +50,10 @@ int runningLoop();
 
 // These are global objects who's classes come from Project Aela.
 Window window;
-Renderer renderer3D;
+Renderer renderer;
 ControlManager controlManager;
 TimeManager timeManager;
+TextManager textManager;
 
 Aela::SceneManager sceneManager;
 
@@ -76,17 +78,17 @@ int startAela() {
 	// STOP IGNORING NOW
 
 	// This is TEMPORARY and sets the window width and height.
-	int windowWidth = 1024, windowHeight = 768;
+	int windowWidth = 1280, windowHeight = 720;
 	// This is also TEMPORARY and sets the window starting position.
 	int windowXPosition = 50, windowYPosition = 50;
 
 	window.addProperty(WindowFlag::AELA_WINDOW_SHOWN);
 	window.addProperty(WindowFlag::AELA_WINDOW_OPENGL);
-	bool windowCreationSuccess = window.createWindow(windowWidth, windowHeight, windowXPosition, windowYPosition, "Aela Engine");
+	bool windowCreationSuccess = window.createWindow(windowWidth, windowHeight, windowXPosition, windowYPosition, "Project Aela");
 	window.getWindowPosition(&windowXPosition, &windowYPosition);
 
 	if (windowCreationSuccess == false) {
-		AelaErrorHandling::windowError("Aela Window", "The Aela Window failed to initialise!");
+		AelaErrorHandling::windowError("Project Aela Window", "The Aela Window failed to initialise!");
 		return -1;
 	} else {
 		window.makeWindowOpenGLContext();
@@ -103,37 +105,85 @@ int startAela() {
 	// This tells to ControlManager to prevent the camera from being inverted.
 	controlManager.setProperty(ControlManagerProperty::ALLOW_UPSIDE_DOWN_CAMERA, 0);
 
+	// This makes the textManager initialize the FreeType library and setup other things.
+	textManager.setup();
+
 	// This passes the window and time manager to the renderer and control manager.
-	renderer3D.setup3D(&window);
-	renderer3D.setup2D(&window);
-	renderer3D.setTimeManager(&timeManager);
+	// Please note that the window must be set before calling setup functions.
+	renderer.setWindow(&window);
+	renderer.setTimeManager(&timeManager);
+	renderer.setTextManager(&textManager);
+	renderer.setup3D();
+	renderer.setup2D();
 	controlManager.setWindow(&window);
 	controlManager.setTimeManager(&timeManager);
 
 	// This starts the running loop. What else would you think it does?
-	bool value = runningLoop();
+	int value = runningLoop();
 	return value;
 }
 
 int runningLoop() {
+	// These are temporary 2D textures that demonstrate how to render textures using a Renderer. This will be
+	// moved once the menu system is formed.
+	Texture testTexture = loadDDSToTexture("res/textures/ekkon.dds");
+	testTexture.getOutput()->setValues(0, 0, 100, 50);
+	Texture testTexture2 = loadDDSToTexture("res/textures/gradient.dds");
+	testTexture2.getOutput()->setValues(100, 0, 1180, 50);
+
+	// This is also temporary and showcases text rendering. This will be moved once the menu system is formed.
+	int arial = textManager.createNewTextFont("arial bold.ttf");
+	textManager.adjustFontSize(arial, 22);
+	Rect<int> textOutput(128, 34, 200, 200);
+	ColourRGBA textColour(0.9f, 0.1f, 0.9f, 1.0f);
+
+	// This is also temporary and used to output framerate.
+	clock_t timeSinceLastFrameCheck = 0;
+	int timeBetweenFrameChecks = 250, fps = -1;
+	// http://stackoverflow.com/questions/87304/calculating-frames-per-second-in-a-game
+	float fpsSmoothing = 0.9f;
+
 	// This is the program's running loop.
 	do {
+		// These functions update classes.
 		timeManager.updateTime();
 		window.updateWindowEvents();
-		renderer3D.updateCameraUsingControls(&controlManager);
+		renderer.updateCameraUsingControls(&controlManager);
 
-		// TODO Robert please verify that this is the correct place to do this
+		// This is temporary and will be moved once a model manager is created!
+		renderer.calculateModelData();
+
+		// This does some simple math for framerate calculating.
+		if (timeManager.getCurrentTime() >= timeSinceLastFrameCheck + timeBetweenFrameChecks) {
+			if (fps == -1) {
+				fps = (1000.0f / timeManager.getTimeBetweenFrames());
+			} else {
+				fps = (int) ((fps * fpsSmoothing) + ((1000.0f / timeManager.getTimeBetweenFrames()) * (1.0f - fpsSmoothing)));
+				timeSinceLastFrameCheck = timeManager.getCurrentTime();
+			}
+		}
+		
+		// This updates and renders the current scene.
 		Aela::Scene* currentScene = sceneManager.getCurrentScene();
 		if (currentScene != NULL) {
 			currentScene->update();
 			currentScene->render();
 		}
 
-		renderer3D.render();
+		// This renders the program.
+		renderer.startRenderingFrame();
+		renderer.render3DModels();
+		renderer.renderBillboards();
+		std::string fpsData = std::to_string(fps) + " FPS";
+		renderer.render2DTexture(&testTexture);
+		renderer.render2DTexture(&testTexture2);
+		renderer.renderTextToTexture(fpsData, arial, &textOutput, &textColour);
+		renderer.endRenderingFrame();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 	return 0;
 }
 
+// This method is meant to be run by another program that uses the Project Aela library. It starts Project Aela.
 void Aela::start() {
 	int errorCode = startAela();
 	std::cout << "Program exited with error code " << errorCode << std::endl;

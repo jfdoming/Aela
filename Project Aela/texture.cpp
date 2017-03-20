@@ -185,7 +185,7 @@ Texture loadDDSToTexture(std::string filePath) {
 	// This tells openGL that future functions will reference this texture.
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
-	// This sets the pixel atorage mode.
+	// This sets the pixel storage mode.
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	unsigned int blockSize = (format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
@@ -214,5 +214,6 @@ Texture loadDDSToTexture(std::string filePath) {
 	free(buffer);
 	texture.setTexture(&textureID);
 	texture.setDimensions(0, 0, actualTextureWidth, actualTextureHeight);
+	texture.setOutput(0, 0, actualTextureWidth, actualTextureHeight);
 	return texture;
 }

@@ -10,7 +10,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
-void Basic3DModelShader::shade(Model3D* model, GLuint depthProgramID, GLuint depthMatrixID) {
+void Basic3DModelShader::shade(Model3D* model, GLuint depthProgramID, GLuint depthMatrixID, GLuint frameBuffer) {
 	// This loads the shadow renderer's buffers.
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
@@ -38,6 +38,8 @@ void Basic3DModelShader::shade(Model3D* model, GLuint depthProgramID, GLuint dep
 
 	// This says "use this shader".
 	glUseProgram(depthProgramID);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
 	// These are positions and rotations for light and the model.
 	glm::vec3 lightInvDir = glm::vec3(0.5f, 2, 2);
