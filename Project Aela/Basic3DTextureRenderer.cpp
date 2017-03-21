@@ -45,9 +45,7 @@ void Basic3DTextureRenderer::renderTextures(Model3D* model, GLuint frameBuffer, 
 
 	// This binds the framebuffer.
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-	glClearColor(0.9f, 0.2f, 0.9f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glEnable(GL_CULL_FACE);
 
 	// This is positioning/rotation of light and the model.

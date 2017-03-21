@@ -96,7 +96,7 @@ void Basic3DRenderer::setupFrameBuffers() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	colourFrameBufferTexture.setDimensions(0, 0, 1280, 720);
-	colourFrameBufferTexture.setOutput(0, 0, 280, 220);
+	colourFrameBufferTexture.setOutput(0, 0, 1280, 720);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(colourFrameBufferTexture.getTexture()), 0);
 
@@ -167,6 +167,13 @@ void Basic3DRenderer::renderTextures(Model3D* model) {
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	textureRenderer.renderTextures(model, colourFrameBuffer, programID, depthMatrixID, matrixID, modelMatrixID, viewMatrixID,
 		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID);
+}
+
+void Basic3DRenderer::clearColourFrameBuffer() {
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glBindFramebuffer(GL_FRAMEBUFFER, colourFrameBuffer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {

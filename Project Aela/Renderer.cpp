@@ -104,6 +104,7 @@ void Renderer::startRenderingFrame() {
 	// This says "render to the framebuffer".
 	glBindFramebuffer(GL_FRAMEBUFFER, *basic3DRenderer.getColourFrameBuffer());
 
+	basic3DRenderer.clearColourFrameBuffer();
 	basic2DRenderer.clearFrameBuffer();
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -134,7 +135,7 @@ void Renderer::renderTextToTexture(std::string text, int textFontToUse, Rect<int
 }
 
 void Renderer::endRenderingFrame() {
-	basic2DRenderer.renderTextureToScreen(basic2DRenderer.getFrameBufferTexture(), window->getWindowDimensions());
+	// basic2DRenderer.renderTextureToScreen(basic2DRenderer.getFrameBufferTexture(), window->getWindowDimensions());
 	basic2DRenderer.renderTextureToScreen(basic3DRenderer.getColourFrameBufferTexture(), window->getWindowDimensions());
 	window->updateBuffer();
 }

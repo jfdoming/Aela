@@ -83,6 +83,7 @@ class Basic3DRenderer {
 		void shade(Model3D* model);
 		void renderTextures(Model3D* model);
 		void clearDepthTexture();
+		void clearColourFrameBuffer();
 		void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
 		void renderBillboard(Billboard* billboard);
 		void setupBasicRendering();
