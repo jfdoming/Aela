@@ -88,7 +88,7 @@ void Basic3DRenderer::setupFrameBuffers() {
 
 	glGenTextures(1, colourFrameBufferTexture.getTexture());
 	glBindTexture(GL_TEXTURE_2D, *(colourFrameBufferTexture.getTexture()));
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1280, 720, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, windowWidth, windowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	/* Clamping to edges is important to prevent artifacts when scaling */
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -96,8 +96,8 @@ void Basic3DRenderer::setupFrameBuffers() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	colourFrameBufferTexture.setDimensions(0, 0, 1280, 720);
-	colourFrameBufferTexture.setOutput(0, 0, 1280, 720);
+	colourFrameBufferTexture.setDimensions(0, 0, windowWidth, windowHeight);
+	colourFrameBufferTexture.setOutput(0, 0, windowWidth, windowHeight);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(colourFrameBufferTexture.getTexture()), 0);
 

@@ -42,9 +42,10 @@ class Basic2DRenderer {
 		void setup();
 
 		// These functions are accessible to Project Aela's main renderer in order to render 2D components.
-		void renderTextureToScreen(Texture* texture, Rect<unsigned int>* windowDimensions);
-		void renderTextureToBuffer(Texture* texture, Rect<unsigned int>* windowDimensions);
-		void renderTextToBuffer(std::string text, TextFont* textFont, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
+		void renderTextureToBuffer(Texture* texture, Rect<unsigned int>* windowDimensions, GLuint frameBuffer);
+		void renderTextureToBuffer(Texture* texture, Rect<unsigned int>* windowDimensions, GLuint frameBuffer, GLuint customShader);
+		void renderTextureTo2DBuffer(Texture* texture, Rect<unsigned int>* windowDimensions);
+		void renderTextTo2DBuffer(std::string text, TextFont* textFont, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
 			unsigned int pointsPerPixel);
 
 		// These are some useful self-explanatory functions.
@@ -57,7 +58,7 @@ class Basic2DRenderer {
 
 	private:
 		// These are handles to shaders.
-		GLuint bufferToScreenProgramID, textToBufferProgramID, imageToBufferProgramID;
+		GLuint bufferTextureToBufferProgramID, textToBufferProgramID, imageToBufferProgramID;
 		// These are handles to variables inside of the image shader.
 		GLuint imageTextureID, imageQuadVertexBufferID, imageTopLeftBufferID, imageWidthAndHeightBufferID, imageDimensionsBufferID,
 			imageWindowDimensionsBufferID;

@@ -76,6 +76,7 @@ class Renderer {
 		TimeManager* getTimeManager();
 		Camera3D* getCamera();
 		void updateCameraUsingControls(ControlManager* controls);
+		bool checkFrameBuffer();
 
 	private:
 		std::vector<Renderer3DFlag> flags;
@@ -91,6 +92,11 @@ class Renderer {
 		std::vector<Billboard> billboards;
 		Texture temporaryTexture;
 		Texture temporaryTexture2;
+
+		GLuint mainFrameBuffer;
+		Texture mainFrameBufferTexture;
+
+		GLuint effects3DShader, effects2DShader;
 
 		void addFlag(Renderer3DFlag flag);
 		void setup3DRendering();

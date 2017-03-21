@@ -10,16 +10,16 @@
 
 // This is the setup function, which sets up OpenGL-related variables.
 void Basic2DRenderer::setup() {
-	bufferToScreenProgramID = loadShaders("res/shaders/2D_Buffer_To_Screen.vertexshader", "res/shaders/2D_Buffer_To_Screen.fragmentshader");
+	bufferTextureToBufferProgramID = loadShaders("res/shaders/2D_Buffer_To_Buffer.vertexshader", "res/shaders/2D_Buffer_To_Buffer.fragmentshader");
 	textToBufferProgramID = loadShaders("res/shaders/Text_To_Buffer.vertexshader", "res/shaders/Text_To_Buffer.fragmentshader");
 	imageToBufferProgramID = loadShaders("res/shaders/2D_Texture_To_Buffer.vertexshader", "res/shaders/2D_Texture_To_Buffer.fragmentshader");
 
-	imageTextureID = glGetUniformLocation(bufferToScreenProgramID, "quadTexture");
-	imageQuadVertexBufferID = glGetAttribLocation(bufferToScreenProgramID, "vertexPosition");
-	imageTopLeftBufferID = glGetAttribLocation(bufferToScreenProgramID, "positionOfTextureOnScreen");
-	imageWidthAndHeightBufferID = glGetAttribLocation(bufferToScreenProgramID, "boundingBoxDimensions");
-	imageDimensionsBufferID = glGetAttribLocation(bufferToScreenProgramID, "textureDimensions");
-	imageWindowDimensionsBufferID = glGetAttribLocation(bufferToScreenProgramID, "windowDimensions");
+	imageTextureID = glGetUniformLocation(bufferTextureToBufferProgramID, "quadTexture");
+	imageQuadVertexBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "vertexPosition");
+	imageTopLeftBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "positionOfTextureOnScreen");
+	imageWidthAndHeightBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "boundingBoxDimensions");
+	imageDimensionsBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "textureDimensions");
+	imageWindowDimensionsBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "windowDimensions");
 
 	characterTextureID = glGetUniformLocation(textToBufferProgramID, "quadTexture");
 	characterQuadVertexBufferID = glGetAttribLocation(textToBufferProgramID, "vertexPosition");
@@ -55,8 +55,13 @@ void Basic2DRenderer::setup() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-// This function renders a texture directly to the screen.
-void Basic2DRenderer::renderTextureToScreen(Texture* texture, Rect<unsigned int>* windowDimensions) {
+// This function renders a texture directly to a framebuffer.
+void Basic2DRenderer::renderTextureToBuffer(Texture* texture, Rect<unsigned int>* windowDimensions, GLuint frameBuffer) {
+	renderTextureToBuffer(texture, windowDimensions, frameBuffer, bufferTextureToBufferProgramID);
+}
+
+// This function renders a texture directly to a framebuffer.
+void Basic2DRenderer::renderTextureToBuffer(Texture* texture, Rect<unsigned int>* windowDimensions, GLuint frameBuffer, GLuint customShader) {
 	// Due to the way that OpenGL seems to flip the texture, the shader needs to flip it back
 	// and show the texture's opposite side. Or the renderer could just send normal data.
 	// GL_CULL_FACE needs to be disabled if one uses the first option.
@@ -83,9 +88,9 @@ void Basic2DRenderer::renderTextureToScreen(Texture* texture, Rect<unsigned int>
 	int textureWidth = texture->getDimensions()->getWidth(), textureHeight = texture->getDimensions()->getHeight();
 
 	// These are some functions needed by OpenGL.
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glViewport(0, 0, windowWidth, windowHeight);
-	glUseProgram(bufferToScreenProgramID);
+	glUseProgram(customShader);
 
 	// This passes the texture to OpenGL.
 	glActiveTexture(GL_TEXTURE0);
@@ -225,7 +230,7 @@ void Basic2DRenderer::renderTextureToScreen(Texture* texture, Rect<unsigned int>
 }
 
 // This function renders a texture directly to the screen.
-void Basic2DRenderer::renderTextureToBuffer(Texture* texture, Rect<unsigned int>* windowDimensions) {
+void Basic2DRenderer::renderTextureTo2DBuffer(Texture* texture, Rect<unsigned int>* windowDimensions) {
 	// Due to the way that OpenGL seems to flip the texture, the shader needs to flip it back
 	// and show the texture's opposite side. Or the renderer could just send normal data.
 	// GL_CULL_FACE needs to be disabled if one uses the first option.
@@ -394,7 +399,7 @@ void Basic2DRenderer::renderTextureToBuffer(Texture* texture, Rect<unsigned int>
 	glDeleteBuffers(1, &windowDimensionsBuffer);
 }
 
-void Basic2DRenderer::renderTextToBuffer(std::string text, TextFont* textFont, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, unsigned int pointsPerPixel) {
+void Basic2DRenderer::renderTextTo2DBuffer(std::string text, TextFont* textFont, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, unsigned int pointsPerPixel) {
 	Rect<int> characterPositioning = *output;
 
 	FT_GlyphSlot glyph = (*(textFont->getFace()))->glyph;

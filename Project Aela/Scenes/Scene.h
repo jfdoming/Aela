@@ -7,20 +7,20 @@
 
 #pragma once
 
+#include <vector>
+#include "../Models.h"
+
 namespace Aela {
 	class Scene {
 	public:
 		int id;
-
-		void funky();
-
-		template <typename T, typename C>
-		void otherFunc(T (C::*func)());
 
 		void update();
 		void render();
 
 		Scene(int id);
 		~Scene();
+	private:
+		std::vector<Model3D> models;
 	};
 }

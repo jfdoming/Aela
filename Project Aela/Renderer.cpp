@@ -21,11 +21,16 @@ void Renderer::addFlag(Renderer3DFlag flag) {
 }
 
 void Renderer::setup3DRendering() {
+	if (mainFrameBuffer == NULL) {
+		setupGLFeatures();
+	}
 	basic3DRenderer.setupBasicRendering();
 }
 
 void Renderer::setup2DRendering() {
-	setupGLFeatures();
+	if (mainFrameBuffer == NULL) {
+		setupGLFeatures();
+	}
 	basic2DRenderer.setup();
 }
 
@@ -41,6 +46,25 @@ void Renderer::setupGLFeatures() {
 
 	// This culls/gets triangles of which the normal is not towards the camera.
 	glEnable(GL_CULL_FACE);
+
+	glGenFramebuffers(1, &mainFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, mainFrameBuffer);
+
+	glGenTextures(1, mainFrameBufferTexture.getTexture());
+	glBindTexture(GL_TEXTURE_2D, *(mainFrameBufferTexture.getTexture()));
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1280, 720, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	/* Clamping to edges is important to prevent artifacts when scaling */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	/* Linear filtering usually looks best for text */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	mainFrameBufferTexture.setDimensions(0, 0, 1280, 720);
+	mainFrameBufferTexture.setOutput(0, 0, 1280, 720);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(mainFrameBufferTexture.getTexture()), 0);
+	checkFrameBuffer();
 }
 
 bool Renderer::setupGLEW() {
@@ -59,6 +83,7 @@ void Renderer::setup3D() {
 		setupGLFeatures();
 		temporarilySetupModels();
 		setup3DRendering();
+		effects3DShader = loadShaders("res/shaders/3D_Post_Processing.vertexshader", "res/shaders/3D_Post_Processing.fragmentshader");
 	} else {
 		AelaErrorHandling::windowError("Project Aela Rendering", "The window must be set before setting up 3D.");
 	}
@@ -68,6 +93,7 @@ void Renderer::setup2D() {
 	if (window != NULL) {
 		setupGLFeatures();
 		setup2DRendering();
+		effects2DShader = loadShaders("res/shaders/2D_Post_Processing.vertexshader", "res/shaders/2D_Post_Processing.fragmentshader");
 	} else {
 		AelaErrorHandling::windowError("Project Aela Rendering", "The winodw must be set before setting up 3D.");
 	}
@@ -94,13 +120,16 @@ void Renderer::startRenderingFrame() {
 	glBindFramebuffer(GL_FRAMEBUFFER, *basic3DRenderer.getColourFrameBuffer());
 	// This tells OpenGL to render to the entire framebuffer (top-left corner to bottom-right).
 	// Changing this can be used for split screen multiplayer gaming.
-	glViewport(0, 0, basic3DRenderer.windowWidth, basic3DRenderer.windowHeight);
+	glViewport(0, 0, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight());
 
 	basic3DRenderer.setCamera(&camera);
 	basic3DRenderer.resetDepthTexture();
 
 	// The screen needs to be cleared again in order to properly clear the depth texture.
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, mainFrameBuffer);
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	basic3DRenderer.clearColourFrameBuffer();
 	basic2DRenderer.clearFrameBuffer();
@@ -127,16 +156,18 @@ void Renderer::renderBillboards() {
 }
 
 void Renderer::render2DTexture(Texture* texture) {
-	basic2DRenderer.renderTextureToBuffer(texture, window->getWindowDimensions());
+	basic2DRenderer.renderTextureTo2DBuffer(texture, window->getWindowDimensions());
 }
 
 void Renderer::renderTextToTexture(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour) {
-	basic2DRenderer.renderTextToBuffer(text, textManager->getTextFont(textFontToUse), output, window->getWindowDimensions(), colour, textManager->POINTS_PER_PIXEL);
+	basic2DRenderer.renderTextTo2DBuffer(text, textManager->getTextFont(textFontToUse), output, window->getWindowDimensions(), colour,
+		textManager->POINTS_PER_PIXEL);
 }
 
 void Renderer::endRenderingFrame() {
-	// basic2DRenderer.renderTextureToScreen(basic2DRenderer.getFrameBufferTexture(), window->getWindowDimensions());
-	basic2DRenderer.renderTextureToScreen(basic3DRenderer.getColourFrameBufferTexture(), window->getWindowDimensions());
+	basic2DRenderer.renderTextureToBuffer(basic3DRenderer.getColourFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects3DShader);
+	basic2DRenderer.renderTextureToBuffer(basic2DRenderer.getFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects2DShader);
+	basic2DRenderer.renderTextureToBuffer(&mainFrameBufferTexture, window->getWindowDimensions(), 0);
 	window->updateBuffer();
 }
 
@@ -189,6 +220,16 @@ void Renderer::calculateModelData() {
 
 void Renderer::updateCameraUsingControls(ControlManager* controls) {
 	controls->computeMatricesWithInputs(&camera);
+}
+
+bool Renderer::checkFrameBuffer() {
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		AelaErrorHandling::windowError("Aela 2D Rendering",
+			"There was a problem setting up the framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
+		return false;
+	} else {
+		return true;
+	}
 }
 
 std::string Renderer::getInformation(RendererInformation infoToGet) {
