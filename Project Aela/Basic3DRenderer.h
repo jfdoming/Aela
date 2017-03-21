@@ -105,7 +105,7 @@ class Basic3DRenderer {
 		GLuint quad_vertexbuffer;
 
 		// These properties are used for the framebuffers.
-		GLuint colourFrameBuffer, depthFrameBuffer;
+		GLuint colourFrameBuffer, depthFrameBuffer, depthRenderBuffer;
 		Texture colourFrameBufferTexture;
 
 		Window* window;

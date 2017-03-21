@@ -101,12 +101,12 @@ void Renderer::startRenderingFrame() {
 
 	// The screen needs to be cleared again in order to properly clear the depth texture.
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// This says "render to the framebuffer".
-	glBindFramebuffer(GL_FRAMEBUFFER, *basic3DRenderer.getColourFrameBuffer());
 
 	basic3DRenderer.clearColourFrameBuffer();
 	basic2DRenderer.clearFrameBuffer();
 
+	// This says "render to the framebuffer".
+	glBindFramebuffer(GL_FRAMEBUFFER, *basic3DRenderer.getColourFrameBuffer());
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 }

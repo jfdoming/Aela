@@ -66,6 +66,7 @@ class Window {
 		bool quitCheck();
 		bool keyPressed(int SDL_Code);
 		bool isFocused();
-		static void showCursor();
+		
+		void showCursor();
 		static void hideCursor();
 };
