@@ -77,11 +77,11 @@
     <Filter Include="Source Files\Scenes">
       <UniqueIdentifier>{a2c255d3-1d7d-45e9-a41c-66d64f9c529c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Rendering\2D\Text">
-      <UniqueIdentifier>{0adf6ed8-8594-461a-a4be-1a887e9992e0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Utils\Colour">
-      <UniqueIdentifier>{e99c19cd-2cd0-4fee-b22b-333125ec3f05}</UniqueIdentifier>
+      <UniqueIdentifier>{a2dcca8e-8b37-462e-99ce-bda5d6ffd49e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\2D\Text">
+      <UniqueIdentifier>{acf79cd2-8311-42c0-9832-630ab3ab6c05}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -148,11 +148,23 @@
     <ClCompile Include="Scenes\SceneManager.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Resource Management\OBJLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="TextManager.cpp">
       <Filter>Source Files\Rendering\2D\Text</Filter>
     </ClCompile>
     <ClCompile Include="TextFont.cpp">
       <Filter>Source Files\Rendering\2D\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\Menu.cpp">
+      <Filter>Source Files\Rendering\2D\Menu_System</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\Component.cpp">
+      <Filter>Source Files\Rendering\2D\Menu_System</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\AbstractContainer.cpp">
+      <Filter>Source Files\Rendering\2D\Menu_System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -231,14 +243,24 @@
     <ClInclude Include="Scenes\stdafx.h">
       <Filter>Source Files\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="Resource Management\OBJLoader.h" />
+    <ClInclude Include="ColourRGBA.h">
+      <Filter>Source Files\Utils\Colour</Filter>
+    </ClInclude>
     <ClInclude Include="TextManager.h">
       <Filter>Source Files\Rendering\2D\Text</Filter>
     </ClInclude>
     <ClInclude Include="TextFont.h">
       <Filter>Source Files\Rendering\2D\Text</Filter>
     </ClInclude>
-    <ClInclude Include="ColourRGBA.h">
-      <Filter>Source Files\Utils\Colour</Filter>
+    <ClInclude Include="Menus\Menu.h">
+      <Filter>Source Files\Rendering\2D\Menu_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\Component.h">
+      <Filter>Source Files\Rendering\2D\Menu_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\AbstractContainer.h">
+      <Filter>Source Files\Rendering\2D\Menu_System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -254,17 +276,7 @@
     <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
       <Filter>shaders</Filter>
     </None>
-    <None Include="..\Release\res\shaders\2D.fragmentshader">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\2D.vertexshader">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\Text.fragmentshader">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\Text.vertexshader">
-      <Filter>shaders</Filter>
-    </None>
+    <None Include="..\Release\res\shaders\quad.fragmentshader" />
+    <None Include="..\Release\res\shaders\quad.vertexshader" />
   </ItemGroup>
 </Project>
