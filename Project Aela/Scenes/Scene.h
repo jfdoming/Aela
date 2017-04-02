@@ -5,10 +5,11 @@
 * Description: Represents a scene in the game.
 */
 
-#pragma once
-
 #include <vector>
+#ifndef AELA_MODEL
+#define AELA_MODEL
 #include "../Models.h"
+#endif
 
 namespace Aela {
 	class Scene {

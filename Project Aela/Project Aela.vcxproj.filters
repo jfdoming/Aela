@@ -83,6 +83,9 @@
     <Filter Include="Source Files\Utils\Colour">
       <UniqueIdentifier>{e99c19cd-2cd0-4fee-b22b-333125ec3f05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Error Handler\Error Handling Classes">
+      <UniqueIdentifier>{93d780e0-cb72-4f6b-a365-11327525784d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vboindexer.cpp">
@@ -112,14 +115,8 @@
     <ClCompile Include="Basic3DRenderer.cpp">
       <Filter>Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Basic3DModelShader.cpp">
-      <Filter>Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Models.cpp">
       <Filter>Source Files\Rendering\3D\Models</Filter>
-    </ClCompile>
-    <ClCompile Include="Basic3DTextureRenderer.cpp">
-      <Filter>Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Basic2DRenderer.cpp">
       <Filter>Source Files\Rendering\2D\2D_Renderer</Filter>
@@ -142,17 +139,29 @@
     <ClCompile Include="objloader_old.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="TextManager.cpp">
+      <Filter>Source Files\Rendering\2D\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="TextFont.cpp">
+      <Filter>Source Files\Rendering\2D\Text</Filter>
+    </ClCompile>
     <ClCompile Include="Scenes\Scene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Scenes\SceneManager.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="TextManager.cpp">
-      <Filter>Source Files\Rendering\2D\Text</Filter>
+    <ClCompile Include="AelaSimpleError.cpp">
+      <Filter>Source Files\Error Handler\Error Handling Classes</Filter>
     </ClCompile>
-    <ClCompile Include="TextFont.cpp">
-      <Filter>Source Files\Rendering\2D\Text</Filter>
+    <ClCompile Include="AelaErrorHandler.cpp">
+      <Filter>Source Files\Error Handler\Error Handling Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic3DShadowRenderer.cpp">
+      <Filter>Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic3DModelRenderer.cpp">
+      <Filter>Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -222,15 +231,6 @@
     <ClInclude Include="objloader_old.hpp">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\Scene.h">
-      <Filter>Source Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\SceneManager.h">
-      <Filter>Source Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Scenes\stdafx.h">
-      <Filter>Source Files\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="TextManager.h">
       <Filter>Source Files\Rendering\2D\Text</Filter>
     </ClInclude>
@@ -240,8 +240,59 @@
     <ClInclude Include="ColourRGBA.h">
       <Filter>Source Files\Utils\Colour</Filter>
     </ClInclude>
+    <ClInclude Include="Scenes\Scene.h">
+      <Filter>Source Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\SceneManager.h">
+      <Filter>Source Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\stdafx.h">
+      <Filter>Source Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="AelaErrorHandler.h">
+      <Filter>Source Files\Error Handler\Error Handling Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="AelaSimpleError.h">
+      <Filter>Source Files\Error Handler\Error Handling Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Basic3DModelRenderer.h">
+      <Filter>Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Basic3DShadowRenderer.h">
+      <Filter>Source Files\Rendering\3D\3D Renderer\Basic 3D Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.fragmentshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.vertexshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.fragmentshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.vertexshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Post_Processing.fragmentshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Post_Processing.vertexshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.fragmentshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.vertexshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\3D_Post_Processing.fragmentshader">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\3D_Post_Processing.vertexshader">
+      <Filter>shaders</Filter>
+    </None>
     <None Include="..\Release\res\shaders\DepthRTT.fragmentshader">
       <Filter>shaders</Filter>
     </None>
@@ -254,16 +305,10 @@
     <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
       <Filter>shaders</Filter>
     </None>
-    <None Include="..\Release\res\shaders\2D.fragmentshader">
+    <None Include="..\Release\res\shaders\Text_To_Buffer.fragmentshader">
       <Filter>shaders</Filter>
     </None>
-    <None Include="..\Release\res\shaders\2D.vertexshader">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\Text.fragmentshader">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\Text.vertexshader">
+    <None Include="..\Release\res\shaders\Text_To_Buffer.vertexshader">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

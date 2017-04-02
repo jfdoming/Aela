@@ -1,6 +1,6 @@
 /*
 * Name: Project Aela's Model Class
-* Author: Ekkon Games
+* Author: Robert Ciborowski
 * Date: November 2016
 * Description: A class used by Aela's Renderer to store properties of a model.
 */
@@ -18,10 +18,6 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-#include "objloader_old.hpp"
-#include "vboindexer.hpp"
-#include "texture.hpp"
-
 #ifndef AELA_MODEL_3D_PROPERTY
 #define AELA_MODEL_3D_PROPERTY
 // This enum is used in an Model3D function to change a single property.
@@ -34,10 +30,8 @@ enum class Model3DProperty {
 class Model3D {
 	private:
 		// Translation.
-		float xPosition, yPosition, zPosition;
 		glm::vec3 position;
 		// Rotation.
-		float xRotation, yRotation, zRotation;
 		glm::vec3 rotation;
 
 	public:
@@ -48,13 +42,7 @@ class Model3D {
 		GLuint texture;
 
 		Model3D() {
-			xPosition = 0;
-			yPosition = 0;
-			zPosition = 0;
 			position = glm::vec3(0.0, 0.0, 0.0);
-			xRotation = 0;
-			yRotation = 0;
-			zRotation = 0;
 			rotation = glm::vec3(0.0, 0.0, 0.0);
 		}
 

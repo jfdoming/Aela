@@ -1,12 +1,20 @@
+/*
+ * Name: Depth Texturing
+ * Author: Ekkon Games - Robert Ciborowski
+ * Date: October 2016
+ * Description: Project Aela's Depth Texture Renderer, which is used for shadows.
+*/
+
 #version 330 core
 
-// Input vertex data, different for all executions of this shader.
-layout(location = 0) in vec3 vertexPosition_modelspace;
+// This is the input data.
+layout(location = 0) in vec3 position;
 
-// Values that stay constant for the whole mesh.
+// This is the depth matrix, which does not change for the entire mesh.
 uniform mat4 depthMVP;
 
+// This is main(), which simply calculates position.
 void main(){
-	gl_Position =  depthMVP * vec4(vertexPosition_modelspace,1);
+	gl_Position =  depthMVP * vec4(position,1);
 }
 

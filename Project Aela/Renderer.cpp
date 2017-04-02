@@ -1,30 +1,19 @@
 /*
 * Name: Project Aela's Renderer
-* Author: Ekkon Games
+* Author: Robert Ciborowski
 * Date: October 2016
-* Description: A class used for interacting between Aela's renderers.
+* Description: A class used for interacting between Project Aela's renderers.
 */
 
 #include "Renderer.h"
-
-void Renderer::addFlag(Renderer3DFlag flag) {
-	bool flagExists = false;
-	for (unsigned int i = 0; i < flags.size(); i++) {
-		if (flags[i] == flag) {
-			flagExists = true;
-			break;
-		}
-	}
-	if (!flagExists) {
-		flags.insert(flags.begin(), flag);
-	}
-}
+#include "ErrorHandler.h"
+#include "shader.hpp"
 
 void Renderer::setup3DRendering() {
 	if (mainFrameBuffer == NULL) {
 		setupGLFeatures();
 	}
-	basic3DRenderer.setupBasicRendering();
+	basic3DRenderer.setup();
 }
 
 void Renderer::setup2DRendering() {
@@ -43,9 +32,6 @@ void Renderer::setupGLFeatures() {
 
 	// This will accept a fragment if it closer to the camera than the previous one.
 	glDepthFunc(GL_LESS);
-
-	// This culls/gets triangles of which the normal is not towards the camera.
-	glEnable(GL_CULL_FACE);
 
 	glGenFramebuffers(1, &mainFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, mainFrameBuffer);
@@ -68,11 +54,10 @@ void Renderer::setupGLFeatures() {
 }
 
 bool Renderer::setupGLEW() {
-	// Initialize GLEW.
-	glewExperimental = true; // Needed for core profile
+	// This initializes GLEW.
+	glewExperimental = true;
 	if (glewInit() != GLEW_OK) {
 		AelaErrorHandling::windowError("OpenGL Extension Wrangler", "OpenGL Extension Wrangler failed to initialise!");
-		getchar();
 		return false;
 	}
 	return true;
@@ -81,7 +66,6 @@ bool Renderer::setupGLEW() {
 void Renderer::setup3D() {
 	if (window != NULL) {
 		setupGLFeatures();
-		temporarilySetupModels();
 		setup3DRendering();
 		effects3DShader = loadShaders("res/shaders/3D_Post_Processing.vertexshader", "res/shaders/3D_Post_Processing.fragmentshader");
 	} else {
@@ -112,6 +96,7 @@ void Renderer::setTextManager(TextManager* textManager) {
 	this->textManager = textManager;
 }
 
+// This starts the rendering of a frame.
 void Renderer::startRenderingFrame() {
 	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
 	// Clear the screen.
@@ -140,19 +125,17 @@ void Renderer::startRenderingFrame() {
 	glEnable(GL_BLEND);
 }
 
-void Renderer::render3DModels() {
-	for (unsigned int whichModel = 0; whichModel < models.size(); whichModel++) {
-		basic3DRenderer.shade(&models[whichModel]);
-	}
-	for (unsigned int whichModel = 0; whichModel < models.size(); whichModel++) {
-		basic3DRenderer.renderTextures(&models[whichModel]);
-	}
+// These functions render objects into their proper framebuffers using basic renderers.
+void Renderer::renderModelShadows(Model3D* model) {
+	basic3DRenderer.renderShadows(model);
 }
 
-void Renderer::renderBillboards() {
-	for (unsigned int whichBillboard = 0; whichBillboard < billboards.size(); whichBillboard++) {
-		basic3DRenderer.renderBillboard(&billboards[whichBillboard]);
-	}
+void Renderer::renderModel(Model3D* model) {
+	basic3DRenderer.renderModels(model);
+}
+
+void Renderer::renderBillboard(Billboard* billboard) {
+	basic3DRenderer.renderBillboard(billboard);
 }
 
 void Renderer::render2DTexture(Texture* texture) {
@@ -164,6 +147,8 @@ void Renderer::renderTextToTexture(std::string text, int textFontToUse, Rect<int
 		textManager->POINTS_PER_PIXEL);
 }
 
+// This ends the rendering of a frame. This renders the framebuffers of the basic renderers
+// into the screen framebuffer while applying the effects from the effects shaders.
 void Renderer::endRenderingFrame() {
 	basic2DRenderer.renderTextureToBuffer(basic3DRenderer.getColourFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects3DShader);
 	basic2DRenderer.renderTextureToBuffer(basic2DRenderer.getFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects2DShader);
@@ -171,36 +156,7 @@ void Renderer::endRenderingFrame() {
 	window->updateBuffer();
 }
 
-void Renderer::calculateModelData() {
-	// This will be here until a model manager is created.
-	// This is used to move a model.
-	float xPosition, yPosition, zPosition;
-	models[1].getPosition(&xPosition, &yPosition, &zPosition);
-
-	if (basic3DRenderer.getWindow()->keyPressed(80)) {
-		xPosition -= 0.01f * timeManager->getTimeBetweenFrames();
-	}
-
-	if (basic3DRenderer.getWindow()->keyPressed(79)) {
-		xPosition += 0.01f * timeManager->getTimeBetweenFrames();
-	}
-
-	if (basic3DRenderer.getWindow()->keyPressed(82)) {
-		zPosition += 0.01f * timeManager->getTimeBetweenFrames();
-	}
-
-	if (basic3DRenderer.getWindow()->keyPressed(81)) {
-		zPosition -= 0.01f * timeManager->getTimeBetweenFrames();
-	}
-
-	if (basic3DRenderer.getWindow()->keyPressed(229)) {
-		yPosition += 0.01f * timeManager->getTimeBetweenFrames();
-	}
-
-	if (basic3DRenderer.getWindow()->keyPressed(228)) {
-		yPosition -= 0.01f * timeManager->getTimeBetweenFrames();
-	}
-
+void Renderer::temporaryKeyCheckFunction() {
 	// Field of view changing.
 	if (basic3DRenderer.getWindow()->keyPressed(46)) {
 		camera.setFieldOfView(camera.getFieldOfView() - (0.002f) * timeManager->getTimeBetweenFrames());
@@ -209,13 +165,6 @@ void Renderer::calculateModelData() {
 	if (basic3DRenderer.getWindow()->keyPressed(45)) {
 		camera.setFieldOfView(camera.getFieldOfView() + (0.002f) * timeManager->getTimeBetweenFrames());
 	}
-
-	// Rotation.
-	if (basic3DRenderer.getWindow()->keyPressed(56)) {
-		models[1].setProperty(Model3DProperty::Y_ROTATION, (models[1].getProperty(Model3DProperty::Y_ROTATION) + (3.14159f / 2.0f * timeManager->getTimeBetweenFrames()) / 1000.0f));
-	}
-
-	models[1].setPosition(xPosition, yPosition, zPosition);
 }
 
 void Renderer::updateCameraUsingControls(ControlManager* controls) {
@@ -224,7 +173,7 @@ void Renderer::updateCameraUsingControls(ControlManager* controls) {
 
 bool Renderer::checkFrameBuffer() {
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		AelaErrorHandling::windowError("Aela 2D Rendering",
+		AelaErrorHandling::windowError("Aela Rendering",
 			"There was a problem setting up the framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
 		return false;
 	} else {

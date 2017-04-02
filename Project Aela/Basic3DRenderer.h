@@ -1,9 +1,9 @@
 /*
 * Name: Project Aela's Basic 3D Renderer
-* Author: Ekkon Games
+* Author: Robert Ciborowski
 * Date: October 2016
 * Description: A class as well as its smaller classes used by Aela's Renderer to
-*              shade 3D models.
+*              render 3D objects.
 */
 
 #pragma once
@@ -19,54 +19,20 @@
 
 #include "ErrorHandler.h"
 #include "shader.hpp"
+#ifndef AELA_MODEL
+#define AELA_MODEL
 #include "Models.h"
+#endif
 #include "Billboards.h"
 #include "Window.h"
 #include "Camera3D.h"
-#include "ControlManager.h"
-
-class Basic3DModelShader {
-public:
-	Basic3DModelShader() {
-
-	}
-
-	void shade(Model3D* model, GLuint depthProgramID, GLuint depthMatrixID, GLuint frameBuffer);
-};
-
-class Basic3DTextureRenderer {
-public:
-	Basic3DTextureRenderer() {
-		biasMatrix = glm::mat4(
-			0.5, 0.0, 0.0, 0.0,
-			0.0, 0.5, 0.0, 0.0,
-			0.0, 0.0, 0.5, 0.0,
-			0.5, 0.5, 0.5, 1.0
-		);
-	}
-
-	void renderTextures(Model3D* model, GLuint frameBuffer, GLuint programID, GLuint depthMatrixID,
-		GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID,
-		GLuint textureID, GLuint depthTexture, GLuint shadowMapID);
-	void renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint textureID,
-		GLuint programID, GLuint frameBuffer, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID,
-		GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
-	void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);
-
-private:
-	glm::mat4 biasMatrix;
-	glm::mat4 viewMatrix, projectionMatrix;
-};
+#include "Basic3DModelRenderer.h"
+#include "Basic3DShadowRenderer.h"
 
 class Basic3DRenderer {
 	public:
 		Basic3DRenderer() {
 			depthFrameBuffer = 0;
-			flipMatrix = glm::mat3(
-				-1.0, 0.0, 0.0,
-				0.0, -1.0, 0.0,
-				0.0, 0.0, -1.0
-			);
 		}
 
 		~Basic3DRenderer() {
@@ -80,26 +46,31 @@ class Basic3DRenderer {
 			glDeleteVertexArrays(1, &vertexArrayID);
 		}
 
-		void shade(Model3D* model);
-		void renderTextures(Model3D* model);
-		void clearDepthTexture();
+		// These are some functions related to rendering.
+		void renderShadows(Model3D* model);
+		void renderModels(Model3D* model);
 		void clearColourFrameBuffer();
 		void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
 		void renderBillboard(Billboard* billboard);
-		void setupBasicRendering();
+
+		// These are some functions related to setup.
+		void setup();
 		void setWindow(Window* setWindow);
 		void setCamera(Camera3D* camera);
 		void resetDepthTexture();
+		// These are some getters.
 		Window* getWindow();
 		GLuint* getColourFrameBuffer();
 		Texture* getColourFrameBufferTexture();
-		int windowWidth, windowHeight;
 
 	private:
-		Basic3DModelShader modelShader;
-		Basic3DTextureRenderer textureRenderer;
+		// These are the smaller renderers that the Basic3DRenderer uses.
+		Basic3DShadowRenderer modelShader;
+		Basic3DModelRenderer textureRenderer;
 
-		GLuint vertexArrayID, depthProgramID, depthMatrixID, quad_programID, texID, programID;
+		// These are a bunch of handles to GLSL variables that get passed to the shadow and
+		// model renderer during rendering.
+		GLuint vertexArrayID, depthProgramID, depthMatrixID, quad_programID, texID, programID, billboardProgramID;
 		GLuint textureID, matrixID, viewMatrixID, modelMatrixID, depthBiasID, shadowMapID, lightInvDirID;
 		GLuint depthTexture;
 		GLuint quad_vertexbuffer;
@@ -108,23 +79,17 @@ class Basic3DRenderer {
 		GLuint colourFrameBuffer, depthFrameBuffer, depthRenderBuffer;
 		Texture colourFrameBufferTexture;
 
+		// These are some Project Aela objects that the 3D renderer uses.
 		Window* window;
 		Camera3D* camera;
 
-		const GLfloat g_quad_vertex_buffer_data[18] = {
-			-1.0f, -1.0f, 0.0f,
-			1.0f, -1.0f, 0.0f,
-			-1.0f,  1.0f, 0.0f,
-			-1.0f,  1.0f, 0.0f,
-			1.0f, -1.0f, 0.0f,
-			1.0f,  1.0f, 0.0f,
-		};
+		// These are used by the renderer so that "window->getWindowDimensions()->getWidth()"
+		// (and "...getHeight()") does not have to called all the time.
+		int windowWidth, windowHeight;
 
-		glm::mat3 flipMatrix;
-
+		// These are some setup related functions.
 		void setupVertexArrayID();
 		void setupShaders();
 		void getIDs();
-		void setupQuadVertexBuffer();
 		void setupFrameBuffers();
 };

@@ -1,6 +1,6 @@
 /*
 * Name: Project Aela's Basic 3D Renderer
-* Author: Ekkon Games
+* Author: Robert Ciborowski
 * Date: October 2016
 * Description: A class used by Aela's Renderer that uses other, more basic objects
 *              to render 3D items.
@@ -8,7 +8,7 @@
 
 #include "Basic3DRenderer.h"
 
-void Basic3DRenderer::setupBasicRendering() {
+void Basic3DRenderer::setup() {
 	setupVertexArrayID();
 	setupShaders();
 	setupFrameBuffers();
@@ -36,6 +36,7 @@ void Basic3DRenderer::setupShaders() {
 	// quad_programID = loadShaders("res/shaders/Passthrough.vertexshader", "res/shaders/SimpleTexture.fragmentshader");
 	// texID = glGetUniformLocation(quad_programID, "texture");
 	programID = loadShaders("res/shaders/ShadowMapping.vertexshader", "res/shaders/ShadowMapping.fragmentshader");
+	billboardProgramID = loadShaders("res/shaders/ShadowMapping.vertexshader", "res/shaders/Billboard_Shadow_Mapping.fragmentshader");
 }
 
 void Basic3DRenderer::getIDs() {
@@ -150,13 +151,6 @@ Window* Basic3DRenderer::getWindow() {
 	return window;
 }
 
-void Basic3DRenderer::setupQuadVertexBuffer() {
-	// This will bind our quad vertex buffer data.
-	glGenBuffers(1, &quad_vertexbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, quad_vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_quad_vertex_buffer_data), g_quad_vertex_buffer_data, GL_STATIC_DRAW);
-}
-
 GLuint* Basic3DRenderer::getColourFrameBuffer() {
 	return &depthFrameBuffer;
 }
@@ -165,18 +159,18 @@ Texture* Basic3DRenderer::getColourFrameBufferTexture() {
 	return &colourFrameBufferTexture;
 }
 
-void Basic3DRenderer::shade(Model3D* model) {
-	modelShader.shade(model, depthProgramID, depthMatrixID, depthFrameBuffer);
+void Basic3DRenderer::renderShadows(Model3D* model) {
+	modelShader.renderShadows(model, depthProgramID, depthMatrixID, depthFrameBuffer);
 }
 
-void Basic3DRenderer::renderTextures(Model3D* model) {
+void Basic3DRenderer::renderModels(Model3D* model) {
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	textureRenderer.renderTextures(model, colourFrameBuffer, programID, depthMatrixID, matrixID, modelMatrixID, viewMatrixID,
+	textureRenderer.renderModels(model, colourFrameBuffer, programID, depthMatrixID, matrixID, modelMatrixID, viewMatrixID,
 		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID);
 }
 
 void Basic3DRenderer::clearColourFrameBuffer() {
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glBindFramebuffer(GL_FRAMEBUFFER, colourFrameBuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -186,10 +180,10 @@ void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, gl
 	// Note: for regular texture rendering, use:
 	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	textureRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, programID, colourFrameBuffer, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, position, lookAt, inverseRotation);
+	textureRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, billboardProgramID, colourFrameBuffer, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, lightInvDirID, depthMatrixID, position, lookAt, inverseRotation);
 }
 
 void Basic3DRenderer::renderBillboard(Billboard* billboard) {
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	textureRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), textureID, programID, colourFrameBuffer, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, billboard->getPosition(), camera->getPosition(), true);
+	textureRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), textureID, billboardProgramID, colourFrameBuffer, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, lightInvDirID, depthMatrixID, billboard->getPosition(), camera->getPosition(), true);
 }

@@ -124,12 +124,41 @@ int startAela() {
 }
 
 int runningLoop() {
+	// TEMPORARY! This won't exist once models are moved elsewhere.
+	std::vector<Model3D> models;
+	models.resize(6);
+	models[0].loadTexture("res/textures/grass.dds");
+	models[1].loadTexture("res/textures/beretta.dds");
+	models[2].loadTexture("res/textures/mug.dds");
+	models[3].loadTexture("res/textures/missile.dds");
+	models[4].loadTexture("res/textures/cat.dds");
+	models[5].loadTexture("res/textures/big_marble.dds");
+
+	// This loads the models from OBJ files.
+	models[0].loadModel("res/models/testGrassPlane.obj");
+	models[1].loadModel("res/models/beretta.obj");
+	models[2].loadModel("res/models/mug.obj");
+	models[3].loadModel("res/models/missile.obj");
+	models[4].loadModel("res/models/cat.obj");
+	models[5].loadModel("res/models/big_marble.obj");
+
+	// This sets model position.
+	models[1].setPosition(10, 0, 0);
+	models[2].setPosition(0, 10, 15);
+	models[4].setPosition(0, 0, -15);
+	models[5].setPosition(10, 20, 10);
+
+	std::vector<Billboard> billboards;
+	billboards.resize(1);
+	billboards[0].loadTexture("res/textures/ekkon.dds");
+
+
 	// These are temporary 2D textures that demonstrate how to render textures using a Renderer. This will be
 	// moved once the menu system is formed.
 	Texture testTexture = loadDDSToTexture("res/textures/ekkon.dds");
-	testTexture.getOutput()->setValues(0, 0, 100, 50);
+	testTexture.setOutput(0, 0, 100, 50);
 	Texture testTexture2 = loadDDSToTexture("res/textures/gradient.dds");
-	testTexture2.getOutput()->setValues(100, 0, 1180, 50);
+	testTexture2.setOutput(100, 0, 1180, 50);
 
 	// This is also temporary and showcases text rendering. This will be moved once the menu system is formed.
 	int arial = textManager.createNewTextFont("arial bold.ttf");
@@ -151,12 +180,12 @@ int runningLoop() {
 		renderer.updateCameraUsingControls(&controlManager);
 
 		// This is temporary and will be moved once a model manager is created!
-		renderer.calculateModelData();
+		renderer.temporaryKeyCheckFunction();
 
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() >= timeSinceLastFrameCheck + timeBetweenFrameChecks) {
 			if (fps == -1) {
-				fps = (1000.0f / timeManager.getTimeBetweenFrames());
+				fps = (int) (1000.0f / timeManager.getTimeBetweenFrames());
 			} else {
 				fps = (int) ((fps * fpsSmoothing) + ((1000.0f / timeManager.getTimeBetweenFrames()) * (1.0f - fpsSmoothing)));
 				timeSinceLastFrameCheck = timeManager.getCurrentTime();
@@ -172,14 +201,25 @@ int runningLoop() {
 
 		// This renders the program.
 		renderer.startRenderingFrame();
-		renderer.render3DModels();
-		renderer.renderBillboards();
+		for (unsigned int i = 0; i < models.size(); i++) {
+			renderer.renderModelShadows(&(models[i]));
+		}
+		for (unsigned int i = 0; i < models.size(); i++) {
+			renderer.renderModel(&(models[i]));
+		}
+		for (unsigned int i = 0; i < billboards.size(); i++) {
+			renderer.renderBillboard(&(billboards[i]));
+		}
 		std::string fpsData = std::to_string(fps) + " FPS";
 		renderer.render2DTexture(&testTexture);
 		renderer.render2DTexture(&testTexture2);
 		renderer.renderTextToTexture(fpsData, arial, &textOutput, &textColour);
 		renderer.endRenderingFrame();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
+	// This will call each model's destructor, which will delete each model's texture. I'm not sure if this
+	// is done automatically by OpenGL or Windows when the program closes, so I added it just in case.
+	// -Robert
+	models.resize(0);
 	return 0;
 }
 

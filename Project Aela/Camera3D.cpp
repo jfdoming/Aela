@@ -1,24 +1,18 @@
 /*
 * Name: Project Aela's 3D Camera
-* Author: Ekkon Games
+* Author: Robert Ciborowski
 * Date: November 2016
-* Description: A class used by Aela's Renderer to store properties of a camera.
+* Description: A class used by Project Aela's Renderer to store properties of a camera.
 */
 
 #include "Camera3D.h"
 
 void Camera3D::setPosition(float setX, float setY, float setZ) {
-	xPosition = setX;
-	yPosition = setY;
-	zPosition = setZ;
 	position = glm::vec3(setX, setY, setZ);
 }
 
 void Camera3D::setPosition(glm::vec3 setPosition) {
 	position = setPosition;
-	xPosition = position.x;
-	yPosition = position.y;
-	zPosition = position.z;
 }
 
 glm::vec3 Camera3D::getPosition() {
@@ -26,23 +20,17 @@ glm::vec3 Camera3D::getPosition() {
 }
 
 void Camera3D::getPosition(float* setXPosition, float* setYPosition, float* setZPosition) {
-	*setXPosition = xPosition;
-	*setYPosition = yPosition;
-	*setZPosition = zPosition;
+	*setXPosition = position.x;
+	*setYPosition = position.y;
+	*setZPosition = position.z;
 }
 
 void Camera3D::setRotation(float setX, float setY, float setZ) {
-	xRotation = setX;
-	yRotation = setY;
-	zRotation = setZ;
 	rotation = glm::vec3(setX, setY, setZ);
 }
 
 void Camera3D::setRotation(glm::vec3 setRotation) {
 	rotation = setRotation;
-	xRotation = rotation.x;
-	yRotation = rotation.y;
-	zRotation = rotation.z;
 }
 
 glm::vec3 Camera3D::getRotation() {
@@ -50,57 +38,51 @@ glm::vec3 Camera3D::getRotation() {
 }
 
 void Camera3D::getRotation(float* setXPosition, float* setYPosition, float* setZPosition) {
-	*setXPosition = xRotation;
-	*setYPosition = yRotation;
-	*setZPosition = zRotation;
+	*setXPosition = rotation.x;
+	*setYPosition = rotation.y;
+	*setZPosition = rotation.z;
 }
 
 
 void Camera3D::setProperty(Model3DProperty property, float value) {
 	if (property == Model3DProperty::X_POSITION) {
-		xPosition = value;
-		position = glm::vec3(xPosition, yPosition, zPosition);
+		position.x = value;
 	}
 	if (property == Model3DProperty::Y_POSITION) {
-		yPosition = value;
-		position = glm::vec3(xPosition, yPosition, zPosition);
+		position.y = value;
 	}
 	if (property == Model3DProperty::Z_POSITION) {
-		zPosition = value;
-		position = glm::vec3(xPosition, yPosition, zPosition);
+		position.z = value;
 	}
 	if (property == Model3DProperty::X_ROTATION) {
-		xRotation = value;
-		rotation = glm::vec3(xRotation, yRotation, zRotation);
+		rotation.x = value;
 	}
 	if (property == Model3DProperty::Y_ROTATION) {
-		yRotation = value;
-		rotation = glm::vec3(xRotation, yRotation, zRotation);
+		rotation.y = value;
 	}
 	if (property == Model3DProperty::Z_ROTATION) {
-		zRotation = value;
-		rotation = glm::vec3(xRotation, yRotation, zRotation);
+		rotation.z = value;
 	}
 }
 
 float Camera3D::getProperty(Model3DProperty property) {
 	if (property == Model3DProperty::X_POSITION) {
-		return xPosition;
+		return position.x;
 	}
 	if (property == Model3DProperty::Y_POSITION) {
-		return yPosition;
+		return position.y;
 	}
 	if (property == Model3DProperty::Z_POSITION) {
-		return zPosition;
+		return position.z;
 	}
 	if (property == Model3DProperty::X_ROTATION) {
-		return xRotation;
+		return rotation.x;
 	}
 	if (property == Model3DProperty::Y_ROTATION) {
-		return yRotation;
+		return rotation.y;
 	}
 	if (property == Model3DProperty::Z_ROTATION) {
-		return zRotation;
+		return rotation.z;
 	}
 	return 0;
 }

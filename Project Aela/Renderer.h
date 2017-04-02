@@ -1,8 +1,8 @@
 /*
 * Name: Project Aela's Renderer
-* Author: Ekkon Games
+* Author: Robert Ciborowski
 * Date: October 2016
-* Description: A class used for interacting between Aela's renderers.
+* Description: A class used for interacting between Project Aela's renderers.
 */
 
 #include <vector>
@@ -19,8 +19,6 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-#include "ErrorHandler.h"
-#include "shader.hpp"
 #include "Billboards.h"
 #include "Window.h"
 #include "Camera3D.h"
@@ -28,10 +26,12 @@
 #include "Basic3DRenderer.h"
 #include "Basic2DRenderer.h"
 #include "TextManager.h"
+#ifndef AELA_MODEL
+#define AELA_MODEL
+#include "Models.h"
+#endif
 
-enum class Renderer3DFlag {
-	RENDER_SHADOWS, RENDER_TEXTURES
-};
+// These are some enums used by the Renderer.
 
 enum class RendererInformation {
 	VENDOR, RENDERER, OPENGL_VERSION, GLSL_VERSION, OPENGL_EXTENSIONS
@@ -44,42 +44,50 @@ class Renderer {
 		}
 
 		Renderer(Window* windowToSet) {
-			temporarilySetupModels();
 			setWindow(windowToSet);
 			basic3DRenderer.setCamera(&camera);
 			setup3DRendering();
 		}
 
 		~Renderer() {
-			models.resize(0);
+			
 		}
 
+		// These functions initialize required elements for different types of rendering.
+		// They MUST be called before performing their type of rendering.
 		void setup3D();
 		void setup2D();
 
+		// These functions bind the Renderer with other Aela classes. They must be called
+		// before rendering.
 		void setWindow(Window* window);
 		void setTimeManager(TimeManager* timeManager);
 		void setTextManager(TextManager* textManager);
 
+		// The following functions are used to render a frame.
 		void startRenderingFrame();
-		void render3DModels();
-		void renderBillboards();
+		void renderModelShadows(Model3D* model);
+		void renderModel(Model3D* model);
+		void renderBillboard(Billboard* billboard);
+		// This function renders a texture to the 2D renderer's framebuffer.
 		void render2DTexture(Texture* texture);
 		void renderTextToTexture(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour);
 		void endRenderingFrame();
 
 		// TEMPORARY!!!!!!!!!!!!!!
-		void calculateModelData();
+		void temporaryKeyCheckFunction();
 
+		// These are some getters.
 		std::string getInformation(RendererInformation infoToGet);
 		Window* getWindow();
 		TimeManager* getTimeManager();
 		Camera3D* getCamera();
+
+		// This function uses a control manager to update the renderer's camera.
 		void updateCameraUsingControls(ControlManager* controls);
-		bool checkFrameBuffer();
 
 	private:
-		std::vector<Renderer3DFlag> flags;
+		// These are a bunch of Project Aela objects that the renderer uses.
 		Basic3DRenderer basic3DRenderer;
 		Basic2DRenderer basic2DRenderer;
 		Camera3D camera;
@@ -87,48 +95,20 @@ class Renderer {
 		Window* window;
 		TextManager* textManager;
 
-		// TEMPORARY!!!!!!!!!!!!!!
-		std::vector<Model3D> models;
-		std::vector<Billboard> billboards;
-		Texture temporaryTexture;
-		Texture temporaryTexture2;
-
+		// This represents the framebuffer that is attached to the screen.
 		GLuint mainFrameBuffer;
 		Texture mainFrameBufferTexture;
 
+		// These are the post process shaders.
 		GLuint effects3DShader, effects2DShader;
 
-		void addFlag(Renderer3DFlag flag);
+		// These are some setup functions used internally by the Renderer.
 		void setup3DRendering();
 		void setup2DRendering();
 		void setupGLFeatures();
 		bool setupGLEW();
-		void temporarilySetupModels() {
-			// TEMPORARY! This won't exist once models are moved elsewhere.
-			models.resize(6);
-			models[0].loadTexture("res/textures/uvmap.DDS");
-			models[1].loadTexture("res/textures/beretta.DDS");
-			models[2].loadTexture("res/textures/mug.dds");
-			models[3].loadTexture("res/textures/missile.dds");
-			models[4].loadTexture("res/textures/cat.dds");
-			models[5].loadTexture("res/textures/big_marble.dds");
 
-			// This loads the models from OBJ files.
-			models[0].loadModel("res/models/room_thickwalls.obj");
-			models[1].loadModel("res/models/beretta.obj");
-			models[2].loadModel("res/models/mug.obj");
-			models[3].loadModel("res/models/missile.obj");
-			models[4].loadModel("res/models/cat.obj");
-			models[5].loadModel("res/models/big_marble.obj");
-
-			// This sets model position.
-			models[1].setPosition(10, 0, 0);
-			models[2].setPosition(0, 10, 15);
-			models[4].setPosition(0, 0, -15);
-			models[5].setPosition(10, 20, 10);
-
-			// This sets up a billboard.
-			billboards.resize(1);
-			billboards[0].loadTexture("res/textures/uvmap.DDS");
-		}		
+		// This function is used internally to check the framebuffer that is currently
+		// being applied to OpenGL.
+		bool checkFrameBuffer();
 };
