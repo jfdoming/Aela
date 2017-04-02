@@ -9,6 +9,7 @@
 
 #include <vector>
 #include "../Models.h"
+#include "../Renderer.h"
 
 namespace Aela {
 	class Scene {
@@ -16,7 +17,7 @@ namespace Aela {
 		int id;
 
 		void update();
-		void render();
+		void render(Renderer* renderer);
 
 		Scene(int id);
 		~Scene();

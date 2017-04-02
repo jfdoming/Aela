@@ -163,7 +163,10 @@
     <ClCompile Include="Menus\Component.cpp">
       <Filter>Source Files\Rendering\2D\Menu_System</Filter>
     </ClCompile>
-    <ClCompile Include="Menus\AbstractContainer.cpp">
+    <ClCompile Include="Menus\Container.cpp">
+      <Filter>Source Files\Rendering\2D\Menu_System</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\LayoutManager.cpp">
       <Filter>Source Files\Rendering\2D\Menu_System</Filter>
     </ClCompile>
   </ItemGroup>
@@ -259,7 +262,13 @@
     <ClInclude Include="Menus\Component.h">
       <Filter>Source Files\Rendering\2D\Menu_System</Filter>
     </ClInclude>
-    <ClInclude Include="Menus\AbstractContainer.h">
+    <ClInclude Include="Menus\Container.h">
+      <Filter>Source Files\Rendering\2D\Menu_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\stdafx.h">
+      <Filter>Source Files\Rendering\2D\Menu_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\LayoutManager.h">
       <Filter>Source Files\Rendering\2D\Menu_System</Filter>
     </ClInclude>
   </ItemGroup>

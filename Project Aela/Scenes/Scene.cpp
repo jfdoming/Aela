@@ -14,6 +14,8 @@ void Scene::update() {
 
 }
 
-void Scene::render() {
-
+void Scene::render(Renderer* renderer) {
+	for (auto const& model : models) {
+		renderer->put3DModel(model);
+	}
 }
