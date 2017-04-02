@@ -1,6 +1,6 @@
 /*
 * Name: Project Aela's Window Class
-* Author: Ekkon Games
+* Author: Robert Ciborowski
 * Date: October 2016
 * Description: A class that uses SDL to form a window.
 */

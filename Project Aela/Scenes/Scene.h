@@ -5,8 +5,6 @@
 * Description: Represents a scene in the game.
 */
 
-#pragma once
-
 #include <vector>
 #include "../Models.h"
 #include "../Renderer.h"

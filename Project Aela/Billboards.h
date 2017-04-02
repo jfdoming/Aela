@@ -1,8 +1,8 @@
 /*
 * Name: Project Aela's Billboard class.
-* Author: Ekkon Games
+* Author: Robert Ciborowski
 * Date: October 2016
-* Description: A header-only class used to store properties of a billboard.
+* Description: A simple, header-only class used to store properties of a billboard.
 */
 
 #pragma once
@@ -30,6 +30,7 @@ class Billboard {
 			texture = setTexture;
 		}
 
+		// These are setters and getters.
 		void setPosition(glm::vec3 setPosition) {
 			position = setPosition;
 		}
@@ -40,6 +41,18 @@ class Billboard {
 
 		glm::vec3 getPosition() {
 			return position;
+		}
+
+		void getPosition(float* setXPosition, float* setYPosition, float* setZPosition) {
+			*setXPosition = position.x;
+			*setYPosition = position.y;
+			*setZPosition = position.z;
+		}
+
+		void setPosition(float setX, float setY, float setZ) {
+			position.x = setX;
+			position.y = setY;
+			position.z = setZ;
 		}
 
 		GLuint getTexture() {

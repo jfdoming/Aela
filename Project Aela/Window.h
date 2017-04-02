@@ -1,13 +1,11 @@
 /*
 * Name: Project Aela's Window Class
-* Author: Ekkon Games
+* Author: Robert Ciborowski
 * Date: October 2016
 * Description: A class that uses SDL to form a window.
 */
 
 #pragma once
-#include "ErrorHandler.h"
-#include <iostream>
 #include <string>
 #include <vector>
 #include "Rect.h"
@@ -34,7 +32,10 @@ class Window {
 		// These are the enumerators for the window flags.
 		std::vector<WindowFlag> flags;
 
+		// This is used to bind SDL with OpenGL.
 		SDL_GLContext openGLContext;
+
+		// This should be moved into the Control Manager!
 		const Uint8* keystates;
 
 		// Window events.

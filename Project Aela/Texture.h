@@ -1,12 +1,11 @@
 /*
 * Name: Project Aela's Texture Class
-* Author: Ekkon Games
+* Author: Robert Ciborowski
 * Date: 21/02/2017
-* Description: A class used by Aela's Renderer to store properties of a texture.
+* Description: A class used by Aela's Renderer to store properties of an OpenGL texture.
 */
 
 #pragma once
-#include "ErrorHandler.h"
 #ifndef GLEW_STATIC
 #define GLEW_STATIC
 #endif
@@ -20,6 +19,7 @@ class Texture {
 			dimensions.setValues(0, 0, 0, 0);
 		}
 
+		// These are some getters and setters.
 		void setDimensions(Rect<int>* dimensions) {
 			this->dimensions = *dimensions;
 		}
@@ -59,6 +59,10 @@ class Texture {
 			return &texture;
 		}
 
+		// This function returns if the object was initialised properly. If it is not
+		// initialised then rendering propblems will occur. Note that a Texture is still
+		// initialised if the output (dimensions on the screen) has a width and/or height
+		// of zero.
 		bool isInitialised() {
 			return (dimensions.getWidth() > 0 && dimensions.getHeight() > 0 && texture != NULL);
 		}

@@ -1,13 +1,12 @@
 /*
 * Name: Project Aela's 3D Camera
-* Author: Ekkon Games
+* Author: Robert Ciborowski
 * Date: November 2016
-* Description: A class used by Aela's Renderer to store properties of a camera.
+* Description: A class used by Project Aela's Renderer to store properties of a camera.
 */
 
 #pragma once
 #include <glm/glm.hpp>
-#include "Window.h"
 #include <time.h>
 
 #ifndef AELA_MODEL_3D_PROPERTY
@@ -23,13 +22,7 @@ class Camera3D {
 	public:
 		Camera3D() {
 			position = glm::vec3(0, 0, 0);
-			xPosition = 0;
-			yPosition = 0;
-			zPosition = 0;
 			rotation = glm::vec3(0, 0, 0);
-			xRotation = 0;
-			yRotation = 0;
-			zRotation = 0;
 			fieldOfView = 45.0f;
 		}
 
@@ -64,11 +57,9 @@ class Camera3D {
 		glm::mat4 projectionMatrix;
 
 		// Translation.
-		float xPosition, yPosition, zPosition;
 		glm::vec3 position;
 
 		// Rotation.
-		float xRotation, yRotation, zRotation;
 		glm::vec3 rotation;
 
 		float fieldOfView;
