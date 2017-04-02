@@ -5,14 +5,15 @@
 * Description: Sizes and positions components within a parent container.
 */
 
-#pragma once
-#include "Component.h"
-#include "Container.h"
-
-class LayoutManager {
-public:
-	LayoutManager(Container* parent);
-	~LayoutManager();
-
-	virtual void update(std::vector<Component*>& components) = 0;
-};
+//#pragma once
+//#include "Component.h"
+//#include "Container.h"
+//#include <vector>
+//
+//class LayoutManager {
+//	public:
+//		LayoutManager(Container* parent);
+//		~LayoutManager();
+//
+//		virtual void update(std::vector<Component*>& components) = 0;
+//};

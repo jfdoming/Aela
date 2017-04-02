@@ -28,23 +28,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 using namespace glm;
 
-// These are headers of some loading functions. They will eventually be moved into the Resource Manager.
-#include "shader.hpp"
-#include "texture.hpp"
-#include "objloader_old.hpp"
-#include "vboindexer.hpp"
-
 // These are headers that are part of Project Aela.
-#include "ControlManager.h"
+#include "Control Manager/ControlManager.h"
 #include "Aela_Engine.h"
-#include "Window.h"
-#include "ErrorHandler.h"
-#include "Renderer.h"
-#include "TimeManager.h"
+#include "Window/Window.h"
+#include "Error Handler/ErrorHandler.h"
+#ifndef AELA_RENDERER
+#define AELA_RENDERER
+#include "Renderer/Renderer.h"
+#endif
+#include "Time Manager/TimeManager.h"
+#include "2D/Text/TextManager.h"
 #include "Scenes/SceneManager.h"
-
 #include "Resource Management/ResourceManager.h"
 #include "Resource Management/TextureLoader.h"
+#include "Lua\LuaManager.h"
 
 int runningLoop();
 
@@ -54,8 +52,16 @@ Renderer renderer;
 ControlManager controlManager;
 TimeManager timeManager;
 TextManager textManager;
-
+LuaManager luaManager;
+LuaScript controlScript;
 Aela::SceneManager sceneManager;
+
+class A {
+	public:
+		void apple() {
+			std::cout << "Apple\n";
+		}
+};
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -117,6 +123,19 @@ int startAela() {
 	renderer.setup2D();
 	controlManager.setWindow(&window);
 	controlManager.setTimeManager(&timeManager);
+
+	// Lua Stuff
+	luabridge::getGlobalNamespace(luaManager.getLuaState())
+		.beginClass<ControlManager>("ControlManager")
+			.addFunction("test", &ControlManager::test)
+		.endClass();
+
+	// Expose Object, must register classes before doing this
+	luaManager.exposeObject(controlManager, "controlManager");
+
+	controlScript.initLua(luaManager.getLuaState());
+	controlScript.loadScript("res/scripts/controls.lua");
+
 
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();
@@ -196,8 +215,10 @@ int runningLoop() {
 		Aela::Scene* currentScene = sceneManager.getCurrentScene();
 		if (currentScene != NULL) {
 			currentScene->update();
-			currentScene->render();
+			currentScene->render(&renderer);
 		}
+
+		controlScript.callFunction("keyPressed", window.getKeystate());
 
 		// This renders the program.
 		renderer.startRenderingFrame();

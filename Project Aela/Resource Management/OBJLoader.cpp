@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 
 #include "OBJLoader.h"
-#include "../ErrorHandler.h"
+#include "../Error Handler/ErrorHandler.h"
 
 // Very, VERY simple OBJ loader.
 // Here is a short list of features a real function would provide : 

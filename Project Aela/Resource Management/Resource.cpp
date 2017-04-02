@@ -1,5 +1,5 @@
 #include "Resource.h"
-#include "../ErrorHandler.h"
+#include "../Error Handler/ErrorHandler.h"
 #include <fstream>
 
 // Resource classes implementation
