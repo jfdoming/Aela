@@ -5,15 +5,10 @@
 * Description: Represents a scene in the game.
 */
 
+#pragma once
 #include <vector>
-#ifndef AELA_MODEL
-#define AELA_MODEL
 #include "../3D/Models/Models.h"
-#endif
-#ifndef AELA_RENDERER
-#define AELA_RENDERER
 #include "../Renderer/Renderer.h"
-#endif
 
 namespace Aela {
 	class Scene {
@@ -26,6 +21,6 @@ namespace Aela {
 		Scene(int id);
 		~Scene();
 	private:
-		std::vector<Model3D> models;
+		std::vector<Model3D*> models;
 	};
 }

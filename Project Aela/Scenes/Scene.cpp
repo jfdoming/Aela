@@ -15,7 +15,7 @@ void Scene::update() {
 }
 
 void Scene::render(Renderer* renderer) {
-	for (auto const& model : models) {
-		// renderer->put3DModel(model);
+	for (Model3D* model : models) {
+		renderer->renderModel(model);
 	}
 }

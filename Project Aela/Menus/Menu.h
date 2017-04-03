@@ -6,12 +6,12 @@
                containers, widgets and other assorted GUI elements.
 */
 
-//#pragma once
-//#include "Container.h"
-//
-//class Menu : public Container {
-//	public:
-//		Menu();
-//		~Menu();
-//};
-//
+#pragma once
+#include "Container.h"
+
+class Menu : public Container {
+	public:
+		Menu();
+		~Menu();
+};
+
