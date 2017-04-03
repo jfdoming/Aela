@@ -6,11 +6,8 @@
 */
 
 #pragma once
+#include "../../3D/Models/Models.h"
 #include <glm/gtc/matrix_transform.hpp>
-#ifndef AELA_MODEL
-#define AELA_MODEL
-#include "../Models/Models.h"
-#endif
 
 class Basic3DShadowRenderer {
 	public:

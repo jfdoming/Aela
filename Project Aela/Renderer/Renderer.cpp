@@ -131,7 +131,7 @@ void Renderer::renderModelShadows(Model3D* model) {
 }
 
 void Renderer::renderModel(Model3D* model) {
-	basic3DRenderer.renderModels(model);
+	basic3DRenderer.renderModel(model);
 }
 
 void Renderer::renderBillboard(Billboard* billboard) {

@@ -5,6 +5,7 @@
 * Description: A class used for interacting between Project Aela's renderers.
 */
 
+#pragma once
 #include <vector>
 #include <string>
 #include <iostream>
@@ -26,10 +27,6 @@
 #include "../3D/3D Renderer/Basic3DRenderer.h"
 #include "../2D/2D Renderer/Basic2DRenderer.h"
 #include "../2D/Text/TextManager.h"
-#ifndef AELA_MODEL
-#define AELA_MODEL
-#include "Models.h"
-#endif
 
 // These are some enums used by the Renderer.
 

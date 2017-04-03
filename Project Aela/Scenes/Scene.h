@@ -6,14 +6,8 @@
 */
 
 #include <vector>
-#ifndef AELA_MODEL
-#define AELA_MODEL
 #include "../3D/Models/Models.h"
-#endif
-#ifndef AELA_RENDERER
-#define AELA_RENDERER
 #include "../Renderer/Renderer.h"
-#endif
 
 namespace Aela {
 	class Scene {
