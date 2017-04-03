@@ -7,12 +7,9 @@
 
 #pragma once
 #include "Component.h"
-#include "Container.h"
+#include <vector>
 
 class LayoutManager {
-public:
-	LayoutManager(Container* parent);
-	~LayoutManager();
-
-	virtual void update(std::vector<Component*>& components) = 0;
+	public:
+		virtual void update(std::vector<Component*>& components) = 0;
 };

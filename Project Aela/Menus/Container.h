@@ -12,16 +12,16 @@
 #include <vector>
 
 class Container : public Component {
-public:
-	Container();
-	~Container();
+	public:
+		Container();
+		~Container();
 
-	void add(Component* component);
+		void add(Component* component);
 
-	virtual void update();
-	virtual void render();
-private:
-	LayoutManager* layout;
-	std::vector<Component*> children;
+		virtual void update();
+		virtual void render();
+	private:
+		LayoutManager* layout;
+		std::vector<Component*> children;
 };
 

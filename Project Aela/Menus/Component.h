@@ -8,14 +8,14 @@
 #pragma once
 
 class Component {
-public:
-	Component();
-	~Component();
+	public:
+		Component();
+		~Component();
 
-	virtual bool isDirty();
+		virtual bool isDirty();
 
-	virtual void update() = 0;
-	virtual void render() = 0;
-protected:
-	bool dirty = true;
+		virtual void update() = 0;
+		virtual void render() = 0;
+	protected:
+		bool dirty = true;
 };

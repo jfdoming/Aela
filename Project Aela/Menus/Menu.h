@@ -10,8 +10,8 @@
 #include "Container.h"
 
 class Menu : public Container {
-public:
-	Menu();
-	~Menu();
+	public:
+		Menu();
+		~Menu();
 };
 
