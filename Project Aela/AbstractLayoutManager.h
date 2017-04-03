@@ -9,10 +9,12 @@
 #include "Container.h"
 #include "LayoutManager.h"
 
-class AbstractLayoutManager : LayoutManager {
+class AbstractLayoutManager : public LayoutManager {
 public:
 	AbstractLayoutManager(Container* parent);
 	~AbstractLayoutManager();
+
+	virtual void update(std::vector<Component*>& components);
 protected:
 	Container* parent;
 };

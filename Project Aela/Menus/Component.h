@@ -13,9 +13,14 @@ class Component {
 		~Component();
 
 		virtual bool isDirty();
+		int getWidth();
+		int getHeight();
+
 
 		virtual void update() = 0;
 		virtual void render() = 0;
 	protected:
 		bool dirty = true;
+		int width = 0;
+		int height = 0;
 };
