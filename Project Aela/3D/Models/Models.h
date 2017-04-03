@@ -5,12 +5,7 @@
 * Description: A class used by Aela's Renderer to store properties of a model.
 */
 
-// WARNING!!! Please use the following when including this file:
-/* #ifndef AELA_MODEL
-#define AELA_MODEL
-#include "Models.h"
-#endif*/
-
+#pragma once
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>

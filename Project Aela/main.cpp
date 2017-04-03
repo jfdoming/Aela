@@ -33,10 +33,6 @@ using namespace glm;
 #include "Aela_Engine.h"
 #include "Window/Window.h"
 #include "Error Handler/ErrorHandler.h"
-#ifndef AELA_RENDERER
-#define AELA_RENDERER
-#include "Renderer/Renderer.h"
-#endif
 #include "Time Manager/TimeManager.h"
 #include "2D/Text/TextManager.h"
 #include "Scenes/SceneManager.h"

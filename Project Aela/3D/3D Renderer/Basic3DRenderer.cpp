@@ -163,9 +163,9 @@ void Basic3DRenderer::renderShadows(Model3D* model) {
 	modelShader.renderShadows(model, depthProgramID, depthMatrixID, depthFrameBuffer);
 }
 
-void Basic3DRenderer::renderModels(Model3D* model) {
+void Basic3DRenderer::renderModel(Model3D* model) {
 	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	textureRenderer.renderModels(model, colourFrameBuffer, programID, depthMatrixID, matrixID, modelMatrixID, viewMatrixID,
+	textureRenderer.renderModel(model, colourFrameBuffer, programID, depthMatrixID, matrixID, modelMatrixID, viewMatrixID,
 		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID);
 }
 

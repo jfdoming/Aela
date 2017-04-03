@@ -16,7 +16,7 @@ void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setPro
 	projectionMatrix = setProjectionMatrix;
 }
 
-void Basic3DModelRenderer::renderModels(Model3D* model, GLuint frameBuffer, GLuint programID, GLuint depthMatrixID,
+void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint programID, GLuint depthMatrixID,
 	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID,
 	GLuint depthTexture, GLuint shadowMapID) {
 
