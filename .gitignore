@@ -8,7 +8,8 @@
 vcxproj/
 
 # Please don't ignore resources it's very irritating when you need a specific resource to FUCKING RUN THE PROGRAM
-![Rr]elease/res/
+**/[Rr]elease/*
+!**/[Rr]elease/res/
 
 # User-specific files
 *.suo
@@ -22,7 +23,6 @@ vcxproj/
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
-[Rr]elease/
 [Rr]eleases/
 [Xx]64/
 [Xx]86/
