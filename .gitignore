@@ -7,8 +7,8 @@
 *.vcxproj
 vcxproj/
 
-# Don't ignore this!
-![Rr]elease/res/shaders/
+# Please don't ignore resources it's very irritating when you need a specific resource to FUCKING RUN THE PROGRAM
+![Rr]elease/res/
 
 # User-specific files
 *.suo
