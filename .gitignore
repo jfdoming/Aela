@@ -5,6 +5,7 @@
 # You can't ignore cancer, if you don't treat it then you will die.
 *.sln
 *.vcxproj
+*.vcxproj.filters
 vcxproj/
 
 # Please don't ignore resources it's very irritating when you need a specific resource to FUCKING RUN THE PROGRAM

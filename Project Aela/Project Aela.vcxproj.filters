@@ -365,8 +365,5 @@
     <None Include="..\Release\res\shaders\Text_To_Buffer.vertexshader">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="Menus\desktop.ini">
-      <Filter>Source Files\Menus</Filter>
-    </None>
   </ItemGroup>
 </Project>
