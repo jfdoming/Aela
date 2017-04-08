@@ -16,4 +16,7 @@ public:
 	void updateEvents();
 
 	SDL_Event getEvent();
+
+	void bindWindow(Window* _window);
+	void bindControlManager(ControlManager* _controlManager);
 };

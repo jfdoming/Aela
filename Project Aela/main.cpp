@@ -127,6 +127,8 @@ int startAela() {
 	controlScript.initLua(luaManager.getLuaState());
 	controlScript.loadScript("res/scripts/controls.lua");
 
+	eventHandler.bindControlManager(&controlManager);
+	eventHandler.bindWindow(&window);
 
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();
