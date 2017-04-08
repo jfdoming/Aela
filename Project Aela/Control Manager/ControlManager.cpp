@@ -58,8 +58,8 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		window->setCursorPositionInWindow(width / 2, height / 2);
 
 		// This gets the horizontal and vertical angles.
-		float horizontalAngle = camera->getProperty(Model3DProperty::X_ROTATION);
-		float verticalAngle = camera->getProperty(Model3DProperty::Y_ROTATION);
+		float horizontalAngle = camera->getProperty(Object3DProperty::X_ROTATION);
+		float verticalAngle = camera->getProperty(Object3DProperty::Y_ROTATION);
 
 		// This computes the new horizontal angle.
 		horizontalAngle += mouseSpeed * float(width / 2 - xpos);
@@ -93,8 +93,8 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 			verticalAngle = glm::pi<float>() / -2;
 		}
 
-		camera->setProperty(Model3DProperty::X_ROTATION, horizontalAngle);
-		camera->setProperty(Model3DProperty::Y_ROTATION, verticalAngle);
+		camera->setProperty(Object3DProperty::X_ROTATION, horizontalAngle);
+		camera->setProperty(Object3DProperty::Y_ROTATION, verticalAngle);
 
 		// This converts the coordinates from rotational to cartesian-planar.
 		glm::vec3 direction(
