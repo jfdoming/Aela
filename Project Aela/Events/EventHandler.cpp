@@ -30,6 +30,14 @@ void EventHandler::updateEvents() {
 	}
 }
 
+void EventHandler::bindWindow(Window* window) {
+	this->window = window;
+}
+
+void EventHandler::bindControlManager(ControlManager* controlManager) {
+	this->controlManager = controlManager;
+}
+
 SDL_Event EventHandler::getEvent() {
 	return event;
 }

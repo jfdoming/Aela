@@ -41,13 +41,13 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		windowFocus = true;
 		float deltaTime = timeManager->getTimeBetweenFrames();
 
+		std::cout << "sdsdsd";
 		// This is temporarily hard-coded and enables going fast.
 		if (keyPressed(225)) {
 			currentSpeed = superSpeed;
 		} else {
 			currentSpeed = speed;
 		}
-
 		// This gets the cursor's position.
 		int xpos, ypos;
 		window->getCursorPositionInWindow(&xpos, &ypos);

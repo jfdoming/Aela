@@ -1,0 +1,16 @@
+/*
+ * Name: Depth Texturing
+ * Author: Ekkon Games - Robert Ciborowski
+ * Date: October 2016
+ * Description: Project Aela's Depth Texture Renderer, which is used for shadows.
+*/
+
+#version 330 core
+
+// This is the output data.
+layout(location = 0) out float fragmentdepth;
+
+// This is main(), which calculates colour using depth.
+void main(){
+	fragmentdepth = gl_FragCoord.z;
+}
