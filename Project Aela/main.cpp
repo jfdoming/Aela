@@ -39,6 +39,8 @@ using namespace glm;
 #include "Resource Management/ResourceManager.h"
 #include "Resource Management/TextureLoader.h"
 #include "Lua\LuaManager.h"
+#include "Lua/LuaManager.h"
+#include "Events/EventHandler.h"
 
 int runningLoop();
 
@@ -46,6 +48,7 @@ int runningLoop();
 Window window;
 Renderer renderer;
 ControlManager controlManager;
+EventHandler eventHandler;
 TimeManager timeManager;
 TextManager textManager;
 LuaManager luaManager;
@@ -132,6 +135,8 @@ int startAela() {
 	controlScript.initLua(luaManager.getLuaState());
 	controlScript.loadScript("res/scripts/controls.lua");
 
+	eventHandler.bindControlManager(&controlManager);
+	eventHandler.bindWindow(&window);
 
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();
@@ -189,12 +194,19 @@ int runningLoop() {
 
 	// This is the program's running loop.
 	do {
-		std::cout << "A\n";
 		// These functions update classes.
 		timeManager.updateTime();
-		std::cout << "B\n";
 		renderer.updateCameraUsingControls(&controlManager);
-		std::cout << "C\n";
+		// Update Event
+		eventHandler.updateEvents();
+
+		// These functions update classes.
+		timeManager.updateTime();
+		renderer.updateCameraUsingControls(&controlManager);
+
+		// This is temporary and will be moved once a model manager is created!
+		renderer.temporaryKeyCheckFunction(&controlManager);
+
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() >= timeSinceLastFrameCheck + timeBetweenFrameChecks) {
 			if (fps == -1) {
@@ -205,15 +217,12 @@ int runningLoop() {
 			}
 		}
 		
-		std::cout << "D\n";
 		// This updates and renders the current scene.
 		Aela::Scene* currentScene = sceneManager.getCurrentScene();
 		if (currentScene != NULL) {
 			currentScene->update();
 			currentScene->render(&renderer);
 		}
-
-		// controlScript.callFunction("keyPressed", window.getKeystate());
 
 		// This renders the program.
 		renderer.startRenderingFrame();
@@ -231,7 +240,6 @@ int runningLoop() {
 		renderer.render2DTexture(&testTexture2);
 		renderer.renderTextToTexture(fpsData, arial, &textOutput, &textColour);
 		renderer.endRenderingFrame();
-		std::cout << "D\n";
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 	// This will call each model's destructor, which will delete each model's texture. I'm not sure if this
 	// is done automatically by OpenGL or Windows when the program closes, so I added it just in case.
