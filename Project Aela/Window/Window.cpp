@@ -104,21 +104,6 @@ void Window::updateBuffer() {
 	SDL_GL_SwapWindow(window);
 }
 
-void Window::updateWindowEvents() {
-	SDL_PollEvent(&occur);
-	keystates = SDL_GetKeyboardState(NULL);
-	if (occur.type == SDL_WINDOWEVENT) {
-		switch (occur.window.event) {
-		case SDL_WINDOWEVENT_FOCUS_GAINED:
-			hasFocus = true;
-			break;
-		case SDL_WINDOWEVENT_FOCUS_LOST:
-			hasFocus = false;
-			break;
-		}
-	}
-}
-
 void Window::getCursorPositionInWindow(int* x, int* y) {
 	SDL_GetMouseState(x, y);
 }
@@ -135,20 +120,20 @@ void Window::setCursorPositionGlobally(int x, int y) {
 	SDL_WarpMouseGlobal(x, y);
 }
 
+void Window::setFocus(bool focus) {
+	hasFocus = focus;
+}
+
 std::string Window::getWindowName() {
 	return windowName;
 }
 
+void Window::quit() {
+	shouldQuit = true;
+}
+
 bool Window::quitCheck() {
-	return occur.type == SDL_QUIT;
-}
-
-bool Window::keyPressed(int SDL_Code) {
-	return (keystates[SDL_Code] == 1);
-}
-
-Uint8 Window::getKeystate() {
-	return *keystates;
+	return shouldQuit;
 }
 
 void Window::showCursor() {

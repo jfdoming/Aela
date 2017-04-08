@@ -72,7 +72,7 @@ class Renderer {
 		void endRenderingFrame();
 
 		// TEMPORARY!!!!!!!!!!!!!!
-		void temporaryKeyCheckFunction();
+		void temporaryKeyCheckFunction(ControlManager* controls);
 
 		// These are some getters.
 		std::string getInformation(RendererInformation infoToGet);
