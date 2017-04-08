@@ -214,7 +214,7 @@ int runningLoop() {
 			currentScene->render(&renderer);
 		}
 
-		controlScript.callFunction("keyPressed", window.getKeystate());
+		// controlScript.callFunction("keyPressed", window.getKeystate());
 
 		// This renders the program.
 		renderer.startRenderingFrame();

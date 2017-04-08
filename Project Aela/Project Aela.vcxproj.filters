@@ -83,6 +83,12 @@
     <Filter Include="Source Files\Lua">
       <UniqueIdentifier>{233c489f-33a8-4438-806a-3d0ff01a9a86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\3D\3D Object">
+      <UniqueIdentifier>{4fa581bd-1570-4f56-aefa-5c43983f0daf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\3D Light">
+      <UniqueIdentifier>{dfd198cb-f201-4667-bdc8-cf38d88c4414}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -118,26 +124,17 @@
     <ClCompile Include="Menus\Menu.cpp">
       <Filter>Source Files\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="2D\2D Renderer\Basic2DRenderer.cpp">
-      <Filter>Source Files\2D\2D_Renderer</Filter>
+    <ClCompile Include="Control Manager\ControlManager.cpp">
+      <Filter>Source Files\Control Manager</Filter>
     </ClCompile>
-    <ClCompile Include="2D\Text\TextFont.cpp">
-      <Filter>Source Files\2D\Text</Filter>
+    <ClCompile Include="Error Handler\AelaErrorHandler.cpp">
+      <Filter>Source Files\Error Handler</Filter>
     </ClCompile>
-    <ClCompile Include="2D\Text\TextManager.cpp">
-      <Filter>Source Files\2D\Text</Filter>
+    <ClCompile Include="Error Handler\AelaSimpleError.cpp">
+      <Filter>Source Files\Error Handler</Filter>
     </ClCompile>
-    <ClCompile Include="3D\3D Camera\Camera3D.cpp">
-      <Filter>Source Files\3D\3D Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DModelRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DShadowRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
+    <ClCompile Include="Error Handler\ErrorHandler.cpp">
+      <Filter>Source Files\Error Handler</Filter>
     </ClCompile>
     <ClCompile Include="Old Garbage\objloader_old.cpp">
       <Filter>Old Garbage</Filter>
@@ -151,20 +148,35 @@
     <ClCompile Include="Old Garbage\vboindexer.cpp">
       <Filter>Old Garbage</Filter>
     </ClCompile>
+    <ClCompile Include="2D\2D Renderer\Basic2DRenderer.cpp">
+      <Filter>Source Files\2D\2D_Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="2D\Text\TextFont.cpp">
+      <Filter>Source Files\2D\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="2D\Text\TextManager.cpp">
+      <Filter>Source Files\2D\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Renderer\Basic3DModelRenderer.cpp">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Renderer\Basic3DRenderer.cpp">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Renderer\Basic3DShadowRenderer.cpp">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Camera\Camera3D.cpp">
+      <Filter>Source Files\3D\3D Camera</Filter>
+    </ClCompile>
     <ClCompile Include="3D\Models\Models.cpp">
       <Filter>Source Files\3D\Models</Filter>
     </ClCompile>
-    <ClCompile Include="Control Manager\ControlManager.cpp">
-      <Filter>Source Files\Control Manager</Filter>
+    <ClCompile Include="Renderer\Renderer.cpp">
+      <Filter>Source Files\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Error Handler\AelaErrorHandler.cpp">
-      <Filter>Source Files\Error Handler</Filter>
-    </ClCompile>
-    <ClCompile Include="Error Handler\AelaSimpleError.cpp">
-      <Filter>Source Files\Error Handler</Filter>
-    </ClCompile>
-    <ClCompile Include="Error Handler\ErrorHandler.cpp">
-      <Filter>Source Files\Error Handler</Filter>
+    <ClCompile Include="Window\Window.cpp">
+      <Filter>Source Files\Window</Filter>
     </ClCompile>
     <ClCompile Include="Lua\Entity.cpp">
       <Filter>Source Files\Lua</Filter>
@@ -175,14 +187,11 @@
     <ClCompile Include="Lua\LuaScript.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\Renderer.cpp">
-      <Filter>Source Files\Renderer</Filter>
+    <ClCompile Include="3D\3D Object\Object3D.cpp">
+      <Filter>Source Files\3D\3D Object</Filter>
     </ClCompile>
-    <ClCompile Include="Window\Window.cpp">
-      <Filter>Source Files\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="Menus\AbstractLayoutManager.cpp">
-      <Filter>Source Files\Menus</Filter>
+    <ClCompile Include="3D\3D Light\Light3D.cpp">
+      <Filter>Source Files\3D\3D Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -231,29 +240,17 @@
     <ClInclude Include="Menus\stdafx.h">
       <Filter>Source Files\Menus</Filter>
     </ClInclude>
-    <ClInclude Include="2D\2D Renderer\Basic2DRenderer.h">
-      <Filter>Source Files\2D\2D_Renderer</Filter>
+    <ClInclude Include="Control Manager\ControlManager.h">
+      <Filter>Source Files\Control Manager</Filter>
     </ClInclude>
-    <ClInclude Include="2D\Text\TextFont.h">
-      <Filter>Source Files\2D\Text</Filter>
+    <ClInclude Include="Error Handler\AelaErrorHandler.h">
+      <Filter>Source Files\Error Handler</Filter>
     </ClInclude>
-    <ClInclude Include="2D\Text\TextManager.h">
-      <Filter>Source Files\2D\Text</Filter>
+    <ClInclude Include="Error Handler\AelaSimpleError.h">
+      <Filter>Source Files\Error Handler</Filter>
     </ClInclude>
-    <ClInclude Include="3D\3D Camera\Camera3D.h">
-      <Filter>Source Files\3D\3D Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DModelRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DShadowRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Billboards\Billboards.h">
-      <Filter>Source Files\3D\Billboards</Filter>
+    <ClInclude Include="Error Handler\ErrorHandler.h">
+      <Filter>Source Files\Error Handler</Filter>
     </ClInclude>
     <ClInclude Include="Old Garbage\objloader_old.hpp">
       <Filter>Old Garbage</Filter>
@@ -267,32 +264,35 @@
     <ClInclude Include="Old Garbage\vboindexer.hpp">
       <Filter>Old Garbage</Filter>
     </ClInclude>
+    <ClInclude Include="2D\2D Renderer\Basic2DRenderer.h">
+      <Filter>Source Files\2D\2D_Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="2D\Text\TextFont.h">
+      <Filter>Source Files\2D\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="2D\Text\TextManager.h">
+      <Filter>Source Files\2D\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Renderer\Basic3DModelRenderer.h">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Renderer\Basic3DRenderer.h">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Renderer\Basic3DShadowRenderer.h">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Billboards\Billboards.h">
+      <Filter>Source Files\3D\Billboards</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Camera\Camera3D.h">
+      <Filter>Source Files\3D\3D Camera</Filter>
+    </ClInclude>
     <ClInclude Include="3D\Models\Models.h">
       <Filter>Source Files\3D\Models</Filter>
     </ClInclude>
     <ClInclude Include="3D\Texture\Texture.h">
       <Filter>Source Files\3D\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="Control Manager\ControlManager.h">
-      <Filter>Source Files\Control Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Error Handler\AelaErrorHandler.h">
-      <Filter>Source Files\Error Handler</Filter>
-    </ClInclude>
-    <ClInclude Include="Error Handler\AelaSimpleError.h">
-      <Filter>Source Files\Error Handler</Filter>
-    </ClInclude>
-    <ClInclude Include="Error Handler\ErrorHandler.h">
-      <Filter>Source Files\Error Handler</Filter>
-    </ClInclude>
-    <ClInclude Include="Lua\Entity.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="Lua\LuaManager.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="Lua\LuaScript.h">
-      <Filter>Source Files\Lua</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\Renderer.h">
       <Filter>Source Files\Renderer</Filter>
@@ -309,11 +309,62 @@
     <ClInclude Include="Window\Window.h">
       <Filter>Source Files\Window</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractLayoutManager.h">
-      <Filter>Source Files\Menus</Filter>
+    <ClInclude Include="Lua\Entity.h">
+      <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaManager.h">
+      <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\LuaScript.h">
+      <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Object\Object3D.h">
+      <Filter>Source Files\3D\3D Object</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Light\Light3D.h">
+      <Filter>Source Files\3D\3D Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Post_Processing.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Post_Processing.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\3D_Post_Processing.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\3D_Post_Processing.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Texture_Buffer_To_Buffer.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Texture_Buffer_To_Buffer.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\Billboard_Shadow_Mapping.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
     <None Include="..\Release\res\shaders\DepthRTT.fragmentshader">
       <Filter>Source Files\Shaders</Filter>
     </None>
@@ -325,6 +376,15 @@
     </None>
     <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
       <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\Text_To_Buffer.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\Text_To_Buffer.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="Menus\desktop.ini">
+      <Filter>Source Files\Menus</Filter>
     </None>
   </ItemGroup>
 </Project>
