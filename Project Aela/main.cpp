@@ -38,7 +38,8 @@ using namespace glm;
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
 #include "Resource Management/TextureLoader.h"
-#include "Lua\LuaManager.h"
+#include "Lua/LuaManager.h"
+#include "Events/EventHandler.h"
 
 int runningLoop();
 
@@ -46,18 +47,12 @@ int runningLoop();
 Window window;
 Renderer renderer;
 ControlManager controlManager;
+EventHandler eventHandler;
 TimeManager timeManager;
 TextManager textManager;
 LuaManager luaManager;
 LuaScript controlScript;
 Aela::SceneManager sceneManager;
-
-class A {
-	public:
-		void apple() {
-			std::cout << "Apple\n";
-		}
-};
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -189,13 +184,15 @@ int runningLoop() {
 
 	// This is the program's running loop.
 	do {
+		// Update Event
+		eventHandler.updateEvents();
+
 		// These functions update classes.
 		timeManager.updateTime();
-		window.updateWindowEvents();
 		renderer.updateCameraUsingControls(&controlManager);
 
 		// This is temporary and will be moved once a model manager is created!
-		renderer.temporaryKeyCheckFunction();
+		renderer.temporaryKeyCheckFunction(&controlManager);
 
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() >= timeSinceLastFrameCheck + timeBetweenFrameChecks) {
@@ -213,8 +210,6 @@ int runningLoop() {
 			currentScene->update();
 			currentScene->render(&renderer);
 		}
-
-		controlScript.callFunction("keyPressed", window.getKeystate());
 
 		// This renders the program.
 		renderer.startRenderingFrame();

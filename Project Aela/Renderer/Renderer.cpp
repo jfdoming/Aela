@@ -156,13 +156,13 @@ void Renderer::endRenderingFrame() {
 	window->updateBuffer();
 }
 
-void Renderer::temporaryKeyCheckFunction() {
+void Renderer::temporaryKeyCheckFunction(ControlManager* controls) {
 	// Field of view changing.
-	if (basic3DRenderer.getWindow()->keyPressed(46)) {
+	if (controls->keyPressed(46)) {
 		camera.setFieldOfView(camera.getFieldOfView() - (0.002f) * timeManager->getTimeBetweenFrames());
 	}
 
-	if (basic3DRenderer.getWindow()->keyPressed(45)) {
+	if (controls->keyPressed(45)) {
 		camera.setFieldOfView(camera.getFieldOfView() + (0.002f) * timeManager->getTimeBetweenFrames());
 	}
 }

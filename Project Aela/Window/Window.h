@@ -24,7 +24,7 @@ class Window {
 		// These are typical window properties.
 		int windowWidth, windowHeight;
 		std::string windowName;
-		bool resizable, visibility, borderless, maximized, taskbarVisibility, hasFocus;
+		bool resizable, visibility, borderless, maximized, taskbarVisibility, hasFocus, shouldQuit;
 
 		// This is the SDL_Window used by this class.
 		SDL_Window* window;
@@ -34,12 +34,6 @@ class Window {
 
 		// This is used to bind SDL with OpenGL.
 		SDL_GLContext openGLContext;
-
-		// This should be moved into the Control Manager!
-		const Uint8* keystates;
-
-		// Window events.
-		SDL_Event occur;
 
 		Rect<unsigned int> windowDimensions;
 
@@ -58,16 +52,15 @@ class Window {
 		void getWindowPosition(int* xPositionVariable, int* yPositionVariable);
 		bool makeWindowOpenGLContext();
 		void updateBuffer();
-		void updateWindowEvents();
 		void getCursorPositionInWindow(int* x, int* y);
 		void getCursorPositionGlobally(int* x, int* y);
 		void setCursorPositionInWindow(int x, int y);
 		void setCursorPositionGlobally(int x, int y);
+		void setFocus(bool focus);
 		std::string getWindowName();
+		void quit();
 		bool quitCheck();
-		bool keyPressed(int SDL_Code);
 		bool isFocused();
-		Uint8 getKeystate();
 		
 		void showCursor();
 		static void hideCursor();

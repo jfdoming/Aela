@@ -83,6 +83,9 @@
     <Filter Include="Source Files\Lua">
       <UniqueIdentifier>{233c489f-33a8-4438-806a-3d0ff01a9a86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Events">
+      <UniqueIdentifier>{5419fb83-8642-42c6-8976-df0729c3c285}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -180,6 +183,9 @@
     </ClCompile>
     <ClCompile Include="Lua\LuaScript.cpp">
       <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\EventHandler.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -305,6 +311,9 @@
     </ClInclude>
     <ClInclude Include="Lua\LuaScript.h">
       <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\EventHandler.h">
+      <Filter>Source Files\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
