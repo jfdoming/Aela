@@ -1,4 +1,5 @@
 #include "TextureLoader.h"
+#include "../3D/Texture/Texture.h"
 
 using namespace Aela;
 
@@ -82,10 +83,11 @@ Resource* Aela::TextureLoader::load(std::ifstream &in) {
 	}
 	delete[] buffer;
 
-	TextureResource* res = new TextureResource();
-	res->data = textureID;
+	Texture* res = new Texture(&textureID);
+	res->setDimensions(0, 0, imageWidth, imageHeight);
+	res->setOutput(0, 0, imageWidth, imageHeight);
 
-	std::cout << "texture id: " << res->data << std::endl;
+	//std::cout << "texture id: " << res->texture << std::endl;
 
 	return res;
 }

@@ -170,8 +170,12 @@ int runningLoop() {
 
 	// These are temporary 2D textures that demonstrate how to render textures using a Renderer. This will be
 	// moved once the menu system is formed.
-	Texture testTexture = loadDDSToTexture("res/textures/ekkon.dds");
-	testTexture.setOutput(0, 0, 100, 50);
+	Aela::ResourceManager resourceManager(2);
+	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
+	resourceManager.load("res/textures/ekkon.dds", false);
+	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");//loadDDSToTexture("res/textures/ekkon.dds");
+	std::cout << "test text" << std::endl;
+	//testTexture->setOutput(0, 0, 100, 50);
 	Texture testTexture2 = loadDDSToTexture("res/textures/gradient.dds");
 	testTexture2.setOutput(100, 0, 1180, 50);
 
@@ -228,7 +232,7 @@ int runningLoop() {
 			renderer.renderBillboard(&(billboards[i]));
 		}
 		std::string fpsData = std::to_string(fps) + " FPS";
-		renderer.render2DTexture(&testTexture);
+		renderer.render2DTexture(testTexture);
 		renderer.render2DTexture(&testTexture2);
 		renderer.renderTextToTexture(fpsData, arial, &textOutput, &textColour);
 		renderer.endRenderingFrame();
@@ -237,6 +241,9 @@ int runningLoop() {
 	// is done automatically by OpenGL or Windows when the program closes, so I added it just in case.
 	// -Robert
 	models.resize(0);
+
+	resourceManager.unload("res/textures/ekkon.dds");
+
 	return 0;
 }
 

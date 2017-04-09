@@ -20,7 +20,10 @@ class Component {
 		virtual void update() = 0;
 		virtual void render() = 0;
 	protected:
+		// whether this component needs to be repainted
 		bool dirty = true;
+
+		// dimensions
 		int width = 0;
 		int height = 0;
 };

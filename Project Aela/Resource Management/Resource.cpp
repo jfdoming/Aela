@@ -10,12 +10,6 @@ Aela::Resource::Resource() {
 Aela::Resource::~Resource() {
 }
 
-Aela::TextureResource::TextureResource() {
-}
-
-Aela::TextureResource::~TextureResource() {
-}
-
 Aela::OBJResource::OBJResource() {
 }
 

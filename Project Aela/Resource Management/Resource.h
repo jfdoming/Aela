@@ -8,7 +8,6 @@
 #pragma once
 
 #include "stdafx.h"
-#include <GL/glew.h>
 #include <GLM/glm.hpp>
 #include <vector>
 
@@ -17,15 +16,7 @@ namespace Aela {
 		public:
 
 		Resource();
-		~Resource();
-	};
-
-	class TextureResource : public Resource {
-	public:
-		GLuint data = 0;
-
-		TextureResource();
-		~TextureResource();
+		virtual ~Resource();
 	};
 
 	class OBJResource : public Resource {
@@ -33,8 +24,8 @@ namespace Aela {
 		std::vector<glm::vec3> vertices;
 		std::vector<glm::vec2> UVs;
 		std::vector<glm::vec3> normals;
-
+		
 		OBJResource();
-		~OBJResource();
+		virtual ~OBJResource();
 	};
 }

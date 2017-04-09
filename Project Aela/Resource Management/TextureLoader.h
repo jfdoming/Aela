@@ -12,7 +12,17 @@ namespace Aela {
 
 	class TextureLoader : public ResourceLoader {
 		public:
-		bool isValid(std::ifstream &in);
-		Resource* load(std::ifstream &in);
+			static TextureLoader& getInstance() {
+				static TextureLoader instance; // guaranteed to be destroyed, instantiated on first use
+				return instance;
+			}
+
+			TextureLoader(TextureLoader const&) = delete;
+			void operator=(TextureLoader const&) = delete;
+
+			virtual bool isValid(std::ifstream &in);
+			virtual Resource* load(std::ifstream &in);
+	private:
+		TextureLoader() {}
 	};
 }

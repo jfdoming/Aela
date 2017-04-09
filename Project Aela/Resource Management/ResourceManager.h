@@ -6,9 +6,15 @@
 #include <unordered_map>
 #include <vector>
 
+#include "OBJLoader.h"
+#include "TextureLoader.h"
+
 namespace Aela {
 	class ResourceManager {
 		public:
+			static OBJLoader OBJECT_LOADER;
+			static TextureLoader TEXTURE_LOADER;
+
 			ResourceManager(int resourceCount);
 			~ResourceManager();
 
@@ -25,14 +31,21 @@ namespace Aela {
 			void bindLoader(ResourceLoader* loader);
 
 			/*
-			 * Read in text from a text file and store it as a Resource, accessible using obtain(string).
-			 */
+			* Read from a file and store it as a Resource, accessible using obtain(string).
+			*/
 			bool load(std::string src, bool crucial);
+
+			/*
+			* Unload the specified resource.
+			*/
+			void unload(std::string src);
 
 			/*
 			* Obtain the specified resource for use in the application.
 			*/
-			template <class T> T* obtain(std::string src);
+			template <class T> T* obtain(std::string src) {
+				return (T*) obtain_impl(src);
+			}
 
 			// error handling
 			std::string getNewCrucialInvalidResourceKey();
@@ -42,5 +55,7 @@ namespace Aela {
 			std::vector<std::string> invalidResourceKeys;
 			std::string crucialInvalidResourceKey = "";
 			ResourceLoader* loader;
+
+			Resource* obtain_impl(std::string src);
 	};
 }

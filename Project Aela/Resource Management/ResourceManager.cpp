@@ -48,12 +48,16 @@ bool ResourceManager::load(std::string src, bool crucial) {
 	return valid;
 }
 
-template <class T> T* ResourceManager::obtain(std::string src) {
-	std::iterator iter = resources.find(src);
+void ResourceManager::unload(std::string src) {
+	delete obtain_impl(src);
+}
+
+Resource* ResourceManager::obtain_impl(std::string src) {
+	std::unordered_map<std::string, Resource*>::const_iterator iter = resources.find(src);
 	if (iter == resources.end()) {
 		return NULL;
 	}
-	return iter.second;
+	return iter->second;
 }
 
 std::string Aela::ResourceManager::getNewCrucialInvalidResourceKey() {
