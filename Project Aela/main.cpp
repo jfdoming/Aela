@@ -39,6 +39,8 @@ using namespace glm;
 #include "Resource Management/ResourceManager.h"
 #include "Resource Management/TextureLoader.h"
 #include "Lua\LuaManager.h"
+#include "Lua/LuaManager.h"
+#include "Events/EventHandler.h"
 
 int runningLoop();
 
@@ -46,6 +48,7 @@ int runningLoop();
 Window window;
 Renderer renderer;
 ControlManager controlManager;
+EventHandler eventHandler;
 TimeManager timeManager;
 TextManager textManager;
 LuaManager luaManager;
@@ -132,6 +135,8 @@ int startAela() {
 	controlScript.initLua(luaManager.getLuaState());
 	controlScript.loadScript("res/scripts/controls.lua");
 
+	eventHandler.bindControlManager(&controlManager);
+	eventHandler.bindWindow(&window);
 
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();
@@ -195,11 +200,16 @@ int runningLoop() {
 	do {
 		// These functions update classes.
 		timeManager.updateTime();
-		window.updateWindowEvents();
+		renderer.updateCameraUsingControls(&controlManager);
+		// Update Event
+		eventHandler.updateEvents();
+
+		// These functions update classes.
+		timeManager.updateTime();
 		renderer.updateCameraUsingControls(&controlManager);
 
 		// This is temporary and will be moved once a model manager is created!
-		renderer.temporaryKeyCheckFunction();
+		renderer.temporaryKeyCheckFunction(&controlManager);
 
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() >= timeSinceLastFrameCheck + timeBetweenFrameChecks) {
@@ -217,8 +227,6 @@ int runningLoop() {
 			currentScene->update();
 			currentScene->render(&renderer);
 		}
-
-		controlScript.callFunction("keyPressed", window.getKeystate());
 
 		// This renders the program.
 		renderer.startRenderingFrame();

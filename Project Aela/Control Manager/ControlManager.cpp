@@ -27,6 +27,14 @@ void ControlManager::setTimeManager(TimeManager* setTime) {
 	timeManager = setTime;
 }
 
+void ControlManager::updateEvents(SDL_Event* _event) {
+	event = _event;
+}
+
+bool ControlManager::keyPressed(int keycode) {
+	return event->key.keysym.scancode == keycode;
+}
+
 void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 	// This will only run if the window is focused.
 	if (window->isFocused()) {
@@ -34,12 +42,11 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		float deltaTime = timeManager->getTimeBetweenFrames();
 
 		// This is temporarily hard-coded and enables going fast.
-		if (window->keyPressed(225)) {
+		if (keyPressed(225)) {
 			currentSpeed = superSpeed;
 		} else {
 			currentSpeed = speed;
 		}
-
 		// This gets the cursor's position.
 		int xpos, ypos;
 		window->getCursorPositionInWindow(&xpos, &ypos);
@@ -50,8 +57,8 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		window->setCursorPositionInWindow(width / 2, height / 2);
 
 		// This gets the horizontal and vertical angles.
-		float horizontalAngle = camera->getProperty(Model3DProperty::X_ROTATION);
-		float verticalAngle = camera->getProperty(Model3DProperty::Y_ROTATION);
+		float horizontalAngle = camera->getProperty(Object3DProperty::X_ROTATION);
+		float verticalAngle = camera->getProperty(Object3DProperty::Y_ROTATION);
 
 		// This computes the new horizontal angle.
 		horizontalAngle += mouseSpeed * float(width / 2 - xpos);
@@ -85,8 +92,8 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 			verticalAngle = glm::pi<float>() / -2;
 		}
 
-		camera->setProperty(Model3DProperty::X_ROTATION, horizontalAngle);
-		camera->setProperty(Model3DProperty::Y_ROTATION, verticalAngle);
+		camera->setProperty(Object3DProperty::X_ROTATION, horizontalAngle);
+		camera->setProperty(Object3DProperty::Y_ROTATION, verticalAngle);
 
 		// This converts the coordinates from rotational to cartesian-planar.
 		glm::vec3 direction(
@@ -107,29 +114,29 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		glm::vec3 position = camera->getPosition();
 
 		// This occurs when 'w' is pressed.
-		if (window->keyPressed(26)) {
+		if (keyPressed(26)) {
 			position += direction * deltaTime * currentSpeed;
 		}
 		// This occurs when 's' is pressed.
-		if (window->keyPressed(22)) {
+		if (keyPressed(22)) {
 			position -= direction * deltaTime * currentSpeed;
 		}
 		// This occurs when 'd' is pressed.
-		if (window->keyPressed(7)) {
+		if (keyPressed(7)) {
 			position += right * deltaTime * currentSpeed;
 		}
 		// This occurs when 'a' is pressed.
-		if (window->keyPressed(4)) {
+		if (keyPressed(4)) {
 			position -= right * deltaTime * currentSpeed;
 		}
 
 		// This occurs when space is pressed.
-		if (window->keyPressed(44)) {
+		if (keyPressed(44)) {
 			position += straightUp * deltaTime * currentSpeed;
 		}
 
 		// This occurs when left shift is pressed.
-		if (window->keyPressed(224)) {
+		if (keyPressed(224)) {
 			position -= straightUp * deltaTime * currentSpeed;
 		}
 

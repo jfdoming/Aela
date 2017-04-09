@@ -6,7 +6,7 @@
  *              specifically render a framebuffer's texture to another buffer.
 */
 
-#version 330 core
+#version 410
 
 // This is the input data.
 layout(location = 0) in vec3 vertexPosition;
