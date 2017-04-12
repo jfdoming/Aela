@@ -179,13 +179,13 @@ int runningLoop() {
 
 	// This is the program's running loop.
 	do {
+		// Update Event (MUST DO THIS FIRST)
+		eventHandler.updateEvents();
+		controlManager.updateKeystate(eventHandler.getKeystate());
+
 		// These functions update classes.
 		timeManager.updateTime();
 		renderer.updateCameraUsingControls(&controlManager);
-
-		// Update Event
-		eventHandler.updateEvents();
-		controlManager.updateKeystate(eventHandler.getKeystate());
 
 		// These functions update classes.
 		timeManager.updateTime();
