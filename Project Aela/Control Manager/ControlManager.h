@@ -31,10 +31,6 @@ class ControlManager {
 			allowUpsideDownCamera = true;
 		}
 
-		// Key pressing
-		void updateEvents(SDL_Event* _event);
-		bool keyPressed(int keycode);
-
 		// This computes matrices for a Camera3D.
 		void computeMatricesWithInputs(Camera3D* camera);
 
@@ -43,6 +39,11 @@ class ControlManager {
 		void setTimeManager(TimeManager* setTime);
 		void setCameraUpsideDownAllowance(bool allowUpsdideDown);
 		void setProperty(ControlManagerProperty property, float value);
+		void updateKeystate(const Uint8* _keystate);
+
+		// Functions that are bound to keys
+		void goSuperSpeed();
+		void goNormalSpeed();
 
 		// This is a test function for LUA.
 		void test();
@@ -51,7 +52,7 @@ class ControlManager {
 		// These are pointers to other Aela classes.
 		TimeManager* timeManager;
 		Window* window;
-		SDL_Event* event;
+		const Uint8* keystate;
 
 		// This stores the window's state.
 		bool windowFocus;

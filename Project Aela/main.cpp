@@ -12,21 +12,8 @@
 #include <iostream>
 #include <string>
 
-// This makes GLEW Static to avoid errors.
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif
-
-// This includes GLEW.
-#include <GL/glew.h>
-
-// This includes GLFW.
-// #include <glfw3.h>
-
-// This includes GLM.
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-using namespace glm;
+// External library headers
+#include "SDL.h"
 
 // These are headers that are part of Project Aela.
 #include "Control Manager/ControlManager.h"
@@ -38,7 +25,6 @@ using namespace glm;
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
 #include "Resource Management/TextureLoader.h"
-#include "Lua\LuaManager.h"
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 
@@ -54,13 +40,6 @@ TextManager textManager;
 LuaManager luaManager;
 LuaScript controlScript;
 Aela::SceneManager sceneManager;
-
-class A {
-	public:
-		void apple() {
-			std::cout << "Apple\n";
-		}
-};
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -138,6 +117,12 @@ int startAela() {
 	eventHandler.bindControlManager(&controlManager);
 	eventHandler.bindWindow(&window);
 
+	std::function<void(ControlManager&)> func1 = &ControlManager::goSuperSpeed;
+	std::function<void(ControlManager&)> func2 = &ControlManager::goNormalSpeed;
+
+	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, func1, controlManager);
+	eventHandler.bindMemberFunction(SDL_KEYUP, 225, func2, controlManager);
+
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();
 	return value;
@@ -197,15 +182,17 @@ int runningLoop() {
 		// These functions update classes.
 		timeManager.updateTime();
 		renderer.updateCameraUsingControls(&controlManager);
+
 		// Update Event
 		eventHandler.updateEvents();
+		controlManager.updateKeystate(eventHandler.getKeystate());
 
 		// These functions update classes.
 		timeManager.updateTime();
 		renderer.updateCameraUsingControls(&controlManager);
 
 		// This is temporary and will be moved once a model manager is created!
-		renderer.temporaryKeyCheckFunction(&controlManager);
+		// renderer.temporaryKeyCheckFunction(&controlManager);
 
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() >= timeSinceLastFrameCheck + timeBetweenFrameChecks) {
