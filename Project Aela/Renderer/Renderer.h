@@ -71,8 +71,9 @@ class Renderer {
 		void renderTextToTexture(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour);
 		void endRenderingFrame();
 
-		// TEMPORARY!!!!!!!!!!!!!!
-		void temporaryKeyCheckFunction(ControlManager* controls);
+		// TEMPORARY?
+		void incFOV();
+		void decFOV();
 
 		// These are some getters.
 		std::string getInformation(RendererInformation infoToGet);

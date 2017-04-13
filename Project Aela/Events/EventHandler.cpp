@@ -9,6 +9,8 @@ EventHandler::~EventHandler() {
 }
 
 void EventHandler::updateEvents() {
+	keystate = SDL_GetKeyboardState(NULL);
+
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 			case SDL_QUIT:
@@ -21,10 +23,10 @@ void EventHandler::updateEvents() {
 				window->setFocus(false);
 				break;
 			case SDL_KEYDOWN:
-				controlManager->updateEvents(&event);
+				invokeBoundFunctions(SDL_KEYDOWN, event.key.keysym.scancode);
 				break;
 			case SDL_KEYUP:
-				controlManager->updateEvents(&event);
+				invokeBoundFunctions(SDL_KEYUP, event.key.keysym.scancode);
 				break;
 		}
 	}
@@ -38,6 +40,51 @@ void EventHandler::bindControlManager(ControlManager* controlManager) {
 	this->controlManager = controlManager;
 }
 
-SDL_Event EventHandler::getEvent() {
-	return event;
+void EventHandler::bindFunction(Uint32 type, int key, std::function<void()> func) {
+	auto iter = listeners.find(type);
+
+	if (iter == listeners.end()) {
+		std::unordered_map<int, std::vector<std::function<void()>>> _boundFuncs;
+		std::vector<std::function<void()>> _funcs;
+
+		_funcs.push_back(func);
+		_boundFuncs.emplace(key, _funcs);
+		listeners.emplace(type, _boundFuncs);
+	} else {
+		auto _iter = iter->second.find(key);
+
+		if (_iter == iter->second.end()) {
+			std::vector<std::function<void()>> _funcs;
+
+			_funcs.push_back(func);
+			iter->second.emplace(key, _funcs);
+		} else {
+			_iter->second.push_back(func);
+		}
+	}
+}
+
+void EventHandler::invokeBoundFunctions(Uint32 type, int key) {
+	auto iter = listeners.find(type);
+
+	if (iter == listeners.end()) {
+		return;
+	}
+
+	auto _iter = iter->second.find(key);
+
+	if (_iter == iter->second.end()) {
+		return;
+	}
+
+	std::function<void()> func;
+
+	for (int i = 0; i < _iter->second.size(); i++) {
+		func = _iter->second.at(i);
+		func();
+	}
+}
+
+const Uint8* EventHandler::getKeystate() {
+	return keystate;
 }

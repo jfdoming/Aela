@@ -27,27 +27,12 @@ void ControlManager::setTimeManager(TimeManager* setTime) {
 	timeManager = setTime;
 }
 
-void ControlManager::updateEvents(SDL_Event* _event) {
-	event = _event;
-}
-
-bool ControlManager::keyPressed(int keycode) {
-	// return event->key.keysym.scancode == keycode;
-	return false;
-}
-
 void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 	// This will only run if the window is focused.
 	if (window->isFocused()) {
 		windowFocus = true;
 		float deltaTime = timeManager->getTimeBetweenFrames();
 
-		// This is temporarily hard-coded and enables going fast.
-		if (keyPressed(225)) {
-			currentSpeed = superSpeed;
-		} else {
-			currentSpeed = speed;
-		}
 		// This gets the cursor's position.
 		int xpos, ypos;
 		window->getCursorPositionInWindow(&xpos, &ypos);
@@ -115,29 +100,29 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		glm::vec3 position = camera->getPosition();
 
 		// This occurs when 'w' is pressed.
-		if (keyPressed(26)) {
+		if (keystate[26]) {
 			position += direction * deltaTime * currentSpeed;
 		}
 		// This occurs when 's' is pressed.
-		if (keyPressed(22)) {
+		if (keystate[22]) {
 			position -= direction * deltaTime * currentSpeed;
 		}
 		// This occurs when 'd' is pressed.
-		if (keyPressed(7)) {
+		if (keystate[7]) {
 			position += right * deltaTime * currentSpeed;
 		}
 		// This occurs when 'a' is pressed.
-		if (keyPressed(4)) {
+		if (keystate[4]) {
 			position -= right * deltaTime * currentSpeed;
 		}
 
 		// This occurs when space is pressed.
-		if (keyPressed(44)) {
+		if (keystate[44]) {
 			position += straightUp * deltaTime * currentSpeed;
 		}
 
 		// This occurs when left shift is pressed.
-		if (keyPressed(224)) {
+		if (keystate[224]) {
 			position -= straightUp * deltaTime * currentSpeed;
 		}
 
@@ -173,6 +158,20 @@ void ControlManager::setProperty(ControlManagerProperty property, float value) {
 			superSpeed = value;
 			break;
 	}
+}
+
+void ControlManager::updateKeystate(const Uint8* _keystate) {
+	keystate = _keystate;
+}
+
+void ControlManager::goSuperSpeed() {
+	// This is temporarily hard-coded and enables going fast.
+	currentSpeed = superSpeed;
+}
+
+void ControlManager::goNormalSpeed() {
+	// This is temporarily hard-coded and enables going fast.
+	currentSpeed = superSpeed;
 }
 
 void ControlManager::test() {
