@@ -72,8 +72,8 @@ class Renderer {
 		void endRenderingFrame();
 
 		// TEMPORARY?
-		void incFOV();
-		void decFOV();
+		void increaseFOV();
+		void decreaseFOV();
 
 		// These are some getters.
 		std::string getInformation(RendererInformation infoToGet);

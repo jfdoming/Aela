@@ -114,11 +114,19 @@ int startAela() {
 	eventHandler.bindControlManager(&controlManager);
 	eventHandler.bindWindow(&window);
 
-	std::function<void(ControlManager&)> func1 = &ControlManager::goSuperSpeed;
-	std::function<void(ControlManager&)> func2 = &ControlManager::goNormalSpeed;
+	// TODO: Find a way to do this that doesn't require creating separate std::functions
+	std::function<void(ControlManager&)> fast = &ControlManager::goSuperSpeed;
+	std::function<void(ControlManager&)> slow = &ControlManager::goNormalSpeed;
 
-	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, func1, controlManager);
-	eventHandler.bindMemberFunction(SDL_KEYUP, 225, func2, controlManager);
+	std::function<void(Renderer&)> inc = &Renderer::increaseFOV;
+	std::function<void(Renderer&)> dec = &Renderer::decreaseFOV;
+
+	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, fast, controlManager);
+	eventHandler.bindMemberFunction(SDL_KEYUP, 225, slow, controlManager);
+
+	// These lines break the program, I have no idea why
+	// eventHandler.bindMemberFunction(SDL_KEYDOWN, 45, inc, renderer);
+	// eventHandler.bindMemberFunction(SDL_KEYDOWN, 46, dec, renderer);
 
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();

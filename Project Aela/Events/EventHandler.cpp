@@ -16,11 +16,15 @@ void EventHandler::updateEvents() {
 			case SDL_QUIT:
 				window->quit();
 				break;
-			case SDL_WINDOWEVENT_FOCUS_GAINED:
-				window->setFocus(true);
-				break;
-			case SDL_WINDOWEVENT_FOCUS_LOST:
-				window->setFocus(false);
+			case SDL_WINDOWEVENT:
+				switch (event.window.event) {
+					case SDL_WINDOWEVENT_FOCUS_GAINED:
+						window->setFocus(true);
+						break;
+					case SDL_WINDOWEVENT_FOCUS_LOST:
+						window->setFocus(false);
+						break;
+				}
 				break;
 			case SDL_KEYDOWN:
 				invokeBoundFunctions(SDL_KEYDOWN, event.key.keysym.scancode);

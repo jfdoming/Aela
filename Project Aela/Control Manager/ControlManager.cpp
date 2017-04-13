@@ -31,6 +31,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 	// This will only run if the window is focused.
 	if (window->isFocused()) {
 		windowFocus = true;
+
 		float deltaTime = timeManager->getTimeBetweenFrames();
 
 		// This gets the cursor's position.
@@ -121,7 +122,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 			position += straightUp * deltaTime * currentSpeed;
 		}
 
-		// This occurs when left shift is pressed.
+		// This occurs when left ctrl is pressed.
 		if (keystate[224]) {
 			position -= straightUp * deltaTime * currentSpeed;
 		}
@@ -132,7 +133,6 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		glm::mat4 viewMatrix = glm::lookAt(position, position + direction, up);
 		camera->setProjectionMatrix(projectionMatrix);
 		camera->setViewMatrix(viewMatrix);
-
 	} else {
 		windowFocus = false;
 	}
@@ -165,15 +165,15 @@ void ControlManager::updateKeystate(const Uint8* _keystate) {
 }
 
 void ControlManager::goSuperSpeed() {
-	// This is temporarily hard-coded and enables going fast.
 	currentSpeed = superSpeed;
+	SDL_Log("Current speed set to %f", currentSpeed);
 }
 
 void ControlManager::goNormalSpeed() {
-	// This is temporarily hard-coded and enables going fast.
-	currentSpeed = superSpeed;
+	currentSpeed = speed;
+	SDL_Log("Current speed set to %f", currentSpeed);
 }
 
 void ControlManager::test() {
-	// Add stuff here.
+	std::cout << "Pressed a button?\n";
 }

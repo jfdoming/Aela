@@ -25,7 +25,7 @@ class ControlManager {
 		ControlManager() {
 			windowFocus = true;
 			speed = 0.003f;
-			superSpeed = 0.006f;
+			superSpeed = 0.012f;
 			currentSpeed = 0.0f;
 			mouseSpeed = 0.005f;
 			allowUpsideDownCamera = true;

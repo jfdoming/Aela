@@ -156,11 +156,11 @@ void Renderer::endRenderingFrame() {
 	window->updateBuffer();
 }
 
-void Renderer::incFOV() {
+void Renderer::increaseFOV() {
 	camera.setFieldOfView(camera.getFieldOfView() + (0.002f) * timeManager->getTimeBetweenFrames());
 }
 
-void Renderer::decFOV() {
+void Renderer::decreaseFOV() {
 	camera.setFieldOfView(camera.getFieldOfView() - (0.002f) * timeManager->getTimeBetweenFrames());
 }
 
