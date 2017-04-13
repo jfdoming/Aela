@@ -150,7 +150,7 @@ void Renderer::renderTextToTexture(std::string text, int textFontToUse, Rect<int
 // This ends the rendering of a frame. This renders the framebuffers of the basic renderers
 // into the screen framebuffer while applying the effects from the effects shaders.
 void Renderer::endRenderingFrame() {
-	basic2DRenderer.renderTextureToBuffer(basic3DRenderer.getColourFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects2DShader);
+	basic2DRenderer.renderTextureToBuffer(basic3DRenderer.getColourFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects3DShader);
 	basic2DRenderer.renderTextureToBuffer(basic2DRenderer.getFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects2DShader);
 	basic2DRenderer.renderTextureToBuffer(&mainFrameBufferTexture, window->getWindowDimensions(), 0);
 	window->updateBuffer();

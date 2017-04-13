@@ -132,7 +132,6 @@ Texture loadDDSToTexture(std::string filePath) {
 		return texture;
 	}
 
-	std::cout << fileHeader[0] << "\n";
 	// This will check the file to see if it begins with "DDS ".
 	// If this file header does not exist, the file is not a DDS file.
 	char DDSText[4];

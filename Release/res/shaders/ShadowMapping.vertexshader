@@ -29,7 +29,7 @@ void main(){
 	ShadowCoord = DepthBiasMVP * vec4(position,1);
 	
 	// Position of the vertex, in worldspace : M * position
-	// Position_worldspace = (M * vec4(position,1)).xyz;
+	Position_worldspace = (M * vec4(position,1)).xyz;
 	
 	// Vector that goes from the vertex to the camera, in camera space.
 	// In camera space, the camera is at the origin (0,0,0).
