@@ -12,22 +12,6 @@
 #include <iostream>
 #include <string>
 
-// This makes GLEW Static to avoid errors.
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif
-
-// This includes GLEW.
-#include <GL/glew.h>
-
-// This includes GLFW.
-// #include <glfw3.h>
-
-// This includes GLM.
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-using namespace glm;
-
 // These are headers that are part of Project Aela.
 #include "Control Manager/ControlManager.h"
 #include "Aela_Engine.h"
@@ -54,13 +38,6 @@ TextManager textManager;
 LuaManager luaManager;
 LuaScript controlScript;
 Aela::SceneManager sceneManager;
-
-class A {
-	public:
-		void apple() {
-			std::cout << "Apple\n";
-		}
-};
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -200,10 +177,6 @@ int runningLoop() {
 		// Update Event
 		eventHandler.updateEvents();
 
-		// These functions update classes.
-		timeManager.updateTime();
-		renderer.updateCameraUsingControls(&controlManager);
-
 		// This is temporary and will be moved once a model manager is created!
 		renderer.temporaryKeyCheckFunction(&controlManager);
 
@@ -211,8 +184,12 @@ int runningLoop() {
 		if (timeManager.getCurrentTime() >= timeSinceLastFrameCheck + timeBetweenFrameChecks) {
 			if (fps == -1) {
 				fps = (int) (1000.0f / timeManager.getTimeBetweenFrames());
-			} else {
+			} else if (timeManager.getTimeBetweenFrames() != 0) {
 				fps = (int) ((fps * fpsSmoothing) + ((1000.0f / timeManager.getTimeBetweenFrames()) * (1.0f - fpsSmoothing)));
+				timeSinceLastFrameCheck = timeManager.getCurrentTime();
+			} else {
+				// Whoa, your computer is THAT fast? If you're really so rich, buy me a new PC!
+				fps = (int) ((fps * fpsSmoothing) + (1000.0f * (1.0f - fpsSmoothing)));
 				timeSinceLastFrameCheck = timeManager.getCurrentTime();
 			}
 		}

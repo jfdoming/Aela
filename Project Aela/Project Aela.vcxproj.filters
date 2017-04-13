@@ -56,9 +56,6 @@
     <Filter Include="Source Files\2D">
       <UniqueIdentifier>{79242ccc-4346-46ed-a71e-d607bc7b6af2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\2D\2D_Renderer">
-      <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\2D\Text">
       <UniqueIdentifier>{acf79cd2-8311-42c0-9832-630ab3ab6c05}</UniqueIdentifier>
     </Filter>
@@ -91,6 +88,9 @@
     </Filter>
     <Filter Include="Source Files\Events">
       <UniqueIdentifier>{148bbe3b-b9f9-4f12-b7d1-2d687a30c34b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\2D\2D Renderer">
+      <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -152,7 +152,7 @@
       <Filter>Old Garbage</Filter>
     </ClCompile>
     <ClCompile Include="2D\2D Renderer\Basic2DRenderer.cpp">
-      <Filter>Source Files\2D\2D_Renderer</Filter>
+      <Filter>Source Files\2D\2D Renderer</Filter>
     </ClCompile>
     <ClCompile Include="2D\Text\TextFont.cpp">
       <Filter>Source Files\2D\Text</Filter>
@@ -271,7 +271,7 @@
       <Filter>Old Garbage</Filter>
     </ClInclude>
     <ClInclude Include="2D\2D Renderer\Basic2DRenderer.h">
-      <Filter>Source Files\2D\2D_Renderer</Filter>
+      <Filter>Source Files\2D\2D Renderer</Filter>
     </ClInclude>
     <ClInclude Include="2D\Text\TextFont.h">
       <Filter>Source Files\2D\Text</Filter>

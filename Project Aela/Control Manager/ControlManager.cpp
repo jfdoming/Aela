@@ -32,7 +32,8 @@ void ControlManager::updateEvents(SDL_Event* _event) {
 }
 
 bool ControlManager::keyPressed(int keycode) {
-	return event->key.keysym.scancode == keycode;
+	// return event->key.keysym.scancode == keycode;
+	return false;
 }
 
 void ControlManager::computeMatricesWithInputs(Camera3D* camera) {

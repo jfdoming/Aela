@@ -3,6 +3,7 @@
 #include <string>
 #include "../Error Handler/ErrorHandler.h"
 #include "../Old Garbage/texture.hpp"
+#include <iostream>
 #ifndef GLEW_STATIC
 #define GLEW_STATIC
 #endif
@@ -131,6 +132,7 @@ Texture loadDDSToTexture(std::string filePath) {
 		return texture;
 	}
 
+	std::cout << fileHeader[0] << "\n";
 	// This will check the file to see if it begins with "DDS ".
 	// If this file header does not exist, the file is not a DDS file.
 	char DDSText[4];
@@ -150,6 +152,8 @@ Texture loadDDSToTexture(std::string filePath) {
 	unsigned int fourCCType = *(unsigned int*) &(fileHeader[80]);
 	unsigned char* buffer;
 	unsigned int bufferSize;
+
+	std::cout << linearSize << " is the linearSize \n";
 
 	// This checks to see how large the bufferSize will be, including all mip-maps.
 	bufferSize = mipMapAmount > 1 ? linearSize * 2 : linearSize;
