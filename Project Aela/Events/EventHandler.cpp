@@ -9,9 +9,9 @@ EventHandler::~EventHandler() {
 }
 
 void EventHandler::updateEvents() {
-	keystate = SDL_GetKeyboardState(NULL);
-
 	while (SDL_PollEvent(&event)) {
+		keystate = SDL_GetKeyboardState(NULL);
+
 		switch (event.type) {
 			case SDL_QUIT:
 				window->quit();

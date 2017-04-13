@@ -100,6 +100,12 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		// This is a position vector.
 		glm::vec3 position = camera->getPosition();
 
+		if (keystate[225]) {
+			currentSpeed = superSpeed;
+		} else {
+			currentSpeed = speed;
+		}
+		
 		// This occurs when 'w' is pressed.
 		if (keystate[26]) {
 			position += direction * deltaTime * currentSpeed;
@@ -165,13 +171,13 @@ void ControlManager::updateKeystate(const Uint8* _keystate) {
 }
 
 void ControlManager::goSuperSpeed() {
-	currentSpeed = superSpeed;
-	SDL_Log("Current speed set to %f", currentSpeed);
+	// Doesn't actually work, can't be fixed easily
+	shouldGoFast = true;
 }
 
 void ControlManager::goNormalSpeed() {
-	currentSpeed = speed;
-	SDL_Log("Current speed set to %f", currentSpeed);
+	// Doesn't actually work, can't be fixed easily
+	shouldGoFast = false;
 }
 
 void ControlManager::test() {

@@ -118,8 +118,8 @@ int startAela() {
 	std::function<void(ControlManager&)> fast = &ControlManager::goSuperSpeed;
 	std::function<void(ControlManager&)> slow = &ControlManager::goNormalSpeed;
 
-	std::function<void(Renderer&)> inc = &Renderer::increaseFOV;
-	std::function<void(Renderer&)> dec = &Renderer::decreaseFOV;
+	std::function<void(Renderer)> inc = &Renderer::increaseFOV;
+	std::function<void(Renderer)> dec = &Renderer::decreaseFOV;
 
 	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, fast, controlManager);
 	eventHandler.bindMemberFunction(SDL_KEYUP, 225, slow, controlManager);

@@ -60,6 +60,9 @@ class ControlManager {
 		// Speed: 0.001f is 1 unit per tick.
 		float speed, superSpeed, currentSpeed, mouseSpeed;
 
+		// Keeps track of whether or not the player should be going fast
+		bool shouldGoFast;
+
 		// This keeps track of whether the camera shoudl be allowed to be upside down.
 		bool allowUpsideDownCamera;
 
