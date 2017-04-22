@@ -20,9 +20,6 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-// This includes GLFW.
-// #include <glfw3.h>
-
 // This includes GLM.
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -38,7 +35,6 @@ using namespace glm;
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
 #include "Resource Management/TextureLoader.h"
-#include "Lua\LuaManager.h"
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 
@@ -172,17 +168,18 @@ int runningLoop() {
 	billboards.resize(1);
 	billboards[0].loadTexture("res/textures/ekkon.dds");
 
-
 	// These are temporary 2D textures that demonstrate how to render textures using a Renderer. This will be
 	// moved once the menu system is formed.
 	Aela::ResourceManager resourceManager(2);
 	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
-	resourceManager.load("res/textures/ekkon.dds", false);
-	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");//loadDDSToTexture("res/textures/ekkon.dds");
-	std::cout << "test text" << std::endl;
-	//testTexture->setOutput(0, 0, 100, 50);
-	Texture testTexture2 = loadDDSToTexture("res/textures/gradient.dds");
-	testTexture2.setOutput(100, 0, 1180, 50);
+	Texture testTexturex = loadDDSToTexture("res/textures/ekkon.dds");
+	if (!resourceManager.load("res/textures/ekkon.dds", false)) {
+		std::cout << "Failed to load the first test texture!" << std::endl;
+	}
+	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");
+	testTexture->setOutput(0, 0, 100, 50);
+	//Texture testTexture2 = loadDDSToTexture("res/textures/gradient.dds");
+	//testTexture2.setOutput(100, 0, 1180, 50);
 
 	// This is also temporary and showcases text rendering. This will be moved once the menu system is formed.
 	int arial = textManager.createNewTextFont("arial bold.ttf");
@@ -203,10 +200,6 @@ int runningLoop() {
 		renderer.updateCameraUsingControls(&controlManager);
 		// Update Event
 		eventHandler.updateEvents();
-
-		// These functions update classes.
-		timeManager.updateTime();
-		renderer.updateCameraUsingControls(&controlManager);
 
 		// This is temporary and will be moved once a model manager is created!
 		renderer.temporaryKeyCheckFunction(&controlManager);
@@ -241,7 +234,7 @@ int runningLoop() {
 		}
 		std::string fpsData = std::to_string(fps) + " FPS";
 		renderer.render2DTexture(testTexture);
-		renderer.render2DTexture(&testTexture2);
+		//renderer.render2DTexture(&testTexture2);
 		renderer.renderTextToTexture(fpsData, arial, &textOutput, &textColour);
 		renderer.endRenderingFrame();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());

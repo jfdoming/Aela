@@ -6,7 +6,7 @@
 #define AELA_RESOURCE_TEXTURE_HEADER_START "DDS "
 
 namespace Aela {
-	enum CompressionAlgorithms {
+	enum class CompressionAlgorithms : unsigned int {
 		FOURCC_DXT1 = 0x31545844, FOURCC_DXT3 = 0x33545844, FOURCC_DXT5 = 0x35545844
 	};
 

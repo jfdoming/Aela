@@ -19,7 +19,7 @@ class Texture : public Aela::Resource {
 
 		// constructor added for resmgmt purposes
 		// Hopefully the noarg constructor can be removed once all code is refactored to use resmgmt.
-		Texture(GLuint* texture) {
+		Texture(GLuint texture) {
 			setTexture(texture);
 		}
 
@@ -56,13 +56,6 @@ class Texture : public Aela::Resource {
 			return &output;
 		}
 
-		void setTexture(GLuint* texture) {
-			if (texture != NULL) {
-				deleteTexture();
-			}
-			this->texture = *texture;
-		}
-
 		GLuint* getTexture() {
 			return &texture;
 		}
@@ -72,15 +65,22 @@ class Texture : public Aela::Resource {
 		// initialised if the output (dimensions on the screen) has a width and/or height
 		// of zero.
 		bool isInitialised() {
-			return (dimensions.getWidth() > 0 && dimensions.getHeight() > 0 && texture != NULL);
+			return (dimensions.getWidth() > 0 && dimensions.getHeight() > 0 && texture != 0);
 		}
 
 	private:
 		Rect<int> dimensions;
 		Rect<int> output;
-		GLuint texture = NULL;
+		GLuint texture = 0;
 
 		void deleteTexture() {
 			glDeleteTextures(1, &texture);
+		}
+
+		void setTexture(GLuint texture) {
+			if (texture != 0) {
+				deleteTexture();
+			}
+			this->texture = texture;
 		}
 };
