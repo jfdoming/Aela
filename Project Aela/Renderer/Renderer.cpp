@@ -156,15 +156,12 @@ void Renderer::endRenderingFrame() {
 	window->updateBuffer();
 }
 
-void Renderer::temporaryKeyCheckFunction(ControlManager* controls) {
-	// Field of view changing.
-	if (controls->keyPressed(46)) {
-		camera.setFieldOfView(camera.getFieldOfView() - (0.002f) * timeManager->getTimeBetweenFrames());
-	}
+void Renderer::increaseFOV() {
+	camera.setFieldOfView(camera.getFieldOfView() + (0.002f) * timeManager->getTimeBetweenFrames());
+}
 
-	if (controls->keyPressed(45)) {
-		camera.setFieldOfView(camera.getFieldOfView() + (0.002f) * timeManager->getTimeBetweenFrames());
-	}
+void Renderer::decreaseFOV() {
+	camera.setFieldOfView(camera.getFieldOfView() - (0.002f) * timeManager->getTimeBetweenFrames());
 }
 
 void Renderer::updateCameraUsingControls(ControlManager* controls) {

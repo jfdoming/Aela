@@ -9,7 +9,8 @@ in vec3 LightDirection_cameraspace;
 in vec4 ShadowCoord;
 
 // This is the output data.
-layout(location = 0) out vec3 colour;
+vec3 colourAsVec3;
+layout(location = 0) out vec4 colour;
 
 // Values that stay constant for the whole mesh.
 uniform sampler2D myTextureSampler;
@@ -112,11 +113,12 @@ void main(){
 	// if ( texture( shadowMap, (ShadowCoord.xy/ShadowCoord.w) ).z  <  (ShadowCoord.z-bias)/ShadowCoord.w )
 	// if ( textureProj( shadowMap, ShadowCoord.xyw ).z  <  (ShadowCoord.z-bias)/ShadowCoord.w )
 	
-	colour = 
+	colourAsVec3 = 
 		// Ambient : simulates indirect lighting
 		MaterialAmbientColor +
 		// Diffuse : "colour" of the object
 		visibility * MaterialDiffuseColor * LightColor * LightPower * cosTheta+
 		// Specular : reflective highlight, like a mirror
 		visibility * MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,5);
+	colour = vec4(colourAsVec3, 1);
 }

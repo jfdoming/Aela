@@ -35,4 +35,6 @@ class Basic3DModelRenderer {
 			0.5, 0.5, 0.5, 1.0
 		);
 		glm::mat4 viewMatrix, projectionMatrix;
+
+		void drawTestQuad();
 };

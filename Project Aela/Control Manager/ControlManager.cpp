@@ -27,26 +27,13 @@ void ControlManager::setTimeManager(TimeManager* setTime) {
 	timeManager = setTime;
 }
 
-void ControlManager::updateEvents(SDL_Event* _event) {
-	event = _event;
-}
-
-bool ControlManager::keyPressed(int keycode) {
-	return event->key.keysym.scancode == keycode;
-}
-
 void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 	// This will only run if the window is focused.
 	if (window->isFocused()) {
 		windowFocus = true;
+
 		float deltaTime = timeManager->getTimeBetweenFrames();
 
-		// This is temporarily hard-coded and enables going fast.
-		if (keyPressed(225)) {
-			currentSpeed = superSpeed;
-		} else {
-			currentSpeed = speed;
-		}
 		// This gets the cursor's position.
 		int xpos, ypos;
 		window->getCursorPositionInWindow(&xpos, &ypos);
@@ -113,30 +100,36 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		// This is a position vector.
 		glm::vec3 position = camera->getPosition();
 
+		if (keystate[225]) {
+			currentSpeed = superSpeed;
+		} else {
+			currentSpeed = speed;
+		}
+		
 		// This occurs when 'w' is pressed.
-		if (keyPressed(26)) {
+		if (keystate[26]) {
 			position += direction * deltaTime * currentSpeed;
 		}
 		// This occurs when 's' is pressed.
-		if (keyPressed(22)) {
+		if (keystate[22]) {
 			position -= direction * deltaTime * currentSpeed;
 		}
 		// This occurs when 'd' is pressed.
-		if (keyPressed(7)) {
+		if (keystate[7]) {
 			position += right * deltaTime * currentSpeed;
 		}
 		// This occurs when 'a' is pressed.
-		if (keyPressed(4)) {
+		if (keystate[4]) {
 			position -= right * deltaTime * currentSpeed;
 		}
 
 		// This occurs when space is pressed.
-		if (keyPressed(44)) {
+		if (keystate[44]) {
 			position += straightUp * deltaTime * currentSpeed;
 		}
 
-		// This occurs when left shift is pressed.
-		if (keyPressed(224)) {
+		// This occurs when left ctrl is pressed.
+		if (keystate[224]) {
 			position -= straightUp * deltaTime * currentSpeed;
 		}
 
@@ -146,7 +139,6 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		glm::mat4 viewMatrix = glm::lookAt(position, position + direction, up);
 		camera->setProjectionMatrix(projectionMatrix);
 		camera->setViewMatrix(viewMatrix);
-
 	} else {
 		windowFocus = false;
 	}
@@ -174,6 +166,20 @@ void ControlManager::setProperty(ControlManagerProperty property, float value) {
 	}
 }
 
+void ControlManager::updateKeystate(const Uint8* _keystate) {
+	keystate = _keystate;
+}
+
+void ControlManager::goSuperSpeed() {
+	// Doesn't actually work, can't be fixed easily
+	shouldGoFast = true;
+}
+
+void ControlManager::goNormalSpeed() {
+	// Doesn't actually work, can't be fixed easily
+	shouldGoFast = false;
+}
+
 void ControlManager::test() {
-	// Add stuff here.
+	std::cout << "Pressed a button?\n";
 }

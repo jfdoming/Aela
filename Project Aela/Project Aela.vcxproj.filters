@@ -56,9 +56,6 @@
     <Filter Include="Source Files\2D">
       <UniqueIdentifier>{79242ccc-4346-46ed-a71e-d607bc7b6af2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\2D\2D_Renderer">
-      <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\2D\Text">
       <UniqueIdentifier>{acf79cd2-8311-42c0-9832-630ab3ab6c05}</UniqueIdentifier>
     </Filter>
@@ -91,6 +88,9 @@
     </Filter>
     <Filter Include="Source Files\3D\3D Object">
       <UniqueIdentifier>{184f120f-789a-49f0-9744-a97204630fe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\2D\2D Renderer">
+      <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -152,7 +152,7 @@
       <Filter>Old Garbage</Filter>
     </ClCompile>
     <ClCompile Include="2D\2D Renderer\Basic2DRenderer.cpp">
-      <Filter>Source Files\2D\2D_Renderer</Filter>
+      <Filter>Source Files\2D\2D Renderer</Filter>
     </ClCompile>
     <ClCompile Include="2D\Text\TextFont.cpp">
       <Filter>Source Files\2D\Text</Filter>
@@ -190,11 +190,14 @@
     <ClCompile Include="Lua\LuaScript.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="Menus\AbstractLayoutManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Object\Object3D.cpp">
+      <Filter>Source Files\3D\Object3D</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Light\Light3D.cpp">
+      <Filter>Source Files\3D\Light</Filter>
     </ClCompile>
     <ClCompile Include="3D\3D Light\Light3D.cpp">
       <Filter>Source Files\3D\3D Light</Filter>
@@ -274,7 +277,7 @@
       <Filter>Old Garbage</Filter>
     </ClInclude>
     <ClInclude Include="2D\2D Renderer\Basic2DRenderer.h">
-      <Filter>Source Files\2D\2D_Renderer</Filter>
+      <Filter>Source Files\2D\2D Renderer</Filter>
     </ClInclude>
     <ClInclude Include="2D\Text\TextFont.h">
       <Filter>Source Files\2D\Text</Filter>
@@ -327,15 +330,14 @@
     <ClInclude Include="Lua\LuaScript.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="AbstractLayoutManager.h" />
     <ClInclude Include="Events\EventHandler.h">
       <Filter>Source Files\Events</Filter>
     </ClInclude>
-    <ClInclude Include="3D\3D Light\Light3D.h">
-      <Filter>Source Files\3D\3D Light</Filter>
-    </ClInclude>
     <ClInclude Include="3D\3D Object\Object3D.h">
-      <Filter>Source Files\3D\3D Object</Filter>
+      <Filter>Source Files\3D\Object3D</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Light\Light3D.h">
+      <Filter>Source Files\3D\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -349,6 +351,12 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\Text_To_Buffer.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\Text_To_Buffer.vertexshader">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

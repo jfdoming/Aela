@@ -12,19 +12,6 @@
 #include <iostream>
 #include <string>
 
-// This makes GLEW Static to avoid errors.
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif
-
-// This includes GLEW.
-#include <GL/glew.h>
-
-// This includes GLM.
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-using namespace glm;
-
 // These are headers that are part of Project Aela.
 #include "Control Manager/ControlManager.h"
 #include "Aela_Engine.h"
@@ -50,13 +37,6 @@ TextManager textManager;
 LuaManager luaManager;
 LuaScript controlScript;
 Aela::SceneManager sceneManager;
-
-class A {
-	public:
-		void apple() {
-			std::cout << "Apple\n";
-		}
-};
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -134,6 +114,20 @@ int startAela() {
 	eventHandler.bindControlManager(&controlManager);
 	eventHandler.bindWindow(&window);
 
+	// TODO: Find a way to do this that doesn't require creating separate std::functions
+	std::function<void(ControlManager&)> fast = &ControlManager::goSuperSpeed;
+	std::function<void(ControlManager&)> slow = &ControlManager::goNormalSpeed;
+
+	std::function<void(Renderer)> inc = &Renderer::increaseFOV;
+	std::function<void(Renderer)> dec = &Renderer::decreaseFOV;
+
+	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, fast, controlManager);
+	eventHandler.bindMemberFunction(SDL_KEYUP, 225, slow, controlManager);
+
+	// These lines break the program, I have no idea why
+	// eventHandler.bindMemberFunction(SDL_KEYDOWN, 45, inc, renderer);
+	// eventHandler.bindMemberFunction(SDL_KEYDOWN, 46, dec, renderer);
+
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();
 	return value;
@@ -195,21 +189,23 @@ int runningLoop() {
 
 	// This is the program's running loop.
 	do {
-		// These functions update classes.
-		timeManager.updateTime();
-		renderer.updateCameraUsingControls(&controlManager);
-		// Update Event
+		// Update Event (MUST DO THIS FIRST)
 		eventHandler.updateEvents();
+		controlManager.updateKeystate(eventHandler.getKeystate());
 
 		// This is temporary and will be moved once a model manager is created!
-		renderer.temporaryKeyCheckFunction(&controlManager);
+		// renderer.temporaryKeyCheckFunction(&controlManager);
 
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() >= timeSinceLastFrameCheck + timeBetweenFrameChecks) {
 			if (fps == -1) {
 				fps = (int) (1000.0f / timeManager.getTimeBetweenFrames());
-			} else {
+			} else if (timeManager.getTimeBetweenFrames() != 0) {
 				fps = (int) ((fps * fpsSmoothing) + ((1000.0f / timeManager.getTimeBetweenFrames()) * (1.0f - fpsSmoothing)));
+				timeSinceLastFrameCheck = timeManager.getCurrentTime();
+			} else {
+				// Whoa, your computer is THAT fast? If you're really so rich, buy me a new PC!
+				fps = (int) ((fps * fpsSmoothing) + (1000.0f * (1.0f - fpsSmoothing)));
 				timeSinceLastFrameCheck = timeManager.getCurrentTime();
 			}
 		}
