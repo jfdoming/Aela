@@ -51,8 +51,6 @@ GLuint loadDDSToGLuint(std::string filePath) {
 	// This will receive the rest of the header.
 	fread(&fileHeader, 124, 1, imageFile);
 
-	std::cout << "yo men: " << fileHeader[8] <<std::endl;
-
 	unsigned int imageHeight = *(unsigned int*) &(fileHeader[8]);
 	unsigned int imageWidth = *(unsigned int*) &(fileHeader[12]);
 	unsigned int linearSize = *(unsigned int*) &(fileHeader[16]);
@@ -154,8 +152,6 @@ Texture loadDDSToTexture(std::string filePath) {
 	unsigned int fourCCType = *(unsigned int*) &(fileHeader[80]);
 	unsigned char* buffer;
 	unsigned int bufferSize;
-
-	std::cout << linearSize << " is the linearSize \n";
 
 	// This checks to see how large the bufferSize will be, including all mip-maps.
 	bufferSize = mipMapAmount > 1 ? linearSize * 2 : linearSize;

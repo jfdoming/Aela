@@ -30,9 +30,7 @@ Resource* Aela::TextureLoader::load(std::ifstream& in) {
 	bufferSize = (mipMapAmount > 1) ? (linearSize * 2) : linearSize;
 
 	// read the contents of the file.
-	std::cout << "gsdfhsdfhi: " << linearSize << std::endl;
 	char* buffer = new char[bufferSize * sizeof(unsigned char)];
-	std::cout << "gsdfhsdfhij" << std::endl;
 	in.read(buffer, bufferSize);
 
 	// determine the texture format

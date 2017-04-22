@@ -165,15 +165,21 @@ int runningLoop() {
 	// These are temporary 2D textures that demonstrate how to render textures using a Renderer. This will be
 	// moved once the menu system is formed.
 	Aela::ResourceManager resourceManager(2);
+
+	// load test textures
 	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
-	Texture testTexturex = loadDDSToTexture("res/textures/ekkon.dds");
 	if (!resourceManager.load("res/textures/ekkon.dds", false)) {
 		std::cout << "Failed to load the first test texture!" << std::endl;
 	}
+	if (!resourceManager.load("res/textures/gradient.dds", false)) {
+		std::cout << "Failed to load the second test texture!" << std::endl;
+	}
+
+	// obtain and set up test textures
 	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");
 	testTexture->setOutput(0, 0, 100, 50);
-	//Texture testTexture2 = loadDDSToTexture("res/textures/gradient.dds");
-	//testTexture2.setOutput(100, 0, 1180, 50);
+	Texture* testTexture2 = resourceManager.obtain<Texture>("res/textures/gradient.dds");
+	testTexture2->setOutput(100, 0, 1180, 50);
 
 	// This is also temporary and showcases text rendering. This will be moved once the menu system is formed.
 	int arial = textManager.createNewTextFont("arial bold.ttf");
@@ -182,7 +188,7 @@ int runningLoop() {
 	ColourRGBA textColour(0.9f, 0.1f, 0.9f, 1.0f);
 
 	// This is also temporary and used to output framerate.
-	clock_t timeSinceLastFrameCheck = 0;
+	clock_t timeOfLastFrameCheck = 0;
 	int timeBetweenFrameChecks = 250, fps = -1;
 	// http://stackoverflow.com/questions/87304/calculating-frames-per-second-in-a-game
 	float fpsSmoothing = 0.9f;
@@ -193,20 +199,18 @@ int runningLoop() {
 		eventHandler.updateEvents();
 		controlManager.updateKeystate(eventHandler.getKeystate());
 
-		// This is temporary and will be moved once a model manager is created!
-		// renderer.temporaryKeyCheckFunction(&controlManager);
-
 		// This does some simple math for framerate calculating.
-		if (timeManager.getCurrentTime() >= timeSinceLastFrameCheck + timeBetweenFrameChecks) {
+		timeManager.updateTime();
+		if (timeManager.getCurrentTime() - timeOfLastFrameCheck >= timeBetweenFrameChecks) {
 			if (fps == -1) {
 				fps = (int) (1000.0f / timeManager.getTimeBetweenFrames());
 			} else if (timeManager.getTimeBetweenFrames() != 0) {
 				fps = (int) ((fps * fpsSmoothing) + ((1000.0f / timeManager.getTimeBetweenFrames()) * (1.0f - fpsSmoothing)));
-				timeSinceLastFrameCheck = timeManager.getCurrentTime();
+				timeOfLastFrameCheck = timeManager.getCurrentTime();
 			} else {
 				// Whoa, your computer is THAT fast? If you're really so rich, buy me a new PC!
 				fps = (int) ((fps * fpsSmoothing) + (1000.0f * (1.0f - fpsSmoothing)));
-				timeSinceLastFrameCheck = timeManager.getCurrentTime();
+				timeOfLastFrameCheck = timeManager.getCurrentTime();
 			}
 		}
 		
@@ -230,7 +234,7 @@ int runningLoop() {
 		}
 		std::string fpsData = std::to_string(fps) + " FPS";
 		renderer.render2DTexture(testTexture);
-		//renderer.render2DTexture(&testTexture2);
+		renderer.render2DTexture(testTexture2);
 		renderer.renderTextToTexture(fpsData, arial, &textOutput, &textColour);
 		renderer.endRenderingFrame();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
@@ -240,6 +244,7 @@ int runningLoop() {
 	models.resize(0);
 
 	resourceManager.unload("res/textures/ekkon.dds");
+	resourceManager.unload("res/textures/gradient.dds");
 
 	return 0;
 }
