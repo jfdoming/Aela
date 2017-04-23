@@ -1,4 +1,5 @@
 #include "TextureLoader.h"
+#include "../3D/Texture/Texture.h"
 
 using namespace Aela;
 
@@ -6,36 +7,35 @@ bool TextureLoader::isValid(std::ifstream &in) {
 	return true;
 }
 
-Resource* Aela::TextureLoader::load(std::ifstream &in) {
+Resource* Aela::TextureLoader::load(std::ifstream& in) {
 	// using char[] for speed
 	char textureHeader[AELA_RESOURCE_TEXTURE_HEADER_SIZE];
 
 	// read the file header
-	in.get(textureHeader, AELA_RESOURCE_TEXTURE_HEADER_SIZE);
+	in.read(textureHeader, AELA_RESOURCE_TEXTURE_HEADER_SIZE);
 
 	// make sure we are reading a texture file
-	if (strncmp(textureHeader, AELA_RESOURCE_TEXTURE_HEADER_START, 4) != 0) {
+	if (strncmp((char*) textureHeader, AELA_RESOURCE_TEXTURE_HEADER_START, 4) != 0) {
 		return NULL;
 	}
 
-	unsigned int imageHeight = *(unsigned int*) &(textureHeader[8]);
-	unsigned int imageWidth = *(unsigned int*) &(textureHeader[12]);
-	unsigned int linearSize = *(unsigned int*) &(textureHeader[16]);
-	unsigned int mipMapAmount = *(unsigned int*) &(textureHeader[24]);
-	unsigned int fourCCType = *(unsigned int*) &(textureHeader[80]);
-	char* buffer;
+	unsigned int imageHeight = *(unsigned int*) &(textureHeader[12]);
+	unsigned int imageWidth = *(unsigned int*) &(textureHeader[16]);
+	unsigned int linearSize = *(unsigned int*) &(textureHeader[20]);
+	unsigned int mipMapAmount = *(unsigned int*) &(textureHeader[28]);
+	unsigned int fourCCType = *(unsigned int*) &(textureHeader[84]);
 	unsigned int bufferSize;
 	
 	// calculate texture size, including mip-maps
 	bufferSize = (mipMapAmount > 1) ? (linearSize * 2) : linearSize;
 
 	// read the contents of the file.
-	buffer = new char[bufferSize * sizeof(unsigned char)];
-	in.get(buffer, bufferSize);
+	char* buffer = new char[bufferSize * sizeof(unsigned char)];
+	in.read(buffer, bufferSize);
 
 	// determine the texture format
 	unsigned int format;
-	switch (fourCCType) {
+	switch ((CompressionAlgorithms) fourCCType) {
 		case CompressionAlgorithms::FOURCC_DXT1:
 			format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
 			break;
@@ -47,6 +47,7 @@ Resource* Aela::TextureLoader::load(std::ifstream &in) {
 			break;
 		default:
 			delete[] buffer;
+			std::cout << "four cc type: " << fourCCType << std::endl;
 			return NULL;
 	}
 
@@ -82,10 +83,9 @@ Resource* Aela::TextureLoader::load(std::ifstream &in) {
 	}
 	delete[] buffer;
 
-	TextureResource* res = new TextureResource();
-	res->data = textureID;
-
-	std::cout << "texture id: " << res->data << std::endl;
+	Texture* res = new Texture(textureID);
+	res->setDimensions(0, 0, imageWidth, imageHeight);
+	res->setOutput(0, 0, imageWidth, imageHeight);
 
 	return res;
 }

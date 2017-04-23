@@ -12,11 +12,23 @@
 
 #include <GL/glew.h>
 #include "../../Utilities/Rect/Rect.h"
+#include "../../Resource Management/Resource.h"
 
-class Texture {
+class Texture : public Aela::Resource {
 	public:
+
+		// constructor added for resmgmt purposes
+		// Hopefully the noarg constructor can be removed once all code is refactored to use resmgmt.
+		Texture(GLuint texture) {
+			setTexture(texture);
+		}
+
 		Texture() {
 			dimensions.setValues(0, 0, 0, 0);
+		}
+
+		virtual ~Texture(){
+			deleteTexture();
 		}
 
 		// These are some getters and setters.
@@ -44,17 +56,6 @@ class Texture {
 			return &output;
 		}
 
-		void setTexture(GLuint* texture) {
-			if (texture != NULL) {
-				glDeleteTextures(1, &(this->texture));
-			}
-			this->texture = *texture;
-		}
-
-		void deleteTexture() {
-			glDeleteTextures(1, &texture);
-		}
-
 		GLuint* getTexture() {
 			return &texture;
 		}
@@ -64,11 +65,22 @@ class Texture {
 		// initialised if the output (dimensions on the screen) has a width and/or height
 		// of zero.
 		bool isInitialised() {
-			return (dimensions.getWidth() > 0 && dimensions.getHeight() > 0 && texture != NULL);
+			return (dimensions.getWidth() > 0 && dimensions.getHeight() > 0 && texture != 0);
 		}
 
 	private:
 		Rect<int> dimensions;
 		Rect<int> output;
-		GLuint texture = NULL;
+		GLuint texture = 0;
+
+		void deleteTexture() {
+			glDeleteTextures(1, &texture);
+		}
+
+		void setTexture(GLuint texture) {
+			if (texture != 0) {
+				deleteTexture();
+			}
+			this->texture = texture;
+		}
 };

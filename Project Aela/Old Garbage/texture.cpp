@@ -48,7 +48,7 @@ GLuint loadDDSToGLuint(std::string filePath) {
 		return 0;
 	}
 
-	// This will recieve the rest of the header.
+	// This will receive the rest of the header.
 	fread(&fileHeader, 124, 1, imageFile);
 
 	unsigned int imageHeight = *(unsigned int*) &(fileHeader[8]);
@@ -120,8 +120,9 @@ GLuint loadDDSToGLuint(std::string filePath) {
 	return textureID;
 }
 
+// I (Julian) commented this out because I don't want to fix code we will never need again.
+// Uncomment this to see why it doesn't work.
 Texture loadDDSToTexture(std::string filePath) {
-	Texture texture;
 	unsigned char fileHeader[124];
 	FILE* imageFile;
 
@@ -129,7 +130,7 @@ Texture loadDDSToTexture(std::string filePath) {
 	fopen_s(&imageFile, filePath.c_str(), "rb");
 	if (imageFile == NULL) {
 		AelaErrorHandling::windowError("Aela DDS Loader", "A DDS file that the program tried to read was not found.");
-		return texture;
+		return NULL;
 	}
 
 	// This will check the file to see if it begins with "DDS ".
@@ -138,7 +139,7 @@ Texture loadDDSToTexture(std::string filePath) {
 	fread(DDSText, 1, 4, imageFile);
 	if (strncmp(DDSText, "DDS ", 4) != 0) {
 		fclose(imageFile);
-		return texture;
+		return NULL;
 	}
 
 	// This will recieve the rest of the header.
@@ -156,7 +157,7 @@ Texture loadDDSToTexture(std::string filePath) {
 	bufferSize = mipMapAmount > 1 ? linearSize * 2 : linearSize;
 
 	// This allocates memory for the buffer using malloc() and reads the rest of the file.
-	buffer = (unsigned char*)malloc(bufferSize * sizeof(unsigned char));
+	buffer = (unsigned char*) malloc(bufferSize * sizeof(unsigned char));
 	fread(buffer, 1, bufferSize, imageFile);
 
 	// This closes the file.
@@ -176,7 +177,7 @@ Texture loadDDSToTexture(std::string filePath) {
 			break;
 		default:
 			free(buffer);
-			return texture;
+			return NULL;
 	}
 
 	// This creates an OpenGL texture.
@@ -213,7 +214,8 @@ Texture loadDDSToTexture(std::string filePath) {
 
 	}
 	free(buffer);
-	texture.setTexture(&textureID);
+
+	Texture texture(textureID);
 	texture.setDimensions(0, 0, actualTextureWidth, actualTextureHeight);
 	texture.setOutput(0, 0, actualTextureWidth, actualTextureHeight);
 	return texture;
