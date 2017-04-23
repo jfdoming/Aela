@@ -24,6 +24,7 @@
 #include "../3D Camera/Camera3D.h"
 #include "Basic3DModelRenderer.h"
 #include "Basic3DShadowRenderer.h"
+#include "../3D Light/Light3D.h"
 
 class Basic3DRenderer {
 	public:
@@ -43,8 +44,8 @@ class Basic3DRenderer {
 		}
 
 		// These are some functions related to rendering.
-		void renderShadows(Model3D* model);
-		void renderModel(Model3D* model);
+		void renderShadows(Model3D* model, std::vector<Light3D> lights);
+		void renderModel(Model3D* model, std::vector<Light3D> lights);
 		void clearColourFrameBuffer();
 		void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
 		void renderBillboard(Billboard* billboard);

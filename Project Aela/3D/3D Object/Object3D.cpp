@@ -9,8 +9,8 @@ void Object3D::setPosition(glm::vec3 setPosition) {
 	position = setPosition;
 }
 
-glm::vec3 Object3D::getPosition() {
-	return position;
+glm::vec3* Object3D::getPosition() {
+	return &position;
 }
 
 void Object3D::getPosition(float* setXPosition, float* setYPosition, float* setZPosition) {
@@ -27,8 +27,8 @@ void Object3D::setRotation(glm::vec3 setRotation) {
 	rotation = setRotation;
 }
 
-glm::vec3 Object3D::getRotation() {
-	return rotation;
+glm::vec3* Object3D::getRotation() {
+	return &rotation;
 }
 
 void Object3D::getRotation(float* setXPosition, float* setYPosition, float* setZPosition) {

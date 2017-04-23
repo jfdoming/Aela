@@ -7,6 +7,7 @@
 
 #pragma once
 #include "../../3D/Models/Models.h"
+#include "../3D Light/Light3D.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 class Basic3DShadowRenderer {
@@ -16,5 +17,5 @@ class Basic3DShadowRenderer {
 		}
 
 		// This adds a model's shadow to the shadow map.
-		void renderShadows(Model3D* model, GLuint depthProgramID, GLuint depthMatrixID, GLuint frameBuffer);
+		void renderShadows(Model3D* model, GLuint depthProgramID, GLuint depthMatrixID, GLuint frameBuffer, std::vector<Light3D> lights);
 	};

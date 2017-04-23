@@ -98,7 +98,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		glm::vec3 up = glm::cross(right, direction);
 
 		// This is a position vector.
-		glm::vec3 position = camera->getPosition();
+		glm::vec3 position = *(camera->getPosition());
 
 		if (keystate[225]) {
 			currentSpeed = superSpeed;

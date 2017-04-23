@@ -27,6 +27,7 @@
 #include "../3D/3D Renderer/Basic3DRenderer.h"
 #include "../2D/2D Renderer/Basic2DRenderer.h"
 #include "../2D/Text/TextManager.h"
+#include "../3D/3D Light/Light3D.h"
 
 // These are some enums used by the Renderer.
 
@@ -100,11 +101,17 @@ class Renderer {
 		// These are the post process shaders.
 		GLuint effects3DShader, effects2DShader;
 
+		// This is temporary and stores the lights that should be used.
+		std::vector<Light3D> lights;
+
 		// These are some setup functions used internally by the Renderer.
 		void setup3DRendering();
 		void setup2DRendering();
 		void setupGLFeatures();
 		bool setupGLEW();
+
+		// TEMPORARY!!!
+		void setupLights();
 
 		// This function is used internally to check the framebuffer that is currently
 		// being applied to OpenGL.

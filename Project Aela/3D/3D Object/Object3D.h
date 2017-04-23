@@ -16,20 +16,20 @@ class Object3D {
 		// Positioning getters and setters.
 		void setPosition(float setX, float setY, float setZ);
 		void setPosition(glm::vec3 setPosition);
-		glm::vec3 getPosition();
+		glm::vec3* getPosition();
 		void getPosition(float* setXPosition, float* setYPosition, float* setZPosition);
 
 		// Rotation getters and setters.
 		void setRotation(float setX, float setY, float setZ);
 		void setRotation(glm::vec3 setRotation);
-		glm::vec3 getRotation();
+		glm::vec3* getRotation();
 		void getRotation(float* setXPosition, float* setYPosition, float* setZPosition);
 
 		// A function used for changing any single transformation-related property.
 		void setProperty(Object3DProperty property, float value);
 		float getProperty(Object3DProperty property);
 
-	private:
+	protected:
 		// Translation.
 		glm::vec3 position = glm::vec3(0.0, 0.0, 0.0);
 		// Rotation.

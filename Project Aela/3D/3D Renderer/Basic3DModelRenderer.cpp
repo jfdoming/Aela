@@ -18,7 +18,7 @@ void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setPro
 
 void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint programID, GLuint depthMatrixID,
 	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID,
-	GLuint depthTexture, GLuint shadowMapID) {
+	GLuint depthTexture, GLuint shadowMapID, std::vector<Light3D> lights) {
 
 	// This loads buffers.
 	GLuint vertexbuffer;
@@ -46,18 +46,18 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 	glEnable(GL_CULL_FACE);
 
 	// This is positioning/rotation of light and the model.
-	glm::vec3 lightInvDir = glm::vec3(0.5f, 2, 2);
-	glm::vec3 position = model->getPosition();
-	glm::vec3 rotation = model->getRotation();
+	glm::vec3 lightInvDir = *(lights[0].getRotation());
+	glm::vec3 position = *(model->getPosition());
+	glm::vec3 rotation = *(model->getRotation());
 
 	// This calculates the MVP matrix using the light's point of view. Note: glm::ortho creates a matrix.
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
 	// Use this if you want a spot light. Otherwise, use the code above.
-	//glm::vec3 lightPos(5, 20, 20);
-	//glm::mat4 depthProjectionMatrix = glm::perspective<float>(45.0f, 1.0f, 2.0f, 50.0f);
-	//glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));
+	// glm::vec3 lightPos(5, 20, 20);
+	// glm::mat4 depthProjectionMatrix = glm::perspective<float>(45.0f, 1.0f, 2.0f, 50.0f);
+	// glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));
 
 	// These are more matrices.
 	glm::mat4 depthModelMatrix = glm::mat4(1.0);

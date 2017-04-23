@@ -83,7 +83,7 @@ void EventHandler::invokeBoundFunctions(Uint32 type, int key) {
 
 	std::function<void()> func;
 
-	for (int i = 0; i < _iter->second.size(); i++) {
+	for (unsigned int i = 0; i < _iter->second.size(); i++) {
 		func = _iter->second.at(i);
 		func();
 	}
