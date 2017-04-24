@@ -201,6 +201,7 @@ int runningLoop() {
 
 		// This does some simple math for framerate calculating.
 		timeManager.updateTime();
+		renderer.updateCameraUsingControls(&controlManager);
 		if (timeManager.getCurrentTime() - timeOfLastFrameCheck >= timeBetweenFrameChecks) {
 			if (fps == -1) {
 				fps = (int) (1000.0f / timeManager.getTimeBetweenFrames());
