@@ -205,6 +205,9 @@
     <ClCompile Include="3D\3D Light\Light3D.cpp">
       <Filter>Source Files\3D\3D Light</Filter>
     </ClCompile>
+    <ClCompile Include="Resource Management\ResourceQuery.cpp">
+      <Filter>Source Files\Resources\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aela_Engine.h">
@@ -338,6 +341,9 @@
     </ClInclude>
     <ClInclude Include="3D\3D Object\Object3D.h">
       <Filter>Source Files\3D\3D Object</Filter>
+	</ClInclude>
+    <ClInclude Include="Resource Management\ResourceQuery.h">
+      <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
