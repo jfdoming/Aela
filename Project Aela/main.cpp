@@ -40,24 +40,6 @@ Aela::SceneManager sceneManager;
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
-	// TESTING FROM JULIAN PLEASE IGNORE
-	//Aela::ResourceManager mgr(5);
-	// std::cout << "ResourceManager Test for Text files " << (mgr.loadText("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
-	// std::cout << "Text value: " << (static_cast<Aela::TextResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
-	// Aela::TextLoader loader;
-	// mgr.bindLoader(&loader);
-	// std::cout << "ResourceManager Test for Text files " << (mgr.load("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
-	// std::cout << "Text value: " << mgr.obtain<Aela::TextureResource>("res/textures/beretta.DDS").src << std::endl;
-
-	// Aela::ResourceManager mgr(5);
-	// std::cout << "ResourceManager Test for Text files " << (mgr.loadTexture("text.txt", false) ? "succeeded!" : "failed!") << std::endl;
-	// std::cout << "Text value: " << (static_cast<Aela::TextureResource&>(mgr.obtain("res/text/text.txt"))).src << std::endl;
-	// Aela::TextureLoader textTest;
-	// std::ifstream stream;
-	// stream.open("res/textures/cat.dds");
-	// textTest.load(stream);
-	// STOP IGNORING NOW
-
 	// This is TEMPORARY and sets the window width and height.
 	int windowWidth = 1280, windowHeight = 720;
 	// This is also TEMPORARY and sets the window starting position.
@@ -135,8 +117,7 @@ int startAela() {
 
 int runningLoop() {
 	// TEMPORARY! This won't exist once models are moved elsewhere.
-	std::vector<Model3D> models;
-	models.resize(6);
+	std::vector<Model3D> models(6);
 	models[0].loadTexture("res/textures/grass.dds");
 	models[1].loadTexture("res/textures/beretta.dds");
 	models[2].loadTexture("res/textures/mug.dds");
@@ -166,13 +147,16 @@ int runningLoop() {
 	// moved once the menu system is formed.
 	Aela::ResourceManager resourceManager(2);
 
-	// load test textures
+	// set up the loader to load textures into our group
 	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
-	if (!resourceManager.load("res/textures/ekkon.dds", false)) {
-		std::cout << "Failed to load the first test texture!" << std::endl;
-	}
-	if (!resourceManager.load("res/textures/gradient.dds", false)) {
-		std::cout << "Failed to load the second test texture!" << std::endl;
+	resourceManager.bindGroup("test");
+
+	resourceManager.addToGroup("res/textures/ekkon.dds", false);
+	resourceManager.addToGroup("res/textures/gradient.dds", false);
+
+	// load test textures
+	if (resourceManager.loadGroup("test") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"test\"!" << std::endl;
 	}
 
 	// obtain and set up test textures
@@ -199,9 +183,10 @@ int runningLoop() {
 		eventHandler.updateEvents();
 		controlManager.updateKeystate(eventHandler.getKeystate());
 
-		// This does some simple math for framerate calculating.
 		timeManager.updateTime();
 		renderer.updateCameraUsingControls(&controlManager);
+
+		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() - timeOfLastFrameCheck >= timeBetweenFrameChecks) {
 			if (fps == -1) {
 				fps = (int) (1000.0f / timeManager.getTimeBetweenFrames());
@@ -244,8 +229,7 @@ int runningLoop() {
 	// -Robert
 	models.resize(0);
 
-	resourceManager.unload("res/textures/ekkon.dds");
-	resourceManager.unload("res/textures/gradient.dds");
+	resourceManager.unloadGroup("test");
 
 	return 0;
 }

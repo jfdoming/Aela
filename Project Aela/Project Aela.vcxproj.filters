@@ -193,17 +193,23 @@
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Source Files\Events</Filter>
     </ClCompile>
-    <ClCompile Include="3D\3D Object\Object3D.cpp">
-      <Filter>Source Files\3D\Object3D</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Light\Light3D.cpp">
-      <Filter>Source Files\3D\Light</Filter>
-    </ClCompile>
     <ClCompile Include="3D\3D Light\Light3D.cpp">
       <Filter>Source Files\3D\3D Light</Filter>
     </ClCompile>
     <ClCompile Include="3D\3D Object\Object3D.cpp">
       <Filter>Source Files\3D\3D Object</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Light\Light3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Object\Object3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\AbstractLayoutManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\ResourceQuery.cpp">
+      <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -333,11 +339,10 @@
     <ClInclude Include="Events\EventHandler.h">
       <Filter>Source Files\Events</Filter>
     </ClInclude>
-    <ClInclude Include="3D\3D Object\Object3D.h">
-      <Filter>Source Files\3D\Object3D</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Light\Light3D.h">
-      <Filter>Source Files\3D\Light</Filter>
+    <ClInclude Include="3D\3D Light\Light3D.h" />
+    <ClInclude Include="3D\3D Object\Object3D.h" />
+    <ClInclude Include="Resource Management\ResourceQuery.h">
+      <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -351,12 +356,6 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\Text_To_Buffer.fragmentshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\Text_To_Buffer.vertexshader">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

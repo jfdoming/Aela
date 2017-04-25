@@ -2,7 +2,7 @@
 * Class: Resource
 * Author: Julian Dominguez-Schatz
 * Date: 01/01/2017
-* Description: Keeps track of the scene system.
+* Description: Represents a resource used in the application.
 */
 
 #pragma once

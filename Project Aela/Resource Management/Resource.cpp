@@ -2,7 +2,7 @@
 #include "../Error Handler/ErrorHandler.h"
 #include <fstream>
 
-// Resource classes implementation
+// Resource class implementation
 
 Aela::Resource::Resource() {
 }

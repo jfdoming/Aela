@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "Resource.h"
+#include "ResourceQuery.h"
 #include "ResourceLoader.h"
 #include <unordered_map>
 #include <vector>
@@ -14,6 +15,10 @@ namespace Aela {
 		public:
 			static OBJLoader OBJECT_LOADER;
 			static TextureLoader TEXTURE_LOADER;
+
+			enum class Status {
+				OK, FAILED, ABORT
+			};
 
 			ResourceManager(int resourceCount);
 			~ResourceManager();
@@ -29,11 +34,22 @@ namespace Aela {
 			 */
 
 			void bindLoader(ResourceLoader* loader);
+			void bindGroup(std::string group);
+
+			Status loadGroup(std::string name);
+			Status unloadGroup(std::string name);
+			void addToGroup(std::string src, bool crucial);
+			void addToGroup(ResourceQuery& query);
 
 			/*
 			* Read from a file and store it as a Resource, accessible using obtain(string).
 			*/
-			bool load(std::string src, bool crucial);
+			Status load(std::string src, bool crucial, ResourceLoader& loader);
+
+			/*
+			* Read from a file and store it as a Resource, accessible using obtain(string).
+			*/
+			Status load(ResourceQuery& query);
 
 			/*
 			* Unload the specified resource.
@@ -52,9 +68,13 @@ namespace Aela {
 			std::vector<std::string>& getNewInvalidResourceKeys();
 		private:
 			std::unordered_map<std::string, Resource*> resources;
+			std::unordered_map<std::string, std::vector<ResourceQuery>> groups;
+
 			std::vector<std::string> invalidResourceKeys;
 			std::string crucialInvalidResourceKey = "";
-			ResourceLoader* loader;
+
+			ResourceLoader* boundLoader;
+			std::vector<ResourceQuery>* boundGroup;
 
 			Resource* obtain_impl(std::string src);
 	};
