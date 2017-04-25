@@ -13,7 +13,8 @@ namespace Aela {
 	class TextureLoader : public ResourceLoader {
 		public:
 			static TextureLoader& getInstance() {
-				static TextureLoader instance; // guaranteed to be destroyed, instantiated on first use
+				// This is guaranteed to be destroyed, and instantiated on first use.
+				static TextureLoader instance;
 				return instance;
 			}
 

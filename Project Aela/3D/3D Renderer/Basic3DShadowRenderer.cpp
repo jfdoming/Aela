@@ -10,7 +10,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
-void Basic3DShadowRenderer::renderShadows(Model3D* model, GLuint depthProgramID, GLuint depthMatrixID, GLuint frameBuffer, std::vector<Light3D> lights) {
+void Basic3DShadowRenderer::renderShadow(Model3D* model, GLuint depthProgramID, GLuint depthMatrixID, GLuint frameBuffer, std::vector<Light3D>* lights) {
 	// This loads the shadow renderer's buffers.
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
@@ -41,7 +41,7 @@ void Basic3DShadowRenderer::renderShadows(Model3D* model, GLuint depthProgramID,
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
 	// These are positions and rotations for light and the model.
-	glm::vec3 lightInvDir = *(lights[0].getRotation());
+	glm::vec3 lightInvDir = *(lights->at(0).getRotation());
 	glm::vec3 position = *(model->getPosition());
 	glm::vec3 rotation = *(model->getRotation());
 

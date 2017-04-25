@@ -44,11 +44,12 @@ class Basic3DRenderer {
 		}
 
 		// These are some functions related to rendering.
-		void renderShadows(Model3D* model, std::vector<Light3D> lights);
-		void renderModel(Model3D* model, std::vector<Light3D> lights);
+		void renderShadow(Model3D* model);
+		void renderModel(Model3D* model);
 		void clearColourFrameBuffer();
 		void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
 		void renderBillboard(Billboard* billboard);
+		void bindLights(std::vector<Light3D>* lights);
 
 		// These are some functions related to setup.
 		void setup();
@@ -60,10 +61,11 @@ class Basic3DRenderer {
 		GLuint* getColourFrameBuffer();
 		Texture* getColourFrameBufferTexture();
 
+
 	private:
 		// These are the smaller renderers that the Basic3DRenderer uses.
-		Basic3DShadowRenderer modelShader;
-		Basic3DModelRenderer textureRenderer;
+		Basic3DShadowRenderer shadowRenderer;
+		Basic3DModelRenderer modelRenderer;
 
 		// These are a bunch of handles to GLSL variables that get passed to the shadow and
 		// model renderer during rendering.
@@ -79,6 +81,9 @@ class Basic3DRenderer {
 		// These are some Project Aela objects that the 3D renderer uses.
 		Window* window;
 		Camera3D* camera;
+
+		// This is temporarily here. It stores the lights of the program.
+		std::vector<Light3D>* lights;
 
 		// These are used by the renderer so that "window->getWindowDimensions()->getWidth()"
 		// (and "...getHeight()") does not have to called all the time.

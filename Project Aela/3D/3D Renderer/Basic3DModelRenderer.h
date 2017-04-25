@@ -19,7 +19,7 @@ class Basic3DModelRenderer {
 		// the Basic3DRenderer.
 		void renderModel(Model3D* model, GLuint frameBuffer, GLuint programID, GLuint depthMatrixID,
 			GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID,
-			GLuint textureID, GLuint depthTexture, GLuint shadowMapID, std::vector<Light3D> lights);
+			GLuint textureID, GLuint depthTexture, GLuint shadowMapID, std::vector<Light3D>* lights);
 		// This function renders a 2D texture in 3D space. It requires a lot of GLuints that
 		//  are provided by the Basic3DRenderer.
 		void renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint textureID,

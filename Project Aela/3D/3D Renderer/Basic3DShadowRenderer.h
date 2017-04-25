@@ -17,5 +17,5 @@ class Basic3DShadowRenderer {
 		}
 
 		// This adds a model's shadow to the shadow map.
-		void renderShadows(Model3D* model, GLuint depthProgramID, GLuint depthMatrixID, GLuint frameBuffer, std::vector<Light3D> lights);
+		void renderShadow(Model3D* model, GLuint depthProgramID, GLuint depthMatrixID, GLuint frameBuffer, std::vector<Light3D>* lights);
 	};

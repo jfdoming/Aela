@@ -15,7 +15,6 @@ void Renderer::setup3DRendering() {
 	}
 	basic3DRenderer.setup();
 	// TEMPORARY!
-	setupLights();
 }
 
 void Renderer::setup2DRendering() {
@@ -63,17 +62,6 @@ bool Renderer::setupGLEW() {
 		return false;
 	}
 	return true;
-}
-
-void Renderer::setupLights() {
-	for (int i = 0; i < 3; i++) {
-		glm::vec3 position = glm::vec3(0 + (i * 10), 0 + (i * 10), 0 + (i * 10));
-		glm::vec3 rotation = glm::vec3(0 + (i * 10), 0 + (i * 10), 0 + (i * 10));
-		glm::vec3 colour = glm::vec3(1.0, 1.0, 1.0);
-		float power = 1.0;
-		Light3D light(position, rotation, colour, power);
-		lights.insert(lights.begin(), light);
-	}
 }
 
 void Renderer::setup3D() {
@@ -138,13 +126,17 @@ void Renderer::startRenderingFrame() {
 	glEnable(GL_BLEND);
 }
 
+void Renderer::bindLights(std::vector<Light3D>* lights) {
+	basic3DRenderer.bindLights(lights);
+}
+
 // These functions render objects into their proper framebuffers using basic renderers.
 void Renderer::renderModelShadows(Model3D* model) {
-	basic3DRenderer.renderShadows(model, lights);
+	basic3DRenderer.renderShadow(model);
 }
 
 void Renderer::renderModel(Model3D* model) {
-	basic3DRenderer.renderModel(model, lights);
+	basic3DRenderer.renderModel(model);
 }
 
 void Renderer::renderBillboard(Billboard* billboard) {

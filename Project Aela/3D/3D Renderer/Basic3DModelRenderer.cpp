@@ -18,7 +18,7 @@ void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setPro
 
 void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint programID, GLuint depthMatrixID,
 	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID,
-	GLuint depthTexture, GLuint shadowMapID, std::vector<Light3D> lights) {
+	GLuint depthTexture, GLuint shadowMapID, std::vector<Light3D>* lights) {
 
 	// This loads buffers.
 	GLuint vertexbuffer;
@@ -46,7 +46,9 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 	glEnable(GL_CULL_FACE);
 
 	// This is positioning/rotation of light and the model.
-	glm::vec3 lightInvDir = *(lights[0].getRotation());
+	glm::vec3 lightInvDir = *(lights->at(0).getRotation());
+	std::cout << lights->at(0).getRotation()->x << " " << lights->at(0).getRotation()->y << " " << lights->at(0).getRotation()->z << " are the rot values\n";
+
 	glm::vec3 position = *(model->getPosition());
 	glm::vec3 rotation = *(model->getRotation());
 

@@ -64,6 +64,7 @@ class Renderer {
 
 		// The following functions are used to render a frame.
 		void startRenderingFrame();
+		void bindLights(std::vector<Light3D>* lights);
 		void renderModelShadows(Model3D* model);
 		void renderModel(Model3D* model);
 		void renderBillboard(Billboard* billboard);
@@ -101,17 +102,11 @@ class Renderer {
 		// These are the post process shaders.
 		GLuint effects3DShader, effects2DShader;
 
-		// This is temporary and stores the lights that should be used.
-		std::vector<Light3D> lights;
-
 		// These are some setup functions used internally by the Renderer.
 		void setup3DRendering();
 		void setup2DRendering();
 		void setupGLFeatures();
 		bool setupGLEW();
-
-		// TEMPORARY!!!
-		void setupLights();
 
 		// This function is used internally to check the framebuffer that is currently
 		// being applied to OpenGL.
