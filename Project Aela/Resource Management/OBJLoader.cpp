@@ -23,7 +23,7 @@
 using namespace Aela;
 
 bool Aela::OBJLoader::isValid(std::ifstream& in) {
-	return in.is_open();
+	return true;
 }
 
 Resource* Aela::OBJLoader::load(std::ifstream& in) {

@@ -205,6 +205,9 @@
     <ClCompile Include="3D\3D Light\Light3D.cpp">
       <Filter>Source Files\3D\3D Light</Filter>
     </ClCompile>
+    <ClCompile Include="Resource Management\ResourceQuery.cpp">
+      <Filter>Source Files\Resources\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aela_Engine.h">
@@ -339,8 +342,9 @@
     <ClInclude Include="3D\3D Object\Object3D.h">
       <Filter>Source Files\3D\3D Object</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Colour\ColourRGB.h">
-      <Filter>Source Files\Utilities\Colour</Filter>
+    <ClInclude Include="Utilities\Colour\ColourRGB.h" />
+    <ClInclude Include="Resource Management\ResourceQuery.h">
+      <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -362,8 +366,6 @@
     <None Include="..\Release\res\shaders\Text_To_Buffer.vertexshader">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="..\Release\res\shaders\Billboard_Shadow_Mapping.fragmentshader" />
-    <None Include="Menus\desktop.ini" />
     <None Include="..\Release\res\shaders\3D_Post_Processing.vertexshader">
       <Filter>Source Files\Shaders</Filter>
     </None>
@@ -398,6 +400,9 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="..\Release\res\shaders\3D_Post_Processing.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\Billboard_Shadow_Mapping.fragmentshader">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

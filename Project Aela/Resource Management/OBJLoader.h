@@ -5,8 +5,19 @@
 namespace Aela {
 	class OBJLoader : public ResourceLoader {
 	public:
-		bool isValid(std::ifstream& in);
-		Resource* load(std::ifstream& in);
+		static OBJLoader& getInstance() {
+			// This is guaranteed to be destroyed, and instantiated on first use.
+			static OBJLoader instance;
+			return instance;
+		}
+
+		OBJLoader(OBJLoader const&) = delete;
+		void operator=(OBJLoader const&) = delete;
+
+		virtual bool isValid(std::ifstream& in);
+		virtual Resource* load(std::ifstream& in);
+	private:
+		OBJLoader() {}
 	};
 }
 

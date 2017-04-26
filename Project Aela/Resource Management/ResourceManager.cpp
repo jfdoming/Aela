@@ -12,11 +12,90 @@ ResourceManager::~ResourceManager() {
 }
 
 void ResourceManager::bindLoader(ResourceLoader* loader) {
-	this->loader = loader;
+	this->boundLoader = loader;
 }
 
-bool ResourceManager::load(std::string src, bool crucial) {
+void ResourceManager::bindGroup(std::string group) {
+	// ensure a group exists to add to
+	auto iter = groups.find(group);
+	if (groups.find(group) == groups.end()) {
+		groups.emplace(group, std::vector<ResourceQuery>());
+		this->boundGroup = &(groups.find(group)->second);
+	} else {
+		this->boundGroup = &(iter->second);
+	}
+}
+
+ResourceManager::Status ResourceManager::loadGroup(std::string name) {
+	// ensure a group exists to load
+	auto iter = groups.find(name);
+	if (groups.find(name) == groups.end()) {
+		return Status::FAILED;
+	}
+
+	// get the group to load
+	auto group = iter->second;
+
+	// load all resources in the group
+	Status returnStatus = Status::OK;
+	for (ResourceQuery query : group) {
+		// make sure we are using the correct resource loader
+		ResourceLoader* resourceLoader = query.getLoader();
+		if (boundLoader != resourceLoader) {
+			bindLoader(resourceLoader);
+		}
+
+		// load the resource
+		Status status = load(query);
+
+		// interpret the result
+		if (status == Status::ABORT) {
+			return status;
+		}
+		if (status == Status::FAILED) {
+			returnStatus = status;
+		}
+	}
+	return returnStatus;
+}
+
+ResourceManager::Status ResourceManager::unloadGroup(std::string name) {
+	// ensure a group exists to unload
+	auto iter = groups.find(name);
+	if (groups.find(name) == groups.end()) {
+		return Status::FAILED;
+	}
+
+	// get the group to unload
+	auto group = iter->second;
+
+	// unload all resources in the group
+	for (ResourceQuery query : group) {
+		// load the resource
+		unload(query.getSrc());
+	}
+	return Status::OK;
+}
+
+void ResourceManager::addToGroup(std::string src, bool crucial) {
+	ResourceQuery query(src, crucial, boundLoader);
+	addToGroup(query);
+}
+
+void ResourceManager::addToGroup(ResourceQuery& query) {
+	boundGroup->push_back(query);
+}
+
+ResourceManager::Status ResourceManager::load(std::string src, bool crucial, ResourceLoader& loader) {
+	ResourceQuery query(src, crucial, &loader);
+	return load(query);
+}
+
+ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 	bool valid = true;
+	bool crucial = query.isCrucial();
+	std::string src = query.getSrc();
+
 	std::ifstream in;
 	in.flags(std::ios::binary | std::ios::in);
 	in.open(src);
@@ -27,8 +106,8 @@ bool ResourceManager::load(std::string src, bool crucial) {
 		valid = false;
 	}
 
-	if (valid && loader->isValid(in)) {
-		Resource* res = loader->load(in);
+	if (valid && boundLoader->isValid(in)) {
+		Resource* res = boundLoader->load(in);
 		
 		if (res == NULL) {
 			valid = false;
@@ -36,18 +115,21 @@ bool ResourceManager::load(std::string src, bool crucial) {
 			resources.emplace(src, res);
 		}
 	}
+
+	in.close();
 	
 	if (!valid) {
 		// cannot load the resource
 		if (crucial) {
 			crucialInvalidResourceKey = src;
+			return Status::ABORT;
 		} else {
 			invalidResourceKeys.push_back(src);
+			return Status::FAILED;
 		}
 	}
 
-	in.close();
-	return valid;
+	return Status::OK;
 }
 
 void ResourceManager::unload(std::string src) {
@@ -55,7 +137,7 @@ void ResourceManager::unload(std::string src) {
 }
 
 Resource* ResourceManager::obtain_impl(std::string src) {
-	std::unordered_map<std::string, Resource*>::const_iterator iter = resources.find(src);
+	auto iter = resources.find(src);
 	if (iter == resources.end()) {
 		return NULL;
 	}

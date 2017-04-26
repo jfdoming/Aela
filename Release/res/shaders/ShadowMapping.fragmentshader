@@ -21,7 +21,6 @@ uniform vec3 lightDirections[3];
 uniform vec3 lightColours[3];
 uniform float lightPowers[3];
 
-
 vec2 poissonDisk[16] = vec2[](
    vec2(-0.94201624, -0.39906216), 
    vec2(0.94558609, -0.76890725), 
@@ -49,15 +48,15 @@ float random(vec3 seed, int i){
 }
 
 void main(){
+	vec3 lightColour = vec3(0.0, 0.0, 0.0);
 	// This averages the light colours.
-	vec3 lightColour = vec3(0, 0, 0);
 	for (int i = 0; i < numberOfLights; i++) {
 		lightColour += lightColours[i];
 	}
 	lightColour /= numberOfLights;
 	
 	// This adds up and clamps the light powers.
-	float lightPower = 1.0f;
+	float lightPower = 0.0f;
 	for (int i = 0; i < numberOfLights; i++) {
 		lightPower += lightPowers[i];
 	}
@@ -68,7 +67,7 @@ void main(){
 	vec3 MaterialAmbientColor = vec3(0.1, 0.1, 0.1) * MaterialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(0.3, 0.3, 0.3);
 
-	vec3 diffuseColours[3], specularColours[3];
+	vec3 diffuseColours[lightDirections.length()], specularColours[lightDirections.length()];
 	vec3 finalDiffuseColour, finalSpecularColour;
 	
 	for (int i = 0; i < numberOfLights; i++) {
