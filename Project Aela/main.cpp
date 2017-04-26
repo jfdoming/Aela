@@ -158,9 +158,19 @@ int runningLoop() {
 	models[4].setPosition(0, 0, -15);
 	models[5].setPosition(10, 20, 10);
 
-	std::vector<Billboard> billboards;
-	billboards.resize(1);
+	std::vector<Billboard> billboards(1);
 	billboards[0].loadTexture("res/textures/ekkon.dds");
+
+	std::vector<Light3D> lights;
+	for (int i = 0; i < 3; i++) {
+		glm::vec3 position = glm::vec3(0 + (i * 10), 0 + (i * 10), 0 + (i * 10));
+		glm::vec3 rotation = glm::vec3(0 + (i * 10), 0 + (i * 10), 0 + (i * 10));
+		ColourRGB colour(1.0, 1.0, 1.0);
+		float power = 1.0;
+		Light3D light(position, rotation, colour, power);
+		lights.insert(lights.begin(), light);
+	}
+
 
 	// These are temporary 2D textures that demonstrate how to render textures using a Renderer. This will be
 	// moved once the menu system is formed.
@@ -195,7 +205,7 @@ int runningLoop() {
 
 	// This is the program's running loop.
 	do {
-		// Update Event (MUST DO THIS FIRST)
+		// This updates events. It must be done first.
 		eventHandler.updateEvents();
 		controlManager.updateKeystate(eventHandler.getKeystate());
 
@@ -224,6 +234,8 @@ int runningLoop() {
 
 		// This renders the program.
 		renderer.startRenderingFrame();
+		renderer.bindLights(&lights);
+		renderer.renderLights();
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModelShadows(&(models[i]));
 		}

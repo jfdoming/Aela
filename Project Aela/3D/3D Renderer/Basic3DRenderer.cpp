@@ -35,26 +35,25 @@ void Basic3DRenderer::setupShaders() {
 
 	// quad_programID = loadShaders("res/shaders/Passthrough.vertexshader", "res/shaders/SimpleTexture.fragmentshader");
 	// texID = glGetUniformLocation(quad_programID, "texture");
-	programID = loadShaders("res/shaders/ShadowMapping.vertexshader", "res/shaders/ShadowMapping.fragmentshader");
+	modelProgramID = loadShaders("res/shaders/ShadowMapping.vertexshader", "res/shaders/ShadowMapping.fragmentshader");
 	billboardProgramID = loadShaders("res/shaders/ShadowMapping.vertexshader", "res/shaders/Billboard_Shadow_Mapping.fragmentshader");
 }
 
 void Basic3DRenderer::getIDs() {
 	depthMatrixID = glGetUniformLocation(depthProgramID, "depthMVP");
 
-	// This gets a handle for the "myTextureSampler" uniform.
-	textureID = glGetUniformLocation(programID, "myTextureSampler");
+	textureID = glGetUniformLocation(modelProgramID, "myTextureSampler");
 
-	// This gets a handle for the "MVP" uniform.
-	matrixID = glGetUniformLocation(programID, "MVP");
-	viewMatrixID = glGetUniformLocation(programID, "V");
-	modelMatrixID = glGetUniformLocation(programID, "M");
-	depthBiasID = glGetUniformLocation(programID, "DepthBiasMVP");
-	shadowMapID = glGetUniformLocation(programID, "shadowMap");
+	matrixID = glGetUniformLocation(modelProgramID, "MVP");
+	viewMatrixID = glGetUniformLocation(modelProgramID, "V");
+	modelMatrixID = glGetUniformLocation(modelProgramID, "M");
+	depthBiasID = glGetUniformLocation(modelProgramID, "DepthBiasMVP");
+	shadowMapID = glGetUniformLocation(modelProgramID, "shadowMap");
 
-	// This gets a handle for the "LightPosition" uniform.
-	lightInvDirID = glGetUniformLocation(programID, "LightInvDirection_worldspace");
-
+	numberOfLightsID = glGetUniformLocation(modelProgramID, "numberOfLights");
+	lightDirectionsID = glGetUniformLocation(modelProgramID, "lightDirections");
+	lightColoursID = glGetUniformLocation(modelProgramID, "lightColours");
+	lightPowersID = glGetUniformLocation(modelProgramID, "lightPowers");
 }
 
 void Basic3DRenderer::setupFrameBuffers() {
@@ -159,14 +158,14 @@ Texture* Basic3DRenderer::getColourFrameBufferTexture() {
 	return &colourFrameBufferTexture;
 }
 
-void Basic3DRenderer::renderShadows(Model3D* model, std::vector<Light3D> lights) {
-	modelShader.renderShadows(model, depthProgramID, depthMatrixID, depthFrameBuffer, lights);
+void Basic3DRenderer::renderShadow(Model3D* model) {
+	shadowRenderer.renderShadow(model, depthProgramID, depthMatrixID, depthFrameBuffer, lights);
 }
 
-void Basic3DRenderer::renderModel(Model3D* model, std::vector<Light3D> lights) {
-	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	textureRenderer.renderModel(model, colourFrameBuffer, programID, depthMatrixID, matrixID, modelMatrixID, viewMatrixID,
-		depthBiasID, lightInvDirID, textureID, depthTexture, shadowMapID, lights);
+void Basic3DRenderer::renderModel(Model3D* model) {
+	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
+	modelRenderer.renderModel(model, colourFrameBuffer, modelProgramID, depthMatrixID, matrixID, modelMatrixID, viewMatrixID,
+		depthBiasID, textureID, depthTexture, shadowMapID, lights);
 }
 
 void Basic3DRenderer::clearColourFrameBuffer() {
@@ -179,11 +178,20 @@ void Basic3DRenderer::clearColourFrameBuffer() {
 void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
 	// Note: for regular texture rendering, use:
 	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
-	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	textureRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, billboardProgramID, colourFrameBuffer, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, lightInvDirID, depthMatrixID, position, lookAt, inverseRotation);
+	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
+	modelRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, textureID, billboardProgramID, colourFrameBuffer, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, depthMatrixID, position, lookAt, inverseRotation);
 }
 
 void Basic3DRenderer::renderBillboard(Billboard* billboard) {
-	textureRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	textureRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), textureID, billboardProgramID, colourFrameBuffer, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, lightInvDirID, depthMatrixID, billboard->getPosition(), *(camera->getPosition()), true);
+	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
+	modelRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), textureID, billboardProgramID, colourFrameBuffer, viewMatrixID, matrixID, modelMatrixID, depthBiasID, depthTexture, shadowMapID, depthMatrixID, billboard->getPosition(), *(camera->getPosition()), true);
+}
+
+void Basic3DRenderer::bindLights(std::vector<Light3D>* lights) {
+	this->lights = lights;
+}
+
+// This function tells the renderer to send the lights added through bindLights() to the shaders.
+void Basic3DRenderer::renderLights() {
+	modelRenderer.renderLights(lights, modelProgramID, numberOfLightsID, lightDirectionsID, lightColoursID, lightPowersID);
 }

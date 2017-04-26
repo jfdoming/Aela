@@ -193,17 +193,17 @@
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Source Files\Events</Filter>
     </ClCompile>
-    <ClCompile Include="3D\3D Object\Object3D.cpp">
-      <Filter>Source Files\3D\Object3D</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Light\Light3D.cpp">
-      <Filter>Source Files\3D\Light</Filter>
-    </ClCompile>
     <ClCompile Include="3D\3D Light\Light3D.cpp">
       <Filter>Source Files\3D\3D Light</Filter>
     </ClCompile>
     <ClCompile Include="3D\3D Object\Object3D.cpp">
       <Filter>Source Files\3D\3D Object</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Object\Object3D.cpp">
+      <Filter>Source Files\3D\3D Object</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Light\Light3D.cpp">
+      <Filter>Source Files\3D\3D Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -333,11 +333,14 @@
     <ClInclude Include="Events\EventHandler.h">
       <Filter>Source Files\Events</Filter>
     </ClInclude>
-    <ClInclude Include="3D\3D Object\Object3D.h">
-      <Filter>Source Files\3D\Object3D</Filter>
-    </ClInclude>
     <ClInclude Include="3D\3D Light\Light3D.h">
-      <Filter>Source Files\3D\Light</Filter>
+      <Filter>Source Files\3D\3D Light</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Object\Object3D.h">
+      <Filter>Source Files\3D\3D Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Colour\ColourRGB.h">
+      <Filter>Source Files\Utilities\Colour</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -357,6 +360,44 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="..\Release\res\shaders\Text_To_Buffer.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\Billboard_Shadow_Mapping.fragmentshader" />
+    <None Include="Menus\desktop.ini" />
+    <None Include="..\Release\res\shaders\3D_Post_Processing.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Post_Processing.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Post_Processing.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Texture_Buffer_To_Buffer.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Texture_Buffer_To_Buffer.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.fragmentshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.vertexshader">
+      <Filter>Source Files\Shaders</Filter>
+    </None>
+    <None Include="..\Release\res\shaders\3D_Post_Processing.fragmentshader">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>

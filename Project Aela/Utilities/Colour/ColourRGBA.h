@@ -6,6 +6,7 @@
 */
 
 #pragma once
+#include <glm/glm.hpp>
 
 class ColourRGBA {
 	public:
@@ -54,6 +55,10 @@ class ColourRGBA {
 
 		float getA() {
 			return a;
+		}
+
+		glm::vec4 getVec4() {
+			return glm::vec4(r, g, b, a);
 		}
 
 	private:

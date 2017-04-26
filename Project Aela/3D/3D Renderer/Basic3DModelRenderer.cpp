@@ -16,9 +16,36 @@ void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setPro
 	projectionMatrix = setProjectionMatrix;
 }
 
-void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint programID, GLuint depthMatrixID,
-	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID, GLuint textureID,
-	GLuint depthTexture, GLuint shadowMapID, std::vector<Light3D> lights) {
+void Basic3DModelRenderer::renderLights(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID) {
+	glUseProgram(modelProgramID);
+	GLuint numberOfLights = lights->size();
+	std::vector<glm::vec3*> directionPointers(numberOfLights);
+	std::vector<glm::vec3> colours(numberOfLights);
+	std::vector<glm::vec3*> colourPointers(numberOfLights);
+	std::vector<float> powers(numberOfLights);
+
+	for (unsigned int i = 0; i < numberOfLights; i++) {
+		directionPointers[i] = lights->at(i).getRotation();
+	}
+
+	for (unsigned int i = 0; i < numberOfLights; i++) {
+		colours[i] = lights->at(i).getColour()->getVec3();
+		colourPointers[i] = &(colours[i]);
+	}
+
+	for (unsigned int i = 0; i < numberOfLights; i++) {
+		powers[i] = lights->at(i).getPower();
+	}
+
+	glUniform1i(numberOfLightsID, numberOfLights);
+	glUniform3fv(lightDirectionsID, numberOfLights, &(directionPointers.at(0)->x));
+	glUniform3fv(lightColoursID, numberOfLights, &(colourPointers.at(0)->x));
+	glUniform1f(lightPowersID, powers.at(0));
+}
+
+void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint depthMatrixID,
+	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint textureID,
+	GLuint depthTexture, GLuint shadowMapID, std::vector<Light3D>* lights) {
 
 	// This loads buffers.
 	GLuint vertexbuffer;
@@ -46,7 +73,7 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 	glEnable(GL_CULL_FACE);
 
 	// This is positioning/rotation of light and the model.
-	glm::vec3 lightInvDir = *(lights[0].getRotation());
+	glm::vec3 lightInvDir = *(lights->at(0).getRotation());
 	glm::vec3 position = *(model->getPosition());
 	glm::vec3 rotation = *(model->getRotation());
 
@@ -63,7 +90,7 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 	glm::mat4 depthModelMatrix = glm::mat4(1.0);
 	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
 
-	glUseProgram(programID);
+	glUseProgram(modelProgramID);
 
 	// This sends the transformations to the shader.
 	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthMVP[0][0]);
@@ -79,7 +106,6 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
 	glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
 	glUniformMatrix4fv(depthBiasID, 1, GL_FALSE, &depthBiasMVP[0][0]);
-	glUniform3f(lightInvDirID, lightInvDir.x, lightInvDir.y, lightInvDir.z);
 
 	// This binds the texture to "slot" zero. A similar thing happens to the depth texture.
 	glActiveTexture(GL_TEXTURE0);
@@ -139,9 +165,9 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 // To specify a rotation for the camera as a vec3, use the texture's position and add the direction (position + direction) for the lookAt parameter.
 // Note: for the lookAt parameter, position + glm::vec3(0.0, 0.0, 1.0) will not rotate the texture. Use this for no rotation.
 void Basic3DModelRenderer::renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint textureID,
-	GLuint programID, GLuint frameBuffer, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID,
-	GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, GLuint lightInvDirID, GLuint depthMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
-	glUseProgram(programID);
+	GLuint modelProgramID, GLuint frameBuffer, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID,
+	GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, GLuint depthMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
+	glUseProgram(modelProgramID);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
 	if (cullFaces) {

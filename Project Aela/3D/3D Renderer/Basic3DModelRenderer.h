@@ -17,16 +17,17 @@ class Basic3DModelRenderer {
 
 		// This function renders a model. It requires a lot of GLuints that are provided by
 		// the Basic3DRenderer.
-		void renderModel(Model3D* model, GLuint frameBuffer, GLuint programID, GLuint depthMatrixID,
-			GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint lightInvDirID,
-			GLuint textureID, GLuint depthTexture, GLuint shadowMapID, std::vector<Light3D> lights);
+		void renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint depthMatrixID,
+			GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID,
+			GLuint textureID, GLuint depthTexture, GLuint shadowMapID, std::vector<Light3D>* lights);
 		// This function renders a 2D texture in 3D space. It requires a lot of GLuints that
 		//  are provided by the Basic3DRenderer.
 		void renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint textureID,
-			GLuint programID, GLuint frameBuffer, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID,
-			GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, GLuint lightInvDirID, GLuint depthMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
+			GLuint modelProgramID, GLuint frameBuffer, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID,
+			GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, GLuint depthMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
 		// This is made for the Basic3DRenderer to set matrices.
 		void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);
+		void renderLights(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID);
 
 	private:
 		glm::mat4 biasMatrix = glm::mat4(
