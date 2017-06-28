@@ -16,7 +16,6 @@ class Component {
 		int getWidth();
 		int getHeight();
 
-
 		virtual void update() = 0;
 		virtual void render() = 0;
 	protected:

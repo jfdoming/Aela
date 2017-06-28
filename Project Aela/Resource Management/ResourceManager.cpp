@@ -4,11 +4,50 @@
 
 using namespace Aela;
 
+bool readMods(std::vector<std::string>& mods) {
+	std::ifstream modListFile("mods/mods.list");
+	std::string line;
+
+	if (!modListFile) {
+		return false;
+	}
+
+	while (std::getline(modListFile, line)) {
+		mods.emplace_back(line);
+	}
+
+	return true;
+}
+
 ResourceManager::ResourceManager(int resourceCount) {
 	resources.reserve(resourceCount);
 }
 
 ResourceManager::~ResourceManager() {
+}
+
+// don't call me yet!!!
+void ResourceManager::addToLuaInstance(LuaManager& mgr) {
+	// only expose part of the class to Lua
+	luabridge::getGlobalNamespace(mgr.getLuaState())
+		.beginClass<Aela::ResourceManager>("ResourceManager")
+		.addFunction("bindGroup", &Aela::ResourceManager::bindGroup)
+		.addFunction("bindLoader", &Aela::ResourceManager::bindLoader)
+		.addFunction("addToGroup", static_cast<void(Aela::ResourceManager::*)(std::string, bool)>(&Aela::ResourceManager::addToGroup))
+		.endClass();
+
+	// expose this object
+	mgr.exposeObject(*this, "resourceManager");
+
+	std::vector<std::string> mods;
+	if (readMods(mods)) {
+		// we must assume we have a list of mods contained in the mod vector
+		LuaScript loadingScript;
+		loadingScript.initLua(mgr.getLuaState());
+		for (auto mod : mods) {
+			loadingScript.loadScript(mod + "/res/scripts/resources.lua");
+		}
+	}
 }
 
 void ResourceManager::bindLoader(ResourceLoader* loader) {

@@ -85,7 +85,7 @@ int startAela() {
 	// Lua Stuff
 	luabridge::getGlobalNamespace(luaManager.getLuaState())
 		.beginClass<ControlManager>("ControlManager")
-			.addFunction("test", &ControlManager::test)
+		.addFunction("test", &ControlManager::test)
 		.endClass();
 
 	// Expose Object, must register classes before doing this
@@ -118,7 +118,7 @@ int startAela() {
 
 int runningLoop() {
 	// TEMPORARY! This won't exist once models are moved elsewhere.
-	resourceManager.bindLoader(&Aela::OBJLoader::getInstance());
+	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
 	std::vector<Model3D> models(6);
 	models[0].loadTexture("res/textures/grass.dds");
 	models[1].loadTexture("res/textures/beretta.dds");
