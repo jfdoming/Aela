@@ -11,7 +11,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
-// fuck you
+
 // These are headers that are part of Project Aela.
 #include "Control Manager/ControlManager.h"
 #include "Aela_Engine.h"
@@ -85,7 +85,7 @@ int startAela() {
 	// Lua Stuff
 	luabridge::getGlobalNamespace(luaManager.getLuaState())
 		.beginClass<ControlManager>("ControlManager")
-			.addFunction("test", &ControlManager::test)
+		.addFunction("test", &ControlManager::test)
 		.endClass();
 
 	// Expose Object, must register classes before doing this
@@ -239,16 +239,6 @@ int runningLoop() {
 
 		// THIS IS FOR DEBUGGING!
 		controlManager.transform3DObject(&lights[1], 7);
-		// lights[0].setPosition(*renderer.getCamera()->getPosition());
-		// lights[1].setPosition(*lights[0].getPosition());
-		// models[1].setPosition(*lights[0].getPosition());
-		// models[1].setRotation(*lights[0].getRotation());
-		// models[2].setPosition(*lights[1].getPosition());
-		// models[2].setRotation(*lights[1].getRotation());
-		// lights[0].getRotation()->x = -renderer.getCamera()->getRotation()->y;
-		// lights[0].getRotation()->y = renderer.getCamera()->getRotation()->x;
-		// lights[0].getRotation()->z = renderer.getCamera()->getRotation()->z;
-
 		// std::cout << lights[0].getPosition()->x << " " << lights[0].getPosition()->y << " " << lights[0].getPosition()->z << "\n";
 
 		// This renders the program.

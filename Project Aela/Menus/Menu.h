@@ -14,4 +14,3 @@ class Menu : public Container {
 		Menu();
 		~Menu();
 };
-

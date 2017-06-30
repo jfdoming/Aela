@@ -67,7 +67,7 @@ void Renderer::setup3D() {
 	if (window != NULL) {
 		setupGLFeatures();
 		setup3DRendering();
-		effects3DShader = loadShaders("res/shaders/3D_Post_Processing.vertexshader", "res/shaders/3D_Post_Processing.fragmentshader");
+		effects3DShader = loadShaders("res/shaders/3D/3DPostProcessing.vert", "res/shaders/3D/3DPostProcessing.frag");
 	} else {
 		AelaErrorHandling::windowError("Project Aela Rendering", "The window must be set before setting up 3D.");
 	}
@@ -77,7 +77,7 @@ void Renderer::setup2D() {
 	if (window != NULL) {
 		setupGLFeatures();
 		setup2DRendering();
-		effects2DShader = loadShaders("res/shaders/2D_Post_Processing.vertexshader", "res/shaders/2D_Post_Processing.fragmentshader");
+		effects2DShader = loadShaders("res/shaders/2D/2DPostProcessing.vert", "res/shaders/2D/2DPostProcessing.frag");
 	} else {
 		AelaErrorHandling::windowError("Project Aela Rendering", "The winodw must be set before setting up 3D.");
 	}
@@ -98,15 +98,22 @@ void Renderer::setTextManager(TextManager* textManager) {
 
 // This starts the rendering of a frame.
 void Renderer::startRenderingFrame() {
-	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
+	GLint result;
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &result);
+
 	// Clear the screen.
+	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	// This says "render to the framebuffer".
-	glBindFramebuffer(GL_FRAMEBUFFER, *basic3DRenderer.getColourFrameBuffer());
+
+	// Clear the main frame buffer.
+	glBindFramebuffer(GL_FRAMEBUFFER, mainFrameBuffer);
+	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	basic3DRenderer.setCamera(&camera);
 
 	// The screen needs to be cleared again in order to properly clear the depth texture.
+	glBindFramebuffer(GL_FRAMEBUFFER, *basic3DRenderer.getColourFrameBuffer());
 	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
 	glBindFramebuffer(GL_FRAMEBUFFER, *basic3DRenderer.getColourFrameBuffer());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -28,9 +28,9 @@ void Basic2DRenderer::setup() {
 
 void Basic2DRenderer::load2DShaders() {
 	// These functions load shaders.
-	bufferTextureToBufferProgramID = loadShaders("res/shaders/2D_Texture_Buffer_To_Buffer.vertexshader", "res/shaders/2D_Texture_Buffer_To_Buffer.fragmentshader");
-	textToBufferProgramID = loadShaders("res/shaders/Text_To_Buffer.vertexshader", "res/shaders/Text_To_Buffer.fragmentshader");
-	imageToBufferProgramID = loadShaders("res/shaders/2D_Texture_To_Buffer.vertexshader", "res/shaders/2D_Texture_To_Buffer.fragmentshader");
+	bufferTextureToBufferProgramID = loadShaders("res/shaders/2D/2DTextureBufferToBuffer.vert", "res/shaders/2D/2DTextureBufferToBuffer.frag");
+	textToBufferProgramID = loadShaders("res/shaders/2D/TextToBuffer.vert", "res/shaders/2D/TextToBuffer.frag");
+	imageToBufferProgramID = loadShaders("res/shaders/2D/2DTextureToBuffer.vert", "res/shaders/2D/2DTextureToBuffer.frag");
 }
 
 void Basic2DRenderer::getGLSLVariableHandles() {

@@ -167,11 +167,11 @@ void ControlManager::transform3DObject(Object3D* object, float speedModifier) {
 		}
 		// This occurs when "DOWN" is pressed.
 		if (keystate[81]) {
-			object->translate(glm::vec3(0, 0, -deltaTime * currentSpeed * speedModifier));
+			object->translate(glm::vec3(0, 0, deltaTime * currentSpeed * speedModifier));
 		}
 		// This occurs when "UP" is pressed.
 		if (keystate[82]) {
-			object->translate(glm::vec3(0, 0, deltaTime * currentSpeed * speedModifier));
+			object->translate(glm::vec3(0, 0, -deltaTime * currentSpeed * speedModifier));
 		}
 		// This occurs when "1" is pressed.
 		if (keystate[30]) {

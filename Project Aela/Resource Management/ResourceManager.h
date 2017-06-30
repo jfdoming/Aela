@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "../Lua/LuaManager.h"
 #include "Resource.h"
 #include "ResourceQuery.h"
 #include "ResourceLoader.h"
@@ -22,6 +23,8 @@ namespace Aela {
 
 			ResourceManager(int resourceCount);
 			~ResourceManager();
+
+			void addToLuaInstance(LuaManager& mgr);
 
 			/*
 			 * The following Resource loading methods have similar parameters and return values.

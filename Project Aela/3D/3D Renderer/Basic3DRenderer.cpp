@@ -16,18 +16,17 @@ void Basic3DRenderer::setup() {
 
 void Basic3DRenderer::setupShaders() {
 	// This creates and compiles the GLSL program from the shaders.
-	depthProgramID = loadShaders("res/shaders/DepthRTT.vertexshader", "res/shaders/DepthRTT.geometryshader", "res/shaders/DepthRTT.fragmentshader");
-	// depthProgramID = loadShaders("res/shaders/3.2.1.point_shadows_depth.vs", "res/shaders/3.2.1.point_shadows_depth.gs", "res/shaders/3.2.1.point_shadows_depth.fs");
-	modelProgramID = loadShaders("res/shaders/ShadowMapping.vertexshader", "res/shaders/ShadowMapping.fragmentshader");
-	billboardProgramID = loadShaders("res/shaders/Billboards.vertexshader", "res/shaders/Billboards.fragmentshader");
-	skyboxProgramID = loadShaders("res/shaders/Skybox.vertexshader", "res/shaders/Skybox.fragmentshader");
+	depthProgramID = loadShaders("res/shaders/3D/Depth.vert", "res/shaders/3D/Depth.geom", "res/shaders/3D/Depth.frag");
+	modelProgramID = loadShaders("res/shaders/3D/Model.vert", "res/shaders/3D/Model.frag");
+	billboardProgramID = loadShaders("res/shaders/3D/Billboards.vert", "res/shaders/3D/Billboards.frag");
+	skyboxProgramID = loadShaders("res/shaders/3D/Skybox.vert", "res/shaders/3D/Skybox.frag");
 }
 
 void Basic3DRenderer::getIDs() {
-	modelTextureID = glGetUniformLocation(modelProgramID, "myTextureSampler");
-	modelMVPMatrixID = glGetUniformLocation(modelProgramID, "MVP");
-	modelViewMatrixID = glGetUniformLocation(modelProgramID, "V");
-	modelMatrixID = glGetUniformLocation(modelProgramID, "M");
+	modelTextureID = glGetUniformLocation(modelProgramID, "textureSampler");
+	modelMVPMatrixID = glGetUniformLocation(modelProgramID, "modelViewProjectionMatrix");
+	modelViewMatrixID = glGetUniformLocation(modelProgramID, "viewMatrix");
+	modelMatrixID = glGetUniformLocation(modelProgramID, "modelMatrix");
 	shadowMapID = glGetUniformLocation(modelProgramID, "shadowMaps[0]");
 	numberOfLightsID = glGetUniformLocation(modelProgramID, "numberOfLights");
 	lightPositionsID = glGetUniformLocation(modelProgramID, "lightPositions");
@@ -35,16 +34,16 @@ void Basic3DRenderer::getIDs() {
 	lightColoursID = glGetUniformLocation(modelProgramID, "lightColours");
 	lightPowersID = glGetUniformLocation(modelProgramID, "lightPowers");
 
-	billboardTextureID = glGetUniformLocation(billboardProgramID, "myTextureSampler");
-	billboardMVPMatrixID = glGetUniformLocation(billboardProgramID, "MVP");
+	billboardTextureID = glGetUniformLocation(billboardProgramID, "textureSampler");
+	billboardMVPMatrixID = glGetUniformLocation(billboardProgramID, "modelViewProjectionMatrix");
 
 	shadowMatrixID = glGetUniformLocation(depthProgramID, "shadowMatrices[0]");
-	shadowModelMatrixID = glGetUniformLocation(depthProgramID, "model");
+	shadowModelMatrixID = glGetUniformLocation(depthProgramID, "modelMatrix");
 	lightShadowPositionsID = glGetUniformLocation(depthProgramID, "lightPosition");
 
-	skyboxTextureID = glGetUniformLocation(skyboxProgramID, "skybox");
-	skyboxViewMatrixID = glGetUniformLocation(skyboxProgramID, "view");
-	skyboxProjectionMatrixID = glGetUniformLocation(skyboxProgramID, "projection");
+	skyboxTextureID = glGetUniformLocation(skyboxProgramID, "skyboxTexture");
+	skyboxViewMatrixID = glGetUniformLocation(skyboxProgramID, "viewMatrix");
+	skyboxProjectionMatrixID = glGetUniformLocation(skyboxProgramID, "projectionMatrix");
 }
 
 void Basic3DRenderer::setupFrameBuffers() {
