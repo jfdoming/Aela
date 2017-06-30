@@ -9,6 +9,8 @@
 #include "../Error Handler/ErrorHandler.h"
 #include "../Old Garbage/shader.hpp"
 
+using namespace Aela;
+
 void Renderer::setup3DRendering() {
 	if (mainFrameBuffer == NULL) {
 		setupGLFeatures();

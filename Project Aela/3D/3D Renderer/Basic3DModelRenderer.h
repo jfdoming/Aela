@@ -21,7 +21,7 @@ class Basic3DModelRenderer {
 			GLuint modelViewMatrixID, GLuint modelTextureID);
 
 		// This function renders a 2D texture in 3D space.
-		void renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint billboardTextureID,
+		void renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID,
 			GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
 
 		// This is made for the Basic3DRenderer in order to set matrices.

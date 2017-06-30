@@ -217,6 +217,15 @@
     <ClCompile Include="3D\Skybox\Skybox.cpp">
       <Filter>Source Files\3D\Skybox</Filter>
     </ClCompile>
+    <ClCompile Include="Events\Event.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Lua\Mod.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Lua\ModManager.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aela_Engine.h">
@@ -362,6 +371,18 @@
     </ClInclude>
     <ClInclude Include="3D\Skybox\Skybox.h">
       <Filter>Source Files\3D\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\Exposable.h">
+      <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\Event.h">
+      <Filter>Source Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\Mod.h">
+      <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\ModManager.h">
+      <Filter>Source Files\Lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

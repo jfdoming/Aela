@@ -27,8 +27,9 @@
 #include "Basic3DSkyboxRenderer.h"
 #include "../3D Light/Light3D.h"
 
-class Basic3DRenderer {
-	public:
+namespace Aela {
+	class Basic3DRenderer {
+		public:
 		Basic3DRenderer() {
 		}
 
@@ -60,7 +61,7 @@ class Basic3DRenderer {
 		GLuint* getColourFrameBuffer();
 		Texture* getColourFrameBufferTexture();
 
-	private:
+		private:
 		// These are the smaller renderers that the Basic3DRenderer uses.
 		Basic3DShadowRenderer shadowRenderer;
 		Basic3DModelRenderer modelRenderer;
@@ -96,4 +97,5 @@ class Basic3DRenderer {
 		void setupShaders();
 		void getIDs();
 		void setupFrameBuffers();
-};
+	};
+}

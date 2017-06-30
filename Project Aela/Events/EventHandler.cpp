@@ -1,5 +1,7 @@
 #include "EventHandler.h"
 
+using namespace Aela;
+
 EventHandler::EventHandler() {
 
 }

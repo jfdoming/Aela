@@ -11,16 +11,17 @@
 #include "../Utilities/Rect/Rect.h"
 #include "SDL.h"
 
-enum class WindowFlag {
-	AELA_WINDOW_RESIZABLE, AELA_WINDOW_NON_RESIZABLE,
-	AELA_WINDOW_SHOWN, AELA_WINDOW_HIDDEN,
-	AELA_WINDOW_BORDERLESS,
-	AELA_WINDOW_MINIMIZED, AELA_WINDOW_MAXIMIZED,
-	AELA_WINDOW_OPENGL
-};
+namespace Aela {
+	enum class WindowFlag {
+		AELA_WINDOW_RESIZABLE, AELA_WINDOW_NON_RESIZABLE,
+		AELA_WINDOW_SHOWN, AELA_WINDOW_HIDDEN,
+		AELA_WINDOW_BORDERLESS,
+		AELA_WINDOW_MINIMIZED, AELA_WINDOW_MAXIMIZED,
+		AELA_WINDOW_OPENGL
+	};
 
-class Window {
-	private:
+	class Window {
+		private:
 		// These are typical window properties.
 		int windowWidth, windowHeight;
 		std::string windowName;
@@ -37,7 +38,7 @@ class Window {
 
 		Rect<unsigned int> windowDimensions;
 
-	public:
+		public:
 		// These are the constructors.
 		Window() {
 			hasFocus = true;
@@ -61,7 +62,8 @@ class Window {
 		void quit();
 		bool quitCheck();
 		bool isFocused();
-		
+
 		void showCursor();
 		static void hideCursor();
-};
+	};
+}

@@ -8,6 +8,8 @@
 #include "Window.h"
 #include "../Error Handler/ErrorHandler.h"
 
+using namespace Aela;
+
 void Window::addProperty(WindowFlag flag) {
 	bool flagExists = false;
 	for (unsigned int i = 0; i < flags.size(); i++) {

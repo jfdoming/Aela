@@ -25,6 +25,8 @@
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 
+using namespace Aela;
+
 int runningLoop();
 
 // These are global objects who's classes come from Project Aela.
@@ -36,8 +38,8 @@ TimeManager timeManager;
 TextManager textManager;
 LuaManager luaManager;
 LuaScript controlScript;
-Aela::SceneManager sceneManager;
-Aela::ResourceManager resourceManager(0);
+SceneManager sceneManager;
+ResourceManager resourceManager(0);
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -91,9 +93,6 @@ int startAela() {
 	// Expose Object, must register classes before doing this
 	luaManager.exposeObject(controlManager, "controlManager");
 
-	controlScript.initLua(luaManager.getLuaState());
-	controlScript.loadScript("res/scripts/controls.lua");
-
 	eventHandler.bindControlManager(&controlManager);
 	eventHandler.bindWindow(&window);
 
@@ -106,10 +105,6 @@ int startAela() {
 
 	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, fast, controlManager);
 	eventHandler.bindMemberFunction(SDL_KEYUP, 225, slow, controlManager);
-
-	// These lines break the program, I have no idea why
-	// eventHandler.bindMemberFunction(SDL_KEYDOWN, 45, inc, renderer);
-	// eventHandler.bindMemberFunction(SDL_KEYDOWN, 46, dec, renderer);
 
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();

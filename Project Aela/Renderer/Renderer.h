@@ -31,14 +31,15 @@
 
 // These are some enums used by the Renderer.
 
-enum class RendererInformation {
-	VENDOR, RENDERER, OPENGL_VERSION, GLSL_VERSION, OPENGL_EXTENSIONS
-};
+namespace Aela {
+	enum class RendererInformation {
+		VENDOR, RENDERER, OPENGL_VERSION, GLSL_VERSION, OPENGL_EXTENSIONS
+	};
 
-class Renderer {
-	public:
+	class Renderer {
+		public:
 		Renderer() {
-			
+
 		}
 
 		Renderer(Window* windowToSet) {
@@ -48,7 +49,7 @@ class Renderer {
 		}
 
 		~Renderer() {
-			
+
 		}
 
 		// These functions initialize required elements for different types of rendering.
@@ -89,7 +90,7 @@ class Renderer {
 		// This function uses a control manager to update the renderer's camera.
 		void updateCameraUsingControls(ControlManager* controls);
 
-	private:
+		private:
 		// These are a bunch of Project Aela objects that the renderer uses.
 		Basic3DRenderer basic3DRenderer;
 		Basic2DRenderer basic2DRenderer;
@@ -114,4 +115,5 @@ class Renderer {
 		// This function is used internally to check the framebuffer that is currently
 		// being applied to OpenGL.
 		bool checkFrameBuffer();
-};
+	};
+}

@@ -49,6 +49,22 @@ float shadowCalculation(vec3 positionInLightSpace, int whichLight, float bias) {
 		return 0;
 	}
     float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+	
+	// This undergoes the PCF process, if enabled.
+	/*if (PCFModifier != 0) {
+		vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+		int halfOfPCFModifier = int(ceil(PCFModifier / 2.0));
+		for (int x = 0 - halfOfPCFModifier; x < halfOfPCFModifier; x++) {
+			for (int y = 0 - halfOfPCFModifier; y < halfOfPCFModifier; y++) {
+				if (!(x == 0 && y == 0)) {
+					float pcfDepth = texture(shadowMap, coordinate.xy + vec2(x, y) * texelSize).r; 
+					shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
+				}			
+			}    
+		}
+		shadow /= PCFModifier * PCFModifier;
+	}*/
+	
 	// return closestDepth / far;
     return shadow;
 }  

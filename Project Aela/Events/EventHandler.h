@@ -7,8 +7,9 @@
 #include "../Window/Window.h"
 #include "../Control Manager/ControlManager.h"
 
-class EventHandler {
-	private:
+namespace Aela {
+	class EventHandler {
+		private:
 		std::unordered_map<Uint32, std::unordered_map<int, std::vector<std::function<void()>>>> listeners;
 
 		SDL_Event event;
@@ -17,7 +18,7 @@ class EventHandler {
 
 		const Uint8* keystate;
 
-	public:
+		public:
 		EventHandler();
 		~EventHandler();
 
@@ -35,4 +36,5 @@ class EventHandler {
 		void invokeBoundFunctions(Uint32 type, int key);
 
 		const Uint8* getKeystate();
-};
+	};
+}
