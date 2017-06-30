@@ -92,6 +92,9 @@
     <Filter Include="Source Files\2D\2D Renderer">
       <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\3D\Skybox">
+      <UniqueIdentifier>{ccd6a13e-811e-46da-a92e-953af5c47932}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -207,6 +210,12 @@
     </ClCompile>
     <ClCompile Include="Resource Management\ResourceQuery.cpp">
       <Filter>Source Files\Resources\General</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Renderer\Basic3DSkyboxRenderer.cpp">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Skybox\Skybox.cpp">
+      <Filter>Source Files\3D\Skybox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -342,9 +351,17 @@
     <ClInclude Include="3D\3D Object\Object3D.h">
       <Filter>Source Files\3D\3D Object</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Colour\ColourRGB.h" />
     <ClInclude Include="Resource Management\ResourceQuery.h">
       <Filter>Source Files\Resources\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Colour\ColourRGB.h">
+      <Filter>Source Files\Utilities\Colour</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Skybox\Skybox.h">
+      <Filter>Source Files\3D\Skybox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

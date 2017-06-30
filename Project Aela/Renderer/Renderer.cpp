@@ -14,7 +14,6 @@ void Renderer::setup3DRendering() {
 		setupGLFeatures();
 	}
 	basic3DRenderer.setup();
-	// TEMPORARY!
 }
 
 void Renderer::setup2DRendering() {
@@ -104,26 +103,19 @@ void Renderer::startRenderingFrame() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// This says "render to the framebuffer".
 	glBindFramebuffer(GL_FRAMEBUFFER, *basic3DRenderer.getColourFrameBuffer());
-	// This tells OpenGL to render to the entire framebuffer (top-left corner to bottom-right).
-	// Changing this can be used for split screen multiplayer gaming.
-	glViewport(0, 0, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight());
 
 	basic3DRenderer.setCamera(&camera);
-	basic3DRenderer.resetDepthTexture();
 
 	// The screen needs to be cleared again in order to properly clear the depth texture.
+	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
+	glBindFramebuffer(GL_FRAMEBUFFER, *basic3DRenderer.getColourFrameBuffer());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, mainFrameBuffer);
-	glClear(GL_COLOR_BUFFER_BIT);
 
 	basic3DRenderer.clearColourFrameBuffer();
+	basic3DRenderer.clearShadowMaps();
 	basic2DRenderer.clearFrameBuffer();
-
-	// This says "render to the framebuffer".
-	glBindFramebuffer(GL_FRAMEBUFFER, *basic3DRenderer.getColourFrameBuffer());
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
 }
 
 void Renderer::bindLights(std::vector<Light3D>* lights) {
@@ -148,6 +140,10 @@ void Renderer::renderBillboard(Billboard* billboard) {
 	basic3DRenderer.renderBillboard(billboard);
 }
 
+void Renderer::renderSkybox(Skybox* skybox) {
+	basic3DRenderer.renderSkybox(skybox);
+}
+
 void Renderer::render2DTexture(Texture* texture) {
 	basic2DRenderer.renderTextureTo2DBuffer(texture, window->getWindowDimensions());
 }
@@ -164,6 +160,10 @@ void Renderer::endRenderingFrame() {
 	basic2DRenderer.renderTextureToBuffer(basic2DRenderer.getFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects2DShader);
 	basic2DRenderer.renderTextureToBuffer(&mainFrameBufferTexture, window->getWindowDimensions(), 0);
 	window->updateBuffer();
+}
+
+void Renderer::generateShadowMap(Light3D* light) {
+	basic3DRenderer.generateShadowMap(light);
 }
 
 void Renderer::increaseFOV() {

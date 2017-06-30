@@ -34,6 +34,10 @@ class ControlManager {
 		// This computes matrices for a Camera3D.
 		void computeMatricesWithInputs(Camera3D* camera);
 
+		// This is a temporary function used for testing. It translates
+		// a 3D object.
+		void transform3DObject(Object3D* object, float speedModifier);
+
 		// These are setters and getters of the control manager.
 		void setWindow(Window* setWindow);
 		void setTimeManager(TimeManager* setTime);

@@ -52,11 +52,11 @@ Resource* Aela::TextureLoader::load(std::ifstream& in) {
 	}
 
 	// create an OpenGL texture
-	GLuint textureID;
-	glGenTextures(1, &textureID);
+	GLuint modelTextureID;
+	glGenTextures(1, &modelTextureID);
 
 	// This tells openGL that future functions will reference this texture.
-	glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(GL_TEXTURE_2D, modelTextureID);
 
 	// set the pixel storage mode
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -83,7 +83,7 @@ Resource* Aela::TextureLoader::load(std::ifstream& in) {
 	}
 	delete[] buffer;
 
-	Texture* res = new Texture(textureID);
+	Texture* res = new Texture(modelTextureID);
 	res->setDimensions(0, 0, imageWidth, imageHeight);
 	res->setOutput(0, 0, imageWidth, imageHeight);
 

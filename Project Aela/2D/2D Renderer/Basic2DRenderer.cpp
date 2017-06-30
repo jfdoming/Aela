@@ -89,6 +89,8 @@ void Basic2DRenderer::renderTextureToBuffer(Texture* texture, Rect<unsigned int>
 	// and show the texture's opposite side. Or the renderer could just send normal data.
 	// GL_CULL_FACE needs to be disabled if one uses the first option.
 	glDisable(GL_CULL_FACE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 
 	// This calculates some positioning and dimensional data.
 	Rect<int>* output = texture->getOutput();
@@ -304,6 +306,9 @@ void Basic2DRenderer::renderCharacter(char* character, Rect<int>* output, Rect<u
 	// and show the texture's opposite side. Or the renderer could just send normal data.
 	// GL_CULL_FACE needs to be disabled if one uses the first option.
 	glDisable(GL_CULL_FACE);
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 
 	// This sets up positioning data.
 	int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();

@@ -11,7 +11,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
-
+// fuck you
 // These are headers that are part of Project Aela.
 #include "Control Manager/ControlManager.h"
 #include "Aela_Engine.h"
@@ -119,41 +119,60 @@ int startAela() {
 int runningLoop() {
 	// TEMPORARY! This won't exist once models are moved elsewhere.
 	resourceManager.bindLoader(&Aela::OBJLoader::getInstance());
-	std::vector<Model3D> models(6);
+	std::vector<Model3D> models(7);
 	models[0].loadTexture("res/textures/grass.dds");
-	models[1].loadTexture("res/textures/beretta.dds");
+	models[1].loadTexture("res/textures/mug.dds");
 	models[2].loadTexture("res/textures/mug.dds");
-	models[3].loadTexture("res/textures/missile.dds");
-	models[4].loadTexture("res/textures/cat.dds");
-	models[5].loadTexture("res/textures/big_marble.dds");
+	models[3].loadTexture("res/textures/cat.dds");
+	models[4].loadTexture("res/textures/missile.dds");
+	models[5].loadTexture("res/textures/cat.dds");
+	models[6].loadTexture("res/textures/big_marble.dds");
 
 	// This loads the models from OBJ files.
-	models[0].loadModel("res/models/testGrassPlane.obj");
-	models[1].loadModel("res/models/beretta.obj");
-	models[2].loadModel("res/models/mug.obj");
-	models[3].loadModel("res/models/missile.obj");
-	models[4].loadModel("res/models/cat.obj");
-	models[5].loadModel("res/models/big_marble.obj");
+	models[0].loadModel("res/models/large_grass_plane.obj");
+	models[1].loadModel("res/models/mug_centered.obj");
+	models[2].loadModel("res/models/mug_centered.obj");
+	models[3].loadModel("res/models/cat.obj");
+	models[4].loadModel("res/models/missile.obj");
+	models[5].loadModel("res/models/cat.obj");
+	models[6].loadModel("res/models/big_marble.obj");
 
 	// This sets model position.
-	models[1].setPosition(10, 0, 0);
-	models[2].setPosition(0, 10, 15);
-	models[4].setPosition(0, 0, -15);
-	models[5].setPosition(10, 20, 10);
+	models[1].setPosition(-10.72f, 4, -15.51f);
+	models[2].setPosition(0, 20, 15);
+	models[5].setPosition(0, 0, -15);
+	models[6].setPosition(10, 20, 10);
 
+	Skybox skybox;
+	std::string basicPath = "res/textures/skybox_test";
+	std::string paths[6] = {
+		basicPath + "/right.dds",
+		basicPath + "/left.dds",
+		basicPath + "/up.dds",
+		basicPath + "/down.dds",
+		basicPath + "/back.dds",
+		basicPath + "/front.dds"
+	};
+	loadSkybox(&skybox, paths, 512, 512);
 	std::vector<Billboard> billboards(1);
 	billboards[0].loadTexture("res/textures/ekkon.dds");
 
 	std::vector<Light3D> lights;
-	for (int i = 0; i < 3; i++) {
-		glm::vec3 position = glm::vec3(0 + (i * 10), 0 + (i * 10), 0 + (i * 10));
-		glm::vec3 rotation = glm::vec3(0 + (i * 10), 0 + (i * 10), 0 + (i * 10));
-		ColourRGB colour(1.0, 1.0, 1.0);
-		float power = 1.0;
+	for (int i = 0; i < 2; i++) {
+		glm::vec3 position;
+		if (i == 0) {
+			position = glm::vec3(-8, 3, 0);
+		} else {
+			position = glm::vec3(10, 3, 10);
+		}
+		glm::vec3 rotation = glm::vec3(0, 0, 0);
+		ColourRGB colour(1, 1, 1);
+		float power = 0.5;
 		Light3D light(position, rotation, colour, power);
-		lights.insert(lights.begin(), light);
+		renderer.generateShadowMap(&light);
+		lights.push_back(light);
 	}
-
+	renderer.bindLights(&lights);
 
 	// These are temporary 2D textures that demonstrate how to render textures using a Renderer. This will be
 	// moved once the menu system is formed.
@@ -218,19 +237,33 @@ int runningLoop() {
 			currentScene->render(&renderer);
 		}
 
+		// THIS IS FOR DEBUGGING!
+		controlManager.transform3DObject(&lights[1], 7);
+		// lights[0].setPosition(*renderer.getCamera()->getPosition());
+		// lights[1].setPosition(*lights[0].getPosition());
+		// models[1].setPosition(*lights[0].getPosition());
+		// models[1].setRotation(*lights[0].getRotation());
+		// models[2].setPosition(*lights[1].getPosition());
+		// models[2].setRotation(*lights[1].getRotation());
+		// lights[0].getRotation()->x = -renderer.getCamera()->getRotation()->y;
+		// lights[0].getRotation()->y = renderer.getCamera()->getRotation()->x;
+		// lights[0].getRotation()->z = renderer.getCamera()->getRotation()->z;
+
+		// std::cout << lights[0].getPosition()->x << " " << lights[0].getPosition()->y << " " << lights[0].getPosition()->z << "\n";
+
 		// This renders the program.
 		renderer.startRenderingFrame();
-		renderer.bindLights(&lights);
-		renderer.renderLights();
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModelShadows(&(models[i]));
 		}
+		renderer.renderLights();
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModel(&(models[i]));
 		}
 		for (unsigned int i = 0; i < billboards.size(); i++) {
 			renderer.renderBillboard(&(billboards[i]));
 		}
+		renderer.renderSkybox(&skybox);
 		std::string fpsData = std::to_string(fps) + " FPS";
 		renderer.render2DTexture(testTexture);
 		renderer.render2DTexture(testTexture2);

@@ -1,5 +1,6 @@
 #include "Object3D.h"
-
+#include <iostream>
+#define PI 3.14159265358979323846
 
 void Object3D::setPosition(float setX, float setY, float setZ) {
 	position = glm::vec3(setX, setY, setZ);
@@ -79,3 +80,48 @@ float Object3D::getProperty(Object3DProperty property) {
 	}
 	return 0;
 }
+
+void Object3D::translate(glm::vec3 translation) {
+	position += translation;
+}
+
+void Object3D::rotate(glm::vec3 rotation) {
+	this->rotation += rotation;
+	forceValuesWithinRange(&(this->rotation), 0, PI * 2);
+}
+
+void Object3D::translate(float x, float y, float z) {
+	translate(glm::vec3(x, y, z));
+}
+
+void Object3D::rotate(float x, float y, float z) {
+	rotate(glm::vec3(x, y, z));
+}
+
+void Object3D::forceValuesWithinRange(glm::vec3* vec3, float minimum, float maximum) {
+	if (vec3->x < minimum) {
+		vec3->x += (maximum - minimum) * ceil(abs((minimum - vec3->x) / (maximum - minimum)));
+	}
+
+	if (vec3->x > maximum) {
+		vec3->x -= (maximum - minimum) * ceil(abs((maximum - vec3->x) / (maximum - minimum)));
+	}
+
+	if (vec3->y < minimum) {
+		vec3->y += (maximum - minimum) * ceil(abs((minimum - vec3->y) / (maximum - minimum)));
+	}
+
+	if (vec3->y > maximum) {
+		vec3->y -= (maximum - minimum) * ceil(abs((maximum - vec3->y) / (maximum - minimum)));
+	}
+
+	if (vec3->z < minimum) {
+		vec3->z += (maximum - minimum) * ceil(abs((minimum - vec3->z) / (maximum - minimum)));
+	}
+
+	if (vec3->z > maximum) {
+		vec3->z -= (maximum - minimum) * ceil(abs((maximum - vec3->z) / (maximum - minimum)));
+	}
+}
+
+

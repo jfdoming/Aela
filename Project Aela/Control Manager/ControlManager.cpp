@@ -144,6 +144,68 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 	}
 }
 
+void ControlManager::transform3DObject(Object3D* object, float speedModifier) {
+	if (window->isFocused()) {
+		float deltaTime = timeManager->getTimeBetweenFrames();
+
+		// This is for translation.
+		// This occurs when "LEFT" is pressed.
+		if (keystate[80]) {
+			object->translate(glm::vec3(-deltaTime * currentSpeed * speedModifier, 0, 0));
+		}
+		// This occurs when "RIGHT" is pressed.
+		if (keystate[79]) {
+			object->translate(glm::vec3(deltaTime * currentSpeed * speedModifier, 0, 0));
+		}
+		// This occurs when "RIGHT SHIFT" is pressed.
+		if (keystate[229]) {
+			object->translate(glm::vec3(0, deltaTime * currentSpeed * speedModifier, 0));
+		}
+		// This occurs when "RIGHT CTRL" is pressed.
+		if (keystate[228]) {
+			object->translate(glm::vec3(0, -deltaTime * currentSpeed * speedModifier, 0));
+		}
+		// This occurs when "DOWN" is pressed.
+		if (keystate[81]) {
+			object->translate(glm::vec3(0, 0, -deltaTime * currentSpeed * speedModifier));
+		}
+		// This occurs when "UP" is pressed.
+		if (keystate[82]) {
+			object->translate(glm::vec3(0, 0, deltaTime * currentSpeed * speedModifier));
+		}
+		// This occurs when "1" is pressed.
+		if (keystate[30]) {
+			object->rotate(glm::vec3(-deltaTime * currentSpeed * speedModifier, 0, 0));
+			std::cout << object->getRotation()->x << " - ";
+		}
+		// This occurs when "2" is pressed.
+		if (keystate[31]) {
+			object->rotate(glm::vec3(deltaTime * currentSpeed * speedModifier, 0, 0));
+			std::cout << object->getRotation()->x << " - ";
+		}
+		// This occurs when "3" is pressed.
+		if (keystate[32]) {
+			object->rotate(glm::vec3(0, -deltaTime * currentSpeed * speedModifier, 0));
+			std::cout << object->getRotation()->y << " - ";
+		}
+		// This occurs when "4" is pressed.
+		if (keystate[33]) {
+			object->rotate(glm::vec3(0, deltaTime * currentSpeed * speedModifier, 0));
+			std::cout << object->getRotation()->y << " - ";
+		}
+		// This occurs when "5" is pressed.
+		if (keystate[34]) {
+			object->rotate(glm::vec3(0, 0, -deltaTime * currentSpeed * speedModifier));
+			std::cout << object->getRotation()->z << " - ";
+		}
+		// This occurs when "6" is pressed.
+		if (keystate[35]) {
+			object->rotate(glm::vec3(0, 0, deltaTime * currentSpeed * speedModifier));
+			std::cout << object->getRotation()->z << " - ";
+		}
+	}
+}
+
 void ControlManager::setCameraUpsideDownAllowance(bool allowUpsideDown) {
 	allowUpsideDownCamera = allowUpsideDown;
 }

@@ -19,12 +19,19 @@ using namespace std;
 #include "../Error Handler/ErrorHandler.h"
 
 GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath) {
+	return loadShaders(vertexShaderPath, "", fragmentShaderPath);
+}
 
+GLuint loadShaders(std::string vertexShaderPath, std::string geometryShaderPath, std::string fragmentShaderPath) {
 	// This creates the shaders.
-	GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-	GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+	GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER), geometryShaderID,
+		fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
-	// This will read the vertex shader code.
+	if (geometryShaderPath != "") {
+		geometryShaderID = glCreateShader(GL_GEOMETRY_SHADER);
+	}
+
+	// This reads the vertex shader code.
 	std::string vertexShaderCode;
 	std::ifstream vertexShaderStream(vertexShaderPath);
 
@@ -39,7 +46,23 @@ GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath)
 		return 0;
 	}
 
-	// Read the fragment shader code from the file
+	std::string geometryShaderCode;
+	if (geometryShaderPath != "") {
+		// This reads the geometry shader code.
+		std::ifstream geometryShaderStream(geometryShaderPath);
+		if (geometryShaderStream.is_open()) {
+			std::string line = "";
+			while (getline(geometryShaderStream, line)) {
+				geometryShaderCode += "\n" + line;
+			}
+			geometryShaderStream.close();
+		} else {
+			AelaErrorHandling::windowError("Aela Shader Reader", "There was a problem finding the requested geometry shader:\n" + geometryShaderPath);
+			return 0;
+		}
+	}
+
+	// This reads the fragment shader code.
 	std::string fragmentShaderCode;
 	std::ifstream fragmentShaderStream(fragmentShaderPath);
 	if (fragmentShaderStream.is_open()) {
@@ -73,6 +96,25 @@ GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath)
 		AelaErrorHandling::consoleWindowError("Aela Shader Reader", vertexShaderPath + " had an error: " + messageAsString);
 	}
 
+	if (geometryShaderPath != "") {
+		// This compiles the geometry shader shader.
+		AelaErrorHandling::consoleWindowError("Aela Shader Reader", "The geometry shader " + geometryShaderPath + " is compiling...");
+		char const* geometryCodeAsChar = geometryShaderCode.c_str();
+		glShaderSource(geometryShaderID, 1, &geometryCodeAsChar, NULL);
+		glCompileShader(geometryShaderID);
+
+		// This retrieves any errors related to the vertex shader compilation.
+		glGetShaderiv(geometryShaderID, GL_COMPILE_STATUS, &result);
+		glGetShaderiv(geometryShaderID, GL_INFO_LOG_LENGTH, &logLength);
+
+		if (logLength > 0) {
+			std::vector<char> geometryShaderErrorMessage(logLength + 1);
+			glGetShaderInfoLog(geometryShaderID, logLength, NULL, &geometryShaderErrorMessage[0]);
+			std::string messageAsString(geometryShaderErrorMessage.begin(), geometryShaderErrorMessage.end());
+			AelaErrorHandling::consoleWindowError("Aela Shader Reader", geometryShaderPath + " had an error: " + messageAsString);
+		}
+	}
+
 	// This compiles the fragment shader.
 	AelaErrorHandling::consoleWindowError("Aela Shader Reader", "The fragment shader " + fragmentShaderPath + " is compiling...");
 	char const* fragmentCodeAsChar = fragmentShaderCode.c_str();
@@ -94,6 +136,7 @@ GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath)
 	AelaErrorHandling::consoleWindowError("Aela Shader Reader", "Aela Shader Reader is linking shaders with OpenGL.");
 	GLuint programID = glCreateProgram();
 	glAttachShader(programID, vertexShaderID);
+	glAttachShader(programID, geometryShaderID);
 	glAttachShader(programID, fragmentShaderID);
 	glLinkProgram(programID);
 
@@ -108,10 +151,10 @@ GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath)
 	}
 
 	glDetachShader(programID, vertexShaderID);
+	glDetachShader(programID, geometryShaderID);
 	glDetachShader(programID, fragmentShaderID);
 	glDeleteShader(vertexShaderID);
+	glDeleteShader(geometryShaderID);
 	glDeleteShader(fragmentShaderID);
 	return programID;
 }
-
-

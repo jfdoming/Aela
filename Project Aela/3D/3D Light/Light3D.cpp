@@ -19,3 +19,19 @@ ColourRGB* Light3D::getColour() {
 float Light3D::getPower() {
 	return power;
 }
+
+GLuint* Light3D::getShadowMapTexture() {
+	return &shadowMapTexture;
+}
+
+void Light3D::setShadowMapTexture(GLuint* shadowMapTexture) {
+	this->shadowMapTexture = *shadowMapTexture;
+}
+
+GLuint* Light3D::getShadowMapBuffer() {
+	return &shadowMapBuffer;
+}
+
+void Light3D::setShadowMapBuffer(GLuint* shadowMapBuffer) {
+	this->shadowMapBuffer = *shadowMapBuffer;
+}

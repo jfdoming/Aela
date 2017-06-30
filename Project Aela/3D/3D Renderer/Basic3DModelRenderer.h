@@ -17,17 +17,19 @@ class Basic3DModelRenderer {
 
 		// This function renders a model. It requires a lot of GLuints that are provided by
 		// the Basic3DRenderer.
-		void renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint depthMatrixID,
-			GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint textureID,
-			GLuint depthTexture, GLuint shadowMapID, std::vector<Light3D>* lights);
-		// This function renders a 2D texture in 3D space. It requires a lot of GLuints that
-		//  are provided by the Basic3DRenderer.
-		void renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint textureID,
-			GLuint modelProgramID, GLuint frameBuffer, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID,
-			GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, GLuint depthMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
-		// This is made for the Basic3DRenderer to set matrices.
+		void renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID, GLuint modelMatrixID,
+			GLuint modelViewMatrixID, GLuint modelTextureID);
+
+		// This function renders a 2D texture in 3D space.
+		void renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint billboardTextureID,
+			GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
+
+		// This is made for the Basic3DRenderer in order to set matrices.
 		void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);
-		void renderLights(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID);
+
+		// This sends light data to the model shader.
+		void renderLights(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID,
+			GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID);
 
 	private:
 		glm::mat4 biasMatrix = glm::mat4(
@@ -37,6 +39,8 @@ class Basic3DModelRenderer {
 			0.5, 0.5, 0.5, 1.0
 		);
 		glm::mat4 viewMatrix, projectionMatrix;
+		const unsigned int MAX_LIGHT_AMOUNT = 5;
 
 		void drawTestQuad();
+		void renderTestCube();
 };

@@ -69,10 +69,12 @@ class Renderer {
 		void renderModelShadows(Model3D* model);
 		void renderModel(Model3D* model);
 		void renderBillboard(Billboard* billboard);
+		void renderSkybox(Skybox* skybox);
 		// This function renders a texture to the 2D renderer's framebuffer.
 		void render2DTexture(Texture* texture);
 		void renderTextToTexture(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour);
 		void endRenderingFrame();
+		void generateShadowMap(Light3D* light);
 
 		// TEMPORARY?
 		void increaseFOV();

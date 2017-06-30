@@ -11,10 +11,10 @@
 layout(location = 0) in vec3 position;
 
 // This is the depth matrix, which does not change for the entire mesh.
-uniform mat4 depthMVP;
+uniform mat4 model;
 
 // This is main(), which simply calculates position.
 void main(){
-	gl_Position =  depthMVP * vec4(position,1);
+	gl_Position = model * vec4(position, 1);
 }
 

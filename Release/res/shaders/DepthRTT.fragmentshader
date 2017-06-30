@@ -7,10 +7,14 @@
 
 #version 330 core
 
-// This is the output data.
-layout(location = 0) out float fragmentdepth;
+in vec4 fragmentPosition;
+
+uniform vec3 lightPosition;
+float far = 100.0;
 
 // This is main(), which calculates colour using depth.
 void main(){
-	fragmentdepth = gl_FragCoord.z;
+    float lightDistance = length(fragmentPosition.xyz - lightPosition);
+    lightDistance = lightDistance / far;
+    gl_FragDepth = lightDistance;
 }
