@@ -122,7 +122,7 @@ void Basic3DRenderer::setCamera(Camera3D* setCamera) {
 	camera = setCamera;
 }
 
-void Aela::Basic3DRenderer::bindLights(std::vector<Light3D>* lights) {
+void Basic3DRenderer::bindLights(std::vector<Light3D>* lights) {
 	this->lights = lights;
 }
 

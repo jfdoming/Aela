@@ -61,9 +61,9 @@ namespace Aela {
 			GLuint* getColourFrameBuffer();
 			Texture* getColourFrameBufferTexture();
 
-		
 
-		private:
+
+			private:
 			// These are the smaller renderers that the Basic3DRenderer uses.
 			Basic3DShadowRenderer shadowRenderer;
 			Basic3DModelRenderer modelRenderer;
@@ -100,4 +100,4 @@ namespace Aela {
 			void getIDs();
 			void setupFrameBuffers();
 	};
-}
+};

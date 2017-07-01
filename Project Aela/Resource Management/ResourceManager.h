@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "../Lua/LuaManager.h"
+#include "../Lua/Exposable.h"
 #include "Resource.h"
 #include "ResourceQuery.h"
 #include "ResourceLoader.h"
@@ -12,7 +13,7 @@
 #include "TextureLoader.h"
 
 namespace Aela {
-	class ResourceManager {
+	class ResourceManager: public Exposable {
 		public:
 			static OBJLoader OBJECT_LOADER;
 			static TextureLoader TEXTURE_LOADER;
@@ -24,7 +25,7 @@ namespace Aela {
 			ResourceManager(int resourceCount);
 			~ResourceManager();
 
-			void addToLuaInstance(LuaManager& mgr);
+			void expose(LuaManager& mgr);
 
 			/*
 			 * The following Resource loading methods have similar parameters and return values.

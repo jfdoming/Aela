@@ -7,6 +7,18 @@ bool TextureLoader::isValid(std::ifstream &in) {
 	return true;
 }
 
+void TextureLoader::expose(LuaManager& mgr) {
+	// only expose part of the class to Lua
+	luabridge::getGlobalNamespace(mgr.getLuaState())
+		.beginClass<Aela::TextureLoader>("TextureLoader")
+		.addStaticFunction("getInstance", &TextureLoader::getInstance)
+		.endClass();
+
+	// expose this object
+	// Sorry Waseef, I had to comment this out in order to compile.
+	// mgr.exposeObject(*this, "textureLoader");
+}
+
 Resource* Aela::TextureLoader::load(std::ifstream& in) {
 	// using char[] for speed
 	char textureHeader[AELA_RESOURCE_TEXTURE_HEADER_SIZE];

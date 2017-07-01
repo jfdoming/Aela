@@ -111,7 +111,7 @@ namespace Aela {
 			// This function uses a control manager to update the renderer's camera.
 			void updateCameraUsingControls(ControlManager* controls);
 
-		private:
+			private:
 			// These are a bunch of Project Aela objects that the renderer uses.
 			Basic3DRenderer basic3DRenderer;
 			Basic2DRenderer basic2DRenderer;
@@ -141,4 +141,4 @@ namespace Aela {
 			// being applied to OpenGL.
 			bool checkFrameBuffer();
 	};
-}
+};

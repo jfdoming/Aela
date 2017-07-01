@@ -98,9 +98,6 @@ int startAela() {
 	// Expose Object, must register classes before doing this
 	luaManager.exposeObject(controlManager, "controlManager");
 
-	controlScript.initLua(luaManager.getLuaState());
-	controlScript.loadScript("res/scripts/controls.lua");
-
 	eventHandler.bindControlManager(&controlManager);
 	eventHandler.bindWindow(&window);
 
@@ -113,10 +110,6 @@ int startAela() {
 
 	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, fast, controlManager);
 	eventHandler.bindMemberFunction(SDL_KEYUP, 225, slow, controlManager);
-
-	// These lines break the program, I have no idea why
-	// eventHandler.bindMemberFunction(SDL_KEYDOWN, 45, inc, renderer);
-	// eventHandler.bindMemberFunction(SDL_KEYDOWN, 46, dec, renderer);
 
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();
@@ -267,7 +260,7 @@ int runningLoop() {
 		renderer.render2DTexture(testTexture);
 		renderer.render2DTexture(testTexture2);
 		renderer.renderText(fpsData, arial, &textOutput, &textColour);
-		ColourRGBA funkyColour((timeManager.getCurrentTime() % 1000) / 1000.0, 1.0 - (timeManager.getCurrentTime() % 1000) / 1000.0, 0.8, 0.8);
+		ColourRGBA funkyColour((timeManager.getCurrentTime() % 1000) / 1000.0f, 1.0f - (timeManager.getCurrentTime() % 1000) / 1000.0f, 0.8f, 0.8f);
 		renderer.renderRectangle(50, 50, 100, 100, window.getWindowDimensions(), &funkyColour);
 		renderer.renderTriangle(200, 50, 300, 150, 400, 50, window.getWindowDimensions(), &funkyColour);
 		renderer.endRenderingFrame();

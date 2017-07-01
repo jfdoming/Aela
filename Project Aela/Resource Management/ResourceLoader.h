@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "Resource.h"
+#include "../Lua/Exposable.h"
 
 namespace Aela {
 	class ResourceLoader {
