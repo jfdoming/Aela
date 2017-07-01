@@ -1,5 +1,5 @@
 /*
-* Class: Menu
+* Class: TextComponent
 * Author: Julian Dominguez-Schatz
 * Date: 20/03/2017
 * Description: Represents a text component in our game. It allows the user to enter text.

@@ -92,6 +92,9 @@
     <Filter Include="Source Files\2D\2D Renderer">
       <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{d891b45e-4fa2-497c-b714-0d24c2dc0d8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -207,6 +210,18 @@
     </ClCompile>
     <ClCompile Include="Resource Management\ResourceQuery.cpp">
       <Filter>Source Files\Resources\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\TextComponent.cpp">
+      <Filter>Source Files\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\AbstractLayoutManager.cpp">
+      <Filter>Source Files\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\AudioManager.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\Listener.cpp">
+      <Filter>Source Files\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -342,9 +357,20 @@
     <ClInclude Include="3D\3D Object\Object3D.h">
       <Filter>Source Files\3D\3D Object</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Colour\ColourRGB.h" />
     <ClInclude Include="Resource Management\ResourceQuery.h">
       <Filter>Source Files\Resources\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\TextComponent.h">
+      <Filter>Source Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\AbstractLayoutManager.h">
+      <Filter>Source Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioManager.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Listener.h">
+      <Filter>Source Files\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -358,51 +384,6 @@
       <Filter>Source Files\Shaders</Filter>
     </None>
     <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\Text_To_Buffer.fragmentshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\Text_To_Buffer.vertexshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\3D_Post_Processing.vertexshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.fragmentshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.vertexshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.fragmentshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.vertexshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\2D_Post_Processing.fragmentshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\2D_Post_Processing.vertexshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\2D_Texture_Buffer_To_Buffer.fragmentshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\2D_Texture_Buffer_To_Buffer.vertexshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.fragmentshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.vertexshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\3D_Post_Processing.fragmentshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\Billboard_Shadow_Mapping.fragmentshader">
       <Filter>Source Files\Shaders</Filter>
     </None>
   </ItemGroup>
