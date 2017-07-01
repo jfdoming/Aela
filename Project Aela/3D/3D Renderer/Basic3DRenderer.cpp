@@ -8,6 +8,8 @@
 
 #include "Basic3DRenderer.h"
 
+using namespace Aela;
+
 void Basic3DRenderer::setup() {
 	setupShaders();
 	setupFrameBuffers();
@@ -120,6 +122,10 @@ void Basic3DRenderer::setCamera(Camera3D* setCamera) {
 	camera = setCamera;
 }
 
+void Aela::Basic3DRenderer::bindLights(std::vector<Light3D>* lights) {
+	this->lights = lights;
+}
+
 Window* Basic3DRenderer::getWindow() {
 	return window;
 }
@@ -156,17 +162,13 @@ void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, gl
 	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
 	glViewport(0, 0, windowWidth, windowHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	modelRenderer.renderTextureIn3DSpace(window, cullFaces, *texture, billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, position, lookAt, inverseRotation);
+	modelRenderer.renderTextureIn3DSpace(cullFaces, *texture, billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, position, lookAt, inverseRotation);
 }
 
 void Basic3DRenderer::renderBillboard(Billboard* billboard) {
 	glViewport(0, 0, windowWidth, windowHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	modelRenderer.renderTextureIn3DSpace(window, true, billboard->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), *(camera->getPosition()), true);
-}
-
-void Basic3DRenderer::bindLights(std::vector<Light3D>* lights) {
-	this->lights = lights;
+	modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), *(camera->getPosition()), true);
 }
 
 void Basic3DRenderer::clearShadowMaps() {
@@ -174,8 +176,8 @@ void Basic3DRenderer::clearShadowMaps() {
 }
 
 // This function tells the renderer to send the lights added through bindLights() to the shaders.
-void Basic3DRenderer::renderLights() {
-	modelRenderer.renderLights(lights, modelProgramID, numberOfLightsID, lightPositionsID, lightDirectionsID, lightColoursID, lightPowersID, shadowMapID);
+void Basic3DRenderer::sendLightDataToShader() {
+	modelRenderer.sendLightDataToShader(lights, modelProgramID, numberOfLightsID, lightPositionsID, lightDirectionsID, lightColoursID, lightPowersID, shadowMapID);
 }
 
 void Basic3DRenderer::renderSkybox(Skybox* skybox) {

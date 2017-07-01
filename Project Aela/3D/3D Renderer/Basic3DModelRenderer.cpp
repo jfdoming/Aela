@@ -19,7 +19,7 @@ void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setPro
 	projectionMatrix = setProjectionMatrix;
 }
 
-void Basic3DModelRenderer::renderLights(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID) {
+void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID) {
 	glUseProgram(modelProgramID);
 
 	GLuint numberOfLights = lights->size();
@@ -170,7 +170,7 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 // For billboards, use getPositionOfCamera() to make the texture look at the camera.
 // To specify a rotation for the camera as a vec3, use the texture's position and add the direction (position + direction) for the lookAt parameter.
 // Note: for the lookAt parameter, position + glm::vec3(0.0, 0.0, 1.0) will not rotate the texture. Use this for no rotation.
-void Basic3DModelRenderer::renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint modelTextureID,
+void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint modelTextureID,
 	GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
 
 	glUseProgram(programID);

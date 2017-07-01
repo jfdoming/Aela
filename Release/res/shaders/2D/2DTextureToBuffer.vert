@@ -5,7 +5,7 @@
  * Description: Project Aela's Texture Renderer, which renders a 2D texture to a buffer.
 */
 
-#version 410
+#version 330 core
 
 // These is the input data.
 layout(location = 0) in vec3 vertexPosition;

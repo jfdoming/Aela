@@ -7,6 +7,8 @@
 
 #include "TextManager.h"
 
+using namespace Aela;
+
 // This loads a font into the font list.
 int TextManager::createNewTextFont(std::string name) {
 	int index = textFonts.size();

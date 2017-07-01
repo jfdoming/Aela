@@ -21,14 +21,14 @@ class Basic3DModelRenderer {
 			GLuint modelViewMatrixID, GLuint modelTextureID);
 
 		// This function renders a 2D texture in 3D space.
-		void renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint billboardTextureID,
+		void renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID,
 			GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
 
 		// This is made for the Basic3DRenderer in order to set matrices.
 		void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);
 
 		// This sends light data to the model shader.
-		void renderLights(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID,
+		void sendLightDataToShader(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID,
 			GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID);
 
 	private:

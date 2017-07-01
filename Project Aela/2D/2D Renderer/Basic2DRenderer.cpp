@@ -2,7 +2,7 @@
 * Class: Project Aela's 2D Renderer
 * Author: Robert Ciborowski
 * Date: February 2017
-* Description: A class used by Aela's Renderer to render textures as 2D objects.
+* Description: A class used by Aela's Renderer to render 2D objects.
 */
 
 #include "Basic2DRenderer.h"
@@ -510,6 +510,52 @@ void Basic2DRenderer::drawTestQuad() {
 	glTexCoord2f(0, 1);
 	glVertex2f(0, 1);
 	glEnd();
+}
+
+// This function is used to draw a rectangle.
+void Basic2DRenderer::renderRectangle(Rect<int>* output, Rect<unsigned int>* windowDimensions,  ColourRGBA* colour) {
+	glUseProgram(0);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glViewport(0, 0, windowDimensions->getWidth(), windowDimensions->getHeight());
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
+	glColor4f(colour->getR(), colour->getG(), colour->getB(), colour->getA());
+	glBegin(GL_QUADS);
+	glVertex2f(-1 + 2 * ((float) output->getX() / windowWidth), -(-1 + 2 * ((float) output->getY() / windowHeight)));
+	glVertex2f(-1 + 2 * ((float) output->getX() / windowWidth), -(-1 + 2 * (((float) output->getY() + output->getHeight()) / windowHeight)));
+	glVertex2f(-1 + 2 * (((float) output->getX() + output->getWidth()) / windowWidth), -(-1 + 2 * (((float) output->getY() + output->getHeight()) / windowHeight)));
+	glVertex2f(-1 + 2 * (((float) output->getX() + output->getWidth()) / windowWidth), -(-1 + 2 * ((float) output->getY() / windowHeight)));
+	glEnd();
+}
+
+void Basic2DRenderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
+	Rect<int> rect(xPosition, yPosition, width, height);
+	renderRectangle(&rect, windowDimensions, colour);
+}
+
+void Basic2DRenderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
+	glUseProgram(0);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glViewport(0, 0, windowDimensions->getWidth(), windowDimensions->getHeight());
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
+	int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
+	glColor4f(colour->getR(), colour->getG(), colour->getB(), colour->getA());
+	glBegin(GL_TRIANGLES);
+	glVertex2f(-1 + 2 * ((float) pointA.x / windowWidth), -(-1 + 2 * ((float) pointA.y / windowHeight)));
+	glVertex2f(-1 + 2 * ((float) pointB.x / windowWidth), -(-1 + 2 * ((float) pointB.y / windowHeight)));
+	glVertex2f(-1 + 2 * ((float) pointC.x / windowWidth), -(-1 + 2 * ((float) pointC.y / windowHeight)));
+	glEnd();
+}
+
+void Basic2DRenderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
+	glm::vec2 pointA(pointAX, pointAY);
+	glm::vec2 pointB(pointBX, pointBY);
+	glm::vec2 pointC(pointCX, pointCY);
+	renderTriangle(pointA, pointB, pointC, windowDimensions, colour);
 }
 
 // These are some getters.

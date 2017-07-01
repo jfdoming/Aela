@@ -25,6 +25,8 @@
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 
+using namespace Aela;
+
 int runningLoop();
 
 // These are global objects who's classes come from Project Aela.
@@ -36,8 +38,8 @@ TimeManager timeManager;
 TextManager textManager;
 LuaManager luaManager;
 LuaScript controlScript;
-Aela::SceneManager sceneManager;
-Aela::ResourceManager resourceManager(0);
+SceneManager sceneManager;
+ResourceManager resourceManager(0);
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -81,6 +83,11 @@ int startAela() {
 	renderer.setup2D();
 	controlManager.setWindow(&window);
 	controlManager.setTimeManager(&timeManager);
+
+	// This activates features of the renderer. These can be changed at any point during the runtime.
+	renderer.activateFeature(RendererFeature::SHADOWS);
+	renderer.activateFeature(RendererFeature::BILLBOARDS);
+	renderer.activateFeature(RendererFeature::SKYBOX);
 
 	// Lua Stuff
 	luabridge::getGlobalNamespace(luaManager.getLuaState())
@@ -137,12 +144,13 @@ int runningLoop() {
 	models[5].loadModel("res/models/cat.obj");
 	models[6].loadModel("res/models/big_marble.obj");
 
-	// This sets model position.
+	// This sets model positioning.
 	models[1].setPosition(-10.72f, 4, -15.51f);
 	models[2].setPosition(0, 20, 15);
 	models[5].setPosition(0, 0, -15);
 	models[6].setPosition(10, 20, 10);
 
+	// This is how a skybox is loaded.
 	Skybox skybox;
 	std::string basicPath = "res/textures/skybox_test";
 	std::string paths[6] = {
@@ -154,9 +162,12 @@ int runningLoop() {
 		basicPath + "/front.dds"
 	};
 	loadSkybox(&skybox, paths, 512, 512);
+
+	// This is how a billboard is loaded.
 	std::vector<Billboard> billboards(1);
 	billboards[0].loadTexture("res/textures/ekkon.dds");
 
+	// This is how a light is set up.
 	std::vector<Light3D> lights;
 	for (int i = 0; i < 2; i++) {
 		glm::vec3 position;
@@ -173,9 +184,6 @@ int runningLoop() {
 		lights.push_back(light);
 	}
 	renderer.bindLights(&lights);
-
-	// These are temporary 2D textures that demonstrate how to render textures using a Renderer. This will be
-	// moved once the menu system is formed.
 
 	// set up the loader to load textures into our group
 	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
@@ -224,7 +232,7 @@ int runningLoop() {
 				fps = (int) ((fps * fpsSmoothing) + ((1000.0f / timeManager.getTimeBetweenFrames()) * (1.0f - fpsSmoothing)));
 				timeOfLastFrameCheck = timeManager.getCurrentTime();
 			} else {
-				// Whoa, your computer is THAT fast? If you're really so rich, buy me a new PC!
+				// Whoa, your computer is THAT fast? If you're really that rich, buy me a new PC!
 				fps = (int) ((fps * fpsSmoothing) + (1000.0f * (1.0f - fpsSmoothing)));
 				timeOfLastFrameCheck = timeManager.getCurrentTime();
 			}
@@ -237,16 +245,17 @@ int runningLoop() {
 			currentScene->render(&renderer);
 		}
 
-		// THIS IS FOR DEBUGGING!
+		// THIS IS FOR TESTING!
 		controlManager.transform3DObject(&lights[1], 7);
 		// std::cout << lights[0].getPosition()->x << " " << lights[0].getPosition()->y << " " << lights[0].getPosition()->z << "\n";
 
 		// This renders the program.
 		renderer.startRenderingFrame();
+		renderer.setupBoundLightsForCurrentFrame();
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModelShadows(&(models[i]));
 		}
-		renderer.renderLights();
+		renderer.sendBoundLightDataToShader();
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModel(&(models[i]));
 		}
@@ -257,7 +266,10 @@ int runningLoop() {
 		std::string fpsData = std::to_string(fps) + " FPS";
 		renderer.render2DTexture(testTexture);
 		renderer.render2DTexture(testTexture2);
-		renderer.renderTextToTexture(fpsData, arial, &textOutput, &textColour);
+		renderer.renderText(fpsData, arial, &textOutput, &textColour);
+		ColourRGBA funkyColour((timeManager.getCurrentTime() % 1000) / 1000.0, 1.0 - (timeManager.getCurrentTime() % 1000) / 1000.0, 0.8, 0.8);
+		renderer.renderRectangle(50, 50, 100, 100, window.getWindowDimensions(), &funkyColour);
+		renderer.renderTriangle(200, 50, 300, 150, 400, 50, window.getWindowDimensions(), &funkyColour);
 		renderer.endRenderingFrame();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 	// This will call each model's destructor, which will delete each model's texture. I'm not sure if this

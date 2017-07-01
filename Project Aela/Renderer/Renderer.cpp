@@ -9,6 +9,8 @@
 #include "../Error Handler/ErrorHandler.h"
 #include "../Old Garbage/shader.hpp"
 
+using namespace Aela;
+
 void Renderer::setup3DRendering() {
 	if (mainFrameBuffer == NULL) {
 		setupGLFeatures();
@@ -96,11 +98,13 @@ void Renderer::setTextManager(TextManager* textManager) {
 	this->textManager = textManager;
 }
 
+void Aela::Renderer::bindLights(std::vector<Light3D>* lights) {
+	this->lights = lights;
+	basic3DRenderer.bindLights(lights);
+}
+
 // This starts the rendering of a frame.
 void Renderer::startRenderingFrame() {
-	GLint result;
-	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &result);
-
 	// Clear the screen.
 	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -125,18 +129,16 @@ void Renderer::startRenderingFrame() {
 	basic2DRenderer.clearFrameBuffer();
 }
 
-void Renderer::bindLights(std::vector<Light3D>* lights) {
-	basic3DRenderer.bindLights(lights);
-}
-
 // This function tells the renderer to send the lights added through bindLights() to the shaders.
-void Renderer::renderLights() {
-	basic3DRenderer.renderLights();
+void Renderer::sendBoundLightDataToShader() {
+	basic3DRenderer.sendLightDataToShader();
 }
 
 // These functions render objects into their proper framebuffers using basic renderers.
 void Renderer::renderModelShadows(Model3D* model) {
-	basic3DRenderer.renderShadow(model);
+	if (useShadows) {
+		basic3DRenderer.renderShadow(model);
+	}
 }
 
 void Renderer::renderModel(Model3D* model) {
@@ -144,20 +146,40 @@ void Renderer::renderModel(Model3D* model) {
 }
 
 void Renderer::renderBillboard(Billboard* billboard) {
-	basic3DRenderer.renderBillboard(billboard);
+	if (useBillboards) {
+		basic3DRenderer.renderBillboard(billboard);
+	}
 }
 
 void Renderer::renderSkybox(Skybox* skybox) {
-	basic3DRenderer.renderSkybox(skybox);
+	if (useSkybox) {
+		basic3DRenderer.renderSkybox(skybox);
+	}
 }
 
 void Renderer::render2DTexture(Texture* texture) {
 	basic2DRenderer.renderTextureTo2DBuffer(texture, window->getWindowDimensions());
 }
 
-void Renderer::renderTextToTexture(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour) {
+void Renderer::renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour) {
 	basic2DRenderer.renderTextTo2DBuffer(text, textManager->getTextFont(textFontToUse), output, window->getWindowDimensions(), colour,
 		textManager->POINTS_PER_PIXEL);
+}
+
+void Renderer::renderRectangle(Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
+	basic2DRenderer.renderRectangle(output, windowDimensions, colour);
+}
+
+void Renderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
+	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, windowDimensions, colour);
+}
+
+void Aela::Renderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
+	basic2DRenderer.renderTriangle(pointA, pointB, pointC, windowDimensions, colour);
+}
+
+void Aela::Renderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
+	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, windowDimensions, colour);
 }
 
 // This ends the rendering of a frame. This renders the framebuffers of the basic renderers
@@ -172,6 +194,54 @@ void Renderer::endRenderingFrame() {
 void Renderer::generateShadowMap(Light3D* light) {
 	basic3DRenderer.generateShadowMap(light);
 }
+
+void Renderer::setupBoundLightsForCurrentFrame() {
+	basic3DRenderer.clearShadowMaps();
+}
+
+void Renderer::activateFeature(RendererFeature feature) {
+	switch (feature) {
+		case RendererFeature::SHADOWS:
+			useShadows = true;
+			break;
+		case RendererFeature::BILLBOARDS:
+			useBillboards = true;
+			break;
+		case RendererFeature::SKYBOX:
+			useSkybox = true;
+			break;
+	}
+}
+
+void Renderer::deactivateFeature(RendererFeature feature) {
+	switch (feature) {
+		case RendererFeature::SHADOWS:
+			useShadows = false;
+			break;
+		case RendererFeature::BILLBOARDS:
+			useBillboards = false;
+			break;
+		case RendererFeature::SKYBOX:
+			useSkybox = false;
+			break;
+	}
+}
+
+void Aela::Renderer::toggleFeature(RendererFeature feature) {
+	switch (feature) {
+		case RendererFeature::SHADOWS:
+			useShadows = !useShadows;
+			break;
+		case RendererFeature::BILLBOARDS:
+			useBillboards = !useBillboards;
+			break;
+		case RendererFeature::SKYBOX:
+			useSkybox = !useSkybox;
+			break;
+	}
+}
+
+
 
 void Renderer::increaseFOV() {
 	camera.setFieldOfView(camera.getFieldOfView() + (0.002f) * timeManager->getTimeBetweenFrames());

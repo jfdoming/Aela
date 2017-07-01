@@ -49,6 +49,18 @@ float shadowCalculation(vec3 positionInLightSpace, int whichLight, float bias) {
 		return 0;
 	}
     float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+	
+	// This undergoes the PCF process, if enabled.
+	/*if (PCFModifier != 0) {
+		for (int x = -PCFModifier / 2; x < PCFModifier / 2; x++) {
+			for (int y = -PCFModifier / 2; y < PCFModifier / 2; y++) {
+				for (int z = -PCFModifier / 2; z < PCFModifier / 2; z++) {
+					if (
+				}
+			}
+		}
+	}*/
+	
 	// return closestDepth / far;
     return shadow;
 }  

@@ -9,12 +9,13 @@
 #include "time.h"
 #include <iostream>
 
-class TimeManager {
-	public:
+namespace Aela {
+	class TimeManager {
+		public:
 		TimeManager() {
 			updateTime();
 		}
-		
+
 		void updateTime() {
 			// This updates the time and the time difference between the current and the last frame.
 			lastTime = currentTime;
@@ -35,7 +36,8 @@ class TimeManager {
 		}
 
 
-	private:
+		private:
 		clock_t currentTime, lastTime;
 		float deltaTime;
-};
+	};
+}
