@@ -1,6 +1,7 @@
 #pragma once
+#include "LuaManager.h"
 
 class Exposable {
 	public:
-		virtual void expose() = 0;
+		virtual void expose(LuaManager& mgr) = 0;
 };
