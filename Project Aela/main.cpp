@@ -171,7 +171,7 @@ int runningLoop() {
 		}
 		glm::vec3 rotation = glm::vec3(0, 0, 0);
 		ColourRGB colour(1, 1, 1);
-		float power = 0.5;
+		float power = 0.8;
 		Light3D light(position, rotation, colour, power);
 		renderer.generateShadowMap(&light);
 		lights.push_back(light);
@@ -239,7 +239,7 @@ int runningLoop() {
 		}
 
 		// THIS IS FOR TESTING!
-		controlManager.transform3DObject(&lights[1], 7);
+		controlManager.transform3DObject(&lights[0], 7);
 		// std::cout << lights[0].getPosition()->x << " " << lights[0].getPosition()->y << " " << lights[0].getPosition()->z << "\n";
 
 		// This renders the program.
