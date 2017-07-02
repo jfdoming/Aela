@@ -174,17 +174,18 @@ void Renderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, i
 	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, windowDimensions, colour);
 }
 
-void Aela::Renderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
+void Renderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
 	basic2DRenderer.renderTriangle(pointA, pointB, pointC, windowDimensions, colour);
 }
 
-void Aela::Renderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
+void Renderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
 	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, windowDimensions, colour);
 }
 
 // This ends the rendering of a frame. This renders the framebuffers of the basic renderers
 // into the screen framebuffer while applying the effects from the effects shaders.
 void Renderer::endRenderingFrame() {
+	basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultiSampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getWindowDimensions());
 	basic2DRenderer.renderTextureToBuffer(basic3DRenderer.getColourFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects3DShader);
 	basic2DRenderer.renderTextureToBuffer(basic2DRenderer.getFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects2DShader);
 	basic2DRenderer.renderTextureToBuffer(&mainFrameBufferTexture, window->getWindowDimensions(), 0);

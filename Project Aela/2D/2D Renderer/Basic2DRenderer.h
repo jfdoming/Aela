@@ -44,6 +44,7 @@ class Basic2DRenderer {
 		void renderTextureTo2DBuffer(Texture* texture, Rect<unsigned int>* windowDimensions);
 		void renderTextTo2DBuffer(std::string text, TextFont* textFont, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
 			unsigned int pointsPerPixel);
+		void renderMultisampledBufferToBuffer(GLuint multisampledBuffer, GLuint secondaryBuffer, Rect<unsigned int>* windowDimensions);
 		void renderRectangle(Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
 		void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
 		void renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);

@@ -28,7 +28,7 @@ int effectsToUse[1] = int[1](0);
 // These functions and variables are the effects that may be used on the buffer.
 // This is the blur effect.
 vec4 blur(vec4 colourToModify);
-float blurMagnitude = 5;
+float blurMagnitude = 1;
 
 // This is the black and white effect. If it is too dark or light, use the
 // brightness modifier.
@@ -78,7 +78,7 @@ vec4 blur(vec4 colourToModify){
 		}
 	}
 	
-	colourToModify /= 100;
+	colourToModify /= 4 * blurMagnitude * blurMagnitude;
 	return colourToModify;
 }
 

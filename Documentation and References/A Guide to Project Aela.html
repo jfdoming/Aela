@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ekkon Programming Style Guide</title>
+	<style>
+		h1 {
+			color:black;
+			font-family:arial;
+		}
+		h2 {
+			color:black;
+			font-family:arial;
+		}
+		h3 {
+			color:black;
+			font-family:arial;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<img src="ekkon.png" style="position:absolute;left:15px;top:25px;">
+		<h1 style="position:absolute;left:160px;">A Guide to Project Aela</h1>
+	</div>
+	<div style="position:absolute;top:100px;">
+	<i>Note that this guide may leave out some details. Questions may be forwarded to <a href="mailto:bobbyewy@gmail.com">bobbyewy@gmail.com</a> or posted in the private Ekkon Games discord server.</i>
+
+	<h2>Table of Contents</h2>
+	<ul>
+		<li><a href="#introduction">Introduction to Project Aela</a></li>
+		<li><a href="#rendering">Rendering</a></li>
+		<li><a href="#lol">Add more here</a></li>
+	</ul>
+	
+	<h2 id="introduction">Introduction to Project Aela</h2>
+	
+	<h3>What is Project Aela?</h3>
+	Project Aela is a software engine that specializes in giving a developer the ability to create any kind of desktop application with ease.
+	Originally intended for the creation of PC games, Project Aela allows a developer to utilise 3D rendering, 2D rendering, controls, LUA scripting, audio and resource management
+	in their applications.
+	
+	<h3>How does a developer use Project Aela?</h3>
+	Using Project Aela in a desktop application is not very complex. Project Aela is a static library, meaning that it can be included and utilised inside of another software
+	application. Here is a very simple piece of software that utilises Project Aela:
+	
+<pre><code>
+#include "Aela_Engine.h"
+
+int main(int argc, char *args[]) {
+	Aela::start();
+    return 0;
+}
+</code></pre>
+
+	<h3>Where did the name "Project Aela" come from?</h3>
+	Project Aela was named after a huntress from a <i>certain</i> video game.
+	
+
+
+	<h2 id="rendering">Rendering</h2>
+	This section is a work in progress.
+
+</div>
+</body>
+</html>

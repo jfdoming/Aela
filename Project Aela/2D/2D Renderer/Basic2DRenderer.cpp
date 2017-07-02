@@ -282,6 +282,12 @@ void Basic2DRenderer::renderTextTo2DBuffer(std::string text, TextFont* textFont,
 	}
 }
 
+void Basic2DRenderer::renderMultisampledBufferToBuffer(GLuint multisampledBuffer, GLuint secondaryBuffer, Rect<unsigned int>* windowDimensions) {
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, multisampledBuffer);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, secondaryBuffer);
+	glBlitFramebuffer(0, 0, windowDimensions->getWidth(), windowDimensions->getHeight(), 0, 0, windowDimensions->getWidth(), windowDimensions->getHeight(), GL_COLOR_BUFFER_BIT, GL_NEAREST);
+}
+
 // This clears the 2D framebuffer.
 void Basic2DRenderer::clearFrameBuffer() {
 	glClearColor(0.0, 0.0, 0.0, 0.0);

@@ -60,10 +60,10 @@ namespace Aela {
 			Window* getWindow();
 			GLuint* getColourFrameBuffer();
 			Texture* getColourFrameBufferTexture();
+			GLuint* getMultiSampledColourFrameBuffer();
+			Texture* getMultiSampledColourFrameBufferTexture();
 
-
-
-			private:
+		private:
 			// These are the smaller renderers that the Basic3DRenderer uses.
 			Basic3DShadowRenderer shadowRenderer;
 			Basic3DModelRenderer modelRenderer;
@@ -79,8 +79,8 @@ namespace Aela {
 			GLuint quad_vertexbuffer;
 
 			// These properties are used for the framebuffers.
-			GLuint colourFrameBuffer, depthRenderBuffer;
-			Texture colourFrameBufferTexture;
+			GLuint multisampledColourFrameBuffer, colourFrameBuffer, depthRenderBuffer;
+			Texture multisampledColourFrameBufferTexture, colourFrameBufferTexture;
 
 			// These are some Project Aela objects that the 3D renderer uses.
 			Window* window;
