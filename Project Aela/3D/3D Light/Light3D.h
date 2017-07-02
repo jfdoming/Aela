@@ -9,6 +9,14 @@
 #include "../3D Object/Object3D.h"
 #include "../../Utilities/Colour/ColourRGB.h"
 
+// This makes GLEW Static to avoid errors.
+#ifndef GLEW_STATIC
+#define GLEW_STATIC
+#endif
+
+// This includes GLEW.
+#include <GL/glew.h>
+
 /* Notes for things to add later:
  * Types of light: such as spotlights or all-angle lights. Spotlights
  *                 make use of rotation.
@@ -36,8 +44,13 @@ class Light3D : public Object3D {
 		void setPower(float power);
 		ColourRGB* getColour();
 		float getPower();
+		GLuint* getShadowMapTexture();
+		void setShadowMapTexture(GLuint* shadowMapTexture);
+		GLuint* getShadowMapBuffer();
+		void setShadowMapBuffer(GLuint* shadowMapBuffer);
 
 	private:
 		ColourRGB colour;
 		float power;
+		GLuint shadowMapTexture, shadowMapBuffer;
 };

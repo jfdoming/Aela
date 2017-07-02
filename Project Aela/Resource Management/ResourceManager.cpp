@@ -27,7 +27,7 @@ ResourceManager::~ResourceManager() {
 }
 
 // don't call me yet!!!
-void ResourceManager::addToLuaInstance(LuaManager& mgr) {
+void ResourceManager::expose(LuaManager& mgr) {
 	// only expose part of the class to Lua
 	luabridge::getGlobalNamespace(mgr.getLuaState())
 		.beginClass<Aela::ResourceManager>("ResourceManager")
@@ -38,16 +38,6 @@ void ResourceManager::addToLuaInstance(LuaManager& mgr) {
 
 	// expose this object
 	mgr.exposeObject(*this, "resourceManager");
-
-	std::vector<std::string> mods;
-	if (readMods(mods)) {
-		// we must assume we have a list of mods contained in the mod vector
-		LuaScript loadingScript;
-		loadingScript.initLua(mgr.getLuaState());
-		for (auto mod : mods) {
-			loadingScript.loadScript(mod + "/res/scripts/resources.lua");
-		}
-	}
 }
 
 void ResourceManager::bindLoader(ResourceLoader* loader) {
@@ -145,7 +135,7 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 		valid = false;
 	}
 
-	if (valid && boundLoader->isValid(in)) {
+	if (valid) {
 		Resource* res = boundLoader->load(in);
 		
 		if (res == NULL) {

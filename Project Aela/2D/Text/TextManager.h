@@ -14,8 +14,9 @@
 #include "../../Error Handler/ErrorHandler.h"
 #include "TextFont.h"
 
-class TextManager {
-	public:
+namespace Aela {
+	class TextManager {
+		public:
 		TextManager() {
 
 		}
@@ -33,9 +34,10 @@ class TextManager {
 		// This stores the amount of points in a character that make up one pixel.
 		const unsigned short POINTS_PER_PIXEL = 64;
 
-	private:
+		private:
 		// This is the list of fonts.
 		std::vector<TextFont> textFonts;
 		// This is the FreeType Library object.
 		FT_Library freetype;
-};
+	};
+}

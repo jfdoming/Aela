@@ -9,6 +9,7 @@
 #define SHADER_HPP
 
 GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath);
+GLuint loadShaders(std::string vertexShaderPath, std::string geometryShaderPath, std::string fragmentShaderPath);
 
 #endif
 

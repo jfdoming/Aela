@@ -25,6 +25,8 @@
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 
+using namespace Aela;
+
 int runningLoop();
 
 // These are global objects who's classes come from Project Aela.
@@ -36,8 +38,8 @@ TimeManager timeManager;
 TextManager textManager;
 LuaManager luaManager;
 LuaScript controlScript;
-Aela::SceneManager sceneManager;
-Aela::ResourceManager resourceManager(0);
+SceneManager sceneManager;
+ResourceManager resourceManager(0);
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -82,6 +84,11 @@ int startAela() {
 	controlManager.setWindow(&window);
 	controlManager.setTimeManager(&timeManager);
 
+	// This activates features of the renderer. These can be changed at any point during the runtime.
+	renderer.activateFeature(RendererFeature::SHADOWS);
+	renderer.activateFeature(RendererFeature::BILLBOARDS);
+	renderer.activateFeature(RendererFeature::SKYBOX);
+
 	// Lua Stuff
 	luabridge::getGlobalNamespace(luaManager.getLuaState())
 		.beginClass<ControlManager>("ControlManager")
@@ -90,9 +97,6 @@ int startAela() {
 
 	// Expose Object, must register classes before doing this
 	luaManager.exposeObject(controlManager, "controlManager");
-
-	controlScript.initLua(luaManager.getLuaState());
-	controlScript.loadScript("res/scripts/controls.lua");
 
 	eventHandler.bindControlManager(&controlManager);
 	eventHandler.bindWindow(&window);
@@ -107,10 +111,6 @@ int startAela() {
 	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, fast, controlManager);
 	eventHandler.bindMemberFunction(SDL_KEYUP, 225, slow, controlManager);
 
-	// These lines break the program, I have no idea why
-	// eventHandler.bindMemberFunction(SDL_KEYDOWN, 45, inc, renderer);
-	// eventHandler.bindMemberFunction(SDL_KEYDOWN, 46, dec, renderer);
-
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();
 	return value;
@@ -118,45 +118,65 @@ int startAela() {
 
 int runningLoop() {
 	// TEMPORARY! This won't exist once models are moved elsewhere.
-	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
-	std::vector<Model3D> models(6);
+	resourceManager.bindLoader(&Aela::OBJLoader::getInstance());
+	std::vector<Model3D> models(7);
 	models[0].loadTexture("res/textures/grass.dds");
-	models[1].loadTexture("res/textures/beretta.dds");
+	models[1].loadTexture("res/textures/mug.dds");
 	models[2].loadTexture("res/textures/mug.dds");
-	models[3].loadTexture("res/textures/missile.dds");
-	models[4].loadTexture("res/textures/cat.dds");
-	models[5].loadTexture("res/textures/big_marble.dds");
+	models[3].loadTexture("res/textures/cat.dds");
+	models[4].loadTexture("res/textures/missile.dds");
+	models[5].loadTexture("res/textures/cat.dds");
+	models[6].loadTexture("res/textures/big_marble.dds");
 
 	// This loads the models from OBJ files.
-	models[0].loadModel("res/models/testGrassPlane.obj");
-	models[1].loadModel("res/models/beretta.obj");
-	models[2].loadModel("res/models/mug.obj");
-	models[3].loadModel("res/models/missile.obj");
-	models[4].loadModel("res/models/cat.obj");
-	models[5].loadModel("res/models/big_marble.obj");
+	models[0].loadModel("res/models/large_grass_plane.obj");
+	models[1].loadModel("res/models/mug_centered.obj");
+	models[2].loadModel("res/models/mug_centered.obj");
+	models[3].loadModel("res/models/cat.obj");
+	models[4].loadModel("res/models/missile.obj");
+	models[5].loadModel("res/models/cat.obj");
+	models[6].loadModel("res/models/big_marble.obj");
 
-	// This sets model position.
-	models[1].setPosition(10, 0, 0);
-	models[2].setPosition(0, 10, 15);
-	models[4].setPosition(0, 0, -15);
-	models[5].setPosition(10, 20, 10);
+	// This sets model positioning.
+	models[1].setPosition(-10.72f, 4, -15.51f);
+	models[2].setPosition(0, 20, 15);
+	models[5].setPosition(0, 0, -15);
+	models[6].setPosition(10, 20, 10);
 
+	// This is how a skybox is loaded.
+	Skybox skybox;
+	std::string basicPath = "res/textures/skybox_test";
+	std::string paths[6] = {
+		basicPath + "/right.dds",
+		basicPath + "/left.dds",
+		basicPath + "/up.dds",
+		basicPath + "/down.dds",
+		basicPath + "/back.dds",
+		basicPath + "/front.dds"
+	};
+	loadSkybox(&skybox, paths, 512, 512);
+
+	// This is how a billboard is loaded.
 	std::vector<Billboard> billboards(1);
 	billboards[0].loadTexture("res/textures/ekkon.dds");
 
+	// This is how a light is set up.
 	std::vector<Light3D> lights;
-	for (int i = 0; i < 3; i++) {
-		glm::vec3 position = glm::vec3(0 + (i * 10), 0 + (i * 10), 0 + (i * 10));
-		glm::vec3 rotation = glm::vec3(0 + (i * 10), 0 + (i * 10), 0 + (i * 10));
-		ColourRGB colour(1.0, 1.0, 1.0);
-		float power = 1.0;
+	for (int i = 0; i < 2; i++) {
+		glm::vec3 position;
+		if (i == 0) {
+			position = glm::vec3(-8, 3, 0);
+		} else {
+			position = glm::vec3(10, 3, 10);
+		}
+		glm::vec3 rotation = glm::vec3(0, 0, 0);
+		ColourRGB colour(1, 1, 1);
+		float power = 0.5;
 		Light3D light(position, rotation, colour, power);
-		lights.insert(lights.begin(), light);
+		renderer.generateShadowMap(&light);
+		lights.push_back(light);
 	}
-
-
-	// These are temporary 2D textures that demonstrate how to render textures using a Renderer. This will be
-	// moved once the menu system is formed.
+	renderer.bindLights(&lights);
 
 	// set up the loader to load textures into our group
 	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
@@ -205,7 +225,7 @@ int runningLoop() {
 				fps = (int) ((fps * fpsSmoothing) + ((1000.0f / timeManager.getTimeBetweenFrames()) * (1.0f - fpsSmoothing)));
 				timeOfLastFrameCheck = timeManager.getCurrentTime();
 			} else {
-				// Whoa, your computer is THAT fast? If you're really so rich, buy me a new PC!
+				// Whoa, your computer is THAT fast? If you're really that rich, buy me a new PC!
 				fps = (int) ((fps * fpsSmoothing) + (1000.0f * (1.0f - fpsSmoothing)));
 				timeOfLastFrameCheck = timeManager.getCurrentTime();
 			}
@@ -218,23 +238,31 @@ int runningLoop() {
 			currentScene->render(&renderer);
 		}
 
+		// THIS IS FOR TESTING!
+		controlManager.transform3DObject(&lights[1], 7);
+		// std::cout << lights[0].getPosition()->x << " " << lights[0].getPosition()->y << " " << lights[0].getPosition()->z << "\n";
+
 		// This renders the program.
 		renderer.startRenderingFrame();
-		renderer.bindLights(&lights);
-		renderer.renderLights();
+		renderer.setupBoundLightsForCurrentFrame();
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModelShadows(&(models[i]));
 		}
+		renderer.sendBoundLightDataToShader();
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModel(&(models[i]));
 		}
 		for (unsigned int i = 0; i < billboards.size(); i++) {
 			renderer.renderBillboard(&(billboards[i]));
 		}
+		renderer.renderSkybox(&skybox);
 		std::string fpsData = std::to_string(fps) + " FPS";
 		renderer.render2DTexture(testTexture);
 		renderer.render2DTexture(testTexture2);
-		renderer.renderTextToTexture(fpsData, arial, &textOutput, &textColour);
+		renderer.renderText(fpsData, arial, &textOutput, &textColour);
+		ColourRGBA funkyColour((timeManager.getCurrentTime() % 1000) / 1000.0f, 1.0f - (timeManager.getCurrentTime() % 1000) / 1000.0f, 0.8f, 0.8f);
+		renderer.renderRectangle(50, 50, 100, 100, window.getWindowDimensions(), &funkyColour);
+		renderer.renderTriangle(200, 50, 300, 150, 400, 50, window.getWindowDimensions(), &funkyColour);
 		renderer.endRenderingFrame();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 	// This will call each model's destructor, which will delete each model's texture. I'm not sure if this

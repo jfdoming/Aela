@@ -8,44 +8,76 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "Basic3DModelRenderer.h"
 #include "../../Control Manager/ControlManager.h"
+
+#define PI 3.14159265358979323846
 
 void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
 	viewMatrix = setViewMatrix;
 	projectionMatrix = setProjectionMatrix;
 }
 
-void Basic3DModelRenderer::renderLights(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID) {
+void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID) {
 	glUseProgram(modelProgramID);
+
 	GLuint numberOfLights = lights->size();
-	std::vector<glm::vec3*> directionPointers(numberOfLights);
-	std::vector<glm::vec3> colours(numberOfLights);
-	std::vector<glm::vec3*> colourPointers(numberOfLights);
-	std::vector<float> powers(numberOfLights);
-
-	for (unsigned int i = 0; i < numberOfLights; i++) {
-		directionPointers[i] = lights->at(i).getRotation();
+	if (numberOfLights > MAX_LIGHT_AMOUNT) {
+		numberOfLights = MAX_LIGHT_AMOUNT;
 	}
 
-	for (unsigned int i = 0; i < numberOfLights; i++) {
-		colours[i] = lights->at(i).getColour()->getVec3();
-		colourPointers[i] = &(colours[i]);
-	}
+	if (numberOfLights > 0) {
+		// I would do this in a more optimized manner, but there's always time for that later, right?
+		std::vector<float> positions(numberOfLights * 3);
+		std::vector<float> directions(numberOfLights * 3);
+		std::vector<float> colours(numberOfLights * 3);
+		std::vector<float> powers(numberOfLights);
 
-	for (unsigned int i = 0; i < numberOfLights; i++) {
-		powers[i] = lights->at(i).getPower();
-	}
+		for (unsigned int i = 0; i < numberOfLights * 3; i += 3) {
+			positions[i] = lights->at(i / 3).getPosition()->x;
+			positions[i + 1] = lights->at(i / 3).getPosition()->y;
+			positions[i + 2] = lights->at(i / 3).getPosition()->z;
+		}
 
-	glUniform1i(numberOfLightsID, numberOfLights);
-	glUniform3fv(lightDirectionsID, numberOfLights, &(directionPointers.at(0)->x));
-	glUniform3fv(lightColoursID, numberOfLights, &(colourPointers.at(0)->x));
-	glUniform1f(lightPowersID, powers.at(0));
+		for (unsigned int i = 0; i < numberOfLights * 3; i += 3) {
+			directions[i] = lights->at(i / 3).getRotation()->x;
+			directions[i + 1] = lights->at(i / 3).getRotation()->y;
+			directions[i + 2] = lights->at(i / 3).getRotation()->z;
+		}
+
+		for (unsigned int i = 0; i < numberOfLights * 3; i += 3) {
+			colours[i] = lights->at(i / 3).getColour()->getR();
+			colours[i + 1] = lights->at(i / 3).getColour()->getG();
+			colours[i + 2] = lights->at(i / 3).getColour()->getB();
+		}
+
+		for (unsigned int i = 0; i < numberOfLights; i++) {
+			powers[i] = lights->at(i).getPower();
+		}
+
+		glUniform1i(numberOfLightsID, numberOfLights);
+		glUniform3fv(lightPositionsID, numberOfLights, &positions[0]);
+		glUniform3fv(lightDirectionsID, numberOfLights, &directions[0]);
+		glUniform3fv(lightColoursID, numberOfLights, &colours[0]);
+		glUniform1fv(lightPowersID, numberOfLights, &powers[0]);
+
+		for (unsigned int i = 0; i < lights->size(); i++) {
+			glActiveTexture(GL_TEXTURE1 + i);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, *lights->at(i).getShadowMapTexture());
+			glUniform1i(shadowMapID + i, 1 + i);
+		}
+	}
 }
 
-void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint depthMatrixID,
-	GLuint matrixID, GLuint modelMatrixID, GLuint viewMatrixID, GLuint depthBiasID, GLuint textureID,
-	GLuint depthTexture, GLuint shadowMapID, std::vector<Light3D>* lights) {
+void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID,
+	GLuint modelMVPMatrixID, GLuint modelMatrixID, GLuint modelViewMatrixID, GLuint modelTextureID) {
+	glUseProgram(modelProgramID);
+
+	// This binds the framebuffer.
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
 	// This loads buffers.
 	GLuint vertexbuffer;
@@ -68,53 +100,27 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, model->getIndexSize() * sizeof(unsigned short), model->getIndices(), GL_STATIC_DRAW);
 
-	// This binds the framebuffer.
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-	glEnable(GL_CULL_FACE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 
-	// This is positioning/rotation of light and the model.
-	glm::vec3 lightInvDir = *(lights->at(0).getRotation());
-	glm::vec3 position = *(model->getPosition());
-	glm::vec3 rotation = *(model->getRotation());
-
-	// This calculates the MVP matrix using the light's point of view. Note: glm::ortho creates a matrix.
-	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
-	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-
-	// Use this if you want a spot light. Otherwise, use the code above.
-	// glm::vec3 lightPos(5, 20, 20);
-	// glm::mat4 depthProjectionMatrix = glm::perspective<float>(45.0f, 1.0f, 2.0f, 50.0f);
-	// glm::mat4 depthViewMatrix = glm::lookAt(lightPos, lightPos-lightInvDir, glm::vec3(0,1,0));
-
-	// These are more matrices.
-	glm::mat4 depthModelMatrix = glm::mat4(1.0);
-	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
-
-	glUseProgram(modelProgramID);
-
-	// This sends the transformations to the shader.
-	glUniformMatrix4fv(depthMatrixID, 1, GL_FALSE, &depthMVP[0][0]);
+	// This is positioning/rotation of the model.
+	glm::vec3* position = model->getPosition();
+	glm::vec3* rotation = model->getRotation();
 
 	// This computes more matrices.
-	glm::mat4 rotationMatrix = glm::eulerAngleYXZ(rotation.y, rotation.x, rotation.z);
-	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), position) * rotationMatrix;
+	glm::mat4 rotationMatrix = glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
+	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), *position) * rotationMatrix;
 	glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
-	glm::mat4 depthBiasMVP = biasMatrix * depthMVP;
 
 	// This sends more transformations to the shader.
-	glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
+	glUniformMatrix4fv(modelMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
 	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
-	glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
-	glUniformMatrix4fv(depthBiasID, 1, GL_FALSE, &depthBiasMVP[0][0]);
+	glUniformMatrix4fv(modelViewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
 
-	// This binds the texture to "slot" zero. A similar thing happens to the depth texture.
+	// This binds the texture to "slot" zero.
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, *model->getTexture());
-	glUniform1i(textureID, 0);
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, depthTexture);
-	glUniform1i(shadowMapID, 1);
+	glUniform1i(modelTextureID, 0);
 
 	// These are attributes for the vertex buffer.
 	glEnableVertexAttribArray(0);
@@ -131,7 +137,7 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 		// Stride.
 		0,
 		// Array buffer offset.
-		(void*)0
+		(void*) 0
 	);
 
 	// These are attributes for the UV buffer.
@@ -164,11 +170,13 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 // For billboards, use getPositionOfCamera() to make the texture look at the camera.
 // To specify a rotation for the camera as a vec3, use the texture's position and add the direction (position + direction) for the lookAt parameter.
 // Note: for the lookAt parameter, position + glm::vec3(0.0, 0.0, 1.0) will not rotate the texture. Use this for no rotation.
-void Basic3DModelRenderer::renderTextureIn3DSpace(Window* window, bool cullFaces, GLuint texture, GLuint textureID,
-	GLuint modelProgramID, GLuint frameBuffer, GLuint viewMatrixID, GLuint matrixID, GLuint modelMatrixID,
-	GLuint depthBiasID, GLuint depthTexture, GLuint shadowMapID, GLuint depthMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
-	glUseProgram(modelProgramID);
+void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint modelTextureID,
+	GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
+
+	glUseProgram(programID);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 
 	if (cullFaces) {
 		glEnable(GL_CULL_FACE);
@@ -199,11 +207,7 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(Window* window, bool cullFaces
 		// This binds the texture to "slot" zero.
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
-		glUniform1i(textureID, 0);
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, depthTexture);
-		glUniform1i(shadowMapID, 1);
+		glUniform1i(modelTextureID, 0);
 
 		// Buffer generation.
 		GLuint vertexbuffer;
@@ -223,9 +227,7 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(Window* window, bool cullFaces
 		}
 		glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 
-		glUniformMatrix4fv(matrixID, 1, GL_FALSE, &MVP[0][0]);
-		glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
-		glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
+		glUniformMatrix4fv(billboardMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
 
 		// Vertex buffer attributes.
 		glEnableVertexAttribArray(0);
@@ -273,4 +275,72 @@ void Basic3DModelRenderer::drawTestQuad() {
 	glTexCoord2f(0, 1);
 	glVertex2f(0, 1);
 	glEnd();
+}
+
+void Basic3DModelRenderer::renderTestCube() {
+	unsigned int cubeVAO = 0;
+	unsigned int cubeVBO = 0;
+	if (cubeVAO == 0) {
+		// Order: back face, front face, left face, right face, bottom face, top face
+		float vertices[] = {
+			-1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
+			1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
+			1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
+			1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
+			-1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
+			-1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
+
+			-1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f,
+			1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f,
+			1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f,
+			1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f,
+			-1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f,
+
+			-1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+			-1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+			-1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+			-1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+
+			1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+			1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+			1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+			1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+			1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+			1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+
+			-1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
+			1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
+			1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
+			1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
+			-1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
+			-1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
+
+			1.0f,  1.0f , 1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+			1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
+			1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+			-1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
+			-1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f
+		};
+		glGenVertexArrays(1, &cubeVAO);
+		glGenBuffers(1, &cubeVBO);
+		// fill buffer
+		glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		// link vertex attributes
+		glBindVertexArray(cubeVAO);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) 0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (3 * sizeof(float)));
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (6 * sizeof(float)));
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+	}
+	glBindVertexArray(cubeVAO);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
 }

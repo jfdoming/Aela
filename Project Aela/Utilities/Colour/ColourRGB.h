@@ -48,6 +48,18 @@ class ColourRGB {
 		return b;
 	}
 
+	float* getRPointer() {
+		return &r;
+	}
+
+	float* getGPointer() {
+		return &g;
+	}
+
+	float* getBPointer() {
+		return &b;
+	}
+
 	glm::vec3 getVec3() {
 		return glm::vec3(r, g, b);
 	}

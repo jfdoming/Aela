@@ -29,6 +29,13 @@ class Object3D {
 		void setProperty(Object3DProperty property, float value);
 		float getProperty(Object3DProperty property);
 
+		void translate(glm::vec3 translation);
+		void rotate(glm::vec3 rotation);
+		void translate(float x, float y, float z);
+		void rotate(float x, float y, float z);
+
+		void forceValuesWithinRange(glm::vec3* vec3, float minimum, float maximum);
+
 	protected:
 		// Translation.
 		glm::vec3 position = glm::vec3(0.0, 0.0, 0.0);

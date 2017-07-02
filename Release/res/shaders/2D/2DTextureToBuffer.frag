@@ -5,7 +5,7 @@
  * Description: Project Aela's Texture Renderer, which renders a 2D texture to a buffer.
 */
 
-#version 410
+#version 330 core
 
 // This is the output data.
 layout(location = 0) out vec4 colour;

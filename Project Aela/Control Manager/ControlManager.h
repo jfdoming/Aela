@@ -12,16 +12,17 @@
 #include "../Time Manager/TimeManager.h"
 #include <time.h>
 
-// These enums are used to set properties for the control manager.
-enum class ControlManagerProperty {
-	ALLOW_UPSIDE_DOWN_CAMERA,
-	CAMERA_TRANSLATION_SPEED, CAMERA_TRANSLATION_SUPER_SPEED,
-	CAMERA_ROTATION_SPEED
-};
+namespace Aela {
+	// These enums are used to set properties for the control manager.
+	enum class ControlManagerProperty {
+		ALLOW_UPSIDE_DOWN_CAMERA,
+		CAMERA_TRANSLATION_SPEED, CAMERA_TRANSLATION_SUPER_SPEED,
+		CAMERA_ROTATION_SPEED
+	};
 
-// This is the Control Manager class.
-class ControlManager {
-	public:
+	// This is the Control Manager class.
+	class ControlManager {
+		public:
 		ControlManager() {
 			windowFocus = true;
 			speed = 0.003f;
@@ -33,6 +34,10 @@ class ControlManager {
 
 		// This computes matrices for a Camera3D.
 		void computeMatricesWithInputs(Camera3D* camera);
+
+		// This is a temporary function used for testing. It translates
+		// a 3D object.
+		void transform3DObject(Object3D* object, float speedModifier);
 
 		// These are setters and getters of the control manager.
 		void setWindow(Window* setWindow);
@@ -48,7 +53,7 @@ class ControlManager {
 		// This is a test function for LUA.
 		void test();
 
-	private:
+		private:
 		// These are pointers to other Aela classes.
 		TimeManager* timeManager;
 		Window* window;
@@ -68,4 +73,5 @@ class ControlManager {
 
 		// This is used when computing controls.
 		const glm::vec3 straightUp = glm::vec3(0, 0.5, 0);
-};
+	};
+}

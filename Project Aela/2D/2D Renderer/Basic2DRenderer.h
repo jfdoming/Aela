@@ -2,7 +2,7 @@
 * Class: Project Aela's 2D Renderer
 * Author: Robert Ciborowski
 * Date: February 2017
-* Description: A class used by Aela's Renderer to render textures as 2D objects.
+* Description: A class used by Aela's Renderer to render 2D objects.
 */
 
 // These are the includes.
@@ -44,6 +44,11 @@ class Basic2DRenderer {
 		void renderTextureTo2DBuffer(Texture* texture, Rect<unsigned int>* windowDimensions);
 		void renderTextTo2DBuffer(std::string text, TextFont* textFont, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
 			unsigned int pointsPerPixel);
+		void renderRectangle(Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
+		void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
+		void renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
+		void renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY,
+			Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
 
 		// These are some useful, self-explanatory functions.
 		void clearFrameBuffer();
