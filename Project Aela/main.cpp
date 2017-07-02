@@ -173,7 +173,7 @@ int runningLoop() {
 		}
 		glm::vec3 rotation = glm::vec3(0, 0, 0);
 		ColourRGB colour(1, 1, 1);
-		float power = 0.8;
+		float power = 0.8F;
 		Light3D light(position, rotation, colour, power);
 		renderer.generateShadowMap(&light);
 		lights.push_back(light);

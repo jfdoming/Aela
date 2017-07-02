@@ -1,5 +1,6 @@
 #include "Object3D.h"
 #include <iostream>
+
 #define PI 3.14159265358979323846
 
 void Object3D::setPosition(float setX, float setY, float setZ) {
