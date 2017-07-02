@@ -10,9 +10,9 @@
 
 using namespace Aela;
 
-void Basic3DRenderer::setup() {
+void Basic3DRenderer::setup(unsigned int multisampling) {
 	setupShaders();
-	setupFrameBuffers();
+	setupFrameBuffers(multisampling);
 	getIDs();
 }
 
@@ -29,6 +29,7 @@ void Basic3DRenderer::getIDs() {
 	modelMVPMatrixID = glGetUniformLocation(modelProgramID, "modelViewProjectionMatrix");
 	modelViewMatrixID = glGetUniformLocation(modelProgramID, "viewMatrix");
 	modelMatrixID = glGetUniformLocation(modelProgramID, "modelMatrix");
+	cameraPositionID = glGetUniformLocation(modelProgramID, "cameraPosition");
 	shadowMapID = glGetUniformLocation(modelProgramID, "shadowMaps[0]");
 	numberOfLightsID = glGetUniformLocation(modelProgramID, "numberOfLights");
 	lightPositionsID = glGetUniformLocation(modelProgramID, "lightPositions");
@@ -48,7 +49,7 @@ void Basic3DRenderer::getIDs() {
 	skyboxProjectionMatrixID = glGetUniformLocation(skyboxProgramID, "projectionMatrix");
 }
 
-void Basic3DRenderer::setupFrameBuffers() {
+void Basic3DRenderer::setupFrameBuffers(unsigned int multisampling) {
 	// This generates the colour framebuffer.
 	glGenFramebuffers(1, &colourFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, colourFrameBuffer);
@@ -68,30 +69,38 @@ void Basic3DRenderer::setupFrameBuffers() {
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(colourFrameBufferTexture.getTexture()), 0);
 
-	// This generates the multisampled colour framebuffer, which later is blitted to the regular colour framebuffer.
-	glGenFramebuffers(1, &multisampledColourFrameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, multisampledColourFrameBuffer);
+	if (multisampling > 0) {
+		// This generates the multisampled colour framebuffer, which later is blitted to the regular colour framebuffer.
+		glGenFramebuffers(1, &multisampledColourFrameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, multisampledColourFrameBuffer);
 
-	glGenTextures(1, multisampledColourFrameBufferTexture.getTexture());
-	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, *(multisampledColourFrameBufferTexture.getTexture()));
-	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, windowWidth, windowHeight, GL_TRUE);
-	/* Clamping to edges is important to prevent artifacts when scaling */
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	/* Linear filtering usually looks best for text */
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glGenTextures(1, multisampledColourFrameBufferTexture.getTexture());
+		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, *(multisampledColourFrameBufferTexture.getTexture()));
+		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, windowWidth, windowHeight, GL_TRUE);
+		/* Clamping to edges is important to prevent artifacts when scaling */
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		/* Linear filtering usually looks best for text */
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	multisampledColourFrameBufferTexture.setDimensions(0, 0, windowWidth, windowHeight);
-	multisampledColourFrameBufferTexture.setOutput(0, 0, windowWidth, windowHeight);
-	glDrawBuffer(GL_COLOR_ATTACHMENT0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *(multisampledColourFrameBufferTexture.getTexture()), 0);
+		multisampledColourFrameBufferTexture.setDimensions(0, 0, windowWidth, windowHeight);
+		multisampledColourFrameBufferTexture.setOutput(0, 0, windowWidth, windowHeight);
+		glDrawBuffer(GL_COLOR_ATTACHMENT0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *(multisampledColourFrameBufferTexture.getTexture()), 0);
+	} else {
+		glDeleteBuffers(1, &multisampledColourFrameBuffer);
+		glDeleteTextures(1, multisampledColourFrameBufferTexture.getTexture());
+	}
 
 	// This generates the depth renderbuffer, which is used alongside the multisampled colour framebuffer.
 	glGenRenderbuffers(1, &depthRenderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer);
-	// glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, windowWidth, windowHeight);
-	glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT, windowWidth, windowHeight);
+	if (multisampling > 0) {
+		glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT, windowWidth, windowHeight);
+	} else {
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, windowWidth, windowHeight);
+	}
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -160,11 +169,11 @@ Texture* Basic3DRenderer::getColourFrameBufferTexture() {
 	return &colourFrameBufferTexture;
 }
 
-GLuint * Aela::Basic3DRenderer::getMultiSampledColourFrameBuffer() {
+GLuint * Aela::Basic3DRenderer::getMultisampledColourFrameBuffer() {
 	return &multisampledColourFrameBuffer;
 }
 
-Texture * Aela::Basic3DRenderer::getMultiSampledColourFrameBufferTexture() {
+Texture * Aela::Basic3DRenderer::getMultisampledColourFrameBufferTexture() {
 	return &multisampledColourFrameBufferTexture;
 }
 
@@ -173,10 +182,14 @@ void Basic3DRenderer::renderShadow(Model3D* model) {
 	shadowRenderer.renderShadow(model, depthProgramID, shadowModelMatrixID, shadowMatrixID, lights, lightShadowPositionsID);
 }
 
-void Basic3DRenderer::renderModel(Model3D* model) {
+void Basic3DRenderer::renderModel(Model3D* model, bool multisampling) {
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	glViewport(0, 0, windowWidth, windowHeight);
-	modelRenderer.renderModel(model, multisampledColourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID);
+	if (multisampling) {
+		modelRenderer.renderModel(model, multisampledColourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
+	} else {
+		modelRenderer.renderModel(model, colourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
+	}
 }
 
 void Basic3DRenderer::clearColourFrameBuffer() {
@@ -186,18 +199,26 @@ void Basic3DRenderer::clearColourFrameBuffer() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
+void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation, bool multisampling) {
 	// Note: for regular texture rendering, use:
 	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
 	glViewport(0, 0, windowWidth, windowHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	modelRenderer.renderTextureIn3DSpace(cullFaces, *texture, billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, position, lookAt, inverseRotation);
+	if (multisampling) {
+		modelRenderer.renderTextureIn3DSpace(cullFaces, *texture, billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, position, lookAt, inverseRotation);
+	} else {
+		modelRenderer.renderTextureIn3DSpace(cullFaces, *texture, billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, position, lookAt, inverseRotation);
+	}
 }
 
-void Basic3DRenderer::renderBillboard(Billboard* billboard) {
+void Basic3DRenderer::renderBillboard(Billboard* billboard, bool multisampling) {
 	glViewport(0, 0, windowWidth, windowHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), *(camera->getPosition()), true);
+	if (multisampling) {
+		modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), *(camera->getPosition()), true);
+	} else {
+		modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), *(camera->getPosition()), true);
+	}
 }
 
 void Basic3DRenderer::clearShadowMaps() {
@@ -209,8 +230,12 @@ void Basic3DRenderer::sendLightDataToShader() {
 	modelRenderer.sendLightDataToShader(lights, modelProgramID, numberOfLightsID, lightPositionsID, lightDirectionsID, lightColoursID, lightPowersID, shadowMapID);
 }
 
-void Basic3DRenderer::renderSkybox(Skybox* skybox) {
+void Basic3DRenderer::renderSkybox(Skybox* skybox, bool multisampling) {
 	glViewport(0, 0, windowWidth, windowHeight);
 	skyboxRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	skyboxRenderer.renderSkybox(skybox, skyboxProgramID, multisampledColourFrameBuffer, skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID);
+	if (multisampling) {
+		skyboxRenderer.renderSkybox(skybox, skyboxProgramID, multisampledColourFrameBuffer, skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID);
+	} else {
+		skyboxRenderer.renderSkybox(skybox, skyboxProgramID, colourFrameBuffer, skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID);
+	}
 }

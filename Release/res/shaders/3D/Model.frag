@@ -23,10 +23,17 @@ layout(location = 0) out vec4 colour;
 // These are values that are hard-coded into the shader.
 const int MAX_LIGHT_AMOUNT = 2;
 float distanceToLightModifier = 0.1;
-int PCFModifier = 10;
+bool PCF = true;
 float PI  = 3.14159265358979323846;
 float far = 100.0;
 float shadowScalingFactor = 1;
+vec3 PCFDirections[20] = vec3[](
+   vec3( 1,  1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1,  1,  1), 
+   vec3( 1,  1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1,  1, -1),
+   vec3( 1,  1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1,  1,  0),
+   vec3( 1,  0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1,  0, -1),
+   vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1)
+);
 
 // These are the uniforms used by the shader.
 uniform sampler2D textureSampler;
@@ -36,44 +43,37 @@ uniform vec3 lightPositions[2];
 uniform vec3 lightDirections[2];
 uniform vec3 lightColours[2];
 uniform float lightPowers[2];
+uniform vec3 cameraPosition;
 
 // This calculates the shadow. It contains a few methods of making shadows look nicer,
 // including the fixing of shadow acne and peter panning. It also includes percentage-closer
 // filtering (PCF).
 float shadowCalculation(vec3 positionInLightSpace, int whichLight, float bias) {
     vec3 fragToLight = positionInLightSpace - lightPositions[whichLight];
-    float closestDepth = texture(shadowMaps[whichLight], fragToLight).z;
-    closestDepth *= far * shadowScalingFactor;
     float currentDepth = length(fragToLight) * shadowScalingFactor;
 	if (currentDepth > far) {
 		return 0;
 	}
-    float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+    // float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+	float shadow = 0;
 	
 	// This undergoes the PCF process, if enabled.
-	/*if (PCFModifier != 0) {
-<<<<<<< HEAD
-		for (int x = -PCFModifier / 2; x < PCFModifier / 2; x++) {
-			for (int y = -PCFModifier / 2; y < PCFModifier / 2; y++) {
-				for (int z = -PCFModifier / 2; z < PCFModifier / 2; z++) {
-					if (
-				}
+	if (PCF) {
+		// float PCFRadius = (1.0 + length(cameraPosition - worldSpacePosition)) / 500.0;
+		float PCFRadius = 0.05;
+		for (int i = 0; i < PCFDirections.length(); i++) {
+			float closestDepth = texture(shadowMaps[whichLight], fragToLight + PCFDirections[i] * PCFRadius).r;
+			closestDepth *= far * shadowScalingFactor;
+			if (currentDepth - bias > closestDepth) {
+				shadow += 1.0;
 			}
 		}
-=======
-		vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-		int halfOfPCFModifier = int(ceil(PCFModifier / 2.0));
-		for (int x = 0 - halfOfPCFModifier; x < halfOfPCFModifier; x++) {
-			for (int y = 0 - halfOfPCFModifier; y < halfOfPCFModifier; y++) {
-				if (!(x == 0 && y == 0)) {
-					float pcfDepth = texture(shadowMap, coordinate.xy + vec2(x, y) * texelSize).r; 
-					shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
-				}			
-			}    
-		}
-		shadow /= PCFModifier * PCFModifier;
->>>>>>> 1466c6640e926f646858ccdadc950d94848e9492
-	}*/
+		shadow /= float(PCFDirections.length());
+	} else {
+		float closestDepth = texture(shadowMaps[whichLight], fragToLight).z;
+		closestDepth *= far * shadowScalingFactor;
+		shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+	}
 	
 	// return closestDepth / far;
     return shadow;

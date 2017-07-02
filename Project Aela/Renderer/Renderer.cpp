@@ -15,14 +15,14 @@ void Renderer::setup3DRendering() {
 	if (mainFrameBuffer == NULL) {
 		setupGLFeatures();
 	}
-	basic3DRenderer.setup();
+	basic3DRenderer.setup(multisampling3D);
 }
 
 void Renderer::setup2DRendering() {
 	if (mainFrameBuffer == NULL) {
 		setupGLFeatures();
 	}
-	basic2DRenderer.setup();
+	basic2DRenderer.setup(multisampling2D);
 }
 
 void Renderer::setupGLFeatures() {
@@ -87,6 +87,7 @@ void Renderer::setup2D() {
 
 void Renderer::setWindow(Window* window) {
 	basic3DRenderer.setWindow(window);
+	basic2DRenderer.setWindow(window);
 	this->window = window;
 }
 
@@ -126,7 +127,7 @@ void Renderer::startRenderingFrame() {
 
 	basic3DRenderer.clearColourFrameBuffer();
 	basic3DRenderer.clearShadowMaps();
-	basic2DRenderer.clearFrameBuffer();
+	basic2DRenderer.clearFrameBuffer(multisampling2D > 0);
 }
 
 // This function tells the renderer to send the lights added through bindLights() to the shaders.
@@ -142,51 +143,56 @@ void Renderer::renderModelShadows(Model3D* model) {
 }
 
 void Renderer::renderModel(Model3D* model) {
-	basic3DRenderer.renderModel(model);
+	basic3DRenderer.renderModel(model, multisampling3D > 0);
 }
 
 void Renderer::renderBillboard(Billboard* billboard) {
 	if (useBillboards) {
-		basic3DRenderer.renderBillboard(billboard);
+		basic3DRenderer.renderBillboard(billboard, multisampling3D > 0);
 	}
 }
 
 void Renderer::renderSkybox(Skybox* skybox) {
 	if (useSkybox) {
-		basic3DRenderer.renderSkybox(skybox);
+		basic3DRenderer.renderSkybox(skybox, multisampling3D > 0);
 	}
 }
 
 void Renderer::render2DTexture(Texture* texture) {
-	basic2DRenderer.renderTextureTo2DBuffer(texture, window->getWindowDimensions());
+	basic2DRenderer.renderTextureTo2DBuffer(texture, window->getWindowDimensions(), multisampling2D > 0);
 }
 
 void Renderer::renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour) {
 	basic2DRenderer.renderTextTo2DBuffer(text, textManager->getTextFont(textFontToUse), output, window->getWindowDimensions(), colour,
-		textManager->POINTS_PER_PIXEL);
+		textManager->POINTS_PER_PIXEL, multisampling2D > 0);
 }
 
 void Renderer::renderRectangle(Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
-	basic2DRenderer.renderRectangle(output, windowDimensions, colour);
+	basic2DRenderer.renderRectangle(output, windowDimensions, colour, multisampling2D > 0);
 }
 
 void Renderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
-	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, windowDimensions, colour);
+	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, windowDimensions, colour, multisampling2D > 0);
 }
 
 void Renderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
-	basic2DRenderer.renderTriangle(pointA, pointB, pointC, windowDimensions, colour);
+	basic2DRenderer.renderTriangle(pointA, pointB, pointC, windowDimensions, colour, multisampling2D > 0);
 }
 
 void Renderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
-	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, windowDimensions, colour);
+	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, windowDimensions, colour, multisampling2D > 0);
 }
 
 // This ends the rendering of a frame. This renders the framebuffers of the basic renderers
 // into the screen framebuffer while applying the effects from the effects shaders.
 void Renderer::endRenderingFrame() {
-	basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultiSampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getWindowDimensions());
+	if (multisampling3D > 0) {
+		basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultisampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getWindowDimensions());
+	}
 	basic2DRenderer.renderTextureToBuffer(basic3DRenderer.getColourFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects3DShader);
+	if (multisampling2D > 0) {
+		basic2DRenderer.renderMultisampledBufferToBuffer(*basic2DRenderer.getMultisampledFrameBuffer(), *basic2DRenderer.getFrameBuffer(), window->getWindowDimensions());
+	}
 	basic2DRenderer.renderTextureToBuffer(basic2DRenderer.getFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects2DShader);
 	basic2DRenderer.renderTextureToBuffer(&mainFrameBufferTexture, window->getWindowDimensions(), 0);
 	window->updateBuffer();
@@ -211,6 +217,46 @@ void Renderer::activateFeature(RendererFeature feature) {
 		case RendererFeature::SKYBOX:
 			useSkybox = true;
 			break;
+		case RendererFeature::MSAA_3D_X0:
+			multisampling3D = 0;
+			basic3DRenderer.setupFrameBuffers(0);
+			break;
+		case RendererFeature::MSAA_3D_X2:
+			multisampling3D = 2;
+			basic3DRenderer.setupFrameBuffers(2);
+			break;
+		case RendererFeature::MSAA_3D_X4:
+			multisampling3D = 4;
+			basic3DRenderer.setupFrameBuffers(4);
+			break;
+		case RendererFeature::MSAA_3D_X8:
+			multisampling3D = 8;
+			basic3DRenderer.setupFrameBuffers(8);
+			break;
+		case RendererFeature::MSAA_3D_X16:
+			multisampling3D = 16;
+			basic3DRenderer.setupFrameBuffers(16);
+			break;
+		case RendererFeature::MSAA_2D_X0:
+			multisampling2D = 0;
+			basic2DRenderer.setupFrameBuffers(0);
+			break;
+		case RendererFeature::MSAA_2D_X2:
+			multisampling2D = 2;
+			basic2DRenderer.setupFrameBuffers(2);
+			break;
+		case RendererFeature::MSAA_2D_X4:
+			multisampling2D = 4;
+			basic2DRenderer.setupFrameBuffers(4);
+			break;
+		case RendererFeature::MSAA_2D_X8:
+			multisampling2D = 8;
+			basic2DRenderer.setupFrameBuffers(8);
+			break;
+		case RendererFeature::MSAA_2D_X16:
+			multisampling2D = 16;
+			basic2DRenderer.setupFrameBuffers(16);
+			break;
 	}
 }
 
@@ -224,6 +270,60 @@ void Renderer::deactivateFeature(RendererFeature feature) {
 			break;
 		case RendererFeature::SKYBOX:
 			useSkybox = false;
+			break;
+		case RendererFeature::MSAA_3D_X0:
+			// You want to deactivate having no MSAA? What does that even mean?
+			break;
+		case RendererFeature::MSAA_3D_X2:
+			if (multisampling3D == 2) {
+				multisampling3D = 0;
+				basic3DRenderer.setupFrameBuffers(0);
+			}
+			break;
+		case RendererFeature::MSAA_3D_X4:
+			if (multisampling3D == 4) {
+				multisampling3D = 0;
+				basic3DRenderer.setupFrameBuffers(0);
+			}
+			break;
+		case RendererFeature::MSAA_3D_X8:
+			if (multisampling3D == 8) {
+				multisampling3D = 0;
+				basic3DRenderer.setupFrameBuffers(0);
+			}
+			break;
+		case RendererFeature::MSAA_3D_X16:
+			if (multisampling3D == 16) {
+				multisampling3D = 0;
+				basic3DRenderer.setupFrameBuffers(0);
+			}
+			break;
+		case RendererFeature::MSAA_2D_X0:
+			// You want to deactivate having no MSAA? What does that even mean?
+			break;
+		case RendererFeature::MSAA_2D_X2:
+			if (multisampling2D == 2) {
+				multisampling2D = 0;
+				basic2DRenderer.setupFrameBuffers(0);
+			}
+			break;
+		case RendererFeature::MSAA_2D_X4:
+			if (multisampling2D == 4) {
+				multisampling2D = 0;
+				basic2DRenderer.setupFrameBuffers(0);
+			}
+			break;
+		case RendererFeature::MSAA_2D_X8:
+			if (multisampling2D == 8) {
+				multisampling2D = 0;
+				basic2DRenderer.setupFrameBuffers(0);
+			}
+			break;
+		case RendererFeature::MSAA_2D_X16:
+			if (multisampling2D == 16) {
+				multisampling2D = 0;
+				basic2DRenderer.setupFrameBuffers(0);
+			}
 			break;
 	}
 }
@@ -241,8 +341,6 @@ void Aela::Renderer::toggleFeature(RendererFeature feature) {
 			break;
 	}
 }
-
-
 
 void Renderer::increaseFOV() {
 	camera.setFieldOfView(camera.getFieldOfView() + (0.002f) * timeManager->getTimeBetweenFrames());

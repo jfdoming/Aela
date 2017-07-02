@@ -37,7 +37,9 @@ namespace Aela {
 	};
 
 	enum class RendererFeature {
-		SHADOWS, BILLBOARDS, SKYBOX
+		SHADOWS, BILLBOARDS, SKYBOX,
+		MSAA_3D_X0, MSAA_3D_X2, MSAA_3D_X4, MSAA_3D_X8, MSAA_3D_X16,
+		MSAA_2D_X0, MSAA_2D_X2, MSAA_2D_X4, MSAA_2D_X8, MSAA_2D_X16
 	};
 
 	class Renderer {
@@ -111,7 +113,7 @@ namespace Aela {
 			// This function uses a control manager to update the renderer's camera.
 			void updateCameraUsingControls(ControlManager* controls);
 
-			private:
+		private:
 			// These are a bunch of Project Aela objects that the renderer uses.
 			Basic3DRenderer basic3DRenderer;
 			Basic2DRenderer basic2DRenderer;
@@ -136,6 +138,7 @@ namespace Aela {
 
 			// These specify the features that the renderer is allowed to use during rendering.
 			bool useShadows = false, useBillboards = false, useSkybox = false;
+			unsigned int multisampling3D = 0, multisampling2D = 0;
 
 			// This function is used internally to check the framebuffer that is currently
 			// being applied to OpenGL.

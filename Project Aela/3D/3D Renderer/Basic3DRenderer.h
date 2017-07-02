@@ -42,16 +42,16 @@ namespace Aela {
 
 			// These are some functions related to rendering.
 			void renderShadow(Model3D* model);
-			void renderModel(Model3D* model);
+			void renderModel(Model3D* model, bool multisampling);
 			void clearColourFrameBuffer();
-			void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation);
-			void renderBillboard(Billboard* billboard);
+			void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation, bool multisampling);
+			void renderBillboard(Billboard* billboard, bool multisampling);
 			void clearShadowMaps();
 			void sendLightDataToShader();
-			void renderSkybox(Skybox* skybox);
+			void renderSkybox(Skybox* skybox, bool multisampling);
 
 			// These are some functions related to setup.
-			void setup();
+			void setup(unsigned int multisampling);
 			void setWindow(Window* setWindow);
 			void setCamera(Camera3D* camera);
 			void bindLights(std::vector<Light3D>* lights);
@@ -60,8 +60,11 @@ namespace Aela {
 			Window* getWindow();
 			GLuint* getColourFrameBuffer();
 			Texture* getColourFrameBufferTexture();
-			GLuint* getMultiSampledColourFrameBuffer();
-			Texture* getMultiSampledColourFrameBufferTexture();
+			GLuint* getMultisampledColourFrameBuffer();
+			Texture* getMultisampledColourFrameBufferTexture();
+
+			// Although this function is called in setup(), it should be called to change the MSAA amount.
+			void setupFrameBuffers(unsigned int multisampling);
 
 		private:
 			// These are the smaller renderers that the Basic3DRenderer uses.
@@ -72,7 +75,7 @@ namespace Aela {
 			// These are a bunch of handles to GLSL variables that get passed to the shadow and
 			// model renderer during rendering.
 			GLuint depthProgramID, modelProgramID, billboardProgramID, skyboxProgramID;
-			GLuint modelTextureID, modelMVPMatrixID, depthMatrixID, modelViewMatrixID, modelMatrixID, shadowMapID, shadowMatrixID, shadowModelMatrixID;
+			GLuint modelTextureID, modelMVPMatrixID, depthMatrixID, modelViewMatrixID, modelMatrixID, cameraPositionID, shadowMapID, shadowMatrixID, shadowModelMatrixID;
 			GLuint billboardTextureID, billboardMVPMatrixID;
 			GLuint skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID;
 			GLuint numberOfLightsID, lightPositionsID, lightDirectionsID, lightColoursID, lightPowersID, lightShadowPositionsID;
@@ -98,6 +101,5 @@ namespace Aela {
 			// These are some setup related functions.
 			void setupShaders();
 			void getIDs();
-			void setupFrameBuffers();
 	};
 };

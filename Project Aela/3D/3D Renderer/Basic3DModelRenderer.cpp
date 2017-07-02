@@ -70,8 +70,8 @@ void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, G
 	}
 }
 
-void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID,
-	GLuint modelMVPMatrixID, GLuint modelMatrixID, GLuint modelViewMatrixID, GLuint modelTextureID) {
+void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
+	GLuint modelMatrixID, GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition) {
 	glUseProgram(modelProgramID);
 
 	// This binds the framebuffer.
@@ -112,10 +112,11 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), *position) * rotationMatrix;
 	glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 
-	// This sends more transformations to the shader.
+	// This sends more uniforms to the shader.
 	glUniformMatrix4fv(modelMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
 	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
 	glUniformMatrix4fv(modelViewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
+	glUniform3fv(cameraPositionID, 1, &(cameraPosition->x));
 
 	// This binds the texture to "slot" zero.
 	glActiveTexture(GL_TEXTURE0);

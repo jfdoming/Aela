@@ -20,7 +20,7 @@ out vec3 cameraSpaceNormal;
 out vec3 cameraSpaceEyeDirection;
 out vec3 normal;
 
-// Values that stay constant for the whole mesh.
+// These are values that stay constant for the whole mesh.
 uniform mat4 modelViewProjectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;

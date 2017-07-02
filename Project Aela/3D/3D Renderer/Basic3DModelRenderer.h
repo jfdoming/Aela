@@ -18,7 +18,7 @@ class Basic3DModelRenderer {
 		// This function renders a model. It requires a lot of GLuints that are provided by
 		// the Basic3DRenderer.
 		void renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID, GLuint modelMatrixID,
-			GLuint modelViewMatrixID, GLuint modelTextureID);
+			GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition);
 
 		// This function renders a 2D texture in 3D space.
 		void renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID,

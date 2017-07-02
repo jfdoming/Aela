@@ -23,6 +23,6 @@ class Basic3DShadowRenderer {
 		void renderTestCube();
 
 	private:
-		const unsigned int DEPTH_TEXTURE_WIDTH = 1024, DEPTH_TEXTURE_HEIGHT = 1024;
+		const unsigned int DEPTH_TEXTURE_WIDTH = 2048, DEPTH_TEXTURE_HEIGHT = 2048;
 		const unsigned int MAX_LIGHT_AMOUNT = 2;
 };

@@ -84,10 +84,12 @@ int startAela() {
 	controlManager.setWindow(&window);
 	controlManager.setTimeManager(&timeManager);
 
-	// This activates features of the renderer. These can be changed at any point during the runtime.
+	// This activates features of the renderer. These can be changed at any point during the runtime of the application.
 	renderer.activateFeature(RendererFeature::SHADOWS);
 	renderer.activateFeature(RendererFeature::BILLBOARDS);
 	renderer.activateFeature(RendererFeature::SKYBOX);
+	renderer.activateFeature(RendererFeature::MSAA_3D_X4);
+	renderer.activateFeature(RendererFeature::MSAA_2D_X4);
 
 	// Lua Stuff
 	luabridge::getGlobalNamespace(luaManager.getLuaState())
