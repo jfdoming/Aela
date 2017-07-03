@@ -44,7 +44,7 @@ namespace Aela {
 			void renderShadow(Model3D* model);
 			void renderModel(Model3D* model, bool multisampling);
 			void clearColourFrameBuffer();
-			void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation, bool multisampling);
+			void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3* position, glm::vec3* lookAt, bool inverseRotation, bool multisampling);
 			void renderBillboard(Billboard* billboard, bool multisampling);
 			void clearShadowMaps();
 			void sendLightDataToShader();

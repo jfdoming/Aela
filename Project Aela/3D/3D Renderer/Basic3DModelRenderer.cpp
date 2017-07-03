@@ -172,8 +172,7 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 // To specify a rotation for the camera as a vec3, use the texture's position and add the direction (position + direction) for the lookAt parameter.
 // Note: for the lookAt parameter, position + glm::vec3(0.0, 0.0, 1.0) will not rotate the texture. Use this for no rotation.
 void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint modelTextureID,
-	GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
-
+	GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* lookAt, bool inverseRotation) {
 	glUseProgram(programID);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -222,7 +221,7 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture
 		glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
 
 		// This computes matrices based on control input.
-		glm::mat4 modelMatrix = glm::lookAt(position, lookAt, glm::vec3(0, 1, 0));
+		glm::mat4 modelMatrix = glm::translate(glm::lookAt(*position, *lookAt, glm::vec3(0, 1, 0)), *position);
 		if (inverseRotation) {
 			modelMatrix = glm::inverse(modelMatrix);
 		}
@@ -263,6 +262,95 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture
 		glDeleteBuffers(1, &uvbuffer);
 	}
 }
+
+void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID, GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* rotation) {
+	glUseProgram(programID);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
+	if (cullFaces) {
+		glEnable(GL_CULL_FACE);
+	} else {
+		glDisable(GL_CULL_FACE);
+	}
+
+	glm::vec3 vertices[3];
+	glm::vec2 uvs[3];
+
+	for (int i = 0; i < 2; i++) {
+		if (i == 0) {
+			vertices[0] = glm::vec3(1.0, 1.0, 0.0);
+			vertices[1] = glm::vec3(1.0, -1.0, 0.0);
+			vertices[2] = glm::vec3(-1.0, 1.0, 0.0);
+			uvs[0] = glm::vec2(0.0, 0.0);
+			uvs[1] = glm::vec2(0.0, 1.0);
+			uvs[2] = glm::vec2(1.0, 0.0);
+		} else {
+			vertices[0] = glm::vec3(-1.0, -1.0, 0.0);
+			vertices[1] = glm::vec3(-1.0, 1.0, 0.0);
+			vertices[2] = glm::vec3(1.0, -1.0, 0.0);
+			uvs[0] = glm::vec2(1.0, 1.0);
+			uvs[1] = glm::vec2(1.0, 0.0);
+			uvs[2] = glm::vec2(0.0, 1.0);
+		}
+
+		// This binds the texture to "slot" zero.
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glUniform1i(billboardTextureID, 0);
+
+		// Buffer generation.
+		GLuint vertexbuffer;
+		glGenBuffers(1, &vertexbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		GLuint uvbuffer;
+		glGenBuffers(1, &uvbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
+
+		// This computes matrices based on control input.
+		glm::mat4 modelMatrix = glm::translate(glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z), *position);
+		glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
+
+		glUniformMatrix4fv(billboardMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
+
+		// Vertex buffer attributes.
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glVertexAttribPointer(
+			// Attribute
+			0,
+			// Size
+			3,
+			// Type
+			GL_FLOAT,
+			// Is it normalized?
+			GL_FALSE,
+			// Stride
+			0,
+			// Array buffer offset.
+			(void*) 0
+		);
+
+		// UV buffer attributes.
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+		// This draws triangles!
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		// This deletes stuff from the memory.
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDeleteBuffers(1, &vertexbuffer);
+		glDeleteBuffers(1, &uvbuffer);
+	}
+}
+
 
 void Basic3DModelRenderer::drawTestQuad() {
 	glColor3f(1.0, 1.0, 0.5);

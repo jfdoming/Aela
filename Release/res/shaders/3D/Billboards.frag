@@ -8,7 +8,7 @@
 #version 330 core
 
 // This is the output data.
-layout(location = 0) out vec3 colour;
+layout(location = 0) out vec4 colour;
 
 in vec2 UV;
 
@@ -16,5 +16,5 @@ in vec2 UV;
 uniform sampler2D textureSampler;
 
 void main(){
-	colour = texture(textureSampler, UV).rgb;
+	colour = texture(textureSampler, UV);
 }

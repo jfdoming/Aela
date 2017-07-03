@@ -7,6 +7,7 @@
 
 #pragma once
 #include "../../Old Garbage/texture.hpp"
+#include "../3D Object/Object3D.h"
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
@@ -19,7 +20,7 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-class Billboard {
+class Billboard : public Object3D {
 	public:
 		Billboard() {
 
@@ -30,29 +31,8 @@ class Billboard {
 			texture = setTexture;
 		}
 
-		// These are setters and getters.
-		void setPosition(glm::vec3 setPosition) {
-			position = setPosition;
-		}
-
 		void setTexture(GLuint setTexture) {
 			texture = setTexture;
-		}
-
-		glm::vec3 getPosition() {
-			return position;
-		}
-
-		void getPosition(float* setXPosition, float* setYPosition, float* setZPosition) {
-			*setXPosition = position.x;
-			*setYPosition = position.y;
-			*setZPosition = position.z;
-		}
-
-		void setPosition(float setX, float setY, float setZ) {
-			position.x = setX;
-			position.y = setY;
-			position.z = setZ;
 		}
 
 		GLuint getTexture() {
@@ -63,7 +43,15 @@ class Billboard {
 			texture = loadDDSToGLuint(path);
 		}
 
+		void useSpecifiedRotation(bool use) {
+			useRotation = use;
+		}
+
+		bool usingSpecifiedRotation() {
+			return useRotation;
+		}
+
 	private:
-		glm::vec3 position;
 		GLuint texture;
+		bool useRotation = true;
 };

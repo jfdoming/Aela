@@ -199,7 +199,7 @@ void Basic3DRenderer::clearColourFrameBuffer() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation, bool multisampling) {
+void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, glm::vec3* position, glm::vec3* lookAt, bool inverseRotation, bool multisampling) {
 	// Note: for regular texture rendering, use:
 	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
 	glViewport(0, 0, windowWidth, windowHeight);
@@ -214,10 +214,18 @@ void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, gl
 void Basic3DRenderer::renderBillboard(Billboard* billboard, bool multisampling) {
 	glViewport(0, 0, windowWidth, windowHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	if (multisampling) {
-		modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), *(camera->getPosition()), true);
+	if (billboard->usingSpecifiedRotation()) {
+		if (multisampling) {
+			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getRotation());
+		} else {
+			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getRotation());
+		}
 	} else {
-		modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), *(camera->getPosition()), true);
+		if (multisampling) {
+			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), camera->getPosition(), true);
+		} else {
+			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), camera->getPosition(), true);
+		}
 	}
 }
 

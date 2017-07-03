@@ -211,24 +211,6 @@
     <ClCompile Include="Resource Management\ResourceQuery.cpp">
       <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
-    <ClCompile Include="Menus\TextComponent.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="Menus\AbstractLayoutManager.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="Audio\AudioManager.cpp">
-      <Filter>Source Files\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Audio\Listener.cpp">
-      <Filter>Source Files\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\Mod.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\ModManager.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
     <ClCompile Include="3D\Skybox\Skybox.cpp">
       <Filter>Source Files\3D\Skybox</Filter>
     </ClCompile>
@@ -372,33 +354,13 @@
     <ClInclude Include="Resource Management\ResourceQuery.h">
       <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
-    <ClInclude Include="Menus\TextComponent.h">
-      <Filter>Source Files\Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="Menus\AbstractLayoutManager.h">
-      <Filter>Source Files\Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="Audio\AudioManager.h">
-      <Filter>Source Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Audio\Listener.h">
-      <Filter>Source Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Lua\Exposable.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="Lua\Mod.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="Lua\ModManager.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
     <ClInclude Include="3D\Skybox\Skybox.h">
       <Filter>Source Files\3D\Skybox</Filter>
     </ClInclude>
     <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
       <Filter>Source Files\3D\3D Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Utilities\Colour\ColourRGB.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Release\res\shaders\DepthRTT.fragmentshader">
@@ -413,5 +375,20 @@
     <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
       <Filter>Source Files\Shaders</Filter>
     </None>
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.fragmentshader" />
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.vertexshader" />
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.fragmentshader" />
+    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.vertexshader" />
+    <None Include="..\Release\res\shaders\2D_Post_Processing.fragmentshader" />
+    <None Include="..\Release\res\shaders\2D_Post_Processing.vertexshader" />
+    <None Include="..\Release\res\shaders\2D_Texture_Buffer_To_Buffer.fragmentshader" />
+    <None Include="..\Release\res\shaders\2D_Texture_Buffer_To_Buffer.vertexshader" />
+    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.fragmentshader" />
+    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.vertexshader" />
+    <None Include="..\Release\res\shaders\3D_Post_Processing.fragmentshader" />
+    <None Include="..\Release\res\shaders\3D_Post_Processing.vertexshader" />
+    <None Include="..\Release\res\shaders\Billboard_Shadow_Mapping.fragmentshader" />
+    <None Include="..\Release\res\shaders\Text_To_Buffer.fragmentshader" />
+    <None Include="..\Release\res\shaders\Text_To_Buffer.vertexshader" />
   </ItemGroup>
 </Project>

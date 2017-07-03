@@ -158,22 +158,23 @@ int runningLoop() {
 	};
 	loadSkybox(&skybox, paths, 512, 512);
 
-	// This is how a billboard is loaded.
+	// This is how a billboard is loaded. A billboard that looks the camera would not use a specified rotation.
 	std::vector<Billboard> billboards(1);
-	billboards[0].loadTexture("res/textures/ekkon.dds");
+	billboards[0].loadTexture("res/textures/character.dds");
+	billboards[0].useSpecifiedRotation(true);
 
 	// This is how a light is set up.
 	std::vector<Light3D> lights;
 	for (int i = 0; i < 2; i++) {
 		glm::vec3 position;
 		if (i == 0) {
-			position = glm::vec3(-8, 3, 0);
+			position = glm::vec3(-8, 5, 0);
 		} else {
-			position = glm::vec3(10, 3, 10);
+			position = glm::vec3(10, 5, 10);
 		}
 		glm::vec3 rotation = glm::vec3(0, 0, 0);
 		ColourRGB colour(1, 1, 1);
-		float power = 0.8F;
+		float power = 0.6F;
 		Light3D light(position, rotation, colour, power);
 		renderer.generateShadowMap(&light);
 		lights.push_back(light);
@@ -241,7 +242,7 @@ int runningLoop() {
 		}
 
 		// THIS IS FOR TESTING!
-		controlManager.transform3DObject(&lights[0], 7);
+		controlManager.transform3DObject(&billboards[0], 7);
 		// std::cout << lights[0].getPosition()->x << " " << lights[0].getPosition()->y << " " << lights[0].getPosition()->z << "\n";
 
 		// This renders the program.
@@ -254,10 +255,10 @@ int runningLoop() {
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModel(&(models[i]));
 		}
+		renderer.renderSkybox(&skybox);
 		for (unsigned int i = 0; i < billboards.size(); i++) {
 			renderer.renderBillboard(&(billboards[i]));
 		}
-		renderer.renderSkybox(&skybox);
 		std::string fpsData = std::to_string(fps) + " FPS";
 		renderer.render2DTexture(testTexture);
 		renderer.render2DTexture(testTexture2);
