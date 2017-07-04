@@ -212,10 +212,11 @@ int runningLoop() {
 	float fpsSmoothing = 0.9f;
 
 	// This is an example of how to get information about the renderer.
-	std::string info = renderer.getInformation(RendererInformation::RENDERER);
-	if (!info.find("AMD")) {
+	std::string info = renderer.getInformation(RendererInformation::VENDOR);
+	if (info.find("AMD") != std::string::npos || info.find("ATI") != std::string::npos) {
 		AelaErrorHandling::windowError("About your GPU...", "Ah, an AMD card? You must be a classy person that enjoys a fine wine.");
-	} else if (!info.find("NVIDIA")) {
+	} else if (info.find("NVIDIA") != std::string::npos || info.find("GTX") != std::string::npos
+		|| info.find("NV") != std::string::npos || info.find("GT") != std::string::npos) {
 		AelaErrorHandling::windowError("About your GPU...",
 			"Ah, an NVIDIA card? You must enjoy supporting proprietary technologies. I rate your GPU purchase a 3.5/4, if you know what I mean.");
 	} else {
