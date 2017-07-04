@@ -20,14 +20,13 @@ class Basic3DModelRenderer {
 		void renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID, GLuint modelMatrixID,
 			GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition);
 
-		// This function renders a 2D texture in 3D space.
+		// These functions render a 2D texture in 3D space.
 		void renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID,
 			GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* lookAt, bool inverseRotation);
-
 		void renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID,
 			GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* rotation);
 
-		// This is made for the Basic3DRenderer in order to set matrices.
+		// This is made for the Basic3DRenderer in order to set camera matrices.
 		void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);
 
 		// This sends light data to the model shader.
@@ -35,15 +34,11 @@ class Basic3DModelRenderer {
 			GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID);
 
 	private:
-		glm::mat4 biasMatrix = glm::mat4(
-			0.5, 0.0, 0.0, 0.0,
-			0.0, 0.5, 0.0, 0.0,
-			0.0, 0.0, 0.5, 0.0,
-			0.5, 0.5, 0.5, 1.0
-		);
+		// These are the only properties necessary for this class.
 		glm::mat4 viewMatrix, projectionMatrix;
 		const unsigned int MAX_LIGHT_AMOUNT = 5;
 
+		// These functions are here for debugging purposes.
 		void drawTestQuad();
 		void renderTestCube();
 };

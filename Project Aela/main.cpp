@@ -197,7 +197,7 @@ int runningLoop() {
 	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");
 	testTexture->setOutput(0, 0, 100, 50);
 	Texture* testTexture2 = resourceManager.obtain<Texture>("res/textures/gradient.dds");
-	testTexture2->setOutput(100, 0, 1180, 50);
+	testTexture2->setOutput(100, 0, window.getWindowDimensions()->getWidth() - 100, 50);
 
 	// This is also temporary and showcases text rendering. This will be moved once the menu system is formed.
 	int arial = textManager.createNewTextFont("arial bold.ttf");
@@ -210,6 +210,19 @@ int runningLoop() {
 	int timeBetweenFrameChecks = 250, fps = -1;
 	// http://stackoverflow.com/questions/87304/calculating-frames-per-second-in-a-game
 	float fpsSmoothing = 0.9f;
+
+	// This is an example of how to get information about the renderer.
+	std::string info = renderer.getInformation(RendererInformation::RENDERER);
+	if (!info.find("AMD")) {
+		AelaErrorHandling::windowError("About your GPU...", "Ah, an AMD card? You must be a classy person that enjoys a fine wine.");
+	} else if (!info.find("NVIDIA")) {
+		AelaErrorHandling::windowError("About your GPU...",
+			"Ah, an NVIDIA card? You must enjoy supporting proprietary technologies. I rate your GPU purchase a 3.5/4, if you know what I mean.");
+	} else {
+		AelaErrorHandling::windowError("About your GPU...", "It's simply a potato.");
+	}
+	std::cout << info << " " << renderer.getInformation(RendererInformation::VENDOR) << " is the vendor of the GPU, "
+		<< renderer.getInformation(RendererInformation::OPENGL_VERSION) << " is the version of OpenGL.\n";
 
 	// This is the program's running loop.
 	do {
@@ -242,7 +255,7 @@ int runningLoop() {
 		}
 
 		// THIS IS FOR TESTING!
-		controlManager.transform3DObject(&billboards[0], 7);
+		controlManager.transform3DObject(&lights[0], 7);
 		// std::cout << lights[0].getPosition()->x << " " << lights[0].getPosition()->y << " " << lights[0].getPosition()->z << "\n";
 
 		// This renders the program.

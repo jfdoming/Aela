@@ -61,12 +61,11 @@ namespace Aela {
 			// Although this function is called in setup(), it should be called to change the MSAA amount.
 			void setupFrameBuffers(unsigned int multisampling);
 
-			// These are some getters.
+			// These are some getters and setters.
 			GLuint* getFrameBuffer();
 			Texture* getFrameBufferTexture();
 			GLuint* getMultisampledFrameBuffer();
 			Texture* getMultisampledFrameBufferTexture();
-
 			void setWindow(Window* setWindow);
 			Window* getWindow();
 

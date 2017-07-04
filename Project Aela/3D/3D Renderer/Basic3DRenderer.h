@@ -37,13 +37,12 @@ namespace Aela {
 				// This cleans all VBOs and shaders.
 				glDeleteProgram(modelProgramID);
 				glDeleteProgram(depthProgramID);
-				glDeleteBuffers(1, &quad_vertexbuffer);
 			}
 
 			// These are some functions related to rendering.
 			void renderShadow(Model3D* model);
 			void renderModel(Model3D* model, bool multisampling);
-			void clearColourFrameBuffer();
+			void clearColourFrameBuffer(bool multisampling);
 			void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3* position, glm::vec3* lookAt, bool inverseRotation, bool multisampling);
 			void renderBillboard(Billboard* billboard, bool multisampling);
 			void clearShadowMaps();
@@ -52,18 +51,19 @@ namespace Aela {
 
 			// These are some functions related to setup.
 			void setup(unsigned int multisampling);
-			void setWindow(Window* setWindow);
-			void setCamera(Camera3D* camera);
 			void bindLights(std::vector<Light3D>* lights);
 			void generateShadowMap(Light3D* light);
-			// These are some getters.
+
+			// These are some getters and setters.
 			Window* getWindow();
+			void setWindow(Window* setWindow);
+			void setCamera(Camera3D* camera);
 			GLuint* getColourFrameBuffer();
 			Texture* getColourFrameBufferTexture();
 			GLuint* getMultisampledColourFrameBuffer();
 			Texture* getMultisampledColourFrameBufferTexture();
 
-			// Although this function is called in setup(), it should be called to change the MSAA amount.
+			// Although this function is called in setup(), it should also be called to change the MSAA amount.
 			void setupFrameBuffers(unsigned int multisampling);
 
 		private:
@@ -79,7 +79,6 @@ namespace Aela {
 			GLuint billboardTextureID, billboardMVPMatrixID;
 			GLuint skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID;
 			GLuint numberOfLightsID, lightPositionsID, lightDirectionsID, lightColoursID, lightPowersID, lightShadowPositionsID;
-			GLuint quad_vertexbuffer;
 
 			// These properties are used for the framebuffers.
 			GLuint multisampledColourFrameBuffer, colourFrameBuffer, depthRenderBuffer;
@@ -96,6 +95,7 @@ namespace Aela {
 			// (and "...getHeight()") does not have to called all the time.
 			int windowWidth, windowHeight;
 
+			// These variables store the resolution of the depth textures.
 			const unsigned int DEPTH_TEXTURE_WIDTH = 2048, DEPTH_TEXTURE_HEIGHT = 2048;
 
 			// These are some setup related functions.

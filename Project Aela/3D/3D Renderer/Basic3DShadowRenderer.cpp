@@ -14,6 +14,7 @@
 
 #define PI 3.14159265358979323846
 
+// This clears all shadow maps that would be rendered.
 void Basic3DShadowRenderer::clearShadowMaps(std::vector<Light3D>* lights) {
 	unsigned int numberOfLights = lights->size();
 	if (numberOfLights > MAX_LIGHT_AMOUNT) {
@@ -26,6 +27,7 @@ void Basic3DShadowRenderer::clearShadowMaps(std::vector<Light3D>* lights) {
 	}
 }
 
+// This renders a shadow of a model to each light's depth buffer.
 void Basic3DShadowRenderer::renderShadow(Model3D* model, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<Light3D>* lights, GLuint lightPositionsID) {
 	unsigned int numberOfLights = lights->size();
 	if (numberOfLights > MAX_LIGHT_AMOUNT) {
@@ -56,6 +58,7 @@ void Basic3DShadowRenderer::renderShadow(Model3D* model, GLuint depthProgramID, 
 		glm::vec3* rotation = model->getRotation();
 		glm::vec3* position = model->getPosition();
 
+		// This calculates more matrices.
 		float near = 1, far = 100;
 		glm::mat4 depthProjectionMatrix = glm::perspective(glm::radians(90.0f), (float) DEPTH_TEXTURE_WIDTH / (float) DEPTH_TEXTURE_HEIGHT, near, far);
 		glm::mat4 shadowTransformations[6];
@@ -107,6 +110,7 @@ unsigned int Basic3DShadowRenderer::getDepthTextureHeight() {
 	return DEPTH_TEXTURE_HEIGHT;
 }
 
+// This is for debugging.
 void Basic3DShadowRenderer::renderTestCube() {
 	unsigned int cubeVAO = 0;
 	unsigned int cubeVBO = 0;

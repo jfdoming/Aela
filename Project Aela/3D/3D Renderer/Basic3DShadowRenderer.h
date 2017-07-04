@@ -17,9 +17,15 @@ class Basic3DShadowRenderer {
 
 		// This adds a model's shadow to the shadow map.
 		void renderShadow(Model3D* model, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<Light3D>* lights, GLuint lightPositionsID);
+
+		// This clears all shadow maps of lights.
 		void clearShadowMaps(std::vector<Light3D>* lights);
+
+		// These are getters and setters.
 		unsigned int getDepthTextureWidth();
 		unsigned int getDepthTextureHeight();
+
+		// This is for debugging.
 		void renderTestCube();
 
 	private:

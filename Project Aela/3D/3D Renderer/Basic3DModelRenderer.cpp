@@ -14,11 +14,13 @@
 
 #define PI 3.14159265358979323846
 
+// This function is called in order to update camera-related matrices.
 void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
 	viewMatrix = setViewMatrix;
 	projectionMatrix = setProjectionMatrix;
 }
 
+// This function sends light data to the shader.
 void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID) {
 	glUseProgram(modelProgramID);
 
@@ -28,39 +30,25 @@ void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, G
 	}
 
 	if (numberOfLights > 0) {
-		// I would do this in a more optimized manner, but there's always time for that later, right?
-		std::vector<float> positions(numberOfLights * 3);
-		std::vector<float> directions(numberOfLights * 3);
-		std::vector<float> colours(numberOfLights * 3);
-		std::vector<float> powers(numberOfLights);
+		glUniform1i(numberOfLightsID, numberOfLights);
 
-		for (unsigned int i = 0; i < numberOfLights * 3; i += 3) {
-			positions[i] = lights->at(i / 3).getPosition()->x;
-			positions[i + 1] = lights->at(i / 3).getPosition()->y;
-			positions[i + 2] = lights->at(i / 3).getPosition()->z;
-		}
-
-		for (unsigned int i = 0; i < numberOfLights * 3; i += 3) {
-			directions[i] = lights->at(i / 3).getRotation()->x;
-			directions[i + 1] = lights->at(i / 3).getRotation()->y;
-			directions[i + 2] = lights->at(i / 3).getRotation()->z;
-		}
-
-		for (unsigned int i = 0; i < numberOfLights * 3; i += 3) {
-			colours[i] = lights->at(i / 3).getColour()->getR();
-			colours[i + 1] = lights->at(i / 3).getColour()->getG();
-			colours[i + 2] = lights->at(i / 3).getColour()->getB();
+		for (unsigned int i = 0; i < numberOfLights; i++) {
+			glUniform3fv(lightPositionsID + i, 1, &lights->at(i).getPosition()->x);
 		}
 
 		for (unsigned int i = 0; i < numberOfLights; i++) {
-			powers[i] = lights->at(i).getPower();
+			glUniform3fv(lightDirectionsID + i, 1, &lights->at(i).getRotation()->x);
 		}
 
-		glUniform1i(numberOfLightsID, numberOfLights);
-		glUniform3fv(lightPositionsID, numberOfLights, &positions[0]);
-		glUniform3fv(lightDirectionsID, numberOfLights, &directions[0]);
-		glUniform3fv(lightColoursID, numberOfLights, &colours[0]);
-		glUniform1fv(lightPowersID, numberOfLights, &powers[0]);
+		for (unsigned int i = 0; i < numberOfLights; i++) {
+			glm::vec3 value = lights->at(i).getColour()->getVec3();
+			glUniform3fv(lightColoursID + i, 1, &value.x);
+		}
+
+		for (unsigned int i = 0; i < numberOfLights; i++) {
+			float power = lights->at(i).getPower();
+			glUniform1fv(lightPowersID + i, numberOfLights, &power);
+		}
 
 		for (unsigned int i = 0; i < lights->size(); i++) {
 			glActiveTexture(GL_TEXTURE1 + i);
@@ -70,6 +58,7 @@ void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, G
 	}
 }
 
+// This function renders a model.
 void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
 	GLuint modelMatrixID, GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition) {
 	glUseProgram(modelProgramID);
@@ -263,6 +252,7 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture
 	}
 }
 
+// This function renders a texture in the 3D space.
 void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID, GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* rotation) {
 	glUseProgram(programID);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
@@ -351,7 +341,7 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture
 	}
 }
 
-
+// This function is for debugging purposes.
 void Basic3DModelRenderer::drawTestQuad() {
 	glColor3f(1.0, 1.0, 0.5);
 	glBegin(GL_QUADS);
@@ -366,6 +356,7 @@ void Basic3DModelRenderer::drawTestQuad() {
 	glEnd();
 }
 
+// This function is for debugging purposes.
 void Basic3DModelRenderer::renderTestCube() {
 	unsigned int cubeVAO = 0;
 	unsigned int cubeVBO = 0;

@@ -25,18 +25,17 @@ void Basic2DRenderer::setup(unsigned int multisampling) {
 	
 	// This checks the framebuffer.
 	checkFrameBuffer();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+// This function loads all necessary shaders.
 void Basic2DRenderer::load2DShaders() {
-	// These functions load shaders.
 	bufferTextureToBufferProgramID = loadShaders("res/shaders/2D/2DTextureBufferToBuffer.vert", "res/shaders/2D/2DTextureBufferToBuffer.frag");
 	textToBufferProgramID = loadShaders("res/shaders/2D/TextToBuffer.vert", "res/shaders/2D/TextToBuffer.frag");
 	imageToBufferProgramID = loadShaders("res/shaders/2D/2DTextureToBuffer.vert", "res/shaders/2D/2DTextureToBuffer.frag");
 }
 
+// This function gets handles to GLSL variables from GLSL shaders.
 void Basic2DRenderer::getGLSLVariableHandles() {
-	// These functions get handles to GLSL variables from GLSL shaders.
 	imageTextureID = glGetUniformLocation(bufferTextureToBufferProgramID, "quadTexture");
 	imageQuadVertexBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "vertexPosition");
 	imageTopLeftBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "positionOfTextureOnScreen");
@@ -312,6 +311,7 @@ void Basic2DRenderer::renderTextTo2DBuffer(std::string text, TextFont* textFont,
 	}
 }
 
+// This function is made specifically for blitting a 2D multisampled buffer to a regular 2D buffer.
 void Basic2DRenderer::renderMultisampledBufferToBuffer(GLuint multisampledBuffer, GLuint secondaryBuffer, Rect<unsigned int>* windowDimensions) {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, multisampledBuffer);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, secondaryBuffer);
@@ -583,6 +583,7 @@ void Basic2DRenderer::renderRectangle(unsigned int xPosition, unsigned int yPosi
 	renderRectangle(&rect, windowDimensions, colour, multisampling);
 }
 
+// This function is used to draw a triangle.
 void Basic2DRenderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, bool multisampling) {
 	glUseProgram(0);
 	if (multisampling) {
@@ -627,7 +628,16 @@ Texture* Basic2DRenderer::getMultisampledFrameBufferTexture() {
 	return &multisampledFrameBufferTexture;
 }
 
-// This checks to see if the framebuffer is set up properly.
+void Basic2DRenderer::setWindow(Window* setWindow) {
+	window = setWindow;
+	window->getWindowDimensions(&windowWidth, &windowHeight);
+}
+
+Window* Basic2DRenderer::getWindow() {
+	return window;
+}
+
+// This checks to see if the currently bound framebuffer is set up properly.
 bool Basic2DRenderer::checkFrameBuffer() {
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		AelaErrorHandling::windowError("Aela 2D Rendering",
@@ -636,13 +646,4 @@ bool Basic2DRenderer::checkFrameBuffer() {
 	} else {
 		return true;
 	}
-}
-
-void Basic2DRenderer::setWindow(Window* setWindow) {
-	window = setWindow;
-	window->getWindowDimensions(&windowWidth, &windowHeight);
-}
-
-Window* Basic2DRenderer::getWindow() {
-	return window;
 }

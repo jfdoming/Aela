@@ -360,7 +360,9 @@
     <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
       <Filter>Source Files\3D\3D Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Colour\ColourRGB.h" />
+    <ClInclude Include="Utilities\Colour\ColourRGB.h">
+      <Filter>Source Files\Utilities\Colour</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Release\res\shaders\DepthRTT.fragmentshader">
@@ -375,20 +377,5 @@
     <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
       <Filter>Source Files\Shaders</Filter>
     </None>
-    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.fragmentshader" />
-    <None Include="..\Release\res\shaders\2D_Buffer_To_Buffer.vertexshader" />
-    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.fragmentshader" />
-    <None Include="..\Release\res\shaders\2D_Buffer_To_Screen.vertexshader" />
-    <None Include="..\Release\res\shaders\2D_Post_Processing.fragmentshader" />
-    <None Include="..\Release\res\shaders\2D_Post_Processing.vertexshader" />
-    <None Include="..\Release\res\shaders\2D_Texture_Buffer_To_Buffer.fragmentshader" />
-    <None Include="..\Release\res\shaders\2D_Texture_Buffer_To_Buffer.vertexshader" />
-    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.fragmentshader" />
-    <None Include="..\Release\res\shaders\2D_Texture_To_Buffer.vertexshader" />
-    <None Include="..\Release\res\shaders\3D_Post_Processing.fragmentshader" />
-    <None Include="..\Release\res\shaders\3D_Post_Processing.vertexshader" />
-    <None Include="..\Release\res\shaders\Billboard_Shadow_Mapping.fragmentshader" />
-    <None Include="..\Release\res\shaders\Text_To_Buffer.fragmentshader" />
-    <None Include="..\Release\res\shaders\Text_To_Buffer.vertexshader" />
   </ItemGroup>
 </Project>

@@ -32,10 +32,12 @@
 // These are some enums used by the Renderer.
 
 namespace Aela {
+	// This enum is used to obtain information from the renderer.
 	enum class RendererInformation {
 		VENDOR, RENDERER, OPENGL_VERSION, GLSL_VERSION, OPENGL_EXTENSIONS
 	};
 
+	// This enum is used to toggle features of the renderer.
 	enum class RendererFeature {
 		SHADOWS, BILLBOARDS, SKYBOX,
 		MSAA_3D_X0, MSAA_3D_X2, MSAA_3D_X4, MSAA_3D_X8, MSAA_3D_X16,
@@ -100,6 +102,9 @@ namespace Aela {
 			void deactivateFeature(RendererFeature feature);
 			void toggleFeature(RendererFeature feature);
 
+			// This sets the field of view of the bounded camera.
+			void setFOV(float value);
+
 			// TEMPORARY?
 			void increaseFOV();
 			void decreaseFOV();
@@ -133,7 +138,7 @@ namespace Aela {
 			// These are some setup functions used internally by the Renderer.
 			void setup3DRendering();
 			void setup2DRendering();
-			void setupGLFeatures();
+			void setupMainFrameBuffer();
 			bool setupGLEW();
 
 			// These specify the features that the renderer is allowed to use during rendering.
