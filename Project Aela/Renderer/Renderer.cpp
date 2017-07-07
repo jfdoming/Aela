@@ -13,7 +13,7 @@ using namespace Aela;
 
 // This sets up 3D rendering, accounting for multisampling.
 void Renderer::setup3DRendering() {
-	if (mainFrameBuffer == NULL) {
+	if (mainFramebuffer == NULL) {
 		setupMainFrameBuffer();
 	}
 	basic3DRenderer.setup(multisampling3D);
@@ -21,10 +21,10 @@ void Renderer::setup3DRendering() {
 
 // This sets up 2D rendering, accounting for multisampling.
 void Renderer::setup2DRendering() {
-	if (mainFrameBuffer == NULL) {
+	if (mainFramebuffer == NULL) {
 		setupMainFrameBuffer();
 	}
-	basic2DRenderer.setup(multisampling2D);
+	basic2DRenderer.setup();
 }
 
 // This sets up the main frame buffer.
@@ -35,11 +35,11 @@ void Renderer::setupMainFrameBuffer() {
 	// This will accept a fragment if it closer to the camera than the previous one.
 	glDepthFunc(GL_LESS);
 
-	glGenFramebuffers(1, &mainFrameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, mainFrameBuffer);
+	glGenFramebuffers(1, &mainFramebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
 
-	glGenTextures(1, mainFrameBufferTexture.getTexture());
-	glBindTexture(GL_TEXTURE_2D, *(mainFrameBufferTexture.getTexture()));
+	glGenTextures(1, mainFramebufferTexture.getTexture());
+	glBindTexture(GL_TEXTURE_2D, *(mainFramebufferTexture.getTexture()));
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	/* Clamping to edges is important to prevent artifacts when scaling */
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -47,11 +47,11 @@ void Renderer::setupMainFrameBuffer() {
 	/* Linear filtering usually looks best for text */
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	mainFrameBufferTexture.setDimensions(0, 0, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight());
-	mainFrameBufferTexture.setOutput(0, 0, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight());
+	mainFramebufferTexture.setDimensions(0, 0, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight());
+	mainFramebufferTexture.setOutput(0, 0, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight());
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(mainFrameBufferTexture.getTexture()), 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(mainFramebufferTexture.getTexture()), 0);
 	checkFrameBuffer();
 }
 
@@ -112,15 +112,14 @@ void Renderer::startRenderingFrame() {
 
 	// This would clear the main frame buffer, but it doesn't need to be cleared since everything would get overwritten when writing the 3D and 2D
 	// frame buffer textures at the end of the frame.
-	// glBindFramebuffer(GL_FRAMEBUFFER, mainFrameBuffer);
+	// glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
 	// glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
 	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, mainFrameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
 
 	basic3DRenderer.clearColourFrameBuffer(multisampling3D > 0);
 	basic3DRenderer.clearShadowMaps();
-	basic2DRenderer.clearFrameBuffer(multisampling2D > 0);
 }
 
 // This tells the renderer to send the light data to the shaders that need the data.
@@ -155,46 +154,52 @@ void Renderer::renderSkybox(Skybox* skybox) {
 }
 
 // This renders a 2D texture using the 2D renderer.
-void Renderer::render2DTexture(Texture* texture) {
-	basic2DRenderer.renderTextureTo2DBuffer(texture, window->getWindowDimensions(), multisampling2D > 0);
+void Renderer::render2DTexture(Texture* texture, Simple2DFramebuffer* framebuffer) {
+	basic2DRenderer.renderTextureToSimple2DFramebuffer(texture, framebuffer, window->getWindowDimensions());
 }
 
 // This renders text using the 2D renderer.
-void Renderer::renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour) {
-	basic2DRenderer.renderTextTo2DBuffer(text, textManager->getTextFont(textFontToUse), output, window->getWindowDimensions(), colour,
-		textManager->POINTS_PER_PIXEL, multisampling2D > 0);
+void Renderer::renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour, Simple2DFramebuffer* framebuffer) {
+	basic2DRenderer.renderTextToSimple2DFramebuffer(text, textManager->getTextFont(textFontToUse), framebuffer, output, window->getWindowDimensions(), colour,
+		textManager->POINTS_PER_PIXEL);
 }
 
 // This renders a rectangle using the 2D renderer.
-void Renderer::renderRectangle(Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
-	basic2DRenderer.renderRectangle(output, windowDimensions, colour, multisampling2D > 0);
+void Renderer::renderRectangle(Rect<int>* output, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
+	basic2DRenderer.renderRectangle(output, framebuffer, windowDimensions, colour);
 }
 
-void Renderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
-	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, windowDimensions, colour, multisampling2D > 0);
+void Renderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
+	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, framebuffer, windowDimensions, colour);
 }
 
 // This renders a triangle using the 2D renderer.
-void Renderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
-	basic2DRenderer.renderTriangle(pointA, pointB, pointC, windowDimensions, colour, multisampling2D > 0);
+void Renderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
+	basic2DRenderer.renderTriangle(pointA, pointB, pointC, framebuffer, windowDimensions, colour);
 }
 
-void Renderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
-	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, windowDimensions, colour, multisampling2D > 0);
+void Renderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY,
+	Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
+	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, framebuffer, windowDimensions, colour);
 }
 
-// This ends the rendering of a frame. This renders the framebuffers of the basic renderers
-// into the screen framebuffer while applying the effects from the effects shaders.
-void Renderer::endRenderingFrame() {
+void Renderer::renderSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
+	// basic2DRenderer.renderMultisampledBufferToBuffer(*framebuffer->getFramebuffer(), mainFramebuffer, window->getWindowDimensions());
+	if (framebuffer->getMultisampling() > 0) {
+		basic2DRenderer.renderMultisampledBufferToBuffer(*framebuffer->getMultisampledFramebuffer(), *framebuffer->getFramebuffer(), window->getWindowDimensions());
+	}
+	basic2DRenderer.renderTextureToFramebuffer(framebuffer->getFramebufferTexture(), mainFramebuffer, window->getWindowDimensions(), effects2DShader);
+}
+
+void Renderer::endRendering3D() {
 	if (multisampling3D > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultisampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getWindowDimensions());
 	}
-	basic2DRenderer.renderTextureToBuffer(basic3DRenderer.getColourFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects3DShader);
-	if (multisampling2D > 0) {
-		basic2DRenderer.renderMultisampledBufferToBuffer(*basic2DRenderer.getMultisampledFrameBuffer(), *basic2DRenderer.getFrameBuffer(), window->getWindowDimensions());
-	}
-	basic2DRenderer.renderTextureToBuffer(basic2DRenderer.getFrameBufferTexture(), window->getWindowDimensions(), mainFrameBuffer, effects2DShader);
-	basic2DRenderer.renderTextureToBuffer(&mainFrameBufferTexture, window->getWindowDimensions(), 0);
+	basic2DRenderer.renderTextureToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, window->getWindowDimensions(), effects3DShader);
+}
+
+void Renderer::endRenderingFrame() {
+	basic2DRenderer.renderTextureToFramebuffer(&mainFramebufferTexture, 0, window->getWindowDimensions());
 	window->updateBuffer();
 }
 
@@ -204,6 +209,14 @@ void Renderer::generateShadowMap(Light3D* light) {
 
 void Renderer::setupBoundLightsForCurrentFrame() {
 	basic3DRenderer.clearShadowMaps();
+}
+
+void Renderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer, Rect<int>* dimensions, Rect<int>* output) {
+	basic2DRenderer.setupSimple2DFramebuffer(framebuffer, multisampling2D, dimensions, output);
+}
+
+void Renderer::clearSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
+	basic2DRenderer.clearSimple2DFramebuffer(framebuffer);
 }
 
 // This activates a rendering feature.
@@ -240,23 +253,18 @@ void Renderer::activateFeature(RendererFeature feature) {
 			break;
 		case RendererFeature::MSAA_2D_X0:
 			multisampling2D = 0;
-			basic2DRenderer.setupFrameBuffers(0);
 			break;
 		case RendererFeature::MSAA_2D_X2:
 			multisampling2D = 2;
-			basic2DRenderer.setupFrameBuffers(2);
 			break;
 		case RendererFeature::MSAA_2D_X4:
 			multisampling2D = 4;
-			basic2DRenderer.setupFrameBuffers(4);
 			break;
 		case RendererFeature::MSAA_2D_X8:
 			multisampling2D = 8;
-			basic2DRenderer.setupFrameBuffers(8);
 			break;
 		case RendererFeature::MSAA_2D_X16:
 			multisampling2D = 16;
-			basic2DRenderer.setupFrameBuffers(16);
 			break;
 	}
 }
@@ -306,25 +314,21 @@ void Renderer::deactivateFeature(RendererFeature feature) {
 		case RendererFeature::MSAA_2D_X2:
 			if (multisampling2D == 2) {
 				multisampling2D = 0;
-				basic2DRenderer.setupFrameBuffers(0);
 			}
 			break;
 		case RendererFeature::MSAA_2D_X4:
 			if (multisampling2D == 4) {
 				multisampling2D = 0;
-				basic2DRenderer.setupFrameBuffers(0);
 			}
 			break;
 		case RendererFeature::MSAA_2D_X8:
 			if (multisampling2D == 8) {
 				multisampling2D = 0;
-				basic2DRenderer.setupFrameBuffers(0);
 			}
 			break;
 		case RendererFeature::MSAA_2D_X16:
 			if (multisampling2D == 16) {
 				multisampling2D = 0;
-				basic2DRenderer.setupFrameBuffers(0);
 			}
 			break;
 	}

@@ -98,6 +98,9 @@
     <Filter Include="Source Files\3D\Skybox">
       <UniqueIdentifier>{1ffccef5-9a7f-457f-9ce3-dcef351e98fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\2D\Simple 2D Framebuffer">
+      <UniqueIdentifier>{e088761b-dd5b-46dd-b6ce-e2bf3fae298c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -216,6 +219,9 @@
     </ClCompile>
     <ClCompile Include="3D\3D Renderer\Basic3DSkyboxRenderer.cpp">
       <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp">
+      <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -362,6 +368,9 @@
     </ClInclude>
     <ClInclude Include="Utilities\Colour\ColourRGB.h">
       <Filter>Source Files\Utilities\Colour</Filter>
+    </ClInclude>
+    <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
+      <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

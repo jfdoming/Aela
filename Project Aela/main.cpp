@@ -89,7 +89,7 @@ int startAela() {
 	renderer.activateFeature(RendererFeature::BILLBOARDS);
 	renderer.activateFeature(RendererFeature::SKYBOX);
 	renderer.activateFeature(RendererFeature::MSAA_3D_X4);
-	renderer.activateFeature(RendererFeature::MSAA_2D_X4);
+	renderer.activateFeature(RendererFeature::MSAA_2D_X0);
 
 	// Lua Stuff
 	luabridge::getGlobalNamespace(luaManager.getLuaState())
@@ -205,6 +205,10 @@ int runningLoop() {
 	Rect<int> textOutput(128, 34, 200, 200);
 	ColourRGBA textColour(0.9f, 0.1f, 0.9f, 1.0f);
 
+	// This sets up a custom 2D frame buffer.
+	Simple2DFramebuffer customFramebuffer;
+	renderer.setupSimple2DFramebuffer(&customFramebuffer, (Rect<int>*) window.getWindowDimensions(), (Rect<int>*) window.getWindowDimensions());
+
 	// This is also temporary and used to output framerate.
 	clock_t timeOfLastFrameCheck = 0;
 	int timeBetweenFrameChecks = 250, fps = -1;
@@ -261,6 +265,7 @@ int runningLoop() {
 
 		// This renders the program.
 		renderer.startRenderingFrame();
+		renderer.clearSimple2DFramebuffer(&customFramebuffer);
 		renderer.setupBoundLightsForCurrentFrame();
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModelShadows(&(models[i]));
@@ -273,13 +278,15 @@ int runningLoop() {
 		for (unsigned int i = 0; i < billboards.size(); i++) {
 			renderer.renderBillboard(&(billboards[i]));
 		}
+		renderer.endRendering3D();
 		std::string fpsData = std::to_string(fps) + " FPS";
-		renderer.render2DTexture(testTexture);
-		renderer.render2DTexture(testTexture2);
-		renderer.renderText(fpsData, arial, &textOutput, &textColour);
+		renderer.render2DTexture(testTexture, &customFramebuffer);
+		renderer.render2DTexture(testTexture2, &customFramebuffer);
+		renderer.renderText(fpsData, arial, &textOutput, &textColour, &customFramebuffer);
 		ColourRGBA funkyColour((timeManager.getCurrentTime() % 1000) / 1000.0f, 1.0f - (timeManager.getCurrentTime() % 1000) / 1000.0f, 0.8f, 0.8f);
-		renderer.renderRectangle(50, 50, 100, 100, window.getWindowDimensions(), &funkyColour);
-		renderer.renderTriangle(200, 50, 300, 150, 400, 50, window.getWindowDimensions(), &funkyColour);
+		renderer.renderRectangle(50, 50, 100, 100, &customFramebuffer, window.getWindowDimensions(), &funkyColour);
+		renderer.renderTriangle(200, 50, 300, 150, 400, 50, &customFramebuffer, window.getWindowDimensions(), &funkyColour);
+		renderer.renderSimple2DFramebuffer(&customFramebuffer);
 		renderer.endRenderingFrame();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 	// This will call each model's destructor, which will delete each model's texture. I'm not sure if this
