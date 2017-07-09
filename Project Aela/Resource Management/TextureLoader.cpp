@@ -3,10 +3,6 @@
 
 using namespace Aela;
 
-bool TextureLoader::isValid(std::ifstream &in) {
-	return true;
-}
-
 void TextureLoader::expose(LuaManager& mgr) {
 	// only expose part of the class to Lua
 	luabridge::getGlobalNamespace(mgr.getLuaState())

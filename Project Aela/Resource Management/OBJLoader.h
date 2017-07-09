@@ -14,7 +14,6 @@ namespace Aela {
 		OBJLoader(OBJLoader const&) = delete;
 		void operator=(OBJLoader const&) = delete;
 
-		virtual bool isValid(std::ifstream& in);
 		virtual Resource* load(std::ifstream& in);
 	private:
 		OBJLoader() {}

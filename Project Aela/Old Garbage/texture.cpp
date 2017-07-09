@@ -208,7 +208,7 @@ void loadDDSToCubemapSide(GLuint* cubeMap, int side, std::string filePath) {
 
 // I (Julian) commented this out because I don't want to fix code we will never need again.
 // Uncomment this to see why it doesn't work.
-Texture loadDDSToTexture(std::string filePath) {
+/*Texture loadDDSToTexture(std::string filePath) {
 	unsigned char fileHeader[124];
 	FILE* imageFile;
 
@@ -305,7 +305,7 @@ Texture loadDDSToTexture(std::string filePath) {
 	texture.setDimensions(0, 0, actualTextureWidth, actualTextureHeight);
 	texture.setOutput(0, 0, actualTextureWidth, actualTextureHeight);
 	return texture;
-}
+}*/
 
 // This is a function that uses the C way of loading files to load
 // a BMP to a GLuint.

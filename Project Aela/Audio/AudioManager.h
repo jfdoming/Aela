@@ -8,19 +8,27 @@
 #pragma once
 #include <al.h>
 #include <alc.h>
+#include <string>
 #include "Listener.h"
+#include "AudioClip.h"
 
-class AudioManager {
-	public:
-		AudioManager();
-		~AudioManager();
+namespace Aela {
+	class AudioManager {
+		public:
+			AudioManager();
+			~AudioManager();
 
-		bool init();
-		Listener getListener();
+			bool init();
+			void playClip(AudioClip* clip);
 
-	private:
-		ALCcontext* context;
-		ALCdevice* audioDevice;
+			Listener getListener();
 
-		void clearErrors();
-};
+		private:
+			ALCcontext* context;
+			ALCdevice* audioDevice;
+
+			void clearErrors();
+			bool checkError(std::string* msg);
+			void parseErrorMessage(ALuint error, std::string* msg);
+	};
+}

@@ -1,17 +1,9 @@
 #include "Resource.h"
-#include "../Error Handler/ErrorHandler.h"
-#include <fstream>
 
-// Resource class implementation
+using namespace Aela;
 
-Aela::Resource::Resource() {
+Resource::Resource() {
 }
 
-Aela::Resource::~Resource() {
-}
-
-Aela::OBJResource::OBJResource() {
-}
-
-Aela::OBJResource::~OBJResource() {
+Resource::~Resource() {
 }

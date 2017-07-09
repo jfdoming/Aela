@@ -1,5 +1,7 @@
 #include "AbstractLayoutManager.h"
 
+using namespace Aela;
+
 AbstractLayoutManager::AbstractLayoutManager(Container* parent) : parent(parent) {
 }
 

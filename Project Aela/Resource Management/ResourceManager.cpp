@@ -100,7 +100,7 @@ ResourceManager::Status ResourceManager::unloadGroup(std::string name) {
 
 	// unload all resources in the group
 	for (ResourceQuery query : group) {
-		// load the resource
+		// unload the resource
 		unload(query.getSrc());
 	}
 	return Status::OK;
@@ -138,7 +138,7 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 	if (valid) {
 		Resource* res = boundLoader->load(in);
 		
-		if (res == NULL) {
+		if (res == nullptr) {
 			valid = false;
 		} else {
 			resources.emplace(src, res);
@@ -162,13 +162,16 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 }
 
 void ResourceManager::unload(std::string src) {
-	delete obtain_impl(src);
+	Resource* res = obtain_impl(src);
+	if (res != nullptr) {
+		delete res;
+	}
 }
 
 Resource* ResourceManager::obtain_impl(std::string src) {
 	auto iter = resources.find(src);
 	if (iter == resources.end()) {
-		return NULL;
+		return nullptr;
 	}
 	return iter->second;
 }

@@ -22,8 +22,10 @@
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
 #include "Resource Management/TextureLoader.h"
+#include "Audio/WAVEClipLoader.h"
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
+#include "Audio/AudioManager.h"
 
 using namespace Aela;
 
@@ -40,6 +42,7 @@ LuaManager luaManager;
 LuaScript controlScript;
 SceneManager sceneManager;
 ResourceManager resourceManager(0);
+AudioManager audioManager;
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
@@ -90,6 +93,11 @@ int startAela() {
 	renderer.activateFeature(RendererFeature::SKYBOX);
 	renderer.activateFeature(RendererFeature::MSAA_3D_X4);
 	renderer.activateFeature(RendererFeature::MSAA_2D_X4);
+
+	// initialize the audio manager
+	if (!audioManager.init()) {
+		AelaErrorHandling::windowError("OpenAL", "OpenAL failed to initialize!");
+	}
 
 	// Lua Stuff
 	luabridge::getGlobalNamespace(luaManager.getLuaState())
@@ -187,10 +195,15 @@ int runningLoop() {
 	resourceManager.addToGroup("res/textures/ekkon.dds", false);
 	resourceManager.addToGroup("res/textures/gradient.dds", false);
 
+	resourceManager.bindLoader(&Aela::WAVEClipLoader::getInstance());
+	resourceManager.addToGroup("res/audio/clips/test.wav", false);
+
 	// load test textures
 	if (resourceManager.loadGroup("test") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"test\"!" << std::endl;
 	}
+
+	audioManager.playClip(resourceManager.obtain<AudioClip>("res/audio/clips/test.wav"));
 
 	// obtain and set up test textures
 	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");

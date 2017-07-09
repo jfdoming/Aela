@@ -8,11 +8,13 @@
 #pragma once
 #include "Component.h"
 
-class TextComponent : public Component {
-	public:
-		TextComponent();
-		~TextComponent();
+namespace Aela {
+	class TextComponent : public Component {
+		public:
+			TextComponent();
+			~TextComponent();
 
-		virtual void update();
-		virtual void render();
-};
+			virtual void update();
+			virtual void render();
+	};
+}

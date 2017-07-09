@@ -7,25 +7,13 @@
 
 #pragma once
 
-#include "stdafx.h"
-#include <GLM/glm.hpp>
-#include <vector>
-
 namespace Aela {
 	class Resource {
 		public:
+			Resource();
+			virtual ~Resource();
 
-		Resource();
-		virtual ~Resource();
-	};
-
-	class OBJResource : public Resource {
-	public:
-		std::vector<glm::vec3> vertices;
-		std::vector<glm::vec2> UVs;
-		std::vector<glm::vec3> normals;
-		
-		OBJResource();
-		virtual ~OBJResource();
+			Resource(const Resource&) = delete;
+			void operator=(const Resource&) = delete;
 	};
 }

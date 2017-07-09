@@ -7,22 +7,24 @@
 
 #pragma once
 
-class Component {
-	public:
-		Component();
-		~Component();
+namespace Aela {
+	class Component {
+		public:
+			Component();
+			~Component();
 
-		virtual bool isDirty();
-		int getWidth();
-		int getHeight();
+			virtual bool isDirty();
+			int getWidth();
+			int getHeight();
 
-		virtual void update() = 0;
-		virtual void render() = 0;
-	protected:
-		// whether this component needs to be repainted
-		bool dirty = true;
+			virtual void update() = 0;
+			virtual void render() = 0;
+		protected:
+			// whether this component needs to be repainted
+			bool dirty = true;
 
-		// dimensions
-		int width = 0;
-		int height = 0;
-};
+			// dimensions
+			int width = 0;
+			int height = 0;
+	};
+}

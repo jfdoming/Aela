@@ -9,18 +9,20 @@
 #include <vector>
 #include "../3D/Models/Models.h"
 #include "../Renderer/Renderer.h"
+#include "../Menus/Menu.h"
 
 namespace Aela {
 	class Scene {
-	public:
-		int id;
+		public:
+			int id;
 
-		void update();
-		void render(Renderer* renderer);
+			void update();
+			void render(Renderer* renderer);
 
-		Scene(int id);
-		~Scene();
-	private:
-		std::vector<Model3D*> models;
+			Scene(int id);
+			~Scene();
+		private:
+			std::vector<Model3D*> models;
+			Menu* menu = 0;
 	};
 }
