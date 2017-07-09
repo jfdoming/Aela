@@ -23,8 +23,7 @@ namespace Aela {
 			TextureLoader(TextureLoader const&) = delete;
 			void operator=(TextureLoader const&) = delete;
 
-			virtual bool isValid(std::ifstream &in);
-			virtual Resource* load(std::ifstream &in);
+			virtual Resource* load(std::ifstream& in);
 	private:
 		TextureLoader() {}
 	};

@@ -1,5 +1,7 @@
 #include "TextComponent.h"
 
+using namespace Aela;
+
 TextComponent::TextComponent() {
 }
 

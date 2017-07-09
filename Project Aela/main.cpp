@@ -22,8 +22,10 @@
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
 #include "Resource Management/TextureLoader.h"
+#include "Audio/WAVEClipLoader.h"
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
+#include "Audio/AudioManager.h"
 
 namespace Aela {
 	// These are global objects who's classes come from Project Aela.
@@ -43,10 +45,103 @@ namespace Aela {
 
 int runningLoop();
 
+<<<<<<< HEAD
 using namespace Aela;
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
+=======
+// These are global objects who's classes come from Project Aela.
+Window window;
+Renderer renderer;
+ControlManager controlManager;
+EventHandler eventHandler;
+TimeManager timeManager;
+TextManager textManager;
+LuaManager luaManager;
+LuaScript controlScript;
+SceneManager sceneManager;
+ResourceManager resourceManager(0);
+AudioManager audioManager;
+
+// This is the function that starts Aela and contains its loops.
+int startAela() {
+	// This is TEMPORARY and sets the window width and height.
+	int windowWidth = 1280, windowHeight = 720;
+	// This is also TEMPORARY and sets the window starting position.
+	int windowXPosition = 50, windowYPosition = 50;
+
+	window.addProperty(WindowFlag::AELA_WINDOW_SHOWN);
+	window.addProperty(WindowFlag::AELA_WINDOW_OPENGL);
+	bool windowCreationSuccess = window.createWindow(windowWidth, windowHeight, windowXPosition, windowYPosition, "Project Aela");
+	window.getWindowPosition(&windowXPosition, &windowYPosition);
+
+	if (windowCreationSuccess == false) {
+		AelaErrorHandling::windowError("Project Aela Window", "The Aela Window failed to initialise!");
+		return -1;
+	} else {
+		window.makeWindowOpenGLContext();
+		window.hideCursor();
+	}
+
+	// This initializes GLEW.
+	glewExperimental = true;
+	if (glewInit() != GLEW_OK) {
+		AelaErrorHandling::windowError("OpenGL Extension Wrangler", "OpenGL Extension Wrangler failed to initialise!");
+		return -1;
+	}
+
+	// This tells to ControlManager to prevent the camera from being inverted.
+	controlManager.setProperty(ControlManagerProperty::ALLOW_UPSIDE_DOWN_CAMERA, 0);
+
+	// This makes the textManager initialize the FreeType library and setup other things.
+	textManager.setup();
+
+	// This passes the window and time manager to the renderer and control manager.
+	// Please note that the window must be set before calling setup functions.
+	renderer.setWindow(&window);
+	renderer.setTimeManager(&timeManager);
+	renderer.setTextManager(&textManager);
+	renderer.setup3D();
+	renderer.setup2D();
+	controlManager.setWindow(&window);
+	controlManager.setTimeManager(&timeManager);
+
+	// This activates features of the renderer. These can be changed at any point during the runtime of the application.
+	renderer.activateFeature(RendererFeature::SHADOWS);
+	renderer.activateFeature(RendererFeature::BILLBOARDS);
+	renderer.activateFeature(RendererFeature::SKYBOX);
+	renderer.activateFeature(RendererFeature::MSAA_3D_X4);
+	renderer.activateFeature(RendererFeature::MSAA_2D_X0);
+
+	// initialize the audio manager
+	if (!audioManager.init()) {
+		AelaErrorHandling::windowError("OpenAL", "OpenAL failed to initialize!");
+	}
+
+	// Lua Stuff
+	luabridge::getGlobalNamespace(luaManager.getLuaState())
+		.beginClass<ControlManager>("ControlManager")
+		.addFunction("test", &ControlManager::test)
+		.endClass();
+
+	// Expose Object, must register classes before doing this
+	luaManager.exposeObject(controlManager, "controlManager");
+
+	eventHandler.bindControlManager(&controlManager);
+	eventHandler.bindWindow(&window);
+
+	// TODO: Find a way to do this that doesn't require creating separate std::functions
+	std::function<void(ControlManager&)> fast = &ControlManager::goSuperSpeed;
+	std::function<void(ControlManager&)> slow = &ControlManager::goNormalSpeed;
+
+	std::function<void(Renderer)> inc = &Renderer::increaseFOV;
+	std::function<void(Renderer)> dec = &Renderer::decreaseFOV;
+
+	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, fast, controlManager);
+	eventHandler.bindMemberFunction(SDL_KEYUP, 225, slow, controlManager);
+
+>>>>>>> cc1c6f4fafb967b23d232dd85e6248e695529623
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();
 	return value;
@@ -123,10 +218,15 @@ int runningLoop() {
 	resourceManager.addToGroup("res/textures/ekkon.dds", false);
 	resourceManager.addToGroup("res/textures/gradient.dds", false);
 
+	resourceManager.bindLoader(&Aela::WAVEClipLoader::getInstance());
+	resourceManager.addToGroup("res/audio/clips/test.wav", false);
+
 	// load test textures
 	if (resourceManager.loadGroup("test") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"test\"!" << std::endl;
 	}
+
+	audioManager.playClip(resourceManager.obtain<AudioClip>("res/audio/clips/test.wav"));
 
 	// obtain and set up test textures
 	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");

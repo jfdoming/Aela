@@ -1,5 +1,7 @@
 #include "Container.h"
 
+using namespace Aela;
+
 Container::Container() {
 }
 

@@ -9,7 +9,9 @@
 #include "Component.h"
 #include <vector>
 
-class LayoutManager {
-	public:
-		virtual void update(std::vector<Component*>& components) = 0;
-};
+namespace Aela {
+	class LayoutManager {
+		public:
+			virtual void update(std::vector<Component*>& components) = 0;
+	};
+}

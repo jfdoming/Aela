@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 
 #include "OBJLoader.h"
+#include "OBJResource.h"
 #include "../Error Handler/ErrorHandler.h"
 
 // Very, VERY simple OBJ loader.
@@ -21,10 +22,6 @@
 // - Loading from memory, stream, etc
 
 using namespace Aela;
-
-bool Aela::OBJLoader::isValid(std::ifstream& in) {
-	return true;
-}
 
 Resource* Aela::OBJLoader::load(std::ifstream& in) {
 	std::vector<unsigned int> vertexIndexes, uvIndexes, normalIndexes;
@@ -85,7 +82,7 @@ Resource* Aela::OBJLoader::load(std::ifstream& in) {
 
 				} else {
 					AelaErrorHandling::windowError("Aela OBJ Model Loader", "The formatting of the face ('f') section of the OBJ file\nis not the same that the loader uses.\nSupport for more formats will be added soon.");
-					return false;
+					return NULL;
 				}
 				
 			} else {
@@ -114,6 +111,7 @@ Resource* Aela::OBJLoader::load(std::ifstream& in) {
 		res->normals.push_back(normal);
 		res->UVs.push_back(uv);
 	}
+
 	return res;
 }
 

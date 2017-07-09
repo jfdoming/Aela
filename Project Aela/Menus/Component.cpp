@@ -1,5 +1,7 @@
 #include "Component.h"
 
+using namespace Aela;
+
 Component::Component() {
 }
 

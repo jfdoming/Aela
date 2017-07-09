@@ -106,9 +106,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Resource Management\Resource.cpp">
-      <Filter>Source Files\Resources\General</Filter>
-    </ClCompile>
     <ClCompile Include="Resource Management\ResourceManager.cpp">
       <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
@@ -219,6 +216,21 @@
     </ClCompile>
     <ClCompile Include="3D\3D Renderer\Basic3DSkyboxRenderer.cpp">
       <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\ResourceLoader.cpp">
+      <Filter>Source Files\Resources\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\WAVEClipLoader.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\OBJResource.cpp">
+      <Filter>Source Files\Resources\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\AudioClip.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\Resource.cpp">
+      <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
     <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
@@ -365,6 +377,15 @@
     </ClInclude>
     <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
       <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\WAVEClipLoader.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\OBJResource.h">
+      <Filter>Source Files\Resources\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioClip.h">
+      <Filter>Source Files\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\Colour\ColourRGB.h">
       <Filter>Source Files\Utilities\Colour</Filter>

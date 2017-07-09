@@ -9,8 +9,10 @@
 #pragma once
 #include "Container.h"
 
-class Menu : public Container {
-	public:
-		Menu();
-		~Menu();
-};
+namespace Aela {
+	class Menu : public Container {
+		public:
+			Menu();
+			~Menu();
+	};
+}

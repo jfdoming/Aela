@@ -11,17 +11,18 @@
 #include "LayoutManager.h"
 #include <vector>
 
-class Container : public Component {
-	public:
-		Container();
-		~Container();
+namespace Aela {
+	class Container : public Component {
+		public:
+			Container();
+			~Container();
 
-		void add(Component* component);
+			void add(Component* component);
 
-		virtual void update();
-		virtual void render();
-	private:
-		LayoutManager* layout;
-		std::vector<Component*> children;
-};
-
+			virtual void update();
+			virtual void render();
+		private:
+			LayoutManager* layout;
+			std::vector<Component*> children;
+	};
+}
