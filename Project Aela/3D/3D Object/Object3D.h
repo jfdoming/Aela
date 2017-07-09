@@ -38,8 +38,8 @@ class Object3D {
 
 		// These functions are used for transforming the 3D object.
 		void translate(glm::vec3 translation);
-		void rotate(glm::vec3 rotation);
 		void translate(float x, float y, float z);
+		void rotate(glm::vec3 rotation);
 		void rotate(float x, float y, float z);
 
 		// This function is used to force a value within a specific range (not clamping).

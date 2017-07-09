@@ -26,15 +26,14 @@ class Camera3D : public Object3D {
 		void setFieldOfView(float setFieldOfView);
 		float getFieldOfView();
 
+		// These functions allow the camera to rotate and look at a point that is on its plane.
+		void focusAtPointOnPlane(glm::vec3 point, glm::vec3 offset);
+		void focusAtPointOnPlane(glm::vec3 point);
+		void focusAtPointOnPlane(float x, float y, float z);
+
 	private:
 		glm::mat4 viewMatrix;
 		glm::mat4 projectionMatrix;
-
-		// Translation.
-		glm::vec3 position;
-
-		// Rotation.
-		glm::vec3 rotation;
 
 		float fieldOfView;
 };

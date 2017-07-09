@@ -45,11 +45,13 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		window->setCursorPositionInWindow(width / 2, height / 2);
 
 		// This gets the horizontal and vertical angles.
-		float horizontalAngle = camera->getProperty(Object3DProperty::X_ROTATION);
-		float verticalAngle = camera->getProperty(Object3DProperty::Y_ROTATION);
+		float horizontalAngle = camera->getRotation()->x;
+		float verticalAngle = camera->getRotation()->y;
+
+		// std::cout << horizontalAngle << " " << verticalAngle << " are the control manager's values.\n";
 
 		// This computes the new horizontal angle.
-		horizontalAngle += mouseSpeed * float(width / 2 - xpos);
+		// horizontalAngle += mouseSpeed * float(width / 2 - xpos);
 
 		// This adjusts the horizontal angle so that it stays between 0 and PI * 2.
 		if (horizontalAngle >= glm::pi<float>() * 2) {
@@ -60,7 +62,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		}
 
 		// This computes the new vertical angle.
-		float verticalModifier = mouseSpeed * float(height / 2 - ypos);
+		float verticalModifier = 0;// mouseSpeed * float(height / 2 - ypos);
 
 		// This checks to see if the user is trying to make the camera go upside down by moving the camera up
 		// too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
@@ -136,7 +138,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 
 		// This sets all of the camera's position and view related properties.
 		camera->setPosition(position);
-		glm::mat4 projectionMatrix = glm::perspective(camera->getFieldOfView(), 4.0f / 3.0f, 0.1f, 100.0f);
+		glm::mat4 projectionMatrix = glm::perspective(camera->getFieldOfView(), (float) width / height, 0.1f, 100.0f);
 		glm::mat4 viewMatrix = glm::lookAt(position, position + direction, up);
 		camera->setProjectionMatrix(projectionMatrix);
 		camera->setViewMatrix(viewMatrix);
@@ -177,32 +179,26 @@ void ControlManager::transform3DObject(Object3D* object, float speedModifier) {
 		// This occurs when "1" is pressed.
 		if (keystate[30]) {
 			object->rotate(glm::vec3(-deltaTime * currentSpeed * speedModifier, 0, 0));
-			std::cout << object->getRotation()->x << " - ";
 		}
 		// This occurs when "2" is pressed.
 		if (keystate[31]) {
 			object->rotate(glm::vec3(deltaTime * currentSpeed * speedModifier, 0, 0));
-			std::cout << object->getRotation()->x << " - ";
 		}
 		// This occurs when "3" is pressed.
 		if (keystate[32]) {
 			object->rotate(glm::vec3(0, -deltaTime * currentSpeed * speedModifier, 0));
-			std::cout << object->getRotation()->y << " - ";
 		}
 		// This occurs when "4" is pressed.
 		if (keystate[33]) {
 			object->rotate(glm::vec3(0, deltaTime * currentSpeed * speedModifier, 0));
-			std::cout << object->getRotation()->y << " - ";
 		}
 		// This occurs when "5" is pressed.
 		if (keystate[34]) {
 			object->rotate(glm::vec3(0, 0, -deltaTime * currentSpeed * speedModifier));
-			std::cout << object->getRotation()->z << " - ";
 		}
 		// This occurs when "6" is pressed.
 		if (keystate[35]) {
 			object->rotate(glm::vec3(0, 0, deltaTime * currentSpeed * speedModifier));
-			std::cout << object->getRotation()->z << " - ";
 		}
 	}
 }

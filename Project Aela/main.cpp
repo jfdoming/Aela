@@ -12,9 +12,9 @@
 #include <iostream>
 #include <string>
 
+#include "Aela_Engine.h"
 // These are headers that are part of Project Aela.
 #include "Control Manager/ControlManager.h"
-#include "Aela_Engine.h"
 #include "Window/Window.h"
 #include "Error Handler/ErrorHandler.h"
 #include "Time Manager/TimeManager.h"
@@ -25,94 +25,28 @@
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 
-using namespace Aela;
+namespace Aela {
+	// These are global objects who's classes come from Project Aela.
+	Window window;
+	Renderer renderer;
+	ControlManager controlManager;
+	EventHandler eventHandler;
+	TimeManager timeManager;
+	TextManager textManager;
+	LuaManager luaManager;
+	LuaScript controlScript;
+	SceneManager sceneManager;
+	ResourceManager resourceManager(0);
+}
+
+#define PI 3.14159265358979323846
 
 int runningLoop();
 
-// These are global objects who's classes come from Project Aela.
-Window window;
-Renderer renderer;
-ControlManager controlManager;
-EventHandler eventHandler;
-TimeManager timeManager;
-TextManager textManager;
-LuaManager luaManager;
-LuaScript controlScript;
-SceneManager sceneManager;
-ResourceManager resourceManager(0);
+using namespace Aela;
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
-	// This is TEMPORARY and sets the window width and height.
-	int windowWidth = 1280, windowHeight = 720;
-	// This is also TEMPORARY and sets the window starting position.
-	int windowXPosition = 50, windowYPosition = 50;
-
-	window.addProperty(WindowFlag::AELA_WINDOW_SHOWN);
-	window.addProperty(WindowFlag::AELA_WINDOW_OPENGL);
-	bool windowCreationSuccess = window.createWindow(windowWidth, windowHeight, windowXPosition, windowYPosition, "Project Aela");
-	window.getWindowPosition(&windowXPosition, &windowYPosition);
-
-	if (windowCreationSuccess == false) {
-		AelaErrorHandling::windowError("Project Aela Window", "The Aela Window failed to initialise!");
-		return -1;
-	} else {
-		window.makeWindowOpenGLContext();
-		window.hideCursor();
-	}
-
-	// This initializes GLEW.
-	glewExperimental = true;
-	if (glewInit() != GLEW_OK) {
-		AelaErrorHandling::windowError("OpenGL Extension Wrangler", "OpenGL Extension Wrangler failed to initialise!");
-		return -1;
-	}
-
-	// This tells to ControlManager to prevent the camera from being inverted.
-	controlManager.setProperty(ControlManagerProperty::ALLOW_UPSIDE_DOWN_CAMERA, 0);
-
-	// This makes the textManager initialize the FreeType library and setup other things.
-	textManager.setup();
-
-	// This passes the window and time manager to the renderer and control manager.
-	// Please note that the window must be set before calling setup functions.
-	renderer.setWindow(&window);
-	renderer.setTimeManager(&timeManager);
-	renderer.setTextManager(&textManager);
-	renderer.setup3D();
-	renderer.setup2D();
-	controlManager.setWindow(&window);
-	controlManager.setTimeManager(&timeManager);
-
-	// This activates features of the renderer. These can be changed at any point during the runtime of the application.
-	renderer.activateFeature(RendererFeature::SHADOWS);
-	renderer.activateFeature(RendererFeature::BILLBOARDS);
-	renderer.activateFeature(RendererFeature::SKYBOX);
-	renderer.activateFeature(RendererFeature::MSAA_3D_X4);
-	renderer.activateFeature(RendererFeature::MSAA_2D_X0);
-
-	// Lua Stuff
-	luabridge::getGlobalNamespace(luaManager.getLuaState())
-		.beginClass<ControlManager>("ControlManager")
-		.addFunction("test", &ControlManager::test)
-		.endClass();
-
-	// Expose Object, must register classes before doing this
-	luaManager.exposeObject(controlManager, "controlManager");
-
-	eventHandler.bindControlManager(&controlManager);
-	eventHandler.bindWindow(&window);
-
-	// TODO: Find a way to do this that doesn't require creating separate std::functions
-	std::function<void(ControlManager&)> fast = &ControlManager::goSuperSpeed;
-	std::function<void(ControlManager&)> slow = &ControlManager::goNormalSpeed;
-
-	std::function<void(Renderer)> inc = &Renderer::increaseFOV;
-	std::function<void(Renderer)> dec = &Renderer::decreaseFOV;
-
-	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, fast, controlManager);
-	eventHandler.bindMemberFunction(SDL_KEYUP, 225, slow, controlManager);
-
 	// This starts the running loop. What else would you think it does?
 	int value = runningLoop();
 	return value;
@@ -162,6 +96,7 @@ int runningLoop() {
 	std::vector<Billboard> billboards(1);
 	billboards[0].loadTexture("res/textures/character.dds");
 	billboards[0].useSpecifiedRotation(true);
+	renderer.getCamera()->setPosition(glm::vec3(0, 5, -10));
 
 	// This is how a light is set up.
 	std::vector<Light3D> lights;
@@ -234,8 +169,14 @@ int runningLoop() {
 		// This updates events. It must be done first.
 		eventHandler.updateEvents();
 		controlManager.updateKeystate(eventHandler.getKeystate());
-
 		timeManager.updateTime();
+
+		// THIS IS FOR TESTING!
+		controlManager.transform3DObject(&billboards[0], -5);
+		controlManager.transform3DObject(renderer.getCamera(), -5);
+		renderer.getCamera()->focusAtPointOnPlane(*billboards[0].getPosition(), glm::vec3(0, 0, 0));
+		// std::cout << billboards[0].getPosition()->x << " " << billboards[0].getPosition()->y << " " << billboards[0].getPosition()->z << "\n";
+
 		renderer.updateCameraUsingControls(&controlManager);
 
 		// This does some simple math for framerate calculating.
@@ -258,10 +199,6 @@ int runningLoop() {
 			currentScene->update();
 			currentScene->render(&renderer);
 		}
-
-		// THIS IS FOR TESTING!
-		controlManager.transform3DObject(&lights[0], 7);
-		// std::cout << lights[0].getPosition()->x << " " << lights[0].getPosition()->y << " " << lights[0].getPosition()->z << "\n";
 
 		// This renders the program.
 		renderer.startRenderingFrame();
@@ -296,6 +233,85 @@ int runningLoop() {
 
 	resourceManager.unloadGroup("test");
 
+	return 0;
+}
+
+int Aela::setupWindow(unsigned int width, unsigned int height, unsigned int windowXPosition, unsigned int windowYPosition) {
+	window.addProperty(WindowFlag::AELA_WINDOW_SHOWN);
+	window.addProperty(WindowFlag::AELA_WINDOW_OPENGL);
+	bool windowCreationSuccess = window.createWindow(width, height, windowXPosition, windowYPosition, "Project Aela");
+
+	if (windowCreationSuccess == false) {
+		AelaErrorHandling::windowError("Project Aela Window", "The Aela Window failed to initialise!");
+		return -1;
+	} else {
+		window.makeWindowOpenGLContext();
+		window.hideCursor();
+		return 0;
+	}
+}
+
+int Aela::setupRenderer() {
+	// This makes the textManager initialize the FreeType library and setup other things.
+	textManager.setup();
+
+	// This initializes GLEW.
+	glewExperimental = true;
+	if (glewInit() != GLEW_OK) {
+		AelaErrorHandling::windowError("OpenGL Extension Wrangler", "OpenGL Extension Wrangler failed to initialise!");
+		return -1;
+	}
+
+	// This passes the window and time manager to the renderer and control manager.
+	// Please note that the window must be set before calling setup functions.
+	renderer.setWindow(&window);
+	renderer.setTimeManager(&timeManager);
+	renderer.setTextManager(&textManager);
+	renderer.setup3D();
+	renderer.setup2D();
+
+	// This activates features of the renderer. These can be changed at any point during the runtime of the application.
+	renderer.activateFeature(RendererFeature::SHADOWS);
+	renderer.activateFeature(RendererFeature::BILLBOARDS);
+	renderer.activateFeature(RendererFeature::SKYBOX);
+	renderer.activateFeature(RendererFeature::MSAA_3D_X4);
+	renderer.activateFeature(RendererFeature::MSAA_2D_X4);
+	return 0;
+}
+
+int Aela::setupControlManager() {
+	// This sets the Control Manager up and tells it to prevent the camera from being inverted.
+	controlManager.setProperty(ControlManagerProperty::ALLOW_UPSIDE_DOWN_CAMERA, 0);
+	controlManager.setWindow(&window);
+	controlManager.setTimeManager(&timeManager);
+	return 0;
+}
+
+int Aela::setupLUA() {
+	// Lua Stuff
+	luabridge::getGlobalNamespace(luaManager.getLuaState())
+		.beginClass<ControlManager>("ControlManager")
+		.addFunction("test", &ControlManager::test)
+		.endClass();
+
+	// Expose Object, must register classes before doing this
+	luaManager.exposeObject(controlManager, "controlManager");
+	return 0;
+}
+
+int Aela::setupEventHandler() {
+	eventHandler.bindControlManager(&controlManager);
+	eventHandler.bindWindow(&window);
+
+	// TODO: Find a way to do this that doesn't require creating separate std::functions
+	std::function<void(ControlManager&)> fast = &ControlManager::goSuperSpeed;
+	std::function<void(ControlManager&)> slow = &ControlManager::goNormalSpeed;
+
+	std::function<void(Renderer)> inc = &Renderer::increaseFOV;
+	std::function<void(Renderer)> dec = &Renderer::decreaseFOV;
+
+	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, fast, controlManager);
+	eventHandler.bindMemberFunction(SDL_KEYUP, 225, slow, controlManager);
 	return 0;
 }
 

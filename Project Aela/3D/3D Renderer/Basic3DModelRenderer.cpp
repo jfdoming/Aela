@@ -210,10 +210,11 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture
 		glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
 
 		// This computes matrices based on control input.
-		glm::mat4 modelMatrix = glm::translate(glm::lookAt(*position, *lookAt, glm::vec3(0, 1, 0)), *position);
+		glm::mat4 modelMatrix = glm::lookAt(*position, *lookAt, glm::vec3(0, 1, 0));
 		if (inverseRotation) {
 			modelMatrix = glm::inverse(modelMatrix);
 		}
+		modelMatrix = glm::translate(modelMatrix, *position);
 		glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 
 		glUniformMatrix4fv(billboardMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);

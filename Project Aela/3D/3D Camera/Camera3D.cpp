@@ -30,3 +30,18 @@ void Camera3D::setViewMatrix(glm::mat4 setViewMatrix) {
 void Camera3D::setProjectionMatrix(glm::mat4 setProjectionMatrix) {
 	projectionMatrix = setProjectionMatrix;
 }
+
+void Camera3D::focusAtPointOnPlane(glm::vec3 point, glm::vec3 offset) {
+	glm::vec3 angle = glm::normalize(point - position);
+	setRotation(angle.x + offset.x, angle.y + offset.y, offset.z);
+}
+
+void Camera3D::focusAtPointOnPlane(glm::vec3 point) {
+	glm::vec3 angle = glm::normalize(point - position);
+	setRotation(angle.x, angle.y, 0);
+}
+
+void Camera3D::focusAtPointOnPlane(float x, float y, float z) {
+	glm::vec3 point(x, y, z);
+	focusAtPointOnPlane(point);
+}
