@@ -45,12 +45,11 @@ namespace Aela {
 
 int runningLoop();
 
-<<<<<<< HEAD
 using namespace Aela;
 
 // This is the function that starts Aela and contains its loops.
 int startAela() {
-=======
+
 // These are global objects who's classes come from Project Aela.
 Window window;
 Renderer renderer;
