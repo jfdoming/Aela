@@ -17,27 +17,27 @@
 namespace Aela {
 	class TextManager {
 		public:
-		TextManager() {
+			TextManager() {
 
-		}
+			}
 
-		// This is used for setting up the FreeType library.
-		void setup();
+			// This is used for setting up the FreeType library.
+			void setup();
 
-		// These are some functions that are made for interacting with the
-		// list of text fonts.
-		int createNewTextFont(std::string name);
-		TextFont* getTextFont(unsigned int index);
-		bool deleteTextFont(unsigned int index);
-		bool adjustFontSize(unsigned int index, int size);
+			// These are some functions that are made for interacting with the
+			// list of text fonts.
+			int createNewTextFont(std::string name);
+			TextFont* getTextFont(unsigned int index);
+			bool deleteTextFont(unsigned int index);
+			bool adjustFontSize(unsigned int index, int size);
 
-		// This stores the amount of points in a character that make up one pixel.
-		const unsigned short POINTS_PER_PIXEL = 64;
+			// This stores the amount of points in a character that make up one pixel.
+			const unsigned short POINTS_PER_PIXEL = 64;
 
 		private:
-		// This is the list of fonts.
-		std::vector<TextFont> textFonts;
-		// This is the FreeType Library object.
-		FT_Library freetype;
+			// This is the list of fonts.
+			std::vector<TextFont> textFonts;
+			// This is the FreeType Library object.
+			FT_Library freetype;
 	};
 }

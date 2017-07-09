@@ -23,7 +23,7 @@ int TextManager::createNewTextFont(std::string name) {
 	return 0;
 }
 
-// This sets up the freetpye library.
+// This sets up the freetype library.
 void TextManager::setup() {
 	if (FT_Init_FreeType(&freetype)) {
 		AelaErrorHandling::windowError("Project Aela's TextManager", "There was an error initializing the freetype library.");

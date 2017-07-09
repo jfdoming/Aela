@@ -14,11 +14,13 @@
 
 #define PI 3.14159265358979323846
 
+// This function is called in order to update camera-related matrices.
 void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
 	viewMatrix = setViewMatrix;
 	projectionMatrix = setProjectionMatrix;
 }
 
+// This function sends light data to the shader.
 void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID) {
 	glUseProgram(modelProgramID);
 
@@ -28,39 +30,25 @@ void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, G
 	}
 
 	if (numberOfLights > 0) {
-		// I would do this in a more optimized manner, but there's always time for that later, right?
-		std::vector<float> positions(numberOfLights * 3);
-		std::vector<float> directions(numberOfLights * 3);
-		std::vector<float> colours(numberOfLights * 3);
-		std::vector<float> powers(numberOfLights);
+		glUniform1i(numberOfLightsID, numberOfLights);
 
-		for (unsigned int i = 0; i < numberOfLights * 3; i += 3) {
-			positions[i] = lights->at(i / 3).getPosition()->x;
-			positions[i + 1] = lights->at(i / 3).getPosition()->y;
-			positions[i + 2] = lights->at(i / 3).getPosition()->z;
-		}
-
-		for (unsigned int i = 0; i < numberOfLights * 3; i += 3) {
-			directions[i] = lights->at(i / 3).getRotation()->x;
-			directions[i + 1] = lights->at(i / 3).getRotation()->y;
-			directions[i + 2] = lights->at(i / 3).getRotation()->z;
-		}
-
-		for (unsigned int i = 0; i < numberOfLights * 3; i += 3) {
-			colours[i] = lights->at(i / 3).getColour()->getR();
-			colours[i + 1] = lights->at(i / 3).getColour()->getG();
-			colours[i + 2] = lights->at(i / 3).getColour()->getB();
+		for (unsigned int i = 0; i < numberOfLights; i++) {
+			glUniform3fv(lightPositionsID + i, 1, &lights->at(i).getPosition()->x);
 		}
 
 		for (unsigned int i = 0; i < numberOfLights; i++) {
-			powers[i] = lights->at(i).getPower();
+			glUniform3fv(lightDirectionsID + i, 1, &lights->at(i).getRotation()->x);
 		}
 
-		glUniform1i(numberOfLightsID, numberOfLights);
-		glUniform3fv(lightPositionsID, numberOfLights, &positions[0]);
-		glUniform3fv(lightDirectionsID, numberOfLights, &directions[0]);
-		glUniform3fv(lightColoursID, numberOfLights, &colours[0]);
-		glUniform1fv(lightPowersID, numberOfLights, &powers[0]);
+		for (unsigned int i = 0; i < numberOfLights; i++) {
+			glm::vec3 value = lights->at(i).getColour()->getVec3();
+			glUniform3fv(lightColoursID + i, 1, &value.x);
+		}
+
+		for (unsigned int i = 0; i < numberOfLights; i++) {
+			float power = lights->at(i).getPower();
+			glUniform1fv(lightPowersID + i, numberOfLights, &power);
+		}
 
 		for (unsigned int i = 0; i < lights->size(); i++) {
 			glActiveTexture(GL_TEXTURE1 + i);
@@ -70,6 +58,7 @@ void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, G
 	}
 }
 
+// This function renders a model.
 void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
 	GLuint modelMatrixID, GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition) {
 	glUseProgram(modelProgramID);
@@ -172,8 +161,7 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 // To specify a rotation for the camera as a vec3, use the texture's position and add the direction (position + direction) for the lookAt parameter.
 // Note: for the lookAt parameter, position + glm::vec3(0.0, 0.0, 1.0) will not rotate the texture. Use this for no rotation.
 void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint modelTextureID,
-	GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation) {
-
+	GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* lookAt, bool inverseRotation) {
 	glUseProgram(programID);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -222,7 +210,7 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture
 		glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
 
 		// This computes matrices based on control input.
-		glm::mat4 modelMatrix = glm::lookAt(position, lookAt, glm::vec3(0, 1, 0));
+		glm::mat4 modelMatrix = glm::translate(glm::lookAt(*position, *lookAt, glm::vec3(0, 1, 0)), *position);
 		if (inverseRotation) {
 			modelMatrix = glm::inverse(modelMatrix);
 		}
@@ -264,6 +252,96 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture
 	}
 }
 
+// This function renders a texture in the 3D space.
+void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID, GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* rotation) {
+	glUseProgram(programID);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
+	if (cullFaces) {
+		glEnable(GL_CULL_FACE);
+	} else {
+		glDisable(GL_CULL_FACE);
+	}
+
+	glm::vec3 vertices[3];
+	glm::vec2 uvs[3];
+
+	for (int i = 0; i < 2; i++) {
+		if (i == 0) {
+			vertices[0] = glm::vec3(1.0, 1.0, 0.0);
+			vertices[1] = glm::vec3(1.0, -1.0, 0.0);
+			vertices[2] = glm::vec3(-1.0, 1.0, 0.0);
+			uvs[0] = glm::vec2(0.0, 0.0);
+			uvs[1] = glm::vec2(0.0, 1.0);
+			uvs[2] = glm::vec2(1.0, 0.0);
+		} else {
+			vertices[0] = glm::vec3(-1.0, -1.0, 0.0);
+			vertices[1] = glm::vec3(-1.0, 1.0, 0.0);
+			vertices[2] = glm::vec3(1.0, -1.0, 0.0);
+			uvs[0] = glm::vec2(1.0, 1.0);
+			uvs[1] = glm::vec2(1.0, 0.0);
+			uvs[2] = glm::vec2(0.0, 1.0);
+		}
+
+		// This binds the texture to "slot" zero.
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glUniform1i(billboardTextureID, 0);
+
+		// Buffer generation.
+		GLuint vertexbuffer;
+		glGenBuffers(1, &vertexbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+		GLuint uvbuffer;
+		glGenBuffers(1, &uvbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
+
+		// This computes matrices based on control input.
+		glm::mat4 modelMatrix = glm::translate(glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z), *position);
+		glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
+
+		glUniformMatrix4fv(billboardMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
+
+		// Vertex buffer attributes.
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glVertexAttribPointer(
+			// Attribute
+			0,
+			// Size
+			3,
+			// Type
+			GL_FLOAT,
+			// Is it normalized?
+			GL_FALSE,
+			// Stride
+			0,
+			// Array buffer offset.
+			(void*) 0
+		);
+
+		// UV buffer attributes.
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+		// This draws triangles!
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		// This deletes stuff from the memory.
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDeleteBuffers(1, &vertexbuffer);
+		glDeleteBuffers(1, &uvbuffer);
+	}
+}
+
+// This function is for debugging purposes.
 void Basic3DModelRenderer::drawTestQuad() {
 	glColor3f(1.0, 1.0, 0.5);
 	glBegin(GL_QUADS);
@@ -278,6 +356,7 @@ void Basic3DModelRenderer::drawTestQuad() {
 	glEnd();
 }
 
+// This function is for debugging purposes.
 void Basic3DModelRenderer::renderTestCube() {
 	unsigned int cubeVAO = 0;
 	unsigned int cubeVBO = 0;

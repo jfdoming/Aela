@@ -1,3 +1,10 @@
+/*
+* Class: Light3D
+* Author: Robert Ciborowski
+* Date: 07/04/2017
+* Description: A class used to store the properties of a light.
+*/
+
 #include "Light3D.h"
 
 void Light3D::setColour(ColourRGB* colour) {

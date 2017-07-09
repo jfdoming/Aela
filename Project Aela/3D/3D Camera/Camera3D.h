@@ -10,9 +10,6 @@
 #include <time.h>
 #include "../3D Object/Object3D.h"
 
-
-
-
 class Camera3D : public Object3D {
 	public:
 		Camera3D() {

@@ -92,7 +92,7 @@ int startAela() {
 	renderer.activateFeature(RendererFeature::BILLBOARDS);
 	renderer.activateFeature(RendererFeature::SKYBOX);
 	renderer.activateFeature(RendererFeature::MSAA_3D_X4);
-	renderer.activateFeature(RendererFeature::MSAA_2D_X4);
+	renderer.activateFeature(RendererFeature::MSAA_2D_X0);
 
 	// initialize the audio manager
 	if (!audioManager.init()) {
@@ -166,22 +166,23 @@ int runningLoop() {
 	};
 	loadSkybox(&skybox, paths, 512, 512);
 
-	// This is how a billboard is loaded.
+	// This is how a billboard is loaded. A billboard that looks the camera would not use a specified rotation.
 	std::vector<Billboard> billboards(1);
-	billboards[0].loadTexture("res/textures/ekkon.dds");
+	billboards[0].loadTexture("res/textures/character.dds");
+	billboards[0].useSpecifiedRotation(true);
 
 	// This is how a light is set up.
 	std::vector<Light3D> lights;
 	for (int i = 0; i < 2; i++) {
 		glm::vec3 position;
 		if (i == 0) {
-			position = glm::vec3(-8, 3, 0);
+			position = glm::vec3(-8, 5, 0);
 		} else {
-			position = glm::vec3(10, 3, 10);
+			position = glm::vec3(10, 5, 10);
 		}
 		glm::vec3 rotation = glm::vec3(0, 0, 0);
 		ColourRGB colour(1, 1, 1);
-		float power = 0.8F;
+		float power = 0.6F;
 		Light3D light(position, rotation, colour, power);
 		renderer.generateShadowMap(&light);
 		lights.push_back(light);
@@ -209,7 +210,7 @@ int runningLoop() {
 	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");
 	testTexture->setOutput(0, 0, 100, 50);
 	Texture* testTexture2 = resourceManager.obtain<Texture>("res/textures/gradient.dds");
-	testTexture2->setOutput(100, 0, 1180, 50);
+	testTexture2->setOutput(100, 0, window.getWindowDimensions()->getWidth() - 100, 50);
 
 	// This is also temporary and showcases text rendering. This will be moved once the menu system is formed.
 	int arial = textManager.createNewTextFont("arial bold.ttf");
@@ -217,11 +218,29 @@ int runningLoop() {
 	Rect<int> textOutput(128, 34, 200, 200);
 	ColourRGBA textColour(0.9f, 0.1f, 0.9f, 1.0f);
 
+	// This sets up a custom 2D frame buffer.
+	Simple2DFramebuffer customFramebuffer;
+	renderer.setupSimple2DFramebuffer(&customFramebuffer, (Rect<int>*) window.getWindowDimensions(), (Rect<int>*) window.getWindowDimensions());
+
 	// This is also temporary and used to output framerate.
 	clock_t timeOfLastFrameCheck = 0;
 	int timeBetweenFrameChecks = 250, fps = -1;
 	// http://stackoverflow.com/questions/87304/calculating-frames-per-second-in-a-game
 	float fpsSmoothing = 0.9f;
+
+	// This is an example of how to get information about the renderer.
+	std::string info = renderer.getInformation(RendererInformation::VENDOR);
+	if (info.find("AMD") != std::string::npos || info.find("ATI") != std::string::npos) {
+		AelaErrorHandling::windowError("About your GPU...", "Ah, an AMD card? You must be a classy person that enjoys a fine wine.");
+	} else if (info.find("NVIDIA") != std::string::npos || info.find("GTX") != std::string::npos
+		|| info.find("NV") != std::string::npos || info.find("GT") != std::string::npos) {
+		AelaErrorHandling::windowError("About your GPU...",
+			"Ah, an NVIDIA card? You must enjoy supporting proprietary technologies. I rate your GPU purchase a 3.5/4, if you know what I mean.");
+	} else {
+		AelaErrorHandling::windowError("About your GPU...", "It's simply a potato.");
+	}
+	std::cout << info << " " << renderer.getInformation(RendererInformation::VENDOR) << " is the vendor of the GPU, "
+		<< renderer.getInformation(RendererInformation::OPENGL_VERSION) << " is the version of OpenGL.\n";
 
 	// This is the program's running loop.
 	do {
@@ -259,6 +278,7 @@ int runningLoop() {
 
 		// This renders the program.
 		renderer.startRenderingFrame();
+		renderer.clearSimple2DFramebuffer(&customFramebuffer);
 		renderer.setupBoundLightsForCurrentFrame();
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModelShadows(&(models[i]));
@@ -267,17 +287,19 @@ int runningLoop() {
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModel(&(models[i]));
 		}
+		renderer.renderSkybox(&skybox);
 		for (unsigned int i = 0; i < billboards.size(); i++) {
 			renderer.renderBillboard(&(billboards[i]));
 		}
-		renderer.renderSkybox(&skybox);
+		renderer.endRendering3D();
 		std::string fpsData = std::to_string(fps) + " FPS";
-		renderer.render2DTexture(testTexture);
-		renderer.render2DTexture(testTexture2);
-		renderer.renderText(fpsData, arial, &textOutput, &textColour);
+		renderer.render2DTexture(testTexture, &customFramebuffer);
+		renderer.render2DTexture(testTexture2, &customFramebuffer);
+		renderer.renderText(fpsData, arial, &textOutput, &textColour, &customFramebuffer);
 		ColourRGBA funkyColour((timeManager.getCurrentTime() % 1000) / 1000.0f, 1.0f - (timeManager.getCurrentTime() % 1000) / 1000.0f, 0.8f, 0.8f);
-		renderer.renderRectangle(50, 50, 100, 100, window.getWindowDimensions(), &funkyColour);
-		renderer.renderTriangle(200, 50, 300, 150, 400, 50, window.getWindowDimensions(), &funkyColour);
+		renderer.renderRectangle(50, 50, 100, 100, &customFramebuffer, window.getWindowDimensions(), &funkyColour);
+		renderer.renderTriangle(200, 50, 300, 150, 400, 50, &customFramebuffer, window.getWindowDimensions(), &funkyColour);
+		renderer.renderSimple2DFramebuffer(&customFramebuffer);
 		renderer.endRenderingFrame();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 	// This will call each model's destructor, which will delete each model's texture. I'm not sure if this

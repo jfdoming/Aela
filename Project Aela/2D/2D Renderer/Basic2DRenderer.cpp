@@ -13,30 +13,30 @@
 using namespace Aela;
 
 // This is the setup function, which sets up OpenGL-related variables.
-void Basic2DRenderer::setup(unsigned int multisampling) {
+void Basic2DRenderer::setup() {
 	// This loads shaders.
 	load2DShaders();
 
 	// This gets handles to GLSL variables.
 	getGLSLVariableHandles();
-
-	// This generates textures for characters, textures buffers, etc.
-	setupFrameBuffers(multisampling);
 	
+	// This loads the character texture.
+	glGenTextures(1, &characterTexture);
+	glBindTexture(GL_TEXTURE_2D, characterTexture);
+
 	// This checks the framebuffer.
 	checkFrameBuffer();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+// This function loads all necessary shaders.
 void Basic2DRenderer::load2DShaders() {
-	// These functions load shaders.
 	bufferTextureToBufferProgramID = loadShaders("res/shaders/2D/2DTextureBufferToBuffer.vert", "res/shaders/2D/2DTextureBufferToBuffer.frag");
 	textToBufferProgramID = loadShaders("res/shaders/2D/TextToBuffer.vert", "res/shaders/2D/TextToBuffer.frag");
 	imageToBufferProgramID = loadShaders("res/shaders/2D/2DTextureToBuffer.vert", "res/shaders/2D/2DTextureToBuffer.frag");
 }
 
+// This function gets handles to GLSL variables from GLSL shaders.
 void Basic2DRenderer::getGLSLVariableHandles() {
-	// These functions get handles to GLSL variables from GLSL shaders.
 	imageTextureID = glGetUniformLocation(bufferTextureToBufferProgramID, "quadTexture");
 	imageQuadVertexBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "vertexPosition");
 	imageTopLeftBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "positionOfTextureOnScreen");
@@ -53,38 +53,21 @@ void Basic2DRenderer::getGLSLVariableHandles() {
 	characterColourBufferID = glGetAttribLocation(textToBufferProgramID, "textColour");
 }
 
-void Basic2DRenderer::setupFrameBuffers(unsigned int multisampling) {
+void Basic2DRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer, unsigned int multisampling, Rect<int>* dimensions, Rect<int>* output) {
 	// This sets up the 2D framebuffer. This is included in the same function as the
 	// texture generation code to avoid only one of the two (buffer and texture) being generated.
 	// This is especially important since some textures are tied to the framebuffer.
-	// Note for later: use glBlitFramebuffer() for copying a rectangle of an image.
-	glGenFramebuffers(1, &frameBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
-	// This loads the character texture.
-	glGenTextures(1, &characterTexture);
-	glBindTexture(GL_TEXTURE_2D, characterTexture);
-
-	// This loads the texture that is tied to the framebuffer.
-	glGenTextures(1, frameBufferTexture.getTexture());
-	glBindTexture(GL_TEXTURE_2D, *(frameBufferTexture.getTexture()));
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, windowWidth, windowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	frameBufferTexture.setDimensions(0, 0, windowWidth, windowHeight);
-	frameBufferTexture.setOutput(0, 0, windowWidth, windowHeight);
-	glDrawBuffer(GL_COLOR_ATTACHMENT0);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(frameBufferTexture.getTexture()), 0);
+	GLuint* texture = framebuffer->getFramebufferTexture()->getTexture();
+	GLuint* multisampledTexture = framebuffer->getMultisampledFramebufferTexture()->getTexture();
 
 	if (multisampling > 0) {
 		// This generates the multisampled colour framebuffer, which later is blitted to the regular colour framebuffer.
-		glGenFramebuffers(1, &multisampledFrameBuffer);
-		glBindFramebuffer(GL_FRAMEBUFFER, multisampledFrameBuffer);
+		glGenFramebuffers(1, framebuffer->getMultisampledFramebuffer());
+		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
 
-		glGenTextures(1, multisampledFrameBufferTexture.getTexture());
-		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, *(multisampledFrameBufferTexture.getTexture()));
+		glGenTextures(1, multisampledTexture);
+		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, *multisampledTexture);
 		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, windowWidth, windowHeight, GL_TRUE);
 		/* Clamping to edges is important to prevent artifacts when scaling */
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -93,24 +76,52 @@ void Basic2DRenderer::setupFrameBuffers(unsigned int multisampling) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		multisampledFrameBufferTexture.setDimensions(0, 0, windowWidth, windowHeight);
-		multisampledFrameBufferTexture.setOutput(0, 0, windowWidth, windowHeight);
+		framebuffer->getMultisampledFramebufferTexture()->setDimensions(0, 0, windowWidth, windowHeight);
+		framebuffer->getMultisampledFramebufferTexture()->setOutput(0, 0, windowWidth, windowHeight);
 		glDrawBuffer(GL_COLOR_ATTACHMENT0);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *(multisampledFrameBufferTexture.getTexture()), 0);
-	} else {
-		glDeleteBuffers(1, &multisampledFrameBuffer);
-		glDeleteTextures(1, multisampledFrameBufferTexture.getTexture());
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *multisampledTexture, 0);
 	}
+
+	glGenFramebuffers(1, framebuffer->getFramebuffer());
+	glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getFramebuffer());
+	glGenTextures(1, texture);
+	glBindTexture(GL_TEXTURE_2D, *texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, windowWidth, windowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *texture, 0);
+
+	framebuffer->getFramebufferTexture()->setDimensions(dimensions);
+	framebuffer->getFramebufferTexture()->setOutput(output);
+	framebuffer->setMultisampling(multisampling);
 }
 
-// This function renders a texture directly to a specified framebuffer.
-void Basic2DRenderer::renderTextureToBuffer(Texture* texture, Rect<unsigned int>* windowDimensions, GLuint frameBuffer) {
-	renderTextureToBuffer(texture, windowDimensions, frameBuffer, bufferTextureToBufferProgramID);
+// This function renders a texture directly to a specified framebuffer using the shader for rendering images.
+void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions) {
+	renderTextureToSimple2DFramebuffer(texture, framebuffer, windowDimensions, imageToBufferProgramID);
 }
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
 // Note: Custom shaders can be used for post-process effects.
-void Basic2DRenderer::renderTextureToBuffer(Texture* texture, Rect<unsigned int>* windowDimensions, GLuint frameBuffer, GLuint customShader) {
+void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, GLuint customShader) {
+	if (framebuffer->getMultisampling() > 0) {
+		renderTextureToFramebuffer(texture, *framebuffer->getMultisampledFramebuffer(), windowDimensions, customShader);
+	} else {
+		renderTextureToFramebuffer(texture, *framebuffer->getFramebuffer(), windowDimensions, customShader);
+	}
+}
+
+// This function renders a texture directly to a specified framebuffer.
+void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<unsigned int>* windowDimensions) {
+	renderTextureToFramebuffer(texture, framebuffer, windowDimensions, bufferTextureToBufferProgramID);
+}
+
+// This function renders a texture directly to a framebuffer, using a custom shader.
+// Note: Custom shaders can be used for post-process effects.
+void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<unsigned int>* windowDimensions, GLuint customShader) {
 	// Due to the way that OpenGL seems to flip the texture, the shader needs to flip it back
 	// and show the texture's opposite side. Or the renderer could just send normal data.
 	// GL_CULL_FACE needs to be disabled if one uses the first option.
@@ -139,7 +150,7 @@ void Basic2DRenderer::renderTextureToBuffer(Texture* texture, Rect<unsigned int>
 	int textureWidth = texture->getDimensions()->getWidth(), textureHeight = texture->getDimensions()->getHeight();
 
 	// These are some functions needed by OpenGL.
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glViewport(0, 0, windowWidth, windowHeight);
 	glUseProgram(customShader);
 
@@ -280,17 +291,8 @@ void Basic2DRenderer::renderTextureToBuffer(Texture* texture, Rect<unsigned int>
 	glDeleteBuffers(1, &windowDimensionsBuffer);
 }
 
-// This function renders a texture directly to the 2D renderer's buffer.
-void Basic2DRenderer::renderTextureTo2DBuffer(Texture* texture, Rect<unsigned int>* windowDimensions, bool multisampling) {
-	if (multisampling) {
-		renderTextureToBuffer(texture, windowDimensions, multisampledFrameBuffer, imageToBufferProgramID);
-	} else {
-		renderTextureToBuffer(texture, windowDimensions, frameBuffer, imageToBufferProgramID);
-	}
-}
-
 // This function renders text directly to the 2D renderer's buffer.
-void Basic2DRenderer::renderTextTo2DBuffer(std::string text, TextFont* textFont, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, unsigned int pointsPerPixel, bool multisampling) {
+void Basic2DRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFont* textFont, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, unsigned int pointsPerPixel) {
 	// This sets up some variables for later use.
 	Rect<int> characterPositioning = *output;
 	FT_GlyphSlot glyph = (*(textFont->getFace()))->glyph;
@@ -307,11 +309,12 @@ void Basic2DRenderer::renderTextTo2DBuffer(std::string text, TextFont* textFont,
 		characterPositioning.setY(output->getY() - (glyph->metrics.horiBearingY / pointsPerPixel));
 		characterPositioning.setWidth(glyph->bitmap.width);
 		characterPositioning.setHeight(glyph->bitmap.rows);
-		renderCharacter(p, &characterPositioning, windowDimensions, glyph, colour, multisampling);
+		renderCharacter(p, framebuffer, &characterPositioning, windowDimensions, glyph, colour);
 		characterPositioning.setX(characterPositioning.getX() + (glyph->metrics.horiAdvance / pointsPerPixel));
 	}
 }
 
+// This function is made specifically for blitting a 2D multisampled buffer to a regular 2D buffer.
 void Basic2DRenderer::renderMultisampledBufferToBuffer(GLuint multisampledBuffer, GLuint secondaryBuffer, Rect<unsigned int>* windowDimensions) {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, multisampledBuffer);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, secondaryBuffer);
@@ -319,19 +322,18 @@ void Basic2DRenderer::renderMultisampledBufferToBuffer(GLuint multisampledBuffer
 }
 
 // This clears the 2D framebuffer.
-void Basic2DRenderer::clearFrameBuffer(bool multisampling) {
+void Basic2DRenderer::clearSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	if (multisampling) {
-		glBindFramebuffer(GL_FRAMEBUFFER, multisampledFrameBuffer);
+	if (framebuffer->getMultisampling() > 0) {
+		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
 	} else {
-		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getFramebuffer());
 	}
 	glClear(GL_COLOR_BUFFER_BIT);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 // This renders a single character using the character shader.
-void Basic2DRenderer::renderCharacter(char* character, Rect<int>* output, Rect<unsigned int>* windowDimensions, FT_GlyphSlot glyph, ColourRGBA* colour, bool multisampling) {
+void Basic2DRenderer::renderCharacter(char* character, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, FT_GlyphSlot glyph, ColourRGBA* colour) {
 	glBindTexture(GL_TEXTURE_2D, characterTexture);
 	// Note: 1 byte alignment is required when uploading texture data.
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -369,10 +371,10 @@ void Basic2DRenderer::renderCharacter(char* character, Rect<int>* output, Rect<u
 	int textureWidth = output->getWidth(), textureHeight = output->getHeight();
 
 	// This calls some OpenGL functions necessary before rendering.
-	if (multisampling) {
-		glBindFramebuffer(GL_FRAMEBUFFER, multisampledFrameBuffer);
+	if (framebuffer->getMultisampling() > 0) {
+		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
 	} else {
-		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getFramebuffer());
 	}
 	glViewport(0, 0, windowWidth, windowHeight);
 	glUseProgram(textToBufferProgramID);
@@ -557,12 +559,12 @@ void Basic2DRenderer::drawTestQuad() {
 }
 
 // This function is used to draw a rectangle.
-void Basic2DRenderer::renderRectangle(Rect<int>* output, Rect<unsigned int>* windowDimensions,  ColourRGBA* colour, bool multisampling) {
+void Basic2DRenderer::renderRectangle(Rect<int>* output, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions,  ColourRGBA* colour) {
 	glUseProgram(0);
-	if (multisampling) {
-		glBindFramebuffer(GL_FRAMEBUFFER, multisampledFrameBuffer);
+	if (framebuffer->getMultisampling() > 0) {
+		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
 	} else {
-		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getFramebuffer());
 	}
 	glViewport(0, 0, windowDimensions->getWidth(), windowDimensions->getHeight());
 	glEnable(GL_CULL_FACE);
@@ -578,17 +580,18 @@ void Basic2DRenderer::renderRectangle(Rect<int>* output, Rect<unsigned int>* win
 	glEnd();
 }
 
-void Basic2DRenderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, bool multisampling) {
+void Basic2DRenderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
 	Rect<int> rect(xPosition, yPosition, width, height);
-	renderRectangle(&rect, windowDimensions, colour, multisampling);
+	renderRectangle(&rect, framebuffer, windowDimensions, colour);
 }
 
-void Basic2DRenderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, bool multisampling) {
+// This function is used to draw a triangle.
+void Basic2DRenderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
 	glUseProgram(0);
-	if (multisampling) {
-		glBindFramebuffer(GL_FRAMEBUFFER, multisampledFrameBuffer);
+	if (framebuffer->getMultisampling() > 0) {
+		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
 	} else {
-		glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getFramebuffer());
 	}
 	glViewport(0, 0, windowDimensions->getWidth(), windowDimensions->getHeight());
 	glEnable(GL_CULL_FACE);
@@ -603,39 +606,12 @@ void Basic2DRenderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::ve
 	glEnd();
 }
 
-void Basic2DRenderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, bool multisampling) {
+void Basic2DRenderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX,
+	unsigned int pointCY, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
 	glm::vec2 pointA(pointAX, pointAY);
 	glm::vec2 pointB(pointBX, pointBY);
 	glm::vec2 pointC(pointCX, pointCY);
-	renderTriangle(pointA, pointB, pointC, windowDimensions, colour, multisampling);
-}
-
-// These are some getters.
-GLuint* Basic2DRenderer::getFrameBuffer() {
-	return &frameBuffer;
-}
-
-Texture* Basic2DRenderer::getFrameBufferTexture() {
-	return &frameBufferTexture;
-}
-
-GLuint* Basic2DRenderer::getMultisampledFrameBuffer() {
-	return &multisampledFrameBuffer;
-}
-
-Texture* Basic2DRenderer::getMultisampledFrameBufferTexture() {
-	return &multisampledFrameBufferTexture;
-}
-
-// This checks to see if the framebuffer is set up properly.
-bool Basic2DRenderer::checkFrameBuffer() {
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		AelaErrorHandling::windowError("Aela 2D Rendering",
-			"There was a problem setting up the framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
-		return false;
-	} else {
-		return true;
-	}
+	renderTriangle(pointA, pointB, pointC, framebuffer, windowDimensions, colour);
 }
 
 void Basic2DRenderer::setWindow(Window* setWindow) {
@@ -645,4 +621,15 @@ void Basic2DRenderer::setWindow(Window* setWindow) {
 
 Window* Basic2DRenderer::getWindow() {
 	return window;
+}
+
+// This checks to see if the currently bound framebuffer is set up properly.
+bool Basic2DRenderer::checkFrameBuffer() {
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		AelaErrorHandling::windowError("Aela 2D Rendering",
+			"There was a problem setting up the framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
+		return false;
+	} else {
+		return true;
+	}
 }

@@ -10,20 +10,22 @@
 
 using namespace Aela;
 
+// This sets up the class.
 void Basic3DRenderer::setup(unsigned int multisampling) {
 	setupShaders();
 	setupFrameBuffers(multisampling);
 	getIDs();
 }
 
+// This creates and compiles the shaders.
 void Basic3DRenderer::setupShaders() {
-	// This creates and compiles the GLSL program from the shaders.
 	depthProgramID = loadShaders("res/shaders/3D/Depth.vert", "res/shaders/3D/Depth.geom", "res/shaders/3D/Depth.frag");
 	modelProgramID = loadShaders("res/shaders/3D/Model.vert", "res/shaders/3D/Model.frag");
 	billboardProgramID = loadShaders("res/shaders/3D/Billboards.vert", "res/shaders/3D/Billboards.frag");
 	skyboxProgramID = loadShaders("res/shaders/3D/Skybox.vert", "res/shaders/3D/Skybox.frag");
 }
 
+// This gets handles to GLSL uniforms.
 void Basic3DRenderer::getIDs() {
 	modelTextureID = glGetUniformLocation(modelProgramID, "textureSampler");
 	modelMVPMatrixID = glGetUniformLocation(modelProgramID, "modelViewProjectionMatrix");
@@ -32,10 +34,10 @@ void Basic3DRenderer::getIDs() {
 	cameraPositionID = glGetUniformLocation(modelProgramID, "cameraPosition");
 	shadowMapID = glGetUniformLocation(modelProgramID, "shadowMaps[0]");
 	numberOfLightsID = glGetUniformLocation(modelProgramID, "numberOfLights");
-	lightPositionsID = glGetUniformLocation(modelProgramID, "lightPositions");
-	lightDirectionsID = glGetUniformLocation(modelProgramID, "lightDirections");
-	lightColoursID = glGetUniformLocation(modelProgramID, "lightColours");
-	lightPowersID = glGetUniformLocation(modelProgramID, "lightPowers");
+	lightPositionsID = glGetUniformLocation(modelProgramID, "lightPositions[0]");
+	lightDirectionsID = glGetUniformLocation(modelProgramID, "lightDirections[0]");
+	lightColoursID = glGetUniformLocation(modelProgramID, "lightColours[0]");
+	lightPowersID = glGetUniformLocation(modelProgramID, "lightPowers[0]");
 
 	billboardTextureID = glGetUniformLocation(billboardProgramID, "textureSampler");
 	billboardMVPMatrixID = glGetUniformLocation(billboardProgramID, "modelViewProjectionMatrix");
@@ -49,6 +51,8 @@ void Basic3DRenderer::getIDs() {
 	skyboxProjectionMatrixID = glGetUniformLocation(skyboxProgramID, "projectionMatrix");
 }
 
+// This sets up all of the framebuffers, including the MSAA framebuffer.
+// It is also called if the MSAA amount changes.
 void Basic3DRenderer::setupFrameBuffers(unsigned int multisampling) {
 	// This generates the colour framebuffer.
 	glGenFramebuffers(1, &colourFrameBuffer);
@@ -89,6 +93,7 @@ void Basic3DRenderer::setupFrameBuffers(unsigned int multisampling) {
 		glDrawBuffer(GL_COLOR_ATTACHMENT0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *(multisampledColourFrameBufferTexture.getTexture()), 0);
 	} else {
+		// If the MSAA amount is changed from a value greater than zero to zero, the buffer and texture should be deleted.
 		glDeleteBuffers(1, &multisampledColourFrameBuffer);
 		glDeleteTextures(1, multisampledColourFrameBufferTexture.getTexture());
 	}
@@ -107,11 +112,10 @@ void Basic3DRenderer::setupFrameBuffers(unsigned int multisampling) {
 		AelaErrorHandling::windowError("Project Aela 3D Rendering",
 			"There was a problem setting up the colour framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
 	}
-
 }
 
+// This generates a light's depth frame buffer.
 void Basic3DRenderer::generateShadowMap(Light3D* light) {
-	// This generates the frame buffer for depth.
 	GLuint* buffer = light->getShadowMapBuffer();
 	glGenFramebuffers(1, buffer);
 
@@ -177,11 +181,13 @@ Texture * Aela::Basic3DRenderer::getMultisampledColourFrameBufferTexture() {
 	return &multisampledColourFrameBufferTexture;
 }
 
+// This renders a model's shadow per light using the shadow renderer.
 void Basic3DRenderer::renderShadow(Model3D* model) {
 	glViewport(0, 0, shadowRenderer.getDepthTextureWidth(), shadowRenderer.getDepthTextureHeight());
 	shadowRenderer.renderShadow(model, depthProgramID, shadowModelMatrixID, shadowMatrixID, lights, lightShadowPositionsID);
 }
 
+// This renders a model.
 void Basic3DRenderer::renderModel(Model3D* model, bool multisampling) {
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	glViewport(0, 0, windowWidth, windowHeight);
@@ -192,14 +198,19 @@ void Basic3DRenderer::renderModel(Model3D* model, bool multisampling) {
 	}
 }
 
-void Basic3DRenderer::clearColourFrameBuffer() {
+// This clears the colour frame buffer.
+void Basic3DRenderer::clearColourFrameBuffer(bool multisampling) {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glBindFramebuffer(GL_FRAMEBUFFER, multisampledColourFrameBuffer);
+	if (multisampling) {
+		glBindFramebuffer(GL_FRAMEBUFFER, multisampledColourFrameBuffer);
+	} else {
+		glBindFramebuffer(GL_FRAMEBUFFER, colourFrameBuffer);
+	}
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, glm::vec3 position, glm::vec3 lookAt, bool inverseRotation, bool multisampling) {
+// This renders a texture in 3D space.
+void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, glm::vec3* position, glm::vec3* lookAt, bool inverseRotation, bool multisampling) {
 	// Note: for regular texture rendering, use:
 	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
 	glViewport(0, 0, windowWidth, windowHeight);
@@ -211,13 +222,22 @@ void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, gl
 	}
 }
 
+// This renders a billboard, accounting for multisampling.
 void Basic3DRenderer::renderBillboard(Billboard* billboard, bool multisampling) {
 	glViewport(0, 0, windowWidth, windowHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	if (multisampling) {
-		modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), *(camera->getPosition()), true);
+	if (billboard->usingSpecifiedRotation()) {
+		if (multisampling) {
+			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getRotation());
+		} else {
+			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getRotation());
+		}
 	} else {
-		modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), *(camera->getPosition()), true);
+		if (multisampling) {
+			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), camera->getPosition(), true);
+		} else {
+			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), camera->getPosition(), true);
+		}
 	}
 }
 
@@ -230,6 +250,7 @@ void Basic3DRenderer::sendLightDataToShader() {
 	modelRenderer.sendLightDataToShader(lights, modelProgramID, numberOfLightsID, lightPositionsID, lightDirectionsID, lightColoursID, lightPowersID, shadowMapID);
 }
 
+// This renders a skybox, accounting for multisampling.
 void Basic3DRenderer::renderSkybox(Skybox* skybox, bool multisampling) {
 	glViewport(0, 0, windowWidth, windowHeight);
 	skyboxRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
