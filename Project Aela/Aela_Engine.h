@@ -6,5 +6,6 @@ namespace Aela {
 	int setupControlManager();
 	int setupLUA();
 	int setupEventHandler();
+	int setupAudioPlayer();
 	void start();
 }
