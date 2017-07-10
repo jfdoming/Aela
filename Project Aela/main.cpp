@@ -134,7 +134,7 @@ int runningLoop() {
 		std::cerr << "Failed to load a resource from group \"test\"!" << std::endl;
 	}
 
-	audioManager.playClip(resourceManager.obtain<AudioClip>("res/audio/clips/test.wav"));
+	audioPlayer.playClip(resourceManager.obtain<AudioClip>("res/audio/clips/test.wav"));
 
 	// obtain and set up test textures
 	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");

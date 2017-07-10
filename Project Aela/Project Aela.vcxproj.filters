@@ -106,6 +106,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Resource Management\Resource.cpp">
+      <Filter>Source Files\Resources\General</Filter>
+    </ClCompile>
     <ClCompile Include="Resource Management\ResourceManager.cpp">
       <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
@@ -217,38 +220,23 @@
     <ClCompile Include="3D\3D Renderer\Basic3DSkyboxRenderer.cpp">
       <Filter>Source Files\3D\3D Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Resource Management\ResourceLoader.cpp">
-      <Filter>Source Files\Resources\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Audio\WAVEClipLoader.cpp">
-      <Filter>Source Files\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\OBJResource.cpp">
-      <Filter>Source Files\Resources\General</Filter>
+    <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp">
+      <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClCompile>
     <ClCompile Include="Audio\AudioClip.cpp">
       <Filter>Source Files\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\Resource.cpp">
-      <Filter>Source Files\Resources\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Menus\AbstractLayoutManager.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\Mod.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\ModManager.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Menus\TextComponent.cpp">
-      <Filter>Source Files\Menus</Filter>
     </ClCompile>
     <ClCompile Include="Audio\AudioManager.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
     <ClCompile Include="Audio\Listener.cpp">
       <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\WAVEClipLoader.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\OBJResource.cpp">
+      <Filter>Source Files\Resources\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -393,35 +381,26 @@
     <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
       <Filter>Source Files\3D\3D Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Audio\WAVEClipLoader.h">
-      <Filter>Source Files\Audio</Filter>
+    <ClInclude Include="Utilities\Colour\ColourRGB.h">
+      <Filter>Source Files\Utilities\Colour</Filter>
     </ClInclude>
-    <ClInclude Include="Resource Management\OBJResource.h">
-      <Filter>Source Files\Resources\General</Filter>
+    <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
+      <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClInclude>
     <ClInclude Include="Audio\AudioClip.h">
       <Filter>Source Files\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Lua\ModManager.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="Lua\Mod.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="Menus\AbstractLayoutManager.h">
-      <Filter>Source Files\Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="Menus\TextComponent.h">
-      <Filter>Source Files\Menus</Filter>
-    </ClInclude>
     <ClInclude Include="Audio\AudioManager.h">
       <Filter>Source Files\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Lua\Exposable.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
     <ClInclude Include="Audio\Listener.h">
       <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\WAVEClipLoader.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\OBJResource.h">
+      <Filter>Source Files\Resources\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
