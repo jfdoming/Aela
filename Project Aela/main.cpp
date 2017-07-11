@@ -90,11 +90,15 @@ int runningLoop() {
 	for (unsigned int i = 0; i < 4; i++) {
 		KeyFrame3D keyFrame;
 		keyFrame.setObject(&models[0]);
-		glm::vec3 translation(10, 5, (-1 * i % 2) * 10);
-		glm::vec3 rotation(0, 2 * i % 2, 0);
+		glm::vec3 translation(10, 5, (i % 2) * 10);
+		glm::vec3 rotation(0, PI * (i % 2), 0.3 * (i % 2));
 		keyFrame.setTranslation(&translation);
 		keyFrame.setRotation(&rotation);
-		keyFrame.setTimeAfterPreviousKeyFrame((i + 1) * 1500);
+		if (i == 0) {
+			keyFrame.setTimeAfterPreviousKeyFrame(6000);
+		} else {
+			keyFrame.setTimeAfterPreviousKeyFrame(4000);
+		}
 		animator.addKeyFrame(&keyFrame);
 	}
 
@@ -194,7 +198,7 @@ int runningLoop() {
 		eventHandler.updateEvents();
 		controlManager.updateKeystate(eventHandler.getKeystate());
 		timeManager.updateTime();
-		// animator.update();
+		animator.update();
 
 		// THIS IS FOR TESTING!
 		controlManager.transform3DObject(&billboards[0], -5);
