@@ -101,6 +101,9 @@
     <Filter Include="Source Files\2D\Simple 2D Framebuffer">
       <UniqueIdentifier>{e088761b-dd5b-46dd-b6ce-e2bf3fae298c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\3D\3D Animator">
+      <UniqueIdentifier>{dfdd52f2-c33c-42da-a451-335357229b65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -237,6 +240,12 @@
     </ClCompile>
     <ClCompile Include="Resource Management\OBJResource.cpp">
       <Filter>Source Files\Resources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Animator\Animator3D.cpp">
+      <Filter>Source Files\3D\3D Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Animator\KeyFrame3D.cpp">
+      <Filter>Source Files\3D\3D Animator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -401,6 +410,12 @@
     </ClInclude>
     <ClInclude Include="Resource Management\OBJResource.h">
       <Filter>Source Files\Resources\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Animator\Animator3D.h">
+      <Filter>Source Files\3D\3D Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Animator\KeyFrame3D.h">
+      <Filter>Source Files\3D\3D Animator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

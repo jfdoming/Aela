@@ -1,5 +1,5 @@
 /*
-* Name: Project Aela's Basic 3D Renderer
+* Class: Basic 3D Renderer
 * Author: Robert Ciborowski
 * Date: October 2016
 * Description: A class used by Aela's Renderer that uses other, more basic objects

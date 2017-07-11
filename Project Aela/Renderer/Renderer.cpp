@@ -1,5 +1,5 @@
 /*
-* Name: Project Aela's Renderer
+* Class: Renderer
 * Author: Robert Ciborowski
 * Date: October 2016
 * Description: A class used for interacting between Project Aela's renderers.

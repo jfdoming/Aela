@@ -1,5 +1,5 @@
 /*
-* Name: Project Aela's Time Manager
+* Class: Time Manager
 * Author: Robert Ciborowski
 * Date: November 2016
 * Description: A header-only class for time management.

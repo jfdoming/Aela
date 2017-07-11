@@ -13,6 +13,7 @@
 #include <string>
 
 #include "Aela_Engine.h"
+
 // These are headers that are part of Project Aela.
 #include "Control Manager/ControlManager.h"
 #include "Window/Window.h"
@@ -26,6 +27,7 @@
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 #include "Audio/AudioManager.h"
+#include "3D\3D Animator\Animator3D.h"
 
 namespace Aela {
 	// These are global objects who's classes come from Project Aela.
@@ -40,6 +42,7 @@ namespace Aela {
 	SceneManager sceneManager;
 	ResourceManager resourceManager(0);
 	AudioManager audioPlayer;
+	Animator3D animator;
 }
 
 #define PI 3.14159265358979323846
@@ -81,6 +84,18 @@ int runningLoop() {
 	models[2].setPosition(0, 20, 15);
 	models[5].setPosition(0, 0, -15);
 	models[6].setPosition(10, 20, 10);
+
+	// This would animate things if the animator currently worked.
+	std::vector<KeyFrame3D> keyFrames;
+	for (unsigned int i = 0; i < 4; i++) {
+		KeyFrame3D keyFrame;
+		keyFrame.setObject(&models[3]);
+		glm::vec3 translation(10, 5, (-1 * i % 2) * 10);
+		glm::vec3 rotation(0, 2 * i % 2, 0);
+		keyFrame.setTranslation(&translation);
+		keyFrame.setRotation(&rotation);
+		keyFrame.setTimeAfterPreviousKeyFrame(i * 1500);
+	}
 
 	// This is how a skybox is loaded.
 	Skybox skybox;
@@ -178,6 +193,7 @@ int runningLoop() {
 		eventHandler.updateEvents();
 		controlManager.updateKeystate(eventHandler.getKeystate());
 		timeManager.updateTime();
+		animator.update();
 
 		// THIS IS FOR TESTING!
 		controlManager.transform3DObject(&billboards[0], -5);

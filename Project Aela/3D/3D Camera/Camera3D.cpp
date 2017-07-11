@@ -1,5 +1,5 @@
 /*
-* Name: Project Aela's 3D Camera
+* Class: 3D Camera
 * Author: Robert Ciborowski
 * Date: November 2016
 * Description: A class used by Project Aela's Renderer to store properties of a camera.
