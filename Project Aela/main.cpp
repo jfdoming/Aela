@@ -89,12 +89,13 @@ int runningLoop() {
 	std::vector<KeyFrame3D> keyFrames;
 	for (unsigned int i = 0; i < 4; i++) {
 		KeyFrame3D keyFrame;
-		keyFrame.setObject(&models[3]);
+		keyFrame.setObject(&models[0]);
 		glm::vec3 translation(10, 5, (-1 * i % 2) * 10);
 		glm::vec3 rotation(0, 2 * i % 2, 0);
 		keyFrame.setTranslation(&translation);
 		keyFrame.setRotation(&rotation);
-		keyFrame.setTimeAfterPreviousKeyFrame(i * 1500);
+		keyFrame.setTimeAfterPreviousKeyFrame((i + 1) * 1500);
+		animator.addKeyFrame(&keyFrame);
 	}
 
 	// This is how a skybox is loaded.
@@ -193,7 +194,7 @@ int runningLoop() {
 		eventHandler.updateEvents();
 		controlManager.updateKeystate(eventHandler.getKeystate());
 		timeManager.updateTime();
-		animator.update();
+		// animator.update();
 
 		// THIS IS FOR TESTING!
 		controlManager.transform3DObject(&billboards[0], -5);
@@ -341,6 +342,11 @@ int Aela::setupEventHandler() {
 
 int Aela::setupAudioPlayer() {
 	return audioPlayer.init() ? 0 : -1;
+}
+
+int Aela::setupAnimator() {
+	animator.setTimeManager(&timeManager);
+	return 0;
 }
 
 // This method is meant to be run by another program that uses the Project Aela library. It starts Project Aela.

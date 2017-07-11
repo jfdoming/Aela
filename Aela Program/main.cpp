@@ -32,6 +32,11 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
+	error = setupAnimator();
+	if (error != 0) {
+		return error;
+	}
+
 	Aela::start();
 
     return 0;
