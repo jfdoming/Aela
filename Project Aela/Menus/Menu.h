@@ -8,8 +8,8 @@
 
 #pragma once
 #include "Container.h"
-#include "2D/Simple 2D Framebuffer/Simple2DFramebuffer.h"
-#include "Utilities\Rect\Rect.h"
+#include "../2D/Simple 2D Framebuffer/Simple2DFramebuffer.h"
+#include "../Utilities\Rect\Rect.h"
 
 namespace Aela {
 	class Menu : public Container {

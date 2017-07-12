@@ -27,7 +27,7 @@
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 #include "Audio/AudioManager.h"
-#include "3D\3D Animator\Animator3D.h"
+#include "3D/3D Animator/Animator3D.h"
 
 namespace Aela {
 	// These are global objects who's classes come from Project Aela.

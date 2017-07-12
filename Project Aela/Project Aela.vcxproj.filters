@@ -235,21 +235,6 @@
     <ClCompile Include="Resource Management\OBJResource.cpp">
       <Filter>Source Files\Resources\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Menus\AbstractLayoutManager.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="Menus\TextComponent.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\ResourceLoader.cpp">
-      <Filter>Source Files\Resources\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\Mod.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Lua\ModManager.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
     <ClCompile Include="3D\3D Animator\Animator3D.cpp">
       <Filter>Source Files\3D\3D Animator</Filter>
     </ClCompile>
@@ -420,21 +405,6 @@
     <ClInclude Include="Resource Management\OBJResource.h">
       <Filter>Source Files\Resources\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Menus\AbstractLayoutManager.h">
-      <Filter>Source Files\Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="Lua\Exposable.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="Lua\Mod.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="Lua\ModManager.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="Menus\TextComponent.h">
-      <Filter>Source Files\Menus</Filter>
-    </ClInclude>
     <ClInclude Include="3D\3D Animator\Animator3D.h">
       <Filter>Source Files\3D\3D Animator</Filter>
     </ClInclude>
@@ -443,6 +413,9 @@
     </ClInclude>
     <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Colour\ColourRGB.h">
+      <Filter>Source Files\Utilities\Colour</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
