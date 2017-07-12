@@ -5,6 +5,9 @@ using namespace Aela;
 Container::Container() {
 }
 
+Container::Container(int x, int y) : Component(x, y) {
+}
+
 Container::~Container() {
 }
 

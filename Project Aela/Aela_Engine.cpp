@@ -47,18 +47,9 @@ namespace Aela {
 
 #define PI 3.14159265358979323846
 
-int runningLoop();
-
 using namespace Aela;
 
-// This is the function that starts Aela and contains its loops.
-int startAela() {
-	// This starts the running loop. What else would you think it does?
-	int value = runningLoop();
-	return value;
-}
-
-int runningLoop() {
+int Aela::Engine::runningLoop() {
 	// TEMPORARY! This won't exist once models are moved elsewhere.
 	resourceManager.bindLoader(&Aela::OBJLoader::getInstance());
 	std::vector<Model3D> models(7);
@@ -265,7 +256,7 @@ int runningLoop() {
 	return 0;
 }
 
-int Aela::setupWindow(unsigned int width, unsigned int height, unsigned int windowXPosition, unsigned int windowYPosition) {
+int Aela::Engine::setupWindow(unsigned int width, unsigned int height, unsigned int windowXPosition, unsigned int windowYPosition) {
 	window.addProperty(WindowFlag::AELA_WINDOW_SHOWN);
 	window.addProperty(WindowFlag::AELA_WINDOW_OPENGL);
 	bool windowCreationSuccess = window.createWindow(width, height, windowXPosition, windowYPosition, "Project Aela");
@@ -280,7 +271,7 @@ int Aela::setupWindow(unsigned int width, unsigned int height, unsigned int wind
 	}
 }
 
-int Aela::setupRenderer() {
+int Aela::Engine::setupRenderer() {
 	// This makes the textManager initialize the FreeType library and setup other things.
 	textManager.setup();
 
@@ -308,7 +299,7 @@ int Aela::setupRenderer() {
 	return 0;
 }
 
-int Aela::setupControlManager() {
+int Aela::Engine::setupControlManager() {
 	// This sets the Control Manager up and tells it to prevent the camera from being inverted.
 	controlManager.setProperty(ControlManagerProperty::ALLOW_UPSIDE_DOWN_CAMERA, 0);
 	controlManager.setWindow(&window);
@@ -316,7 +307,7 @@ int Aela::setupControlManager() {
 	return 0;
 }
 
-int Aela::setupLUA() {
+int Aela::Engine::setupLUA() {
 	// Lua Stuff
 	luabridge::getGlobalNamespace(luaManager.getLuaState())
 		.beginClass<ControlManager>("ControlManager")
@@ -328,7 +319,7 @@ int Aela::setupLUA() {
 	return 0;
 }
 
-int Aela::setupEventHandler() {
+int Aela::Engine::setupEventHandler() {
 	eventHandler.bindControlManager(&controlManager);
 	eventHandler.bindWindow(&window);
 
@@ -344,17 +335,17 @@ int Aela::setupEventHandler() {
 	return 0;
 }
 
-int Aela::setupAudioPlayer() {
+int Aela::Engine::setupAudioPlayer() {
 	return audioPlayer.init() ? 0 : -1;
 }
 
-int Aela::setupAnimator() {
+int Aela::Engine::setupAnimator() {
 	animator.setTimeManager(&timeManager);
 	return 0;
 }
 
 // This method is meant to be run by another program that uses the Project Aela library. It starts Project Aela.
-void Aela::start() {
-	int errorCode = startAela();
+void Aela::Engine::start() {
+	int errorCode = runningLoop();
 	std::cout << "Program exited with error code " << errorCode << std::endl;
 }

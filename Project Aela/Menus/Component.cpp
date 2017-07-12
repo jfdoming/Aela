@@ -5,6 +5,9 @@ using namespace Aela;
 Component::Component() {
 }
 
+Component::Component(int x, int y) :x(x), y(y) {
+}
+
 Component::~Component() {
 }
 
