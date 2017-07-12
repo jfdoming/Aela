@@ -237,13 +237,14 @@ int Aela::Engine::runningLoop() {
 		}
 		renderer.endRendering3D();
 		std::string fpsData = std::to_string(fps) + " FPS";
-		renderer.render2DTexture(testTexture, &customFramebuffer);
-		renderer.render2DTexture(testTexture2, &customFramebuffer);
-		renderer.renderText(fpsData, arial, &textOutput, &textColour, &customFramebuffer);
+		renderer.bindSimple2DFramebuffer(&customFramebuffer);
+		renderer.render2DTexture(testTexture);
+		renderer.render2DTexture(testTexture2);
+		renderer.renderText(fpsData, arial, &textOutput, &textColour);
 		ColourRGBA funkyColour((timeManager.getCurrentTime() % 1000) / 1000.0f, 1.0f - (timeManager.getCurrentTime() % 1000) / 1000.0f, 0.8f, 0.8f);
-		renderer.renderRectangle(50, 50, 100, 100, &customFramebuffer, window.getWindowDimensions(), &funkyColour);
-		renderer.renderTriangle(200, 50, 300, 150, 400, 50, &customFramebuffer, window.getWindowDimensions(), &funkyColour);
-		renderer.renderSimple2DFramebuffer(&customFramebuffer);
+		renderer.renderRectangle(50, 50, 100, 100, window.getWindowDimensions(), &funkyColour);
+		renderer.renderTriangle(200, 50, 300, 150, 400, 50, window.getWindowDimensions(), &funkyColour);
+		renderer.renderSimple2DFramebuffer();
 		renderer.endRenderingFrame();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 	// This will call each model's destructor, which will delete each model's texture. I'm not sure if this

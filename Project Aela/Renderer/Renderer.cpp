@@ -105,6 +105,10 @@ void Aela::Renderer::bindLights(std::vector<Light3D>* lights) {
 	basic3DRenderer.bindLights(lights);
 }
 
+void Aela::Renderer::bindSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
+	bound2DFramebuffer = framebuffer;
+}
+
 // This starts the rendering of a frame.
 void Renderer::startRenderingFrame() {
 	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
@@ -154,41 +158,41 @@ void Renderer::renderSkybox(Skybox* skybox) {
 }
 
 // This renders a 2D texture using the 2D renderer.
-void Renderer::render2DTexture(Texture* texture, Simple2DFramebuffer* framebuffer) {
-	basic2DRenderer.renderTextureToSimple2DFramebuffer(texture, framebuffer, window->getWindowDimensions());
+void Renderer::render2DTexture(Texture* texture) {
+	basic2DRenderer.renderTextureToSimple2DFramebuffer(texture, bound2DFramebuffer, window->getWindowDimensions());
 }
 
 // This renders text using the 2D renderer.
-void Renderer::renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour, Simple2DFramebuffer* framebuffer) {
-	basic2DRenderer.renderTextToSimple2DFramebuffer(text, textManager->getTextFont(textFontToUse), framebuffer, output, window->getWindowDimensions(), colour,
+void Renderer::renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour) {
+	basic2DRenderer.renderTextToSimple2DFramebuffer(text, textManager->getTextFont(textFontToUse), bound2DFramebuffer, output, window->getWindowDimensions(), colour,
 		textManager->POINTS_PER_PIXEL);
 }
 
 // This renders a rectangle using the 2D renderer.
-void Renderer::renderRectangle(Rect<int>* output, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
-	basic2DRenderer.renderRectangle(output, framebuffer, windowDimensions, colour);
+void Renderer::renderRectangle(Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
+	basic2DRenderer.renderRectangle(output, bound2DFramebuffer, windowDimensions, colour);
 }
 
-void Renderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
-	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, framebuffer, windowDimensions, colour);
+void Renderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
+	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, bound2DFramebuffer, windowDimensions, colour);
 }
 
 // This renders a triangle using the 2D renderer.
-void Renderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
-	basic2DRenderer.renderTriangle(pointA, pointB, pointC, framebuffer, windowDimensions, colour);
+void Renderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
+	basic2DRenderer.renderTriangle(pointA, pointB, pointC, bound2DFramebuffer, windowDimensions, colour);
 }
 
 void Renderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY,
-	Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
-	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, framebuffer, windowDimensions, colour);
+	Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
+	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, bound2DFramebuffer, windowDimensions, colour);
 }
 
-void Renderer::renderSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
+void Renderer::renderSimple2DFramebuffer() {
 	// basic2DRenderer.renderMultisampledBufferToBuffer(*framebuffer->getFramebuffer(), mainFramebuffer, window->getWindowDimensions());
-	if (framebuffer->getMultisampling() > 0) {
-		basic2DRenderer.renderMultisampledBufferToBuffer(*framebuffer->getMultisampledFramebuffer(), *framebuffer->getFramebuffer(), window->getWindowDimensions());
+	if (bound2DFramebuffer->getMultisampling() > 0) {
+		basic2DRenderer.renderMultisampledBufferToBuffer(*bound2DFramebuffer->getMultisampledFramebuffer(), *bound2DFramebuffer->getFramebuffer(), window->getWindowDimensions());
 	}
-	basic2DRenderer.renderTextureToFramebuffer(framebuffer->getFramebufferTexture(), mainFramebuffer, window->getWindowDimensions(), effects2DShader);
+	basic2DRenderer.renderTextureToFramebuffer(bound2DFramebuffer->getFramebufferTexture(), mainFramebuffer, window->getWindowDimensions(), effects2DShader);
 }
 
 void Renderer::endRendering3D() {
