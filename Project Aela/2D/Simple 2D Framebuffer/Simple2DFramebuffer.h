@@ -5,6 +5,8 @@
 * Description: A class used by Aela's 2D Renderer to represent a 2D frame buffer.
 */
 
+#pragma once
+
 // This makes GLEW Static to avoid errors.
 #ifndef GLEW_STATIC
 #define GLEW_STATIC

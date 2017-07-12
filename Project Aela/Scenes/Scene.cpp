@@ -12,9 +12,7 @@ Scene::~Scene() {
 
 void Scene::update() {
 	if (menu != nullptr) {
-		if (menu->isDirty()) {
-			menu->render();
-		}
+		menu->update();
 	}
 }
 
@@ -25,7 +23,7 @@ void Scene::render(Renderer* renderer) {
 
 	if (menu != nullptr) {
 		if (menu->isDirty()) {
-			menu->render();
+			menu->render(renderer);
 		}
 	}
 }

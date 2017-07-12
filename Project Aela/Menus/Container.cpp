@@ -19,10 +19,10 @@ void Container::update() {
 	layout->update(children);
 }
 
-void Container::render() {
+void Container::render(Renderer* renderer) {
 	for (Component* child : children) {
 		if (child->isDirty()) {
-			child->render();
+			child->render(renderer);
 		}
 	}
 }
