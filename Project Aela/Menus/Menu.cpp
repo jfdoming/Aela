@@ -15,3 +15,8 @@ Menu::Menu(Rect<int>* renderDimensions, Renderer renderer, int x, int y) : Conta
 
 Menu::~Menu() {
 }
+
+void Menu::render(Renderer* renderer) {
+	renderer->bindSimple2DFramebuffer(&buffer);
+	Container::render(renderer);
+}

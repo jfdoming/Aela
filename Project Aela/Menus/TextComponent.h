@@ -15,6 +15,6 @@ namespace Aela {
 			~TextComponent();
 
 			virtual void update();
-			virtual void render();
+			virtual void render(Renderer* renderer);
 	};
 }
