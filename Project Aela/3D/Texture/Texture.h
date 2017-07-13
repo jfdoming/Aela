@@ -1,5 +1,5 @@
 /*
-* Name: Project Aela's Texture Class
+* Class: Texture
 * Author: Robert Ciborowski
 * Date: 21/02/2017
 * Description: A class used by Aela's Renderer to store properties of an OpenGL texture.

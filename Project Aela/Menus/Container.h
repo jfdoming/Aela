@@ -15,12 +15,16 @@ namespace Aela {
 	class Container : public Component {
 		public:
 			Container();
-			~Container();
+			virtual ~Container();
 
 			void add(Component* component);
 
 			virtual void update();
-			virtual void render();
+			virtual void render(Renderer* renderer);
+
+		protected:
+			Container(int x, int y);
+
 		private:
 			LayoutManager* layout;
 			std::vector<Component*> children;

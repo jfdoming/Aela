@@ -253,6 +253,9 @@
     <ClCompile Include="Audio\WAVEClipLoader.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="Aela_Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aela_Engine.h">

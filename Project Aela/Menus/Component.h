@@ -6,25 +6,32 @@
 */
 
 #pragma once
+#include "../Renderer/Renderer.h"
 
 namespace Aela {
 	class Component {
 		public:
 			Component();
-			~Component();
+			virtual ~Component();
 
 			virtual bool isDirty();
 			int getWidth();
 			int getHeight();
 
 			virtual void update() = 0;
-			virtual void render() = 0;
+			virtual void render(Renderer* renderer) = 0;
 		protected:
 			// whether this component needs to be repainted
 			bool dirty = true;
 
+			// position
+			int x = 0;
+			int y = 0;
+
 			// dimensions
 			int width = 0;
 			int height = 0;
+
+			Component(int x, int y);
 	};
 }

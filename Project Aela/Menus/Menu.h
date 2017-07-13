@@ -8,11 +8,16 @@
 
 #pragma once
 #include "Container.h"
+#include "../2D/Simple 2D Framebuffer/Simple2DFramebuffer.h"
+#include "../Utilities\Rect\Rect.h"
 
 namespace Aela {
 	class Menu : public Container {
 		public:
-			Menu();
+			Menu(Rect<int>* renderDimensions, Renderer renderer);
+			Menu(Rect<int>* renderDimensions, Renderer renderer, int x, int y);
 			~Menu();
+		private:
+			Simple2DFramebuffer buffer;
 	};
 }

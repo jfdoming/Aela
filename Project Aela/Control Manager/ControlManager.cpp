@@ -1,5 +1,5 @@
 /*
-* Name: Project Aela's Control Manager
+* Class: Control Manager
 * Author: Ekkon Games
 * Date: November 2016
 * Description: A class that manages user controls.

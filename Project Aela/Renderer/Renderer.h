@@ -1,5 +1,5 @@
 /*
-* Name: Project Aela's Renderer
+* Class: Renderer
 * Author: Robert Ciborowski
 * Date: October 2016
 * Description: A class used for interacting between Project Aela's renderers.
@@ -75,6 +75,9 @@ namespace Aela {
 			// once than to send each light every frame.
 			void bindLights(std::vector<Light3D>* lights);
 
+			// This binds a simple 2D framebuffer for rendering 2D to.
+			void bindSimple2DFramebuffer(Simple2DFramebuffer* framebuffer);
+
 			// These functions are used to render a frame.
 			void startRenderingFrame();
 			void endRendering3D();
@@ -94,14 +97,14 @@ namespace Aela {
 			void clearSimple2DFramebuffer(Simple2DFramebuffer* framebuffer);
 
 			// These functions are related to 2D rendering.
-			void render2DTexture(Texture* texture, Simple2DFramebuffer* framebuffer);
-			void renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour, Simple2DFramebuffer* framebuffer);
-			void renderRectangle(Rect<int>* output, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
-			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
-			void renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
+			void render2DTexture(Texture* texture);
+			void renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour);
+			void renderRectangle(Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
+			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
+			void renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
 			void renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY,
-				Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
-			void renderSimple2DFramebuffer(Simple2DFramebuffer* framebuffer);
+				Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
+			void renderSimple2DFramebuffer();
 
 			// These functions are for (de)activating renderer features.
 			void activateFeature(RendererFeature feature);
@@ -133,6 +136,7 @@ namespace Aela {
 			Window* window;
 			TextManager* textManager;
 			std::vector<Light3D>* lights;
+			Simple2DFramebuffer* bound2DFramebuffer;
 
 			// This represents the framebuffer that is attached to the screen.
 			GLuint mainFramebuffer;

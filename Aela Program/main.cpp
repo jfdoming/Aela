@@ -5,34 +5,39 @@
 #include "Aela_Engine.h"
 
 int main(int argc, char *args[]) {
-	using namespace Aela;
+	Aela::Engine engine;
 
-	int error = setupWindow(1280, 720, 50, 50);
+	int error = engine.setupWindow(1280, 720, 50, 50);
 	if (error != 0) {
 		return error;
 	}
 
-	error = setupRenderer();
+	error = engine.setupRenderer();
 	if (error != 0) {
 		return error;
 	}
 
-	error = setupControlManager();
+	error = engine.setupControlManager();
 	if (error != 0) {
 		return error;
 	}
 
-	error = setupLUA();
+	error = engine.setupLUA();
 	if (error != 0) {
 		return error;
 	}
 
-	error = setupEventHandler();
+	error = engine.setupEventHandler();
 	if (error != 0) {
 		return error;
 	}
 
-	Aela::start();
+	error = engine.setupAnimator();
+	if (error != 0) {
+		return error;
+	}
+
+	engine.start();
 
     return 0;
 }
