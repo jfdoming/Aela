@@ -101,6 +101,9 @@
     <Filter Include="Source Files\2D\Simple 2D Framebuffer">
       <UniqueIdentifier>{e088761b-dd5b-46dd-b6ce-e2bf3fae298c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\3D\3D Animator">
+      <UniqueIdentifier>{dfdd52f2-c33c-42da-a451-335357229b65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -214,14 +217,29 @@
     <ClCompile Include="Resource Management\ResourceQuery.cpp">
       <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Skybox\Skybox.cpp">
-      <Filter>Source Files\3D\Skybox</Filter>
+    <ClCompile Include="Resource Management\ResourceLoader.cpp">
+      <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DSkyboxRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
+    <ClCompile Include="Lua\Mod.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Lua\ModManager.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\Event.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
     <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Skybox\Skybox.cpp">
+      <Filter>Source Files\3D\Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\KeyEvent.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\MouseEvent.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
     <ClCompile Include="Audio\AudioClip.cpp">
       <Filter>Source Files\Audio</Filter>
@@ -234,9 +252,6 @@
     </ClCompile>
     <ClCompile Include="Audio\WAVEClipLoader.cpp">
       <Filter>Source Files\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\OBJResource.cpp">
-      <Filter>Source Files\Resources\Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -375,17 +390,29 @@
     <ClInclude Include="Resource Management\ResourceQuery.h">
       <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Skybox\Skybox.h">
-      <Filter>Source Files\3D\Skybox</Filter>
+    <ClInclude Include="Lua\Exposable.h">
+      <Filter>Source Files\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
+    <ClInclude Include="Lua\Mod.h">
+      <Filter>Source Files\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="Utilities\Colour\ColourRGB.h">
-      <Filter>Source Files\Utilities\Colour</Filter>
+    <ClInclude Include="Lua\ModManager.h">
+      <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\Event.h">
+      <Filter>Source Files\Events</Filter>
     </ClInclude>
     <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Skybox\Skybox.h">
+      <Filter>Source Files\3D\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\KeyEvent.h">
+      <Filter>Source Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\MouseEvent.h">
+      <Filter>Source Files\Events</Filter>
     </ClInclude>
     <ClInclude Include="Audio\AudioClip.h">
       <Filter>Source Files\Audio</Filter>
@@ -398,9 +425,6 @@
     </ClInclude>
     <ClInclude Include="Audio\WAVEClipLoader.h">
       <Filter>Source Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource Management\OBJResource.h">
-      <Filter>Source Files\Resources\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
