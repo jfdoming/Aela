@@ -30,11 +30,3 @@ void KeyFrame3D::setRotation(glm::vec3* rotation) {
 glm::vec3* KeyFrame3D::getRotation() {
 	return &rotation;
 }
-
-void KeyFrame3D::setTimeAfterPreviousKeyFrame(unsigned int time) {
-	timeAfterPreviousKeyFrame = time;
-}
-
-unsigned int KeyFrame3D::getTimeAfterPreviousKeyFrame() {
-	return timeAfterPreviousKeyFrame;
-}

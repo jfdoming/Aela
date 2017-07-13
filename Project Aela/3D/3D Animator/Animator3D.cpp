@@ -8,50 +8,51 @@
 #include "Animator3D.h"
 
 void Animator3D::update() {
-	if (keyFrames.size() != 0) {
-		timeSinceLastKeyFrame += (unsigned int) timeManager->getTimeBetweenFrames();
-		unsigned int timeOfFrame0 = keyFrames.at(0).getTimeAfterPreviousKeyFrame();
+	if (keyFrameLists.size() != 0) {
+		timeSinceLastKeyFrameList += (unsigned int) timeManager->getTimeBetweenFrames();
+		unsigned int timeOfFrame0 = keyFrameLists.at(0).getTimeAfterPreviousKeyFrame();
 
-		for (unsigned int whichFrame = 0; whichFrame == 0 || (whichFrame < keyFrames.size() && keyFrames.at(whichFrame).getTimeAfterPreviousKeyFrame() == 0); whichFrame++) {
-			KeyFrame3D* keyFrame = &keyFrames.at(whichFrame);
-			Object3D* object = keyFrame->getObject();
+		KeyFrame3DList* keyFrameList = &keyFrameLists.at(0);
+		std::vector<KeyFrame3D>* keyFrameVector = keyFrameList->getKeyFrames();
 
-			if (keyFrames.at(whichFrame).getTimeAfterPreviousKeyFrame() <= timeSinceLastKeyFrame) {
+		if (keyFrameList->getTimeAfterPreviousKeyFrame() <= timeSinceLastKeyFrameList) {
+			for (unsigned int whichFrame = 0; whichFrame < keyFrameVector->size(); whichFrame++) {
+				KeyFrame3D* keyFrame = &keyFrameVector->at(whichFrame);
+				Object3D* object = keyFrame->getObject();
+
 				object->setPosition(*keyFrame->getTranslation());
 				object->setRotation(*keyFrame->getRotation());
-				keyFrames.erase(keyFrames.begin());
-				originalPositions.erase(originalPositions.begin() + whichFrame);
-				originalRotations.erase(originalRotations.begin() + whichFrame);
-				timeSinceLastKeyFrame = 0;
-				if (keyFrames.size() == 0) {
-					break;
-				} else {
-					originalPositions.insert(originalPositions.begin() + whichFrame, *keyFrames.at(whichFrame).getObject()->getPosition());
-					originalRotations.insert(originalRotations.begin() + whichFrame, *keyFrames.at(whichFrame).getObject()->getRotation());
-					whichFrame--;
-				}
-			} else {
-				unsigned int timing = keyFrames.at(whichFrame).getTimeAfterPreviousKeyFrame() + 1;
-				glm::vec3* originalPosition = &originalPositions.at(whichFrame);
-				glm::vec3* originalRotation = &originalRotations.at(whichFrame);
-				if (keyFrame->getTranslation() != NULL) {
-					glm::vec3* finalTranslation = keyFrame->getTranslation();
-					glm::vec3 newPosition(originalPosition->x + (((float) finalTranslation->x - originalPosition->x) / timing) * timeSinceLastKeyFrame,
-						originalPosition->y + (((float) finalTranslation->y - originalPosition->y) / timing) * timeSinceLastKeyFrame,
-						originalPosition->z + (((float) finalTranslation->z - originalPosition->z) / timing) * timeSinceLastKeyFrame);
-					object->setPosition(newPosition);
-					std::cout << originalPosition->z + (((float) finalTranslation->z - originalPosition->z) / timing) * timeSinceLastKeyFrame << " is stuff, " << whichFrame << " is the frame.\n";
-				}
-				if (keyFrame->getRotation() != NULL) {
-					glm::vec3* finalRotation = keyFrame->getRotation();
-					glm::vec3 newRotation(originalRotation->x + (((float) finalRotation->x - originalRotation->x) / timing) * timeSinceLastKeyFrame,
-						originalRotation->y + (((float) finalRotation->y - originalRotation->y) / timing) * timeSinceLastKeyFrame,
-						originalRotation->z + (((float) finalRotation->z - originalRotation->z) / timing) * timeSinceLastKeyFrame);
-					object->setRotation(newRotation);
-				}
 			}
-			if ((whichFrame < keyFrames.size() && keyFrames.at(whichFrame).getTimeAfterPreviousKeyFrame() == 0)) {
-				std::cout << "";
+			keyFrameLists.erase(keyFrameLists.begin());
+			timeSinceLastKeyFrameList = 0;
+			if (keyFrameLists.size() == 0) {
+				return;
+			}
+			keyFrameList = &keyFrameLists.at(0);
+			keyFrameVector = keyFrameList->getKeyFrames();
+			keyFrameList->storeOriginalTransformations();
+		}
+
+		for (unsigned int whichFrame = 0; whichFrame < keyFrameVector->size(); whichFrame++) {
+			KeyFrame3D* keyFrame = &keyFrameVector->at(whichFrame);
+			Object3D* object = keyFrame->getObject();
+
+			unsigned int timing = keyFrameList->getTimeAfterPreviousKeyFrame() + 1;
+			glm::vec3* originalPosition = &keyFrameList->getOriginalPositions()->at(whichFrame);
+			glm::vec3* originalRotation = &keyFrameList->getOriginalRotations()->at(whichFrame);
+			if (keyFrame->getTranslation() != NULL) {
+				glm::vec3* finalTranslation = keyFrame->getTranslation();
+				glm::vec3 newPosition(originalPosition->x + (((float) finalTranslation->x - originalPosition->x) / timing) * timeSinceLastKeyFrameList,
+					originalPosition->y + (((float) finalTranslation->y - originalPosition->y) / timing) * timeSinceLastKeyFrameList,
+					originalPosition->z + (((float) finalTranslation->z - originalPosition->z) / timing) * timeSinceLastKeyFrameList);
+				object->setPosition(newPosition);
+			}
+			if (keyFrame->getRotation() != NULL) {
+				glm::vec3* finalRotation = keyFrame->getRotation();
+				glm::vec3 newRotation(originalRotation->x + (((float) finalRotation->x - originalRotation->x) / timing) * timeSinceLastKeyFrameList,
+					originalRotation->y + (((float) finalRotation->y - originalRotation->y) / timing) * timeSinceLastKeyFrameList,
+					originalRotation->z + (((float) finalRotation->z - originalRotation->z) / timing) * timeSinceLastKeyFrameList);
+				object->setRotation(newRotation);
 			}
 		}
 	}
@@ -65,16 +66,13 @@ TimeManager* Animator3D::getTimeManager() {
 	return timeManager;
 }
 
-void Animator3D::addKeyFrame(KeyFrame3D* keyFrame) {
-	keyFrames.push_back(*keyFrame);
-	if (keyFrames.size() == 1) {
-		originalPositions.insert(originalPositions.begin(), *keyFrame->getObject()->getPosition());
-		originalRotations.insert(originalRotations.begin(), *keyFrame->getObject()->getRotation());
-		timeSinceLastKeyFrame = 0;
-		std::cout << keyFrame->getTimeAfterPreviousKeyFrame() << " - Added a new key frame. \n";
+void Animator3D::addKeyFrameList(KeyFrame3DList* keyFrameList) {
+	if (keyFrameLists.size() == 0) {
+		keyFrameList->storeOriginalTransformations();
 	}
+	keyFrameLists.push_back(*keyFrameList);
 }
 
-std::vector<KeyFrame3D>* Animator3D::getKeyFrames() {
-	return &keyFrames;
+std::vector<KeyFrame3DList>* Animator3D::getKeyFrames() {
+	return &keyFrameLists;
 }

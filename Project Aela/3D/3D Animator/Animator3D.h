@@ -7,7 +7,7 @@
 
 #include <vector>
 
-#include "KeyFrame3D.h"
+#include "KeyFrame3DList.h"
 #include "../../Time Manager/TimeManager.h"
 
 using namespace Aela;
@@ -24,18 +24,14 @@ class Animator3D {
 		// These are getters and setters.
 		void setTimeManager(TimeManager* timeManager);
 		TimeManager* getTimeManager();
-		void addKeyFrame(KeyFrame3D* keyFrame);
-		std::vector<KeyFrame3D>* getKeyFrames();
+		void addKeyFrameList(KeyFrame3DList* keyFrameList);
+		std::vector<KeyFrame3DList>* getKeyFrames();
 
 	private:
 		// These are the Aela objects that this class uses.
 		TimeManager* timeManager;
-		std::vector<KeyFrame3D> keyFrames;
+		std::vector<KeyFrame3DList> keyFrameLists;
 
 		// This stores the time since the most recently finished key frame.
-		unsigned int timeSinceLastKeyFrame = 0;
-
-		// This stores the original properties of an object before it was modified by the key frame.
-		std::vector<glm::vec3> originalPositions;
-		std::vector<glm::vec3> originalRotations;
+		unsigned int timeSinceLastKeyFrameList = 0;
 };

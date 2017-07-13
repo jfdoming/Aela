@@ -169,22 +169,22 @@ void Renderer::renderText(std::string text, int textFontToUse, Rect<int>* output
 }
 
 // This renders a rectangle using the 2D renderer.
-void Renderer::renderRectangle(Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
-	basic2DRenderer.renderRectangle(output, bound2DFramebuffer, windowDimensions, colour);
+void Renderer::renderRectangle(Rect<int>* output, ColourRGBA* colour) {
+	basic2DRenderer.renderRectangle(output, bound2DFramebuffer, window->getWindowDimensions(), colour);
 }
 
-void Renderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
-	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, bound2DFramebuffer, windowDimensions, colour);
+void Renderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour) {
+	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, bound2DFramebuffer, window->getWindowDimensions(), colour);
 }
 
 // This renders a triangle using the 2D renderer.
-void Renderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
-	basic2DRenderer.renderTriangle(pointA, pointB, pointC, bound2DFramebuffer, windowDimensions, colour);
+void Renderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, ColourRGBA* colour) {
+	basic2DRenderer.renderTriangle(pointA, pointB, pointC, bound2DFramebuffer, window->getWindowDimensions(), colour);
 }
 
-void Renderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY,
-	Rect<unsigned int>* windowDimensions, ColourRGBA * colour) {
-	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, bound2DFramebuffer, windowDimensions, colour);
+void Renderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX,
+	unsigned int pointCY, ColourRGBA * colour) {
+	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, bound2DFramebuffer, window->getWindowDimensions(), colour);
 }
 
 void Renderer::renderSimple2DFramebuffer() {
@@ -219,8 +219,8 @@ void Renderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer, Rect<i
 	basic2DRenderer.setupSimple2DFramebuffer(framebuffer, multisampling2D, dimensions, output);
 }
 
-void Renderer::clearSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
-	basic2DRenderer.clearSimple2DFramebuffer(framebuffer);
+void Renderer::clearSimple2DFramebuffer() {
+	basic2DRenderer.clearSimple2DFramebuffer(bound2DFramebuffer);
 }
 
 // This activates a rendering feature.
