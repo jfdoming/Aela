@@ -190,8 +190,6 @@ int Aela::Engine::runningLoop() {
 	// This is the program's running loop.
 	do {
 		// This updates events. It must be done first.
-		eventHandler.updateEvents();
-		controlManager.updateKeystate(eventHandler.getKeystate());
 		timeManager.updateTime();
 		animator.update();
 
@@ -325,7 +323,6 @@ int Aela::Engine::setupLUA() {
 }
 
 int Aela::Engine::setupEventHandler() {
-	eventHandler.bindControlManager(&controlManager);
 	eventHandler.bindWindow(&window);
 
 	// TODO: Find a way to do this that doesn't require creating separate std::functions
@@ -334,9 +331,6 @@ int Aela::Engine::setupEventHandler() {
 
 	std::function<void(Renderer)> inc = &Renderer::increaseFOV;
 	std::function<void(Renderer)> dec = &Renderer::decreaseFOV;
-
-	eventHandler.bindMemberFunction(SDL_KEYDOWN, 225, fast, controlManager);
-	eventHandler.bindMemberFunction(SDL_KEYUP, 225, slow, controlManager);
 	return 0;
 }
 
