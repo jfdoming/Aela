@@ -270,6 +270,7 @@
     </ClCompile>
     <ClCompile Include="Lua\ModManager.cpp">
       <Filter>Source Files\Lua</Filter>
+    </ClCompile>
     <ClCompile Include="3D\3D Animator\KeyFrame3DList.cpp">
       <Filter>Source Files\3D\3D Animator</Filter>
     </ClCompile>
@@ -290,6 +291,7 @@
     </ClCompile>
     <ClCompile Include="Resource Management\OBJResource.cpp">
       <Filter>Source Files\Resources\Objects</Filter>
+    </ClCompile>
     <ClCompile Include="Lua\ModEnvironment.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
@@ -537,6 +539,7 @@
     </ClInclude>
     <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
       <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="Events\Event.h">
       <Filter>Source Files\Events</Filter>
     </ClInclude>
