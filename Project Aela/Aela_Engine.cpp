@@ -76,21 +76,25 @@ int Aela::Engine::runningLoop() {
 	models[5].setPosition(0, 0, -15);
 	models[6].setPosition(10, 20, 10);
 
-	// This would animate things if the animator currently worked.
+	// This animates models just to make sure that the animator actually works.
 	std::vector<KeyFrame3D> keyFrames;
 	for (unsigned int i = 0; i < 4; i++) {
-		KeyFrame3D keyFrame;
-		keyFrame.setObject(&models[0]);
-		glm::vec3 translation(10, 5, (i % 2) * 10);
-		glm::vec3 rotation(0, PI * (i % 2), 0.3 * (i % 2));
-		keyFrame.setTranslation(&translation);
-		keyFrame.setRotation(&rotation);
-		if (i == 0) {
-			keyFrame.setTimeAfterPreviousKeyFrame(6000);
-		} else {
-			keyFrame.setTimeAfterPreviousKeyFrame(4000);
+		KeyFrame3DList keyFrameList;
+		for (int j = 1; j < 4; j++) {
+			KeyFrame3D keyFrame;
+			keyFrame.setObject(&models[j]);
+			glm::vec3 translation(j * -5, 5 + (i % 2), (i % 2) * 10);
+			keyFrame.setTranslation(&translation);
+			glm::vec3 rotation(j % 2 + 3, PI * (i % 2), 0.3 * (j % 2 + 1));
+			keyFrame.setRotation(&rotation);
+			keyFrameList.addKeyFrame(&keyFrame);
 		}
-		animator.addKeyFrame(&keyFrame);
+		if (i == 0) {
+			keyFrameList.setTimeAfterPreviousKeyFrame(8000);
+		} else {
+			keyFrameList.setTimeAfterPreviousKeyFrame(4000);
+		}
+		animator.addKeyFrameList(&keyFrameList);
 	}
 
 	// This is how a skybox is loaded.
@@ -220,7 +224,6 @@ int Aela::Engine::runningLoop() {
 
 		// This renders the program.
 		renderer.startRenderingFrame();
-		renderer.clearSimple2DFramebuffer(&customFramebuffer);
 		renderer.setupBoundLightsForCurrentFrame();
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModelShadows(&(models[i]));
@@ -234,14 +237,15 @@ int Aela::Engine::runningLoop() {
 			renderer.renderBillboard(&(billboards[i]));
 		}
 		renderer.endRendering3D();
-		std::string fpsData = std::to_string(fps) + " FPS";
 		renderer.bindSimple2DFramebuffer(&customFramebuffer);
+		renderer.clearSimple2DFramebuffer();
+		std::string fpsData = std::to_string(fps) + " FPS";
 		renderer.render2DTexture(testTexture);
 		renderer.render2DTexture(testTexture2);
 		renderer.renderText(fpsData, arial, &textOutput, &textColour);
 		ColourRGBA funkyColour((timeManager.getCurrentTime() % 1000) / 1000.0f, 1.0f - (timeManager.getCurrentTime() % 1000) / 1000.0f, 0.8f, 0.8f);
-		renderer.renderRectangle(50, 50, 100, 100, window.getWindowDimensions(), &funkyColour);
-		renderer.renderTriangle(200, 50, 300, 150, 400, 50, window.getWindowDimensions(), &funkyColour);
+		renderer.renderRectangle(50, 50, 100, 100, &funkyColour);
+		renderer.renderTriangle(200, 50, 300, 150, 400, 50, &funkyColour);
 		renderer.renderSimple2DFramebuffer();
 		renderer.endRenderingFrame();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());

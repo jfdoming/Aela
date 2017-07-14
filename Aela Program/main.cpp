@@ -1,5 +1,9 @@
-// Aela Program.cpp : Defines the entry point for the console application.
-//
+/*
+* Class: Aela Program
+* Author: Ekkon Games
+* Date: October 2017
+* Description: A simple program that uses the Project Aela library.
+*/
 
 #include "stdafx.h"
 #include "Aela_Engine.h"

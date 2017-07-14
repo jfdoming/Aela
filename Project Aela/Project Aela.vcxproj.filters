@@ -229,6 +229,12 @@
     <ClCompile Include="3D\Skybox\Skybox.cpp">
       <Filter>Source Files\3D\Skybox</Filter>
     </ClCompile>
+    <ClCompile Include="3D\Skybox\Skybox.cpp">
+      <Filter>Source Files\3D\Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Renderer\Basic3DSkyboxRenderer.cpp">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="Audio\AudioClip.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
@@ -241,6 +247,18 @@
     <ClCompile Include="Audio\WAVEClipLoader.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="Resource Management\OBJResource.cpp">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Animator\Animator3D.cpp">
+      <Filter>Source Files\3D\3D Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Animator\KeyFrame3D.cpp">
+      <Filter>Source Files\3D\3D Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp">
+      <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
+    </ClCompile>
     <ClCompile Include="Aela_Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -252,6 +270,8 @@
     </ClCompile>
     <ClCompile Include="Lua\ModManager.cpp">
       <Filter>Source Files\Lua</Filter>
+    <ClCompile Include="3D\3D Animator\KeyFrame3DList.cpp">
+      <Filter>Source Files\3D\3D Animator</Filter>
     </ClCompile>
     <ClCompile Include="Lua\Mod.cpp">
       <Filter>Source Files\Lua</Filter>
@@ -270,6 +290,20 @@
     </ClCompile>
     <ClCompile Include="Resource Management\OBJResource.cpp">
       <Filter>Source Files\Resources\Objects</Filter>
+    <ClCompile Include="Lua\ModEnvironment.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Lua\ModManager.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\Event.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\KeyEvent.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\MouseEvent.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -408,10 +442,49 @@
     <ClInclude Include="Resource Management\ResourceQuery.h">
       <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
+    <ClInclude Include="3D\Skybox\Skybox.h">
+      <Filter>Source Files\3D\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioClip.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioManager.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Listener.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\WAVEClipLoader.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\OBJResource.h">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Animator\Animator3D.h">
+      <Filter>Source Files\3D\3D Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Animator\KeyFrame3D.h">
+      <Filter>Source Files\3D\3D Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
+      <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Colour\ColourRGB.h">
+      <Filter>Source Files\Utilities\Colour</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Animator\KeyFrame3DList.h">
+      <Filter>Source Files\3D\3D Animator</Filter>
+    </ClInclude>
     <ClInclude Include="Lua\Exposable.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
     <ClInclude Include="Lua\Mod.h">
+      <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\ModEnvironment.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
     <ClInclude Include="Lua\ModManager.h">
@@ -464,6 +537,14 @@
     </ClInclude>
     <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
       <Filter>Source Files\3D\3D Renderer</Filter>
+    <ClInclude Include="Events\Event.h">
+      <Filter>Source Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\KeyEvent.h">
+      <Filter>Source Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\MouseEvent.h">
+      <Filter>Source Files\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
