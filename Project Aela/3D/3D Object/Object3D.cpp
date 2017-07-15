@@ -17,10 +17,10 @@ glm::vec3* Object3D::getPosition() {
 	return &position;
 }
 
-void Object3D::getPosition(float* setXPosition, float* setYPosition, float* setZPosition) {
-	*setXPosition = position.x;
-	*setYPosition = position.y;
-	*setZPosition = position.z;
+void Object3D::getPosition(float* setX, float* setY, float* setZ) {
+	*setX = position.x;
+	*setY = position.y;
+	*setZ = position.z;
 }
 
 void Object3D::setRotation(float setX, float setY, float setZ) {
@@ -35,10 +35,28 @@ glm::vec3* Object3D::getRotation() {
 	return &rotation;
 }
 
-void Object3D::getRotation(float* setXPosition, float* setYPosition, float* setZPosition) {
-	*setXPosition = rotation.x;
-	*setYPosition = rotation.y;
-	*setZPosition = rotation.z;
+void Object3D::getRotation(float* setX, float* setY, float* setZ) {
+	*setX = rotation.x;
+	*setY = rotation.y;
+	*setZ = rotation.z;
+}
+
+void Object3D::setScaling(float setX, float setY, float setZ) {
+	scaling = glm::vec3(setX, setY, setZ);
+}
+
+void Object3D::setScaling(glm::vec3 setScaling) {
+	scaling = setScaling;
+}
+
+glm::vec3* Object3D::getScaling() {
+	return &scaling;
+}
+
+void Object3D::getScaling(float* setX, float* setY, float* setZ) {
+	*setX = scaling.x;
+	*setY = scaling.y;
+	*setZ = scaling.z;
 }
 
 void Object3D::setProperty(Object3DProperty property, float value) {
@@ -90,7 +108,7 @@ void Object3D::translate(glm::vec3 translation) {
 
 void Object3D::rotate(glm::vec3 rotation) {
 	this->rotation += rotation;
-	forceValuesWithinRange(&(this->rotation), 0, PI * 2);
+	forceValuesWithinRange(&(this->rotation), 0, (float) PI * 2);
 }
 
 void Object3D::translate(float x, float y, float z) {

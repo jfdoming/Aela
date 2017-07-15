@@ -114,6 +114,7 @@ int Aela::Engine::runningLoop() {
 	std::vector<Billboard> billboards(1);
 	billboards[0].loadTexture("res/textures/character.dds");
 	billboards[0].useSpecifiedRotation(true);
+	billboards[0].setPosition(0, 1, -1.5);
 	renderer.getCamera()->setPosition(glm::vec3(0, 5, -10));
 
 	// This is how a light is set up.
@@ -194,10 +195,11 @@ int Aela::Engine::runningLoop() {
 		animator.update();
 
 		// THIS IS FOR TESTING!
-		controlManager.transform3DObject(&billboards[0], -5);
-		controlManager.transform3DObject(renderer.getCamera(), -5);
+		// controlManager.transform3DObject(&billboards[0], -5);
+		// controlManager.transform3DObject(renderer.getCamera(), -5);
 		renderer.getCamera()->focusAtPointOnPlane(*billboards[0].getPosition(), glm::vec3(0, 0, 0));
 		// std::cout << billboards[0].getPosition()->x << " " << billboards[0].getPosition()->y << " " << billboards[0].getPosition()->z << "\n";
+		billboards[0].setScaling(2 - (timeManager.getCurrentTime() % 2000) / 3500.0f, 2 + (timeManager.getCurrentTime() % 2000) / 3500.0f, 2);
 
 		renderer.updateCameraUsingControls(&controlManager);
 

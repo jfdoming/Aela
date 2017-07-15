@@ -22,13 +22,6 @@
 #include "../3D Object/Object3D.h"
 
 class Model3D : public Object3D {
-	private:
-		std::vector<glm::vec3> vertices;
-		std::vector<glm::vec2> uvs;
-		std::vector<glm::vec3> normals;
-		std::vector<unsigned short> indices;
-		GLuint texture;
-
 	public:
 		Model3D() {
 
@@ -50,4 +43,12 @@ class Model3D : public Object3D {
 		int getNormalSize();
 		int getIndexSize();
 		GLuint* getTexture();
+
+	private:
+		std::vector<glm::vec3> vertices;
+		std::vector<glm::vec2> uvs;
+		std::vector<glm::vec3> normals;
+		std::vector<unsigned short> indices;
+
+		GLuint texture;
 };

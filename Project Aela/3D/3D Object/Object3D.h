@@ -24,13 +24,19 @@ class Object3D {
 		void setPosition(float setX, float setY, float setZ);
 		void setPosition(glm::vec3 setPosition);
 		glm::vec3* getPosition();
-		void getPosition(float* setXPosition, float* setYPosition, float* setZPosition);
+		void getPosition(float* setX, float* setY, float* setZ);
 
 		// These are rotation getters and setters.
 		void setRotation(float setX, float setY, float setZ);
 		void setRotation(glm::vec3 setRotation);
 		glm::vec3* getRotation();
-		void getRotation(float* setXPosition, float* setYPosition, float* setZPosition);
+		void getRotation(float* setX, float* setY, float* setZ);
+
+		// These are scaling getters and setters.
+		void setScaling(float setX, float setY, float setZ);
+		void setScaling(glm::vec3 setScaling);
+		glm::vec3* getScaling();
+		void getScaling(float* setX, float* setY, float* setZ);
 
 		// These are functions used for changing any single transformation-related property.
 		void setProperty(Object3DProperty property, float value);
@@ -47,6 +53,7 @@ class Object3D {
 		void forceValuesWithinRange(glm::vec3* vec3, float minimum, float maximum);
 
 	protected:
-		glm::vec3 position = glm::vec3(0.0, 0.0, 0.0);
-		glm::vec3 rotation = glm::vec3(0.0, 0.0, 0.0);
+		glm::vec3 position = glm::vec3(0);
+		glm::vec3 rotation = glm::vec3(0);
+		glm::vec3 scaling = glm::vec3(1);
 };
