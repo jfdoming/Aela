@@ -29,6 +29,8 @@
 #include "Audio/AudioManager.h"
 #include "3D/3D Animator/Animator3D.h"
 
+#include "Menus/TextComponent.h"
+
 namespace Aela {
 	// These are global objects who's classes come from Project Aela.
 	Window window;
@@ -114,6 +116,7 @@ int Aela::Engine::runningLoop() {
 	std::vector<Billboard> billboards(1);
 	billboards[0].loadTexture("res/textures/character.dds");
 	billboards[0].useSpecifiedRotation(true);
+	billboards[0].setPosition(0, 1, -1.5);
 	renderer.getCamera()->setPosition(glm::vec3(0, 5, -10));
 
 	// This is how a light is set up.
@@ -150,6 +153,17 @@ int Aela::Engine::runningLoop() {
 	}
 
 	audioPlayer.playClip(resourceManager.obtain<AudioClip>("res/audio/clips/test.wav"));
+
+	// SCENE TESTING
+	Scene test;
+	TextComponent txt;
+	test.enableMenu(window.getWindowDimensions(), &renderer);
+	test.getMenu()->add(&txt);
+
+	// TODO make sure a layout manager is present!!!
+
+	sceneManager.registerScene(&test, 1);
+	sceneManager.setCurrentScene(1);
 
 	// obtain and set up test textures
 	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");
@@ -194,12 +208,13 @@ int Aela::Engine::runningLoop() {
 		animator.update();
 
 		// THIS IS FOR TESTING!
-		controlManager.transform3DObject(&billboards[0], -5);
-		controlManager.transform3DObject(renderer.getCamera(), -5);
+		//controlManager.transform3DObject(&billboards[0], -5);
+		//controlManager.transform3DObject(renderer.getCamera(), -5);
 		renderer.getCamera()->focusAtPointOnPlane(*billboards[0].getPosition(), glm::vec3(0, 0, 0));
 		// std::cout << billboards[0].getPosition()->x << " " << billboards[0].getPosition()->y << " " << billboards[0].getPosition()->z << "\n";
+		billboards[0].setScaling(2 - (timeManager.getCurrentTime() % 2000) / 3500.0f, 2 + (timeManager.getCurrentTime() % 2000) / 3500.0f, 2);
 
-		renderer.updateCameraUsingControls(&controlManager);
+		//renderer.updateCameraUsingControls(&controlManager);
 
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() - timeOfLastFrameCheck >= timeBetweenFrameChecks) {
@@ -217,7 +232,7 @@ int Aela::Engine::runningLoop() {
 		
 		// This updates and renders the current scene.
 		Aela::Scene* currentScene = sceneManager.getCurrentScene();
-		if (currentScene != NULL) {
+		if (currentScene != nullptr) {
 			currentScene->update();
 			currentScene->render(&renderer);
 		}
