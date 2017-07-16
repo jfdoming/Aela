@@ -57,6 +57,7 @@ void Basic3DShadowRenderer::renderShadow(Model3D* model, GLuint depthProgramID, 
 		glm::vec3* lightPosition = light->getPosition();
 		glm::vec3* rotation = model->getRotation();
 		glm::vec3* position = model->getPosition();
+		glm::vec3* scaling = model->getScaling();
 
 		// This calculates more matrices.
 		float near = 1, far = 100;
@@ -78,8 +79,7 @@ void Basic3DShadowRenderer::renderShadow(Model3D* model, GLuint depthProgramID, 
 		glUniform3fv(lightPositionsID, 1, &(light->getPosition()->x));
 
 		// This computes more matrices.
-		glm::mat4 rotationMatrix = glm::eulerAngleYXZ(rotation->y, rotation->x,  rotation->z);
-		glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), *position) * rotationMatrix;
+		glm::mat4 modelMatrix = glm::translate(glm::scale(glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z), *scaling), *position);
 
 		// This sends all transformations to the shader.
 		glUniformMatrix4fv(shadowModelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);

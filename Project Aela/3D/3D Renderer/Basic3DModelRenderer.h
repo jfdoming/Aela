@@ -22,9 +22,9 @@ class Basic3DModelRenderer {
 
 		// These functions render a 2D texture in 3D space.
 		void renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID,
-			GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* lookAt, bool inverseRotation);
+			GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* scale, glm::vec3* lookAt, bool inverseRotation);
 		void renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID,
-			GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* rotation);
+			GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* rotation, glm::vec3* scale);
 
 		// This is made for the Basic3DRenderer in order to set camera matrices.
 		void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);

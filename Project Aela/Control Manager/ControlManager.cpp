@@ -103,14 +103,14 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		// This is a position vector.
 		glm::vec3 position = *(camera->getPosition());
 
-		if (keystate[225]) {
+		if (false) {// keystate[225]) {
 			currentSpeed = superSpeed;
 		} else {
 			currentSpeed = speed;
 		}
 		
 		// This occurs when 'w' is pressed.
-		if (keystate[26]) {
+		/*if (keystate[26]) {
 			position += direction * deltaTime * currentSpeed;
 		}
 		// This occurs when 's' is pressed.
@@ -134,7 +134,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		// This occurs when left ctrl is pressed.
 		if (keystate[224]) {
 			position -= straightUp * deltaTime * currentSpeed;
-		}
+		}*/
 
 		// This sets all of the camera's position and view related properties.
 		camera->setPosition(position);

@@ -95,10 +95,10 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 	// This is positioning/rotation of the model.
 	glm::vec3* position = model->getPosition();
 	glm::vec3* rotation = model->getRotation();
+	glm::vec3* scaling = model->getScaling();
 
 	// This computes more matrices.
-	glm::mat4 rotationMatrix = glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
-	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0), *position) * rotationMatrix;
+	glm::mat4 modelMatrix = glm::translate(glm::scale(glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z), *scaling), *position);
 	glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 
 	// This sends more uniforms to the shader.
@@ -161,7 +161,7 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 // To specify a rotation for the camera as a vec3, use the texture's position and add the direction (position + direction) for the lookAt parameter.
 // Note: for the lookAt parameter, position + glm::vec3(0.0, 0.0, 1.0) will not rotate the texture. Use this for no rotation.
 void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint modelTextureID,
-	GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* lookAt, bool inverseRotation) {
+	GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* scale, glm::vec3* lookAt, bool inverseRotation) {
 	glUseProgram(programID);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -214,7 +214,7 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture
 		if (inverseRotation) {
 			modelMatrix = glm::inverse(modelMatrix);
 		}
-		modelMatrix = glm::translate(modelMatrix, *position);
+		modelMatrix = glm::translate(glm::scale(modelMatrix, *scale), *position);
 		glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 
 		glUniformMatrix4fv(billboardMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
@@ -254,7 +254,7 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture
 }
 
 // This function renders a texture in the 3D space.
-void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID, GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* rotation) {
+void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID, GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* rotation, glm::vec3* scale) {
 	glUseProgram(programID);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -303,7 +303,7 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture
 		glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
 
 		// This computes matrices based on control input.
-		glm::mat4 modelMatrix = glm::translate(glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z), *position);
+		glm::mat4 modelMatrix = glm::translate(glm::scale(glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z), *scale), *position);
 		glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 
 		glUniformMatrix4fv(billboardMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
