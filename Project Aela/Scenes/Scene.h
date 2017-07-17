@@ -14,15 +14,25 @@
 namespace Aela {
 	class Scene {
 		public:
-			int id;
+			Scene();
+			~Scene();
 
 			void update();
 			void render(Renderer* renderer);
 
-			Scene(int id);
-			~Scene();
+			void enableMenu(Rect<unsigned int>* renderDimensions, Renderer* renderer);
+			void enableMenu(Rect<unsigned int>* renderDimensions, Renderer* renderer, int x, int y);
+			Menu* getMenu();
+
+			void setId(int id);
+			int getId();
 		private:
+			Skybox skybox;
 			std::vector<Model3D*> models;
-			Menu* menu = 0;
+			std::vector<Billboard*> billboards;
+
+			int id = 0;
+
+			Menu menu;
 	};
 }

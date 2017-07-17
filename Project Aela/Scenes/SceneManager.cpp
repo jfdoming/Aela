@@ -1,22 +1,29 @@
 #include "stdafx.h"
 #include "SceneManager.h"
 
+using namespace Aela;
 
-Aela::SceneManager::SceneManager() {
+SceneManager::SceneManager() {
 }
 
 
-Aela::SceneManager::~SceneManager() {
+SceneManager::~SceneManager() {
 }
 
-void Aela::SceneManager::registerScene(Aela::Scene* scene) {
-	scenes.emplace(scene->id, scene);
+void SceneManager::registerScene(Scene* scene, int id) {
+	scene->setId(id);
+	scenes.emplace(id, scene);
 }
 
-void Aela::SceneManager::setCurrentScene(int id) {
-	currentScene = scenes.at(id);
+void SceneManager::setCurrentScene(int id) {
+	auto item = scenes.find(id);
+	if (item == scenes.end()) {
+		currentScene = nullptr;
+	} else {
+		currentScene = item->second;
+	}
 }
 
-Aela::Scene* Aela::SceneManager::getCurrentScene() {
+Scene* SceneManager::getCurrentScene() {
 	return currentScene;
 }

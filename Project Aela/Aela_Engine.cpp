@@ -53,7 +53,6 @@ using namespace Aela;
 
 int Aela::Engine::runningLoop() {
 	// TEMPORARY! This won't exist once models are moved elsewhere.
-	resourceManager.bindLoader(&Aela::OBJLoader::getInstance());
 	std::vector<Model3D> models(7);
 	models[0].loadTexture("res/textures/grass.dds");
 	models[1].loadTexture("res/textures/mug.dds");
@@ -138,7 +137,8 @@ int Aela::Engine::runningLoop() {
 	renderer.bindLights(&lights);
 
 	// set up the loader to load textures into our group
-	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
+	TextureLoader textureLoader;
+	resourceManager.bindLoader(&textureLoader);
 	resourceManager.bindGroup("test");
 
 	resourceManager.addToGroup("res/textures/ekkon.dds", false);

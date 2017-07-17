@@ -16,11 +16,11 @@ namespace Aela {
 		SceneManager();
 		~SceneManager();
 
-		void registerScene(Aela::Scene* scene);
+		void registerScene(Aela::Scene* scene, int id);
 		void setCurrentScene(int id);
 		Scene* getCurrentScene();
 	private:
 		std::unordered_map<int, Aela::Scene*> scenes;
-		Scene* currentScene = NULL;
+		Scene* currentScene = nullptr;
 	};
 }
