@@ -30,6 +30,8 @@
 #include "3D/3D Animator/Animator3D.h"
 #include "3D\Particles\PlanarParticleEmitter.h"
 
+#include "Menus/TextComponent.h"
+
 namespace Aela {
 	// These are global objects who's classes come from Project Aela.
 	Window window;
@@ -163,6 +165,17 @@ int Aela::Engine::runningLoop() {
 
 	audioPlayer.playClip(resourceManager.obtain<AudioClip>("res/audio/clips/test.wav"));
 
+	// SCENE TESTING
+	Scene test;
+	TextComponent txt;
+	test.enableMenu(window.getWindowDimensions(), &renderer);
+	test.getMenu()->add(&txt);
+
+	// TODO make sure a layout manager is present!!!
+
+	sceneManager.registerScene(&test, 1);
+	sceneManager.setCurrentScene(1);
+
 	// obtain and set up test textures
 	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");
 	testTexture->setOutput(0, 0, 100, 50);
@@ -212,7 +225,7 @@ int Aela::Engine::runningLoop() {
 		// std::cout << billboards[0].getPosition()->x << " " << billboards[0].getPosition()->y << " " << billboards[0].getPosition()->z << "\n";
 		billboards[0].setScaling(2 - (timeManager.getCurrentTime() % 2000) / 3500.0f, 2 + (timeManager.getCurrentTime() % 2000) / 3500.0f, 2);
 
-		renderer.updateCameraUsingControls(&controlManager);
+		//renderer.updateCameraUsingControls(&controlManager);
 
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() - timeOfLastFrameCheck >= timeBetweenFrameChecks) {
@@ -230,7 +243,7 @@ int Aela::Engine::runningLoop() {
 		
 		// This updates and renders the current scene.
 		Aela::Scene* currentScene = sceneManager.getCurrentScene();
-		if (currentScene != NULL) {
+		if (currentScene != nullptr) {
 			currentScene->update();
 			currentScene->render(&renderer);
 		}
