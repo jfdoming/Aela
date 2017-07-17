@@ -98,7 +98,7 @@ void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuin
 	glm::vec3* scaling = model->getScaling();
 
 	// This computes more matrices.
-	glm::mat4 modelMatrix = glm::translate(glm::scale(glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z), *scaling), *position);
+	glm::mat4 modelMatrix = glm::scale(glm::translate(glm::mat4(1.0), *position), *scaling) * glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
 	glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 
 	// This sends more uniforms to the shader.

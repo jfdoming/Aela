@@ -23,6 +23,7 @@ class KeyFrame3DList {
 		std::vector<KeyFrame3D>* getKeyFrames();
 		std::vector<glm::vec3>* getOriginalPositions();
 		std::vector<glm::vec3>* getOriginalRotations();
+		std::vector<glm::vec3>* getOriginalScalings();
 		void storeOriginalTransformations();
 
 	private:
@@ -34,4 +35,5 @@ class KeyFrame3DList {
 		// This stores the original properties of an object before it was modified by the key frames.
 		std::vector<glm::vec3> originalPositions;
 		std::vector<glm::vec3> originalRotations;
+		std::vector<glm::vec3> originalScalings;
 };

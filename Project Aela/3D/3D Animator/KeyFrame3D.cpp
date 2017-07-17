@@ -30,3 +30,11 @@ void KeyFrame3D::setRotation(glm::vec3* rotation) {
 glm::vec3* KeyFrame3D::getRotation() {
 	return &rotation;
 }
+
+void KeyFrame3D::setScaling(glm::vec3* scaling) {
+	this->scaling = *scaling;
+}
+
+glm::vec3* KeyFrame3D::getScaling() {
+	return &scaling;
+}

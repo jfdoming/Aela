@@ -24,9 +24,12 @@ class KeyFrame3D {
 		glm::vec3* getTranslation();
 		void setRotation(glm::vec3* rotation);
 		glm::vec3* getRotation();
+		void setScaling(glm::vec3* scaling);
+		glm::vec3* getScaling();
 
 	private:
 		Object3D* object;
 		glm::vec3 translation;
 		glm::vec3 rotation;
+		glm::vec3 scaling = glm::vec3(1);
 };

@@ -60,46 +60,69 @@ void Object3D::getScaling(float* setX, float* setY, float* setZ) {
 }
 
 void Object3D::setProperty(Object3DProperty property, float value) {
-	if (property == Object3DProperty::X_POSITION) {
-		position.x = value;
-	}
-	if (property == Object3DProperty::Y_POSITION) {
-		position.y = value;
-	}
-	if (property == Object3DProperty::Z_POSITION) {
-		position.z = value;
-	}
-	if (property == Object3DProperty::X_ROTATION) {
-		rotation.x = value;
-	}
-	if (property == Object3DProperty::Y_ROTATION) {
-		rotation.y = value;
-	}
-	if (property == Object3DProperty::Z_ROTATION) {
-		rotation.z = value;
+	switch (property) {
+		case Object3DProperty::X_POSITION:
+			position.x = value;
+			break;
+		case Object3DProperty::Y_POSITION:
+			position.y = value;
+			break;
+		case Object3DProperty::Z_POSITION:
+			position.z = value;
+			break;
+		case Object3DProperty::X_ROTATION:
+			rotation.x = value;
+			break;
+		case Object3DProperty::Y_ROTATION:
+			rotation.y = value;
+			break;
+		case Object3DProperty::Z_ROTATION:
+			rotation.z = value;
+			break;
+		case Object3DProperty::X_SCALING:
+			scaling.x = value;
+			break;
+		case Object3DProperty::Y_SCALING:
+			scaling.y = value;
+			break;
+		case Object3DProperty::Z_SCALING:
+			scaling.z = value;
+			break;
 	}
 }
 
 float Object3D::getProperty(Object3DProperty property) {
-	if (property == Object3DProperty::X_POSITION) {
+	switch (property) {
+	case Object3DProperty::X_POSITION:
 		return position.x;
-	}
-	if (property == Object3DProperty::Y_POSITION) {
+		break;
+	case Object3DProperty::Y_POSITION:
 		return position.y;
-	}
-	if (property == Object3DProperty::Z_POSITION) {
+		break;
+	case Object3DProperty::Z_POSITION:
 		return position.z;
-	}
-	if (property == Object3DProperty::X_ROTATION) {
+		break;
+	case Object3DProperty::X_ROTATION:
 		return rotation.x;
-	}
-	if (property == Object3DProperty::Y_ROTATION) {
+		break;
+	case Object3DProperty::Y_ROTATION:
 		return rotation.y;
-	}
-	if (property == Object3DProperty::Z_ROTATION) {
+		break;
+	case Object3DProperty::Z_ROTATION:
 		return rotation.z;
+		break;
+	case Object3DProperty::X_SCALING:
+		return scaling.x;
+		break;
+	case Object3DProperty::Y_SCALING:
+		return scaling.y;
+		break;
+	case Object3DProperty::Z_SCALING:
+		return scaling.z;
+		break;
+	default:
+		return 0;
 	}
-	return 0;
 }
 
 void Object3D::translate(glm::vec3 translation) {
