@@ -104,6 +104,9 @@
     <Filter Include="Source Files\3D\3D Animator">
       <UniqueIdentifier>{dfdd52f2-c33c-42da-a451-335357229b65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\3D\Particles">
+      <UniqueIdentifier>{bda235e5-5357-4000-9f31-be2f991be2eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Resource Management\Resource.cpp">
@@ -214,9 +217,6 @@
     <ClCompile Include="Resource Management\ResourceQuery.cpp">
       <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
-    <ClCompile Include="Resource Management\ResourceLoader.cpp">
-      <Filter>Source Files\Resources\General</Filter>
-    </ClCompile>
     <ClCompile Include="Lua\Mod.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
@@ -262,12 +262,6 @@
     <ClCompile Include="Aela_Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Menus\AbstractLayoutManager.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="Menus\TextComponent.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
     <ClCompile Include="Lua\ModManager.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
@@ -306,6 +300,18 @@
     </ClCompile>
     <ClCompile Include="Events\MouseEvent.cpp">
       <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\Particle.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\ParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\PlanarParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\PointParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -522,12 +528,6 @@
     <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClInclude>
-    <ClInclude Include="Menus\AbstractLayoutManager.h">
-      <Filter>Source Files\Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="Menus\TextComponent.h">
-      <Filter>Source Files\Menus</Filter>
-    </ClInclude>
     <ClInclude Include="Lua\Mod.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
@@ -548,6 +548,18 @@
     </ClInclude>
     <ClInclude Include="Events\MouseEvent.h">
       <Filter>Source Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\Particle.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\ParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\PlanarParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\PointParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

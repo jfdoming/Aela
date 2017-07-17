@@ -1,8 +1,11 @@
+#pragma once
+
 #ifndef GLEW_STATIC
 #define GLEW_STATIC
 #endif
 
 #include <GL/glew.h>
+#include <string>
 #include "../3D/Texture/Texture.h"
 #include "../3D/Skybox/Skybox.h"
 

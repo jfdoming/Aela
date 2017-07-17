@@ -11,7 +11,8 @@
 // This enum is used in an Camera3D function to change a single property.
 enum class Object3DProperty {
 	X_POSITION, Y_POSITION, Z_POSITION,
-	X_ROTATION, Y_ROTATION, Z_ROTATION
+	X_ROTATION, Y_ROTATION, Z_ROTATION,
+	X_SCALING, Y_SCALING, Z_SCALING
 };
 
 class Object3D {

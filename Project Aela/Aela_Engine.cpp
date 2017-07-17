@@ -28,6 +28,7 @@
 #include "Events/EventHandler.h"
 #include "Audio/AudioManager.h"
 #include "3D/3D Animator/Animator3D.h"
+#include "3D\Particles\PlanarParticleEmitter.h"
 
 namespace Aela {
 	// These are global objects who's classes come from Project Aela.
@@ -58,7 +59,7 @@ int Aela::Engine::runningLoop() {
 	models[2].loadTexture("res/textures/mug.dds");
 	models[3].loadTexture("res/textures/cat.dds");
 	models[4].loadTexture("res/textures/missile.dds");
-	models[5].loadTexture("res/textures/cat.dds");
+	models[5].loadTexture("res/textures/test_house.dds");
 	models[6].loadTexture("res/textures/big_marble.dds");
 
 	// This loads the models from OBJ files.
@@ -67,13 +68,15 @@ int Aela::Engine::runningLoop() {
 	models[2].loadModel("res/models/mug_centered.obj");
 	models[3].loadModel("res/models/cat.obj");
 	models[4].loadModel("res/models/missile.obj");
-	models[5].loadModel("res/models/cat.obj");
+	models[5].loadModel("res/models/test_house.obj");
 	models[6].loadModel("res/models/big_marble.obj");
 
 	// This sets model positioning.
 	models[1].setPosition(-10.72f, 4, -15.51f);
 	models[2].setPosition(0, 20, 15);
-	models[5].setPosition(0, 0, -15);
+	models[5].setScaling(1.5, 1.5, 1.5);
+	models[5].setPosition(-10, 0, -5);
+	models[5].setRotation(0, PI / 2, 0);
 	models[6].setPosition(10, 20, 10);
 
 	// This animates models just to make sure that the animator actually works.
@@ -84,9 +87,13 @@ int Aela::Engine::runningLoop() {
 			KeyFrame3D keyFrame;
 			keyFrame.setObject(&models[j]);
 			glm::vec3 translation(j * -5, 5 + (i % 2), (i % 2) * 10);
+			// glm::vec3 translation(j * 5 - 7, 0, 0);
 			keyFrame.setTranslation(&translation);
 			glm::vec3 rotation(j % 2 + 3, PI * (i % 2), 0.3 * (j % 2 + 1));
+			// glm::vec3 rotation(0, 0, 0);
 			keyFrame.setRotation(&rotation);
+			 glm::vec3 scaling(1 + 3 * ((1 + i) % 2), 1 + 3 * (i % 2), 1 + 3 * (i % 2));
+			keyFrame.setScaling(&scaling);
 			keyFrameList.addKeyFrame(&keyFrame);
 		}
 		if (i == 0) {
@@ -115,25 +122,29 @@ int Aela::Engine::runningLoop() {
 	billboards[0].loadTexture("res/textures/character.dds");
 	billboards[0].useSpecifiedRotation(true);
 	billboards[0].setPosition(0, 1, -1.5);
-	renderer.getCamera()->setPosition(glm::vec3(0, 5, -10));
+	renderer.getCamera()->setPosition(glm::vec3(0, 10, -20));
 
 	// This is how a light is set up.
 	std::vector<Light3D> lights;
 	for (int i = 0; i < 2; i++) {
 		glm::vec3 position;
 		if (i == 0) {
-			position = glm::vec3(-8, 5, 0);
+			position = glm::vec3(-18, 25, -10);
 		} else {
-			position = glm::vec3(10, 5, 10);
+			position = glm::vec3(10, 25, 20);
 		}
 		glm::vec3 rotation = glm::vec3(0, 0, 0);
 		ColourRGB colour(1, 1, 1);
-		float power = 0.6F;
+		float power = 0.9F;
 		Light3D light(position, rotation, colour, power);
 		renderer.generateShadowMap(&light);
 		lights.push_back(light);
 	}
 	renderer.bindLights(&lights);
+
+	// This sets up particles.
+	PlanarParticleEmitter particleEmitter;
+	Rect<GLfloat> emitterDimensions(0, 0, 10, 10);
 
 	// set up the loader to load textures into our group
 	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());

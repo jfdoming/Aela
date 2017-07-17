@@ -26,10 +26,15 @@ std::vector<glm::vec3>* KeyFrame3DList::getOriginalRotations() {
 	return &originalRotations;
 }
 
+std::vector<glm::vec3>* KeyFrame3DList::getOriginalScalings() {
+	return &originalScalings;
+}
+
 void KeyFrame3DList::storeOriginalTransformations() {
 	for (KeyFrame3D keyFrame : keyFrames) {
 		originalPositions.push_back(*keyFrame.getObject()->getPosition());
 		originalRotations.push_back(*keyFrame.getObject()->getRotation());
+		originalScalings.push_back(*keyFrame.getObject()->getScaling());
 	}
 }
 
