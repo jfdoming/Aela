@@ -20,7 +20,7 @@ GLuint loadDDSToGLuint(std::string filePath);
 Texture loadDDSToTexture(std::string filePath);
 void loadDDSToCubemapSide(GLuint* cubeMap, int side, std::string filePath);
 GLuint loadBMPToGLuint(std::string filePath);
-void loadSkybox(Skybox* skybox, std::string paths[6], int width, int height);
+void loadSkybox(Aela::Skybox* skybox, std::string paths[6], int width, int height);
 
 // This function should probably be moved somewhere else. Maybe it should be moved into
 // a header file called "useful_functions.h". For now, it exists here.

@@ -16,15 +16,18 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-class Skybox {
+#include "../../Resource Management/Resource.h"
+
+namespace Aela {
+	class Skybox : public Resource {
 	public:
 		Skybox();
 
 		GLuint* getTexture();
-		void setTexture(GLuint* texture);
 		float* getVertices();
 
 	private:
 		GLuint texture;
 		float vertices;
-};
+	};
+}

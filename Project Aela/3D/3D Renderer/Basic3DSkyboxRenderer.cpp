@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
+using namespace Aela;
+
 // This renders a skybox.
 void Basic3DSkyboxRenderer::renderSkybox(Skybox* skybox, GLuint skyboxProgramID, GLuint frameBuffer, GLuint skyboxID, GLuint modelViewMatrixID, GLuint projectionMatrixID) {
 	glUseProgram(skyboxProgramID);

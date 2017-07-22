@@ -60,7 +60,7 @@ class Basic3DSkyboxRenderer {
 		};
 
 		// This adds a model's shadow to the shadow map.
-		void renderSkybox(Skybox* skybox, GLuint skyboxProgramID, GLuint frameBuffer, GLuint skyboxID, GLuint modelViewMatrixID, GLuint projectionMatrixID);
+		void renderSkybox(Aela::Skybox* skybox, GLuint skyboxProgramID, GLuint frameBuffer, GLuint skyboxID, GLuint modelViewMatrixID, GLuint projectionMatrixID);
 
 		// This sets the matrices of the camera.
 		void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);

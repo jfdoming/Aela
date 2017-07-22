@@ -37,7 +37,7 @@ void ResourceManager::expose(LuaManager& mgr) {
 		.endClass();
 
 	// expose this object
-	mgr.exposeObject(*this, "resourceManager");
+	mgr.exposeObject(this, "resourceManager");
 }
 
 void ResourceManager::bindLoader(ResourceLoader* loader) {
@@ -121,33 +121,12 @@ ResourceManager::Status ResourceManager::load(std::string src, bool crucial, Res
 }
 
 ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
-	bool valid = true;
 	bool crucial = query.isCrucial();
 	std::string src = query.getSrc();
 
-	std::ifstream in;
-	in.flags(std::ios::binary | std::ios::in);
-	in.open(src);
-
-	if (!in.is_open() || in.fail()) {
-		// for now, errors are automatically handled here (may change after consultation)
-		AelaErrorHandling::consoleWindowError("Resource Manager", "Failed to open file \"" + src + "\" for reading!");
-		valid = false;
-	}
-
-	if (valid) {
-		Resource* res = boundLoader->load(in);
+	Resource* res = boundLoader->load(src);
 		
-		if (res == nullptr) {
-			valid = false;
-		} else {
-			resources.emplace(src, res);
-		}
-	}
-
-	in.close();
-	
-	if (!valid) {
+	if (res == nullptr) {
 		// cannot load the resource
 		if (crucial) {
 			crucialInvalidResourceKey = src;
@@ -158,6 +137,7 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 		}
 	}
 
+	resources.emplace(src, res);
 	return Status::OK;
 }
 

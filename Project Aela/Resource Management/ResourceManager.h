@@ -9,15 +9,9 @@
 #include <unordered_map>
 #include <vector>
 
-#include "OBJLoader.h"
-#include "TextureLoader.h"
-
 namespace Aela {
 	class ResourceManager: public Exposable {
 		public:
-			static OBJLoader OBJECT_LOADER;
-			static TextureLoader TEXTURE_LOADER;
-
 			enum class Status {
 				OK, FAILED, ABORT
 			};

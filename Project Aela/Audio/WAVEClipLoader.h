@@ -18,17 +18,12 @@
 namespace Aela {
 	class WAVEClipLoader : public ResourceLoader {
 	public:
-		static WAVEClipLoader& getInstance() {
-			// This is guaranteed to be destroyed, and instantiated on first use.
-			static WAVEClipLoader instance;
-			return instance;
-		}
+		WAVEClipLoader();
+		virtual ~WAVEClipLoader();
 
 		WAVEClipLoader(WAVEClipLoader const&) = delete;
 		void operator=(WAVEClipLoader const&) = delete;
 
-		virtual Resource* load(std::ifstream& in);
-	private:
-		WAVEClipLoader() {}
+		virtual Resource* load(std::string src);
 	};
 }

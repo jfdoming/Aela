@@ -344,7 +344,7 @@ int Aela::Engine::setupLUA() {
 		.endClass();
 
 	// Expose Object, must register classes before doing this
-	luaManager.exposeObject(controlManager, "controlManager");
+	luaManager.exposeObject(&controlManager, "controlManager");
 	return 0;
 }
 

@@ -13,7 +13,19 @@
 
 using namespace Aela;
 
-Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
+WAVEClipLoader::WAVEClipLoader() {
+}
+
+WAVEClipLoader::~WAVEClipLoader() {
+}
+
+Resource* WAVEClipLoader::load(std::string src) {
+	// try to open the file
+	std::ifstream in;
+	if (!open(in, src)) {
+		return nullptr;
+	}
+
 	// using char[] for speed
 	char header[CHUNK_HEADER_SIZE];
 
@@ -94,6 +106,7 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 
 	// read in subchunk 2
 	in.read(data, subchunk2Size);
+	in.close();
 
 	AudioClip* clip = new AudioClip(data);
 	clip->setSize(subchunk2Size);

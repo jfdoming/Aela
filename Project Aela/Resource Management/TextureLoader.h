@@ -1,5 +1,10 @@
 #pragma once
 
+#ifndef GLEW_STATIC
+#define GLEW_STATIC
+#endif
+
+#include <GL/glew.h>
 #include "ResourceLoader.h"
 
 #define AELA_RESOURCE_TEXTURE_HEADER_SIZE 128
@@ -12,19 +17,17 @@ namespace Aela {
 
 	class TextureLoader : public ResourceLoader, public Exposable {
 		public:
-			static TextureLoader& getInstance() {
-				// This is guaranteed to be destroyed, and instantiated on first use.
-				static TextureLoader instance;
-				return instance;
-			}
+			TextureLoader();
+			virtual ~TextureLoader();
 
-			void expose(LuaManager& mgr);
+			virtual void expose(LuaManager& mgr);
 
 			TextureLoader(TextureLoader const&) = delete;
 			void operator=(TextureLoader const&) = delete;
 
-			virtual Resource* load(std::ifstream& in);
-	private:
-		TextureLoader() {}
+			virtual Resource* load(std::string src);
+
+		protected:
+			void loadTexture(std::ifstream& in, GLuint* texID, GLenum target);
 	};
 }

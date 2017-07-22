@@ -14,12 +14,17 @@
 namespace Aela {
 	class Menu : public Container {
 		public:
-			Menu(Rect<int>* renderDimensions, Renderer renderer);
-			Menu(Rect<int>* renderDimensions, Renderer renderer, int x, int y);
+			Menu();
 			~Menu();
 
+			void init(Rect<int>* renderDimensions, Renderer* renderer);
+			void init(Rect<int>* renderDimensions, Renderer* renderer, int x, int y);
+
 			virtual void render(Renderer* renderer);
+
+			bool isInitialized();
 		private:
+			bool initialized;
 			Simple2DFramebuffer buffer;
 	};
 }

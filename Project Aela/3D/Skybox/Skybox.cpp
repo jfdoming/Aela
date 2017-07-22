@@ -7,6 +7,8 @@
 
 #include "Skybox.h"
 
+using namespace Aela;
+
 Skybox::Skybox() {
 	float vertexValues[] = {        
 		-1.0f,  1.0f, -1.0f,
@@ -57,10 +59,6 @@ Skybox::Skybox() {
 
 GLuint* Skybox::getTexture() {
 	return &texture;
-}
-
-void Skybox::setTexture(GLuint* texture) {
-	this->texture = *texture;
 }
 
 float* Skybox::getVertices() {
