@@ -22,12 +22,12 @@
 
 #include "../3D/Billboards/Billboards.h"
 #include "../Window/Window.h"
-#include "../3D/3D Camera/Camera3D.h"
+#include "../3D/Camera/Camera3D.h"
 #include "../Control Manager/ControlManager.h"
-#include "../3D/3D Renderer/Basic3DRenderer.h"
-#include "../2D/2D Renderer/Basic2DRenderer.h"
+#include "../3D/Renderer/Basic3DRenderer.h"
+#include "../2D/Renderer/Basic2DRenderer.h"
 #include "../2D/Text/TextManager.h"
-#include "../3D/3D Light/Light3D.h"
+#include "../3D/Light/Light3D.h"
 
 // These are some enums used by the Renderer.
 

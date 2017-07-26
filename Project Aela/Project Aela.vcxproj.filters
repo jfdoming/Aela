@@ -41,9 +41,6 @@
     <Filter Include="Source Files\3D">
       <UniqueIdentifier>{7582ebd5-762f-40fc-9525-20094c4fb166}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\3D\3D Renderer">
-      <UniqueIdentifier>{247e39bc-abf4-4136-ae24-37161b6a17df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\3D\Billboards">
       <UniqueIdentifier>{ecc7cefe-a181-4a48-bd01-a56d97378ded}</UniqueIdentifier>
     </Filter>
@@ -58,9 +55,6 @@
     </Filter>
     <Filter Include="Source Files\2D\Text">
       <UniqueIdentifier>{acf79cd2-8311-42c0-9832-630ab3ab6c05}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\3D\3D Camera">
-      <UniqueIdentifier>{3dd079d9-c7b7-487c-a5ce-0f2b17ce05bd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Old Garbage">
       <UniqueIdentifier>{790e8aaa-302c-4a28-b886-03a1ba69cab5}</UniqueIdentifier>
@@ -83,15 +77,6 @@
     <Filter Include="Source Files\Events">
       <UniqueIdentifier>{4436bb90-6aa1-4557-bf30-fea44dbc9e0d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\3D\3D Light">
-      <UniqueIdentifier>{07af14b2-19f1-4b68-b12a-15a5f0bcfe2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\3D\3D Object">
-      <UniqueIdentifier>{184f120f-789a-49f0-9744-a97204630fe1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\2D\2D Renderer">
-      <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{d891b45e-4fa2-497c-b714-0d24c2dc0d8f}</UniqueIdentifier>
     </Filter>
@@ -101,11 +86,26 @@
     <Filter Include="Source Files\2D\Simple 2D Framebuffer">
       <UniqueIdentifier>{e088761b-dd5b-46dd-b6ce-e2bf3fae298c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\3D\3D Animator">
-      <UniqueIdentifier>{dfdd52f2-c33c-42da-a451-335357229b65}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\3D\Particles">
       <UniqueIdentifier>{bda235e5-5357-4000-9f31-be2f991be2eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Animator">
+      <UniqueIdentifier>{dfdd52f2-c33c-42da-a451-335357229b65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Camera">
+      <UniqueIdentifier>{3dd079d9-c7b7-487c-a5ce-0f2b17ce05bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Light">
+      <UniqueIdentifier>{07af14b2-19f1-4b68-b12a-15a5f0bcfe2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Transformable">
+      <UniqueIdentifier>{184f120f-789a-49f0-9744-a97204630fe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Renderer">
+      <UniqueIdentifier>{247e39bc-abf4-4136-ae24-37161b6a17df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\2D\Renderer">
+      <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -160,26 +160,11 @@
     <ClCompile Include="Old Garbage\vboindexer.cpp">
       <Filter>Old Garbage</Filter>
     </ClCompile>
-    <ClCompile Include="2D\2D Renderer\Basic2DRenderer.cpp">
-      <Filter>Source Files\2D\2D Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="2D\Text\TextFont.cpp">
       <Filter>Source Files\2D\Text</Filter>
     </ClCompile>
     <ClCompile Include="2D\Text\TextManager.cpp">
       <Filter>Source Files\2D\Text</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DModelRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DShadowRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Camera\Camera3D.cpp">
-      <Filter>Source Files\3D\3D Camera</Filter>
     </ClCompile>
     <ClCompile Include="3D\Models\Models.cpp">
       <Filter>Source Files\3D\Models</Filter>
@@ -201,12 +186,6 @@
     </ClCompile>
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Source Files\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Light\Light3D.cpp">
-      <Filter>Source Files\3D\3D Light</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Object\Object3D.cpp">
-      <Filter>Source Files\3D\3D Object</Filter>
     </ClCompile>
     <ClCompile Include="3D\3D Object\Object3D.cpp">
       <Filter>Source Files\3D\3D Object</Filter>
@@ -232,9 +211,6 @@
     <ClCompile Include="3D\Skybox\Skybox.cpp">
       <Filter>Source Files\3D\Skybox</Filter>
     </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DSkyboxRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Audio\AudioClip.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
@@ -250,12 +226,6 @@
     <ClCompile Include="Resource Management\OBJResource.cpp">
       <Filter>Source Files\Resources\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="3D\3D Animator\Animator3D.cpp">
-      <Filter>Source Files\3D\3D Animator</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Animator\KeyFrame3D.cpp">
-      <Filter>Source Files\3D\3D Animator</Filter>
-    </ClCompile>
     <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClCompile>
@@ -265,14 +235,8 @@
     <ClCompile Include="Lua\ModManager.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="3D\3D Animator\KeyFrame3DList.cpp">
-      <Filter>Source Files\3D\3D Animator</Filter>
-    </ClCompile>
     <ClCompile Include="Lua\Mod.cpp">
       <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\ResourceLoader.cpp">
-      <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
     <ClCompile Include="3D\3D Renderer\Basic3DSkyboxRenderer.cpp">
       <Filter>Source Files\3D\3D Renderer</Filter>
@@ -312,6 +276,39 @@
     </ClCompile>
     <ClCompile Include="3D\Particles\PointParticleEmitter.cpp">
       <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Animator\Animator3D.cpp">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Animator\KeyFrame3D.cpp">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Animator\KeyFrame3DList.cpp">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Camera\Camera3D.cpp">
+      <Filter>Source Files\3D\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Light\Light3D.cpp">
+      <Filter>Source Files\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Renderer\Basic3DModelRenderer.cpp">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Renderer\Basic3DRenderer.cpp">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Renderer\Basic3DShadowRenderer.cpp">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Renderer\Basic3DSkyboxRenderer.cpp">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Transformable\Transformable3D.cpp">
+      <Filter>Source Files\3D\Transformable</Filter>
+    </ClCompile>
+    <ClCompile Include="2D\Renderer\Basic2DRenderer.cpp">
+      <Filter>Source Files\2D\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -384,29 +381,14 @@
     <ClInclude Include="Old Garbage\vboindexer.hpp">
       <Filter>Old Garbage</Filter>
     </ClInclude>
-    <ClInclude Include="2D\2D Renderer\Basic2DRenderer.h">
-      <Filter>Source Files\2D\2D Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="2D\Text\TextFont.h">
       <Filter>Source Files\2D\Text</Filter>
     </ClInclude>
     <ClInclude Include="2D\Text\TextManager.h">
       <Filter>Source Files\2D\Text</Filter>
     </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DModelRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DShadowRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="3D\Billboards\Billboards.h">
       <Filter>Source Files\3D\Billboards</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Camera\Camera3D.h">
-      <Filter>Source Files\3D\3D Camera</Filter>
     </ClInclude>
     <ClInclude Include="3D\Models\Models.h">
       <Filter>Source Files\3D\Models</Filter>
@@ -441,20 +423,11 @@
     <ClInclude Include="Events\EventHandler.h">
       <Filter>Source Files\Events</Filter>
     </ClInclude>
-    <ClInclude Include="3D\3D Light\Light3D.h">
-      <Filter>Source Files\3D\3D Light</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Object\Object3D.h">
-      <Filter>Source Files\3D\3D Object</Filter>
-    </ClInclude>
     <ClInclude Include="Resource Management\ResourceQuery.h">
       <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
     <ClInclude Include="3D\Skybox\Skybox.h">
       <Filter>Source Files\3D\Skybox</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Audio\AudioClip.h">
       <Filter>Source Files\Audio</Filter>
@@ -471,20 +444,11 @@
     <ClInclude Include="Resource Management\OBJResource.h">
       <Filter>Source Files\Resources\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="3D\3D Animator\Animator3D.h">
-      <Filter>Source Files\3D\3D Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Animator\KeyFrame3D.h">
-      <Filter>Source Files\3D\3D Animator</Filter>
-    </ClInclude>
     <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\Colour\ColourRGB.h">
       <Filter>Source Files\Utilities\Colour</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Animator\KeyFrame3DList.h">
-      <Filter>Source Files\3D\3D Animator</Filter>
     </ClInclude>
     <ClInclude Include="Lua\Exposable.h">
       <Filter>Source Files\Lua</Filter>
@@ -560,6 +524,39 @@
     </ClInclude>
     <ClInclude Include="3D\Particles\PointParticleEmitter.h">
       <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Animator\Animator3D.h">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Animator\KeyFrame3D.h">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Animator\KeyFrame3DList.h">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Camera\Camera3D.h">
+      <Filter>Source Files\3D\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Light\Light3D.h">
+      <Filter>Source Files\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Renderer\Basic3DModelRenderer.h">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Renderer\Basic3DRenderer.h">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Renderer\Basic3DShadowRenderer.h">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Renderer\Basic3DSkyboxRenderer.h">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Transformable\Transformable3D.h">
+      <Filter>Source Files\3D\Transformable</Filter>
+    </ClInclude>
+    <ClInclude Include="2D\Renderer\Basic2DRenderer.h">
+      <Filter>Source Files\2D\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

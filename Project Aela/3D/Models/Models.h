@@ -19,9 +19,9 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-#include "../3D Object/Object3D.h"
+#include "../Transformable/Transformable3D.h"
 
-class Model3D : public Object3D {
+class Model3D : public Transformable3D {
 	public:
 		Model3D() {
 

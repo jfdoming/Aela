@@ -13,8 +13,8 @@ void ParticleEmitter::setupParticles(std::vector<GLuint>* textures, float partic
 		Billboard particle;
 		srand(timeManager->getCurrentTime());
 		particle.setTexture(textures->at(rand() % textures->size()));
-		particle.setProperty(Object3DProperty::X_SCALING, particleWidth);
-		particle.setProperty(Object3DProperty::Y_SCALING, particleHeight);
+		particle.setProperty(Transformable3DProperty::X_SCALING, particleWidth);
+		particle.setProperty(Transformable3DProperty::Y_SCALING, particleHeight);
 		setupParticlePositioning(i);
 	}
 }
