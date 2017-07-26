@@ -1,8 +1,8 @@
 /*
-* Class: Model
+* Class: Entity3D
 * Author: Robert Ciborowski
 * Date: November 2016
-* Description: A class used by Aela's Renderer to store properties of a model.
+* Description: A class used by Aela's Renderer to store properties of a 3D entity.
 */
 
 #pragma once
@@ -21,13 +21,13 @@
 
 #include "../Transformable/Transformable3D.h"
 
-class Model3D : public Transformable3D {
+class Entity3D : public Transformable3D {
 	public:
-		Model3D() {
+		Entity3D() {
 
 		}
 
-		~Model3D() {
+		~Entity3D() {
 			glDeleteTextures(1, &texture);
 		}
 

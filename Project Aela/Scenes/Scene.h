@@ -7,7 +7,7 @@
 
 #pragma once
 #include <vector>
-#include "../3D/Models/Models.h"
+#include "../3D/Entity/Entity3D.h"
 #include "../Renderer/Renderer.h"
 #include "../Menus/Menu.h"
 
@@ -22,7 +22,7 @@ namespace Aela {
 			Scene(int id);
 			~Scene();
 		private:
-			std::vector<Model3D*> models;
+			std::vector<Entity3D*> models;
 			Menu* menu = 0;
 	};
 }

@@ -28,7 +28,7 @@ void Basic3DShadowRenderer::clearShadowMaps(std::vector<Light3D>* lights) {
 }
 
 // This renders a shadow of a model to each light's depth buffer.
-void Basic3DShadowRenderer::renderShadow(Model3D* model, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<Light3D>* lights, GLuint lightPositionsID) {
+void Basic3DShadowRenderer::renderShadow(Entity3D* model, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<Light3D>* lights, GLuint lightPositionsID) {
 	unsigned int numberOfLights = lights->size();
 	if (numberOfLights > MAX_LIGHT_AMOUNT) {
 		numberOfLights = MAX_LIGHT_AMOUNT;

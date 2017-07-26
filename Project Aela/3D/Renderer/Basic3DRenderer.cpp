@@ -182,13 +182,13 @@ Texture * Aela::Basic3DRenderer::getMultisampledColourFrameBufferTexture() {
 }
 
 // This renders a model's shadow per light using the shadow renderer.
-void Basic3DRenderer::renderShadow(Model3D* model) {
+void Basic3DRenderer::renderShadow(Entity3D* model) {
 	glViewport(0, 0, shadowRenderer.getDepthTextureWidth(), shadowRenderer.getDepthTextureHeight());
 	shadowRenderer.renderShadow(model, depthProgramID, shadowModelMatrixID, shadowMatrixID, lights, lightShadowPositionsID);
 }
 
 // This renders a model.
-void Basic3DRenderer::renderModel(Model3D* model, bool multisampling) {
+void Basic3DRenderer::renderModel(Entity3D* model, bool multisampling) {
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	glViewport(0, 0, windowWidth, windowHeight);
 	if (multisampling) {

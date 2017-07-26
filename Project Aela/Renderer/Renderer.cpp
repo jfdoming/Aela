@@ -132,14 +132,14 @@ void Renderer::sendBoundLightDataToShader() {
 }
 
 // This renders the shadow of a model, if shadows are enabled.
-void Renderer::renderModelShadows(Model3D* model) {
+void Renderer::renderModelShadows(Entity3D* model) {
 	if (useShadows) {
 		basic3DRenderer.renderShadow(model);
 	}
 }
 
 // This renders a model.
-void Renderer::renderModel(Model3D* model) {
+void Renderer::renderModel(Entity3D* model) {
 	basic3DRenderer.renderModel(model, multisampling3D > 0);
 }
 

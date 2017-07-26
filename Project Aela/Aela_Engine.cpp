@@ -55,7 +55,7 @@ using namespace Aela;
 int Aela::Engine::runningLoop() {
 	// TEMPORARY! This won't exist once models are moved elsewhere.
 	resourceManager.bindLoader(&Aela::OBJLoader::getInstance());
-	std::vector<Model3D> models(7);
+	std::vector<Entity3D> models(7);
 	models[0].loadTexture("res/textures/stones.dds");
 	models[1].loadTexture("res/textures/mug.dds");
 	models[2].loadTexture("res/textures/mug.dds");

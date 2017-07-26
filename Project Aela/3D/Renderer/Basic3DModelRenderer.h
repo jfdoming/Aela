@@ -5,7 +5,7 @@
 * Description: A class used by Project Aela's Basic 3D Renderer to specifically render 3D models.
 */
 
-#include "../../3D/Models/Models.h"
+#include "../../3D/Entity/Entity3D.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "../../Window/Window.h"
 #include "../Light/Light3D.h"
@@ -17,7 +17,7 @@ class Basic3DModelRenderer {
 
 		// This function renders a model. It requires a lot of GLuints that are provided by
 		// the Basic3DRenderer.
-		void renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID, GLuint modelMatrixID,
+		void renderModel(Entity3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID, GLuint modelMatrixID,
 			GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition);
 
 		// These functions render a 2D texture in 3D space.

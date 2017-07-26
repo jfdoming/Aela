@@ -59,7 +59,7 @@ void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, G
 }
 
 // This function renders a model.
-void Basic3DModelRenderer::renderModel(Model3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
+void Basic3DModelRenderer::renderModel(Entity3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
 	GLuint modelMatrixID, GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition) {
 	glUseProgram(modelProgramID);
 

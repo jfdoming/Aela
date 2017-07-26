@@ -44,9 +44,6 @@
     <Filter Include="Source Files\3D\Billboards">
       <UniqueIdentifier>{ecc7cefe-a181-4a48-bd01-a56d97378ded}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\3D\Models">
-      <UniqueIdentifier>{a716ec3e-468d-45d0-a491-74cb98069e59}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\3D\Texture">
       <UniqueIdentifier>{4dd661f4-e90b-4822-98d7-0a222023f326}</UniqueIdentifier>
     </Filter>
@@ -86,9 +83,6 @@
     <Filter Include="Source Files\2D\Simple 2D Framebuffer">
       <UniqueIdentifier>{e088761b-dd5b-46dd-b6ce-e2bf3fae298c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\3D\Particles">
-      <UniqueIdentifier>{bda235e5-5357-4000-9f31-be2f991be2eb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\3D\Animator">
       <UniqueIdentifier>{dfdd52f2-c33c-42da-a451-335357229b65}</UniqueIdentifier>
     </Filter>
@@ -106,6 +100,12 @@
     </Filter>
     <Filter Include="Source Files\2D\Renderer">
       <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Entity">
+      <UniqueIdentifier>{a716ec3e-468d-45d0-a491-74cb98069e59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Particles">
+      <UniqueIdentifier>{c0002c9e-878d-45eb-bf80-cf9c39f9d3fe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -166,9 +166,6 @@
     <ClCompile Include="2D\Text\TextManager.cpp">
       <Filter>Source Files\2D\Text</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Models\Models.cpp">
-      <Filter>Source Files\3D\Models</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer\Renderer.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
@@ -186,12 +183,6 @@
     </ClCompile>
     <ClCompile Include="Events\EventHandler.cpp">
       <Filter>Source Files\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Object\Object3D.cpp">
-      <Filter>Source Files\3D\3D Object</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Light\Light3D.cpp">
-      <Filter>Source Files\3D\3D Light</Filter>
     </ClCompile>
     <ClCompile Include="Resource Management\ResourceQuery.cpp">
       <Filter>Source Files\Resources\General</Filter>
@@ -238,15 +229,6 @@
     <ClCompile Include="Lua\Mod.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DSkyboxRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Animator\Animator3D.cpp">
-      <Filter>Source Files\3D\3D Animator</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Animator\KeyFrame3D.cpp">
-      <Filter>Source Files\3D\3D Animator</Filter>
-    </ClCompile>
     <ClCompile Include="Resource Management\OBJResource.cpp">
       <Filter>Source Files\Resources\Objects</Filter>
     </ClCompile>
@@ -264,18 +246,6 @@
     </ClCompile>
     <ClCompile Include="Events\MouseEvent.cpp">
       <Filter>Source Files\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\Particles\Particle.cpp">
-      <Filter>Source Files\3D\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\Particles\ParticleEmitter.cpp">
-      <Filter>Source Files\3D\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\Particles\PlanarParticleEmitter.cpp">
-      <Filter>Source Files\3D\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\Particles\PointParticleEmitter.cpp">
-      <Filter>Source Files\3D\Particles</Filter>
     </ClCompile>
     <ClCompile Include="3D\Animator\Animator3D.cpp">
       <Filter>Source Files\3D\Animator</Filter>
@@ -309,6 +279,21 @@
     </ClCompile>
     <ClCompile Include="2D\Renderer\Basic2DRenderer.cpp">
       <Filter>Source Files\2D\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Entity\Entity3D.cpp">
+      <Filter>Source Files\3D\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\Particle.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\ParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\PlanarParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\PointParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -389,9 +374,6 @@
     </ClInclude>
     <ClInclude Include="3D\Billboards\Billboards.h">
       <Filter>Source Files\3D\Billboards</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Models\Models.h">
-      <Filter>Source Files\3D\Models</Filter>
     </ClInclude>
     <ClInclude Include="3D\Texture\Texture.h">
       <Filter>Source Files\3D\Texture</Filter>
@@ -483,12 +465,6 @@
     <ClInclude Include="Resource Management\OBJResource.h">
       <Filter>Source Files\Resources\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="3D\3D Animator\Animator3D.h">
-      <Filter>Source Files\3D\3D Animator</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Animator\KeyFrame3D.h">
-      <Filter>Source Files\3D\3D Animator</Filter>
-    </ClInclude>
     <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClInclude>
@@ -501,9 +477,6 @@
     <ClInclude Include="Lua\Exposable.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="Events\Event.h">
       <Filter>Source Files\Events</Filter>
     </ClInclude>
@@ -512,18 +485,6 @@
     </ClInclude>
     <ClInclude Include="Events\MouseEvent.h">
       <Filter>Source Files\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Particles\Particle.h">
-      <Filter>Source Files\3D\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Particles\ParticleEmitter.h">
-      <Filter>Source Files\3D\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Particles\PlanarParticleEmitter.h">
-      <Filter>Source Files\3D\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Particles\PointParticleEmitter.h">
-      <Filter>Source Files\3D\Particles</Filter>
     </ClInclude>
     <ClInclude Include="3D\Animator\Animator3D.h">
       <Filter>Source Files\3D\Animator</Filter>
@@ -557,6 +518,21 @@
     </ClInclude>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h">
       <Filter>Source Files\2D\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Entity\Entity3D.h">
+      <Filter>Source Files\3D\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\Particle.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\ParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\PlanarParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\PointParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

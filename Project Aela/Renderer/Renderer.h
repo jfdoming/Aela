@@ -85,8 +85,8 @@ namespace Aela {
 
 			// These functions are related to 3D rendering.
 			void sendBoundLightDataToShader();
-			void renderModelShadows(Model3D* model);
-			void renderModel(Model3D* model);
+			void renderModelShadows(Entity3D* model);
+			void renderModel(Entity3D* model);
 			void renderBillboard(Billboard* billboard);
 			void renderSkybox(Skybox* skybox);
 			void generateShadowMap(Light3D* light);
