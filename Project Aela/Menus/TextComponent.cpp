@@ -11,5 +11,6 @@ TextComponent::~TextComponent() {
 void TextComponent::update() {
 }
 
-void TextComponent::render() {
+void TextComponent::render(Renderer* renderer) {
+	//renderer->renderRectangle();
 }

@@ -17,7 +17,7 @@ void Scene::update() {
 }
 
 void Scene::render(Renderer* renderer) {
-	for (Model3D* model : models) {
+	for (Entity3D* model : models) {
 		renderer->renderModel(model);
 	}
 

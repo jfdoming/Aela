@@ -17,6 +17,8 @@ namespace Aela {
 			Menu(Rect<int>* renderDimensions, Renderer renderer);
 			Menu(Rect<int>* renderDimensions, Renderer renderer, int x, int y);
 			~Menu();
+
+			virtual void render(Renderer* renderer);
 		private:
 			Simple2DFramebuffer buffer;
 	};

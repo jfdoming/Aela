@@ -26,7 +26,10 @@
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 #include "Audio/AudioManager.h"
-#include "3D/3D Animator/Animator3D.h"
+#include "3D/Animator/Animator3D.h"
+#include "3D\Particles\PlanarParticleEmitter.h"
+
+#include "Menus/TextComponent.h"
 
 namespace Aela {
 	// These are global objects who's classes come from Project Aela.
@@ -49,45 +52,55 @@ using namespace Aela;
 int Aela::Engine::runningLoop() {
 	// TEMPORARY! This won't exist once models are moved elsewhere.
 	resourceManager.bindLoader(&Aela::OBJLoader::getInstance());
-	std::vector<Model3D> models(7);
-	models[0].loadTexture("res/textures/grass.dds");
+	std::vector<Entity3D> models(7);
+	models[0].loadTexture("res/textures/stones.dds");
 	models[1].loadTexture("res/textures/mug.dds");
 	models[2].loadTexture("res/textures/mug.dds");
 	models[3].loadTexture("res/textures/cat.dds");
-	models[4].loadTexture("res/textures/missile.dds");
-	models[5].loadTexture("res/textures/cat.dds");
+	models[4].loadTexture("res/textures/tree_1.dds");
+	models[5].loadTexture("res/textures/house_1.dds");
 	models[6].loadTexture("res/textures/big_marble.dds");
 
 	// This loads the models from OBJ files.
-	models[0].loadModel("res/models/large_grass_plane.obj");
+	models[0].loadModel("res/models/stones.obj");
 	models[1].loadModel("res/models/mug_centered.obj");
 	models[2].loadModel("res/models/mug_centered.obj");
 	models[3].loadModel("res/models/cat.obj");
-	models[4].loadModel("res/models/missile.obj");
-	models[5].loadModel("res/models/cat.obj");
+	models[4].loadModel("res/models/tree_1.obj");
+	models[5].loadModel("res/models/house_1.obj");
 	models[6].loadModel("res/models/big_marble.obj");
 
 	// This sets model positioning.
 	models[1].setPosition(-10.72f, 4, -15.51f);
 	models[2].setPosition(0, 20, 15);
-	models[5].setPosition(0, 0, -15);
+	models[5].setScaling(1.5, 1.5, 1.5);
+	models[5].setPosition(-10, 0, 5);
+	models[5].setRotation(0, (float) PI / 2, 0);
 	models[6].setPosition(10, 20, 10);
 
-	// This would animate things if the animator currently worked.
+	// This animates models just to make sure that the animator actually works.
 	std::vector<KeyFrame3D> keyFrames;
 	for (unsigned int i = 0; i < 4; i++) {
-		KeyFrame3D keyFrame;
-		keyFrame.setObject(&models[0]);
-		glm::vec3 translation(10, 5, (i % 2) * 10);
-		glm::vec3 rotation(0, PI * (i % 2), 0.3 * (i % 2));
-		keyFrame.setTranslation(&translation);
-		keyFrame.setRotation(&rotation);
-		if (i == 0) {
-			keyFrame.setTimeAfterPreviousKeyFrame(6000);
-		} else {
-			keyFrame.setTimeAfterPreviousKeyFrame(4000);
+		KeyFrame3DList keyFrameList;
+		for (int j = 1; j < 4; j++) {
+			KeyFrame3D keyFrame;
+			keyFrame.setObject(&models[j]);
+			glm::vec3 translation(j * -5, 5 + (i % 2), (i % 2) * 10);
+			// glm::vec3 translation(j * 5 - 7, 0, 0);
+			keyFrame.setTranslation(&translation);
+			glm::vec3 rotation(j % 2 + 3, PI * (i % 2), 0.3 * (j % 2 + 1));
+			// glm::vec3 rotation(0, 0, 0);
+			keyFrame.setRotation(&rotation);
+			 glm::vec3 scaling(1 + 3 * ((1 + i) % 2), 1 + 3 * (i % 2), 1 + 3 * (i % 2));
+			keyFrame.setScaling(&scaling);
+			keyFrameList.addKeyFrame(&keyFrame);
 		}
-		animator.addKeyFrame(&keyFrame);
+		if (i == 0) {
+			keyFrameList.setTimeAfterPreviousKeyFrame(8000);
+		} else {
+			keyFrameList.setTimeAfterPreviousKeyFrame(4000);
+		}
+		animator.addKeyFrameList(&keyFrameList);
 	}
 
 	// This is how a skybox is loaded.
@@ -107,25 +120,30 @@ int Aela::Engine::runningLoop() {
 	std::vector<Billboard> billboards(1);
 	billboards[0].loadTexture("res/textures/character.dds");
 	billboards[0].useSpecifiedRotation(true);
-	renderer.getCamera()->setPosition(glm::vec3(0, 5, -10));
+	billboards[0].setPosition(0, 1, -1.5);
+	renderer.getCamera()->setPosition(glm::vec3(0, 10, -20));
 
 	// This is how a light is set up.
 	std::vector<Light3D> lights;
 	for (int i = 0; i < 2; i++) {
 		glm::vec3 position;
 		if (i == 0) {
-			position = glm::vec3(-8, 5, 0);
+			position = glm::vec3(-18, 25, -10);
 		} else {
-			position = glm::vec3(10, 5, 10);
+			position = glm::vec3(10, 25, 20);
 		}
 		glm::vec3 rotation = glm::vec3(0, 0, 0);
 		ColourRGB colour(1, 1, 1);
-		float power = 0.6F;
+		float power = 0.9F;
 		Light3D light(position, rotation, colour, power);
 		renderer.generateShadowMap(&light);
 		lights.push_back(light);
 	}
 	renderer.bindLights(&lights);
+
+	// This sets up particles.
+	PlanarParticleEmitter particleEmitter;
+	Rect<GLfloat> emitterDimensions(0, 0, 10, 10);
 
 	// set up the loader to load textures into our group
 	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
@@ -143,6 +161,17 @@ int Aela::Engine::runningLoop() {
 	}
 
 	audioPlayer.playClip(resourceManager.obtain<AudioClip>("res/audio/clips/test.wav"));
+
+	// SCENE TESTING
+	// Scene test;
+	// TextComponent txt;
+	// test.enableMenu(window.getWindowDimensions(), &renderer);
+	// test.getMenu()->add(&txt);
+
+	// TODO make sure a layout manager is present!!!
+
+	// sceneManager.registerScene(&test, 1);
+	// sceneManager.setCurrentScene(1);
 
 	// obtain and set up test textures
 	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");
@@ -190,7 +219,11 @@ int Aela::Engine::runningLoop() {
 		animator.update();
 
 		// THIS IS FOR TESTING!
+		// controlManager.transform3DObject(&billboards[0], -5);
+		// controlManager.transform3DObject(renderer.getCamera(), -5);
 		renderer.getCamera()->focusAtPointOnPlane(*billboards[0].getPosition(), glm::vec3(0, 0, 0));
+		// std::cout << billboards[0].getPosition()->x << " " << billboards[0].getPosition()->y << " " << billboards[0].getPosition()->z << "\n";
+		billboards[0].setScaling(2 - (timeManager.getCurrentTime() % 2000) / 3500.0f, 2 + (timeManager.getCurrentTime() % 2000) / 3500.0f, 2);
 
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() - timeOfLastFrameCheck >= timeBetweenFrameChecks) {
@@ -208,14 +241,13 @@ int Aela::Engine::runningLoop() {
 		
 		// This updates and renders the current scene.
 		Aela::Scene* currentScene = sceneManager.getCurrentScene();
-		if (currentScene != NULL) {
+		if (currentScene != nullptr) {
 			currentScene->update();
 			currentScene->render(&renderer);
 		}
 
 		// This renders the program.
 		renderer.startRenderingFrame();
-		renderer.clearSimple2DFramebuffer(&customFramebuffer);
 		renderer.setupBoundLightsForCurrentFrame();
 		for (unsigned int i = 0; i < models.size(); i++) {
 			renderer.renderModelShadows(&(models[i]));
@@ -229,14 +261,15 @@ int Aela::Engine::runningLoop() {
 			renderer.renderBillboard(&(billboards[i]));
 		}
 		renderer.endRendering3D();
-		std::string fpsData = std::to_string(fps) + " FPS";
 		renderer.bindSimple2DFramebuffer(&customFramebuffer);
+		renderer.clearSimple2DFramebuffer();
+		std::string fpsData = std::to_string(fps) + " FPS";
 		renderer.render2DTexture(testTexture);
 		renderer.render2DTexture(testTexture2);
 		renderer.renderText(fpsData, arial, &textOutput, &textColour);
 		ColourRGBA funkyColour((timeManager.getCurrentTime() % 1000) / 1000.0f, 1.0f - (timeManager.getCurrentTime() % 1000) / 1000.0f, 0.8f, 0.8f);
-		renderer.renderRectangle(50, 50, 100, 100, window.getWindowDimensions(), &funkyColour);
-		renderer.renderTriangle(200, 50, 300, 150, 400, 50, window.getWindowDimensions(), &funkyColour);
+		renderer.renderRectangle(50, 50, 100, 100, &funkyColour);
+		renderer.renderTriangle(200, 50, 300, 150, 400, 50, &funkyColour);
 		renderer.renderSimple2DFramebuffer();
 		renderer.endRenderingFrame();
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());

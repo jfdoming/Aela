@@ -13,12 +13,13 @@
 
 namespace Aela {
 	class OBJResource : public Resource {
-	public:
-		std::vector<glm::vec3> vertices;
-		std::vector<glm::vec2> UVs;
-		std::vector<glm::vec3> normals;
+		public:
+			std::vector<glm::vec3> vertices;
+			std::vector<glm::vec2> UVs;
+			std::vector<glm::vec3> normals;
+			std::vector<unsigned short> indices;
 		
-		OBJResource();
-		virtual ~OBJResource();
+			OBJResource();
+			virtual ~OBJResource();
 	};
 }

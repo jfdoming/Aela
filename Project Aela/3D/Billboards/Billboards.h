@@ -7,7 +7,7 @@
 
 #pragma once
 #include "../../Old Garbage/texture.hpp"
-#include "../3D Object/Object3D.h"
+#include "../Transformable/Transformable3D.h"
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
@@ -20,7 +20,7 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-class Billboard : public Object3D {
+class Billboard : public Transformable3D {
 	public:
 		Billboard() {
 

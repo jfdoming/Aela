@@ -41,14 +41,8 @@
     <Filter Include="Source Files\3D">
       <UniqueIdentifier>{7582ebd5-762f-40fc-9525-20094c4fb166}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\3D\3D Renderer">
-      <UniqueIdentifier>{247e39bc-abf4-4136-ae24-37161b6a17df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\3D\Billboards">
       <UniqueIdentifier>{ecc7cefe-a181-4a48-bd01-a56d97378ded}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\3D\Models">
-      <UniqueIdentifier>{a716ec3e-468d-45d0-a491-74cb98069e59}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\3D\Texture">
       <UniqueIdentifier>{4dd661f4-e90b-4822-98d7-0a222023f326}</UniqueIdentifier>
@@ -58,9 +52,6 @@
     </Filter>
     <Filter Include="Source Files\2D\Text">
       <UniqueIdentifier>{acf79cd2-8311-42c0-9832-630ab3ab6c05}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\3D\3D Camera">
-      <UniqueIdentifier>{3dd079d9-c7b7-487c-a5ce-0f2b17ce05bd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Old Garbage">
       <UniqueIdentifier>{790e8aaa-302c-4a28-b886-03a1ba69cab5}</UniqueIdentifier>
@@ -83,15 +74,6 @@
     <Filter Include="Source Files\Events">
       <UniqueIdentifier>{4436bb90-6aa1-4557-bf30-fea44dbc9e0d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\3D\3D Light">
-      <UniqueIdentifier>{07af14b2-19f1-4b68-b12a-15a5f0bcfe2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\3D\3D Object">
-      <UniqueIdentifier>{184f120f-789a-49f0-9744-a97204630fe1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\2D\2D Renderer">
-      <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{d891b45e-4fa2-497c-b714-0d24c2dc0d8f}</UniqueIdentifier>
     </Filter>
@@ -101,8 +83,29 @@
     <Filter Include="Source Files\2D\Simple 2D Framebuffer">
       <UniqueIdentifier>{e088761b-dd5b-46dd-b6ce-e2bf3fae298c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\3D\3D Animator">
+    <Filter Include="Source Files\3D\Animator">
       <UniqueIdentifier>{dfdd52f2-c33c-42da-a451-335357229b65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Camera">
+      <UniqueIdentifier>{3dd079d9-c7b7-487c-a5ce-0f2b17ce05bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Light">
+      <UniqueIdentifier>{07af14b2-19f1-4b68-b12a-15a5f0bcfe2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Transformable">
+      <UniqueIdentifier>{184f120f-789a-49f0-9744-a97204630fe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Renderer">
+      <UniqueIdentifier>{247e39bc-abf4-4136-ae24-37161b6a17df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\2D\Renderer">
+      <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Entity">
+      <UniqueIdentifier>{a716ec3e-468d-45d0-a491-74cb98069e59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3D\Particles">
+      <UniqueIdentifier>{c0002c9e-878d-45eb-bf80-cf9c39f9d3fe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -157,29 +160,11 @@
     <ClCompile Include="Old Garbage\vboindexer.cpp">
       <Filter>Old Garbage</Filter>
     </ClCompile>
-    <ClCompile Include="2D\2D Renderer\Basic2DRenderer.cpp">
-      <Filter>Source Files\2D\2D Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="2D\Text\TextFont.cpp">
       <Filter>Source Files\2D\Text</Filter>
     </ClCompile>
     <ClCompile Include="2D\Text\TextManager.cpp">
       <Filter>Source Files\2D\Text</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DModelRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Renderer\Basic3DShadowRenderer.cpp">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\3D Camera\Camera3D.cpp">
-      <Filter>Source Files\3D\3D Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\Models\Models.cpp">
-      <Filter>Source Files\3D\Models</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\Renderer.cpp">
       <Filter>Source Files\Renderer</Filter>
@@ -196,6 +181,7 @@
     <ClCompile Include="Lua\LuaScript.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="3D\3D Light\Light3D.cpp">
       <Filter>Source Files\3D\3D Light</Filter>
     </ClCompile>
@@ -207,11 +193,12 @@
     </ClCompile>
     <ClCompile Include="3D\3D Light\Light3D.cpp">
       <Filter>Source Files\3D\3D Light</Filter>
+=======
+    <ClCompile Include="Events\EventHandler.cpp">
+      <Filter>Source Files\Events</Filter>
+>>>>>>> aac64a03c1884ec41c4233fadbed04cd181dbde2
     </ClCompile>
     <ClCompile Include="Resource Management\ResourceQuery.cpp">
-      <Filter>Source Files\Resources\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\ResourceLoader.cpp">
       <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
     <ClCompile Include="Lua\Mod.cpp">
@@ -220,20 +207,14 @@
     <ClCompile Include="Lua\ModManager.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="Events\Event.cpp">
-      <Filter>Source Files\Events</Filter>
-    </ClCompile>
     <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClCompile>
     <ClCompile Include="3D\Skybox\Skybox.cpp">
       <Filter>Source Files\3D\Skybox</Filter>
     </ClCompile>
-    <ClCompile Include="Events\KeyEvent.cpp">
-      <Filter>Source Files\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="Events\MouseEvent.cpp">
-      <Filter>Source Files\Events</Filter>
+    <ClCompile Include="3D\Skybox\Skybox.cpp">
+      <Filter>Source Files\3D\Skybox</Filter>
     </ClCompile>
     <ClCompile Include="Audio\AudioClip.cpp">
       <Filter>Source Files\Audio</Filter>
@@ -244,9 +225,16 @@
     <ClCompile Include="Audio\WAVEClipLoader.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
+    <ClCompile Include="Resource Management\OBJResource.cpp">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp">
+      <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
+    </ClCompile>
     <ClCompile Include="Aela_Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="3D\3D Animator\Animator3D.cpp">
       <Filter>Source Files\3D\3D Animator</Filter>
     </ClCompile>
@@ -255,10 +243,18 @@
     </ClCompile>
     <ClCompile Include="3D\3D Renderer\Basic3DSkyboxRenderer.cpp">
       <Filter>Source Files\3D\3D Renderer</Filter>
+=======
+    <ClCompile Include="Lua\ModManager.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Lua\Mod.cpp">
+      <Filter>Source Files\Lua</Filter>
+>>>>>>> aac64a03c1884ec41c4233fadbed04cd181dbde2
     </ClCompile>
     <ClCompile Include="Resource Management\OBJResource.cpp">
       <Filter>Source Files\Resources\Objects</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Audio\AudioListener.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
@@ -268,6 +264,71 @@
     <ClCompile Include="Events\EventConstants.cpp">
       <Filter>Source Files\Events</Filter>
     </ClCompile>
+=======
+    <ClCompile Include="Lua\ModEnvironment.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Lua\ModManager.cpp">
+      <Filter>Source Files\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\Event.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\KeyEvent.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\MouseEvent.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Animator\Animator3D.cpp">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Animator\KeyFrame3D.cpp">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Animator\KeyFrame3DList.cpp">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Camera\Camera3D.cpp">
+      <Filter>Source Files\3D\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Light\Light3D.cpp">
+      <Filter>Source Files\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Renderer\Basic3DModelRenderer.cpp">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Renderer\Basic3DRenderer.cpp">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Renderer\Basic3DShadowRenderer.cpp">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Renderer\Basic3DSkyboxRenderer.cpp">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Transformable\Transformable3D.cpp">
+      <Filter>Source Files\3D\Transformable</Filter>
+    </ClCompile>
+    <ClCompile Include="2D\Renderer\Basic2DRenderer.cpp">
+      <Filter>Source Files\2D\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Entity\Entity3D.cpp">
+      <Filter>Source Files\3D\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\Particle.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\ParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\PlanarParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\PointParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+>>>>>>> aac64a03c1884ec41c4233fadbed04cd181dbde2
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aela_Engine.h">
@@ -339,32 +400,14 @@
     <ClInclude Include="Old Garbage\vboindexer.hpp">
       <Filter>Old Garbage</Filter>
     </ClInclude>
-    <ClInclude Include="2D\2D Renderer\Basic2DRenderer.h">
-      <Filter>Source Files\2D\2D Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="2D\Text\TextFont.h">
       <Filter>Source Files\2D\Text</Filter>
     </ClInclude>
     <ClInclude Include="2D\Text\TextManager.h">
       <Filter>Source Files\2D\Text</Filter>
     </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DModelRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Renderer\Basic3DShadowRenderer.h">
-      <Filter>Source Files\3D\3D Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="3D\Billboards\Billboards.h">
       <Filter>Source Files\3D\Billboards</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\3D Camera\Camera3D.h">
-      <Filter>Source Files\3D\3D Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Models\Models.h">
-      <Filter>Source Files\3D\Models</Filter>
     </ClInclude>
     <ClInclude Include="3D\Texture\Texture.h">
       <Filter>Source Files\3D\Texture</Filter>
@@ -393,14 +436,43 @@
     <ClInclude Include="Lua\LuaScript.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="3D\3D Light\Light3D.h">
       <Filter>Source Files\3D\3D Light</Filter>
     </ClInclude>
     <ClInclude Include="3D\3D Object\Object3D.h">
       <Filter>Source Files\3D\3D Object</Filter>
+=======
+    <ClInclude Include="Events\EventHandler.h">
+      <Filter>Source Files\Events</Filter>
+>>>>>>> aac64a03c1884ec41c4233fadbed04cd181dbde2
     </ClInclude>
     <ClInclude Include="Resource Management\ResourceQuery.h">
       <Filter>Source Files\Resources\General</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Skybox\Skybox.h">
+      <Filter>Source Files\3D\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioClip.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioManager.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\Listener.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\WAVEClipLoader.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\OBJResource.h">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
+      <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Colour\ColourRGB.h">
+      <Filter>Source Files\Utilities\Colour</Filter>
     </ClInclude>
     <ClInclude Include="Lua\Exposable.h">
       <Filter>Source Files\Lua</Filter>
@@ -408,23 +480,17 @@
     <ClInclude Include="Lua\Mod.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="Lua\ModManager.h">
+    <ClInclude Include="Lua\ModEnvironment.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="Events\Event.h">
-      <Filter>Source Files\Events</Filter>
+    <ClInclude Include="Lua\ModManager.h">
+      <Filter>Source Files\Lua</Filter>
     </ClInclude>
     <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClInclude>
     <ClInclude Include="3D\Skybox\Skybox.h">
       <Filter>Source Files\3D\Skybox</Filter>
-    </ClInclude>
-    <ClInclude Include="Events\KeyEvent.h">
-      <Filter>Source Files\Events</Filter>
-    </ClInclude>
-    <ClInclude Include="Events\MouseEvent.h">
-      <Filter>Source Files\Events</Filter>
     </ClInclude>
     <ClInclude Include="Audio\AudioClip.h">
       <Filter>Source Files\Audio</Filter>
@@ -450,6 +516,7 @@
     <ClInclude Include="Audio\AudioListener.h">
       <Filter>Source Files\Audio</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Events\EventConstants.h">
       <Filter>Source Files\Events</Filter>
     </ClInclude>
@@ -459,6 +526,80 @@
     <ClInclude Include="Events\Listener.h">
       <Filter>Source Files\Events</Filter>
     </ClInclude>
+=======
+    <ClInclude Include="Resource Management\OBJResource.h">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
+      <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\Mod.h">
+      <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\ModManager.h">
+      <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\Exposable.h">
+      <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\Event.h">
+      <Filter>Source Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\KeyEvent.h">
+      <Filter>Source Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\MouseEvent.h">
+      <Filter>Source Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Animator\Animator3D.h">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Animator\KeyFrame3D.h">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Animator\KeyFrame3DList.h">
+      <Filter>Source Files\3D\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Camera\Camera3D.h">
+      <Filter>Source Files\3D\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Light\Light3D.h">
+      <Filter>Source Files\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Renderer\Basic3DModelRenderer.h">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Renderer\Basic3DRenderer.h">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Renderer\Basic3DShadowRenderer.h">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Renderer\Basic3DSkyboxRenderer.h">
+      <Filter>Source Files\3D\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Transformable\Transformable3D.h">
+      <Filter>Source Files\3D\Transformable</Filter>
+    </ClInclude>
+    <ClInclude Include="2D\Renderer\Basic2DRenderer.h">
+      <Filter>Source Files\2D\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Entity\Entity3D.h">
+      <Filter>Source Files\3D\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\Particle.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\ParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\PlanarParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\PointParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+>>>>>>> aac64a03c1884ec41c4233fadbed04cd181dbde2
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Release\res\shaders\DepthRTT.fragmentshader">
