@@ -9,7 +9,7 @@
 #include <al.h>
 #include <alc.h>
 #include <string>
-#include "Listener.h"
+#include "AudioListener.h"
 #include "AudioClip.h"
 
 namespace Aela {
@@ -21,7 +21,7 @@ namespace Aela {
 			bool init();
 			void playClip(AudioClip* clip);
 
-			Listener getListener();
+			AudioListener getListener();
 
 		private:
 			ALCcontext* context;

@@ -10,6 +10,7 @@
 #include "../Window/Window.h"
 #include "../3D/3D Camera/Camera3D.h"
 #include "../Time Manager/TimeManager.h"
+#include "../Events/Event.h"
 #include <time.h>
 
 namespace Aela {

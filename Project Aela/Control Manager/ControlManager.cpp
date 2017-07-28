@@ -224,21 +224,3 @@ void ControlManager::setProperty(ControlManagerProperty property, float value) {
 			break;
 	}
 }
-
-void ControlManager::updateKeystate(const Uint8* _keystate) {
-	keystate = _keystate;
-}
-
-void ControlManager::goSuperSpeed() {
-	// Doesn't actually work, can't be fixed easily
-	shouldGoFast = true;
-}
-
-void ControlManager::goNormalSpeed() {
-	// Doesn't actually work, can't be fixed easily
-	shouldGoFast = false;
-}
-
-void ControlManager::test() {
-	std::cout << "Pressed a button?\n";
-}

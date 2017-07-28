@@ -8,8 +8,16 @@
 #include "Renderer.h"
 #include "../Error Handler/ErrorHandler.h"
 #include "../Old Garbage/shader.hpp"
+#include "../Events/EventConstants.h"
 
 using namespace Aela;
+
+// Event stuff
+void Renderer::onEvent(Event* event) {
+	if (event->getType() == EventConstants::KEY_PRESSED) {
+		updateCamera((KeyEvent*)event);
+	}
+}
 
 // This sets up 3D rendering, accounting for multisampling.
 void Renderer::setup3DRendering() {
@@ -365,9 +373,121 @@ void Renderer::decreaseFOV() {
 	camera.setFieldOfView(camera.getFieldOfView() - (0.002f) * timeManager->getTimeBetweenFrames());
 }
 
-// This tells the control manager to update the camera using the inputs made by the user.
-void Renderer::updateCameraUsingControls(ControlManager* controls) {
-	controls->computeMatricesWithInputs(&camera);
+void Renderer::updateCamera(KeyEvent* event) {
+	if (window->isFocused()) {
+		float deltaTime = timeManager->getTimeBetweenFrames();
+
+		// This gets the cursor's position.
+		int xpos, ypos;
+		window->getCursorPositionInWindow(&xpos, &ypos);
+
+		// This moves the cursor back to the middle of the window.
+		int width, height;
+		window->getWindowDimensions(&width, &height);
+		window->setCursorPositionInWindow(width / 2, height / 2);
+
+		// This gets the horizontal and vertical angles.
+		float horizontalAngle = camera.getRotation()->x;
+		float verticalAngle = camera.getRotation()->y;
+
+		// std::cout << horizontalAngle << " " << verticalAngle << " are the control manager's values.\n";
+
+		// This computes the new horizontal angle.
+		// horizontalAngle += mouseSpeed * float(width / 2 - xpos);
+
+		// This adjusts the horizontal angle so that it stays between 0 and PI * 2.
+		if (horizontalAngle >= glm::pi<float>() * 2) {
+			horizontalAngle -= glm::pi<float>() * 2;
+		}
+		if (horizontalAngle <= 0) {
+			horizontalAngle += glm::pi<float>() * 2;
+		}
+
+		// This computes the new vertical angle.
+		float verticalModifier = 0;// mouseSpeed * float(height / 2 - ypos);
+
+								   // This checks to see if the user is trying to make the camera go upside down by moving the camera up
+								   // too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
+								   // allowUpsideDownCamera is true.
+		if ((!allowUpsideDownCamera && verticalModifier > 0 && verticalAngle + verticalModifier <= glm::pi<float>() / 2) || allowUpsideDownCamera) {
+			verticalAngle += mouseSpeed * float(height / 2 - ypos);
+		}
+		else if (!allowUpsideDownCamera && verticalModifier > 0) {
+			verticalAngle = glm::pi<float>() / 2;
+		}
+
+		// This checks to see if the user is trying to make the camera go upside down by moving the camera down
+		// too far (vertical angle of -PI/2 in radians). This also allows the camera to go upside down as long as
+		// allowUpsideDownCamera is true.
+		if ((!allowUpsideDownCamera && verticalModifier < 0 && verticalAngle + mouseSpeed * float(height / 2 - ypos) >= glm::pi<float>() / -2) || allowUpsideDownCamera) {
+			verticalAngle += mouseSpeed * float(height / 2 - ypos);
+		}
+		else if (!allowUpsideDownCamera && verticalModifier < 0) {
+			verticalAngle = glm::pi<float>() / -2;
+		}
+
+		camera.setProperty(Object3DProperty::X_ROTATION, horizontalAngle);
+		camera.setProperty(Object3DProperty::Y_ROTATION, verticalAngle);
+
+		// This converts the coordinates from rotational to cartesian-planar.
+		glm::vec3 direction(
+			cos(verticalAngle) * sin(horizontalAngle),
+			sin(verticalAngle),
+			cos(verticalAngle) * cos(horizontalAngle)
+		);
+
+		// These are vectors for the cartesian-plane system.
+		glm::vec3 right = glm::vec3(
+			sin(horizontalAngle - 3.14f / 2.0f),
+			0,
+			cos(horizontalAngle - 3.14f / 2.0f)
+		);
+		glm::vec3 up = glm::cross(right, direction);
+
+		// This is a position vector.
+		glm::vec3 position = *(camera.getPosition());
+
+		if (event->getKeycode() == 225) {
+			currentSpeed = superSpeed;
+		}
+		else {
+			currentSpeed = speed;
+		}
+
+		// This occurs when 'w' is pressed.
+		if (event->getKeycode() == 26) {
+			position += direction * deltaTime * currentSpeed;
+		}
+		// This occurs when 's' is pressed.
+		if (event->getKeycode() == 22) {
+			position -= direction * deltaTime * currentSpeed;
+		}
+		// This occurs when 'd' is pressed.
+		if (event->getKeycode() == 7) {
+			position += right * deltaTime * currentSpeed;
+		}
+		// This occurs when 'a' is pressed.
+		if (event->getKeycode() == 4) {
+			position -= right * deltaTime * currentSpeed;
+		}
+
+		// This occurs when space is pressed.
+		if (event->getKeycode() == 44) {
+			position += straightUp * deltaTime * currentSpeed;
+		}
+
+		// This occurs when left ctrl is pressed.
+		if (event->getKeycode() == 224) {
+			position -= straightUp * deltaTime * currentSpeed;
+		}
+
+		// This sets all of the camera's position and view related properties.
+		camera.setPosition(position);
+		glm::mat4 projectionMatrix = glm::perspective(camera.getFieldOfView(), (float)width / height, 0.1f, 100.0f);
+		glm::mat4 viewMatrix = glm::lookAt(position, position + direction, up);
+		camera.setProjectionMatrix(projectionMatrix);
+		camera.setViewMatrix(viewMatrix);
+	}
 }
 
 // This is a useful function that checks the currently bound framebuffer to see if it was set up properly.

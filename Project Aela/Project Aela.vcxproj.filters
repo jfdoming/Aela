@@ -106,9 +106,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Resource Management\Resource.cpp">
       <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
@@ -199,9 +196,6 @@
     <ClCompile Include="Lua\LuaScript.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="Events\EventHandler.cpp">
-      <Filter>Source Files\Events</Filter>
-    </ClCompile>
     <ClCompile Include="3D\3D Light\Light3D.cpp">
       <Filter>Source Files\3D\3D Light</Filter>
     </ClCompile>
@@ -247,14 +241,32 @@
     <ClCompile Include="Audio\AudioManager.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Audio\Listener.cpp">
-      <Filter>Source Files\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="Audio\WAVEClipLoader.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
     <ClCompile Include="Aela_Engine.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Animator\Animator3D.cpp">
+      <Filter>Source Files\3D\3D Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Animator\KeyFrame3D.cpp">
+      <Filter>Source Files\3D\3D Animator</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\3D Renderer\Basic3DSkyboxRenderer.cpp">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\OBJResource.cpp">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\AudioListener.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\EventHandler.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\EventConstants.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -381,9 +393,6 @@
     <ClInclude Include="Lua\LuaScript.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="Events\EventHandler.h">
-      <Filter>Source Files\Events</Filter>
-    </ClInclude>
     <ClInclude Include="3D\3D Light\Light3D.h">
       <Filter>Source Files\3D\3D Light</Filter>
     </ClInclude>
@@ -423,11 +432,32 @@
     <ClInclude Include="Audio\AudioManager.h">
       <Filter>Source Files\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Audio\Listener.h">
-      <Filter>Source Files\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="Audio\WAVEClipLoader.h">
       <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Animator\Animator3D.h">
+      <Filter>Source Files\3D\3D Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Animator\KeyFrame3D.h">
+      <Filter>Source Files\3D\3D Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\3D Renderer\Basic3DSkyboxRenderer.h">
+      <Filter>Source Files\3D\3D Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\OBJResource.h">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioListener.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\EventConstants.h">
+      <Filter>Source Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\EventHandler.h">
+      <Filter>Source Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\Listener.h">
+      <Filter>Source Files\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -5,9 +5,13 @@
 namespace Aela {
 	class KeyEvent : public Event {
 		private:
-			const int ID = 1;
+			int keycode;
+			int modifier;
 		public:
-			KeyEvent();
-			~KeyEvent();
+			KeyEvent(int _type, int _keycode, int _modifier);
+			virtual ~KeyEvent();
+
+			int getKeycode();
+			int getModifier();
 	};
 }
