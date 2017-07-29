@@ -16,7 +16,8 @@ namespace Aela {
 			SDL_Event event;
 			Window* window;
 
-			bool running;
+			bool running, stopped;
+			std::thread eventThread;
 
 			std::queue<Event*> eventQueue;
 			std::unordered_map<int, std::forward_list<Listener*>> listeners; // Listeners defined in C++
@@ -27,6 +28,8 @@ namespace Aela {
 			~EventHandler();
 
 			void start();
+			void stop();
+
 			void updateSDLEvents();
 			void fireEvent(Event* event);
 			void dispatchEvents();

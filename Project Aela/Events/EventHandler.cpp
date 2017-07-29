@@ -10,18 +10,28 @@ EventHandler::EventHandler() {
 }
 
 EventHandler::~EventHandler() {
-
+	if (!stopped) {
+		stop();
+	}
 }
 
 void EventHandler::start() {
+	stopped = false;
 	running = true;
-	std::thread eventThread(&EventHandler::dispatchEvents, this);
+	eventThread = std::thread(&EventHandler::dispatchEvents, this);
+}
+
+void EventHandler::stop() {
+	stopped = true;
+	running = false;
+	eventThread.join();
 }
 
 void EventHandler::updateSDLEvents() {
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 			case SDL_QUIT:
+				running = false;
 				window->quit();
 				break;
 			case SDL_WINDOWEVENT:

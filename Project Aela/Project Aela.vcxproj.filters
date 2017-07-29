@@ -220,9 +220,6 @@
     <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClCompile>
-    <ClCompile Include="Aela_Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Lua\ModManager.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
@@ -235,35 +232,17 @@
     <ClCompile Include="Lua\ModManager.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Skybox\SkyboxLoader.cpp">
-      <Filter>Source Files\3D\Skybox</Filter>
+    <ClCompile Include="Events\Event.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Particles\Particle.cpp">
-      <Filter>Source Files\3D\Particles</Filter>
+    <ClCompile Include="Events\EventConstants.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Particles\ParticleEmitter.cpp">
-      <Filter>Source Files\3D\Particles</Filter>
+    <ClCompile Include="Events\KeyEvent.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Particles\PlanarParticleEmitter.cpp">
-      <Filter>Source Files\3D\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\Particles\PointParticleEmitter.cpp">
-      <Filter>Source Files\3D\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\ResourceGroup.cpp">
-      <Filter>Source Files\Resources\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Menus\AbstractLayoutManager.cpp">
-      <Filter>Source Files\Menus</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\Entity\Entity3D.cpp">
-      <Filter>Source Files\3D\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\Transformable\Transformable3D.cpp">
-      <Filter>Source Files\3D\Transformable</Filter>
-    </ClCompile>
-    <ClCompile Include="Menus\TextComponent.cpp">
-      <Filter>Source Files\Menus</Filter>
+    <ClCompile Include="Events\MouseEvent.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
     <ClCompile Include="2D\Renderer\Basic2DRenderer.cpp">
       <Filter>Source Files\2D\Renderer</Filter>
@@ -280,8 +259,23 @@
     <ClCompile Include="3D\Camera\Camera3D.cpp">
       <Filter>Source Files\3D\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="3D\Entity\Entity3D.cpp">
+      <Filter>Source Files\3D\Entity</Filter>
+    </ClCompile>
     <ClCompile Include="3D\Light\Light3D.cpp">
       <Filter>Source Files\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\Particle.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\ParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\PlanarParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\PointParticleEmitter.cpp">
+      <Filter>Source Files\3D\Particles</Filter>
     </ClCompile>
     <ClCompile Include="3D\Renderer\Basic3DModelRenderer.cpp">
       <Filter>Source Files\3D\Renderer</Filter>
@@ -295,23 +289,23 @@
     <ClCompile Include="3D\Renderer\Basic3DSkyboxRenderer.cpp">
       <Filter>Source Files\3D\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Events\Event.cpp">
-      <Filter>Source Files\Events</Filter>
+    <ClCompile Include="3D\Transformable\Transformable3D.cpp">
+      <Filter>Source Files\3D\Transformable</Filter>
     </ClCompile>
-    <ClCompile Include="Events\EventConstants.cpp">
-      <Filter>Source Files\Events</Filter>
+    <ClCompile Include="Aela_Engine.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Events\KeyEvent.cpp">
-      <Filter>Source Files\Events</Filter>
+    <ClCompile Include="Resource Management\ResourceGroup.cpp">
+      <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
-    <ClCompile Include="Events\MouseEvent.cpp">
-      <Filter>Source Files\Events</Filter>
+    <ClCompile Include="Menus\AbstractLayoutManager.cpp">
+      <Filter>Source Files\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\TextComponent.cpp">
+      <Filter>Source Files\Menus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Aela_Engine.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Resource Management\Resource.h">
       <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
@@ -429,9 +423,6 @@
     <ClInclude Include="Audio\AudioManager.h">
       <Filter>Source Files\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Audio\Listener.h">
-      <Filter>Source Files\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="Audio\WAVEClipLoader.h">
       <Filter>Source Files\Audio</Filter>
     </ClInclude>
@@ -474,12 +465,6 @@
     <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClInclude>
-    <ClInclude Include="Menus\AbstractLayoutManager.h">
-      <Filter>Source Files\Menus</Filter>
-    </ClInclude>
-    <ClInclude Include="Menus\TextComponent.h">
-      <Filter>Source Files\Menus</Filter>
-    </ClInclude>
     <ClInclude Include="Lua\Mod.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
@@ -489,29 +474,20 @@
     <ClInclude Include="Lua\Exposable.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Skybox\SkyboxLoader.h">
-      <Filter>Source Files\3D\Skybox</Filter>
+    <ClInclude Include="Events\Event.h">
+      <Filter>Source Files\Events</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Particles\Particle.h">
-      <Filter>Source Files\3D\Particles</Filter>
+    <ClInclude Include="Events\EventConstants.h">
+      <Filter>Source Files\Events</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Particles\ParticleEmitter.h">
-      <Filter>Source Files\3D\Particles</Filter>
+    <ClInclude Include="Events\KeyEvent.h">
+      <Filter>Source Files\Events</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Particles\PlanarParticleEmitter.h">
-      <Filter>Source Files\3D\Particles</Filter>
+    <ClInclude Include="Events\Listener.h">
+      <Filter>Source Files\Events</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Particles\PointParticleEmitter.h">
-      <Filter>Source Files\3D\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource Management\ResourceGroup.h">
-      <Filter>Source Files\Resources\General</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Entity\Entity3D.h">
-      <Filter>Source Files\3D\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Transformable\Transformable3D.h">
-      <Filter>Source Files\3D\Transformable</Filter>
+    <ClInclude Include="Events\MouseEvent.h">
+      <Filter>Source Files\Events</Filter>
     </ClInclude>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h">
       <Filter>Source Files\2D\Renderer</Filter>
@@ -528,8 +504,23 @@
     <ClInclude Include="3D\Camera\Camera3D.h">
       <Filter>Source Files\3D\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="3D\Entity\Entity3D.h">
+      <Filter>Source Files\3D\Entity</Filter>
+    </ClInclude>
     <ClInclude Include="3D\Light\Light3D.h">
       <Filter>Source Files\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\Particle.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\ParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\PlanarParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Particles\PointParticleEmitter.h">
+      <Filter>Source Files\3D\Particles</Filter>
     </ClInclude>
     <ClInclude Include="3D\Renderer\Basic3DModelRenderer.h">
       <Filter>Source Files\3D\Renderer</Filter>
@@ -543,20 +534,26 @@
     <ClInclude Include="3D\Renderer\Basic3DSkyboxRenderer.h">
       <Filter>Source Files\3D\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Events\Event.h">
-      <Filter>Source Files\Events</Filter>
+    <ClInclude Include="3D\Transformable\Transformable3D.h">
+      <Filter>Source Files\3D\Transformable</Filter>
     </ClInclude>
-    <ClInclude Include="Events\EventConstants.h">
-      <Filter>Source Files\Events</Filter>
+    <ClInclude Include="Aela_Engine.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Events\KeyEvent.h">
-      <Filter>Source Files\Events</Filter>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Events\Listener.h">
-      <Filter>Source Files\Events</Filter>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Events\MouseEvent.h">
-      <Filter>Source Files\Events</Filter>
+    <ClInclude Include="Resource Management\ResourceGroup.h">
+      <Filter>Source Files\Resources\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\AbstractLayoutManager.h">
+      <Filter>Source Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\TextComponent.h">
+      <Filter>Source Files\Menus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

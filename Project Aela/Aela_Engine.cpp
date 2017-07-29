@@ -226,7 +226,7 @@ int Aela::Engine::runningLoop() {
 		// THIS IS FOR TESTING!
 		// controlManager.transform3DObject(&billboards[0], -5);
 		// controlManager.transform3DObject(renderer.getCamera(), -5);
-		renderer.getCamera()->focusAtPointOnPlane(*billboards[0].getPosition(), glm::vec3(0, 0, 0));
+		// renderer.getCamera()->focusAtPointOnPlane(*billboards[0].getPosition(), glm::vec3(0, 0, 0));
 		// std::cout << billboards[0].getPosition()->x << " " << billboards[0].getPosition()->y << " " << billboards[0].getPosition()->z << "\n";
 		billboards[0].setScaling(2 - (timeManager.getCurrentTime() % 2000) / 3500.0f, 2 + (timeManager.getCurrentTime() % 2000) / 3500.0f, 2);
 
