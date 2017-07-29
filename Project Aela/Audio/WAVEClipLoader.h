@@ -21,9 +21,6 @@ namespace Aela {
 		WAVEClipLoader();
 		virtual ~WAVEClipLoader();
 
-		WAVEClipLoader(WAVEClipLoader const&) = delete;
-		void operator=(WAVEClipLoader const&) = delete;
-
-		virtual Resource* load(std::string src);
+		virtual bool load(std::unordered_map<std::string, Resource*>* resources, std::string src);
 	};
 }

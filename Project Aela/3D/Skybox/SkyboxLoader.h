@@ -18,6 +18,6 @@ namespace Aela {
 			SkyboxLoader(SkyboxLoader const&) = delete;
 			void operator=(SkyboxLoader const&) = delete;
 
-			virtual Resource* load(std::string src);
+			virtual bool load(std::unordered_map<std::string, Resource*>* resources, std::string src);
 	};
 }

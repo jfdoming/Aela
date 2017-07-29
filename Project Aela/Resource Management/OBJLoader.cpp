@@ -29,11 +29,11 @@ OBJLoader::OBJLoader() {
 OBJLoader::~OBJLoader() {
 }
 
-Resource* Aela::OBJLoader::load(std::string src) {
+bool Aela::OBJLoader::load(std::unordered_map<std::string, Resource*>* resources, std::string src) {
 	// try to open the file
 	std::ifstream in;
 	if (!open(in, src)) {
-		return nullptr;
+		return false;
 	}
 
 	std::vector<unsigned int> vertexIndexes, uvIndexes, normalIndexes;
@@ -95,7 +95,7 @@ Resource* Aela::OBJLoader::load(std::string src) {
 				AelaErrorHandling::windowError("Aela OBJ Model Loader", "The formatting of the face ('f') section of the OBJ file\nis not the same that the loader uses.\nSupport for more formats will be added soon.");
 
 				in.close();
-				return nullptr;
+				return false;
 			}
 				
 		} else {
@@ -123,7 +123,9 @@ Resource* Aela::OBJLoader::load(std::string src) {
 		res->UVs.push_back(uv);
 	}
 
-	return res;
+
+	resources->emplace(src, res);
+	return true;
 }
 
 

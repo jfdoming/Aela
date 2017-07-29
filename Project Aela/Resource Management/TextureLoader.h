@@ -22,12 +22,10 @@ namespace Aela {
 
 			virtual void expose(LuaManager& mgr);
 
-			TextureLoader(TextureLoader const&) = delete;
-			void operator=(TextureLoader const&) = delete;
-
-			virtual Resource* load(std::string src);
+			virtual bool load(std::unordered_map<std::string, Resource*>* resources, std::string src);
 
 		protected:
 			void loadTexture(std::ifstream& in, GLuint* texID, GLenum target);
+			void loadTexture(std::ifstream& in, GLuint* texID, GLenum target, unsigned int* width, unsigned int* height);
 	};
 }

@@ -1,3 +1,9 @@
+#ifndef GLEW_STATIC
+#define GLEW_STATIC
+#endif
+
+#include <GL/glew.h>
+
 #include "SkyboxLoader.h"
 #include "Skybox.h"
 
@@ -30,7 +36,7 @@ void SkyboxLoader::expose(LuaManager& mgr) {
 	// mgr.exposeObject(this, "textureLoader");
 }
 
-Resource* Aela::SkyboxLoader::load(std::string src) {
+bool SkyboxLoader::load(std::unordered_map<std::string, Resource*>* resources, std::string src) {
 	Skybox* res = new Skybox();
 
 	GLuint* cubeMapTexture = res->getTexture();
@@ -40,7 +46,7 @@ Resource* Aela::SkyboxLoader::load(std::string src) {
 	for (unsigned int i = 0; i < 6; i++) {
 		std::ifstream in;
 		if (!open(in, src)) {
-			return nullptr;
+			return false;
 		}
 
 		loadTexture(in, cubeMapTexture, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
@@ -54,5 +60,6 @@ Resource* Aela::SkyboxLoader::load(std::string src) {
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-	return res;
+	(*resources)[src] = res;
+	return true;
 }

@@ -8,11 +8,7 @@ namespace Aela {
 		OBJLoader();
 		virtual ~OBJLoader();
 
-
-		OBJLoader(OBJLoader const&) = delete;
-		void operator=(OBJLoader const&) = delete;
-
-		virtual Resource* load(std::string src);
+		virtual bool load(std::unordered_map<std::string, Resource*>* resources, std::string src);
 	};
 }
 

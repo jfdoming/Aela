@@ -49,6 +49,7 @@ namespace Aela {
 }
 
 #define PI 3.14159265358979323846
+#define PI_F 3.14159265358979323846F
 
 using namespace Aela;
 
@@ -77,7 +78,7 @@ int Aela::Engine::runningLoop() {
 	models[2].setPosition(0, 20, 15);
 	models[5].setScaling(1.5, 1.5, 1.5);
 	models[5].setPosition(-10, 0, -5);
-	models[5].setRotation(0, PI / 2, 0);
+	models[5].setRotation(0, PI_F / 2, 0);
 	models[6].setPosition(10, 20, 10);
 
 	// This animates models just to make sure that the animator actually works.
@@ -155,7 +156,8 @@ int Aela::Engine::runningLoop() {
 	resourceManager.addToGroup("res/textures/ekkon.dds", false);
 	resourceManager.addToGroup("res/textures/gradient.dds", false);
 
-	resourceManager.bindLoader(&Aela::WAVEClipLoader::getInstance());
+	WAVEClipLoader waveClipLoader;
+	resourceManager.bindLoader(&waveClipLoader);
 	resourceManager.addToGroup("res/audio/clips/test.wav", false);
 
 	// load test textures

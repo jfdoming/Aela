@@ -4,21 +4,6 @@
 
 using namespace Aela;
 
-bool readMods(std::vector<std::string>& mods) {
-	std::ifstream modListFile("mods/mods.list");
-	std::string line;
-
-	if (!modListFile) {
-		return false;
-	}
-
-	while (std::getline(modListFile, line)) {
-		mods.emplace_back(line);
-	}
-
-	return true;
-}
-
 ResourceManager::ResourceManager(int resourceCount) {
 	resources.reserve(resourceCount);
 }
@@ -47,8 +32,8 @@ void ResourceManager::bindLoader(ResourceLoader* loader) {
 void ResourceManager::bindGroup(std::string group) {
 	// ensure a group exists to add to
 	auto iter = groups.find(group);
-	if (groups.find(group) == groups.end()) {
-		groups.emplace(group, std::vector<ResourceQuery>());
+	if (iter == groups.end()) {
+		groups.emplace(group, ResourceGroup(group));
 		this->boundGroup = &(groups.find(group)->second);
 	} else {
 		this->boundGroup = &(iter->second);
@@ -63,11 +48,12 @@ ResourceManager::Status ResourceManager::loadGroup(std::string name) {
 	}
 
 	// get the group to load
-	auto group = iter->second;
+	auto group = &(iter->second);
 
 	// load all resources in the group
 	Status returnStatus = Status::OK;
-	for (ResourceQuery query : group) {
+
+	for (ResourceQuery query : *(group->getQueries())) {
 		// make sure we are using the correct resource loader
 		ResourceLoader* resourceLoader = query.getLoader();
 		if (boundLoader != resourceLoader) {
@@ -96,10 +82,10 @@ ResourceManager::Status ResourceManager::unloadGroup(std::string name) {
 	}
 
 	// get the group to unload
-	auto group = iter->second;
+	auto group = &(iter->second);
 
 	// unload all resources in the group
-	for (ResourceQuery query : group) {
+	for (ResourceQuery query : *(group->getQueries())) {
 		// unload the resource
 		unload(query.getSrc());
 	}
@@ -112,7 +98,7 @@ void ResourceManager::addToGroup(std::string src, bool crucial) {
 }
 
 void ResourceManager::addToGroup(ResourceQuery& query) {
-	boundGroup->push_back(query);
+	boundGroup->getQueries()->push_back(query);
 }
 
 ResourceManager::Status ResourceManager::load(std::string src, bool crucial, ResourceLoader& loader) {
@@ -124,9 +110,9 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 	bool crucial = query.isCrucial();
 	std::string src = query.getSrc();
 
-	Resource* res = boundLoader->load(src);
-		
-	if (res == nullptr) {
+	bool success = boundLoader->load(&resources, src);
+	
+	if (!success) {
 		// cannot load the resource
 		if (crucial) {
 			crucialInvalidResourceKey = src;
@@ -137,7 +123,6 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 		}
 	}
 
-	resources.emplace(src, res);
 	return Status::OK;
 }
 
