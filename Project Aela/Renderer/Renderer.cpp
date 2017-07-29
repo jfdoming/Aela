@@ -157,6 +157,10 @@ void Renderer::renderSkybox(Skybox* skybox) {
 	}
 }
 
+void Aela::Renderer::renderParticles(ParticleEmitter* particleEmitter) {
+	basic3DRenderer.renderParticles(particleEmitter, multisampling3D > 0);
+}
+
 // This renders a 2D texture using the 2D renderer.
 void Renderer::render2DTexture(Texture* texture) {
 	basic2DRenderer.renderTextureToSimple2DFramebuffer(texture, bound2DFramebuffer, window->getWindowDimensions());

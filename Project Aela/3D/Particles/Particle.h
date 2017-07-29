@@ -7,13 +7,20 @@
 
 #pragma once
 
-class Particle {
+#include "../Billboards/Billboards.h"
+
+class Particle : public Billboard {
 	public:
 		Particle() {
 
 		}
 
+		float getSpeed();
+		void setSpeed(float baseSpeed);
+		unsigned int getLifetime();
+		void setLifetime(unsigned int baseLifetime);
+
 	private:
-
-
+		float baseSpeed = 0.001f;
+		unsigned int baseLifetime = 1000;
 };

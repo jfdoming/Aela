@@ -12,8 +12,6 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <iostream>
 
-#define PI 3.14159265358979323846
-
 // This clears all shadow maps that would be rendered.
 void Basic3DShadowRenderer::clearShadowMaps(std::vector<Light3D>* lights) {
 	unsigned int numberOfLights = lights->size();

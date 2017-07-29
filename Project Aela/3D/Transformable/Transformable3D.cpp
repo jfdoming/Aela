@@ -2,9 +2,6 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
-
-#define PI 3.14159265358979323846
-
 void Transformable3D::setPosition(float setX, float setY, float setZ) {
 	position = glm::vec3(setX, setY, setZ);
 }
@@ -131,7 +128,7 @@ void Transformable3D::translate(glm::vec3 translation) {
 
 void Transformable3D::rotate(glm::vec3 rotation) {
 	this->rotation += rotation;
-	forceValuesWithinRange(&(this->rotation), 0, (float) PI * 2);
+	forceValuesWithinRange(&(this->rotation), 0, (float) glm::pi<float>() * 2);
 }
 
 void Transformable3D::translate(float x, float y, float z) {

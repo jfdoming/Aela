@@ -9,8 +9,9 @@
 
 #include "ParticleEmitter.h"
 #include "../../Utilities/Rect/Rect.h"
+#include "../Camera/Camera3D.h"
 
-class PlanarParticleEmitter : public ParticleEmitter, public Transformable3D {
+class PlanarParticleEmitter : public ParticleEmitter {
 	public:
 		PlanarParticleEmitter() {
 
@@ -21,9 +22,17 @@ class PlanarParticleEmitter : public ParticleEmitter, public Transformable3D {
 		void setupParticles(std::vector<GLuint>* textures, float particleWidth, float particleHeight, unsigned int amount);
 		void update();
 
+		// These are getters and setters.
+		Camera3D* getCamera();
+		void setCamera(Camera3D* camera);
+
 	private:
 		// This stores the dimensions of the plane.
 		Rect<GLfloat> dimensions;
 
-		void setupParticlePositioning(unsigned int whichParticle);
+		// This class requires a pointer to the camera so that it can properly sort particles.
+		Camera3D* camera;
+
+		void setupParticlePositioning(unsigned int whichParticle, unsigned int numberOfParticles);
+		void sortParticles();
 };

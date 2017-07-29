@@ -1,3 +1,10 @@
+/*
+* Class: Resource
+* Author: Robert Ciborowski and Julian Dominguez-Schatz
+* Date: 04/07/2017
+* Description: Represents a model resource used in the application.
+*/
+
 #include <vector>
 #include <stdio.h>
 #include <string>
@@ -11,16 +18,6 @@
 #include "OBJResource.h"
 #include "../Error Handler/ErrorHandler.h"
 
-// Very, VERY simple OBJ loader.
-// Here is a short list of features a real function would provide : 
-// - Binary files. Reading a model should be just a few memcpy's away, not parsing a file at runtime. In short : OBJ is not very great.
-// - Animations & bones (includes bones weights)
-// - Multiple UVs
-// - All attributes should be optional, not "forced"
-// - More stable. Change a line in the OBJ file and it crashes.
-// - More secure. Change another line and you can inject code.
-// - Loading from memory, stream, etc
-
 using namespace Aela;
 
 Resource* Aela::OBJLoader::load(std::ifstream& in) {
@@ -28,6 +25,7 @@ Resource* Aela::OBJLoader::load(std::ifstream& in) {
 	std::vector<glm::vec3> temp_vertices;
 	std::vector<glm::vec2> temp_uvs;
 	std::vector<glm::vec3> temp_normals;
+	std::vector<std::vector<unsigned short>> indices;
 
 	// This actually reads the file.
 	std::string line;
@@ -107,9 +105,10 @@ Resource* Aela::OBJLoader::load(std::ifstream& in) {
 		glm::vec2 uv = temp_uvs[uvIndex - 1];
 		
 		// This will put the attributes in the buffers.
-		res->vertices.push_back(vertex);
-		res->normals.push_back(normal);
-		res->UVs.push_back(uv);
+		// This is commetned out since this stuff should be moved to ModelSegments (AKA Objects).
+		// res->vertices.push_back(vertex);
+		// res->normals.push_back(normal);
+		// res->UVs.push_back(uv);
 	}
 
 	return res;

@@ -14,7 +14,7 @@
 using namespace Aela;
 
 Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
-	// using char[] for speed
+	// using char[] for baseSpeed
 	char header[CHUNK_HEADER_SIZE];
 
 	// read the file header
@@ -34,7 +34,7 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 		return NULL;
 	}
 
-	// using char[] for speed
+	// using char[] for baseSpeed
 	char subchunk1Header[SUBCHUNK1_HEADER_SIZE];
 
 	// read in the subchunk 1 header
@@ -54,7 +54,7 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 		return NULL;
 	}
 
-	// using char[] for speed
+	// using char[] for baseSpeed
 	char* subchunk1 = new char[subchunk1Size];
 
 	// read in subchunk 1
@@ -77,7 +77,7 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 	// free memory used to store subchunk 1
 	delete[] subchunk1;
 
-	// using char[] for speed
+	// using char[] for baseSpeed
 	char* subchunk2Header = new char[SUBCHUNK2_HEADER_SIZE];
 
 	// read in the subchunk 2 header

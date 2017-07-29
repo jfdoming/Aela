@@ -16,7 +16,7 @@ void TextureLoader::expose(LuaManager& mgr) {
 }
 
 Resource* Aela::TextureLoader::load(std::ifstream& in) {
-	// using char[] for speed
+	// using char[] for baseSpeed
 	char textureHeader[AELA_RESOURCE_TEXTURE_HEADER_SIZE];
 
 	// read the file header

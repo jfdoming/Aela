@@ -19,7 +19,7 @@
 
 #include "../../Error Handler/ErrorHandler.h"
 #include "../../Old Garbage/shader.hpp"
-#include "../Billboards/Billboards.h"
+#include "../Particles/ParticleEmitter.h"
 #include "../../Window/Window.h"
 #include "../Camera/Camera3D.h"
 #include "Basic3DModelRenderer.h"
@@ -48,6 +48,7 @@ namespace Aela {
 			void clearShadowMaps();
 			void sendLightDataToShader();
 			void renderSkybox(Skybox* skybox, bool multisampling);
+			void renderParticles(ParticleEmitter* particleEmitter, bool multisampling);
 
 			// These are some functions related to setup.
 			void setup(unsigned int multisampling);

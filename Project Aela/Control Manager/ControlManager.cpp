@@ -51,7 +51,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		// std::cout << horizontalAngle << " " << verticalAngle << " are the control manager's values.\n";
 
 		// This computes the new horizontal angle.
-		// horizontalAngle += mouseSpeed * float(width / 2 - xpos);
+		/* horizontalAngle += mouseSpeed * float(width / 2 - xpos);
 
 		// This adjusts the horizontal angle so that it stays between 0 and PI * 2.
 		if (horizontalAngle >= glm::pi<float>() * 2) {
@@ -63,6 +63,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 
 		// This computes the new vertical angle.
 		float verticalModifier = 0;// mouseSpeed * float(height / 2 - ypos);
+		
 
 		// This checks to see if the user is trying to make the camera go upside down by moving the camera up
 		// too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
@@ -72,7 +73,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		} else if (!allowUpsideDownCamera && verticalModifier > 0) {
 			verticalAngle = glm::pi<float>() / 2;
 		}
-
+		
 		// This checks to see if the user is trying to make the camera go upside down by moving the camera down
 		// too far (vertical angle of -PI/2 in radians). This also allows the camera to go upside down as long as
 		// allowUpsideDownCamera is true.
@@ -81,9 +82,10 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		} else if (!allowUpsideDownCamera && verticalModifier < 0) {
 			verticalAngle = glm::pi<float>() / -2;
 		}
-
+		
 		camera->setProperty(Transformable3DProperty::X_ROTATION, horizontalAngle);
 		camera->setProperty(Transformable3DProperty::Y_ROTATION, verticalAngle);
+		*/
 
 		// This converts the coordinates from rotational to cartesian-planar.
 		glm::vec3 direction(
@@ -106,7 +108,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		if (false) {// keystate[225]) {
 			currentSpeed = superSpeed;
 		} else {
-			currentSpeed = speed;
+			currentSpeed = baseSpeed;
 		}
 		
 		// This occurs when 'w' is pressed.
@@ -217,7 +219,7 @@ void ControlManager::setProperty(ControlManagerProperty property, float value) {
 			mouseSpeed = value;
 			break;
 		case ControlManagerProperty::CAMERA_TRANSLATION_SPEED:
-			speed = value;
+			baseSpeed = value;
 			break;
 		case ControlManagerProperty::CAMERA_TRANSLATION_SUPER_SPEED:
 			superSpeed = value;

@@ -107,6 +107,9 @@
     <Filter Include="Source Files\3D\Particles">
       <UniqueIdentifier>{c0002c9e-878d-45eb-bf80-cf9c39f9d3fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Resources\Materials">
+      <UniqueIdentifier>{a891ab63-d204-492b-8321-f07e3b024bb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Resource Management\Resource.cpp">
@@ -294,6 +297,15 @@
     </ClCompile>
     <ClCompile Include="3D\Particles\PointParticleEmitter.cpp">
       <Filter>Source Files\3D\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\Object.cpp">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\Material.cpp">
+      <Filter>Source Files\Resources\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\MaterialLoader.cpp">
+      <Filter>Source Files\Resources\Materials</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -533,6 +545,15 @@
     </ClInclude>
     <ClInclude Include="3D\Particles\PointParticleEmitter.h">
       <Filter>Source Files\3D\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\Object.h">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\Material.h">
+      <Filter>Source Files\Resources\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\MaterialLoader.h">
+      <Filter>Source Files\Resources\Materials</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

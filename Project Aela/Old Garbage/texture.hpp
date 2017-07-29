@@ -12,10 +12,8 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
 
-// Load a .BMP file using our custom loader
 // GLuint loadBMP_custom(const char* imagepath);
 
-// Load a .DDS file using GLFW's own loader
 GLuint loadDDSToGLuint(std::string filePath);
 Texture loadDDSToTexture(std::string filePath);
 void loadDDSToCubemapSide(GLuint* cubeMap, int side, std::string filePath);

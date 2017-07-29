@@ -25,7 +25,7 @@ namespace Aela {
 		public:
 		ControlManager() {
 			windowFocus = true;
-			speed = 0.003f;
+			baseSpeed = 0.003f;
 			superSpeed = 0.012f;
 			currentSpeed = 0.0f;
 			mouseSpeed = 0.005f;
@@ -63,7 +63,7 @@ namespace Aela {
 		bool windowFocus;
 
 		// Speed: 0.001f is 1 unit per tick.
-		float speed, superSpeed, currentSpeed, mouseSpeed;
+		float baseSpeed, superSpeed, currentSpeed, mouseSpeed;
 
 		// Keeps track of whether or not the player should be going fast
 		bool shouldGoFast;

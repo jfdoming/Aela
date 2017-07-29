@@ -8,12 +8,12 @@
 
 #pragma once
 
-#include "../Billboards/Billboards.h"
+#include "Particle.h"
 #include "../../Time Manager/TimeManager.h"
 
 using namespace Aela;
 
-class ParticleEmitter {
+class ParticleEmitter : public Transformable3D {
 	public:
 		ParticleEmitter() {
 			
@@ -30,15 +30,37 @@ class ParticleEmitter {
 		virtual void update();
 
 		// These are getters and setters.
-		std::vector<Billboard>* getParticles();
+		std::vector<Particle>* getParticles();
 		void setTimeManager(TimeManager* timeManager);
 		TimeManager* getTimeManager();
+		float getBaseSpeed();
+		void setBaseSpeed(float baseSpeed);
+		unsigned int getBaseLifetime();
+		void setBaseLifetime(unsigned int baseLifetime);
+		float getSpeedOffset();
+		void setSpeedOffset(float speedOffset);
+		unsigned int getLifetimeOffset();
+		void setLifetimeOffset(unsigned int lifetimeOffset);
+		float getPathOffset();
+		void setPathOffset(float pathOffset);
 
 	protected:
 		// These are the properties of the class that use Aela classes.
-		std::vector<Billboard> particles;
+		std::vector<Particle> particles;
 		TimeManager* timeManager;
 
+		// This defines properties of the particles. Speed = distance / millisecond, lifetime = distance.
+		float baseSpeed = 0.001f;
+		unsigned int baseLifetime = 1000;
+
+		// These are offsets that allow some particles to be slightly different in their behaviour compared to other particles.
+		float speedOffset = 0;
+		unsigned int lifetimeOffset = 0;
+		float pathOffset = 0;
+
 		// This is meant to reset a particle's position once it has completed its life.
-		virtual void setupParticlePositioning(unsigned int whichParticle);
+		virtual void setupParticlePositioning(unsigned int whichParticle, unsigned int numberOfParticles);
+
+		// This function sorts particles so that they may be rendered properly.
+		virtual void sortParticles();
 };

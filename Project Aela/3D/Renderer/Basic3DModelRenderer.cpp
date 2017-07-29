@@ -12,8 +12,6 @@
 #include "Basic3DModelRenderer.h"
 #include "../../Control Manager/ControlManager.h"
 
-#define PI 3.14159265358979323846
-
 // This function is called in order to update camera-related matrices.
 void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
 	viewMatrix = setViewMatrix;
@@ -254,7 +252,8 @@ void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture
 }
 
 // This function renders a texture in the 3D space.
-void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID, GLuint programID, GLuint frameBuffer, GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* rotation, glm::vec3* scale) {
+void Basic3DModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint texture, GLuint billboardTextureID, GLuint programID, GLuint frameBuffer,
+	GLuint billboardMVPMatrixID, glm::vec3* position, glm::vec3* rotation, glm::vec3* scale) {
 	glUseProgram(programID);
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

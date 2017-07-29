@@ -234,9 +234,9 @@ void Basic3DRenderer::renderBillboard(Billboard* billboard, bool multisampling) 
 		}
 	} else {
 		if (multisampling) {
-			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getRotation(), camera->getPosition(), true);
+			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getScaling(), camera->getPosition(), true);
 		} else {
-			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getRotation(), camera->getPosition(), true);
+			modelRenderer.renderTextureIn3DSpace(true, billboard->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getScaling(), camera->getPosition(), true);
 		}
 	}
 }
@@ -258,5 +258,29 @@ void Basic3DRenderer::renderSkybox(Skybox* skybox, bool multisampling) {
 		skyboxRenderer.renderSkybox(skybox, skyboxProgramID, multisampledColourFrameBuffer, skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID);
 	} else {
 		skyboxRenderer.renderSkybox(skybox, skyboxProgramID, colourFrameBuffer, skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID);
+	}
+}
+
+void Aela::Basic3DRenderer::renderParticles(ParticleEmitter* particleEmitter, bool multisampling) {
+	glViewport(0, 0, windowWidth, windowHeight);
+	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
+	for (Particle particle : *particleEmitter->getParticles()) {
+		glm::vec3 position = *particle.getPosition() + *particleEmitter->getPosition();
+		glm::vec3 rotation = *particle.getRotation() + *particleEmitter->getRotation();
+		glm::vec3 scaling = *particle.getScaling() * *particleEmitter->getScaling();
+
+		if (particle.usingSpecifiedRotation()) {
+			if (multisampling) {
+				modelRenderer.renderTextureIn3DSpace(true, particle.getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, &position, &rotation, &scaling);
+			} else {
+				modelRenderer.renderTextureIn3DSpace(true, particle.getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, &position, &rotation, &scaling);
+			}
+		} else {
+			if (multisampling) {
+				modelRenderer.renderTextureIn3DSpace(true, particle.getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, &position, &scaling, camera->getPosition(), true);
+			} else {
+				modelRenderer.renderTextureIn3DSpace(true, particle.getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, &position, &scaling, camera->getPosition(), true);
+			}
+		}
 	}
 }

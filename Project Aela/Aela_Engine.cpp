@@ -48,8 +48,6 @@ namespace Aela {
 	Animator3D animator;
 }
 
-#define PI 3.14159265358979323846
-
 using namespace Aela;
 
 int Aela::Engine::runningLoop() {
@@ -78,7 +76,7 @@ int Aela::Engine::runningLoop() {
 	models[2].setPosition(0, 20, 15);
 	models[5].setScaling(1.5, 1.5, 1.5);
 	models[5].setPosition(-10, 0, 5);
-	models[5].setRotation(0, (float) PI / 2, 0);
+	models[5].setRotation(0, glm::pi<float>() / 2, 0);
 	models[6].setPosition(10, 20, 10);
 
 	// This animates models just to make sure that the animator actually works.
@@ -91,7 +89,7 @@ int Aela::Engine::runningLoop() {
 			glm::vec3 translation(j * -5, 5 + (i % 2), (i % 2) * 10);
 			// glm::vec3 translation(j * 5 - 7, 0, 0);
 			keyFrame.setTranslation(&translation);
-			glm::vec3 rotation(j % 2 + 3, PI * (i % 2), 0.3 * (j % 2 + 1));
+			glm::vec3 rotation(j % 2 + 3, glm::pi<float>() * (i % 2), 0.3 * (j % 2 + 1));
 			// glm::vec3 rotation(0, 0, 0);
 			keyFrame.setRotation(&rotation);
 			 glm::vec3 scaling(1 + 3 * ((1 + i) % 2), 1 + 3 * (i % 2), 1 + 3 * (i % 2));
@@ -147,6 +145,30 @@ int Aela::Engine::runningLoop() {
 	// This sets up particles.
 	PlanarParticleEmitter particleEmitter;
 	Rect<GLfloat> emitterDimensions(0, 0, 10, 10);
+	particleEmitter.setupDimensions(&emitterDimensions);
+	particleEmitter.setCamera(renderer.getCamera());
+	particleEmitter.setBaseLifetime(7);
+	particleEmitter.setBaseSpeed(0.001f);
+	particleEmitter.setSpeedOffset(0.0f);
+	particleEmitter.setLifetimeOffset(0);
+	particleEmitter.setPathOffset(2);
+	particleEmitter.setPosition(2, 0, 5);
+	particleEmitter.setTimeManager(&timeManager);
+
+	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
+	resourceManager.bindGroup("particles");
+	resourceManager.addToGroup("res/textures/particle_1.dds", false);
+	resourceManager.addToGroup("res/textures/particle_2.dds", false);
+
+	if (resourceManager.loadGroup("particles") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"particles\"!" << std::endl;
+	}
+
+	std::vector<GLuint> particleTextures;
+	particleTextures.push_back(*resourceManager.obtain<Texture>("res/textures/particle_2.dds")->getTexture());
+	particleTextures.push_back(*resourceManager.obtain<Texture>("res/textures/particle_2.dds")->getTexture());
+	
+	particleEmitter.setupParticles(&particleTextures, 1, 1, 15);
 
 	// set up the loader to load textures into our group
 	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
@@ -199,7 +221,7 @@ int Aela::Engine::runningLoop() {
 	float fpsSmoothing = 0.9f;
 
 	// This is an example of how to get information about the renderer.
-	std::string info = renderer.getInformation(RendererInformation::VENDOR);
+	/*std::string info = renderer.getInformation(RendererInformation::VENDOR);
 	if (info.find("AMD") != std::string::npos || info.find("ATI") != std::string::npos) {
 		AelaErrorHandling::windowError("About your GPU...", "Ah, an AMD card? You must be a classy person that enjoys a fine wine.");
 	} else if (info.find("NVIDIA") != std::string::npos || info.find("GTX") != std::string::npos
@@ -210,13 +232,14 @@ int Aela::Engine::runningLoop() {
 		AelaErrorHandling::windowError("About your GPU...", "It's simply a potato.");
 	}
 	std::cout << info << " " << renderer.getInformation(RendererInformation::VENDOR) << " is the vendor of the GPU, "
-		<< renderer.getInformation(RendererInformation::OPENGL_VERSION) << " is the version of OpenGL.\n";
+		<< renderer.getInformation(RendererInformation::OPENGL_VERSION) << " is the version of OpenGL.\n";*/
 
 	// This is the program's running loop.
 	do {
 		// This updates events. It must be done first.
 		timeManager.updateTime();
 		animator.update();
+		particleEmitter.update();
 
 		// THIS IS FOR TESTING!
 		// controlManager.transform3DObject(&billboards[0], -5);
@@ -259,6 +282,7 @@ int Aela::Engine::runningLoop() {
 			renderer.renderModel(&(models[i]));
 		}
 		renderer.renderSkybox(&skybox);
+		renderer.renderParticles(&particleEmitter);
 		for (unsigned int i = 0; i < billboards.size(); i++) {
 			renderer.renderBillboard(&(billboards[i]));
 		}

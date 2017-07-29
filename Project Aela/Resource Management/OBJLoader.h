@@ -1,22 +1,29 @@
+/*
+* Class: Resource
+* Author: Robert Ciborowski and Julian Dominguez-Schatz
+* Date: 04/07/2017
+* Description: Represents a model resource used in the application.
+*/
+
 #pragma once
 
 #include "ResourceLoader.h"
 
 namespace Aela {
 	class OBJLoader : public ResourceLoader {
-	public:
-		static OBJLoader& getInstance() {
-			// This is guaranteed to be destroyed, and instantiated on first use.
-			static OBJLoader instance;
-			return instance;
-		}
+		public:
+			static OBJLoader& getInstance() {
+				// This is guaranteed to be destroyed, and instantiated on first use.
+				static OBJLoader instance;
+				return instance;
+			}
 
-		OBJLoader(OBJLoader const&) = delete;
-		void operator=(OBJLoader const&) = delete;
+			OBJLoader(OBJLoader const&) = delete;
+			void operator=(OBJLoader const&) = delete;
 
-		virtual Resource* load(std::ifstream& in);
-	private:
-		OBJLoader() {}
+			virtual Resource* load(std::ifstream& in);
+		private:
+			OBJLoader() {}
 	};
 }
 

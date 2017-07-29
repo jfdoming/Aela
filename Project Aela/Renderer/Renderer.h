@@ -20,7 +20,8 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-#include "../3D/Billboards/Billboards.h"
+// Note: The different types of ParticleEmitters already include "Billboards.h".
+#include "../3D/Particles/PlanarParticleEmitter.h"
 #include "../Window/Window.h"
 #include "../3D/Camera/Camera3D.h"
 #include "../Control Manager/ControlManager.h"
@@ -28,8 +29,6 @@
 #include "../2D/Renderer/Basic2DRenderer.h"
 #include "../2D/Text/TextManager.h"
 #include "../3D/Light/Light3D.h"
-
-// These are some enums used by the Renderer.
 
 namespace Aela {
 	// This enum is used to obtain information from the renderer.
@@ -89,6 +88,7 @@ namespace Aela {
 			void renderModel(Entity3D* model);
 			void renderBillboard(Billboard* billboard);
 			void renderSkybox(Skybox* skybox);
+			void renderParticles(ParticleEmitter* particleEmitter);
 			void generateShadowMap(Light3D* light);
 			void setupBoundLightsForCurrentFrame();
 
