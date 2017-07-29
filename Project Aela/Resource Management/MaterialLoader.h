@@ -12,18 +12,12 @@
 namespace Aela {
 	class MaterialLoader : public ResourceLoader {
 		public:
-			static MaterialLoader& getInstance() {
-				// This is guaranteed to be destroyed, and instantiated on first use.
-				static MaterialLoader instance;
-				return instance;
-			}
+			MaterialLoader();
+			virtual ~MaterialLoader();
 
-			MaterialLoader(MaterialLoader const&) = delete;
-			void operator=(MaterialLoader const&) = delete;
-
-			virtual Resource* load(std::ifstream& in);
+			virtual void expose(LuaManager& mgr);
+			virtual bool load(std::unordered_map<std::string, Resource*>* resources, std::string src);
 		private:
-			MaterialLoader() {}
 
 			GLuint loadDDSToGLuint(std::string filePath);
 	};

@@ -13,8 +13,8 @@ class LuaManager {
 		~LuaManager();
 
 		template <typename T>
-		void exposeObject(T obj, std::string name) {
-			luabridge::push(L, &obj);
+		void exposeObject(T* obj, std::string name) {
+			luabridge::push(L, obj);
 			lua_setglobal(L, name.c_str());
 		}
 

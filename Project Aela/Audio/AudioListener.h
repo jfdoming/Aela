@@ -10,10 +10,10 @@
 #include <alc.h>
 #include <glm/glm.hpp>
 
-class Listener {
+class AudioListener {
 	public:
-		Listener();
-		~Listener();
+		AudioListener();
+		~AudioListener();
 
 		bool setPosition(ALfloat x, ALfloat y, ALfloat z);
 		bool setVelocity(ALfloat x, ALfloat y, ALfloat z);

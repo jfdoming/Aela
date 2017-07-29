@@ -387,13 +387,13 @@ GLuint loadBMPToGLuint(std::string path) {
 	return modelTextureID;
 }
 
-void loadSkybox(Skybox* skybox, std::string paths[6], int width, int height) {
-	GLuint cubeMapTexture;
-	glGenTextures(1, &cubeMapTexture);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture);
+void loadSkybox(Aela::Skybox* skybox, std::string paths[6], int width, int height) {
+	GLuint* cubeMapTexture = skybox->getTexture();
+	glGenTextures(1, cubeMapTexture);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, *cubeMapTexture);
 
 	for (unsigned int i = 0; i < 6; i++) {
-		loadDDSToCubemapSide(&cubeMapTexture, i, paths[i]);
+		loadDDSToCubemapSide(cubeMapTexture, i, paths[i]);
 	}
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -401,5 +401,4 @@ void loadSkybox(Skybox* skybox, std::string paths[6], int width, int height) {
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	skybox->setTexture(&cubeMapTexture);
 }

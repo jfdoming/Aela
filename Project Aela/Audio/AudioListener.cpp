@@ -1,12 +1,12 @@
-#include "Listener.h"
+#include "AudioListener.h"
 
-Listener::Listener() {
+AudioListener::AudioListener() {
 }
 
-Listener::~Listener() {
+AudioListener::~AudioListener() {
 }
 
-bool Listener::setPosition(ALfloat x, ALfloat y, ALfloat z) {
+bool AudioListener::setPosition(ALfloat x, ALfloat y, ALfloat z) {
 	orientation[0] = x;
 	orientation[1] = y;
 	orientation[2] = z;
@@ -17,14 +17,14 @@ bool Listener::setPosition(ALfloat x, ALfloat y, ALfloat z) {
 	}
 }
 
-bool Listener::setVelocity(ALfloat x, ALfloat y, ALfloat z) {
+bool AudioListener::setVelocity(ALfloat x, ALfloat y, ALfloat z) {
 	alListener3f(AL_VELOCITY, x, y, z);
 	if (alGetError() != AL_NO_ERROR) {
 		return false;
 	}
 }
 
-bool Listener::setOrientation(ALfloat x, ALfloat y, ALfloat z) {
+bool AudioListener::setOrientation(ALfloat x, ALfloat y, ALfloat z) {
 	orientation[3] = x;
 	orientation[4] = y;
 	orientation[5] = z;

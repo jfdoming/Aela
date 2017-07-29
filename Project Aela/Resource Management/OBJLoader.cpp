@@ -20,7 +20,19 @@
 
 using namespace Aela;
 
-Resource* Aela::OBJLoader::load(std::ifstream& in) {
+OBJLoader::OBJLoader() {
+}
+
+OBJLoader::~OBJLoader() {
+}
+
+bool Aela::OBJLoader::load(std::unordered_map<std::string, Resource*>* resources, std::string src) {
+	// try to open the file
+	std::ifstream in;
+	if (!open(in, src)) {
+		return false;
+	}
+
 	std::vector<unsigned int> vertexIndexes, uvIndexes, normalIndexes;
 	std::vector<glm::vec3> temp_vertices;
 	std::vector<glm::vec2> temp_uvs;
@@ -30,67 +42,66 @@ Resource* Aela::OBJLoader::load(std::ifstream& in) {
 	// This actually reads the file.
 	std::string line;
 
-	if (in.is_open()) {
-		while (std::getline(in, line)) {
-			// This reads the first word of the line.
-			if (line.find("v ") != std::string::npos) {
-				glm::vec3 vertex;
-				line.erase(0, 2);
-				sscanf_s(line.c_str(), "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-				temp_vertices.push_back(vertex);
-			} else if (line.find("vt ") != std::string::npos) {
-				glm::vec2 uv;
-				line.erase(0, 3);
-				sscanf_s(line.c_str(), "%f %f\n", &uv.x, &uv.y);
-				// This wil invert the V coordinate since this uses a DDS texture, which are inverted. If you use BMPS then don't do this!
-				uv.y = -uv.y;
-				temp_uvs.push_back(uv);
-			} else if (line.find("vn ") != std::string::npos) {
-				line.erase(0, 3);
-				glm::vec3 normal;
-				sscanf_s(line.c_str(), "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-				temp_normals.push_back(normal);
-			} else if (line.find("f ") != std::string::npos) {
-				line.erase(0, 2);
-				std::string vertex1, vertex2, vertex3;
-				unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-				int numberOfSlashes = 0;
-				for (unsigned int i = 0; i < line.length(); i++) {
-					if (line.at(i) == '/') {
-						numberOfSlashes++;
-					}
+	while (std::getline(in, line)) {
+		// This reads the first word of the line.
+		if (line.find("v ") != std::string::npos) {
+			glm::vec3 vertex;
+			line.erase(0, 2);
+			sscanf_s(line.c_str(), "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+			temp_vertices.push_back(vertex);
+		} else if (line.find("vt ") != std::string::npos) {
+			glm::vec2 uv;
+			line.erase(0, 3);
+			sscanf_s(line.c_str(), "%f %f\n", &uv.x, &uv.y);
+			// This wil invert the V coordinate since this uses a DDS texture, which are inverted. If you use BMPS then don't do this!
+			uv.y = -uv.y;
+			temp_uvs.push_back(uv);
+		} else if (line.find("vn ") != std::string::npos) {
+			line.erase(0, 3);
+			glm::vec3 normal;
+			sscanf_s(line.c_str(), "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+			temp_normals.push_back(normal);
+		} else if (line.find("f ") != std::string::npos) {
+			line.erase(0, 2);
+			std::string vertex1, vertex2, vertex3;
+			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+			int numberOfSlashes = 0;
+			for (unsigned int i = 0; i < line.length(); i++) {
+				if (line.at(i) == '/') {
+					numberOfSlashes++;
 				}
-				if (numberOfSlashes == 6) {
-					int combiner = sscanf_s(line.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
-					if (combiner == 9) {
-						vertexIndexes.push_back(vertexIndex[0]);
-						vertexIndexes.push_back(vertexIndex[1]);
-						vertexIndexes.push_back(vertexIndex[2]);
-						uvIndexes.push_back(uvIndex[0]);
-						uvIndexes.push_back(uvIndex[1]);
-						uvIndexes.push_back(uvIndex[2]);
-						normalIndexes.push_back(normalIndex[0]);
-						normalIndexes.push_back(normalIndex[1]);
-						normalIndexes.push_back(normalIndex[2]);
-					} else {
-						// Error, somehow.
-					}
-				} else if (numberOfSlashes == 3) {
-					AelaErrorHandling::windowError("Aela OBJ Model Loader", "The requested model's normal (vn) information is missing.\nTry exporting the model with different information.");
-
-				} else {
-					AelaErrorHandling::windowError("Aela OBJ Model Loader", "The formatting of the face ('f') section of the OBJ file\nis not the same that the loader uses.\nSupport for more formats will be added soon.");
-					return NULL;
-				}
-				
-			} else {
-				// The line in the file is a comment if this line is reached.
 			}
+			if (numberOfSlashes == 6) {
+				int combiner = sscanf_s(line.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+				if (combiner == 9) {
+					vertexIndexes.push_back(vertexIndex[0]);
+					vertexIndexes.push_back(vertexIndex[1]);
+					vertexIndexes.push_back(vertexIndex[2]);
+					uvIndexes.push_back(uvIndex[0]);
+					uvIndexes.push_back(uvIndex[1]);
+					uvIndexes.push_back(uvIndex[2]);
+					normalIndexes.push_back(normalIndex[0]);
+					normalIndexes.push_back(normalIndex[1]);
+					normalIndexes.push_back(normalIndex[2]);
+				} else {
+					// Error, somehow.
+				}
+			} else if (numberOfSlashes == 3) {
+				AelaErrorHandling::windowError("Aela OBJ Model Loader", "The requested model's normal (vn) information is missing.\nTry exporting the model with different information.");
+
+			} else {
+				AelaErrorHandling::windowError("Aela OBJ Model Loader", "The formatting of the face ('f') section of the OBJ file\nis not the same that the loader uses.\nSupport for more formats will be added soon.");
+
+				in.close();
+				return false;
+			}
+				
+		} else {
+			// The line in the file is a comment if this line is reached.
 		}
-	} else {
-		AelaErrorHandling::windowError("Aela OBJ Model Loader", "The program tried to load a non-existent OBJ file.");
-		return false;
 	}
+
+	in.close();
 
 	OBJResource* res = new OBJResource();
 	for (unsigned int i = 0; i < vertexIndexes.size(); i++) {
@@ -111,7 +122,9 @@ Resource* Aela::OBJLoader::load(std::ifstream& in) {
 		// res->UVs.push_back(uv);
 	}
 
-	return res;
+
+	resources->emplace(src, res);
+	return true;
 }
 
 

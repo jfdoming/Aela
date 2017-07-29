@@ -5,19 +5,14 @@
 #include "../Lua/Exposable.h"
 #include "Resource.h"
 #include "ResourceQuery.h"
+#include "ResourceGroup.h"
 #include "ResourceLoader.h"
 #include <unordered_map>
 #include <vector>
 
-#include "OBJLoader.h"
-#include "TextureLoader.h"
-
 namespace Aela {
 	class ResourceManager: public Exposable {
 		public:
-			static OBJLoader OBJECT_LOADER;
-			static TextureLoader TEXTURE_LOADER;
-
 			enum class Status {
 				OK, FAILED, ABORT
 			};
@@ -71,14 +66,14 @@ namespace Aela {
 			std::string getNewCrucialInvalidResourceKey();
 			std::vector<std::string>& getNewInvalidResourceKeys();
 		private:
+			std::unordered_map<std::string, ResourceGroup> groups;
 			std::unordered_map<std::string, Resource*> resources;
-			std::unordered_map<std::string, std::vector<ResourceQuery>> groups;
 
 			std::vector<std::string> invalidResourceKeys;
 			std::string crucialInvalidResourceKey = "";
 
 			ResourceLoader* boundLoader;
-			std::vector<ResourceQuery>* boundGroup;
+			ResourceGroup* boundGroup;
 
 			Resource* obtain_impl(std::string src);
 	};

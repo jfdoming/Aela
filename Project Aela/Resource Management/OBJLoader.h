@@ -11,19 +11,11 @@
 
 namespace Aela {
 	class OBJLoader : public ResourceLoader {
-		public:
-			static OBJLoader& getInstance() {
-				// This is guaranteed to be destroyed, and instantiated on first use.
-				static OBJLoader instance;
-				return instance;
-			}
+	public:
+		OBJLoader();
+		virtual ~OBJLoader();
 
-			OBJLoader(OBJLoader const&) = delete;
-			void operator=(OBJLoader const&) = delete;
-
-			virtual Resource* load(std::ifstream& in);
-		private:
-			OBJLoader() {}
+		virtual bool load(std::unordered_map<std::string, Resource*>* resources, std::string src);
 	};
 }
 

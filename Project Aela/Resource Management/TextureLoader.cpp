@@ -3,20 +3,56 @@
 
 using namespace Aela;
 
+TextureLoader::TextureLoader() {
+}
+
+TextureLoader::~TextureLoader() {
+}
+
 void TextureLoader::expose(LuaManager& mgr) {
 	// only expose part of the class to Lua
 	luabridge::getGlobalNamespace(mgr.getLuaState())
 		.beginClass<Aela::TextureLoader>("TextureLoader")
-		.addStaticFunction("getInstance", &TextureLoader::getInstance)
 		.endClass();
 
 	// expose this object
 	// Sorry Waseef, I had to comment this out in order to compile.
-	// mgr.exposeObject(*this, "textureLoader");
+	// mgr.exposeObject(this, "textureLoader");
 }
 
-Resource* Aela::TextureLoader::load(std::ifstream& in) {
-	// using char[] for baseSpeed
+bool Aela::TextureLoader::load(std::unordered_map<std::string, Resource*>* resources, std::string src) {
+	// try to open the file
+	std::ifstream in;
+	if (!open(in, src)) {
+		return false;
+	}
+
+	// create an OpenGL texture
+	GLuint modelTextureID;
+	glGenTextures(1, &modelTextureID);
+
+	// This tells openGL that future functions will reference this texture.
+	glBindTexture(GL_TEXTURE_2D, modelTextureID);
+
+	unsigned int imageWidth, imageHeight;
+	loadTexture(in, &modelTextureID, GL_TEXTURE_2D, &imageWidth, &imageHeight);
+
+	in.close();
+
+	Texture* res = new Texture(modelTextureID);
+	res->setDimensions(0, 0, imageWidth, imageHeight);
+	res->setOutput(0, 0, imageWidth, imageHeight);
+
+	(*resources)[src] = res;
+	return true;
+}
+
+void TextureLoader::loadTexture(std::ifstream& in, GLuint* texID, GLenum target) {
+	loadTexture(in, texID, target, nullptr, nullptr);
+}
+
+void TextureLoader::loadTexture(std::ifstream& in, GLuint* texID, GLenum target, unsigned int* width, unsigned int* height) {
+	// using char[] for speed
 	char textureHeader[AELA_RESOURCE_TEXTURE_HEADER_SIZE];
 
 	// read the file header
@@ -24,7 +60,7 @@ Resource* Aela::TextureLoader::load(std::ifstream& in) {
 
 	// make sure we are reading a texture file
 	if (strncmp((char*) textureHeader, AELA_RESOURCE_TEXTURE_HEADER_START, 4) != 0) {
-		return NULL;
+		return;
 	}
 
 	unsigned int imageHeight = *(unsigned int*) &(textureHeader[12]);
@@ -33,7 +69,7 @@ Resource* Aela::TextureLoader::load(std::ifstream& in) {
 	unsigned int mipMapAmount = *(unsigned int*) &(textureHeader[28]);
 	unsigned int fourCCType = *(unsigned int*) &(textureHeader[84]);
 	unsigned int bufferSize;
-	
+
 	// calculate texture size, including mip-maps
 	bufferSize = (mipMapAmount > 1) ? (linearSize * 2) : linearSize;
 
@@ -55,16 +91,8 @@ Resource* Aela::TextureLoader::load(std::ifstream& in) {
 			break;
 		default:
 			delete[] buffer;
-			std::cout << "four cc type: " << fourCCType << std::endl;
-			return NULL;
+			return;
 	}
-
-	// create an OpenGL texture
-	GLuint modelTextureID;
-	glGenTextures(1, &modelTextureID);
-
-	// This tells openGL that future functions will reference this texture.
-	glBindTexture(GL_TEXTURE_2D, modelTextureID);
 
 	// set the pixel storage mode
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -75,7 +103,7 @@ Resource* Aela::TextureLoader::load(std::ifstream& in) {
 	// load the mipmaps
 	for (unsigned int level = 0; level < mipMapAmount && (imageWidth || imageHeight); level++) {
 		unsigned int size = ((imageWidth + 3) / 4) * ((imageHeight + 3) / 4) * blockSize;
-		glCompressedTexImage2D(GL_TEXTURE_2D, level, format, imageWidth, imageHeight, 0, size, buffer + offset);
+		glCompressedTexImage2D(target, level, format, imageWidth, imageHeight, 0, size, buffer + offset);
 		offset += size;
 		imageWidth /= 2;
 		imageHeight /= 2;
@@ -91,9 +119,10 @@ Resource* Aela::TextureLoader::load(std::ifstream& in) {
 	}
 	delete[] buffer;
 
-	Texture* res = new Texture(modelTextureID);
-	res->setDimensions(0, 0, imageWidth, imageHeight);
-	res->setOutput(0, 0, imageWidth, imageHeight);
-
-	return res;
+	if (width != nullptr) {
+		*width = imageWidth;
+	}
+	if (height != nullptr) {
+		*height = imageHeight;
+	}
 }

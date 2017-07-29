@@ -211,9 +211,6 @@
     <ClCompile Include="Audio\AudioManager.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Audio\Listener.cpp">
-      <Filter>Source Files\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="Audio\WAVEClipLoader.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
@@ -306,6 +303,21 @@
     </ClCompile>
     <ClCompile Include="Resource Management\MaterialLoader.cpp">
       <Filter>Source Files\Resources\Materials</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\AudioListener.cpp">
+      <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\ResourceGroup.cpp">
+      <Filter>Source Files\Resources\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\ResourceLoader.cpp">
+      <Filter>Source Files\Resources\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\AbstractLayoutManager.cpp">
+      <Filter>Source Files\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="Menus\TextComponent.cpp">
+      <Filter>Source Files\Menus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -427,9 +439,6 @@
       <Filter>Source Files\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Audio\AudioManager.h">
-      <Filter>Source Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Audio\Listener.h">
       <Filter>Source Files\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Audio\WAVEClipLoader.h">
@@ -554,6 +563,18 @@
     </ClInclude>
     <ClInclude Include="Resource Management\MaterialLoader.h">
       <Filter>Source Files\Resources\Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio\AudioListener.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\ResourceGroup.h">
+      <Filter>Source Files\Resources\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\AbstractLayoutManager.h">
+      <Filter>Source Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\TextComponent.h">
+      <Filter>Source Files\Menus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

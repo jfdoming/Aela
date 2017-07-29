@@ -1,24 +1,40 @@
 #pragma once
-#include "SDL.h"
-#include <vector>
-#include <functional>
+#include <forward_list>
+#include <queue>
+#include <thread>
 #include <unordered_map>
-#include <iterator>
+#include "SDL.h"
+#include "lua.hpp"
+#include "../Lua/LuaBridge/LuaBridge.h"
 #include "../Window/Window.h"
-#include "../Control Manager/ControlManager.h"
+#include "Event.h"
+#include "Listener.h"
 
 namespace Aela {
 	class EventHandler {
+		private:
+			SDL_Event event;
+			Window* window;
 
-		SDL_Event event;
-		Window* window;
+			bool running, stopped;
+			std::thread eventThread;
+
+			std::queue<Event*> eventQueue;
+			std::unordered_map<int, std::forward_list<Listener*>> listeners; // Listeners defined in C++
+			//std::unordered_map<int, luabridge::LuaRef> callbacks; // Listeners defined in Lua
 
 		public:
-		EventHandler();
-		~EventHandler();
+			EventHandler();
+			~EventHandler();
 
-		void bindWindow(Window* window);
-		void updateSDLEvents();
-		void fireEvents();
+			void start();
+			void stop();
+
+			void updateSDLEvents();
+			void fireEvent(Event* event);
+			void dispatchEvents();
+			void addListener(int type, Listener* listener);
+
+			void bindWindow(Window* window);
 	};
 }

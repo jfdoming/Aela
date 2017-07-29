@@ -15,7 +15,6 @@
 #include "Aela_Engine.h"
 
 // These are headers that are part of Project Aela.
-#include "Control Manager/ControlManager.h"
 #include "Window/Window.h"
 #include "Error Handler/ErrorHandler.h"
 #include "Time Manager/TimeManager.h"
@@ -23,12 +22,13 @@
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
 #include "Resource Management/TextureLoader.h"
+#include "Resource Management/OBJLoader.h"
 #include "Audio/WAVEClipLoader.h"
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 #include "Audio/AudioManager.h"
 #include "3D/Animator/Animator3D.h"
-#include "3D\Particles\PlanarParticleEmitter.h"
+#include "3D/Particles/PlanarParticleEmitter.h"
 
 #include "Menus/TextComponent.h"
 
@@ -36,12 +36,10 @@ namespace Aela {
 	// These are global objects who's classes come from Project Aela.
 	Window window;
 	Renderer renderer;
-	ControlManager controlManager;
 	EventHandler eventHandler;
 	TimeManager timeManager;
 	TextManager textManager;
 	LuaManager luaManager;
-	LuaScript controlScript;
 	SceneManager sceneManager;
 	ResourceManager resourceManager(0);
 	AudioManager audioPlayer;
@@ -52,7 +50,8 @@ using namespace Aela;
 
 int Aela::Engine::runningLoop() {
 	// TEMPORARY! This won't exist once models are moved elsewhere.
-	resourceManager.bindLoader(&Aela::OBJLoader::getInstance());
+	OBJLoader objLoader;
+	resourceManager.bindLoader(&objLoader);
 	std::vector<Entity3D> models(7);
 	models[0].loadTexture("res/textures/stones.dds");
 	models[1].loadTexture("res/textures/mug.dds");
@@ -155,7 +154,10 @@ int Aela::Engine::runningLoop() {
 	particleEmitter.setPosition(2, 0, 5);
 	particleEmitter.setTimeManager(&timeManager);
 
-	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
+	// This uses a texture loader to load particles. We may eventually want a seperate particle loader!
+	TextureLoader textureLoader;
+	resourceManager.bindLoader(&textureLoader);
+
 	resourceManager.bindGroup("particles");
 	resourceManager.addToGroup("res/textures/particle_1.dds", false);
 	resourceManager.addToGroup("res/textures/particle_2.dds", false);
@@ -170,14 +172,13 @@ int Aela::Engine::runningLoop() {
 	
 	particleEmitter.setupParticles(&particleTextures, 1, 1, 15);
 
-	// set up the loader to load textures into our group
-	resourceManager.bindLoader(&Aela::TextureLoader::getInstance());
 	resourceManager.bindGroup("test");
 
 	resourceManager.addToGroup("res/textures/ekkon.dds", false);
 	resourceManager.addToGroup("res/textures/gradient.dds", false);
 
-	resourceManager.bindLoader(&Aela::WAVEClipLoader::getInstance());
+	WAVEClipLoader waveClipLoader;
+	resourceManager.bindLoader(&waveClipLoader);
 	resourceManager.addToGroup("res/audio/clips/test.wav", false);
 
 	// load test textures
@@ -234,9 +235,12 @@ int Aela::Engine::runningLoop() {
 	std::cout << info << " " << renderer.getInformation(RendererInformation::VENDOR) << " is the vendor of the GPU, "
 		<< renderer.getInformation(RendererInformation::OPENGL_VERSION) << " is the version of OpenGL.\n";*/
 
+	eventHandler.start();
+
 	// This is the program's running loop.
 	do {
 		// This updates events. It must be done first.
+		eventHandler.updateSDLEvents();
 		timeManager.updateTime();
 		animator.update();
 		particleEmitter.update();
@@ -247,8 +251,6 @@ int Aela::Engine::runningLoop() {
 		renderer.getCamera()->focusAtPointOnPlane(*billboards[0].getPosition(), glm::vec3(0, 0, 0));
 		// std::cout << billboards[0].getPosition()->x << " " << billboards[0].getPosition()->y << " " << billboards[0].getPosition()->z << "\n";
 		billboards[0].setScaling(2 - (timeManager.getCurrentTime() % 2000) / 3500.0f, 2 + (timeManager.getCurrentTime() % 2000) / 3500.0f, 2);
-
-		renderer.updateCameraUsingControls(&controlManager);
 
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() - timeOfLastFrameCheck >= timeBetweenFrameChecks) {
@@ -265,11 +267,12 @@ int Aela::Engine::runningLoop() {
 		}
 		
 		// This updates and renders the current scene.
-		Aela::Scene* currentScene = sceneManager.getCurrentScene();
+		// LEAVE COMMENTED OUT PLOX!!!
+		/*Aela::Scene* currentScene = sceneManager.getCurrentScene();
 		if (currentScene != nullptr) {
 			currentScene->update();
 			currentScene->render(&renderer);
-		}
+		}*/
 
 		// This renders the program.
 		renderer.startRenderingFrame();
@@ -354,33 +357,15 @@ int Aela::Engine::setupRenderer() {
 
 int Aela::Engine::setupControlManager() {
 	// This sets the Control Manager up and tells it to prevent the camera from being inverted.
-	controlManager.setProperty(ControlManagerProperty::ALLOW_UPSIDE_DOWN_CAMERA, 0);
-	controlManager.setWindow(&window);
-	controlManager.setTimeManager(&timeManager);
 	return 0;
 }
 
 int Aela::Engine::setupLUA() {
-	// Lua Stuff
-	luabridge::getGlobalNamespace(luaManager.getLuaState())
-		.beginClass<ControlManager>("ControlManager")
-		.addFunction("test", &ControlManager::test)
-		.endClass();
-
-	// Expose Object, must register classes before doing this
-	luaManager.exposeObject(controlManager, "controlManager");
 	return 0;
 }
 
 int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
-
-	// TODO: Find a way to do this that doesn't require creating separate std::functions
-	std::function<void(ControlManager&)> fast = &ControlManager::goSuperSpeed;
-	std::function<void(ControlManager&)> slow = &ControlManager::goNormalSpeed;
-
-	std::function<void(Renderer)> inc = &Renderer::increaseFOV;
-	std::function<void(Renderer)> dec = &Renderer::decreaseFOV;
 	return 0;
 }
 

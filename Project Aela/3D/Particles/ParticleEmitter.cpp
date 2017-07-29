@@ -16,7 +16,6 @@ void ParticleEmitter::setupParticles(std::vector<GLuint>* textures, float partic
 		Particle particle;
 		srand(timeManager->getCurrentTime() + i);
 		particle.setTexture(textures->at(rand() % textures->size()));
-		std::cout << rand() % textures->size() << " is the tex ID\n";
 		particle.setProperty(Transformable3DProperty::X_SCALING, particleWidthScaling);
 		particle.setProperty(Transformable3DProperty::Y_SCALING, particleHeightScaling);
 		particle.setSpeed(baseSpeed + (speedOffset * (rand() % 100) / 100));

@@ -23,9 +23,29 @@
 
 using namespace Aela;
 
-Resource* Aela::MaterialLoader::load(std::ifstream& in) {
+MaterialLoader::MaterialLoader() {
+}
+
+MaterialLoader::~MaterialLoader() {
+}
+
+void MaterialLoader::expose(LuaManager& mgr) {
+	// only expose part of the class to Lua
+	luabridge::getGlobalNamespace(mgr.getLuaState())
+		.beginClass<Aela::MaterialLoader>("MaterialLoader")
+		.endClass();
+
+	// Sorry Waseef, Julian had to comment this out in order to compile.
+	// mgr.exposeObject(this, "textureLoader");
+}
+
+bool Aela::MaterialLoader::load(std::unordered_map<std::string, Resource*>* resources, std::string src) {
 	std::vector<Material> materials;
 	std::string line;
+	std::ifstream in;
+	if (!open(in, src)) {
+		return false;
+	}
 
 	// This begins reading the file.
 	if (in.is_open()) {

@@ -4,21 +4,6 @@
 
 using namespace Aela;
 
-bool readMods(std::vector<std::string>& mods) {
-	std::ifstream modListFile("mods/mods.list");
-	std::string line;
-
-	if (!modListFile) {
-		return false;
-	}
-
-	while (std::getline(modListFile, line)) {
-		mods.emplace_back(line);
-	}
-
-	return true;
-}
-
 ResourceManager::ResourceManager(int resourceCount) {
 	resources.reserve(resourceCount);
 }
@@ -37,7 +22,7 @@ void ResourceManager::expose(LuaManager& mgr) {
 		.endClass();
 
 	// expose this object
-	mgr.exposeObject(*this, "resourceManager");
+	mgr.exposeObject(this, "resourceManager");
 }
 
 void ResourceManager::bindLoader(ResourceLoader* loader) {
@@ -47,8 +32,8 @@ void ResourceManager::bindLoader(ResourceLoader* loader) {
 void ResourceManager::bindGroup(std::string group) {
 	// ensure a group exists to add to
 	auto iter = groups.find(group);
-	if (groups.find(group) == groups.end()) {
-		groups.emplace(group, std::vector<ResourceQuery>());
+	if (iter == groups.end()) {
+		groups.emplace(group, ResourceGroup(group));
 		this->boundGroup = &(groups.find(group)->second);
 	} else {
 		this->boundGroup = &(iter->second);
@@ -63,11 +48,12 @@ ResourceManager::Status ResourceManager::loadGroup(std::string name) {
 	}
 
 	// get the group to load
-	auto group = iter->second;
+	auto group = &(iter->second);
 
 	// load all resources in the group
 	Status returnStatus = Status::OK;
-	for (ResourceQuery query : group) {
+
+	for (ResourceQuery query : *(group->getQueries())) {
 		// make sure we are using the correct resource loader
 		ResourceLoader* resourceLoader = query.getLoader();
 		if (boundLoader != resourceLoader) {
@@ -96,10 +82,10 @@ ResourceManager::Status ResourceManager::unloadGroup(std::string name) {
 	}
 
 	// get the group to unload
-	auto group = iter->second;
+	auto group = &(iter->second);
 
 	// unload all resources in the group
-	for (ResourceQuery query : group) {
+	for (ResourceQuery query : *(group->getQueries())) {
 		// unload the resource
 		unload(query.getSrc());
 	}
@@ -112,7 +98,7 @@ void ResourceManager::addToGroup(std::string src, bool crucial) {
 }
 
 void ResourceManager::addToGroup(ResourceQuery& query) {
-	boundGroup->push_back(query);
+	boundGroup->getQueries()->push_back(query);
 }
 
 ResourceManager::Status ResourceManager::load(std::string src, bool crucial, ResourceLoader& loader) {
@@ -121,33 +107,12 @@ ResourceManager::Status ResourceManager::load(std::string src, bool crucial, Res
 }
 
 ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
-	bool valid = true;
 	bool crucial = query.isCrucial();
 	std::string src = query.getSrc();
 
-	std::ifstream in;
-	in.flags(std::ios::binary | std::ios::in);
-	in.open(src);
-
-	if (!in.is_open() || in.fail()) {
-		// for now, errors are automatically handled here (may change after consultation)
-		AelaErrorHandling::consoleWindowError("Resource Manager", "Failed to open file \"" + src + "\" for reading!");
-		valid = false;
-	}
-
-	if (valid) {
-		Resource* res = boundLoader->load(in);
-		
-		if (res == nullptr) {
-			valid = false;
-		} else {
-			resources.emplace(src, res);
-		}
-	}
-
-	in.close();
+	bool success = boundLoader->load(&resources, src);
 	
-	if (!valid) {
+	if (!success) {
 		// cannot load the resource
 		if (crucial) {
 			crucialInvalidResourceKey = src;

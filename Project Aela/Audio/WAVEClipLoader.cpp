@@ -13,8 +13,20 @@
 
 using namespace Aela;
 
-Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
-	// using char[] for baseSpeed
+WAVEClipLoader::WAVEClipLoader() {
+}
+
+WAVEClipLoader::~WAVEClipLoader() {
+}
+
+bool WAVEClipLoader::load(std::unordered_map<std::string, Resource*>* resources, std::string src) {
+	// try to open the file
+	std::ifstream in;
+	if (!open(in, src)) {
+		return false;
+	}
+
+	// using char[] for speed
 	char header[CHUNK_HEADER_SIZE];
 
 	// read the file header
@@ -23,7 +35,7 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 	// make sure we are reading a RIFF file
 	if (strncmp((char*) header, RIFF_CHUNK_ID, 4) != 0) {
 		errorMessage = "File not in RIFF format!";
-		return NULL;
+		return false;
 	}
 
 	char* format = header + 8;
@@ -31,7 +43,7 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 	// make sure we are reading a WAVE file
 	if (strncmp(format, WAVE_FORMAT, 4) != 0) {
 		errorMessage = "File not in WAVE format!";
-		return NULL;
+		return false;
 	}
 
 	// using char[] for baseSpeed
@@ -43,7 +55,7 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 	// make sure we are reading the format subchunk header
 	if (strncmp((char*) subchunk1Header, SUBCHUNK1_ID, 4) != 0) {
 		errorMessage = "Format subchunk header invalid!";
-		return NULL;
+		return false;
 	}
 
 	unsigned int subchunk1Size = *((unsigned int*) &(subchunk1Header[4])) & 0xFFFFFFFF;
@@ -51,7 +63,7 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 	// the subchunk 1 size is always 16 for PCM data
 	if (subchunk1Size != PCM_SUBCHUNK1_SIZE) {
 		errorMessage = "Compressed data is not supported!";
-		return NULL;
+		return false;
 	}
 
 	// using char[] for baseSpeed
@@ -65,7 +77,7 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 	// the audio format code is 1 for PCM data
 	if (audioFormatCode != PCM_FORMAT_CODE) {
 		errorMessage = "Compressed data is not supported!";
-		return NULL;
+		return false;
 	}
 
 	unsigned int numberOfChannels = *((unsigned int*) &(subchunk1[2])) & 0xFFFF;
@@ -86,7 +98,7 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 	// make sure we are reading the data subchunk header
 	if (strncmp((char*) subchunk2Header, SUBCHUNK2_ID, 4) != 0) {
 		errorMessage = "Data subchunk header invalid!";
-		return NULL;
+		return false;
 	}
 
 	unsigned int subchunk2Size = *((unsigned int*) &(subchunk2Header[4])) & 0xFFFFFFFF;
@@ -94,6 +106,7 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 
 	// read in subchunk 2
 	in.read(data, subchunk2Size);
+	in.close();
 
 	AudioClip* clip = new AudioClip(data);
 	clip->setSize(subchunk2Size);
@@ -103,5 +116,6 @@ Resource* Aela::WAVEClipLoader::load(std::ifstream& in) {
 	std::cout << "s" << data[0] << std::endl;
 	std::cout << bitsPerSample * sampleRate << std::endl;
 
-	return clip;
+	(*resources)[src] = clip;
+	return true;
 }
