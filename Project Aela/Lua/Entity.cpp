@@ -1,4 +1,4 @@
-#include "Entity.h"
+/*#include "Entity3D.h"
 
 using namespace Aela;
 
@@ -13,4 +13,4 @@ void Entity::init(){
 
 void Entity::update(){
 
-}
+}*/

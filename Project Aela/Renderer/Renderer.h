@@ -22,16 +22,19 @@
 
 #include "../3D/Billboards/Billboards.h"
 #include "../Window/Window.h"
-#include "../3D/3D Camera/Camera3D.h"
+#include "../3D/Camera/Camera3D.h"
 #include "../Control Manager/ControlManager.h"
-#include "../3D/3D Renderer/Basic3DRenderer.h"
-#include "../2D/2D Renderer/Basic2DRenderer.h"
+#include "../3D/Renderer/Basic3DRenderer.h"
+#include "../2D/Renderer/Basic2DRenderer.h"
 #include "../2D/Text/TextManager.h"
-#include "../3D/3D Light/Light3D.h"
+#include "../3D/Light/Light3D.h"
+
+#include "../Events/Listener.h"
+#include "../Events/KeyEvent.h"
 
 // These are some enums used by the Renderer.
 
-namespace Aela {
+namespace Aela{
 	// This enum is used to obtain information from the renderer.
 	enum class RendererInformation {
 		VENDOR, RENDERER, OPENGL_VERSION, GLSL_VERSION, OPENGL_EXTENSIONS
@@ -44,10 +47,15 @@ namespace Aela {
 		MSAA_2D_X0, MSAA_2D_X2, MSAA_2D_X4, MSAA_2D_X8, MSAA_2D_X16
 	};
 
-	class Renderer {
+	class Renderer : public Listener {
 		public:
 			Renderer() {
-
+				windowFocus = false;
+				speed = 0.003f;
+				superSpeed = 0.012f;
+				currentSpeed = 0.0f;
+				mouseSpeed = 0.005f;
+				allowUpsideDownCamera = false;
 			}
 
 			Renderer(Window* windowToSet) {
@@ -59,6 +67,9 @@ namespace Aela {
 			~Renderer() {
 
 			}
+
+			// Event related
+			void onEvent(Event* event);
 
 			// These functions initialize required elements for different types of rendering.
 			// They MUST be called before performing their type of rendering.
@@ -85,8 +96,8 @@ namespace Aela {
 
 			// These functions are related to 3D rendering.
 			void sendBoundLightDataToShader();
-			void renderModelShadows(Model3D* model);
-			void renderModel(Model3D* model);
+			void renderModelShadows(Entity3D* model);
+			void renderModel(Entity3D* model);
 			void renderBillboard(Billboard* billboard);
 			void renderSkybox(Skybox* skybox);
 			void generateShadowMap(Light3D* light);
@@ -124,9 +135,6 @@ namespace Aela {
 			TimeManager* getTimeManager();
 			Camera3D* getCamera();
 
-			// This function uses a control manager to update the renderer's camera.
-			void updateCameraUsingControls(ControlManager* controls);
-
 		private:
 			// These are a bunch of Project Aela objects that the renderer uses.
 			Basic3DRenderer basic3DRenderer;
@@ -158,5 +166,20 @@ namespace Aela {
 			// This function is used internally to check the framebuffer that is currently
 			// being applied to OpenGL.
 			bool checkFrameBuffer();
+
+			// Control related
+			void updateCamera(KeyEvent* event);
+
+			// This stores the window's state.
+			bool windowFocus;
+
+			// Speed: 0.001f is 1 unit per tick.
+			float speed, superSpeed, currentSpeed, mouseSpeed;
+
+			// This keeps track of whether the camera shoudl be allowed to be upside down.
+			bool allowUpsideDownCamera;
+
+			// This is used when computing controls.
+			const glm::vec3 straightUp = glm::vec3(0, 0.5, 0);
 	};
 };

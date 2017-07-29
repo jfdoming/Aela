@@ -8,8 +8,9 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "../Window/Window.h"
-#include "../3D/3D Camera/Camera3D.h"
+#include "../3D/Camera/Camera3D.h"
 #include "../Time Manager/TimeManager.h"
+#include "../Events/Event.h"
 #include <time.h>
 
 namespace Aela {
@@ -36,8 +37,8 @@ namespace Aela {
 		void computeMatricesWithInputs(Camera3D* camera);
 
 		// This is a temporary function used for testing. It translates
-		// a 3D object.
-		void transform3DObject(Object3D* object, float speedModifier);
+		// a Transformable.
+		void transform3DObject(Transformable3D* object, float speedModifier);
 
 		// These are setters and getters of the control manager.
 		void setWindow(Window* setWindow);

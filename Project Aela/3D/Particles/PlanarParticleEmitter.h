@@ -10,7 +10,7 @@
 #include "ParticleEmitter.h"
 #include "../../Utilities/Rect/Rect.h"
 
-class PlanarParticleEmitter : public ParticleEmitter, public Object3D {
+class PlanarParticleEmitter : public ParticleEmitter, public Transformable3D {
 	public:
 		PlanarParticleEmitter() {
 

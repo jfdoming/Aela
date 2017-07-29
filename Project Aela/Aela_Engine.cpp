@@ -15,7 +15,6 @@
 #include "Aela_Engine.h"
 
 // These are headers that are part of Project Aela.
-#include "Control Manager/ControlManager.h"
 #include "Window/Window.h"
 #include "Error Handler/ErrorHandler.h"
 #include "Time Manager/TimeManager.h"
@@ -23,12 +22,13 @@
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
 #include "Resource Management/TextureLoader.h"
+#include "Resource Management/OBJLoader.h"
 #include "Audio/WAVEClipLoader.h"
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 #include "Audio/AudioManager.h"
-#include "3D/3D Animator/Animator3D.h"
-#include "3D\Particles\PlanarParticleEmitter.h"
+#include "3D/Animator/Animator3D.h"
+#include "3D/Particles/PlanarParticleEmitter.h"
 
 #include "Menus/TextComponent.h"
 
@@ -36,12 +36,10 @@ namespace Aela {
 	// These are global objects who's classes come from Project Aela.
 	Window window;
 	Renderer renderer;
-	ControlManager controlManager;
 	EventHandler eventHandler;
 	TimeManager timeManager;
 	TextManager textManager;
 	LuaManager luaManager;
-	LuaScript controlScript;
 	SceneManager sceneManager;
 	ResourceManager resourceManager(0);
 	AudioManager audioPlayer;
@@ -55,30 +53,32 @@ using namespace Aela;
 
 int Aela::Engine::runningLoop() {
 	// TEMPORARY! This won't exist once models are moved elsewhere.
-	std::vector<Model3D> models(7);
-	models[0].loadTexture("res/textures/grass.dds");
+	OBJLoader objLoader;
+	resourceManager.bindLoader(&objLoader);
+	std::vector<Entity3D> models(7);
+	models[0].loadTexture("res/textures/stones.dds");
 	models[1].loadTexture("res/textures/mug.dds");
 	models[2].loadTexture("res/textures/mug.dds");
 	models[3].loadTexture("res/textures/cat.dds");
-	models[4].loadTexture("res/textures/missile.dds");
-	models[5].loadTexture("res/textures/test_house.dds");
+	models[4].loadTexture("res/textures/tree_1.dds");
+	models[5].loadTexture("res/textures/house_1.dds");
 	models[6].loadTexture("res/textures/big_marble.dds");
 
 	// This loads the models from OBJ files.
-	models[0].loadModel("res/models/large_grass_plane.obj");
+	models[0].loadModel("res/models/stones.obj");
 	models[1].loadModel("res/models/mug_centered.obj");
 	models[2].loadModel("res/models/mug_centered.obj");
 	models[3].loadModel("res/models/cat.obj");
-	models[4].loadModel("res/models/missile.obj");
-	models[5].loadModel("res/models/test_house.obj");
+	models[4].loadModel("res/models/tree_1.obj");
+	models[5].loadModel("res/models/house_1.obj");
 	models[6].loadModel("res/models/big_marble.obj");
 
 	// This sets model positioning.
 	models[1].setPosition(-10.72f, 4, -15.51f);
 	models[2].setPosition(0, 20, 15);
 	models[5].setScaling(1.5, 1.5, 1.5);
-	models[5].setPosition(-10, 0, -5);
-	models[5].setRotation(0, PI_F / 2, 0);
+	models[5].setPosition(-10, 0, 5);
+	models[5].setRotation(0, (float) PI / 2, 0);
 	models[6].setPosition(10, 20, 10);
 
 	// This animates models just to make sure that the animator actually works.
@@ -168,15 +168,15 @@ int Aela::Engine::runningLoop() {
 	audioPlayer.playClip(resourceManager.obtain<AudioClip>("res/audio/clips/test.wav"));
 
 	// SCENE TESTING
-	Scene test;
-	TextComponent txt;
-	test.enableMenu(window.getWindowDimensions(), &renderer);
-	test.getMenu()->add(&txt);
+	// Scene test;
+	// TextComponent txt;
+	// test.enableMenu(window.getWindowDimensions(), &renderer);
+	// test.getMenu()->add(&txt);
 
 	// TODO make sure a layout manager is present!!!
 
-	sceneManager.registerScene(&test, 1);
-	sceneManager.setCurrentScene(1);
+	// sceneManager.registerScene(&test, 1);
+	// sceneManager.setCurrentScene(1);
 
 	// obtain and set up test textures
 	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");
@@ -214,9 +214,12 @@ int Aela::Engine::runningLoop() {
 	std::cout << info << " " << renderer.getInformation(RendererInformation::VENDOR) << " is the vendor of the GPU, "
 		<< renderer.getInformation(RendererInformation::OPENGL_VERSION) << " is the version of OpenGL.\n";
 
+	eventHandler.start();
+
 	// This is the program's running loop.
 	do {
 		// This updates events. It must be done first.
+		eventHandler.updateSDLEvents();
 		timeManager.updateTime();
 		animator.update();
 
@@ -226,8 +229,6 @@ int Aela::Engine::runningLoop() {
 		renderer.getCamera()->focusAtPointOnPlane(*billboards[0].getPosition(), glm::vec3(0, 0, 0));
 		// std::cout << billboards[0].getPosition()->x << " " << billboards[0].getPosition()->y << " " << billboards[0].getPosition()->z << "\n";
 		billboards[0].setScaling(2 - (timeManager.getCurrentTime() % 2000) / 3500.0f, 2 + (timeManager.getCurrentTime() % 2000) / 3500.0f, 2);
-
-		//renderer.updateCameraUsingControls(&controlManager);
 
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() - timeOfLastFrameCheck >= timeBetweenFrameChecks) {
@@ -244,11 +245,12 @@ int Aela::Engine::runningLoop() {
 		}
 		
 		// This updates and renders the current scene.
-		Aela::Scene* currentScene = sceneManager.getCurrentScene();
+		// LEAVE COMMENTED OUT PLOX!!!
+		/*Aela::Scene* currentScene = sceneManager.getCurrentScene();
 		if (currentScene != nullptr) {
 			currentScene->update();
 			currentScene->render(&renderer);
-		}
+		}*/
 
 		// This renders the program.
 		renderer.startRenderingFrame();
@@ -332,33 +334,15 @@ int Aela::Engine::setupRenderer() {
 
 int Aela::Engine::setupControlManager() {
 	// This sets the Control Manager up and tells it to prevent the camera from being inverted.
-	controlManager.setProperty(ControlManagerProperty::ALLOW_UPSIDE_DOWN_CAMERA, 0);
-	controlManager.setWindow(&window);
-	controlManager.setTimeManager(&timeManager);
 	return 0;
 }
 
 int Aela::Engine::setupLUA() {
-	// Lua Stuff
-	luabridge::getGlobalNamespace(luaManager.getLuaState())
-		.beginClass<ControlManager>("ControlManager")
-		.addFunction("test", &ControlManager::test)
-		.endClass();
-
-	// Expose Object, must register classes before doing this
-	luaManager.exposeObject(&controlManager, "controlManager");
 	return 0;
 }
 
 int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
-
-	// TODO: Find a way to do this that doesn't require creating separate std::functions
-	std::function<void(ControlManager&)> fast = &ControlManager::goSuperSpeed;
-	std::function<void(ControlManager&)> slow = &ControlManager::goNormalSpeed;
-
-	std::function<void(Renderer)> inc = &Renderer::increaseFOV;
-	std::function<void(Renderer)> dec = &Renderer::decreaseFOV;
 	return 0;
 }
 

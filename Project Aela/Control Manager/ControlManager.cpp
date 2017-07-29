@@ -82,8 +82,8 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 			verticalAngle = glm::pi<float>() / -2;
 		}
 
-		camera->setProperty(Object3DProperty::X_ROTATION, horizontalAngle);
-		camera->setProperty(Object3DProperty::Y_ROTATION, verticalAngle);
+		camera->setProperty(Transformable3DProperty::X_ROTATION, horizontalAngle);
+		camera->setProperty(Transformable3DProperty::Y_ROTATION, verticalAngle);
 
 		// This converts the coordinates from rotational to cartesian-planar.
 		glm::vec3 direction(
@@ -147,7 +147,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 	}
 }
 
-void ControlManager::transform3DObject(Object3D* object, float speedModifier) {
+void ControlManager::transform3DObject(Transformable3D* object, float speedModifier) {
 	if (window->isFocused()) {
 		float deltaTime = timeManager->getTimeBetweenFrames();
 
@@ -223,22 +223,4 @@ void ControlManager::setProperty(ControlManagerProperty property, float value) {
 			superSpeed = value;
 			break;
 	}
-}
-
-void ControlManager::updateKeystate(const Uint8* _keystate) {
-	keystate = _keystate;
-}
-
-void ControlManager::goSuperSpeed() {
-	// Doesn't actually work, can't be fixed easily
-	shouldGoFast = true;
-}
-
-void ControlManager::goNormalSpeed() {
-	// Doesn't actually work, can't be fixed easily
-	shouldGoFast = false;
-}
-
-void ControlManager::test() {
-	std::cout << "Pressed a button?\n";
 }

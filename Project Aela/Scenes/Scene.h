@@ -7,7 +7,7 @@
 
 #pragma once
 #include <vector>
-#include "../3D/Models/Models.h"
+#include "../3D/Entity/Entity3D.h"
 #include "../Renderer/Renderer.h"
 #include "../Menus/Menu.h"
 
@@ -28,7 +28,7 @@ namespace Aela {
 			int getId();
 		private:
 			Skybox skybox;
-			std::vector<Model3D*> models;
+			std::vector<Entity3D*> models;
 			std::vector<Billboard*> billboards;
 
 			int id = 0;
