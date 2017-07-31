@@ -10,7 +10,7 @@
 #include <GLM/glm.hpp>
 #include <vector>
 
-#include "Material.h"
+#include "../../3D/Materials/Material.h"
 
 namespace Aela {
 	class SubModel {

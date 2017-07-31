@@ -21,7 +21,7 @@
 
 #include "Entity.h"
 #include "../3D/Transformable/Transformable3D.h"
-#include "../Resource Management/Model.h"
+#include "../3D/Models/Model.h"
 
 namespace Aela {
 	class Entity3D : public Entity, public Transformable3D {

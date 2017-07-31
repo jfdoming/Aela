@@ -14,7 +14,7 @@
 
 // This includes GLEW.
 #include <GL/glew.h>
-#include "../../3D/Texture/Texture.h"
+#include "../../2D/Texture/Texture.h"
 
 class Simple2DFramebuffer {
 	public:

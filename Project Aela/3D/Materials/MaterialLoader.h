@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "ResourceLoader.h"
-#include "TextureLoader.h"
+#include "../../Resource Management/ResourceLoader.h"
+#include "../../2D/Texture/TextureLoader.h"
 
 namespace Aela {
 	class MaterialLoader : public TextureLoader {

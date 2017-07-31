@@ -6,7 +6,7 @@
 */
 
 #include "Model.h"
-#include "../Error Handler/ErrorHandler.h"
+#include "../../Error Handler/ErrorHandler.h"
 #include <iostream>
 
 using namespace Aela;

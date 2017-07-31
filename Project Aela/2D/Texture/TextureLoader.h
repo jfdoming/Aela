@@ -5,7 +5,7 @@
 #endif
 
 #include <GL/glew.h>
-#include "ResourceLoader.h"
+#include "../../Resource Management/ResourceLoader.h"
 
 #define AELA_RESOURCE_TEXTURE_HEADER_SIZE 128
 #define AELA_RESOURCE_TEXTURE_HEADER_START "DDS "

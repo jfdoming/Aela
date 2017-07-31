@@ -1,5 +1,5 @@
 #include "TextureLoader.h"
-#include "../3D/Texture/Texture.h"
+#include "Texture.h"
 
 using namespace Aela;
 

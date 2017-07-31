@@ -17,7 +17,7 @@
 #include <glm\glm.hpp>
 #include <vector>
 
-#include "Resource.h"
+#include "../../Resource Management/Resource.h"
 
 namespace Aela {
 	class Material : public Resource {

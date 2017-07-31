@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Resource.h"
+#include "../../Resource Management/Resource.h"
 #include "SubModel.h"
 
 #include <GLM/glm.hpp>

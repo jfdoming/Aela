@@ -20,7 +20,7 @@
 
 // These are Project Aela headers.
 #include "../../Utilities/Rect/Rect.h"
-#include "../../3D/Texture/Texture.h"
+#include "../../2D/Texture/Texture.h"
 #include "../Simple 2D Framebuffer/Simple2DFramebuffer.h"
 #include "../Text/TextFont.h"
 #include "../../Utilities/Colour/ColourRGBA.h"

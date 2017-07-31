@@ -12,10 +12,10 @@
 #include "stdafx.h"
 #include "ResourceQuery.h"
 
-#include "../3D/Texture/Texture.h"
+#include "../2D/Texture/Texture.h"
 #include "../3D/Skybox/Skybox.h"
 #include "../Audio/AudioClip.h"
-#include "Model.h"
+#include "../3D/Models/Model.h"
 
 namespace Aela {
 	class ResourceGroup {

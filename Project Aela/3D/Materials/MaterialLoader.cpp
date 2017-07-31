@@ -14,7 +14,7 @@
 
 #include "MaterialLoader.h"
 #include "Material.h"
-#include "../Error Handler/ErrorHandler.h"
+#include "../../Error Handler/ErrorHandler.h"
 
 // This is all temporary until everything is restructured so that we only have one DDS loader!
 #define FOURCC_DXT1 0x31545844 // Equivalent to "DXT1" in ASCII

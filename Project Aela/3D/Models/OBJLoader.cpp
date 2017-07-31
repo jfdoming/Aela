@@ -15,7 +15,7 @@
 #include <glm/glm.hpp>
 
 #include "OBJLoader.h"
-#include "../Error Handler/ErrorHandler.h"
+#include "../../Error Handler/ErrorHandler.h"
 
 using namespace Aela;
 

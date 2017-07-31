@@ -8,7 +8,7 @@
 #pragma once
 
 #include "Model.h"
-#include "ResourceLoader.h"
+#include "../../Resource Management/ResourceLoader.h"
 #include <map>
 
 namespace Aela {
