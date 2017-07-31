@@ -6,6 +6,8 @@
 *.sln
 *.vcxproj
 vcxproj/
+*.filters
+*.user
 
 # Please don't ignore resources it's very irritating when you need a specific resource to RUN THE PROGRAM
 **/[Rr]elease/*
