@@ -22,6 +22,7 @@
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
 #include "Resource Management/TextureLoader.h"
+#include "Resource Management/MaterialLoader.h"
 #include "Resource Management/OBJLoader.h"
 #include "Audio/WAVEClipLoader.h"
 #include "Lua/LuaManager.h"
@@ -29,7 +30,6 @@
 #include "Audio/AudioManager.h"
 #include "3D/Animator/Animator3D.h"
 #include "3D/Particles/PlanarParticleEmitter.h"
-
 #include "Menus/TextComponent.h"
 
 namespace Aela {
@@ -49,49 +49,76 @@ namespace Aela {
 using namespace Aela;
 
 int Aela::Engine::runningLoop() {
-	// TEMPORARY! This won't exist once models are moved elsewhere.
+	// TEMPORARY! This won't exist once entities are moved elsewhere.
+	std::vector<Entity3D> entities(3);
+
+	MaterialLoader materialLoader;
+	resourceManager.bindLoader(&materialLoader);
+	resourceManager.bindGroup("materials");
+	resourceManager.addToGroup("res/materials/meme_mug.mtl", false);
+	resourceManager.addToGroup("res/materials/cat.mtl", false);
+	resourceManager.addToGroup("res/materials/house_1.mtl", false);
+
+	if (resourceManager.loadGroup("materials") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"materials\"!" << std::endl;
+	}
+
+	// *resourceManager.obtain<Texture>("res/textures/particle_2.dds")
+	
+	// This loads the entities' models from OBJ files.
 	OBJLoader objLoader;
 	resourceManager.bindLoader(&objLoader);
-	std::vector<Entity3D> models(7);
-	models[0].loadTexture("res/textures/stones.dds");
-	models[1].loadTexture("res/textures/mug.dds");
-	models[2].loadTexture("res/textures/mug.dds");
-	models[3].loadTexture("res/textures/cat.dds");
-	models[4].loadTexture("res/textures/tree_1.dds");
-	models[5].loadTexture("res/textures/house_1.dds");
-	models[6].loadTexture("res/textures/big_marble.dds");
+	resourceManager.bindGroup("models");
+	resourceManager.addToGroup("res/models/meme_mug.obj", false);
+	resourceManager.addToGroup("res/models/cat.obj", false);
+	resourceManager.addToGroup("res/models/house_1.obj", false);
 
-	// This loads the models from OBJ files.
-	models[0].loadModel("res/models/stones.obj");
-	models[1].loadModel("res/models/mug_centered.obj");
-	models[2].loadModel("res/models/mug_centered.obj");
-	models[3].loadModel("res/models/cat.obj");
-	models[4].loadModel("res/models/tree_1.obj");
-	models[5].loadModel("res/models/house_1.obj");
-	models[6].loadModel("res/models/big_marble.obj");
+	if (resourceManager.loadGroup("models") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"models\"!" << std::endl;
+	}
 
+	entities[0].setModel(resourceManager.obtain<Model>("res/models/meme_mug.obj"));
+	entities[1].setModel(resourceManager.obtain<Model>("res/models/cat.obj"));
+	entities[2].setModel(resourceManager.obtain<Model>("res/models/house_1.obj"));
+
+	// This provides each entity its materials. This may be an annoying way of doing it but it can be changed to be better later.
+	resourceManager.bindGroup("materials");
+	for (Entity3D entity : entities) {
+		std::vector<std::string> materialList = entity.getModel()->getRequiredMaterials();
+		std::unordered_map<std::string, Material*> map;
+		for (std::string name : materialList) {
+			// This adds the material if it isn't already in the map.
+			if (map.find(name) == map.end()) {
+				map[name] = resourceManager.obtain<Material>(name);
+			}
+		}
+		entity.getModel()->setMaterials(map);
+	}
+
+	
 	// This sets model positioning.
-	models[1].setPosition(-10.72f, 4, -15.51f);
-	models[2].setPosition(0, 20, 15);
-	models[5].setScaling(1.5, 1.5, 1.5);
-	models[5].setPosition(-10, 0, 5);
-	models[5].setRotation(0, glm::pi<float>() / 2, 0);
-	models[6].setPosition(10, 20, 10);
-
-	// This animates models just to make sure that the animator actually works.
+	entities[0].setPosition(0.72f, 4, 5.51f);
+	entities[1].setPosition(0.72f, 4, 5.51f);
+	entities[2].setPosition(5, -5, 25);
+	/*entities[5].setScaling(1.5, 1.5, 1.5);
+	entities[5].setPosition(-10, 0, 5);
+	entities[5].setRotation(0, glm::pi<float>() / 2, 0);
+	entities[6].setPosition(10, 20, 10);*/
+	
+	// This animates entities just to make sure that the animator actually works.
 	std::vector<KeyFrame3D> keyFrames;
 	for (unsigned int i = 0; i < 4; i++) {
 		KeyFrame3DList keyFrameList;
-		for (int j = 1; j < 4; j++) {
+		for (int j = 1; j < 1; j++) {
 			KeyFrame3D keyFrame;
-			keyFrame.setObject(&models[j]);
+			keyFrame.setObject(&entities[j]);
 			glm::vec3 translation(j * -5, 5 + (i % 2), (i % 2) * 10);
 			// glm::vec3 translation(j * 5 - 7, 0, 0);
 			keyFrame.setTranslation(&translation);
 			glm::vec3 rotation(j % 2 + 3, glm::pi<float>() * (i % 2), 0.3 * (j % 2 + 1));
 			// glm::vec3 rotation(0, 0, 0);
 			keyFrame.setRotation(&rotation);
-			 glm::vec3 scaling(1 + 3 * ((1 + i) % 2), 1 + 3 * (i % 2), 1 + 3 * (i % 2));
+			glm::vec3 scaling(1 + 3 * ((1 + i) % 2), 1 + 3 * (i % 2), 1 + 3 * (i % 2));
 			keyFrame.setScaling(&scaling);
 			keyFrameList.addKeyFrame(&keyFrame);
 		}
@@ -134,7 +161,7 @@ int Aela::Engine::runningLoop() {
 		}
 		glm::vec3 rotation = glm::vec3(0, 0, 0);
 		ColourRGB colour(1, 1, 1);
-		float power = 0.9F;
+		float power = 1.0F;
 		Light3D light(position, rotation, colour, power);
 		renderer.generateShadowMap(&light);
 		lights.push_back(light);
@@ -176,7 +203,6 @@ int Aela::Engine::runningLoop() {
 
 	resourceManager.addToGroup("res/textures/ekkon.dds", false);
 	resourceManager.addToGroup("res/textures/gradient.dds", false);
-
 	WAVEClipLoader waveClipLoader;
 	resourceManager.bindLoader(&waveClipLoader);
 	resourceManager.addToGroup("res/audio/clips/test.wav", false);
@@ -234,7 +260,6 @@ int Aela::Engine::runningLoop() {
 	}
 	std::cout << info << " " << renderer.getInformation(RendererInformation::VENDOR) << " is the vendor of the GPU, "
 		<< renderer.getInformation(RendererInformation::OPENGL_VERSION) << " is the version of OpenGL.\n";*/
-
 	eventHandler.start();
 
 	// This is the program's running loop.
@@ -277,17 +302,17 @@ int Aela::Engine::runningLoop() {
 		// This renders the program.
 		renderer.startRenderingFrame();
 		renderer.setupBoundLightsForCurrentFrame();
-		for (unsigned int i = 0; i < models.size(); i++) {
-			renderer.renderModelShadows(&(models[i]));
+		for (Entity3D entity : entities) {
+			renderer.render3DEntityShadows(&entity);
 		}
 		renderer.sendBoundLightDataToShader();
-		for (unsigned int i = 0; i < models.size(); i++) {
-			renderer.renderModel(&(models[i]));
+		for (Entity3D entity : entities) {
+			renderer.render3DEntity(&entity);
 		}
 		renderer.renderSkybox(&skybox);
 		renderer.renderParticles(&particleEmitter);
-		for (unsigned int i = 0; i < billboards.size(); i++) {
-			renderer.renderBillboard(&(billboards[i]));
+		for (Billboard billboard : billboards) {
+			renderer.renderBillboard(&billboard);
 		}
 		renderer.endRendering3D();
 		renderer.bindSimple2DFramebuffer(&customFramebuffer);
@@ -305,8 +330,11 @@ int Aela::Engine::runningLoop() {
 	// This will call each model's destructor, which will delete each model's texture. I'm not sure if this
 	// is done automatically by OpenGL or Windows when the program closes, so I added it just in case.
 	// -Robert
-	models.resize(0);
+	entities.resize(0);
 
+	resourceManager.unloadGroup("materials");
+	resourceManager.unloadGroup("models");
+	resourceManager.unloadGroup("particles");
 	resourceManager.unloadGroup("test");
 
 	return 0;

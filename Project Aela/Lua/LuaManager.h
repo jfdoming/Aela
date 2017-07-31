@@ -3,7 +3,7 @@
 #include "lua.hpp"
 #include "LuaBridge/LuaBridge.h"
 #include "LuaScript.h"
-#include "../3D/Entity/Entity3D.h"
+#include "../Entities/Entity.h"
 
 class LuaManager {
 	private:

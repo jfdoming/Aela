@@ -40,8 +40,8 @@ namespace Aela {
 			}
 
 			// These are some functions related to rendering.
-			void renderShadow(Entity3D* model);
-			void renderModel(Entity3D* model, bool multisampling);
+			void renderShadow(Entity3D* entity);
+			void render3DEntity(Entity3D* entity, bool multisampling);
 			void clearColourFrameBuffer(bool multisampling);
 			void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3* position, glm::vec3* scaling, glm::vec3* lookAt, bool inverseRotation, bool multisampling);
 			void renderBillboard(Billboard* billboard, bool multisampling);

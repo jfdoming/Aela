@@ -7,7 +7,7 @@
 
 #pragma once
 #include <vector>
-#include "../3D/Entity/Entity3D.h"
+#include "../Entities/Entity3D.h"
 #include "../Renderer/Renderer.h"
 #include "../Menus/Menu.h"
 

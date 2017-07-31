@@ -17,8 +17,10 @@
 #include <glm\glm.hpp>
 #include <vector>
 
+#include "Resource.h"
+
 namespace Aela {
-	class Material {
+	class Material : public Resource {
 		public:
 			Material() {
 
@@ -26,6 +28,8 @@ namespace Aela {
 
 			GLuint getTexture();
 			void setTexture(GLuint texture);
+
+			std::string fage = "dsd";
 
 		private:
 			GLuint texture;

@@ -6,8 +6,10 @@
 */
 
 #pragma once
-#include "../../3D/Entity/Entity3D.h"
+#include "../../Entities/Entity3D.h"
 #include "../Light/Light3D.h"
+
+using namespace Aela;
 
 class Basic3DShadowRenderer {
 	public:
@@ -16,7 +18,7 @@ class Basic3DShadowRenderer {
 		}
 
 		// This adds a model's shadow to the shadow map.
-		void renderShadow(Entity3D* model, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<Light3D>* lights, GLuint lightPositionsID);
+		void renderShadow(Entity3D* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<Light3D>* lights, GLuint lightPositionsID);
 
 		// This clears all shadow maps of lights.
 		void clearShadowMaps(std::vector<Light3D>* lights);

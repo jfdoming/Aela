@@ -15,7 +15,7 @@
 #include "../3D/Texture/Texture.h"
 #include "../3D/Skybox/Skybox.h"
 #include "../Audio/AudioClip.h"
-#include "OBJResource.h"
+#include "Model.h"
 
 namespace Aela {
 	class ResourceGroup {

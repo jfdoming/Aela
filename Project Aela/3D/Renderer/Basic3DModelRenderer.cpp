@@ -12,6 +12,8 @@
 #include "Basic3DModelRenderer.h"
 #include "../../Control Manager/ControlManager.h"
 
+using namespace Aela;
+
 // This function is called in order to update camera-related matrices.
 void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
 	viewMatrix = setViewMatrix;
@@ -56,9 +58,23 @@ void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, G
 	}
 }
 
-// This function renders a model.
-void Basic3DModelRenderer::renderModel(Entity3D* model, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
+// This function renders a subModel.
+void Basic3DModelRenderer::render3DEntity(Entity3D* entity, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
 	GLuint modelMatrixID, GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition) {
+
+	// This sets up buffers.
+	GLuint vertexbuffer;
+	glGenBuffers(1, &vertexbuffer);
+
+	GLuint uvbuffer;
+	glGenBuffers(1, &uvbuffer);
+
+	GLuint normalbuffer;
+	glGenBuffers(1, &normalbuffer);
+
+	GLuint elementbuffer;
+	glGenBuffers(1, &elementbuffer);
+
 	glUseProgram(modelProgramID);
 
 	// This binds the framebuffer.
@@ -66,92 +82,85 @@ void Basic3DModelRenderer::renderModel(Entity3D* model, GLuint frameBuffer, GLui
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
 
-	// This loads buffers.
-	GLuint vertexbuffer;
-	glGenBuffers(1, &vertexbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, model->getVertexSize() * sizeof(glm::vec3), model->getVertices(), GL_STATIC_DRAW);
-
-	GLuint uvbuffer;
-	glGenBuffers(1, &uvbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-	glBufferData(GL_ARRAY_BUFFER, model->getUVSize() * sizeof(glm::vec2), model->getUVs(), GL_STATIC_DRAW);
-
-	GLuint normalbuffer;
-	glGenBuffers(1, &normalbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-	glBufferData(GL_ARRAY_BUFFER, model->getNormalSize() * sizeof(glm::vec3), model->getNormals(), GL_STATIC_DRAW);
-
-	GLuint elementbuffer;
-	glGenBuffers(1, &elementbuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, model->getIndexSize() * sizeof(unsigned short), model->getIndices(), GL_STATIC_DRAW);
-
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
-	// This is positioning/rotation of the model.
-	glm::vec3* position = model->getPosition();
-	glm::vec3* rotation = model->getRotation();
-	glm::vec3* scaling = model->getScaling();
+	for (SubModel subModel : *entity->getModel()->getSubModels()) {
+		// This loads buffers.
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glBufferData(GL_ARRAY_BUFFER, subModel.getVertexSize() * sizeof(glm::vec3), &subModel.getVertices()->at(0), GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glBufferData(GL_ARRAY_BUFFER, subModel.getUVSize() * sizeof(glm::vec2), &subModel.getUVs()->at(0), GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+		glBufferData(GL_ARRAY_BUFFER, subModel.getNormalSize() * sizeof(glm::vec3), &subModel.getNormals()->at(0), GL_STATIC_DRAW);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, subModel.getIndexSize() * sizeof(unsigned short), &subModel.getIndices()->at(0), GL_STATIC_DRAW);
 
-	// This computes more matrices.
-	glm::mat4 modelMatrix = glm::scale(glm::translate(glm::mat4(1.0), *position), *scaling) * glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
-	glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
+		// This is positioning/rotation of the subModel.
+		glm::vec3* position = entity->getPosition();
+		glm::vec3* rotation = entity->getRotation();
+		glm::vec3* scaling = entity->getScaling();
 
-	// This sends more uniforms to the shader.
-	glUniformMatrix4fv(modelMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
-	glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
-	glUniformMatrix4fv(modelViewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
-	glUniform3fv(cameraPositionID, 1, &(cameraPosition->x));
+		// This computes more matrices.
+		glm::mat4 modelMatrix = glm::scale(glm::translate(glm::mat4(1.0), *position), *scaling) * glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
+		glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 
-	// This binds the texture to "slot" zero.
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, *model->getTexture());
-	glUniform1i(modelTextureID, 0);
+		// This sends more uniforms to the shader.
+		glUniformMatrix4fv(modelMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
+		glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
+		glUniformMatrix4fv(modelViewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);
+		glUniform3fv(cameraPositionID, 1, &(cameraPosition->x));
 
-	// These are attributes for the vertex buffer.
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glVertexAttribPointer(
-		// Attribute.
-		0,
-		// Size.
-		3,
-		// Type.
-		GL_FLOAT,
-		// Is the vertex normalized?
-		GL_FALSE,
-		// Stride.
-		0,
-		// Array buffer offset.
-		(void*) 0
-	);
+		// This binds the texture to "slot" zero.
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, subModel.getMaterial()->getTexture());
+		glUniform1i(modelTextureID, 0);
 
-	// These are attributes for the UV buffer.
-	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+		// These are attributes for the vertex buffer.
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glVertexAttribPointer(
+			// Attribute.
+			0,
+			// Size.
+			3,
+			// Type.
+			GL_FLOAT,
+			// Is the vertex normalized?
+			GL_FALSE,
+			// Stride.
+			0,
+			// Array buffer offset.
+			(void*) 0
+		);
 
-	// These are attributes for the normal buffer.
-	glEnableVertexAttribArray(2);
-	glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-	// This binds the index buffer.
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+		// These are attributes for the UV buffer.
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-	// This draws the elements to the screen.
-	glDrawElements(GL_TRIANGLES, model->getIndexSize(), GL_UNSIGNED_SHORT, (void*) 0);
+		// These are attributes for the normal buffer.
+		glEnableVertexAttribArray(2);
+		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+
+		// This binds the index buffer.
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+
+		// This draws the elements to the screen.
+		glDrawElements(GL_TRIANGLES, subModel.getIndexSize(), GL_UNSIGNED_SHORT, (void*) 0);
+	}
+
+	glDeleteBuffers(1, &vertexbuffer);
+	glDeleteBuffers(1, &uvbuffer);
+	glDeleteBuffers(1, &normalbuffer);
+	glDeleteBuffers(1, &elementbuffer);
 
 	// This deletes buffers.
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
-	glDeleteBuffers(1, &vertexbuffer);
-	glDeleteBuffers(1, &uvbuffer);
-	glDeleteBuffers(1, &normalbuffer);
-	glDeleteBuffers(1, &elementbuffer);
 }
 
 // This function renders a 2D texture in 3D space. It could be used for billboards.

@@ -29,12 +29,12 @@
 #include "../2D/Renderer/Basic2DRenderer.h"
 #include "../2D/Text/TextManager.h"
 #include "../3D/Light/Light3D.h"
-
+#include "../Entities/Entity3D.h"
 #include "../Events/Listener.h"
 #include "../Events/KeyEvent.h"
 
 // These are some enums used by the Renderer.
-namespace Aela{
+namespace Aela {
 	// This enum is used to obtain information from the renderer.
 	enum class RendererInformation {
 		VENDOR, RENDERER, OPENGL_VERSION, GLSL_VERSION, OPENGL_EXTENSIONS
@@ -96,8 +96,8 @@ namespace Aela{
 
 			// These functions are related to 3D rendering.
 			void sendBoundLightDataToShader();
-			void renderModelShadows(Entity3D* model);
-			void renderModel(Entity3D* model);
+			void render3DEntityShadows(Entity3D* entity);
+			void render3DEntity(Entity3D* entity);
 			void renderBillboard(Billboard* billboard);
 			void renderSkybox(Skybox* skybox);
 			void renderParticles(ParticleEmitter* particleEmitter);

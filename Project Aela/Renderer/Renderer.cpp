@@ -119,6 +119,7 @@ void Aela::Renderer::bindSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
 
 // This starts the rendering of a frame.
 void Renderer::startRenderingFrame() {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -128,10 +129,12 @@ void Renderer::startRenderingFrame() {
 	// glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
 	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
+	// glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
 
 	basic3DRenderer.clearColourFrameBuffer(multisampling3D > 0);
-	basic3DRenderer.clearShadowMaps();
+	if (useShadows) {
+		basic3DRenderer.clearShadowMaps();
+	}
 }
 
 // This tells the renderer to send the light data to the shaders that need the data.
@@ -140,15 +143,15 @@ void Renderer::sendBoundLightDataToShader() {
 }
 
 // This renders the shadow of a model, if shadows are enabled.
-void Renderer::renderModelShadows(Entity3D* model) {
+void Renderer::render3DEntityShadows(Entity3D* entity) {
 	if (useShadows) {
-		basic3DRenderer.renderShadow(model);
+		basic3DRenderer.renderShadow(entity);
 	}
 }
 
 // This renders a model.
-void Renderer::renderModel(Entity3D* model) {
-	basic3DRenderer.renderModel(model, multisampling3D > 0);
+void Renderer::render3DEntity(Entity3D* entity) {
+	basic3DRenderer.render3DEntity(entity, multisampling3D > 0);
 }
 
 // This renders a billboard, if billboards are enabled.
@@ -220,11 +223,15 @@ void Renderer::endRenderingFrame() {
 }
 
 void Renderer::generateShadowMap(Light3D* light) {
-	basic3DRenderer.generateShadowMap(light);
+	if (useShadows) {
+		basic3DRenderer.generateShadowMap(light);
+	}
 }
 
 void Renderer::setupBoundLightsForCurrentFrame() {
-	basic3DRenderer.clearShadowMaps();
+	if (useShadows) {
+		basic3DRenderer.clearShadowMaps();
+	}
 }
 
 void Renderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer, Rect<int>* dimensions, Rect<int>* output) {
@@ -378,7 +385,6 @@ void Renderer::decreaseFOV() {
 }
 
 void Renderer::updateCamera(KeyEvent* event) {
-	std::cout << "updating cam.\n";
 	if (window->isFocused()) {
 		float deltaTime = timeManager->getTimeBetweenFrames();
 
@@ -452,7 +458,7 @@ void Renderer::updateCamera(KeyEvent* event) {
 		// This is a position vector.
 		glm::vec3 position = *(camera.getPosition());
 
-		if (event->getKeycode() == 225) {
+		/*if (event->getKeycode() == 225) {
 			currentSpeed = superSpeed;
 		}
 		else {
@@ -484,7 +490,7 @@ void Renderer::updateCamera(KeyEvent* event) {
 		// This occurs when left ctrl is pressed.
 		if (event->getKeycode() == 224) {
 			position -= straightUp * deltaTime * currentSpeed;
-		}
+		}*/
 
 		// This sets all of the camera's position and view related properties.
 		camera.setPosition(position);

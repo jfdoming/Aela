@@ -101,14 +101,14 @@
     <Filter Include="Source Files\2D\Renderer">
       <UniqueIdentifier>{34b86304-4064-4370-8d1f-095ab0a5281e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\3D\Entity">
-      <UniqueIdentifier>{a716ec3e-468d-45d0-a491-74cb98069e59}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\3D\Particles">
       <UniqueIdentifier>{c0002c9e-878d-45eb-bf80-cf9c39f9d3fe}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Resources\Materials">
       <UniqueIdentifier>{a891ab63-d204-492b-8321-f07e3b024bb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{38a9c750-481e-4436-94ae-3cfdd7cccbf2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -126,9 +126,6 @@
     </ClCompile>
     <ClCompile Include="Scenes\SceneManager.cpp">
       <Filter>Source Files\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\OBJLoader.cpp">
-      <Filter>Source Files\Resources\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Menus\Component.cpp">
       <Filter>Source Files\Menus</Filter>
@@ -175,9 +172,6 @@
     <ClCompile Include="Window\Window.cpp">
       <Filter>Source Files\Window</Filter>
     </ClCompile>
-    <ClCompile Include="Lua\Entity.cpp">
-      <Filter>Source Files\Lua</Filter>
-    </ClCompile>
     <ClCompile Include="Lua\LuaManager.cpp">
       <Filter>Source Files\Lua</Filter>
     </ClCompile>
@@ -214,9 +208,6 @@
     <ClCompile Include="Audio\WAVEClipLoader.cpp">
       <Filter>Source Files\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="Resource Management\OBJResource.cpp">
-      <Filter>Source Files\Resources\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClCompile>
@@ -228,9 +219,6 @@
     </ClCompile>
     <ClCompile Include="Lua\Mod.cpp">
       <Filter>Source Files\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\OBJResource.cpp">
-      <Filter>Source Files\Resources\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Lua\ModEnvironment.cpp">
       <Filter>Source Files\Lua</Filter>
@@ -280,9 +268,6 @@
     <ClCompile Include="2D\Renderer\Basic2DRenderer.cpp">
       <Filter>Source Files\2D\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Entity\Entity3D.cpp">
-      <Filter>Source Files\3D\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="3D\Particles\Particle.cpp">
       <Filter>Source Files\3D\Particles</Filter>
     </ClCompile>
@@ -294,9 +279,6 @@
     </ClCompile>
     <ClCompile Include="3D\Particles\PointParticleEmitter.cpp">
       <Filter>Source Files\3D\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\Object.cpp">
-      <Filter>Source Files\Resources\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Resource Management\Material.cpp">
       <Filter>Source Files\Resources\Materials</Filter>
@@ -318,6 +300,27 @@
     </ClCompile>
     <ClCompile Include="Menus\TextComponent.cpp">
       <Filter>Source Files\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Skybox\SkyboxLoader.cpp">
+      <Filter>Source Files\3D\Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\Model.cpp">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\OBJLoader.cpp">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource Management\SubModel.cpp">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Entity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Entities\Entity3D.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Events\EventConstants.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -347,9 +350,6 @@
     </ClInclude>
     <ClInclude Include="Scenes\stdafx.h">
       <Filter>Source Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource Management\OBJLoader.h">
-      <Filter>Source Files\Resources\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Menus\Component.h">
       <Filter>Source Files\Menus</Filter>
@@ -417,9 +417,6 @@
     <ClInclude Include="Window\Window.h">
       <Filter>Source Files\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Lua\Entity.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
     <ClInclude Include="Lua\LuaManager.h">
       <Filter>Source Files\Lua</Filter>
     </ClInclude>
@@ -443,9 +440,6 @@
     </ClInclude>
     <ClInclude Include="Audio\WAVEClipLoader.h">
       <Filter>Source Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource Management\OBJResource.h">
-      <Filter>Source Files\Resources\Objects</Filter>
     </ClInclude>
     <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
@@ -477,14 +471,8 @@
     <ClInclude Include="Audio\AudioManager.h">
       <Filter>Source Files\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Audio\Listener.h">
-      <Filter>Source Files\Audio</Filter>
-    </ClInclude>
     <ClInclude Include="Audio\WAVEClipLoader.h">
       <Filter>Source Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource Management\OBJResource.h">
-      <Filter>Source Files\Resources\Objects</Filter>
     </ClInclude>
     <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
@@ -540,9 +528,6 @@
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h">
       <Filter>Source Files\2D\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Entity\Entity3D.h">
-      <Filter>Source Files\3D\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="3D\Particles\Particle.h">
       <Filter>Source Files\3D\Particles</Filter>
     </ClInclude>
@@ -554,9 +539,6 @@
     </ClInclude>
     <ClInclude Include="3D\Particles\PointParticleEmitter.h">
       <Filter>Source Files\3D\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource Management\Object.h">
-      <Filter>Source Files\Resources\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Resource Management\Material.h">
       <Filter>Source Files\Resources\Materials</Filter>
@@ -575,6 +557,30 @@
     </ClInclude>
     <ClInclude Include="Menus\TextComponent.h">
       <Filter>Source Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Skybox\SkyboxLoader.h">
+      <Filter>Source Files\3D\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\Model.h">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\OBJLoader.h">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource Management\SubModel.h">
+      <Filter>Source Files\Resources\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Entity.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\Entity3D.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\EventConstants.h">
+      <Filter>Source Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Events\Listener.h">
+      <Filter>Source Files\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

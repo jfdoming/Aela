@@ -182,19 +182,19 @@ Texture * Aela::Basic3DRenderer::getMultisampledColourFrameBufferTexture() {
 }
 
 // This renders a model's shadow per light using the shadow renderer.
-void Basic3DRenderer::renderShadow(Entity3D* model) {
+void Basic3DRenderer::renderShadow(Entity3D* entity) {
 	glViewport(0, 0, shadowRenderer.getDepthTextureWidth(), shadowRenderer.getDepthTextureHeight());
-	shadowRenderer.renderShadow(model, depthProgramID, shadowModelMatrixID, shadowMatrixID, lights, lightShadowPositionsID);
+	shadowRenderer.renderShadow(entity, depthProgramID, shadowModelMatrixID, shadowMatrixID, lights, lightShadowPositionsID);
 }
 
 // This renders a model.
-void Basic3DRenderer::renderModel(Entity3D* model, bool multisampling) {
+void Basic3DRenderer::render3DEntity(Entity3D* entity, bool multisampling) {
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	glViewport(0, 0, windowWidth, windowHeight);
 	if (multisampling) {
-		modelRenderer.renderModel(model, multisampledColourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
+		modelRenderer.render3DEntity(entity, multisampledColourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
 	} else {
-		modelRenderer.renderModel(model, colourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
+		modelRenderer.render3DEntity(entity, colourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
 	}
 }
 

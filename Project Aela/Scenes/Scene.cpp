@@ -20,12 +20,12 @@ void Scene::render(Renderer* renderer) {
 
 	renderer->setupBoundLightsForCurrentFrame();
 	for (auto model : models) {
-		renderer->renderModelShadows(model);
+		renderer->render3DEntityShadows(model);
 	}
 	renderer->sendBoundLightDataToShader();
 
 	for (auto model : models) {
-		renderer->renderModel(model);
+		renderer->render3DEntity(model);
 	}
 
 	renderer->renderSkybox(&skybox);

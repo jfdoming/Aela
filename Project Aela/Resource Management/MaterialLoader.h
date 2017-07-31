@@ -8,17 +8,15 @@
 #pragma once
 
 #include "ResourceLoader.h"
+#include "TextureLoader.h"
 
 namespace Aela {
-	class MaterialLoader : public ResourceLoader {
+	class MaterialLoader : public TextureLoader {
 		public:
 			MaterialLoader();
 			virtual ~MaterialLoader();
 
 			virtual void expose(LuaManager& mgr);
 			virtual bool load(std::unordered_map<std::string, Resource*>* resources, std::string src);
-		private:
-
-			GLuint loadDDSToGLuint(std::string filePath);
 	};
 }
