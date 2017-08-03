@@ -132,9 +132,6 @@ void Renderer::startRenderingFrame() {
 	// glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
 
 	basic3DRenderer.clearColourFrameBuffer(multisampling3D > 0);
-	if (useShadows) {
-		basic3DRenderer.clearShadowMaps();
-	}
 }
 
 // This tells the renderer to send the light data to the shaders that need the data.
@@ -169,7 +166,7 @@ void Renderer::renderSkybox(Skybox* skybox) {
 }
 
 void Aela::Renderer::renderParticles(ParticleEmitter* particleEmitter) {
-	basic3DRenderer.renderParticles(particleEmitter, multisampling3D > 0);
+	basic3DRenderer.renderParticles(particleEmitter, &camera, multisampling3D > 0);
 }
 
 // This renders a 2D texture using the 2D renderer.
@@ -229,9 +226,9 @@ void Renderer::generateShadowMap(Light3D* light) {
 }
 
 void Renderer::setupBoundLightsForCurrentFrame() {
-	if (useShadows) {
+	// if (useShadows) {
 		basic3DRenderer.clearShadowMaps();
-	}
+	// }
 }
 
 void Renderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer, Rect<int>* dimensions, Rect<int>* output) {
@@ -401,10 +398,8 @@ void Renderer::updateCamera(KeyEvent* event) {
 		float horizontalAngle = camera.getRotation()->x;
 		float verticalAngle = camera.getRotation()->y;
 
-		// std::cout << horizontalAngle << " " << verticalAngle << " are the control manager's values.\n";
-
 		// This computes the new horizontal angle.
-		// horizontalAngle += mouseSpeed * float(width / 2 - xpos);
+		horizontalAngle += mouseSpeed * float(width / 2 - xpos);
 
 		// This adjusts the horizontal angle so that it stays between 0 and PI * 2.
 		if (horizontalAngle >= glm::pi<float>() * 2) {
@@ -415,11 +410,11 @@ void Renderer::updateCamera(KeyEvent* event) {
 		}
 
 		// This computes the new vertical angle.
-		float verticalModifier = 0;// mouseSpeed * float(height / 2 - ypos);
+		float verticalModifier = mouseSpeed * float(height / 2 - ypos);
 
-								   // This checks to see if the user is trying to make the camera go upside down by moving the camera up
-								   // too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
-								   // allowUpsideDownCamera is true.
+		// This checks to see if the user is trying to make the camera go upside down by moving the camera up
+		// too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
+		// allowUpsideDownCamera is true.
 		if ((!allowUpsideDownCamera && verticalModifier > 0 && verticalAngle + verticalModifier <= glm::pi<float>() / 2) || allowUpsideDownCamera) {
 			verticalAngle += mouseSpeed * float(height / 2 - ypos);
 		}
@@ -458,7 +453,7 @@ void Renderer::updateCamera(KeyEvent* event) {
 		// This is a position vector.
 		glm::vec3 position = *(camera.getPosition());
 
-		/*if (event->getKeycode() == 225) {
+		if (event->getKeycode() == 225) {
 			currentSpeed = superSpeed;
 		}
 		else {
@@ -466,19 +461,19 @@ void Renderer::updateCamera(KeyEvent* event) {
 		}
 
 		// This occurs when 'w' is pressed.
-		if (event->getKeycode() == 26) {
+		if (event->getKeycode() == 119) {
 			position += direction * deltaTime * currentSpeed;
 		}
 		// This occurs when 's' is pressed.
-		if (event->getKeycode() == 22) {
+		if (event->getKeycode() == 115) {
 			position -= direction * deltaTime * currentSpeed;
 		}
 		// This occurs when 'd' is pressed.
-		if (event->getKeycode() == 7) {
+		if (event->getKeycode() == 100) {
 			position += right * deltaTime * currentSpeed;
 		}
 		// This occurs when 'a' is pressed.
-		if (event->getKeycode() == 4) {
+		if (event->getKeycode() == 97) {
 			position -= right * deltaTime * currentSpeed;
 		}
 
@@ -490,11 +485,11 @@ void Renderer::updateCamera(KeyEvent* event) {
 		// This occurs when left ctrl is pressed.
 		if (event->getKeycode() == 224) {
 			position -= straightUp * deltaTime * currentSpeed;
-		}*/
+		}
 
 		// This sets all of the camera's position and view related properties.
 		camera.setPosition(position);
-		glm::mat4 projectionMatrix = glm::perspective(camera.getFieldOfView(), (float)width / height, 0.1f, 100.0f);
+		glm::mat4 projectionMatrix = glm::perspective(camera.getFieldOfView(), (float) width / height, 0.1f, 100.0f);
 		glm::mat4 viewMatrix = glm::lookAt(position, position + direction, up);
 		camera.setProjectionMatrix(projectionMatrix);
 		camera.setViewMatrix(viewMatrix);

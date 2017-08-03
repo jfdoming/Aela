@@ -16,10 +16,8 @@
 #include "Material.h"
 #include "../../Error Handler/ErrorHandler.h"
 
-// This is all temporary until everything is restructured so that we only have one DDS loader!
-#define FOURCC_DXT1 0x31545844 // Equivalent to "DXT1" in ASCII
-#define FOURCC_DXT3 0x33545844 // Equivalent to "DXT3" in ASCII
-#define FOURCC_DXT5 0x35545844 // Equivalent to "DXT5" in ASCII
+// This is only here for temporary debug purposes!
+#include "../../Old Garbage/texture.hpp"
 
 using namespace Aela;
 
@@ -66,26 +64,18 @@ bool Aela::MaterialLoader::load(std::unordered_map<std::string, Resource*>* reso
 						break;
 					}
 				}
-
-				std::ifstream textureStream;
-				if (!ResourceLoader::open(textureStream, path + fileName)) {
-					AelaErrorHandling::windowError("Aela Material Loader", "Could not find the texture " + fileName + " inside of " + path
-						+ " that was spedified in " + src + ".");
-
-					continue;
-				}
-
+				
 				GLuint texture;
 				glGenTextures(1, &texture);
 				glBindTexture(GL_TEXTURE_2D, texture);
-				loadTexture(textureStream, &texture, GL_TEXTURE_2D, NULL, NULL);
+				loadTextureUsingFILE(path + fileName, &texture, GL_TEXTURE_2D);
+
 				if (material != nullptr) {
 					material->setTexture(texture);
 				} else {
 					// Error! The file did not specify a material name before setting the texture!
 					return false;
 				}
-				textureStream.close();
 			} else {
 				// The line in the file is treated as a comment if this line is reached.
 			}

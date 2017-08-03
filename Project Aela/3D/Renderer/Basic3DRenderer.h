@@ -48,7 +48,7 @@ namespace Aela {
 			void clearShadowMaps();
 			void sendLightDataToShader();
 			void renderSkybox(Skybox* skybox, bool multisampling);
-			void renderParticles(ParticleEmitter* particleEmitter, bool multisampling);
+			void renderParticles(ParticleEmitter* particleEmitter, Camera3D* camera, bool multisampling);
 
 			// These are some functions related to setup.
 			void setup(unsigned int multisampling);
@@ -102,5 +102,8 @@ namespace Aela {
 			// These are some setup related functions.
 			void setupShaders();
 			void getIDs();
+
+			void renderParticle(Particle particle, glm::vec3* positionOffset, glm::vec3* rotationOffset, glm::vec3* scalingOffset,
+				bool multisampling);
 	};
 };

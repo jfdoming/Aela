@@ -7,6 +7,7 @@
 */
 
 #include "Basic3DRenderer.h"
+#include <glm/gtx/component_wise.hpp>
 
 using namespace Aela;
 
@@ -261,26 +262,53 @@ void Basic3DRenderer::renderSkybox(Skybox* skybox, bool multisampling) {
 	}
 }
 
-void Aela::Basic3DRenderer::renderParticles(ParticleEmitter* particleEmitter, bool multisampling) {
+// This renders particles. Keep in mind that particles are sorted in the ParticleEmitter's list (based on their z position, relative to the 
+// emitter). This function uses a (probably slow) technique to figure out whether the particles should be rendered according to their order in the
+// list or according the backwards version of this order. This is necessary since if billboards (which is what a particle is) are not rendered
+// from the greatest z-distance to the smallest z distance relative to position 0, 0, 0 in the camera space, their alpha blending will screw up and
+// look bad.
+void Aela::Basic3DRenderer::renderParticles(ParticleEmitter* particleEmitter, Camera3D* camera, bool multisampling) {
 	glViewport(0, 0, windowWidth, windowHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	for (Particle particle : *particleEmitter->getParticles()) {
-		glm::vec3 position = *particle.getPosition() + *particleEmitter->getPosition();
-		glm::vec3 rotation = *particle.getRotation() + *particleEmitter->getRotation();
-		glm::vec3 scaling = *particle.getScaling() * *particleEmitter->getScaling();
+	glm::vec3 actualCameraRotation = glm::vec3(camera->getRotation()->y, camera->getRotation()->x, camera->getRotation()->z);
+	glm::vec3 differenceA = actualCameraRotation - *particleEmitter->getRotation();
+	glm::vec3 differenceB = *particleEmitter->getRotation() - actualCameraRotation;
+	camera->forceValuesWithinRange(&differenceA, 0, glm::pi<float>() * 2);
+	camera->forceValuesWithinRange(&differenceB, 0, glm::pi<float>() * 2);
+	glm::vec3 difference = glm::vec3(glm::min(differenceA.x, differenceB.x), glm::min(differenceA.y, differenceB.y),
+		glm::min(differenceA.z, differenceB.z));
+	float angle = glm::compMax(difference);
 
-		if (particle.usingSpecifiedRotation()) {
-			if (multisampling) {
-				modelRenderer.renderTextureIn3DSpace(true, particle.getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, &position, &rotation, &scaling);
-			} else {
-				modelRenderer.renderTextureIn3DSpace(true, particle.getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, &position, &rotation, &scaling);
-			}
+	if (angle < glm::pi<float>() / 2) {
+		for (Particle particle : *particleEmitter->getParticles()) {
+			renderParticle(particle, particleEmitter->getPosition(), particleEmitter->getRotation(), particleEmitter->getScaling(),
+				multisampling);
+		}
+	} else {
+		for (unsigned int i = particleEmitter->getParticles()->size() - 1; i > 0; i--) {
+			renderParticle(particleEmitter->getParticles()->at(i), particleEmitter->getPosition(), particleEmitter->getRotation(),
+				particleEmitter->getScaling(), multisampling);
+		}
+	}
+}
+
+void Aela::Basic3DRenderer::renderParticle(Particle particle, glm::vec3* positionOffset, glm::vec3* rotationOffset, glm::vec3* scalingOffset,
+	bool multisampling) {
+	glm::vec3 position = *particle.getPosition() + *positionOffset;
+	glm::vec3 rotation = *particle.getRotation() + *rotationOffset;
+	glm::vec3 scaling = *particle.getScaling() * *scalingOffset;
+
+	if (particle.usingSpecifiedRotation()) {
+		if (multisampling) {
+			modelRenderer.renderTextureIn3DSpace(false, particle.getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, &position, &rotation, &scaling);
 		} else {
-			if (multisampling) {
-				modelRenderer.renderTextureIn3DSpace(true, particle.getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, &position, &scaling, camera->getPosition(), true);
-			} else {
-				modelRenderer.renderTextureIn3DSpace(true, particle.getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, &position, &scaling, camera->getPosition(), true);
-			}
+			modelRenderer.renderTextureIn3DSpace(false, particle.getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, &position, &rotation, &scaling);
+		}
+	} else {
+		if (multisampling) {
+			modelRenderer.renderTextureIn3DSpace(false, particle.getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, &position, &scaling, camera->getPosition(), true);
+		} else {
+			modelRenderer.renderTextureIn3DSpace(false, particle.getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, &position, &scaling, camera->getPosition(), true);
 		}
 	}
 }

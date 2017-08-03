@@ -27,6 +27,7 @@
 #include "Audio/WAVEClipLoader.h"
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
+#include "Events/EventConstants.h"
 #include "Audio/AudioManager.h"
 #include "3D/Animator/Animator3D.h"
 #include "3D/Particles/PlanarParticleEmitter.h"
@@ -50,7 +51,7 @@ using namespace Aela;
 
 int Aela::Engine::runningLoop() {
 	// TEMPORARY! This won't exist once entities are moved elsewhere.
-	std::vector<Entity3D> entities(3);
+	std::vector<Entity3D> entities(5);
 
 	MaterialLoader materialLoader;
 	resourceManager.bindLoader(&materialLoader);
@@ -58,6 +59,8 @@ int Aela::Engine::runningLoop() {
 	resourceManager.addToGroup("res/materials/meme_mug.mtl", false);
 	resourceManager.addToGroup("res/materials/cat.mtl", false);
 	resourceManager.addToGroup("res/materials/house_1.mtl", false);
+	resourceManager.addToGroup("res/materials/jeep_1.mtl", false);
+	resourceManager.addToGroup("res/materials/lamp_post_1.mtl", false);
 
 	if (resourceManager.loadGroup("materials") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"materials\"!" << std::endl;
@@ -72,6 +75,8 @@ int Aela::Engine::runningLoop() {
 	resourceManager.addToGroup("res/models/meme_mug.obj", false);
 	resourceManager.addToGroup("res/models/cat.obj", false);
 	resourceManager.addToGroup("res/models/house_1.obj", false);
+	resourceManager.addToGroup("res/models/jeep_1.obj", false);
+	resourceManager.addToGroup("res/models/lamp_post_1.obj", false);
 
 	if (resourceManager.loadGroup("models") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"models\"!" << std::endl;
@@ -80,6 +85,8 @@ int Aela::Engine::runningLoop() {
 	entities[0].setModel(resourceManager.obtain<Model>("res/models/meme_mug.obj"));
 	entities[1].setModel(resourceManager.obtain<Model>("res/models/cat.obj"));
 	entities[2].setModel(resourceManager.obtain<Model>("res/models/house_1.obj"));
+	entities[3].setModel(resourceManager.obtain<Model>("res/models/jeep_1.obj"));
+	entities[4].setModel(resourceManager.obtain<Model>("res/models/lamp_post_1.obj"));
 
 	// This provides each entity its materials. This may be an annoying way of doing it but it can be changed to be better later.
 	resourceManager.bindGroup("materials");
@@ -97,9 +104,11 @@ int Aela::Engine::runningLoop() {
 
 	
 	// This sets model positioning.
-	entities[0].setPosition(0.72f, 4, 5.51f);
-	entities[1].setPosition(0.72f, 4, 5.51f);
-	entities[2].setPosition(5, -5, 25);
+	entities[0].setPosition(0.72f, 6, -5.51f);
+	entities[1].setPosition(0.72f, -1, -5.51f);
+	entities[2].setPosition(5, -3, -10);
+	entities[2].setRotation(0, glm::pi<float>(), 0);
+	entities[4].setPosition(0.72f, 0, 5.51f);
 	/*entities[5].setScaling(1.5, 1.5, 1.5);
 	entities[5].setPosition(-10, 0, 5);
 	entities[5].setRotation(0, glm::pi<float>() / 2, 0);
@@ -109,24 +118,21 @@ int Aela::Engine::runningLoop() {
 	std::vector<KeyFrame3D> keyFrames;
 	for (unsigned int i = 0; i < 4; i++) {
 		KeyFrame3DList keyFrameList;
-		for (int j = 1; j < 1; j++) {
+		for (int j = 3; j < 4; j++) {
 			KeyFrame3D keyFrame;
 			keyFrame.setObject(&entities[j]);
-			glm::vec3 translation(j * -5, 5 + (i % 2), (i % 2) * 10);
+			glm::vec3 translation(30, 0, 0);
 			// glm::vec3 translation(j * 5 - 7, 0, 0);
 			keyFrame.setTranslation(&translation);
-			glm::vec3 rotation(j % 2 + 3, glm::pi<float>() * (i % 2), 0.3 * (j % 2 + 1));
-			// glm::vec3 rotation(0, 0, 0);
+			// glm::vec3 rotation(j % 2 + 3, glm::pi<float>() * (i % 2), 0.3 * (j % 2 + 1));
+			glm::vec3 rotation(0, 0, 0);
 			keyFrame.setRotation(&rotation);
-			glm::vec3 scaling(1 + 3 * ((1 + i) % 2), 1 + 3 * (i % 2), 1 + 3 * (i % 2));
+			// glm::vec3 scaling(1 + 3 * ((1 + i) % 2), 1 + 3 * (i % 2), 1 + 3 * (i % 2));
+			glm::vec3 scaling(1, 1, 1);
 			keyFrame.setScaling(&scaling);
 			keyFrameList.addKeyFrame(&keyFrame);
 		}
-		if (i == 0) {
-			keyFrameList.setTimeAfterPreviousKeyFrame(8000);
-		} else {
-			keyFrameList.setTimeAfterPreviousKeyFrame(4000);
-		}
+		keyFrameList.setTimeAfterPreviousKeyFrame(10000);
 		animator.addKeyFrameList(&keyFrameList);
 	}
 
@@ -168,39 +174,10 @@ int Aela::Engine::runningLoop() {
 	}
 	renderer.bindLights(&lights);
 
-	// This sets up particles.
-	PlanarParticleEmitter particleEmitter;
-	Rect<GLfloat> emitterDimensions(0, 0, 10, 10);
-	particleEmitter.setupDimensions(&emitterDimensions);
-	particleEmitter.setCamera(renderer.getCamera());
-	particleEmitter.setBaseLifetime(7);
-	particleEmitter.setBaseSpeed(0.001f);
-	particleEmitter.setSpeedOffset(0.0f);
-	particleEmitter.setLifetimeOffset(0);
-	particleEmitter.setPathOffset(2);
-	particleEmitter.setPosition(2, 0, 5);
-	particleEmitter.setTimeManager(&timeManager);
-
-	// This uses a texture loader to load particles. We may eventually want a seperate particle loader!
 	TextureLoader textureLoader;
 	resourceManager.bindLoader(&textureLoader);
 
-	resourceManager.bindGroup("particles");
-	resourceManager.addToGroup("res/textures/particle_1.dds", false);
-	resourceManager.addToGroup("res/textures/particle_2.dds", false);
-
-	if (resourceManager.loadGroup("particles") != Aela::ResourceManager::Status::OK) {
-		std::cerr << "Failed to load a resource from group \"particles\"!" << std::endl;
-	}
-
-	std::vector<GLuint> particleTextures;
-	particleTextures.push_back(*resourceManager.obtain<Texture>("res/textures/particle_2.dds")->getTexture());
-	particleTextures.push_back(*resourceManager.obtain<Texture>("res/textures/particle_2.dds")->getTexture());
-	
-	particleEmitter.setupParticles(&particleTextures, 1, 1, 15);
-
 	resourceManager.bindGroup("test");
-
 	resourceManager.addToGroup("res/textures/ekkon.dds", false);
 	resourceManager.addToGroup("res/textures/gradient.dds", false);
 	WAVEClipLoader waveClipLoader;
@@ -213,6 +190,36 @@ int Aela::Engine::runningLoop() {
 	}
 
 	audioPlayer.playClip(resourceManager.obtain<AudioClip>("res/audio/clips/test.wav"));
+
+	// This sets up particles.
+	PlanarParticleEmitter particleEmitter;
+	Rect<GLfloat> emitterDimensions(0, 0, 10, 10);
+	particleEmitter.setupDimensions(&emitterDimensions);
+	particleEmitter.setCamera(renderer.getCamera());
+	particleEmitter.setBaseLifetime(15);
+	particleEmitter.setBaseSpeed(0.001f);
+	particleEmitter.setSpeedOffset(0.001f);
+	particleEmitter.setLifetimeOffset(0);
+	particleEmitter.setPathOffset(2);
+	particleEmitter.setPosition(2, 0, 5);
+	particleEmitter.setRotation(0, 3.4f, 0.1f);
+	particleEmitter.setTimeManager(&timeManager);
+
+	// This uses a texture loader to load particles. We may eventually want a seperate particle loader!
+	resourceManager.bindLoader(&textureLoader);
+	resourceManager.bindGroup("particles");
+	resourceManager.addToGroup("res/textures/particle_1.dds", false);
+	resourceManager.addToGroup("res/textures/particle_2.dds", false);
+
+	if (resourceManager.loadGroup("particles") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"particles\"!" << std::endl;
+	}
+
+	std::vector<GLuint> particleTextures;
+	particleTextures.push_back(*resourceManager.obtain<Texture>("res/textures/particle_1.dds")->getTexture());
+	particleTextures.push_back(*resourceManager.obtain<Texture>("res/textures/particle_2.dds")->getTexture());
+	
+	particleEmitter.setupParticles(&particleTextures, 0.6f, 0.6f, 15);
 
 	// SCENE TESTING
 	// Scene test;
@@ -273,7 +280,7 @@ int Aela::Engine::runningLoop() {
 		// THIS IS FOR TESTING!
 		// controlManager.transform3DObject(&billboards[0], -5);
 		// controlManager.transform3DObject(renderer.getCamera(), -5);
-		renderer.getCamera()->focusAtPointOnPlane(*billboards[0].getPosition(), glm::vec3(0, 0, 0));
+		// renderer.getCamera()->focusAtPointOnPlane(*billboards[0].getPosition(), glm::vec3(0, 0, 0));
 		// std::cout << billboards[0].getPosition()->x << " " << billboards[0].getPosition()->y << " " << billboards[0].getPosition()->z << "\n";
 		billboards[0].setScaling(2 - (timeManager.getCurrentTime() % 2000) / 3500.0f, 2 + (timeManager.getCurrentTime() % 2000) / 3500.0f, 2);
 
@@ -394,6 +401,8 @@ int Aela::Engine::setupLUA() {
 
 int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
+	eventHandler.addListener(EventConstants::KEY_PRESSED, &renderer);
+	eventHandler.addListener(EventConstants::MOUSE_PRESSED, &renderer);
 	return 0;
 }
 

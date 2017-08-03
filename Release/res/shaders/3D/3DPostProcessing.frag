@@ -23,7 +23,7 @@ in vec2 windowDimensionsForFragmentShader;
 float transparency = 1.0;
 
 // This stores the effects to use.
-int effectsToUse[1] = int[1](0);
+int effectsToUse[2] = int[2](0, 3);
 
 // These functions and variables are the effects that may be used on the buffer.
 // This is the blur effect.
@@ -38,7 +38,17 @@ float brightnessModifier = 0.05;
 // This is the tint effect.
 vec4 tint(vec4 colourToModify);
 // Tint Colour: 0 = tint to black, 1.0 = keep original value.
-vec3 tintColour = vec3(0.2, 1.0, 1.0);
+vec3 tintColour = vec3(0.99, 0.91, 0.84);
+
+// This is for noise.
+vec4 noise(vec4 colourToModify, vec2 UV);
+// This is a modifier for the amplitude of the noise.
+float noiseMagnitude = 0.05;
+
+// This is used for pseudo-randomness.
+float rand(vec2 seed){
+    return fract(sin(dot(seed.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
 
 // This is main(), which applies any effects to the colour value of the rendered item.
 void main(){
@@ -58,6 +68,9 @@ void main(){
 				break;
 			case 3:
 				colour = tint(colour);
+				break;
+			case 4:
+				colour = noise(colour, UV);
 				break;
 			default:
 				colour = texture(quadTexture, UV);
@@ -90,4 +103,8 @@ vec4 blackAndWhite(vec4 colourToModify){
 
 vec4 tint(vec4 colourToModify) {
 	return colourToModify * vec4(tintColour, 1);
+}
+
+vec4 noise(vec4 colourToModify, vec2 UV) {
+	return clamp(vec4(colourToModify + vec4(rand(UV) * noiseMagnitude) - vec4(noiseMagnitude / 2)), 0, 1);
 }

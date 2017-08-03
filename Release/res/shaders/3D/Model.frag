@@ -45,6 +45,19 @@ uniform vec3 lightColours[2];
 uniform float lightPowers[2];
 uniform vec3 cameraPosition;
 
+// This is used for pseudo-randomness.
+float rand(vec2 seed){
+    return fract(sin(dot(seed.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+// This is for noise. This effect can be found in the 3D post-process shader. I put it here
+// in case one might want to apply the effect to an individual texture rather than to the
+// entire 3D buffer.
+float noiseMagnitude = 0.07;
+vec4 noise(vec4 colourToModify, vec2 UV) {
+	return clamp(vec4(colourToModify + vec4(rand(UV) * noiseMagnitude) - vec4(noiseMagnitude / 2)), 0, 1);
+}
+
 // This calculates the shadow. It contains a few methods of making shadows look nicer,
 // including the fixing of shadow acne and peter panning. It also includes percentage-closer
 // filtering (PCF).
@@ -120,5 +133,5 @@ void main(){
 	
 	colourAsVec3 = 
 		MaterialAmbientColor + visibility * finalDiffuseColour;
-	colour = vec4(colourAsVec3, 1);
+	colour = noise(vec4(colourAsVec3, 1), UV);
 }

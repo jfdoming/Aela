@@ -51,6 +51,11 @@ GLuint loadDDSToGLuint(std::string filePath) {
 	// This will receive the rest of the header.
 	fread(&fileHeader, 124, 1, imageFile);
 
+	for (int i = 0; i < 124; i++) {
+		std::cout << fileHeader[i];
+	}
+	std::cout << " is the header.\n";
+
 	unsigned int imageHeight = *(unsigned int*) &(fileHeader[8]);
 	unsigned int imageWidth = *(unsigned int*) &(fileHeader[12]);
 	unsigned int linearSize = *(unsigned int*) &(fileHeader[16]);
@@ -98,6 +103,8 @@ GLuint loadDDSToGLuint(std::string filePath) {
 
 	unsigned int blockSize = (format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
 	unsigned int offset = 0;
+
+	std::cout << mipMapAmount << " is the mipmap amount, according to texture.cpp.\n";
 
 	// This loads the mipmaps.
 	for (unsigned int level = 0; level < mipMapAmount && (imageWidth || imageHeight); level++) {

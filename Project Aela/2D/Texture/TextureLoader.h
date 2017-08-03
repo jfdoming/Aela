@@ -27,5 +27,7 @@ namespace Aela {
 		protected:
 			void loadTexture(std::ifstream& in, GLuint* texID, GLenum target);
 			void loadTexture(std::ifstream& in, GLuint* texID, GLenum target, unsigned int* width, unsigned int* height);
+			void loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target);
+			void loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target, unsigned int* width, unsigned int* height);
 	};
 }
