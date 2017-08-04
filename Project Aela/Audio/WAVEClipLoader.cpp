@@ -19,7 +19,7 @@ WAVEClipLoader::WAVEClipLoader() {
 WAVEClipLoader::~WAVEClipLoader() {
 }
 
-bool WAVEClipLoader::load(std::unordered_map<std::string, Resource*>* resources, std::string src) {
+bool WAVEClipLoader::load(ResourceMap& resources, std::string src) {
 	// try to open the file
 	std::ifstream in;
 	if (!open(in, src)) {
@@ -116,6 +116,6 @@ bool WAVEClipLoader::load(std::unordered_map<std::string, Resource*>* resources,
 	std::cout << "s" << data[0] << std::endl;
 	std::cout << bitsPerSample * sampleRate << std::endl;
 
-	(*resources)[src] = clip;
+	resources.put(src, clip);
 	return true;
 }

@@ -9,6 +9,8 @@
 
 #include "Model.h"
 #include "../../Resource Management/ResourceLoader.h"
+#include "../../Resource Management/ResourceMap.h"
+
 #include <map>
 
 namespace Aela {
@@ -17,13 +19,14 @@ namespace Aela {
 			OBJLoader();
 			virtual ~OBJLoader();
 
-			virtual bool load(std::unordered_map<std::string, Resource*>* resources, std::string src);
+			virtual bool load(ResourceMap& resources, std::string src);
 
 		private:
 			struct VertexData {
 				glm::vec3 position;
 				glm::vec2 uv;
 				glm::vec3 normal;
+
 				bool operator<(const VertexData that) const {
 					return memcmp((void*)this, (void*) &that, sizeof(VertexData))>0;
 				};

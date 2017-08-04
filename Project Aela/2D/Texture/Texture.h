@@ -16,14 +16,12 @@
 
 class Texture : public Aela::Resource {
 	public:
-		// constructor added for resmgmt purposes
-		// Hopefully the noarg constructor can be removed once all code is refactored to use resmgmt.
-		Texture(GLuint texture) {
-			setTexture(texture);
+		Texture(GLuint& texId) {
+			this->texture = texId;
 		}
 
 		Texture() {
-			dimensions.setValues(0, 0, 0, 0);
+			//dimensions.setValues(0, 0, 0, 0);
 		}
 
 		virtual ~Texture(){

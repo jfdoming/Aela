@@ -25,7 +25,7 @@ OBJLoader::OBJLoader() {
 OBJLoader::~OBJLoader() {
 }
 
-bool Aela::OBJLoader::load(std::unordered_map<std::string, Resource*>* resources, std::string src) {
+bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 	// try to open the file
 	std::ifstream in;
 	if (!open(in, src)) {
@@ -100,6 +100,7 @@ bool Aela::OBJLoader::load(std::unordered_map<std::string, Resource*>* resources
 			} else {
 				AelaErrorHandling::windowError("Aela OBJ Model Loader", "The formatting of the face ('f') section of the OBJ file\nis not the same that the loader uses.\nMake sure to specify vertex, UV\nand normal data in your OBJ file!");
 				in.close();
+				delete res;
 				return false;
 			}
 				
@@ -112,7 +113,7 @@ bool Aela::OBJLoader::load(std::unordered_map<std::string, Resource*>* resources
 
 	setupSubModel(&res->getSubModels()->at(res->getSubModels()->size() - 1), &vertexIndices, &uvIndices, &normalIndices, &tempVertices, &tempUVs, &tempNormals, materialName);
 
-	resources->emplace(src, res);
+	resources.put(src, res);
 	return true;
 }
 

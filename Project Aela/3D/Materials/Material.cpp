@@ -7,10 +7,10 @@
 
 #include "Material.h"
 
-GLuint Aela::Material::getTexture() {
+Texture* Aela::Material::getTexture() {
 	return texture;
 }
 
-void Aela::Material::setTexture(GLuint texture) {
+void Aela::Material::setTexture(Texture* texture) {
 	this->texture = texture;
 }
