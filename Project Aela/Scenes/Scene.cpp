@@ -18,7 +18,7 @@ void Scene::update() {
 void Scene::render(Renderer* renderer) {
 	renderer->startRenderingFrame();
 
-	renderer->setupBoundLightsForCurrentFrame();
+	renderer->startRendering3D();
 	for (auto model : models) {
 		renderer->render3DEntityShadows(model);
 	}

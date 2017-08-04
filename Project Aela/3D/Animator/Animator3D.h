@@ -3,6 +3,9 @@
 * Author: Robert Ciborowski
 * Date: 10/07/2017
 * Description: A class used by Aela's 3D Animator to perform transformations on 3D objects.
+*              Note: The position of the point used when rotating a Transformable3D using
+*              PointRotation3D is relative to the Transformable3D (as opposed to being relative
+*              to (0, 0, 0) in worldspace).
 */
 
 #include <vector>

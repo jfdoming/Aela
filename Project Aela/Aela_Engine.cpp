@@ -51,7 +51,7 @@ using namespace Aela;
 
 int Aela::Engine::runningLoop() {
 	// TEMPORARY! This won't exist once entities are moved elsewhere.
-	std::vector<Entity3D> entities(5);
+	std::vector<Entity3D> entities(6);
 
 	MaterialLoader materialLoader;
 	resourceManager.bindLoader(&materialLoader);
@@ -61,6 +61,7 @@ int Aela::Engine::runningLoop() {
 	resourceManager.addToGroup("res/materials/house_1.mtl", false);
 	resourceManager.addToGroup("res/materials/jeep_1.mtl", false);
 	resourceManager.addToGroup("res/materials/lamp_post_1.mtl", false);
+	resourceManager.addToGroup("res/materials/sample_terrain_1.mtl", false);
 
 	if (resourceManager.loadGroup("materials") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"materials\"!" << std::endl;
@@ -77,6 +78,7 @@ int Aela::Engine::runningLoop() {
 	resourceManager.addToGroup("res/models/house_1.obj", false);
 	resourceManager.addToGroup("res/models/jeep_1.obj", false);
 	resourceManager.addToGroup("res/models/lamp_post_1.obj", false);
+	resourceManager.addToGroup("res/models/sample_terrain_1.obj", false);
 
 	if (resourceManager.loadGroup("models") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"models\"!" << std::endl;
@@ -87,6 +89,7 @@ int Aela::Engine::runningLoop() {
 	entities[2].setModel(resourceManager.obtain<Model>("res/models/house_1.obj"));
 	entities[3].setModel(resourceManager.obtain<Model>("res/models/jeep_1.obj"));
 	entities[4].setModel(resourceManager.obtain<Model>("res/models/lamp_post_1.obj"));
+	entities[5].setModel(resourceManager.obtain<Model>("res/models/sample_terrain_1.obj"));
 
 	// This provides each entity its materials. This may be an annoying way of doing it but it can be changed to be better later.
 	resourceManager.bindGroup("materials");
@@ -104,35 +107,36 @@ int Aela::Engine::runningLoop() {
 
 	
 	// This sets model positioning.
-	entities[0].setPosition(0.72f, 6, -5.51f);
+	entities[0].setPosition(20, 0, 20);
 	entities[1].setPosition(0.72f, -1, -5.51f);
-	entities[2].setPosition(5, -3, -10);
-	entities[2].setRotation(0, glm::pi<float>(), 0);
-	entities[4].setPosition(0.72f, 0, 5.51f);
-	/*entities[5].setScaling(1.5, 1.5, 1.5);
-	entities[5].setPosition(-10, 0, 5);
+	entities[2].setPosition(0, 0, -6);
+	// entities[2].rotateAroundPoint(&glm::vec3(0, glm::pi<float>(), 0), &glm::vec3(20, 0, 20));
+	entities[4].setPosition(1, 0, 5.0f);
+	entities[5].setScaling(2, 1, 2);
+	/*entities[5].setPosition(-10, 0, 5);
 	entities[5].setRotation(0, glm::pi<float>() / 2, 0);
 	entities[6].setPosition(10, 20, 10);*/
 	
 	// This animates entities just to make sure that the animator actually works.
 	std::vector<KeyFrame3D> keyFrames;
-	for (unsigned int i = 0; i < 4; i++) {
+	for (unsigned int i = 0; i < 2; i++) {
 		KeyFrame3DList keyFrameList;
-		for (int j = 3; j < 4; j++) {
+		for (int j = 2; j < 3; j++) {
 			KeyFrame3D keyFrame;
 			keyFrame.setObject(&entities[j]);
-			glm::vec3 translation(30, 0, 0);
-			// glm::vec3 translation(j * 5 - 7, 0, 0);
+			glm::vec3 translation(*entities[j].getPosition());
 			keyFrame.setTranslation(&translation);
-			// glm::vec3 rotation(j % 2 + 3, glm::pi<float>() * (i % 2), 0.3 * (j % 2 + 1));
 			glm::vec3 rotation(0, 0, 0);
 			keyFrame.setRotation(&rotation);
-			// glm::vec3 scaling(1 + 3 * ((1 + i) % 2), 1 + 3 * (i % 2), 1 + 3 * (i % 2));
+			glm::vec3 pointRotationRotation(0, glm::pi<float>() * i, 0);
+			glm::vec3 pointRotationPoint(20, 0, 20);
+			PointRotation3D pointRotation(&pointRotationRotation, &pointRotationPoint);
+			keyFrame.setPointRotation(&pointRotation);
 			glm::vec3 scaling(1, 1, 1);
 			keyFrame.setScaling(&scaling);
 			keyFrameList.addKeyFrame(&keyFrame);
 		}
-		keyFrameList.setTimeAfterPreviousKeyFrame(10000);
+		keyFrameList.setTimeAfterPreviousKeyFrame(5000 * i + 5000);
 		animator.addKeyFrameList(&keyFrameList);
 	}
 
@@ -154,6 +158,7 @@ int Aela::Engine::runningLoop() {
 	billboards[0].loadTexture("res/textures/character.dds");
 	billboards[0].useSpecifiedRotation(true);
 	billboards[0].setPosition(0, 1, -1.5);
+	billboards[0].setRotation(0, glm::pi<float>(), 0);
 	renderer.getCamera()->setPosition(glm::vec3(0, 10, -20));
 
 	// This is how a light is set up.
@@ -161,13 +166,13 @@ int Aela::Engine::runningLoop() {
 	for (int i = 0; i < 2; i++) {
 		glm::vec3 position;
 		if (i == 0) {
-			position = glm::vec3(-18, 25, -10);
+			position = glm::vec3(-18, 40, -100);
 		} else {
-			position = glm::vec3(10, 25, 20);
+			position = glm::vec3(1, 7.7f, 5.0f);
 		}
 		glm::vec3 rotation = glm::vec3(0, 0, 0);
 		ColourRGB colour(1, 1, 1);
-		float power = 1.0F;
+		float power = 0.8F;
 		Light3D light(position, rotation, colour, power);
 		renderer.generateShadowMap(&light);
 		lights.push_back(light);
@@ -201,7 +206,7 @@ int Aela::Engine::runningLoop() {
 	particleEmitter.setSpeedOffset(0.001f);
 	particleEmitter.setLifetimeOffset(0);
 	particleEmitter.setPathOffset(2);
-	particleEmitter.setPosition(2, 0, 5);
+	particleEmitter.setPosition(5, 0, 5);
 	particleEmitter.setRotation(0, 3.4f, 0.1f);
 	particleEmitter.setTimeManager(&timeManager);
 
@@ -308,7 +313,7 @@ int Aela::Engine::runningLoop() {
 
 		// This renders the program.
 		renderer.startRenderingFrame();
-		renderer.setupBoundLightsForCurrentFrame();
+		renderer.startRendering3D();
 		for (Entity3D entity : entities) {
 			renderer.render3DEntityShadows(&entity);
 		}

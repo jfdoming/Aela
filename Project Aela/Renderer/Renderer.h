@@ -102,7 +102,7 @@ namespace Aela {
 			void renderSkybox(Skybox* skybox);
 			void renderParticles(ParticleEmitter* particleEmitter);
 			void generateShadowMap(Light3D* light);
-			void setupBoundLightsForCurrentFrame();
+			void startRendering3D();
 
 			// These functions are related soecifically to the simple 2D frame buffer.
 			void setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer, Rect<int>* dimensions, Rect<int>* output);

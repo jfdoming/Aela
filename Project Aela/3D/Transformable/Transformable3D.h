@@ -3,10 +3,14 @@
 * Author: Robert Ciborowski
 * Date: November 2016
 * Description: A class used to store the properties of a light.
+*              Note: The position of the point used when rotating a Transformable3D using
+*              PointRotation3D is relative to the Transformable3D (as opposed to being relative
+*              to (0, 0, 0) in worldspace).
 */
 
 #pragma once
 #include <glm/glm.hpp>
+#include "../../Utilities/Transformations/PointRotation3D.h"
 
 // This enum is used in an Camera3D function to change a single property.
 enum class Transformable3DProperty {
@@ -48,6 +52,8 @@ class Transformable3D {
 		void translate(float x, float y, float z);
 		void rotate(glm::vec3 rotation);
 		void rotate(float x, float y, float z);
+		void rotateAroundPoint(PointRotation3D* pointRotation);
+		void rotateAroundPoint(glm::vec3* rotation, glm::vec3* point);
 
 		// This function is used to force a value within a specific range (not clamping).
 		// For example, if using the range 0 and 2a, 11a / 2 is forced to 3a / 2.

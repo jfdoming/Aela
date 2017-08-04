@@ -225,7 +225,7 @@ void Renderer::generateShadowMap(Light3D* light) {
 	}
 }
 
-void Renderer::setupBoundLightsForCurrentFrame() {
+void Renderer::startRendering3D() {
 	// if (useShadows) {
 		basic3DRenderer.clearShadowMaps();
 	// }
