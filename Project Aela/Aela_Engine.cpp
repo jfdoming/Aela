@@ -84,12 +84,26 @@ int Aela::Engine::runningLoop() {
 		std::cerr << "Failed to load a resource from group \"models\"!" << std::endl;
 	}
 
-	entities[0].setModel(resourceManager.obtain<Model>("res/models/meme_mug.obj"));
-	entities[1].setModel(resourceManager.obtain<Model>("res/models/cat.obj"));
-	entities[2].setModel(resourceManager.obtain<Model>("res/models/house_1.obj"));
-	entities[3].setModel(resourceManager.obtain<Model>("res/models/jeep_1.obj"));
-	entities[4].setModel(resourceManager.obtain<Model>("res/models/lamp_post_1.obj"));
-	entities[5].setModel(resourceManager.obtain<Model>("res/models/sample_terrain_1.obj"));
+	bool success;
+	Model* mResult;
+
+	success = resourceManager.obtain<Model>("res/models/meme_mug.obj", mResult);
+	entities[0].setModel(mResult);
+
+	success = resourceManager.obtain<Model>("res/models/cat.obj", mResult);
+	entities[1].setModel(mResult);
+
+	success = resourceManager.obtain<Model>("res/models/house_1.obj", mResult);
+	entities[2].setModel(mResult);
+
+	success = resourceManager.obtain<Model>("res/models/jeep_1.obj", mResult);
+	entities[3].setModel(mResult);
+
+	success = resourceManager.obtain<Model>("res/models/lamp_post_1.obj", mResult);
+	entities[4].setModel(mResult);
+
+	success = resourceManager.obtain<Model>("res/models/sample_terrain_1.obj", mResult);
+	entities[5].setModel(mResult);
 
 	// This provides each entity its materials. This may be an annoying way of doing it but it can be changed to be better later.
 	resourceManager.bindGroup("materials");
@@ -99,7 +113,7 @@ int Aela::Engine::runningLoop() {
 		for (std::string name : materialList) {
 			// This adds the material if it isn't already in the map.
 			if (map.find(name) == map.end()) {
-				map[name] = resourceManager.obtain<Material>(name);
+				success = resourceManager.obtain<Material>(name, map[name]);
 			}
 		}
 		entity.getModel()->setMaterials(map);
@@ -119,7 +133,7 @@ int Aela::Engine::runningLoop() {
 	
 	// This animates entities just to make sure that the animator actually works.
 	std::vector<KeyFrame3D> keyFrames;
-	for (unsigned int i = 0; i < 2; i++) {
+	for (unsigned int i = 0; i < 0; i++) {
 		KeyFrame3DList keyFrameList;
 		for (int j = 2; j < 3; j++) {
 			KeyFrame3D keyFrame;
@@ -194,7 +208,9 @@ int Aela::Engine::runningLoop() {
 		std::cerr << "Failed to load a resource from group \"test\"!" << std::endl;
 	}
 
-	audioPlayer.playClip(resourceManager.obtain<AudioClip>("res/audio/clips/test.wav"));
+	AudioClip* acResult;
+	resourceManager.obtain<AudioClip>("res/audio/clips/test.wav", acResult);
+	audioPlayer.playClip(acResult);
 
 	// This sets up particles.
 	PlanarParticleEmitter particleEmitter;
@@ -221,8 +237,13 @@ int Aela::Engine::runningLoop() {
 	}
 
 	std::vector<GLuint> particleTextures;
-	particleTextures.push_back(*resourceManager.obtain<Texture>("res/textures/particle_1.dds")->getTexture());
-	particleTextures.push_back(*resourceManager.obtain<Texture>("res/textures/particle_2.dds")->getTexture());
+	Texture* tResult;
+
+	success = resourceManager.obtain<Texture>("res/textures/particle_1.dds", tResult);
+	particleTextures.push_back(*(tResult->getTexture()));
+
+	success = resourceManager.obtain<Texture>("res/textures/particle_2.dds", tResult);
+	particleTextures.push_back(*(tResult->getTexture()));
 	
 	particleEmitter.setupParticles(&particleTextures, 0.6f, 0.6f, 15);
 
@@ -238,9 +259,12 @@ int Aela::Engine::runningLoop() {
 	// sceneManager.setCurrentScene(1);
 
 	// obtain and set up test textures
-	Texture* testTexture = resourceManager.obtain<Texture>("res/textures/ekkon.dds");
+	Texture* testTexture;
+	success = resourceManager.obtain<Texture>("res/textures/ekkon.dds", testTexture);
 	testTexture->setOutput(0, 0, 100, 50);
-	Texture* testTexture2 = resourceManager.obtain<Texture>("res/textures/gradient.dds");
+
+	Texture* testTexture2;
+	success = resourceManager.obtain<Texture>("res/textures/gradient.dds", testTexture2);
 	testTexture2->setOutput(100, 0, window.getWindowDimensions()->getWidth() - 100, 50);
 
 	// This is also temporary and showcases text rendering. This will be moved once the menu system is formed.

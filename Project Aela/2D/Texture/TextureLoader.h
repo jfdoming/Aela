@@ -6,6 +6,7 @@
 
 #include <GL/glew.h>
 #include "../../Resource Management/ResourceLoader.h"
+#include "../../2D/Texture/Texture.h"
 
 #define AELA_RESOURCE_TEXTURE_HEADER_SIZE 128
 #define AELA_RESOURCE_TEXTURE_HEADER_START "DDS "
@@ -22,11 +23,12 @@ namespace Aela {
 
 			virtual void expose(LuaManager& mgr);
 
-			virtual bool load(std::unordered_map<std::string, Resource*>* resources, std::string src);
+			virtual bool load(ResourceMap& resources, std::string src);
 
 		protected:
-			void loadTexture(std::ifstream& in, GLuint* texID, GLenum target);
-			void loadTexture(std::ifstream& in, GLuint* texID, GLenum target, unsigned int* width, unsigned int* height);
+			bool loadTexture(Texture*& result, std::string src);
+			bool loadTexture(std::ifstream& in, GLenum target);
+			bool loadTexture(std::ifstream& in, GLenum target, unsigned int* width, unsigned int* height);
 			void loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target);
 			void loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target, unsigned int* width, unsigned int* height);
 	};

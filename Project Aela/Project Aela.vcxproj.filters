@@ -316,6 +316,9 @@
     <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Resource Management\ResourceMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aela_Engine.h">
@@ -572,5 +575,6 @@
     </ClInclude>
     <ClInclude Include="3D\Particles\ParticleLoader.h" />
     <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
+    <ClInclude Include="Resource Management\ResourceMap.h" />
   </ItemGroup>
 </Project>

@@ -118,7 +118,7 @@ void Basic3DModelRenderer::render3DEntity(Entity3D* entity, GLuint frameBuffer, 
 
 		// This binds the texture to "slot" zero.
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, subModel.getMaterial()->getTexture());
+		glBindTexture(GL_TEXTURE_2D, *(subModel.getMaterial()->getTexture()->getTexture()));
 		glUniform1i(modelTextureID, 0);
 
 		// These are attributes for the vertex buffer.

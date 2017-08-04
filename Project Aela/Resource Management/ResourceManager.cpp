@@ -110,7 +110,7 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 	bool crucial = query.isCrucial();
 	std::string src = query.getSrc();
 
-	bool success = boundLoader->load(&resources, src);
+	bool success = boundLoader->load(resources, src);
 	
 	if (!success) {
 		// cannot load the resource
@@ -127,18 +127,11 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 }
 
 void ResourceManager::unload(std::string src) {
-	Resource* res = obtain_impl(src);
-	if (res != nullptr) {
+	Resource* res;
+
+	if (resources.get(src, res) && res != nullptr) {
 		delete res;
 	}
-}
-
-Resource* ResourceManager::obtain_impl(std::string src) {
-	auto iter = resources.find(src);
-	if (iter == resources.end()) {
-		return nullptr;
-	}
-	return iter->second;
 }
 
 std::string Aela::ResourceManager::getNewCrucialInvalidResourceKey() {

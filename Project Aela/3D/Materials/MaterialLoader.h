@@ -17,6 +17,6 @@ namespace Aela {
 			virtual ~MaterialLoader();
 
 			virtual void expose(LuaManager& mgr);
-			virtual bool load(std::unordered_map<std::string, Resource*>* resources, std::string src);
+			virtual bool load(ResourceMap& resources, std::string src);
 	};
 }
