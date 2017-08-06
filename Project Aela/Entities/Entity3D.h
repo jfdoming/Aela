@@ -1,7 +1,7 @@
 /*
 * Class: Entity3D
 * Author: Robert Ciborowski
-* Date: November 2016
+* Date: 06/08/2017
 * Description: A class used by Aela's Renderer to store properties of a 3D entity.
 *              Note: This class used to be known as "Model" but was changed.
 */
@@ -39,7 +39,7 @@ namespace Aela {
 			Model* getModel();
 			void setModel(Model* model);
 			Cuboid<double>* getBoundingBox();
-			void setBoundingBox(Cuboid<double>* boundingBox);
+			void generateBoundingBox();
 
 		private:
 			Model* model;
