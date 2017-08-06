@@ -1,5 +1,5 @@
 # Blender MTL File: 'house_1.blend'
-# Material Count: 6
+# Material Count: 7
 
 newmtl door_1
 Ns 96.078431
@@ -11,7 +11,7 @@ d 1.000000
 illum 2
 map_Kd door_1.dds
 
-newmtl window_1
+newmtl house_1
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
@@ -21,7 +21,7 @@ d 1.000000
 illum 2
 map_Kd window_1.dds
 
-newmtl house_1
+newmtl window_1
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000
@@ -29,4 +29,4 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd house_1.dds
+map_Kd window_1.dds

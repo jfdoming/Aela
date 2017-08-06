@@ -21,7 +21,7 @@ vec3 colourAsVec3;
 layout(location = 0) out vec4 colour;
 
 // These are values that are hard-coded into the shader.
-const int MAX_LIGHT_AMOUNT = 2;
+const int MAX_LIGHT_AMOUNT = 5;
 float distanceToLightModifier = 0.1;
 bool PCF = true;
 float PI  = 3.14159265358979323846;
@@ -39,10 +39,10 @@ vec3 PCFDirections[20] = vec3[](
 uniform sampler2D textureSampler;
 uniform samplerCube shadowMaps[MAX_LIGHT_AMOUNT];
 uniform int numberOfLights;
-uniform vec3 lightPositions[2];
-uniform vec3 lightDirections[2];
-uniform vec3 lightColours[2];
-uniform float lightPowers[2];
+uniform vec3 lightPositions[MAX_LIGHT_AMOUNT];
+uniform vec3 lightDirections[MAX_LIGHT_AMOUNT];
+uniform vec3 lightColours[MAX_LIGHT_AMOUNT];
+uniform float lightPowers[MAX_LIGHT_AMOUNT];
 uniform vec3 cameraPosition;
 
 // This is used for pseudo-randomness.
@@ -97,7 +97,7 @@ void main(){
 	vec3 MaterialDiffuseColor = texture(textureSampler, UV).rgb;
 	vec3 MaterialAmbientColor = vec3(0.15, 0.15, 0.15) * MaterialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(0.3, 0.3, 0.3);
-	vec3 diffuseColours[lightPositions.length()];
+	vec3 diffuseColours[MAX_LIGHT_AMOUNT];
 	vec3 finalDiffuseColour;
 	
 	float visibility = 1.0;
@@ -124,7 +124,7 @@ void main(){
 		visibility += cosTheta * lightPowers[i];
 	}
 	
-	for (int i = 0; i < diffuseColours.length(); i++) {
+	for (int i = 0; i < numberOfLights; i++) {
 		finalDiffuseColour += diffuseColours[i];
 	}
 	

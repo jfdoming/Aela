@@ -16,3 +16,11 @@ Model* Aela::Entity3D::getModel() {
 void Aela::Entity3D::setModel(Model* model) {
 	this->model = model;
 }
+
+Cuboid<double>* Aela::Entity3D::getBoundingBox() {
+	return &boundingBox;
+}
+
+void Aela::Entity3D::setBoundingBox(Cuboid<double>* boundingBox) {
+	this->boundingBox = *boundingBox;
+}

@@ -21,7 +21,8 @@ void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setPro
 }
 
 // This function sends light data to the shader.
-void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID) {
+void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID,
+	GLuint lightPositionsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID) {
 	glUseProgram(modelProgramID);
 
 	GLuint numberOfLights = lights->size();
@@ -29,9 +30,9 @@ void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, G
 		numberOfLights = MAX_LIGHT_AMOUNT;
 	}
 
-	if (numberOfLights > 0) {
-		glUniform1i(numberOfLightsID, numberOfLights);
+	glUniform1i(numberOfLightsID, numberOfLights);
 
+	if (numberOfLights > 0) {
 		for (unsigned int i = 0; i < numberOfLights; i++) {
 			glUniform3fv(lightPositionsID + i, 1, &lights->at(i).getPosition()->x);
 		}
@@ -50,9 +51,13 @@ void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, G
 			glUniform1fv(lightPowersID + i, numberOfLights, &power);
 		}
 
-		for (unsigned int i = 0; i < lights->size(); i++) {
+		for (unsigned int i = 0; i < MAX_LIGHT_AMOUNT; i++) {
 			glActiveTexture(GL_TEXTURE1 + i);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, *lights->at(i).getShadowMapTexture());
+			if (i < lights->size()) {
+				glBindTexture(GL_TEXTURE_CUBE_MAP, *lights->at(i).getShadowMapTexture());
+			} else {
+				glBindTexture(GL_TEXTURE_CUBE_MAP, *lights->at(0).getShadowMapTexture());
+			}
 			glUniform1i(shadowMapID + i, 1 + i);
 		}
 	}
@@ -113,7 +118,7 @@ void Basic3DModelRenderer::render3DEntity(Entity3D* entity, GLuint frameBuffer, 
 
 		// This binds the texture to "slot" zero.
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, subModel.getMaterial()->getTexture());
+		glBindTexture(GL_TEXTURE_2D, *(subModel.getMaterial()->getTexture()->getTexture()));
 		glUniform1i(modelTextureID, 0);
 
 		// These are attributes for the vertex buffer.

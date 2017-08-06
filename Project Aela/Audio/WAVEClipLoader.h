@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Resource Management/ResourceLoader.h"
+#include "../Resource Management/ResourceMap.h"
 
 #define CHUNK_HEADER_SIZE 12
 #define SUBCHUNK1_HEADER_SIZE 8
@@ -21,6 +22,6 @@ namespace Aela {
 		WAVEClipLoader();
 		virtual ~WAVEClipLoader();
 
-		virtual bool load(std::unordered_map<std::string, Resource*>* resources, std::string src);
+		virtual bool load(ResourceMap& resources, std::string src);
 	};
 }

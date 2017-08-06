@@ -102,7 +102,7 @@ namespace Aela {
 			void renderSkybox(Skybox* skybox);
 			void renderParticles(ParticleEmitter* particleEmitter);
 			void generateShadowMap(Light3D* light);
-			void setupBoundLightsForCurrentFrame();
+			void startRendering3D();
 
 			// These functions are related soecifically to the simple 2D frame buffer.
 			void setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer, Rect<int>* dimensions, Rect<int>* output);
@@ -168,8 +168,11 @@ namespace Aela {
 			// being applied to OpenGL.
 			bool checkFrameBuffer();
 
-			// Control related
-			void updateCamera(KeyEvent* event);
+			// This uses controls to update the camera's state.
+			void updateCameraEvents(KeyEvent* event);
+
+			// This updates the camera's matrices.
+			void updateCameraMatrices();
 
 			// This stores the window's state.
 			bool windowFocus;

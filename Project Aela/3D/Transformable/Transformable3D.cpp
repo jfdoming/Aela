@@ -1,6 +1,7 @@
 #include "Transformable3D.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 void Transformable3D::setPosition(float setX, float setY, float setZ) {
 	position = glm::vec3(setX, setY, setZ);
@@ -137,6 +138,17 @@ void Transformable3D::translate(float x, float y, float z) {
 
 void Transformable3D::rotate(float x, float y, float z) {
 	rotate(glm::vec3(x, y, z));
+}
+
+void Transformable3D::rotateAroundPoint(PointRotation3D* pointRotation) {
+	rotateAroundPoint(pointRotation->getRotation(), pointRotation->getPoint());
+}
+
+void Transformable3D::rotateAroundPoint(glm::vec3* rotation, glm::vec3* point) {
+	glm::mat4 pointRotationMatrix = glm::mat4(1);
+	pointRotationMatrix *= glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
+	position += glm::vec3(pointRotationMatrix * glm::vec4(*point * glm::vec3(-1), 0)) + *point;
+	this->rotation += *rotation;
 }
 
 void Transformable3D::forceValuesWithinRange(glm::vec3* vec3, float minimum, float maximum) {

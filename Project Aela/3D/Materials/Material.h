@@ -14,10 +14,11 @@
 
 // This includes GLEW.
 #include <GL/glew.h>
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 #include <vector>
 
 #include "../../Resource Management/Resource.h"
+#include "../../2D/Texture/Texture.h"
 
 namespace Aela {
 	class Material : public Resource {
@@ -26,13 +27,10 @@ namespace Aela {
 
 			}
 
-			GLuint getTexture();
-			void setTexture(GLuint texture);
-
-			std::string fage = "dsd";
-
+			Texture* getTexture();
+			void setTexture(Texture* texture);
 		private:
-			GLuint texture;
+			Texture* texture;
 
 			// These have not been properly implemented yet.
 			/*glm::vec3 ambientColour;

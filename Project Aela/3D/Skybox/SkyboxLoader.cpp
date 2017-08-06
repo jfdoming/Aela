@@ -49,7 +49,7 @@ bool SkyboxLoader::load(std::unordered_map<std::string, Resource*>* resources, s
 			return false;
 		}
 
-		loadTexture(in, cubeMapTexture, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
+		loadTexture(in, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
 
 		in.close();
 	}

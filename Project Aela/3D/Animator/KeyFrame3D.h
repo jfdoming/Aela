@@ -10,6 +10,7 @@
 #include <glm/glm.hpp>
 
 #include "../Transformable/Transformable3D.h"
+#include "../../Utilities/Transformations/PointRotation3D.h"
 
 class KeyFrame3D {
 	public:
@@ -24,6 +25,8 @@ class KeyFrame3D {
 		glm::vec3* getTranslation();
 		void setRotation(glm::vec3* rotation);
 		glm::vec3* getRotation();
+		void setPointRotation(PointRotation3D* pointRotation);
+		PointRotation3D* getPointRotation();
 		void setScaling(glm::vec3* scaling);
 		glm::vec3* getScaling();
 
@@ -31,5 +34,6 @@ class KeyFrame3D {
 		Transformable3D* object;
 		glm::vec3 translation;
 		glm::vec3 rotation;
+		PointRotation3D pointRotation;
 		glm::vec3 scaling = glm::vec3(1);
 };

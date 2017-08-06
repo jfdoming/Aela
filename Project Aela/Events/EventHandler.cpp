@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "EventHandler.h"
 #include "EventConstants.h"
 #include "KeyEvent.h"
@@ -44,12 +46,12 @@ void EventHandler::updateSDLEvents() {
 						break;
 				}
 				break;
-			case SDL_KEYDOWN:
+			/* case SDL_KEYDOWN:
 				fireEvent(new KeyEvent(EventConstants::KEY_PRESSED, event.key.keysym.sym, event.key.keysym.mod));
 				break;
 			case SDL_KEYUP:
 				fireEvent(new KeyEvent(EventConstants::KEY_RELEASED, event.key.keysym.sym, event.key.keysym.mod));
-				break;
+				break;*/
 			case SDL_MOUSEBUTTONDOWN:
 				fireEvent(new MouseEvent(EventConstants::MOUSE_PRESSED,
 											event.button.button,
@@ -66,6 +68,15 @@ void EventHandler::updateSDLEvents() {
 											event.button.x,
 											event.button.y));
 				break;
+		}
+	}
+
+	// Until this class is finished, I have no chocie but to add this here so that the keyboard at least works properly.
+	int numberOfKeys = 0;
+	const Uint8* keystates = SDL_GetKeyboardState(&numberOfKeys);
+	for (int i = 0; i < numberOfKeys; i++) {
+		if (keystates[i]) {
+			fireEvent(new KeyEvent(EventConstants::KEY_PRESSED, i, 0));
 		}
 	}
 }

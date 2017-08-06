@@ -37,11 +37,11 @@ void MaterialLoader::expose(LuaManager& mgr) {
 	// mgr.exposeObject(this, "textureLoader");
 }
 
-bool Aela::MaterialLoader::load(std::unordered_map<std::string, Resource*>* resources, std::string src) {
+bool Aela::MaterialLoader::load(ResourceMap& resources, std::string src) {
 	Material* material = nullptr;
 	std::string line;
 	std::ifstream in;
-	if (!ResourceLoader::open(in, src)) {
+	if (!open(in, src)) {
 		return false;
 	}
 
@@ -51,8 +51,13 @@ bool Aela::MaterialLoader::load(std::unordered_map<std::string, Resource*>* reso
 			if (line.find("newmtl ") != std::string::npos) {
 				material = new Material();
 				std::string name = line.substr(7, line.size() - 7);
-				(*resources)[name] = material;
+				resources.put(name, material);
 			} else if (line.find("map_Kd ") != std::string::npos || line.find("map_Ka ") != std::string::npos) {
+				if (material == nullptr) {
+					// Error! The file did not specify a material name before setting the texture!
+					return false;
+				}
+
 				// If this part of the code is reached, the line may look like "map_Kd tire_1.dds".
 				std::string fileName = line.substr(7, line.size() - 7);
 
@@ -65,16 +70,11 @@ bool Aela::MaterialLoader::load(std::unordered_map<std::string, Resource*>* reso
 					}
 				}
 				
-				GLuint texture;
-				glGenTextures(1, &texture);
-				glBindTexture(GL_TEXTURE_2D, texture);
-				loadTextureUsingFILE(path + fileName, &texture, GL_TEXTURE_2D);
+				std::string textureName = path + fileName;
 
-				if (material != nullptr) {
+				Texture* texture;
+				if (TextureLoader::loadTexture(texture, textureName)) {
 					material->setTexture(texture);
-				} else {
-					// Error! The file did not specify a material name before setting the texture!
-					return false;
 				}
 			} else {
 				// The line in the file is treated as a comment if this line is reached.

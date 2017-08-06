@@ -6,6 +6,8 @@
 */
 
 #include "Animator3D.h"
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 // This updates 3D objects based on keyframes given to the animator.
 void Animator3D::update() {
@@ -24,9 +26,18 @@ void Animator3D::update() {
 				KeyFrame3D* keyFrame = &keyFrameVector->at(whichFrame);
 				Transformable3D* object = keyFrame->getObject();
 
-				object->setPosition(*keyFrame->getTranslation());
-				object->setRotation(*keyFrame->getRotation());
+				// This finds the final scaling of the model.
 				object->setScaling(*keyFrame->getScaling());
+
+				// This finds the matrix for the point rotation.
+				glm::mat4 pointRotationMatrix = glm::mat4(1);
+				glm::vec3* pointRotationRotation = keyFrame->getPointRotation()->getRotation();
+				pointRotationMatrix *= glm::eulerAngleYXZ(pointRotationRotation->y, pointRotationRotation->x, pointRotationRotation->z);
+				
+				// This finds the final position and rotation values and applies them.
+				object->setPosition(*keyFrame->getTranslation() + glm::vec3(pointRotationMatrix
+					* glm::vec4(*keyFrame->getPointRotation()->getPoint() * glm::vec3(-1), 0)) + *keyFrame->getPointRotation()->getPoint());
+				object->setRotation(*keyFrame->getRotation() + *pointRotationRotation);
 			}
 			keyFrameLists.erase(keyFrameLists.begin());
 			timeSinceLastKeyFrameList = 0;
@@ -45,25 +56,35 @@ void Animator3D::update() {
 			KeyFrame3D* keyFrame = &keyFrameVector->at(whichFrame);
 			Transformable3D* object = keyFrame->getObject();
 
+			// This figures out a bunch of transformational values and finds the final scaling value to use.
 			unsigned int timing = keyFrameList->getTimeAfterPreviousKeyFrame() + 1;
 			glm::vec3* originalPosition = &keyFrameList->getOriginalPositions()->at(whichFrame);
 			glm::vec3* originalRotation = &keyFrameList->getOriginalRotations()->at(whichFrame);
 			glm::vec3* originalScaling = &keyFrameList->getOriginalScalings()->at(whichFrame);
 			glm::vec3* finalTranslation = keyFrame->getTranslation();
-			glm::vec3 newPosition(originalPosition->x + (((float) finalTranslation->x - originalPosition->x) / timing) * timeSinceLastKeyFrameList,
-				originalPosition->y + (((float) finalTranslation->y - originalPosition->y) / timing) * timeSinceLastKeyFrameList,
-				originalPosition->z + (((float) finalTranslation->z - originalPosition->z) / timing) * timeSinceLastKeyFrameList);
-			object->setPosition(newPosition);
+			glm::vec3 newPosition((((float) finalTranslation->x - originalPosition->x) / timing) * timeSinceLastKeyFrameList,
+				(((float) finalTranslation->y - originalPosition->y) / timing) * timeSinceLastKeyFrameList,
+				(((float) finalTranslation->z - originalPosition->z) / timing) * timeSinceLastKeyFrameList);
 			glm::vec3* finalRotation = keyFrame->getRotation();
-			glm::vec3 newRotation(originalRotation->x + (((float) finalRotation->x - originalRotation->x) / timing) * timeSinceLastKeyFrameList,
-				originalRotation->y + (((float) finalRotation->y - originalRotation->y) / timing) * timeSinceLastKeyFrameList,
-				originalRotation->z + (((float) finalRotation->z - originalRotation->z) / timing) * timeSinceLastKeyFrameList);
-			object->setRotation(newRotation);
+			glm::vec3 newRotation((((float) finalRotation->x - originalRotation->x) / timing) * timeSinceLastKeyFrameList,
+				(((float) finalRotation->y - originalRotation->y) / timing) * timeSinceLastKeyFrameList,
+				(((float) finalRotation->z - originalRotation->z) / timing) * timeSinceLastKeyFrameList);
 			glm::vec3* finalScaling = keyFrame->getScaling();
 			glm::vec3 newScaling(originalScaling->x + (((float) finalScaling->x - originalScaling->x) / timing) * timeSinceLastKeyFrameList,
 				originalScaling->y + (((float) finalScaling->y - originalScaling->y) / timing) * timeSinceLastKeyFrameList,
 				originalScaling->z + (((float) finalScaling->z - originalScaling->z) / timing) * timeSinceLastKeyFrameList);
 			object->setScaling(newScaling);
+
+			// This finds the matrix for the point rotation.
+			glm::mat4 pointRotationMatrix = glm::mat4(1);
+			glm::vec3* pointRotationRotation = keyFrame->getPointRotation()->getRotation();
+			pointRotationMatrix *= glm::eulerAngleYXZ(pointRotationRotation->y / timing * timeSinceLastKeyFrameList,
+				pointRotationRotation->x / timing * timeSinceLastKeyFrameList, pointRotationRotation->z / timing * timeSinceLastKeyFrameList);
+
+			// This finds the final position and rotation values and applies them.
+			object->setPosition(*originalPosition + newPosition + glm::vec3(pointRotationMatrix
+				* glm::vec4(*keyFrame->getPointRotation()->getPoint() * glm::vec3(-1), 0)) + *keyFrame->getPointRotation()->getPoint());
+			object->setRotation(*originalRotation + newRotation + *pointRotationRotation * glm::vec3((float) timeSinceLastKeyFrameList / timing));
 		}
 	}
 }

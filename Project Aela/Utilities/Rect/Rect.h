@@ -1,7 +1,7 @@
 /*
 * Class: Rectangle
 * Author: Robert Ciborowski
-* Date: February 4th, 2017
+* Date: 04/02/2017
 * Description: A simple header-only class for rectangles.
 */
 
@@ -69,6 +69,6 @@ template <class T> class Rect {
 			return height;
 		}
 
-	private:
+	protected:
 		T xPosition, yPosition, width, height;
 };

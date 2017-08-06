@@ -51,11 +51,6 @@ GLuint loadDDSToGLuint(std::string filePath) {
 	// This will receive the rest of the header.
 	fread(&fileHeader, 124, 1, imageFile);
 
-	for (int i = 0; i < 124; i++) {
-		std::cout << fileHeader[i];
-	}
-	std::cout << " is the header.\n";
-
 	unsigned int imageHeight = *(unsigned int*) &(fileHeader[8]);
 	unsigned int imageWidth = *(unsigned int*) &(fileHeader[12]);
 	unsigned int linearSize = *(unsigned int*) &(fileHeader[16]);
