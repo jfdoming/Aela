@@ -169,7 +169,7 @@ namespace Aela {
 			bool checkFrameBuffer();
 
 			// This uses controls to update the camera's state.
-			void updateCameraEvents(KeyEvent* event);
+			void updateCameraEvents(Event* event);
 
 			// This updates the camera's matrices.
 			void updateCameraMatrices();
@@ -179,6 +179,9 @@ namespace Aela {
 
 			// Speed: 0.001f is 1 unit per tick.
 			float speed, superSpeed, currentSpeed, mouseSpeed;
+
+			// Movement vars
+			bool forward, back, left, right, up, down;
 
 			// This keeps track of whether the camera shoudl be allowed to be upside down.
 			bool allowUpsideDownCamera;

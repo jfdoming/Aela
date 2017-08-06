@@ -14,9 +14,7 @@ using namespace Aela;
 
 // Event stuff
 void Renderer::onEvent(Event* event) {
-	if (event->getType() == EventConstants::KEY_PRESSED) {
-		updateCameraEvents((KeyEvent*)event);
-	}
+	updateCameraEvents(event);
 }
 
 // This sets up 3D rendering, accounting for multisampling.
@@ -382,7 +380,9 @@ void Renderer::decreaseFOV() {
 	camera.setFieldOfView(camera.getFieldOfView() - (0.002f) * timeManager->getTimeBetweenFrames());
 }
 
-void Renderer::updateCameraEvents(KeyEvent* event) {
+void Renderer::updateCameraEvents(Event* event) {
+	KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
+
 	if (window->isFocused()) {
 		float deltaTime = timeManager->getTimeBetweenFrames();
 
@@ -399,45 +399,64 @@ void Renderer::updateCameraEvents(KeyEvent* event) {
 		float horizontalAngle = camera.getRotation()->x;
 		float verticalAngle = camera.getRotation()->y;
 
-		// This is a position vector.
-		glm::vec3 position = *(camera.getPosition());
-
-		if (event->getKeycode() == 225) {
+		if (keyEvent->getKeycode() == 225) {
 			currentSpeed = superSpeed;
-		}
-		else {
+		} else {
 			currentSpeed = speed;
 		}
 
-		// This occurs when 'w' is pressed.
-		if (event->getKeycode() == SDL_SCANCODE_W) {
-			position += *camera.getCartesionalDirection() * deltaTime * currentSpeed;
-		}
-		// This occurs when 's' is pressed.
-		if (event->getKeycode() == SDL_SCANCODE_S) {
-			position -= *camera.getCartesionalDirection() * deltaTime * currentSpeed;
-		}
-		// This occurs when 'd' is pressed.
-		if (event->getKeycode() == SDL_SCANCODE_D) {
-			position += *camera.getRightVector() * deltaTime * currentSpeed;
-		}
-		// This occurs when 'a' is pressed.
-		if (event->getKeycode() == SDL_SCANCODE_A) {
-			position -= *camera.getRightVector() * deltaTime * currentSpeed;
-		}
+		switch (keyEvent->getType()) {
+			case EventConstants::KEY_PRESSED:
+				if (keyEvent->getKeycode() == SDLK_w) {
+					forward = true;
+				}
 
-		// This occurs when space is pressed.
-		if (event->getKeycode() == SDL_SCANCODE_SPACE) {
-			position += straightUp * deltaTime * currentSpeed;
-		}
+				if (keyEvent->getKeycode() == SDLK_s) {
+					back = true;
+				}
 
-		// This occurs when left ctrl is pressed.
-		if (event->getKeycode() == SDL_SCANCODE_LCTRL) {
-			position -= straightUp * deltaTime * currentSpeed;
-		}
+				if (keyEvent->getKeycode() == SDLK_d) {
+					right = true;
+				}
 
-		// This sets all of the camera's position and view related properties.
-		camera.setPosition(position);
+				if (keyEvent->getKeycode() == SDLK_a) {
+					left = true;
+				}
+
+				if (keyEvent->getKeycode() == SDLK_SPACE) {
+					up = true;
+				}
+
+				if (keyEvent->getKeycode() == SDLK_LCTRL) {
+					down = true;
+				}
+				break;
+			case EventConstants::KEY_RELEASED:
+				if (keyEvent->getKeycode() == SDLK_w) {
+					forward = false;
+				}
+
+				if (keyEvent->getKeycode() == SDLK_s) {
+					back = false;
+				}
+
+				if (keyEvent->getKeycode() == SDLK_d) {
+					right = false;
+				}
+
+				if (keyEvent->getKeycode() == SDLK_a) {
+					left = false;
+				}
+
+				if (keyEvent->getKeycode() == SDLK_SPACE) {
+					up = false;
+				}
+
+				if (keyEvent->getKeycode() == SDLK_LCTRL) {
+					down = false;
+				}
+				break;
+		}
 	}
 }
 
@@ -501,6 +520,36 @@ void Aela::Renderer::updateCameraMatrices() {
 	glm::mat4 viewMatrix = glm::lookAt(*camera.getPosition(), *camera.getPosition() + *camera.getCartesionalDirection(), *camera.getUpVector());
 	camera.setProjectionMatrix(projectionMatrix);
 	camera.setViewMatrix(viewMatrix);
+
+	// This is a position vector.
+	glm::vec3 position = *(camera.getPosition());
+
+	if (up) {
+		position += straightUp * deltaTime * currentSpeed;
+	}
+
+	if (down) {
+		position -= straightUp * deltaTime * currentSpeed;
+	}
+
+	if (left) {
+		position -= *camera.getRightVector() * deltaTime * currentSpeed;
+	}
+
+	if (right) {
+		position += *camera.getRightVector() * deltaTime * currentSpeed;
+	}
+
+	if (forward) {
+		position += *camera.getCartesionalDirection() * deltaTime * currentSpeed;
+	}
+
+	if (back) {
+		position -= *camera.getCartesionalDirection() * deltaTime * currentSpeed;
+	}
+
+	// This sets all of the camera's position and view related properties.
+	camera.setPosition(position);
 }
 
 // This is a useful function that checks the currently bound framebuffer to see if it was set up properly.
