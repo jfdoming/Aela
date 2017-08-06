@@ -10,7 +10,7 @@
 
 #include "Rect.h"
 
-template <class T> class Cuboid : public Rect {
+template <class T> class Cuboid : public Rect<T> {
 	public:
 		Cuboid() {
 			xPosition = 0;
