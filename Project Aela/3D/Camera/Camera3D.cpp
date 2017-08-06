@@ -48,3 +48,35 @@ void Camera3D::focusAtPointOnPlane(float x, float y, float z) {
 	glm::vec3 point(x, y, z);
 	focusAtPointOnPlane(point);
 }
+
+void Camera3D::calculateCartesionalDirection() {
+	cartesionalDirection = glm::vec3(
+		cos(rotation.y) * sin(rotation.x),
+		sin(rotation.y),
+		cos(rotation.y) * cos(rotation.x)
+	);
+}
+
+void Camera3D::calculateRightVector() {
+	right = glm::vec3(
+		sin(rotation.x - 3.14f / 2.0f),
+		0,
+		cos(rotation.x - 3.14f / 2.0f)
+	);
+}
+
+void Camera3D::calculateUpVector() {
+	up = glm::cross(right, cartesionalDirection);
+}
+
+glm::vec3* Camera3D::getCartesionalDirection() {
+	return &cartesionalDirection;
+}
+
+glm::vec3* Camera3D::getRightVector() {
+	return &right;
+}
+
+glm::vec3* Camera3D::getUpVector() {
+	return &up;
+}

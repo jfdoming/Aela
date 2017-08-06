@@ -19,8 +19,7 @@ class Camera3D : public Transformable3D {
 		// These are getters and setters for the matrices.
 		void setViewMatrix(glm::mat4 setViewMatrix);
 		void setProjectionMatrix(glm::mat4 setProjectionMatrix);
-		glm::mat4 getViewMatrix();
-		glm::mat4 getProjectionMatrix();
+		glm::mat4 getViewMatrix(), getProjectionMatrix();
 
 		// These are getters and setters for the field of view.
 		void setFieldOfView(float setFieldOfView);
@@ -31,9 +30,16 @@ class Camera3D : public Transformable3D {
 		void focusAtPointOnPlane(glm::vec3 point);
 		void focusAtPointOnPlane(float x, float y, float z);
 
+		// These functions are mainly used by the renderer to update the camera.
+		void calculateCartesionalDirection(), calculateRightVector(), calculateUpVector();
+		glm::vec3* getCartesionalDirection(), *getRightVector(), *getUpVector();
+
 	private:
-		glm::mat4 viewMatrix;
-		glm::mat4 projectionMatrix;
+		// These are the camera's matrices.
+		glm::mat4 viewMatrix, projectionMatrix;
+
+		// These are used during camera updating.
+		glm::vec3 cartesionalDirection, right, up;
 
 		float fieldOfView;
 };

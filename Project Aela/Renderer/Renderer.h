@@ -168,8 +168,11 @@ namespace Aela {
 			// being applied to OpenGL.
 			bool checkFrameBuffer();
 
-			// Control related
-			void updateCamera(KeyEvent* event);
+			// This uses controls to update the camera's state.
+			void updateCameraEvents(KeyEvent* event);
+
+			// This updates the camera's matrices.
+			void updateCameraMatrices();
 
 			// This stores the window's state.
 			bool windowFocus;

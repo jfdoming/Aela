@@ -431,7 +431,6 @@ int Aela::Engine::setupLUA() {
 int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
 	eventHandler.addListener(EventConstants::KEY_PRESSED, &renderer);
-	eventHandler.addListener(EventConstants::MOUSE_PRESSED, &renderer);
 	return 0;
 }
 
