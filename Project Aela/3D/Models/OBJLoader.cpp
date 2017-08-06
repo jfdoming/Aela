@@ -112,7 +112,6 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 	in.close();
 
 	setupSubModel(&res->getSubModels()->at(res->getSubModels()->size() - 1), &vertexIndices, &uvIndices, &normalIndices, &tempVertices, &tempUVs, &tempNormals, materialName);
-
 	resources.put(src, res);
 	return true;
 }
