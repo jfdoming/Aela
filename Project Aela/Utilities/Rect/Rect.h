@@ -69,6 +69,6 @@ template <class T> class Rect {
 			return height;
 		}
 
-	private:
+	protected:
 		T xPosition, yPosition, width, height;
 };

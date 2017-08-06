@@ -313,10 +313,10 @@
     <ClCompile Include="3D\Particles\ParticleLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp">
+    <ClCompile Include="Resource Management\ResourceMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Resource Management\ResourceMap.cpp">
+    <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -574,8 +574,8 @@
       <Filter>Source Files\2D\Textures</Filter>
     </ClInclude>
     <ClInclude Include="3D\Particles\ParticleLoader.h" />
-    <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
     <ClInclude Include="Resource Management\ResourceMap.h" />
     <ClInclude Include="Utilities\Rect\Cuboid.h" />
+    <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
   </ItemGroup>
 </Project>
