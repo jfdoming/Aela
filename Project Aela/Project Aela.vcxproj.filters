@@ -576,5 +576,6 @@
     <ClInclude Include="3D\Particles\ParticleLoader.h" />
     <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
     <ClInclude Include="Resource Management\ResourceMap.h" />
+    <ClInclude Include="Utilities\Rect\Cuboid.h" />
   </ItemGroup>
 </Project>
