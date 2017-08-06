@@ -46,22 +46,11 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 	while (std::getline(in, line)) {
 		// This reads the first word of the line.
 		if (line.find("o ") != std::string::npos) {
-			// This checks to see if the current SubModel is blank.
-			if (tempVertices.size() != 0 && tempUVs.size() != 0 && tempNormals.size() != 0) {
-				if (res->getSubModels()->size() != 0) {
-					setupSubModel(&res->getSubModels()->at(res->getSubModels()->size() - 1), &vertexIndices, &uvIndices, &normalIndices, &tempVertices, &tempUVs, &tempNormals, materialName);
-				}
-				SubModel subModel;
-				res->getSubModels()->push_back(subModel);
-			} else {
-				// This simply wipes all data if one of the sets of data was blank.
-				tempVertices.clear();
-				tempUVs.clear();
-				tempNormals.clear();
-				vertexIndices.clear();
-				uvIndices.clear();
-				normalIndices.clear();
+			if (res->getSubModels()->size() != 0) {
+				setupSubModel(&res->getSubModels()->at(res->getSubModels()->size() - 1), &vertexIndices, &uvIndices, &normalIndices, &tempVertices, &tempUVs, &tempNormals, materialName);
 			}
+			SubModel subModel;
+			res->getSubModels()->push_back(subModel);
 		} else if (line.find("usemtl ") != std::string::npos) {
 			materialName = line.substr(7, line.size() - 7);
 		} else if (line.find("v ") != std::string::npos) {
@@ -123,7 +112,6 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 	in.close();
 
 	setupSubModel(&res->getSubModels()->at(res->getSubModels()->size() - 1), &vertexIndices, &uvIndices, &normalIndices, &tempVertices, &tempUVs, &tempNormals, materialName);
-
 	resources.put(src, res);
 	return true;
 }
