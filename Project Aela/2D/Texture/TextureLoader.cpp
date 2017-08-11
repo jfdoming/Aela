@@ -41,11 +41,15 @@ bool TextureLoader::loadTexture(Texture*& result, std::string src) {
 	// This tells openGL that future functions will reference this texture.
 	glBindTexture(GL_TEXTURE_2D, modelTextureID);
 
-	unsigned int imageWidth, imageHeight;
+	/*unsigned int imageWidth, imageHeight;
 	if (!loadTexture(in, GL_TEXTURE_2D, &imageWidth, &imageHeight)) {
 		in.close();
 		return false;
-	}
+	}*/
+
+	// Sorry Julian, but I'm using FILE until you get your ifstream to work since I want to be able to see textures.
+	loadTextureUsingFILE(src, &modelTextureID, GL_TEXTURE_2D);
+	unsigned int imageWidth = 1024, imageHeight = 1024;
 
 	in.close();
 

@@ -14,6 +14,10 @@ class ColourRGBA {
 
 		}
 
+		ColourRGBA(glm::vec4* colour) {
+			setValues(colour->r, colour->g, colour->b, colour->a);
+		}
+
 		ColourRGBA(float r, float g, float b, float a) {
 			setValues(r, g, b, a);
 		}

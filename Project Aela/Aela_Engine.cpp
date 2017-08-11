@@ -14,75 +14,11 @@
 
 #include "Aela_Engine.h"
 
-// These are headers that are part of Project Aela.
-#include "Window/Window.h"
-#include "Error Handler/ErrorHandler.h"
-#include "Time Manager/TimeManager.h"
-#include "2D/Text/TextManager.h"
-#include "Scenes/SceneManager.h"
-#include "Resource Management/ResourceManager.h"
-#include "2D/Texture/TextureLoader.h"
-#include "3D/Materials/MaterialLoader.h"
-#include "3D/Models/OBJLoader.h"
-#include "Audio/WAVEClipLoader.h"
-#include "Lua/LuaManager.h"
-#include "Events/EventHandler.h"
-#include "Events/EventConstants.h"
-#include "Audio/AudioManager.h"
-#include "3D/Animator/Animator3D.h"
-#include "3D/Particles/PlanarParticleEmitter.h"
-#include "Menus/TextComponent.h"
-
-namespace Aela {
-	// These are global objects who's classes come from Project Aela.
-	Window window;
-	Renderer renderer;
-	EventHandler eventHandler;
-	TimeManager timeManager;
-	TextManager textManager;
-	LuaManager luaManager;
-	SceneManager sceneManager;
-	ResourceManager resourceManager(0);
-	AudioManager audioPlayer;
-	Animator3D animator;
-}
-
 using namespace Aela;
 
 int Aela::Engine::runningLoop() {
 	// TEMPORARY! This won't exist once entities are moved elsewhere.
-	std::vector<Entity3D> entities(6);
-
-	MaterialLoader materialLoader;
-	resourceManager.bindLoader(&materialLoader);
-	resourceManager.bindGroup("materials");
-	resourceManager.addToGroup("res/materials/meme_mug.mtl", false);
-	resourceManager.addToGroup("res/materials/cat.mtl", false);
-	resourceManager.addToGroup("res/materials/house_1.mtl", false);
-	resourceManager.addToGroup("res/materials/jeep_1.mtl", false);
-	resourceManager.addToGroup("res/materials/lamp_post_1.mtl", false);
-	resourceManager.addToGroup("res/materials/sample_terrain_1.mtl", false);
-
-	if (resourceManager.loadGroup("materials") != Aela::ResourceManager::Status::OK) {
-		std::cerr << "Failed to load a resource from group \"materials\"!" << std::endl;
-	}
-
-	// *resourceManager.obtain<Texture>("res/textures/particle_2.dds")
-	
-	// This loads the entities' models from OBJ files.
-	OBJLoader objLoader;
-	resourceManager.bindLoader(&objLoader);
-	resourceManager.bindGroup("models");
-	resourceManager.addToGroup("res/models/meme_mug.obj", false);
-	resourceManager.addToGroup("res/models/cat.obj", false);
-	resourceManager.addToGroup("res/models/house_1.obj", false);
-	resourceManager.addToGroup("res/models/jeep_1.obj", false);
-	resourceManager.addToGroup("res/models/lamp_post_1.obj", false);
-	resourceManager.addToGroup("res/models/sample_terrain_1.obj", false);
-
-	if (resourceManager.loadGroup("models") != Aela::ResourceManager::Status::OK) {
-		std::cerr << "Failed to load a resource from group \"models\"!" << std::endl;
-	}
+	std::vector<ModelEntity> entities(6);
 
 	bool success;
 	Model* mResult;
@@ -107,7 +43,7 @@ int Aela::Engine::runningLoop() {
 
 	// This provides each entity its materials. This may be an annoying way of doing it but it can be changed to be better later.
 	resourceManager.bindGroup("materials");
-	for (Entity3D entity : entities) {
+	for (ModelEntity entity : entities) {
 		std::vector<std::string> materialList = entity.getModel()->getRequiredMaterials();
 		std::unordered_map<std::string, Material*> map;
 		for (std::string name : materialList) {
@@ -131,7 +67,7 @@ int Aela::Engine::runningLoop() {
 	entities[5].setRotation(0, glm::pi<float>() / 2, 0);
 	entities[6].setPosition(10, 20, 10);*/
 	
-	// This animates entities just to make sure that the animator actually works.
+	// This animates entities just to make sure that the animator3D actually works.
 	std::vector<KeyFrame3D> keyFrames;
 	for (unsigned int i = 0; i < 0; i++) {
 		KeyFrame3DList keyFrameList;
@@ -151,7 +87,7 @@ int Aela::Engine::runningLoop() {
 			keyFrameList.addKeyFrame(&keyFrame);
 		}
 		keyFrameList.setTimeAfterPreviousKeyFrame(5000 * i + 5000);
-		animator.addKeyFrameList(&keyFrameList);
+		animator3D.addKeyFrameList(&keyFrameList);
 	}
 
 	// This is how a skybox is loaded.
@@ -167,16 +103,28 @@ int Aela::Engine::runningLoop() {
 	};
 	loadSkybox(&skybox, paths, 512, 512);
 
+	TextureLoader textureLoader;
+	resourceManager.bindLoader(&textureLoader);
+	resourceManager.bindGroup("billboard");
+	resourceManager.addToGroup("res/textures/character.dds", false);
+	if (resourceManager.loadGroup("billboard") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"billboard\"!" << std::endl;
+	}
+
 	// This is how a billboard is loaded. A billboard that looks the camera would not use a specified rotation.
-	std::vector<Billboard> billboards(1);
-	billboards[0].loadTexture("res/textures/character.dds");
-	billboards[0].useSpecifiedRotation(true);
-	billboards[0].setPosition(0, 1, -1.5);
-	billboards[0].setRotation(0, glm::pi<float>(), 0);
-	renderer.getCamera()->setPosition(glm::vec3(0, 10, -20));
+	std::vector<BillboardEntity> billboards(1);
+	Texture* billboardTexture;
+	success = resourceManager.obtain<Texture>("res/textures/character.dds", billboardTexture);\
+	if (success) {
+		billboards[0].setTexture(*billboardTexture->getTexture());
+		billboards[0].useSpecifiedRotation(true);
+		billboards[0].setPosition(0, 1, -1.5);
+		billboards[0].setRotation(0, glm::pi<float>(), 0);
+		renderer.getCamera()->setPosition(glm::vec3(0, 10, -20));
+	}
 
 	// This is how a light is set up.
-	std::vector<Light3D> lights;
+	std::vector<LightEntity> lights;
 	for (int i = 0; i < 2; i++) {
 		glm::vec3 position;
 		if (i == 0) {
@@ -187,14 +135,11 @@ int Aela::Engine::runningLoop() {
 		glm::vec3 rotation = glm::vec3(0, 0, 0);
 		ColourRGB colour(1, 1, 1);
 		float power = 0.8F;
-		Light3D light(position, rotation, colour, power);
+		LightEntity light(position, rotation, colour, power);
 		renderer.generateShadowMap(&light);
 		lights.push_back(light);
 	}
 	renderer.bindLights(&lights);
-
-	TextureLoader textureLoader;
-	resourceManager.bindLoader(&textureLoader);
 
 	resourceManager.bindGroup("test");
 	resourceManager.addToGroup("res/textures/ekkon.dds", false);
@@ -277,6 +222,18 @@ int Aela::Engine::runningLoop() {
 	Simple2DFramebuffer customFramebuffer;
 	renderer.setupSimple2DFramebuffer(&customFramebuffer, (Rect<int>*) window.getWindowDimensions(), (Rect<int>*) window.getWindowDimensions());
 
+	// This is how one would load a map.
+	Map3DLoader mapLoader;
+	Map3D* map;
+	resourceManager.bindLoader(&mapLoader);
+	resourceManager.bindGroup("maps");
+	resourceManager.addToGroup("res/maps/sample_map.txt", false);
+	if (resourceManager.loadGroup("maps") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"maps\"!" << std::endl;
+	}
+	success = resourceManager.obtain<Map3D>("res/maps/sample_map.txt", map);
+
+
 	// This is also temporary and used to output framerate.
 	clock_t timeOfLastFrameCheck = 0;
 	int timeBetweenFrameChecks = 250, fps = -1;
@@ -303,7 +260,7 @@ int Aela::Engine::runningLoop() {
 		// This updates events. It must be done first.
 		eventHandler.updateSDLEvents();
 		timeManager.updateTime();
-		animator.update();
+		animator3D.update();
 		particleEmitter.update();
 
 		// THIS IS FOR TESTING!
@@ -338,16 +295,16 @@ int Aela::Engine::runningLoop() {
 		// This renders the program.
 		renderer.startRenderingFrame();
 		renderer.startRendering3D();
-		for (Entity3D entity : entities) {
+		for (ModelEntity entity : entities) {
 			renderer.render3DEntityShadows(&entity);
 		}
 		renderer.sendBoundLightDataToShader();
-		for (Entity3D entity : entities) {
+		for (ModelEntity entity : entities) {
 			renderer.render3DEntity(&entity);
 		}
 		renderer.renderSkybox(&skybox);
 		renderer.renderParticles(&particleEmitter);
-		for (Billboard billboard : billboards) {
+		for (BillboardEntity billboard : billboards) {
 			renderer.renderBillboard(&billboard);
 		}
 		renderer.endRendering3D();
@@ -424,7 +381,21 @@ int Aela::Engine::setupControlManager() {
 	return 0;
 }
 
+class Lol {
+	public:
+		void testStuff(std::string out) {
+			std::cout << " Test: " << out << "\n";
+		}
+};
+
+Lol lol;
+
 int Aela::Engine::setupLUA() {
+	// This was here just as a test but it breaks.
+	/* luaManager.exposeObject(&lol, "lol");
+	LuaScript testScript;
+	testScript.loadScript("res/scripts/test.lua");
+	testScript.callFunction("testFunction");*/
 	return 0;
 }
 
@@ -440,7 +411,7 @@ int Aela::Engine::setupAudioPlayer() {
 }
 
 int Aela::Engine::setupAnimator() {
-	animator.setTimeManager(&timeManager);
+	animator3D.setTimeManager(&timeManager);
 	return 0;
 }
 
@@ -448,4 +419,40 @@ int Aela::Engine::setupAnimator() {
 void Aela::Engine::start() {
 	int errorCode = runningLoop();
 	std::cout << "Program exited with error code " << errorCode << std::endl;
+}
+
+Window* Aela::Engine::getWindow() {
+	return &window;
+}
+
+Renderer* Aela::Engine::getRenderer() {
+	return &renderer;
+}
+
+EventHandler* Aela::Engine::getEventHandler() {
+	return &eventHandler;
+}
+
+TimeManager* Aela::Engine::getTimeManager() {
+	return &timeManager;
+}
+
+LuaManager* Aela::Engine::getLuaManager() {
+	return &luaManager;
+}
+
+SceneManager* Aela::Engine::getSceneManager() {
+	return &sceneManager;
+}
+
+ResourceManager* Aela::Engine::getResourceManager() {
+	return &resourceManager;
+}
+
+AudioManager* Aela::Engine::getAudioPlayer() {
+	return &audioPlayer;
+}
+
+Animator3D* Aela::Engine::getAnimator3D() {
+	return &animator3D;
 }

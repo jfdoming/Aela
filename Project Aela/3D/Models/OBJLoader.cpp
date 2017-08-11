@@ -1,8 +1,8 @@
 /*
-* Class: Resource
+* Class: OBJ Loader
 * Author: Robert Ciborowski and Julian Dominguez-Schatz
 * Date: 04/07/2017
-* Description: Represents a model resource used in the application.
+* Description: A class for loading OBJ files into models.
 */
 
 #include <vector>
@@ -26,7 +26,7 @@ OBJLoader::~OBJLoader() {
 }
 
 bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
-	// try to open the file
+	// This tries to open the file.
 	std::ifstream in;
 	if (!open(in, src)) {
 		return false;
@@ -151,8 +151,8 @@ void Aela::OBJLoader::setupSubModel(SubModel* subModel, std::vector<unsigned int
 	material = "";
 }
 
-bool Aela::OBJLoader::getSimilarVertex(OBJLoader::VertexData* data, std::map<VertexData, unsigned short>* vertexDataMap, unsigned short* result) {
-	std::map<VertexData, unsigned short>::iterator it = vertexDataMap->find(*data);
+bool Aela::OBJLoader::getSimilarVertex(OBJLoader::VertexPacket* data, std::map<VertexPacket, unsigned short>* vertexDataMap, unsigned short* result) {
+	std::map<VertexPacket, unsigned short>::iterator it = vertexDataMap->find(*data);
 	if (it == vertexDataMap->end()) {
 		return false;
 	} else {
@@ -164,10 +164,10 @@ bool Aela::OBJLoader::getSimilarVertex(OBJLoader::VertexData* data, std::map<Ver
 void Aela::OBJLoader::indexVBO(std::vector<glm::vec3>* inputVertices, std::vector<glm::vec2>* inputUVs, std::vector<glm::vec3>* inputNormals,
 	std::vector<unsigned short>* outputIndices, std::vector<glm::vec3>* outputVertices, std::vector<glm::vec2>* outputUVs,
 	std::vector<glm::vec3>* outputNormals) {
-	std::map<VertexData, unsigned short> vertexDataMap;
+	std::map<VertexPacket, unsigned short> vertexDataMap;
 
 	for (unsigned int i = 0; i < inputVertices->size(); i++) {
-		VertexData packed = {inputVertices->at(i), inputUVs->at(i), inputNormals->at(i)};
+		VertexPacket packed = {inputVertices->at(i), inputUVs->at(i), inputNormals->at(i)};
 
 		// This checks to see if the vertex already exists.
 		unsigned short index;

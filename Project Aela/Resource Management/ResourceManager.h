@@ -25,6 +25,7 @@ namespace Aela {
 				OK, FAILED, ABORT
 			};
 
+
 			ResourceManager(int resourceCount);
 			~ResourceManager();
 

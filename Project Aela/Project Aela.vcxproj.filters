@@ -241,9 +241,6 @@
     <ClCompile Include="3D\Camera\Camera3D.cpp">
       <Filter>Source Files\3D\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Light\Light3D.cpp">
-      <Filter>Source Files\3D\Light</Filter>
-    </ClCompile>
     <ClCompile Include="3D\Particles\Particle.cpp">
       <Filter>Source Files\3D\Particles</Filter>
     </ClCompile>
@@ -286,9 +283,6 @@
     <ClCompile Include="Entities\Entity.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Entities\Entity3D.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="3D\Models\Model.cpp">
       <Filter>Source Files\3D\Models</Filter>
     </ClCompile>
@@ -312,6 +306,30 @@
     </ClCompile>
     <ClCompile Include="Resource Management\ResourceMap.cpp">
       <Filter>Source Files\Resources\General</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Particles\ParticleLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Skybox\SkyboxLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio\AudioListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lua\ModEnvironment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Models\ModelEntity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Light\LightEntity.cpp">
+      <Filter>Source Files\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Maps\Map3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Maps\Map3DLoader.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -371,9 +389,6 @@
     </ClInclude>
     <ClInclude Include="2D\Text\TextManager.h">
       <Filter>Source Files\2D\Text</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Billboards\Billboards.h">
-      <Filter>Source Files\3D\Billboards</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\Renderer.h">
       <Filter>Source Files\Renderer</Filter>
@@ -441,9 +456,6 @@
     <ClInclude Include="Audio\WAVEClipLoader.h">
       <Filter>Source Files\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="Resource Management\OBJResource.h">
-      <Filter>Source Files\Resources\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.h">
       <Filter>Source Files\2D\Simple 2D Framebuffer</Filter>
     </ClInclude>
@@ -486,9 +498,6 @@
     <ClInclude Include="3D\Camera\Camera3D.h">
       <Filter>Source Files\3D\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Light\Light3D.h">
-      <Filter>Source Files\3D\Light</Filter>
-    </ClInclude>
     <ClInclude Include="3D\Particles\Particle.h">
       <Filter>Source Files\3D\Particles</Filter>
     </ClInclude>
@@ -519,12 +528,6 @@
     <ClInclude Include="Aela_Engine.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Resource Management\ResourceGroup.h">
       <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
@@ -535,9 +538,6 @@
       <Filter>Source Files\Menus</Filter>
     </ClInclude>
     <ClInclude Include="Entities\Entity.h">
-      <Filter>Source Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\Entity3D.h">
       <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="3D\Models\Model.h">
@@ -567,19 +567,23 @@
     <ClInclude Include="Resource Management\ResourceMap.h">
       <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Release\res\shaders\DepthRTT.fragmentshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\DepthRTT.vertexshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\ShadowMapping.fragmentshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\Release\res\shaders\ShadowMapping.vertexshader">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
+    <ClInclude Include="3D\Particles\ParticleLoader.h" />
+    <ClInclude Include="3D\Skybox\SkyboxLoader.h" />
+    <ClInclude Include="Audio\AudioListener.h" />
+    <ClInclude Include="Lua\ModEnvironment.h" />
+    <ClInclude Include="Old Garbage\texture.hpp" />
+    <ClInclude Include="Utilities\Colour\ColourRGB.h" />
+    <ClInclude Include="Utilities\Rect\Cuboid.h" />
+    <ClInclude Include="3D\Models\ModelEntity.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Light\LightEntity.h">
+      <Filter>Source Files\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Billboards\BillboardEntity.h">
+      <Filter>Source Files\3D\Billboards</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Maps\Map3D.h" />
+    <ClInclude Include="3D\Maps\Map3DLoader.h" />
   </ItemGroup>
 </Project>

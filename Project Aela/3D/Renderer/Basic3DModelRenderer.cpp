@@ -21,7 +21,7 @@ void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setPro
 }
 
 // This function sends light data to the shader.
-void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, GLuint modelProgramID, GLuint numberOfLightsID,
+void Basic3DModelRenderer::sendLightDataToShader(std::vector<LightEntity>* lights, GLuint modelProgramID, GLuint numberOfLightsID,
 	GLuint lightPositionsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID) {
 	glUseProgram(modelProgramID);
 
@@ -64,7 +64,7 @@ void Basic3DModelRenderer::sendLightDataToShader(std::vector<Light3D>* lights, G
 }
 
 // This function renders a subModel.
-void Basic3DModelRenderer::render3DEntity(Entity3D* entity, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
+void Basic3DModelRenderer::render3DEntity(ModelEntity* entity, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
 	GLuint modelMatrixID, GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition) {
 
 	// This sets up buffers.

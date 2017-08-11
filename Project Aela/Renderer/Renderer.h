@@ -20,7 +20,7 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-// Note: The different types of ParticleEmitters already include "Billboards.h".
+// Note: The different types of ParticleEmitters already include "BillboardEntity.h".
 #include "../3D/Particles/PlanarParticleEmitter.h"
 #include "../Window/Window.h"
 #include "../3D/Camera/Camera3D.h"
@@ -28,8 +28,8 @@
 #include "../3D/Renderer/Basic3DRenderer.h"
 #include "../2D/Renderer/Basic2DRenderer.h"
 #include "../2D/Text/TextManager.h"
-#include "../3D/Light/Light3D.h"
-#include "../Entities/Entity3D.h"
+#include "../3D/Light/LightEntity.h"
+#include "../3D/Models/ModelEntity.h"
 #include "../Events/Listener.h"
 #include "../Events/KeyEvent.h"
 
@@ -84,7 +84,7 @@ namespace Aela {
 
 			// This stores a pointer to the list of lights. It's easier to bind a list of lights
 			// once than to send each light every frame.
-			void bindLights(std::vector<Light3D>* lights);
+			void bindLights(std::vector<LightEntity>* lights);
 
 			// This binds a simple 2D framebuffer for rendering 2D to.
 			void bindSimple2DFramebuffer(Simple2DFramebuffer* framebuffer);
@@ -96,12 +96,12 @@ namespace Aela {
 
 			// These functions are related to 3D rendering.
 			void sendBoundLightDataToShader();
-			void render3DEntityShadows(Entity3D* entity);
-			void render3DEntity(Entity3D* entity);
-			void renderBillboard(Billboard* billboard);
+			void render3DEntityShadows(ModelEntity* entity);
+			void render3DEntity(ModelEntity* entity);
+			void renderBillboard(BillboardEntity* billboard);
 			void renderSkybox(Skybox* skybox);
 			void renderParticles(ParticleEmitter* particleEmitter);
-			void generateShadowMap(Light3D* light);
+			void generateShadowMap(LightEntity* light);
 			void startRendering3D();
 
 			// These functions are related soecifically to the simple 2D frame buffer.
@@ -144,7 +144,7 @@ namespace Aela {
 			TimeManager* timeManager;
 			Window* window;
 			TextManager* textManager;
-			std::vector<Light3D>* lights;
+			std::vector<LightEntity>* lights;
 			Simple2DFramebuffer* bound2DFramebuffer;
 
 			// This represents the framebuffer that is attached to the screen.

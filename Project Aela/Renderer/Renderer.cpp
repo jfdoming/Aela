@@ -106,7 +106,7 @@ void Renderer::setTextManager(TextManager* textManager) {
 	this->textManager = textManager;
 }
 
-void Aela::Renderer::bindLights(std::vector<Light3D>* lights) {
+void Aela::Renderer::bindLights(std::vector<LightEntity>* lights) {
 	this->lights = lights;
 	basic3DRenderer.bindLights(lights);
 }
@@ -138,19 +138,19 @@ void Renderer::sendBoundLightDataToShader() {
 }
 
 // This renders the shadow of a model, if shadows are enabled.
-void Renderer::render3DEntityShadows(Entity3D* entity) {
+void Renderer::render3DEntityShadows(ModelEntity* entity) {
 	if (useShadows) {
 		basic3DRenderer.renderShadow(entity);
 	}
 }
 
 // This renders a model.
-void Renderer::render3DEntity(Entity3D* entity) {
+void Renderer::render3DEntity(ModelEntity* entity) {
 	basic3DRenderer.render3DEntity(entity, multisampling3D > 0);
 }
 
 // This renders a billboard, if billboards are enabled.
-void Renderer::renderBillboard(Billboard* billboard) {
+void Renderer::renderBillboard(BillboardEntity* billboard) {
 	if (useBillboards) {
 		basic3DRenderer.renderBillboard(billboard, multisampling3D > 0);
 	}
@@ -217,7 +217,7 @@ void Renderer::endRenderingFrame() {
 	window->updateBuffer();
 }
 
-void Renderer::generateShadowMap(Light3D* light) {
+void Renderer::generateShadowMap(LightEntity* light) {
 	if (useShadows) {
 		basic3DRenderer.generateShadowMap(light);
 	}

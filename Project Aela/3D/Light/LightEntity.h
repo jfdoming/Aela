@@ -1,5 +1,5 @@
 /*
-* Class: Light3D
+* Class: LightEntity
 * Author: Robert Ciborowski
 * Date: 07/04/2017
 * Description: A class used to store the properties of a light.
@@ -8,6 +8,7 @@
 #pragma once
 #include "../Transformable/Transformable3D.h"
 #include "../../Utilities/Colour/ColourRGB.h"
+#include "../../Entities/Entity.h"
 
 // This makes GLEW Static to avoid errors.
 #ifndef GLEW_STATIC
@@ -17,9 +18,11 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-class Light3D : public Transformable3D {
+using namespace Aela;
+
+class LightEntity : public Entity, public Transformable3D {
 	public:
-		Light3D() {
+		LightEntity() {
 			// If no parameters are set, these values are chosen for the light.
 			position = glm::vec3(0.0, 0.0, 0.0);
 			rotation = glm::vec3(0.0, 0.0, 0.0);
@@ -27,7 +30,7 @@ class Light3D : public Transformable3D {
 			power = 1.0;
 		}
 
-		Light3D(glm::vec3 position, glm::vec3 rotation, ColourRGB colour, float power) {
+		LightEntity(glm::vec3 position, glm::vec3 rotation, ColourRGB colour, float power) {
 			this->position = position;
 			this->rotation = rotation;
 			this->colour = colour;

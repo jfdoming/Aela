@@ -1,33 +1,34 @@
 /*
-* Name: Entity3D
+* Name: ModelEntity
 * Author: Robert Ciborowski
 * Date: 06/08/2017
 * Description: A class used by Aela's Renderer to store properties of a 3D entity.
 *              Note: This class used to be known as "Model" but was changed.
 */
 
-#include "Entity3D.h"
+#include "ModelEntity.h"
 #include "../Error Handler/ErrorHandler.h"
 
 using namespace Aela;
 
-Model* Aela::Entity3D::getModel() {
+Model* Aela::ModelEntity::getModel() {
 	return model;
 }
 
-void Aela::Entity3D::setModel(Model* model) {
+void Aela::ModelEntity::setModel(Model* model) {
 	this->model = model;
 }
 
-Cuboid<double>* Aela::Entity3D::getBoundingBox() {
+Cuboid<double>* Aela::ModelEntity::getBoundingBox() {
 	return &boundingBox;
 }
 
-void Aela::Entity3D::generateBoundingBox() {
+void Aela::ModelEntity::generateBoundingBox() {
 	if (model->getSubModels()->size() != 0) {
 		SubModel* firstSubModel = &model->getSubModels()->at(0);
 		float smallestX = firstSubModel->getVertices()->at(firstSubModel->getIndices()->at(0)).x, greatestX = smallestX,
 			smallestY = firstSubModel->getVertices()->at(firstSubModel->getIndices()->at(0)).y, greatestY, smallestZ, greatestZ;
+
 		for (SubModel subModel : *model->getSubModels()) {
 			for (unsigned short index : *subModel.getIndices()) {
 				glm::vec3* vertex = &subModel.getVertices()->at(index);
@@ -48,7 +49,9 @@ void Aela::Entity3D::generateBoundingBox() {
 				}
 			}
 		}
+
+		boundingBox = Cuboid<double>(smallestX, smallestY, smallestZ, greatestX - smallestX, greatestY - smallestY, greatestZ - smallestZ);
 	} else {
-		AelaErrorHandling::consoleWindowError("Entity3D", "Something tried to generate an entity's bounding box without loading its model first!");
+		AelaErrorHandling::consoleWindowError("ModelEntity", "Something tried to generate an entity's bounding box without loading its model first!");
 	}
 }
