@@ -26,6 +26,7 @@ vec4 noise(vec4 colourToModify, vec2 UV) {
 }
 
 void main() {    
-    colour = noise(texture(skyboxTexture, coordinates), coordinates.xy);
-	colour.a = 1.0;
+    /* colour = noise(texture(skyboxTexture, coordinates), coordinates.xy);
+	colour.a = 1.0;*/
+	colour = texture(skyboxTexture, coordinates);
 }

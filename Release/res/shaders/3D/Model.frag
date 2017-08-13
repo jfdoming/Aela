@@ -133,5 +133,6 @@ void main(){
 	
 	colourAsVec3 = 
 		MaterialAmbientColor + visibility * finalDiffuseColour;
-	colour = noise(vec4(colourAsVec3, 1), UV);
+	// colour = noise(vec4(colourAsVec3, 1), UV);
+	colour = vec4(colourAsVec3, 1);
 }

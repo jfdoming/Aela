@@ -1,5 +1,5 @@
 /*
-* Name: Project Aela's Billboard class.
+* Name: Project Aela's BillboardEntity class.
 * Author: Robert Ciborowski
 * Date: October 2016
 * Description: A simple, header-only class used to store properties of a billboard.
@@ -8,6 +8,7 @@
 #pragma once
 #include "../../Old Garbage/texture.hpp"
 #include "../Transformable/Transformable3D.h"
+#include "../../Entities/Entity.h"
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
@@ -20,13 +21,15 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-class Billboard : public Transformable3D {
+using namespace Aela;
+
+class BillboardEntity : public Transformable3D, public Entity {
 	public:
-		Billboard() {
+		BillboardEntity() {
 
 		}
 
-		Billboard(glm::vec3 setPosition, GLuint setTexture) {
+		BillboardEntity(glm::vec3 setPosition, GLuint setTexture) {
 			position = setPosition;
 			texture = setTexture;
 		}

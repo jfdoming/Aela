@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
-// This updates 3D objects based on keyframes given to the animator.
+// This updates 3D objects based on keyframes given to the animator3D.
 void Animator3D::update() {
 	if (keyFrameLists.size() != 0) {
 		// This keeps track of timing.

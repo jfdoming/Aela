@@ -10,60 +10,64 @@
 
 class ColourRGB {
 	public:
-	ColourRGB() {
+		ColourRGB() {
 
-	}
+		}
 
-	ColourRGB(float r, float g, float b) {
-		setValues(r, g, b);
-	}
+		ColourRGB(glm::vec3* colour) {
+			setValues(colour->r, colour->g, colour->b);
+		}
 
-	void setR(float r) {
-		this->r = r;
-	}
+		ColourRGB(float r, float g, float b) {
+			setValues(r, g, b);
+		}
 
-	void setG(float g) {
-		this->g = g;
-	}
+		void setR(float r) {
+			this->r = r;
+		}
 
-	void setB(float b) {
-		this->b = b;
-	}
+		void setG(float g) {
+			this->g = g;
+		}
 
-	void setValues(float r, float g, float b) {
-		this->r = r;
-		this->g = g;
-		this->b = b;
-	}
+		void setB(float b) {
+			this->b = b;
+		}
 
-	float getR() {
-		return r;
-	}
+		void setValues(float r, float g, float b) {
+			this->r = r;
+			this->g = g;
+			this->b = b;
+		}
 
-	float getG() {
-		return g;
-	}
+		float getR() {
+			return r;
+		}
 
-	float getB() {
-		return b;
-	}
+		float getG() {
+			return g;
+		}
 
-	float* getRPointer() {
-		return &r;
-	}
+		float getB() {
+			return b;
+		}
 
-	float* getGPointer() {
-		return &g;
-	}
+		float* getRPointer() {
+			return &r;
+		}
 
-	float* getBPointer() {
-		return &b;
-	}
+		float* getGPointer() {
+			return &g;
+		}
 
-	glm::vec3 getVec3() {
-		return glm::vec3(r, g, b);
-	}
+		float* getBPointer() {
+			return &b;
+		}
+
+		glm::vec3 getVec3() {
+			return glm::vec3(r, g, b);
+		}
 
 	private:
-	float r, g, b;
+		float r, g, b;
 };

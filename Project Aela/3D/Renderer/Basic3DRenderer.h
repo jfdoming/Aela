@@ -25,7 +25,7 @@
 #include "Basic3DModelRenderer.h"
 #include "Basic3DShadowRenderer.h"
 #include "Basic3DSkyboxRenderer.h"
-#include "../Light/Light3D.h"
+#include "../Light/LightEntity.h"
 
 namespace Aela {
 	class Basic3DRenderer {
@@ -40,11 +40,11 @@ namespace Aela {
 			}
 
 			// These are some functions related to rendering.
-			void renderShadow(Entity3D* entity);
-			void render3DEntity(Entity3D* entity, bool multisampling);
+			void renderShadow(ModelEntity* entity);
+			void render3DEntity(ModelEntity* entity, bool multisampling);
 			void clearColourFrameBuffer(bool multisampling);
 			void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3* position, glm::vec3* scaling, glm::vec3* lookAt, bool inverseRotation, bool multisampling);
-			void renderBillboard(Billboard* billboard, bool multisampling);
+			void renderBillboard(BillboardEntity* billboard, bool multisampling);
 			void clearShadowMaps();
 			void sendLightDataToShader();
 			void renderSkybox(Skybox* skybox, bool multisampling);
@@ -52,8 +52,8 @@ namespace Aela {
 
 			// These are some functions related to setup.
 			void setup(unsigned int multisampling);
-			void bindLights(std::vector<Light3D>* lights);
-			void generateShadowMap(Light3D* light);
+			void bindLights(std::vector<LightEntity>* lights);
+			void generateShadowMap(LightEntity* light);
 
 			// These are some getters and setters.
 			Window* getWindow();
@@ -90,7 +90,7 @@ namespace Aela {
 			Camera3D* camera;
 
 			// This stores the lights to render.
-			std::vector<Light3D>* lights;
+			std::vector<LightEntity>* lights;
 
 			// These are used by the renderer so that "window->getWindowDimensions()->getWidth()"
 			// (and "...getHeight()") does not have to called all the time.

@@ -116,7 +116,7 @@ void Basic3DRenderer::setupFrameBuffers(unsigned int multisampling) {
 }
 
 // This generates a light's depth frame buffer.
-void Basic3DRenderer::generateShadowMap(Light3D* light) {
+void Basic3DRenderer::generateShadowMap(LightEntity* light) {
 	GLuint* buffer = light->getShadowMapBuffer();
 	glGenFramebuffers(1, buffer);
 
@@ -157,7 +157,7 @@ void Basic3DRenderer::setCamera(Camera3D* setCamera) {
 	camera = setCamera;
 }
 
-void Basic3DRenderer::bindLights(std::vector<Light3D>* lights) {
+void Basic3DRenderer::bindLights(std::vector<LightEntity>* lights) {
 	this->lights = lights;
 }
 
@@ -183,13 +183,13 @@ Texture * Aela::Basic3DRenderer::getMultisampledColourFrameBufferTexture() {
 }
 
 // This renders a model's shadow per light using the shadow renderer.
-void Basic3DRenderer::renderShadow(Entity3D* entity) {
+void Basic3DRenderer::renderShadow(ModelEntity* entity) {
 	glViewport(0, 0, shadowRenderer.getDepthTextureWidth(), shadowRenderer.getDepthTextureHeight());
 	shadowRenderer.renderShadow(entity, depthProgramID, shadowModelMatrixID, shadowMatrixID, lights, lightShadowPositionsID);
 }
 
 // This renders a model.
-void Basic3DRenderer::render3DEntity(Entity3D* entity, bool multisampling) {
+void Basic3DRenderer::render3DEntity(ModelEntity* entity, bool multisampling) {
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	glViewport(0, 0, windowWidth, windowHeight);
 	if (multisampling) {
@@ -224,7 +224,7 @@ void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, gl
 }
 
 // This renders a billboard, accounting for multisampling.
-void Basic3DRenderer::renderBillboard(Billboard* billboard, bool multisampling) {
+void Basic3DRenderer::renderBillboard(BillboardEntity* billboard, bool multisampling) {
 	glViewport(0, 0, windowWidth, windowHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	if (billboard->usingSpecifiedRotation()) {

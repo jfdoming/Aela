@@ -6,8 +6,8 @@
 */
 
 #pragma once
-#include "../../Entities/Entity3D.h"
-#include "../Light/Light3D.h"
+#include "../Models/ModelEntity.h"
+#include "../Light/LightEntity.h"
 
 using namespace Aela;
 
@@ -18,10 +18,10 @@ class Basic3DShadowRenderer {
 		}
 
 		// This adds a model's shadow to the shadow map.
-		void renderShadow(Entity3D* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<Light3D>* lights, GLuint lightPositionsID);
+		void renderShadow(ModelEntity* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<LightEntity>* lights, GLuint lightPositionsID);
 
 		// This clears all shadow maps of lights.
-		void clearShadowMaps(std::vector<Light3D>* lights);
+		void clearShadowMaps(std::vector<LightEntity>* lights);
 
 		// These are getters and setters.
 		unsigned int getDepthTextureWidth();

@@ -49,6 +49,9 @@ bool TextureLoader::loadTexture(Texture*& result, std::string src) {
 		return false;
 	}
 
+	// Sorry Julian, but I'm using FILE until you get your ifstream to work since I want to be able to see textures.
+	//loadTextureUsingFILE(src, GL_TEXTURE_2D, &imageWidth, &imageHeight);
+
 	in.close();
 
 	result = new Texture(modelTextureID);

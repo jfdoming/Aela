@@ -8,6 +8,10 @@
 #pragma once
 
 namespace Aela {
+	enum class EntityType {
+		GENERIC, MODEL, LIGHT, BILLBOARD
+	};
+
 	class Entity {
 		public:
 			Entity() {

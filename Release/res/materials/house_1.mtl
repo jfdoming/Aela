@@ -19,7 +19,7 @@ Ks 0.500000 0.500000 0.500000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd window_1.dds
+map_Kd house_1.dds
 
 newmtl window_1
 Ns 96.078431

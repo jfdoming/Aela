@@ -15,7 +15,7 @@
 using namespace Aela;
 
 // This clears all shadow maps that would be rendered.
-void Basic3DShadowRenderer::clearShadowMaps(std::vector<Light3D>* lights) {
+void Basic3DShadowRenderer::clearShadowMaps(std::vector<LightEntity>* lights) {
 	unsigned int numberOfLights = lights->size();
 	if (numberOfLights > MAX_LIGHT_AMOUNT) {
 		numberOfLights = numberOfLights;
@@ -28,7 +28,7 @@ void Basic3DShadowRenderer::clearShadowMaps(std::vector<Light3D>* lights) {
 }
 
 // This renders a shadow of a entity to each light's depth buffer.
-void Basic3DShadowRenderer::renderShadow(Entity3D* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<Light3D>* lights, GLuint lightPositionsID) {
+void Basic3DShadowRenderer::renderShadow(ModelEntity* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<LightEntity>* lights, GLuint lightPositionsID) {
 	unsigned int numberOfLights = lights->size();
 	if (numberOfLights > MAX_LIGHT_AMOUNT) {
 		numberOfLights = MAX_LIGHT_AMOUNT;
@@ -49,7 +49,7 @@ void Basic3DShadowRenderer::renderShadow(Entity3D* entity, GLuint depthProgramID
 
 	for (SubModel subModel : *entity->getModel()->getSubModels()) {
 		for (unsigned int whichLight = 0; whichLight < numberOfLights; whichLight++) {
-			Light3D* light = &lights->at(whichLight);
+			LightEntity* light = &lights->at(whichLight);
 			
 			// This sends data to the buffers.
 			glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);

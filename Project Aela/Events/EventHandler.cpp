@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "EventHandler.h"
 #include "EventConstants.h"
 #include "KeyEvent.h"

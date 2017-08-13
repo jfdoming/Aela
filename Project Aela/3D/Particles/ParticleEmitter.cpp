@@ -26,10 +26,6 @@ void ParticleEmitter::setupParticles(std::vector<GLuint>* textures, float partic
 	sortParticles();
 }
 
-// The implementation of this function is to be done by the sub class.
-void ParticleEmitter::update() {
-}
-
 std::vector<Particle>* ParticleEmitter::getParticles() {
 	return &particles;
 }

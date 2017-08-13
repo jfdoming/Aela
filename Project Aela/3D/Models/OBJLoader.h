@@ -1,8 +1,8 @@
 /*
-* Class: Resource
+* Class: OBJ Loader
 * Author: Robert Ciborowski and Julian Dominguez-Schatz
 * Date: 04/07/2017
-* Description: Represents a model resource used in the application.
+* Description: A class for loading OBJ files into models.
 */
 
 #pragma once
@@ -22,13 +22,13 @@ namespace Aela {
 			virtual bool load(ResourceMap& resources, std::string src);
 
 		private:
-			struct VertexData {
+			struct VertexPacket {
 				glm::vec3 position;
 				glm::vec2 uv;
 				glm::vec3 normal;
 
-				bool operator<(const VertexData that) const {
-					return memcmp((void*)this, (void*) &that, sizeof(VertexData))>0;
+				bool operator<(const VertexPacket that) const {
+					return memcmp((void*)this, (void*) &that, sizeof(VertexPacket))>0;
 				};
 			};
 
@@ -40,6 +40,6 @@ namespace Aela {
 				std::vector<unsigned short>* outputIndices, std::vector<glm::vec3>* outputVertices, std::vector<glm::vec2>* outputUVs,
 				std::vector<glm::vec3>* outputNormals);
 
-			bool getSimilarVertex(OBJLoader::VertexData* data, std::map<VertexData, unsigned short>* vertexDataMap, unsigned short* result);
+			bool getSimilarVertex(OBJLoader::VertexPacket* data, std::map<VertexPacket, unsigned short>* vertexDataMap, unsigned short* result);
 	};
 }

@@ -29,5 +29,6 @@ vec4 noise(vec4 colourToModify, vec2 UV) {
 }
 
 void main(){
-	colour = noise(texture(textureSampler, UV), UV);
+	// colour = noise(texture(textureSampler, UV), UV);
+	colour = texture(textureSampler, UV);
 }

@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "../Billboards/Billboards.h"
+#include "../Billboards/BillboardEntity.h"
 
-class Particle : public Billboard {
+class Particle : public BillboardEntity {
 	public:
 		Particle() {
 
