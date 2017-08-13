@@ -104,6 +104,9 @@
     <Filter Include="Source Files\2D\Textures">
       <UniqueIdentifier>{30df1193-7aa1-4ab1-9705-4c611fae2564}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utilities\Transformations">
+      <UniqueIdentifier>{31e96dd4-f535-494b-8a89-d415e31d150e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scenes\Scene.cpp">
@@ -310,14 +313,11 @@
     <ClCompile Include="2D\Texture\TextureLoader.cpp">
       <Filter>Source Files\2D\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Particles\ParticleLoader.cpp">
+    <ClCompile Include="Resource Management\ResourceMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource Management\ResourceMap.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utilities\Transformations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -573,8 +573,9 @@
     <ClInclude Include="2D\Texture\TextureLoader.h">
       <Filter>Source Files\2D\Textures</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Particles\ParticleLoader.h" />
-    <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
     <ClInclude Include="Resource Management\ResourceMap.h" />
+    <ClInclude Include="Utilities\Transformations\PointRotation3D.h">
+      <Filter>Source Files\Utilities\Transformations</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

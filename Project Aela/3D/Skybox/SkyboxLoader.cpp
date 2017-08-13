@@ -44,12 +44,12 @@ bool SkyboxLoader::load(std::unordered_map<std::string, Resource*>* resources, s
 	glBindTexture(GL_TEXTURE_CUBE_MAP, *cubeMapTexture);
 
 	for (unsigned int i = 0; i < 6; i++) {
-		std::ifstream in;
-		if (!open(in, src)) {
+		std::ifstream in(src, std::ios::binary);
+		if (!isValid(in)) {
 			return false;
 		}
 
-		loadTexture(in, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
+		loadTextureToBoundId(in, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
 
 		in.close();
 	}

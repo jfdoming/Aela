@@ -4,8 +4,6 @@ std::string Aela::ResourceLoader::getErrorMessage() {
 	return errorMessage;
 }
 
-bool Aela::ResourceLoader::open(std::ifstream& in, std::string src) {
-	in.flags(std::ios::binary | std::ios::in);
-	in.open(src);
-	return (in.is_open() && !in.fail());
+bool Aela::ResourceLoader::isValid(std::ifstream& in) {
+	return (in.is_open() && in.good() && !in.fail() && !in.bad());
 }

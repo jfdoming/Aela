@@ -15,6 +15,6 @@ namespace Aela {
 		protected:
 			std::string errorMessage;
 
-			bool open(std::ifstream& in, std::string src);
+			bool isValid(std::ifstream& in);
 	};
 }

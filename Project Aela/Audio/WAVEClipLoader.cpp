@@ -21,8 +21,9 @@ WAVEClipLoader::~WAVEClipLoader() {
 
 bool WAVEClipLoader::load(ResourceMap& resources, std::string src) {
 	// try to open the file
-	std::ifstream in;
-	if (!open(in, src)) {
+	std::ifstream in(src, std::ios::binary);
+	if (!isValid(in)) {
+		std::cout << "fail:" << src << "\n";
 		return false;
 	}
 
@@ -113,7 +114,7 @@ bool WAVEClipLoader::load(ResourceMap& resources, std::string src) {
 	clip->setFormat(numberOfChannels, bitsPerSample);
 	clip->setSampleRate(sampleRate);
 
-	std::cout << "s" << data[0] << std::endl;
+	std::cout << "sbsdg: " << data[0] << std::endl;
 	std::cout << bitsPerSample * sampleRate << std::endl;
 
 	resources.put(src, clip);

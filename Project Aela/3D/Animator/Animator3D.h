@@ -1,5 +1,5 @@
 /*
-* Class: Project Aela's 3D Animator3D
+* Class: Project Aela's 3D Animator
 * Author: Robert Ciborowski
 * Date: 10/07/2017
 * Description: A class used by Aela's 3D Animator to perform transformations on 3D objects.

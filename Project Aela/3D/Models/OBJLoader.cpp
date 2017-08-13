@@ -27,8 +27,8 @@ OBJLoader::~OBJLoader() {
 
 bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 	// try to open the file
-	std::ifstream in;
-	if (!open(in, src)) {
+	std::ifstream in(src, std::ios::binary);
+	if (!isValid(in)) {
 		return false;
 	}
 
