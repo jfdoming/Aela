@@ -21,7 +21,7 @@ void Basic3DModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setPro
 }
 
 // This function sends light data to the shader.
-void Basic3DModelRenderer::sendLightDataToShader(std::vector<LightEntity>* lights, GLuint modelProgramID, GLuint numberOfLightsID,
+void Basic3DModelRenderer::sendLightDataToShader(std::unordered_map<int, LightEntity>* lights, GLuint modelProgramID, GLuint numberOfLightsID,
 	GLuint lightPositionsID, GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID) {
 	glUseProgram(modelProgramID);
 
@@ -33,38 +33,38 @@ void Basic3DModelRenderer::sendLightDataToShader(std::vector<LightEntity>* light
 	glUniform1i(numberOfLightsID, numberOfLights);
 
 	if (numberOfLights > 0) {
-		for (unsigned int i = 0; i < numberOfLights; i++) {
-			glUniform3fv(lightPositionsID + i, 1, &lights->at(i).getPosition()->x);
-		}
-
-		for (unsigned int i = 0; i < numberOfLights; i++) {
-			glUniform3fv(lightDirectionsID + i, 1, &lights->at(i).getRotation()->x);
-		}
-
-		for (unsigned int i = 0; i < numberOfLights; i++) {
-			glm::vec3 value = lights->at(i).getColour()->getVec3();
-			glUniform3fv(lightColoursID + i, 1, &value.x);
-		}
-
-		for (unsigned int i = 0; i < numberOfLights; i++) {
-			float power = lights->at(i).getPower();
-			glUniform1fv(lightPowersID + i, numberOfLights, &power);
-		}
-
-		for (unsigned int i = 0; i < MAX_LIGHT_AMOUNT; i++) {
-			glActiveTexture(GL_TEXTURE1 + i);
-			if (i < lights->size()) {
-				glBindTexture(GL_TEXTURE_CUBE_MAP, *lights->at(i).getShadowMapTexture());
-			} else {
-				glBindTexture(GL_TEXTURE_CUBE_MAP, *lights->at(0).getShadowMapTexture());
+		unsigned int i = 0;
+		for (auto light : *lights) {
+			if (i + 1 > MAX_LIGHT_AMOUNT) {
+				break;
 			}
+			glUniform3fv(lightPositionsID + i, 1, &light.second.getPosition()->x);
+			glUniform3fv(lightDirectionsID + i, 1, &light.second.getRotation()->x);
+
+			glm::vec3 value = light.second.getColour()->getVec3();
+			glUniform3fv(lightColoursID + i, 1, &value.x);
+
+			float power = light.second.getPower();
+			glUniform1fv(lightPowersID + i, numberOfLights, &power);
+
+			glActiveTexture(GL_TEXTURE1 + i);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, *lights->at(i).getShadowMapTexture());
+			glUniform1i(shadowMapID + i, 1 + i);
+			i++;
+		}
+
+		// If the number of lights is less than the max light amount, the first light's shadow map is sent to fill in the remaining spots in the
+		// shader's shadow map array. Not doing so causes the shader to crash.
+		for (unsigned int i = lights->size(); i < MAX_LIGHT_AMOUNT; i++) {
+			glActiveTexture(GL_TEXTURE1 + i);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, *lights->begin()->second.getShadowMapTexture());
 			glUniform1i(shadowMapID + i, 1 + i);
 		}
 	}
 }
 
 // This function renders a subModel.
-void Basic3DModelRenderer::render3DEntity(ModelEntity* entity, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
+void Basic3DModelRenderer::renderModelEntity(ModelEntity* entity, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
 	GLuint modelMatrixID, GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition) {
 
 	// This sets up buffers.
@@ -90,7 +90,9 @@ void Basic3DModelRenderer::render3DEntity(ModelEntity* entity, GLuint frameBuffe
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
-	for (SubModel subModel : *entity->getModel()->getSubModels()) {
+	// Ranged for loops break here for some reason and I don't have the time to see why, so here's a regular for loop instead.
+	for (unsigned int whichSubModel = 0; whichSubModel < entity->getModel()->getSubModels()->size(); whichSubModel++) {
+		SubModel& subModel = entity->getModel()->getSubModels()->at(whichSubModel);
 		// This loads buffers.
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 		glBufferData(GL_ARRAY_BUFFER, subModel.getVertexSize() * sizeof(glm::vec3), &subModel.getVertices()->at(0), GL_STATIC_DRAW);

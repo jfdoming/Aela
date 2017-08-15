@@ -29,7 +29,7 @@ namespace Aela {
 			bool loadTexture(Texture*& result, std::string src);
 			bool loadTexture(std::ifstream& in, GLenum target);
 			bool loadTexture(std::ifstream& in, GLenum target, unsigned int* width, unsigned int* height);
-			void loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target);
-			void loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target, unsigned int* width, unsigned int* height);
+			bool loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target);
+			bool loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target, unsigned int* width, unsigned int* height);
 	};
 }

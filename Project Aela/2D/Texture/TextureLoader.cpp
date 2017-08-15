@@ -48,7 +48,9 @@ bool TextureLoader::loadTexture(Texture*& result, std::string src) {
 	}*/
 
 	// Sorry Julian, but I'm using FILE until you get your ifstream to work since I want to be able to see textures.
-	loadTextureUsingFILE(src, &modelTextureID, GL_TEXTURE_2D);
+	if (!loadTextureUsingFILE(src, &modelTextureID, GL_TEXTURE_2D)) {
+		return false;
+	}
 	unsigned int imageWidth = 1024, imageHeight = 1024;
 
 	in.close();
@@ -142,14 +144,14 @@ bool TextureLoader::loadTexture(std::ifstream& in, GLenum target, unsigned int* 
 	return true;
 }
 
-void TextureLoader::loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target) {
-	loadTextureUsingFILE(path, texID, target, nullptr, nullptr);
+bool TextureLoader::loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target) {
+	return loadTextureUsingFILE(path, texID, target, nullptr, nullptr);
 }
 
 // This loads a texture using FILE. If you're wondering why the first parameter is the path rather than a FILE* (similar to how
 // loadTexture's first parameter is an ifstream&), it's because you'd have to call ResourceLoader::open before using this function,
 // this would mean having to pass a nullptr of FILE* into ResourceLoader::open, which breaks everything. Go ahead, try it, you'll see.
-void TextureLoader::loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target, unsigned int* width, unsigned int* height) {
+bool TextureLoader::loadTextureUsingFILE(std::string path, GLuint* texID, GLenum target, unsigned int* width, unsigned int* height) {
 	FILE* in;
 
 	// using char[] for speed
@@ -159,7 +161,7 @@ void TextureLoader::loadTextureUsingFILE(std::string path, GLuint* texID, GLenum
 	fopen_s(&in, path.c_str(), "rb");
 	if (in == NULL) {
 		AelaErrorHandling::windowError("Aela DDS Loader", "A DDS file  was not found.");
-		return;
+		return false;
 	}
 
 	// read the file header
@@ -167,7 +169,7 @@ void TextureLoader::loadTextureUsingFILE(std::string path, GLuint* texID, GLenum
 
 	// make sure we are reading a texture file
 	if (strncmp((char*) textureHeader, AELA_RESOURCE_TEXTURE_HEADER_START, 4) != 0) {
-		return;
+		return false;
 	}
 
 	unsigned int imageHeight = *(unsigned int*) &(textureHeader[12]);
@@ -198,7 +200,7 @@ void TextureLoader::loadTextureUsingFILE(std::string path, GLuint* texID, GLenum
 		break;
 	default:
 		delete[] buffer;
-		return;
+		return false;
 	}
 
 	// set the pixel storage mode
@@ -232,4 +234,5 @@ void TextureLoader::loadTextureUsingFILE(std::string path, GLuint* texID, GLenum
 	if (height != nullptr) {
 		*height = imageHeight;
 	}
+	return true;
 }

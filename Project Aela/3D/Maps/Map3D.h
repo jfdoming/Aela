@@ -11,8 +11,9 @@
 #include "../Light/LightEntity.h"
 #include "../Models/ModelEntity.h"
 #include "../Billboards/BillboardEntity.h"
+#include "../Skybox/SkyboxEntity.h"
 
-#include <map>
+#include <unordered_map>
 
 using namespace Aela;
 
@@ -24,16 +25,19 @@ class Map3D : public Resource {
 
 		// These are the getters and setters of the class. When loading a map, it is better to load the entities directly into the map using
 		// something such as "map3D.getLights()->push_back()" rather than creating seperate std::maps for those entities and using the set functions.
-		void setLights(std::map<int, LightEntity>* lights);
-		std::map<int, LightEntity>* getLights();
-		void setModels(std::map<int, ModelEntity>* models);
-		std::map<int, ModelEntity>* getModels();
-		void setBillboards(std::map<int, BillboardEntity>* billboards);
-		std::map<int, BillboardEntity>* getBillboards();
+		void setLights(std::unordered_map<int, LightEntity>* lights);
+		std::unordered_map<int, LightEntity>* getLights();
+		void setModels(std::unordered_map<int, ModelEntity>* models);
+		std::unordered_map<int, ModelEntity>* getModels();
+		void setBillboards(std::unordered_map<int, BillboardEntity>* billboards);
+		std::unordered_map<int, BillboardEntity>* getBillboards();
+		void setSkyboxes(std::unordered_map<int, SkyboxEntity>* skyboxes);
+		std::unordered_map<int, SkyboxEntity>* getSkyboxes();
 
 	private:
 		// These are the maps of entities in the world.
-		std::map<int, LightEntity> lights;
-		std::map<int, ModelEntity> models;
-		std::map<int, BillboardEntity> billboards;
+		std::unordered_map<int, LightEntity> lights;
+		std::unordered_map<int, ModelEntity> models;
+		std::unordered_map<int, BillboardEntity> billboards;
+		std::unordered_map<int, SkyboxEntity> skyboxes;
 };

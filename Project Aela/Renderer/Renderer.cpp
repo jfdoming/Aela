@@ -106,8 +106,7 @@ void Renderer::setTextManager(TextManager* textManager) {
 	this->textManager = textManager;
 }
 
-void Aela::Renderer::bindLights(std::vector<LightEntity>* lights) {
-	this->lights = lights;
+void Aela::Renderer::bindLights(std::unordered_map<int, LightEntity>* lights) {
 	basic3DRenderer.bindLights(lights);
 }
 
@@ -138,15 +137,15 @@ void Renderer::sendBoundLightDataToShader() {
 }
 
 // This renders the shadow of a model, if shadows are enabled.
-void Renderer::render3DEntityShadows(ModelEntity* entity) {
+void Renderer::renderModelEntityShadows(ModelEntity* entity) {
 	if (useShadows) {
 		basic3DRenderer.renderShadow(entity);
 	}
 }
 
 // This renders a model.
-void Renderer::render3DEntity(ModelEntity* entity) {
-	basic3DRenderer.render3DEntity(entity, multisampling3D > 0);
+void Renderer::renderModelEntity(ModelEntity* entity) {
+	basic3DRenderer.renderModelEntity(entity, multisampling3D > 0);
 }
 
 // This renders a billboard, if billboards are enabled.
@@ -157,9 +156,9 @@ void Renderer::renderBillboard(BillboardEntity* billboard) {
 }
 
 // This renders a skybox, if skyboxes are enabled.
-void Renderer::renderSkybox(Skybox* skybox) {
+void Renderer::renderSkybox(SkyboxEntity* skybox) {
 	if (useSkybox) {
-		basic3DRenderer.renderSkybox(skybox, multisampling3D > 0);
+		basic3DRenderer.renderSkybox(skybox->getSkybox(), multisampling3D > 0);
 	}
 }
 

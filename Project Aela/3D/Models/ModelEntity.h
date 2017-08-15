@@ -43,6 +43,7 @@ namespace Aela {
 			void setModel(Model* model);
 			Cuboid<double>* getBoundingBox();
 			void generateBoundingBox();
+			EntityType getEntityType();
 
 		private:
 			Model* model;

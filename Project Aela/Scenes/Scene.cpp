@@ -17,21 +17,23 @@ void Scene::update() {
 
 void Scene::render(Renderer* renderer) {
 	renderer->startRenderingFrame();
-
+	renderer->bindLights(map->getLights());
 	renderer->startRendering3D();
-	for (auto model : models) {
-		renderer->render3DEntityShadows(model);
+
+	for (auto model : *map->getModels()) {
+		renderer->renderModelEntityShadows(&model.second);
 	}
+
 	renderer->sendBoundLightDataToShader();
 
-	for (auto model : models) {
-		renderer->render3DEntity(model);
+	for (auto model : *map->getModels()) {
+		renderer->renderModelEntity(&model.second);
 	}
 
-	renderer->renderSkybox(&skybox);
+	renderer->renderSkybox(&(*map->getSkyboxes())[activeSkybox]);
 
-	for (auto billboard : billboards) {
-		renderer->renderBillboard(billboard);
+	for (auto billboard : *map->getBillboards()) {
+		renderer->renderBillboard(&billboard.second);
 	}
 
 	renderer->endRendering3D();
@@ -63,4 +65,20 @@ void Scene::setId(int id) {
 
 int Scene::getId() {
 	return id;
+}
+
+void Scene::setMap(Map3D* map) {
+	this->map = map;
+}
+
+Map3D* Scene::getMap() {
+	return map;
+}
+
+void Scene::setActiveSkybox(unsigned int activeSkybox) {
+	this->activeSkybox = activeSkybox;
+}
+
+unsigned int Scene::getActiveSkybox() {
+	return activeSkybox;
 }

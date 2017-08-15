@@ -331,6 +331,9 @@
     <ClCompile Include="3D\Maps\Map3DLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="3D\Skybox\SkyboxEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource Management\Resource.h">
@@ -585,5 +588,6 @@
     </ClInclude>
     <ClInclude Include="3D\Maps\Map3D.h" />
     <ClInclude Include="3D\Maps\Map3DLoader.h" />
+    <ClInclude Include="3D\Skybox\SkyboxEntity.h" />
   </ItemGroup>
 </Project>

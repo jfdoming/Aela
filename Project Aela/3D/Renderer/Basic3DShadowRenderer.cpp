@@ -15,25 +15,21 @@
 using namespace Aela;
 
 // This clears all shadow maps that would be rendered.
-void Basic3DShadowRenderer::clearShadowMaps(std::vector<LightEntity>* lights) {
-	unsigned int numberOfLights = lights->size();
-	if (numberOfLights > MAX_LIGHT_AMOUNT) {
-		numberOfLights = numberOfLights;
-	}
-	for (unsigned int i = 0; i < numberOfLights; i++) {
+void Basic3DShadowRenderer::clearShadowMaps(std::unordered_map<int, LightEntity>* lights) {
+	unsigned int i = 0;
+	for (auto light : *lights) {
+		if (i + 1 > MAX_LIGHT_AMOUNT) {
+			break;
+		}
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		glBindFramebuffer(GL_FRAMEBUFFER, *lights->at(i).getShadowMapBuffer());
+		glBindFramebuffer(GL_FRAMEBUFFER, *light.second.getShadowMapBuffer());
 		glClear(GL_DEPTH_BUFFER_BIT);
+		i++;
 	}
 }
 
 // This renders a shadow of a entity to each light's depth buffer.
-void Basic3DShadowRenderer::renderShadow(ModelEntity* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<LightEntity>* lights, GLuint lightPositionsID) {
-	unsigned int numberOfLights = lights->size();
-	if (numberOfLights > MAX_LIGHT_AMOUNT) {
-		numberOfLights = MAX_LIGHT_AMOUNT;
-	}
-
+void Basic3DShadowRenderer::renderShadow(ModelEntity* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::unordered_map<int, LightEntity>* lights, GLuint lightPositionsID) {
 	// This enables face culling.
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
@@ -47,10 +43,16 @@ void Basic3DShadowRenderer::renderShadow(ModelEntity* entity, GLuint depthProgra
 	GLuint elementbuffer;
 	glGenBuffers(1, &elementbuffer);
 
-	for (SubModel subModel : *entity->getModel()->getSubModels()) {
-		for (unsigned int whichLight = 0; whichLight < numberOfLights; whichLight++) {
-			LightEntity* light = &lights->at(whichLight);
-			
+	// For some reason, range-based for loops break here so I had to use a regular for loop. I don't have time to fix the range-based loop
+	// since it seems like no one except for me is putting a significant amount of work into Project Aela.
+	for (unsigned int whichSubModel = 0; whichSubModel < entity->getModel()->getSubModels()->size(); whichSubModel++) {
+		SubModel& subModel = entity->getModel()->getSubModels()->at(whichSubModel);
+		unsigned int i = 0;
+		for (auto light : *lights) {
+			if (i + 1 > MAX_LIGHT_AMOUNT) {
+				break;
+			}
+
 			// This sends data to the buffers.
 			glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 			glBufferData(GL_ARRAY_BUFFER, subModel.getVertexSize() * sizeof(glm::vec3), &subModel.getVertices()->at(0), GL_STATIC_DRAW);
@@ -59,7 +61,7 @@ void Basic3DShadowRenderer::renderShadow(ModelEntity* entity, GLuint depthProgra
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, subModel.getIndexSize() * sizeof(unsigned short), &subModel.getIndices()->at(0), GL_STATIC_DRAW);
 
 			// These are positions and rotations for light and the subModel.
-			glm::vec3* lightPosition = light->getPosition();
+			glm::vec3* lightPosition = light.second.getPosition();
 			glm::vec3* rotation = entity->getRotation();
 			glm::vec3* position = entity->getPosition();
 			glm::vec3* scaling = entity->getScaling();
@@ -75,12 +77,12 @@ void Basic3DShadowRenderer::renderShadow(ModelEntity* entity, GLuint depthProgra
 			shadowTransformations[4] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 			shadowTransformations[5] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
-			glBindFramebuffer(GL_FRAMEBUFFER, *light->getShadowMapBuffer());
+			glBindFramebuffer(GL_FRAMEBUFFER, *light.second.getShadowMapBuffer());
 
 			for (unsigned int i = 0; i < 6; i++) {
 				glUniformMatrix4fv(shadowMatrixID + i, 1, GL_FALSE, &shadowTransformations[i][0][0]);
 			}
-			glUniform3fv(lightPositionsID, 1, &(light->getPosition()->x));
+			glUniform3fv(lightPositionsID, 1, &(light.second.getPosition()->x));
 
 			// This computes more matrices.
 			glm::mat4 modelMatrix = glm::translate(glm::scale(glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z), *scaling), *position);
@@ -101,7 +103,7 @@ void Basic3DShadowRenderer::renderShadow(ModelEntity* entity, GLuint depthProgra
 
 			// This frees the buffers from the memory. Delete this if you want to screw over your users.
 			glDisableVertexAttribArray(0);
-
+			i++;
 		}
 	}
 

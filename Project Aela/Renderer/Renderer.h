@@ -30,6 +30,7 @@
 #include "../2D/Text/TextManager.h"
 #include "../3D/Light/LightEntity.h"
 #include "../3D/Models/ModelEntity.h"
+#include "../3D/Skybox/SkyboxEntity.h"
 #include "../Events/Listener.h"
 #include "../Events/KeyEvent.h"
 
@@ -84,7 +85,7 @@ namespace Aela {
 
 			// This stores a pointer to the list of lights. It's easier to bind a list of lights
 			// once than to send each light every frame.
-			void bindLights(std::vector<LightEntity>* lights);
+			void bindLights(std::unordered_map<int, LightEntity>* lights);
 
 			// This binds a simple 2D framebuffer for rendering 2D to.
 			void bindSimple2DFramebuffer(Simple2DFramebuffer* framebuffer);
@@ -96,10 +97,10 @@ namespace Aela {
 
 			// These functions are related to 3D rendering.
 			void sendBoundLightDataToShader();
-			void render3DEntityShadows(ModelEntity* entity);
-			void render3DEntity(ModelEntity* entity);
+			void renderModelEntityShadows(ModelEntity* entity);
+			void renderModelEntity(ModelEntity* entity);
 			void renderBillboard(BillboardEntity* billboard);
-			void renderSkybox(Skybox* skybox);
+			void renderSkybox(SkyboxEntity* skybox);
 			void renderParticles(ParticleEmitter* particleEmitter);
 			void generateShadowMap(LightEntity* light);
 			void startRendering3D();
@@ -144,7 +145,6 @@ namespace Aela {
 			TimeManager* timeManager;
 			Window* window;
 			TextManager* textManager;
-			std::vector<LightEntity>* lights;
 			Simple2DFramebuffer* bound2DFramebuffer;
 
 			// This represents the framebuffer that is attached to the screen.

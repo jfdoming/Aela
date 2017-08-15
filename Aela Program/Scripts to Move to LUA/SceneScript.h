@@ -13,6 +13,14 @@ void setupScenes(Engine* engine) {
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mainMenuScene->getMenu()->add(gameTitleText);
 
+	Map3D* map;
+	bool success = engine->getResourceManager()->obtain<Map3D>("res/maps/sample_map.txt", map);
+	if (success) {
+		mainMenuScene->setMap(map);
+	} else {
+		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/sample_map.txt wasn't loaded properly or something.");
+	}
+
 	engine->getSceneManager()->registerScene(mainMenuScene, 1);
 	engine->getSceneManager()->setCurrentScene(1);
 }

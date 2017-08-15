@@ -22,8 +22,6 @@ namespace Aela {
 
 			std::vector<SubModel>* getSubModels();
 			void setSubModels(std::vector<SubModel>* subModels);
-			std::vector<std::string> getRequiredMaterials();
-			void setMaterials(std::unordered_map<std::string, Material*> materials);
 
 		private:
 			std::vector<SubModel> subModels;

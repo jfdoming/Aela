@@ -7,6 +7,8 @@
 
 #include "Map3DLoader.h"
 
+#include <glm/gtc/constants.hpp>
+
 using namespace Aela;
 
 Aela::Map3DLoader::Map3DLoader() {
@@ -48,9 +50,13 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 				} else if (tagID == "Light") {
 					entityType = EntityType::LIGHT;
 					map->getLights()->emplace(std::pair<int, LightEntity>(map->getLights()->size(), {}));
+					renderer->generateShadowMap(&map->getLights()->at(map->getLights()->size() - 1));
 				} else if(tagID == "Billboard") {
 					entityType = EntityType::BILLBOARD;
 					map->getBillboards()->emplace(std::pair<int, BillboardEntity>(map->getBillboards()->size(), {}));
+				} else if (tagID == "Skybox") {
+					entityType = EntityType::SKYBOX;
+					map->getSkyboxes()->emplace(std::pair<int, SkyboxEntity>(map->getSkyboxes()->size(), {}));
 				}
 			} else if (character == '>') {
 				entityType = EntityType::GENERIC;
@@ -74,6 +80,8 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 								map->getModels()->at(map->getModels()->size() - 1).setModel((Model*) res);
 							} else if (entityType == EntityType::BILLBOARD) {
 								map->getBillboards()->at(map->getBillboards()->size() - 1).setTexture(*((Texture*) res)->getTexture());
+							} else if (entityType == EntityType::SKYBOX) {
+								map->getSkyboxes()->at(map->getSkyboxes()->size() - 1).setSkybox((Skybox*) res);
 							}
 						} else {
 							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", line.substr(j + 1, k - j - 1) + " was requested by "
@@ -146,6 +154,10 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 	return true;
 }
 
+void Aela::Map3DLoader::bindRenderer(Renderer* renderer) {
+	this->renderer = renderer;
+}
+
 void Aela::Map3DLoader::setVec3UsingString(std::string* value, glm::vec3* vec3) {
 	std::vector<std::string> values;
 	std::cout << *value << " is value.\n";
@@ -162,6 +174,19 @@ void Aela::Map3DLoader::setVec3UsingString(std::string* value, glm::vec3* vec3) 
 	}
 
 	if (values.size() > 2) {
-		*vec3 = glm::vec3(std::stof(values.at(0)), std::stof(values.at(1)), std::stof(values.at(2)));
+		float floatValues[3];
+
+		for (unsigned int i = 0; i < 3; i++) {
+			if (values.at(i) == "PI") {
+				floatValues[i] = glm::pi<float>();
+			} else if (values.at(i) == "2PI") {
+				// Note: Setting a rotational value of a Transformabe3D to "2PI" should just set it to zero.
+				floatValues[i] = glm::pi<float>() * 2;
+			} else {
+				floatValues[i] = std::stof(values.at(i));
+			}
+		}
+
+		*vec3 = glm::vec3(floatValues[0], floatValues[1], floatValues[2]);
 	}
 }

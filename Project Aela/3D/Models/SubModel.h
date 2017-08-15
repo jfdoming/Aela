@@ -34,8 +34,6 @@ namespace Aela {
 			unsigned int getIndexSize();
 			Material* getMaterial();
 			void setMaterial(Material* material);
-			std::string getMaterialName();
-			void setMaterialName(std::string materialName);
 
 		private:
 			std::vector<glm::vec3> vertices;
@@ -43,6 +41,5 @@ namespace Aela {
 			std::vector<glm::vec3> normals;
 			std::vector<unsigned short> indices;
 			Material* material;
-			std::string materialName = "";
 	};
 }

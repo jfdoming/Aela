@@ -157,7 +157,7 @@ void Basic3DRenderer::setCamera(Camera3D* setCamera) {
 	camera = setCamera;
 }
 
-void Basic3DRenderer::bindLights(std::vector<LightEntity>* lights) {
+void Basic3DRenderer::bindLights(std::unordered_map<int, LightEntity>* lights) {
 	this->lights = lights;
 }
 
@@ -189,13 +189,13 @@ void Basic3DRenderer::renderShadow(ModelEntity* entity) {
 }
 
 // This renders a model.
-void Basic3DRenderer::render3DEntity(ModelEntity* entity, bool multisampling) {
+void Basic3DRenderer::renderModelEntity(ModelEntity* entity, bool multisampling) {
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	glViewport(0, 0, windowWidth, windowHeight);
 	if (multisampling) {
-		modelRenderer.render3DEntity(entity, multisampledColourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
+		modelRenderer.renderModelEntity(entity, multisampledColourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
 	} else {
-		modelRenderer.render3DEntity(entity, colourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
+		modelRenderer.renderModelEntity(entity, colourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
 	}
 }
 

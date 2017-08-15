@@ -47,6 +47,7 @@ class LightEntity : public Entity, public Transformable3D {
 		void setShadowMapTexture(GLuint* shadowMapTexture);
 		GLuint* getShadowMapBuffer();
 		void setShadowMapBuffer(GLuint* shadowMapBuffer);
+		EntityType getEntityType();
 
 	private:
 		ColourRGB colour;

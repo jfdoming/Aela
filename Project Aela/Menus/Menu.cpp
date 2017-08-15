@@ -25,7 +25,6 @@ void Menu::init(Rect<int>* renderDimensions, Renderer* renderer, int x, int y) {
 }
 
 void Menu::render(Renderer* renderer) {
-	std::cout << "Renmdering.\n";
 	renderer->bindSimple2DFramebuffer(&buffer);
 	Container::render(renderer);
 	renderer->renderSimple2DFramebuffer();

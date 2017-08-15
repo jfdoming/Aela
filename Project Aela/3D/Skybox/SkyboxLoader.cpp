@@ -36,7 +36,7 @@ void SkyboxLoader::expose(LuaManager& mgr) {
 	// mgr.exposeObject(this, "textureLoader");
 }
 
-bool SkyboxLoader::load(std::unordered_map<std::string, Resource*>* resources, std::string src) {
+bool SkyboxLoader::load(ResourceMap& resources, std::string src) {
 	Skybox* res = new Skybox();
 
 	GLuint* cubeMapTexture = res->getTexture();
@@ -44,14 +44,17 @@ bool SkyboxLoader::load(std::unordered_map<std::string, Resource*>* resources, s
 	glBindTexture(GL_TEXTURE_CUBE_MAP, *cubeMapTexture);
 
 	for (unsigned int i = 0; i < 6; i++) {
-		std::ifstream in;
-		if (!open(in, src)) {
+		/*std::ifstream in;
+		if (!open(in, src + paths[i])) {
+			return false;
+		}*/
+
+		if (!loadTextureUsingFILE(src + paths[i], cubeMapTexture, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i)) {
 			return false;
 		}
+		// loadTexture(in, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
 
-		loadTexture(in, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
-
-		in.close();
+		// in.close();
 	}
 
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -60,6 +63,6 @@ bool SkyboxLoader::load(std::unordered_map<std::string, Resource*>* resources, s
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-	(*resources)[src] = res;
+	resources.put(src, res);
 	return true;
 }
