@@ -19,8 +19,9 @@ Aela::Map3DLoader::~Map3DLoader() {
 
 bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 	// This tries to open the file.
-	std::ifstream in;
-	if (!open(in, src)) {
+	std::ifstream in(src, std::ios::binary);
+	if (!isValid(in)) {
+		AelaErrorHandling::consoleWindowError("Aela Map Loader", "The map " + src + " was not found.");
 		return false;
 	}
 
@@ -160,7 +161,6 @@ void Aela::Map3DLoader::bindRenderer(Renderer* renderer) {
 
 void Aela::Map3DLoader::setVec3UsingString(std::string* value, glm::vec3* vec3) {
 	std::vector<std::string> values;
-	std::cout << *value << " is value.\n";
 
 	for (int l = 0; l < value->size(); l++) {
 		if (value->at(l) == ',') {

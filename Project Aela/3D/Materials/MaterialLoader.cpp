@@ -40,8 +40,10 @@ void MaterialLoader::expose(LuaManager& mgr) {
 bool Aela::MaterialLoader::load(ResourceMap& resources, std::string src) {
 	Material* material = nullptr;
 	std::string line;
-	std::ifstream in;
-	if (!open(in, src)) {
+
+	std::ifstream in(src, std::ios::binary);
+
+	if (!isValid(in)) {
 		return false;
 	}
 
@@ -71,7 +73,6 @@ bool Aela::MaterialLoader::load(ResourceMap& resources, std::string src) {
 				}
 				
 				std::string textureName = path + fileName;
-
 				Texture* texture;
 				if (TextureLoader::loadTexture(texture, textureName)) {
 					material->setTexture(texture);

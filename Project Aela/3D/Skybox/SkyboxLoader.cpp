@@ -45,14 +45,18 @@ bool SkyboxLoader::load(ResourceMap& resources, std::string src) {
 
 	for (unsigned int i = 0; i < 6; i++) {
 		/*std::ifstream in;
-		if (!open(in, src + paths[i])) {
-			return false;
-		}*/
-
-		if (!loadTextureUsingFILE(src + paths[i], cubeMapTexture, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i)) {
+		if (!open(in, src + paths[i])) {*/
+		std::ifstream in(src + paths[i], std::ios::binary);
+		if (!isValid(in)) {
+			AelaErrorHandling::consoleWindowError("Aela Skybox Loader", "The skybox " + src + paths[i] + " was not found.");
 			return false;
 		}
+
+		/*if (!loadTextureUsingFILE(src + paths[i], GL_TEXTURE_CUBE_MAP_POSITIVE_X + i)) {
+			return false;
+		}*/
 		// loadTexture(in, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
+		loadTextureToBoundId(in, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
 
 		// in.close();
 	}

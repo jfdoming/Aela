@@ -21,7 +21,7 @@ class Texture : public Aela::Resource {
 		}
 
 		Texture() {
-			//dimensions.setValues(0, 0, 0, 0);
+			dimensions.setValues(0, 0, 0, 0);
 		}
 
 		virtual ~Texture(){
