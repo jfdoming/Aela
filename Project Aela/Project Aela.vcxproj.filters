@@ -113,6 +113,9 @@
     <Filter Include="Source Files\Utilities\Transformations">
       <UniqueIdentifier>{31e96dd4-f535-494b-8a89-d415e31d150e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\3D\Maps">
+      <UniqueIdentifier>{88f96540-0548-4261-ba60-9e8b427fb3ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Resource Management\Resource.cpp">
@@ -324,6 +327,18 @@
     </ClCompile>
     <ClCompile Include="3D\Skybox\SkyboxLoader.cpp">
       <Filter>Source Files\3D\Skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Light\LightEntity.cpp">
+      <Filter>Source Files\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Models\ModelEntity.cpp">
+      <Filter>Source Files\3D\Models</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Maps\Map3D.cpp">
+      <Filter>Source Files\3D\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Maps\Map3DLoader.cpp">
+      <Filter>Source Files\3D\Maps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -579,6 +594,21 @@
     </ClInclude>
     <ClInclude Include="Old Garbage\texture.hpp">
       <Filter>Old Garbage</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Billboards\BillboardEntity.h">
+      <Filter>Source Files\3D\Billboards</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Light\LightEntity.h">
+      <Filter>Source Files\3D\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Models\ModelEntity.h">
+      <Filter>Source Files\3D\Models</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Maps\Map3D.h">
+      <Filter>Source Files\3D\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Maps\Map3DLoader.h">
+      <Filter>Source Files\3D\Maps</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

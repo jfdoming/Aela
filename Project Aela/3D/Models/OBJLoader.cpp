@@ -29,8 +29,10 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 	// try to open the file
 	std::ifstream in(src, std::ios::binary);
 	if (!isValid(in)) {
+		std::cout << "fail:" << src << "\n";
 		return false;
 	}
+	std::cout << "boi:" << src << "\n";
 
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
 	std::vector<glm::vec3> tempVertices;

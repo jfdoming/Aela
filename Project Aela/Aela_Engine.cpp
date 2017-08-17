@@ -17,6 +17,11 @@
 using namespace Aela;
 
 int Aela::Engine::runningLoop() {
+	std::ifstream inT("res/materials/meme_mug.dds", std::ios::binary);
+	if ((inT.is_open() && inT.good() && !inT.fail() && !inT.bad())) {
+		std::cout << "Successfully opened \"res/materials/meme_mug.dds\" for loading!\n";
+	}
+
 	// TEMPORARY! This won't exist once entities are moved elsewhere.
 	std::vector<ModelEntity> entities(6);
 
@@ -114,7 +119,7 @@ int Aela::Engine::runningLoop() {
 	// This is how a billboard is loaded. A billboard that looks the camera would not use a specified rotation.
 	std::vector<BillboardEntity> billboards(1);
 	Texture* billboardTexture;
-	success = resourceManager.obtain<Texture>("res/textures/character.dds", billboardTexture);\
+	success = resourceManager.obtain<Texture>("res/textures/character.dds", billboardTexture);
 	if (success) {
 		billboards[0].setTexture(*billboardTexture->getTexture());
 		billboards[0].useSpecifiedRotation(true);

@@ -17,8 +17,8 @@ Aela::Map3DLoader::~Map3DLoader() {
 
 bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 	// This tries to open the file.
-	std::ifstream in;
-	if (!open(in, src)) {
+	std::ifstream in(src);
+	if (!isValid(in)) {
 		return false;
 	}
 
@@ -150,7 +150,7 @@ void Aela::Map3DLoader::setVec3UsingString(std::string* value, glm::vec3* vec3) 
 	std::vector<std::string> values;
 	std::cout << *value << " is value.\n";
 
-	for (int l = 0; l < value->size(); l++) {
+	for (unsigned int l = 0; l < value->size(); l++) {
 		if (value->at(l) == ',') {
 			values.push_back(value->substr(0, l));
 			value->erase(0, l + 1);
