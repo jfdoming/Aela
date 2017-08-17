@@ -72,10 +72,10 @@ int Aela::Engine::runningLoop() {
 
 	std::vector<GLuint> particleTextures;
 	Texture* tResult;
-	bool success = resourceManager.obtain<Texture>("res/textures/particle_1.dds", tResult);
+	bool success = resourceManager.obtain<Texture>("res/particles/particle_1.dds", tResult);
 	particleTextures.push_back(*(tResult->getTexture()));
 
-	success = resourceManager.obtain<Texture>("res/textures/particle_2.dds", tResult);
+	success = resourceManager.obtain<Texture>("res/particles/particle_2.dds", tResult);
 	particleTextures.push_back(*(tResult->getTexture()));
 	
 	particleEmitter.setupParticles(&particleTextures, 0.6f, 0.6f, 15);
@@ -92,24 +92,6 @@ int Aela::Engine::runningLoop() {
 	// sceneManager.setCurrentScene(1);
 
 	// obtain and set up test textures
-	Texture* testTexture;
-	success = resourceManager.obtain<Texture>("res/textures/ekkon.dds", testTexture);
-	testTexture->setOutput(0, 0, 100, 50);
-
-	Texture* testTexture2;
-	success = resourceManager.obtain<Texture>("res/textures/gradient.dds", testTexture2);
-	testTexture2->setOutput(100, 0, window.getWindowDimensions()->getWidth() - 100, 50);
-
-	// This is also temporary and showcases text rendering. This will be moved once the menu system is formed.
-	int arial = textManager.createNewTextFont("arial bold.ttf");
-	textManager.adjustFontSize(arial, 22);
-	Rect<int> textOutput(128, 34, 200, 200);
-	ColourRGBA textColour(0.9f, 0.1f, 0.9f, 1.0f);
-
-	// This sets up a custom 2D frame buffer.
-	Simple2DFramebuffer customFramebuffer;
-	renderer.setupSimple2DFramebuffer(&customFramebuffer, (Rect<int>*) window.getWindowDimensions(), (Rect<int>*) window.getWindowDimensions());
-
 	// This is also temporary and used to output framerate.
 	clock_t timeOfLastFrameCheck = 0;
 	int timeBetweenFrameChecks = 250, fps = -1;
@@ -221,7 +203,6 @@ int Aela::Engine::setupWindow(unsigned int width, unsigned int height, unsigned 
 		return -1;
 	} else {
 		window.makeWindowOpenGLContext();
-		window.hideCursor();
 		return 0;
 	}
 }
@@ -313,6 +294,10 @@ EventHandler* Aela::Engine::getEventHandler() {
 
 TimeManager* Aela::Engine::getTimeManager() {
 	return &timeManager;
+}
+
+TextManager* Aela::Engine::getTextManager() {
+	return &textManager;
 }
 
 LuaManager* Aela::Engine::getLuaManager() {

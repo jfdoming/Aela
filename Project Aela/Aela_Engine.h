@@ -47,6 +47,7 @@ namespace Aela {
 			Renderer* getRenderer();
 			EventHandler* getEventHandler();
 			TimeManager* getTimeManager();
+			TextManager* getTextManager();
 			LuaManager* getLuaManager();
 			SceneManager* getSceneManager();
 			ResourceManager* getResourceManager();

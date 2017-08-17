@@ -1,11 +1,11 @@
 <Skybox src="res/skyboxes/skybox_2">
 <Skybox src="res/skyboxes/skybox_1">
 <Model src="res/models/meme_mug.obj" position="20,0,20">
-<Model src="res/models/cat.obj" position="0.72,-1,-5.51">
+<Model src="res/models/cat.obj" position="5,0,0" scaling="1.5,1.5,1.5">
 <Model src="res/models/house_1.obj" position="0,0,-6">
-<Model src="res/models/jeep_1.obj">
-<Model src="res/models/lamp_post_1.obj" position="1,0,5">
-<Model src="res/models/sample_terrain_1.obj" position="2,1,2">
-<Light colour="1,0.5,1" power="0.8" position="-18,10,10">
-<Light colour="1,1,0.5" power="0.8" position="1,7.7,5">
-<Billboard src="res/textures/character.dds" useRotation="true" position="0,1,-1.5" rotation="0,PI,0">
+<Model src="res/models/jeep_1.obj" position="-2,0,10" rotation="0,0,0" scaling="0.75,0.75,0.75">
+<Model src="res/models/lamp_post_1.obj" position="1,-1,5">
+<Model src="res/models/sample_terrain_1.obj" position="0,0,1" scaling="2,0,2">
+// <Light colour="1,0.5,1" power="0.8" position="-18,10,10">
+<Light colour="1,1,0.5" power="0.8" position="1,6.8,5">
+<Billboard src="res/textures/character.dds" useRotation="true" position="0,1,-1.5" rotation="0,PI,0" scaling="2,2,1">

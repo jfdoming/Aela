@@ -69,7 +69,7 @@ namespace Aela {
 
 			}
 
-			// Event related
+			// This is triggered on an event.
 			void onEvent(Event* event);
 
 			// These functions initialize required elements for different types of rendering.
@@ -110,7 +110,7 @@ namespace Aela {
 			void clearSimple2DFramebuffer();
 
 			// These functions are related to 2D rendering.
-			void render2DTexture(Texture* texture);
+			void render2DTexture(Texture* texture, Rect<int>* output);
 			void renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour);
 			void renderRectangle(Rect<int>* output, ColourRGBA* colour);
 			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour);

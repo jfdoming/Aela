@@ -18,9 +18,8 @@ std::string materialsAndModelsToLoad[] = {
 };
 
 std::string texturesToLoad[] = {
+	"map_editor_main_background",
 	"character",
-	"gradient",
-	"ekkon",
 	"lol_button"
 };
 

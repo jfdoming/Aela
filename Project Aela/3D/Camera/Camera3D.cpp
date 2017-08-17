@@ -25,6 +25,14 @@ float Camera3D::getFieldOfView() {
 	return fieldOfView;
 }
 
+void Camera3D::setInUse(bool inUse) {
+	this->inUse = inUse;
+}
+
+bool Camera3D::isInUse() {
+	return inUse;
+}
+
 void Camera3D::setViewMatrix(glm::mat4 setViewMatrix) {
 	viewMatrix = setViewMatrix;
 }

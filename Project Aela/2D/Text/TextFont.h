@@ -16,9 +16,13 @@ class TextFont {
 
 		}
 
-		FT_Face* getFace();
+		// These are the getters and setters.
 		void setFace(FT_Face* face);
+		FT_Face* getFace();
+		void setSize(unsigned int size);
+		unsigned int getSize();
 
 	private:
 		FT_Face face;
+		unsigned int size = 0;
 };

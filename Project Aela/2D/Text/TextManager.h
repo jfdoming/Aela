@@ -29,7 +29,7 @@ namespace Aela {
 			int createNewTextFont(std::string name);
 			TextFont* getTextFont(unsigned int index);
 			bool deleteTextFont(unsigned int index);
-			bool adjustFontSize(unsigned int index, int size);
+			bool adjustFontSize(unsigned int index, unsigned int size);
 
 			// This stores the amount of points in a character that make up one pixel.
 			const unsigned short POINTS_PER_PIXEL = 64;
@@ -37,6 +37,7 @@ namespace Aela {
 		private:
 			// This is the list of fonts.
 			std::vector<TextFont> textFonts;
+
 			// This is the FreeType Library object.
 			FT_Library freetype;
 	};

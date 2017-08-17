@@ -54,7 +54,6 @@ void Renderer::setupMainFrameBuffer() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	mainFramebufferTexture.setDimensions(0, 0, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight());
-	mainFramebufferTexture.setOutput(0, 0, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight());
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(mainFramebufferTexture.getTexture()), 0);
@@ -167,8 +166,8 @@ void Aela::Renderer::renderParticles(ParticleEmitter* particleEmitter) {
 }
 
 // This renders a 2D texture using the 2D renderer.
-void Renderer::render2DTexture(Texture* texture) {
-	basic2DRenderer.renderTextureToSimple2DFramebuffer(texture, bound2DFramebuffer, window->getWindowDimensions());
+void Renderer::render2DTexture(Texture* texture, Rect<int>* output) {
+	basic2DRenderer.renderTextureToSimple2DFramebuffer(texture, bound2DFramebuffer, output, window->getWindowDimensions());
 }
 
 // This renders text using the 2D renderer.
@@ -201,18 +200,18 @@ void Renderer::renderSimple2DFramebuffer() {
 	if (bound2DFramebuffer->getMultisampling() > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*bound2DFramebuffer->getMultisampledFramebuffer(), *bound2DFramebuffer->getFramebuffer(), window->getWindowDimensions());
 	}
-	basic2DRenderer.renderTextureToFramebuffer(bound2DFramebuffer->getFramebufferTexture(), mainFramebuffer, window->getWindowDimensions(), effects2DShader);
+	basic2DRenderer.renderTextureToFramebuffer(bound2DFramebuffer->getFramebufferTexture(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), effects2DShader);
 }
 
 void Renderer::endRendering3D() {
 	if (multisampling3D > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultisampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getWindowDimensions());
 	}
-	basic2DRenderer.renderTextureToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, window->getWindowDimensions(), effects3DShader);
+	basic2DRenderer.renderTextureToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), effects3DShader);
 }
 
 void Renderer::endRenderingFrame() {
-	basic2DRenderer.renderTextureToFramebuffer(&mainFramebufferTexture, 0, window->getWindowDimensions());
+	basic2DRenderer.renderTextureToFramebuffer(&mainFramebufferTexture, 0, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions());
 	window->updateBuffer();
 }
 
@@ -460,95 +459,97 @@ void Renderer::updateCameraEvents(Event* event) {
 }
 
 void Aela::Renderer::updateCameraMatrices() {
-	float deltaTime = timeManager->getTimeBetweenFrames();
+	if (window->isFocused() && camera.isInUse()) {
+		float deltaTime = timeManager->getTimeBetweenFrames();
 
-	int width, height;
-	window->getWindowDimensions(&width, &height);
+		int width, height;
+		window->getWindowDimensions(&width, &height);
 
-	// This gets the cursor's position.
-	int xpos, ypos;
-	window->getCursorPositionInWindow(&xpos, &ypos);
-	window->setCursorPositionInWindow(width / 2, height / 2);
+		// This gets the cursor's position.
+		int xpos, ypos;
+		window->getCursorPositionInWindow(&xpos, &ypos);
+		window->setCursorPositionInWindow(width / 2, height / 2);
 
-	// This gets the horizontal and vertical angles.
-	float horizontalAngle = camera.getRotation()->x;
-	float verticalAngle = camera.getRotation()->y;
+		// This gets the horizontal and vertical angles.
+		float horizontalAngle = camera.getRotation()->x;
+		float verticalAngle = camera.getRotation()->y;
 
-	// This computes the new horizontal angle.
-	horizontalAngle += mouseSpeed * float(width / 2 - xpos);
+		// This computes the new horizontal angle.
+		horizontalAngle += mouseSpeed * float(width / 2 - xpos);
 
-	// This adjusts the horizontal angle so that it stays between 0 and PI * 2.
-	if (horizontalAngle >= glm::pi<float>() * 2) {
-		horizontalAngle -= glm::pi<float>() * 2;
+		// This adjusts the horizontal angle so that it stays between 0 and PI * 2.
+		if (horizontalAngle >= glm::pi<float>() * 2) {
+			horizontalAngle -= glm::pi<float>() * 2;
+		}
+		if (horizontalAngle <= 0) {
+			horizontalAngle += glm::pi<float>() * 2;
+		}
+
+		// This computes the new vertical angle.
+		float verticalModifier = mouseSpeed * float(height / 2 - ypos);
+
+		// This checks to see if the user is trying to make the camera go upside down by moving the camera up
+		// too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
+		// allowUpsideDownCamera is true.
+		if ((!allowUpsideDownCamera && verticalModifier > 0 && verticalAngle + verticalModifier <= glm::pi<float>() / 2) || allowUpsideDownCamera) {
+			verticalAngle += mouseSpeed * float(height / 2 - ypos);
+		} else if (!allowUpsideDownCamera && verticalModifier > 0) {
+			verticalAngle = glm::pi<float>() / 2;
+		}
+
+		// This checks to see if the user is trying to make the camera go upside down by moving the camera down
+		// too far (vertical angle of -PI/2 in radians). This also allows the camera to go upside down as long as
+		// allowUpsideDownCamera is true.
+		if ((!allowUpsideDownCamera && verticalModifier < 0 && verticalAngle + mouseSpeed * float(height / 2 - ypos) >= glm::pi<float>() / -2) || allowUpsideDownCamera) {
+			verticalAngle += mouseSpeed * float(height / 2 - ypos);
+		} else if (!allowUpsideDownCamera && verticalModifier < 0) {
+			verticalAngle = glm::pi<float>() / -2;
+		}
+
+		camera.setProperty(Transformable3DProperty::X_ROTATION, horizontalAngle);
+		camera.setProperty(Transformable3DProperty::Y_ROTATION, verticalAngle);
+
+		// Theis calculates vectors for the cartesian-plane system. Note: It is important to calculate the right vector before the up vector as the up
+		// vector is calculated using the right vector.
+		camera.calculateCartesionalDirection();
+		camera.calculateRightVector();
+		camera.calculateUpVector();
+
+		glm::mat4 projectionMatrix = glm::perspective(camera.getFieldOfView(), (float)width / height, 0.1f, 100.0f);
+		glm::mat4 viewMatrix = glm::lookAt(*camera.getPosition(), *camera.getPosition() + *camera.getCartesionalDirection(), *camera.getUpVector());
+		camera.setProjectionMatrix(projectionMatrix);
+		camera.setViewMatrix(viewMatrix);
+
+		// This is a position vector.
+		glm::vec3 position = *(camera.getPosition());
+
+		if (up) {
+			position += straightUp * deltaTime * currentSpeed;
+		}
+
+		if (down) {
+			position -= straightUp * deltaTime * currentSpeed;
+		}
+
+		if (left) {
+			position -= *camera.getRightVector() * deltaTime * currentSpeed;
+		}
+
+		if (right) {
+			position += *camera.getRightVector() * deltaTime * currentSpeed;
+		}
+
+		if (forward) {
+			position += *camera.getCartesionalDirection() * deltaTime * currentSpeed;
+		}
+
+		if (back) {
+			position -= *camera.getCartesionalDirection() * deltaTime * currentSpeed;
+		}
+
+		// This sets all of the camera's position and view related properties.
+		camera.setPosition(position);
 	}
-	if (horizontalAngle <= 0) {
-		horizontalAngle += glm::pi<float>() * 2;
-	}
-
-	// This computes the new vertical angle.
-	float verticalModifier = mouseSpeed * float(height / 2 - ypos);
-
-	// This checks to see if the user is trying to make the camera go upside down by moving the camera up
-	// too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
-	// allowUpsideDownCamera is true.
-	if ((!allowUpsideDownCamera && verticalModifier > 0 && verticalAngle + verticalModifier <= glm::pi<float>() / 2) || allowUpsideDownCamera) {
-		verticalAngle += mouseSpeed * float(height / 2 - ypos);
-	} else if (!allowUpsideDownCamera && verticalModifier > 0) {
-		verticalAngle = glm::pi<float>() / 2;
-	}
-
-	// This checks to see if the user is trying to make the camera go upside down by moving the camera down
-	// too far (vertical angle of -PI/2 in radians). This also allows the camera to go upside down as long as
-	// allowUpsideDownCamera is true.
-	if ((!allowUpsideDownCamera && verticalModifier < 0 && verticalAngle + mouseSpeed * float(height / 2 - ypos) >= glm::pi<float>() / -2) || allowUpsideDownCamera) {
-		verticalAngle += mouseSpeed * float(height / 2 - ypos);
-	} else if (!allowUpsideDownCamera && verticalModifier < 0) {
-		verticalAngle = glm::pi<float>() / -2;
-	}
-
-	camera.setProperty(Transformable3DProperty::X_ROTATION, horizontalAngle);
-	camera.setProperty(Transformable3DProperty::Y_ROTATION, verticalAngle);
-
-	// Theis calculates vectors for the cartesian-plane system. Note: It is important to calculate the right vector before the up vector as the up
-	// vector is calculated using the right vector.
-	camera.calculateCartesionalDirection();
-	camera.calculateRightVector();
-	camera.calculateUpVector();
-	
-	glm::mat4 projectionMatrix = glm::perspective(camera.getFieldOfView(), (float) width / height, 0.1f, 100.0f);
-	glm::mat4 viewMatrix = glm::lookAt(*camera.getPosition(), *camera.getPosition() + *camera.getCartesionalDirection(), *camera.getUpVector());
-	camera.setProjectionMatrix(projectionMatrix);
-	camera.setViewMatrix(viewMatrix);
-
-	// This is a position vector.
-	glm::vec3 position = *(camera.getPosition());
-
-	if (up) {
-		position += straightUp * deltaTime * currentSpeed;
-	}
-
-	if (down) {
-		position -= straightUp * deltaTime * currentSpeed;
-	}
-
-	if (left) {
-		position -= *camera.getRightVector() * deltaTime * currentSpeed;
-	}
-
-	if (right) {
-		position += *camera.getRightVector() * deltaTime * currentSpeed;
-	}
-
-	if (forward) {
-		position += *camera.getCartesionalDirection() * deltaTime * currentSpeed;
-	}
-
-	if (back) {
-		position -= *camera.getCartesionalDirection() * deltaTime * currentSpeed;
-	}
-
-	// This sets all of the camera's position and view related properties.
-	camera.setPosition(position);
 }
 
 // This is a useful function that checks the currently bound framebuffer to see if it was set up properly.

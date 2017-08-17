@@ -70,7 +70,6 @@ void Basic3DRenderer::setupFrameBuffers(unsigned int multisampling) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	colourFrameBufferTexture.setDimensions(0, 0, windowWidth, windowHeight);
-	colourFrameBufferTexture.setOutput(0, 0, windowWidth, windowHeight);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(colourFrameBufferTexture.getTexture()), 0);
 
@@ -90,7 +89,6 @@ void Basic3DRenderer::setupFrameBuffers(unsigned int multisampling) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		multisampledColourFrameBufferTexture.setDimensions(0, 0, windowWidth, windowHeight);
-		multisampledColourFrameBufferTexture.setOutput(0, 0, windowWidth, windowHeight);
 		glDrawBuffer(GL_COLOR_ATTACHMENT0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *(multisampledColourFrameBufferTexture.getTexture()), 0);
 	} else {

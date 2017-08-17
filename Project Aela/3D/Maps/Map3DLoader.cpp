@@ -61,6 +61,9 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 				}
 			} else if (character == '>') {
 				entityType = EntityType::GENERIC;
+			} else if (character == '/' && line.at(1) == '/') {
+				// This is a comment. Stay calm and move to the next line.
+				break;
 			} else if (character != ' ' && entityType != EntityType::GENERIC) {
 				std::string propertyType = "";
 
@@ -162,7 +165,7 @@ void Aela::Map3DLoader::bindRenderer(Renderer* renderer) {
 void Aela::Map3DLoader::setVec3UsingString(std::string* value, glm::vec3* vec3) {
 	std::vector<std::string> values;
 
-	for (int l = 0; l < value->size(); l++) {
+	for (int l = 0; l < (signed int) value->size(); l++) {
 		if (value->at(l) == ',') {
 			values.push_back(value->substr(0, l));
 			value->erase(0, l + 1);

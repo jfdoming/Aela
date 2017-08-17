@@ -14,18 +14,13 @@ void Menu::init(Rect<int>* renderDimensions, Renderer* renderer) {
 
 void Menu::init(Rect<int>* renderDimensions, Renderer* renderer, int x, int y) {
 	renderer->setupSimple2DFramebuffer(&buffer, renderDimensions, renderDimensions);
-
-	this->x = x;
-	this->y = y;
-
-	width = renderDimensions->getWidth();
-	height = renderDimensions->getHeight();
-
+	dimensions.setValues(x, y, renderDimensions->getWidth(), renderDimensions->getHeight());
 	initialized = true;
 }
 
 void Menu::render(Renderer* renderer) {
 	renderer->bindSimple2DFramebuffer(&buffer);
+	renderer->clearSimple2DFramebuffer();
 	Container::render(renderer);
 	renderer->renderSimple2DFramebuffer();
 }

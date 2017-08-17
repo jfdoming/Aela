@@ -35,7 +35,7 @@ bool Aela::ParticleLoader::load(std::unordered_map<std::string, Resource*>* reso
 	glBindTexture(GL_TEXTURE_2D, modelTextureID);
 
 	unsigned int imageWidth, imageHeight;
-	return loadTextureUsingFILE(src, &modelTextureID, GL_TEXTURE_2D, &imageWidth, &imageHeight);
+	return loadTextureUsingFILE(src, GL_TEXTURE_2D, &imageWidth, &imageHeight);
 
 	// (*resources)[src] = res;
 }

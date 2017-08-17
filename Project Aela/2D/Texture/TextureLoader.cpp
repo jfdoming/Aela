@@ -56,8 +56,6 @@ bool TextureLoader::loadTexture(Texture*& result, std::string src) {
 
 	result = new Texture(modelTextureID);
 	result->setDimensions(0, 0, imageWidth, imageHeight);
-	result->setOutput(0, 0, imageWidth, imageHeight);
-
 	return true;
 }
 

@@ -11,6 +11,14 @@ FT_Face* TextFont::getFace() {
 	return &face;
 }
 
+void TextFont::setSize(unsigned int size) {
+	this->size = size;
+}
+
+unsigned int TextFont::getSize() {
+	return size;
+}
+
 void TextFont::setFace(FT_Face* face) {
 	this->face = *face;
 }

@@ -20,7 +20,7 @@ int TextManager::createNewTextFont(std::string name) {
 		return -1;
 	}
 
-	return 0;
+	return index;
 }
 
 // This sets up the freetype library.
@@ -45,9 +45,10 @@ bool TextManager::deleteTextFont(unsigned int index) {
 	return false;
 }
 
-bool TextManager::adjustFontSize(unsigned int index, int size) {
+bool TextManager::adjustFontSize(unsigned int index, unsigned int size) {
 	if (index < textFonts.size()) {
 		FT_Set_Pixel_Sizes(*(textFonts[index].getFace()), 0, size);
+		textFonts[index].setSize(size);
 		return true;
 	}
 	return false;

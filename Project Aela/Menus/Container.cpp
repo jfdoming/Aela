@@ -1,3 +1,11 @@
+/*
+* Class: Container
+* Author: Julian Dominguez-Schatz
+* Date: 20/03/2017
+* Description: Represents a container in our menu system. It lives inside another container,
+*              and can contain various containers, widgets and other assorted GUI elements.
+*/
+
 #include "Container.h"
 #include "AbstractLayoutManager.h"
 
