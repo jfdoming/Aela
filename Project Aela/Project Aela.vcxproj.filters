@@ -310,9 +310,6 @@
     <ClCompile Include="Resource Management\ResourceMap.cpp">
       <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Models\ModelEntity.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="3D\Light\LightEntity.cpp">
       <Filter>Source Files\3D\Light</Filter>
     </ClCompile>
@@ -339,6 +336,9 @@
     </ClCompile>
     <ClCompile Include="Menus\ImageComponent.cpp">
       <Filter>Source Files\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Models\ModelEntity.cpp">
+      <Filter>Source Files\3D\Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -577,9 +577,6 @@
       <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
     <ClInclude Include="Old Garbage\texture.hpp" />
-    <ClInclude Include="3D\Models\ModelEntity.h">
-      <Filter>Source Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="3D\Light\LightEntity.h">
       <Filter>Source Files\3D\Light</Filter>
     </ClInclude>
@@ -615,6 +612,9 @@
     </ClInclude>
     <ClInclude Include="Utilities\strut.h">
       <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Models\ModelEntity.h">
+      <Filter>Source Files\3D\Models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

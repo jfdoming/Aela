@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Scripts to Move to LUA">
+      <UniqueIdentifier>{9b76b570-e1e2-4a70-8de9-50d547a4e08e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -29,6 +32,12 @@
     </ClInclude>
     <ClInclude Include="Aela_Game.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts to Move to LUA\ResourceScript.h">
+      <Filter>Source Files\Scripts to Move to LUA</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts to Move to LUA\SceneScript.h">
+      <Filter>Source Files\Scripts to Move to LUA</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

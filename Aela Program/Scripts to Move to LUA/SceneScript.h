@@ -18,7 +18,7 @@ void setupScenes(Engine* engine) {
 	TextManager* textManager = engine->getTextManager();
 	int arial = textManager->createNewTextFont("arial bold.ttf");
 	textManager->adjustFontSize(arial, 22);
-	ColourRGBA textColour(0.5f, 0.4f, 0.3f, 0.4f);
+	ColourRGBA textColour(0.5f, 0.4f, 0.3f, 1.0f);
 
 	// This sets up an image.
 	ImageComponent* image = new ImageComponent;
@@ -42,9 +42,9 @@ void setupScenes(Engine* engine) {
 
 	Scene* mainMenuScene = new Scene;
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
-	// mainMenuScene->getMenu()->add(image);
-	// mainMenuScene->getMenu()->add(gameTitleText);
-	// mainMenuScene->getMenu()->add(button);
+	mainMenuScene->getMenu()->add(image);
+	mainMenuScene->getMenu()->add(gameTitleText);
+	mainMenuScene->getMenu()->add(button);
 
 	Map3D* map;
 	success = engine->getResourceManager()->obtain<Map3D>("res/maps/sample_map.txt", map);

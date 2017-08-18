@@ -18,7 +18,7 @@ namespace Aela {
 			ButtonComponent();
 			ButtonComponent(Texture* texture);
 			ButtonComponent(Texture* texture, Rect<int>* dimensions);
-			~ButtonComponent();
+			virtual ~ButtonComponent();
 
 			// These are getters and setters.
 			void bindWindow(Window* window);

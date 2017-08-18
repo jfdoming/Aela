@@ -20,7 +20,7 @@ void setupScenes(Engine* engine) {
 	textManager->adjustFontSize(arialLarge, 35);
 	int arial = textManager->createNewTextFont("arial bold.ttf");
 	textManager->adjustFontSize(arial, 18);
-	ColourRGBA VSPurple(0.8392f, 0.8588, 0.9137, 1.0f);
+	ColourRGBA VSPurple(0.8392f, 0.8588f, 0.9137f, 1.0f);
 	Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getWindowDimensions());
 
 	// This sets up an image.
@@ -42,21 +42,21 @@ void setupScenes(Engine* engine) {
 
 	// This sets up some buttons. Note: setText() uses information about the button's dimensions. In order to setup text for
 	// a button, make sure that you set the button's position before hand.
-	ButtonComponent* newMapButton = new ButtonComponent;
+	ButtonComponent* newMapButton = new ButtonComponent();
 	newMapButton->setDimensions(newMapButtonText->getDimensions());
 	newMapButton->setupOnClick(&test, engine->getEventHandler());
 	newMapButton->getDimensions()->setX(windowDimensions.getWidth() / 20);
 	newMapButton->getDimensions()->setY(windowDimensions.getHeight() / 1.24f);
 	newMapButton->setText(newMapButtonText, engine->getTextManager());
 
-	ButtonComponent* loadMapButton = new ButtonComponent;
+	ButtonComponent* loadMapButton = new ButtonComponent();
 	loadMapButton->setDimensions(loadMapButtonText->getDimensions());
 	loadMapButton->setupOnClick(&test, engine->getEventHandler());
 	loadMapButton->getDimensions()->setX(windowDimensions.getWidth() / 20);
 	loadMapButton->getDimensions()->setY(windowDimensions.getHeight() / 1.24f + spacing);
 	loadMapButton->setText(loadMapButtonText, engine->getTextManager());
 
-	ButtonComponent* exitButton = new ButtonComponent;
+	ButtonComponent* exitButton = new ButtonComponent();
 	exitButton->setDimensions(exitButtonText->getDimensions());
 	exitButton->setupOnClick(&test, engine->getEventHandler());
 	exitButton->getDimensions()->setX(windowDimensions.getWidth() / 20);
@@ -64,7 +64,7 @@ void setupScenes(Engine* engine) {
 	exitButton->setText(exitButtonText, engine->getTextManager());
 
 	// This sets up the title screen scene.
-	Scene* mainMenuScene = new Scene;
+	Scene* mainMenuScene = new Scene();
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mainMenuScene->getMenu()->add(image);
 	mainMenuScene->getMenu()->add(titleText);

@@ -32,11 +32,7 @@ bool Aela::TextureLoader::load(ResourceMap& resources, std::string src) {
 }
 
 bool TextureLoader::loadTexture(Texture*& result, std::string src) {
-	// ROBERT IF YOU SEE THIS PLEASE FIX YOUR CODE ITS ALL YOUR FAULT ;(
-	trim(src);
-
 	// try to open the file
-	// std::ifstream in(src, std::ios::binary);
 	std::ifstream in(src, std::ios::binary);
 	if (!isValid(in)) {
 		AelaErrorHandling::consoleWindowError("Aela Texture Loader", "The file " + src + " could not be found.");
@@ -53,12 +49,9 @@ bool TextureLoader::loadTexture(Texture*& result, std::string src) {
 	unsigned int imageWidth, imageHeight;
 	if (!loadTextureToBoundId(in, GL_TEXTURE_2D, &imageWidth, &imageHeight)) {
 		in.close();
+		AelaErrorHandling::consoleWindowError("Aela Texture Loader", "The file " + src + " could not be read.");
 		return false;
 	}
-
-	/*if (loadTextureUsingFILE(src, GL_TEXTURE_2D, &imageWidth, &imageHeight)) {
-		return false;
-	}*/
 
 	in.close();
 

@@ -17,11 +17,6 @@
 using namespace Aela;
 
 int Aela::Engine::runningLoop() {
-	std::ifstream inT("res/materials/meme_mug.dds", std::ios::binary);
-	if ((inT.is_open() && inT.good() && !inT.fail() && !inT.bad())) {
-		std::cout << "Successfully opened \"res/materials/meme_mug.dds\" for loading!\n";
-	}
-
 	// TEMPORARY! This won't exist once entities are moved elsewhere.
 	
 	// This animates entities just to make sure that the animator3D actually works.

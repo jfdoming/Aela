@@ -114,8 +114,8 @@ bool WAVEClipLoader::load(ResourceMap& resources, std::string src) {
 	clip->setFormat(numberOfChannels, bitsPerSample);
 	clip->setSampleRate(sampleRate);
 
-	std::cout << "sbsdg: " << data[0] << std::endl;
-	std::cout << bitsPerSample * sampleRate << std::endl;
+	std::cout << "Audio Data at Index 0: " << data[0] << std::endl;
+	std::cout << "Audio Bits per Sample * Sample Rate: " << bitsPerSample * sampleRate << std::endl;
 
 	resources.put(src, clip);
 	return true;
