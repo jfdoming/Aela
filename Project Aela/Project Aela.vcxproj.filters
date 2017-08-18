@@ -110,11 +110,8 @@
     <Filter Include="Source Files\Utilities\Transformations">
       <UniqueIdentifier>{739e4cef-894e-4147-b28c-eb11e3bd0102}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Utilities\Transformations">
-      <UniqueIdentifier>{31e96dd4-f535-494b-8a89-d415e31d150e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\3D\Maps">
-      <UniqueIdentifier>{88f96540-0548-4261-ba60-9e8b427fb3ef}</UniqueIdentifier>
+      <UniqueIdentifier>{1765a568-121c-4ea8-a484-978fca239ba4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -313,11 +310,17 @@
     <ClCompile Include="Resource Management\ResourceMap.cpp">
       <Filter>Source Files\Resources\General</Filter>
     </ClCompile>
-    <ClCompile Include="Resource Management\ResourceMap.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="3D\Models\ModelEntity.cpp">
+      <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp">
-      <Filter>Source Files\Utilities\Transformations</Filter>
+    <ClCompile Include="3D\Light\LightEntity.cpp">
+      <Filter>Source Files\3D\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Maps\Map3DLoader.cpp">
+      <Filter>Source Files\3D\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="3D\Maps\Map3D.cpp">
+      <Filter>Source Files\3D\Maps</Filter>
     </ClCompile>
     <ClCompile Include="Audio\AudioListener.cpp">
       <Filter>Source Files\Audio</Filter>
@@ -328,17 +331,14 @@
     <ClCompile Include="3D\Skybox\SkyboxLoader.cpp">
       <Filter>Source Files\3D\Skybox</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Light\LightEntity.cpp">
-      <Filter>Source Files\3D\Light</Filter>
+    <ClCompile Include="3D\Skybox\SkyboxEntity.cpp">
+      <Filter>Source Files\3D\Skybox</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Models\ModelEntity.cpp">
-      <Filter>Source Files\3D\Models</Filter>
+    <ClCompile Include="Menus\ButtonComponent.cpp">
+      <Filter>Source Files\Menus</Filter>
     </ClCompile>
-    <ClCompile Include="3D\Maps\Map3D.cpp">
-      <Filter>Source Files\3D\Maps</Filter>
-    </ClCompile>
-    <ClCompile Include="3D\Maps\Map3DLoader.cpp">
-      <Filter>Source Files\3D\Maps</Filter>
+    <ClCompile Include="Menus\ImageComponent.cpp">
+      <Filter>Source Files\Menus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -576,39 +576,45 @@
     <ClInclude Include="Resource Management\ResourceMap.h">
       <Filter>Source Files\Resources\General</Filter>
     </ClInclude>
-    <ClInclude Include="Resource Management\ResourceMap.h" />
-    <ClInclude Include="Utilities\Transformations\PointRotation3D.h">
-      <Filter>Source Files\Utilities\Transformations</Filter>
-    </ClInclude>
-    <ClInclude Include="Audio\AudioListener.h">
-      <Filter>Source Files\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Utilities\Colour\ColourRGB.h">
-      <Filter>Source Files\Utilities\Colour</Filter>
-    </ClInclude>
-    <ClInclude Include="Lua\ModEnvironment.h">
-      <Filter>Source Files\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Skybox\SkyboxLoader.h">
-      <Filter>Source Files\3D\Skybox</Filter>
-    </ClInclude>
-    <ClInclude Include="Old Garbage\texture.hpp">
-      <Filter>Old Garbage</Filter>
-    </ClInclude>
-    <ClInclude Include="3D\Billboards\BillboardEntity.h">
-      <Filter>Source Files\3D\Billboards</Filter>
+    <ClInclude Include="Old Garbage\texture.hpp" />
+    <ClInclude Include="3D\Models\ModelEntity.h">
+      <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="3D\Light\LightEntity.h">
       <Filter>Source Files\3D\Light</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Models\ModelEntity.h">
-      <Filter>Source Files\3D\Models</Filter>
+    <ClInclude Include="3D\Billboards\BillboardEntity.h">
+      <Filter>Source Files\3D\Billboards</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Maps\Map3DLoader.h">
+      <Filter>Source Files\3D\Maps</Filter>
     </ClInclude>
     <ClInclude Include="3D\Maps\Map3D.h">
       <Filter>Source Files\3D\Maps</Filter>
     </ClInclude>
-    <ClInclude Include="3D\Maps\Map3DLoader.h">
-      <Filter>Source Files\3D\Maps</Filter>
+    <ClInclude Include="Audio\AudioListener.h">
+      <Filter>Source Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Lua\ModEnvironment.h">
+      <Filter>Source Files\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Colour\ColourRGB.h">
+      <Filter>Source Files\Utilities\Colour</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Skybox\SkyboxLoader.h">
+      <Filter>Source Files\3D\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="3D\Skybox\SkyboxEntity.h">
+      <Filter>Source Files\3D\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\ButtonComponent.h">
+      <Filter>Source Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Menus\ImageComponent.h">
+      <Filter>Source Files\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\strut.h">
+      <Filter>Source Files\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

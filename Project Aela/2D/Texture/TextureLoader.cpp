@@ -1,6 +1,9 @@
 #include "TextureLoader.h"
 #include <fstream>
 
+#include <windows.h>
+#include "Utilities\strut.h"
+
 using namespace Aela;
 
 TextureLoader::TextureLoader() {
@@ -29,10 +32,14 @@ bool Aela::TextureLoader::load(ResourceMap& resources, std::string src) {
 }
 
 bool TextureLoader::loadTexture(Texture*& result, std::string src) {
+	// ROBERT IF YOU SEE THIS PLEASE FIX YOUR CODE ITS ALL YOUR FAULT ;(
+	trim(src);
+
 	// try to open the file
+	// std::ifstream in(src, std::ios::binary);
 	std::ifstream in(src, std::ios::binary);
 	if (!isValid(in)) {
-		std::cout << "fail:" << src << "\n";
+		AelaErrorHandling::consoleWindowError("Aela Texture Loader", "The file " + src + " could not be found.");
 		return false;
 	}
 
@@ -49,15 +56,14 @@ bool TextureLoader::loadTexture(Texture*& result, std::string src) {
 		return false;
 	}
 
-	// Sorry Julian, but I'm using FILE until you get your ifstream to work since I want to be able to see textures.
-	//loadTextureUsingFILE(src, GL_TEXTURE_2D, &imageWidth, &imageHeight);
+	/*if (loadTextureUsingFILE(src, GL_TEXTURE_2D, &imageWidth, &imageHeight)) {
+		return false;
+	}*/
 
 	in.close();
 
 	result = new Texture(modelTextureID);
 	result->setDimensions(0, 0, imageWidth, imageHeight);
-	result->setOutput(0, 0, imageWidth, imageHeight);
-
 	return true;
 }
 
@@ -234,6 +240,5 @@ bool TextureLoader::loadTextureUsingFILE(std::string path, GLenum target, unsign
 	if (height != nullptr) {
 		*height = imageHeight;
 	}
-
 	return true;
 }

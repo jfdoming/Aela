@@ -9,6 +9,8 @@
 #include "../../Old Garbage/texture.hpp"
 #include "../../Error Handler/ErrorHandler.h"
 #include "../../Old Garbage/shader.hpp"
+#include <freetype/ftglyph.h>
+#include <iostream>
 
 using namespace Aela;
 
@@ -77,7 +79,6 @@ void Basic2DRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer,
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		framebuffer->getMultisampledFramebufferTexture()->setDimensions(0, 0, windowWidth, windowHeight);
-		framebuffer->getMultisampledFramebufferTexture()->setOutput(0, 0, windowWidth, windowHeight);
 		glDrawBuffer(GL_COLOR_ATTACHMENT0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *multisampledTexture, 0);
 	}
@@ -95,42 +96,38 @@ void Basic2DRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer,
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *texture, 0);
 
 	framebuffer->getFramebufferTexture()->setDimensions(dimensions);
-	framebuffer->getFramebufferTexture()->setOutput(output);
 	framebuffer->setMultisampling(multisampling);
 }
 
 // This function renders a texture directly to a specified framebuffer using the shader for rendering images.
-void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions) {
-	renderTextureToSimple2DFramebuffer(texture, framebuffer, windowDimensions, imageToBufferProgramID);
+void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions) {
+	renderTextureToSimple2DFramebuffer(texture, framebuffer, output, windowDimensions, imageToBufferProgramID);
 }
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
 // Note: Custom shaders can be used for post-process effects.
-void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, GLuint customShader) {
+void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, GLuint customShader) {
 	if (framebuffer->getMultisampling() > 0) {
-		renderTextureToFramebuffer(texture, *framebuffer->getMultisampledFramebuffer(), windowDimensions, customShader);
+		renderTextureToFramebuffer(texture, *framebuffer->getMultisampledFramebuffer(), output, windowDimensions, customShader);
 	} else {
-		renderTextureToFramebuffer(texture, *framebuffer->getFramebuffer(), windowDimensions, customShader);
+		renderTextureToFramebuffer(texture, *framebuffer->getFramebuffer(), output, windowDimensions, customShader);
 	}
 }
 
 // This function renders a texture directly to a specified framebuffer.
-void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<unsigned int>* windowDimensions) {
-	renderTextureToFramebuffer(texture, framebuffer, windowDimensions, bufferTextureToBufferProgramID);
+void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions) {
+	renderTextureToFramebuffer(texture, framebuffer, output, windowDimensions, bufferTextureToBufferProgramID);
 }
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
 // Note: Custom shaders can be used for post-process effects.
-void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<unsigned int>* windowDimensions, GLuint customShader) {
+void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, GLuint customShader) {
 	// Due to the way that OpenGL seems to flip the texture, the shader needs to flip it back
 	// and show the texture's opposite side. Or the renderer could just send normal data.
 	// GL_CULL_FACE needs to be disabled if one uses the first option.
 	glDisable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-
-	// This calculates some positioning and dimensional data.
-	Rect<int>* output = texture->getOutput();
 
 	int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
 	float topLeftX = (float) (-1 + ((float) output->getX() / (windowWidth / 2))),
@@ -301,10 +298,12 @@ void Basic2DRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFont
 	// This renders the characters, one at a time.
 	for (unsigned int i = 0; i < text.length(); i++) {
 		p = &((char) (text.at(i)));
+
 		// This loads the character.
 		if (FT_Load_Char(*(textFont->getFace()), *p, FT_LOAD_RENDER)) {
 			continue;
 		}
+
 		// This positions and renders the character.
 		characterPositioning.setY(output->getY() - (glyph->metrics.horiBearingY / pointsPerPixel));
 		characterPositioning.setWidth(glyph->bitmap.width);

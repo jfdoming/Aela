@@ -14,13 +14,23 @@ using namespace Aela;
 
 void AelaGame::setEngine(Engine* engine) {
 	this->engine = engine;
+	resourceManager = engine->getResourceManager();
 }
 
 void AelaGame::loadResources() {
-	loadMaterials(engine->getResourceManager());
-	loadModels(engine->getResourceManager());
+	loadMaterials(resourceManager);
+	loadModels(resourceManager);
+	loadTextures(resourceManager);
+	loadParticles(resourceManager);
+	loadSkyboxes(resourceManager);
+	loadStartupMap(resourceManager, engine->getRenderer());
 }
 
 void AelaGame::loadScenes() {
 	setupScenes(engine);
+}
+
+void AelaGame::setup() {
+	loadResources();
+	loadScenes();
 }

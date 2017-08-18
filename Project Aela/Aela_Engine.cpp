@@ -23,57 +23,9 @@ int Aela::Engine::runningLoop() {
 	}
 
 	// TEMPORARY! This won't exist once entities are moved elsewhere.
-	std::vector<ModelEntity> entities(6);
-
-	bool success;
-	Model* mResult;
-
-	success = resourceManager.obtain<Model>("res/models/meme_mug.obj", mResult);
-	entities[0].setModel(mResult);
-
-	success = resourceManager.obtain<Model>("res/models/cat.obj", mResult);
-	entities[1].setModel(mResult);
-
-	success = resourceManager.obtain<Model>("res/models/house_1.obj", mResult);
-	entities[2].setModel(mResult);
-
-	success = resourceManager.obtain<Model>("res/models/jeep_1.obj", mResult);
-	entities[3].setModel(mResult);
-
-	success = resourceManager.obtain<Model>("res/models/lamp_post_1.obj", mResult);
-	entities[4].setModel(mResult);
-
-	success = resourceManager.obtain<Model>("res/models/sample_terrain_1.obj", mResult);
-	entities[5].setModel(mResult);
-
-	// This provides each entity its materials. This may be an annoying way of doing it but it can be changed to be better later.
-	resourceManager.bindGroup("materials");
-	for (ModelEntity entity : entities) {
-		std::vector<std::string> materialList = entity.getModel()->getRequiredMaterials();
-		std::unordered_map<std::string, Material*> map;
-		for (std::string name : materialList) {
-			// This adds the material if it isn't already in the map.
-			if (map.find(name) == map.end()) {
-				success = resourceManager.obtain<Material>(name, map[name]);
-			}
-		}
-		entity.getModel()->setMaterials(map);
-	}
-
-	
-	// This sets model positioning.
-	entities[0].setPosition(20, 0, 20);
-	entities[1].setPosition(0.72f, -1, -5.51f);
-	entities[2].setPosition(0, 0, -6);
-	// entities[2].rotateAroundPoint(&glm::vec3(0, glm::pi<float>(), 0), &glm::vec3(20, 0, 20));
-	entities[4].setPosition(1, 0, 5.0f);
-	entities[5].setScaling(2, 1, 2);
-	/*entities[5].setPosition(-10, 0, 5);
-	entities[5].setRotation(0, glm::pi<float>() / 2, 0);
-	entities[6].setPosition(10, 20, 10);*/
 	
 	// This animates entities just to make sure that the animator3D actually works.
-	std::vector<KeyFrame3D> keyFrames;
+	/*std::vector<KeyFrame3D> keyFrames;
 	for (unsigned int i = 0; i < 0; i++) {
 		KeyFrame3DList keyFrameList;
 		for (int j = 2; j < 3; j++) {
@@ -93,62 +45,9 @@ int Aela::Engine::runningLoop() {
 		}
 		keyFrameList.setTimeAfterPreviousKeyFrame(5000 * i + 5000);
 		animator3D.addKeyFrameList(&keyFrameList);
-	}
-
-	// This is how a skybox is loaded.
-	Skybox skybox;
-	std::string basicPath = "res/textures/skybox_test";
-	std::string paths[6] = {
-		basicPath + "/right.dds",
-		basicPath + "/left.dds",
-		basicPath + "/up.dds",
-		basicPath + "/down.dds",
-		basicPath + "/back.dds",
-		basicPath + "/front.dds"
-	};
-	loadSkybox(&skybox, paths, 512, 512);
-
-	TextureLoader textureLoader;
-	resourceManager.bindLoader(&textureLoader);
-	resourceManager.bindGroup("billboard");
-	resourceManager.addToGroup("res/textures/character.dds", false);
-	if (resourceManager.loadGroup("billboard") != Aela::ResourceManager::Status::OK) {
-		std::cerr << "Failed to load a resource from group \"billboard\"!" << std::endl;
-	}
-
-	// This is how a billboard is loaded. A billboard that looks the camera would not use a specified rotation.
-	std::vector<BillboardEntity> billboards(1);
-	Texture* billboardTexture;
-	success = resourceManager.obtain<Texture>("res/textures/character.dds", billboardTexture);
-	if (success) {
-		billboards[0].setTexture(*billboardTexture->getTexture());
-		billboards[0].useSpecifiedRotation(true);
-		billboards[0].setPosition(0, 1, -1.5);
-		billboards[0].setRotation(0, glm::pi<float>(), 0);
-		renderer.getCamera()->setPosition(glm::vec3(0, 10, -20));
-	}
-
-	// This is how a light is set up.
-	std::vector<LightEntity> lights;
-	for (int i = 0; i < 2; i++) {
-		glm::vec3 position;
-		if (i == 0) {
-			position = glm::vec3(-18, 40, -100);
-		} else {
-			position = glm::vec3(1, 7.7f, 5.0f);
-		}
-		glm::vec3 rotation = glm::vec3(0, 0, 0);
-		ColourRGB colour(1, 1, 1);
-		float power = 0.8F;
-		LightEntity light(position, rotation, colour, power);
-		renderer.generateShadowMap(&light);
-		lights.push_back(light);
-	}
-	renderer.bindLights(&lights);
+	}*/
 
 	resourceManager.bindGroup("test");
-	resourceManager.addToGroup("res/textures/ekkon.dds", false);
-	resourceManager.addToGroup("res/textures/gradient.dds", false);
 	WAVEClipLoader waveClipLoader;
 	resourceManager.bindLoader(&waveClipLoader);
 	resourceManager.addToGroup("res/audio/clips/test.wav", false);
@@ -176,23 +75,12 @@ int Aela::Engine::runningLoop() {
 	particleEmitter.setRotation(0, 3.4f, 0.1f);
 	particleEmitter.setTimeManager(&timeManager);
 
-	// This uses a texture loader to load particles. We may eventually want a seperate particle loader!
-	resourceManager.bindLoader(&textureLoader);
-	resourceManager.bindGroup("particles");
-	resourceManager.addToGroup("res/textures/particle_1.dds", false);
-	resourceManager.addToGroup("res/textures/particle_2.dds", false);
-
-	if (resourceManager.loadGroup("particles") != Aela::ResourceManager::Status::OK) {
-		std::cerr << "Failed to load a resource from group \"particles\"!" << std::endl;
-	}
-
 	std::vector<GLuint> particleTextures;
 	Texture* tResult;
-
-	success = resourceManager.obtain<Texture>("res/textures/particle_1.dds", tResult);
+	bool success = resourceManager.obtain<Texture>("res/particles/particle_1.dds", tResult);
 	particleTextures.push_back(*(tResult->getTexture()));
 
-	success = resourceManager.obtain<Texture>("res/textures/particle_2.dds", tResult);
+	success = resourceManager.obtain<Texture>("res/particles/particle_2.dds", tResult);
 	particleTextures.push_back(*(tResult->getTexture()));
 	
 	particleEmitter.setupParticles(&particleTextures, 0.6f, 0.6f, 15);
@@ -209,36 +97,6 @@ int Aela::Engine::runningLoop() {
 	// sceneManager.setCurrentScene(1);
 
 	// obtain and set up test textures
-	Texture* testTexture;
-	success = resourceManager.obtain<Texture>("res/textures/ekkon.dds", testTexture);
-	testTexture->setOutput(0, 0, 100, 50);
-
-	Texture* testTexture2;
-	success = resourceManager.obtain<Texture>("res/textures/gradient.dds", testTexture2);
-	testTexture2->setOutput(100, 0, window.getWindowDimensions()->getWidth() - 100, 50);
-
-	// This is also temporary and showcases text rendering. This will be moved once the menu system is formed.
-	int arial = textManager.createNewTextFont("arial bold.ttf");
-	textManager.adjustFontSize(arial, 22);
-	Rect<int> textOutput(128, 34, 200, 200);
-	ColourRGBA textColour(0.9f, 0.1f, 0.9f, 1.0f);
-
-	// This sets up a custom 2D frame buffer.
-	Simple2DFramebuffer customFramebuffer;
-	renderer.setupSimple2DFramebuffer(&customFramebuffer, (Rect<int>*) window.getWindowDimensions(), (Rect<int>*) window.getWindowDimensions());
-
-	// This is how one would load a map.
-	Map3DLoader mapLoader;
-	Map3D* map;
-	resourceManager.bindLoader(&mapLoader);
-	resourceManager.bindGroup("maps");
-	resourceManager.addToGroup("res/maps/sample_map.txt", false);
-	if (resourceManager.loadGroup("maps") != Aela::ResourceManager::Status::OK) {
-		std::cerr << "Failed to load a resource from group \"maps\"!" << std::endl;
-	}
-	success = resourceManager.obtain<Map3D>("res/maps/sample_map.txt", map);
-
-
 	// This is also temporary and used to output framerate.
 	clock_t timeOfLastFrameCheck = 0;
 	int timeBetweenFrameChecks = 250, fps = -1;
@@ -273,7 +131,7 @@ int Aela::Engine::runningLoop() {
 		// controlManager.transform3DObject(renderer.getCamera(), -5);
 		// renderer.getCamera()->focusAtPointOnPlane(*billboards[0].getPosition(), glm::vec3(0, 0, 0));
 		// std::cout << billboards[0].getPosition()->x << " " << billboards[0].getPosition()->y << " " << billboards[0].getPosition()->z << "\n";
-		billboards[0].setScaling(2 - (timeManager.getCurrentTime() % 2000) / 3500.0f, 2 + (timeManager.getCurrentTime() % 2000) / 3500.0f, 2);
+		// billboards[0].setScaling(2 - (timeManager.getCurrentTime() % 2000) / 3500.0f, 2 + (timeManager.getCurrentTime() % 2000) / 3500.0f, 2);
 
 		// This does some simple math for framerate calculating.
 		if (timeManager.getCurrentTime() - timeOfLastFrameCheck >= timeBetweenFrameChecks) {
@@ -291,23 +149,25 @@ int Aela::Engine::runningLoop() {
 		
 		// This updates and renders the current scene.
 		// LEAVE COMMENTED OUT PLOX!!!
-		/*Aela::Scene* currentScene = sceneManager.getCurrentScene();
+		Aela::Scene* currentScene = sceneManager.getCurrentScene();
 		if (currentScene != nullptr) {
 			currentScene->update();
 			currentScene->render(&renderer);
-		}*/
+		}
+
+		// Remember to bind lights to the renderer before starting the render loop!
 
 		// This renders the program.
-		renderer.startRenderingFrame();
+		/*renderer.startRenderingFrame();
 		renderer.startRendering3D();
 		for (ModelEntity entity : entities) {
-			renderer.render3DEntityShadows(&entity);
+			renderer.renderModelEntityShadows(&entity);
 		}
 		renderer.sendBoundLightDataToShader();
 		for (ModelEntity entity : entities) {
-			renderer.render3DEntity(&entity);
+			renderer.renderModelEntity(&entity);
 		}
-		renderer.renderSkybox(&skybox);
+		renderer.renderSkybox(&skyboxEntity);
 		renderer.renderParticles(&particleEmitter);
 		for (BillboardEntity billboard : billboards) {
 			renderer.renderBillboard(&billboard);
@@ -323,12 +183,12 @@ int Aela::Engine::runningLoop() {
 		renderer.renderRectangle(50, 50, 100, 100, &funkyColour);
 		renderer.renderTriangle(200, 50, 300, 150, 400, 50, &funkyColour);
 		renderer.renderSimple2DFramebuffer();
-		renderer.endRenderingFrame();
+		renderer.endRenderingFrame();*/
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 	// This will call each model's destructor, which will delete each model's texture. I'm not sure if this
 	// is done automatically by OpenGL or Windows when the program closes, so I added it just in case.
 	// -Robert
-	entities.resize(0);
+	// entities.resize(0);
 
 	resourceManager.unloadGroup("materials");
 	resourceManager.unloadGroup("models");
@@ -348,7 +208,6 @@ int Aela::Engine::setupWindow(unsigned int width, unsigned int height, unsigned 
 		return -1;
 	} else {
 		window.makeWindowOpenGLContext();
-		window.hideCursor();
 		return 0;
 	}
 }
@@ -440,6 +299,10 @@ EventHandler* Aela::Engine::getEventHandler() {
 
 TimeManager* Aela::Engine::getTimeManager() {
 	return &timeManager;
+}
+
+TextManager* Aela::Engine::getTextManager() {
+	return &textManager;
 }
 
 LuaManager* Aela::Engine::getLuaManager() {

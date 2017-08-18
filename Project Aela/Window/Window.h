@@ -22,48 +22,48 @@ namespace Aela {
 
 	class Window {
 		private:
-		// These are typical window properties.
-		int windowWidth, windowHeight;
-		std::string windowName;
-		bool resizable, visibility, borderless, maximized, taskbarVisibility, hasFocus, shouldQuit;
+			// These are typical window properties.
+			int windowWidth, windowHeight;
+			std::string windowName;
+			bool resizable, visibility, borderless, maximized, taskbarVisibility, hasFocus, shouldQuit;
 
-		// This is the SDL_Window used by this class.
-		SDL_Window* window;
+			// This is the SDL_Window used by this class.
+			SDL_Window* window;
 
-		// These are the enumerators for the window flags.
-		std::vector<WindowFlag> flags;
+			// These are the enumerators for the window flags.
+			std::vector<WindowFlag> flags;
 
-		// This is used to bind SDL with OpenGL.
-		SDL_GLContext openGLContext;
+			// This is used to bind SDL with OpenGL.
+			SDL_GLContext openGLContext;
 
-		Rect<unsigned int> windowDimensions;
+			Rect<unsigned int> windowDimensions;
 
 		public:
-		// These are the constructors.
-		Window() {
-			hasFocus = true;
-			windowName = "Aela Window";
-		}
+			// These are the constructors.
+			Window() {
+				hasFocus = true;
+				windowName = "Aela Window";
+			}
 
-		// These are the behaviours.
-		void addProperty(WindowFlag flag);
-		bool createWindow(int setWidth, int setHeight, int setXPosition, int setYPosition, std::string setName);
-		void getWindowDimensions(int* widthVariable, int* heightVariable);
-		Rect<unsigned int>* getWindowDimensions();
-		void getWindowPosition(int* xPositionVariable, int* yPositionVariable);
-		bool makeWindowOpenGLContext();
-		void updateBuffer();
-		void getCursorPositionInWindow(int* x, int* y);
-		void getCursorPositionGlobally(int* x, int* y);
-		void setCursorPositionInWindow(int x, int y);
-		void setCursorPositionGlobally(int x, int y);
-		void setFocus(bool focus);
-		std::string getWindowName();
-		void quit();
-		bool quitCheck();
-		bool isFocused();
+			// These are the behaviours.
+			void addProperty(WindowFlag flag);
+			bool createWindow(int setWidth, int setHeight, int setXPosition, int setYPosition, std::string setName);
+			void getWindowDimensions(int* widthVariable, int* heightVariable);
+			Rect<unsigned int>* getWindowDimensions();
+			void getWindowPosition(int* xPositionVariable, int* yPositionVariable);
+			bool makeWindowOpenGLContext();
+			void updateBuffer();
+			void getCursorPositionInWindow(int* x, int* y);
+			void getCursorPositionGlobally(int* x, int* y);
+			void setCursorPositionInWindow(int x, int y);
+			void setCursorPositionGlobally(int x, int y);
+			void setFocus(bool focus);
+			std::string getWindowName();
+			void quit();
+			bool quitCheck();
+			bool isFocused();
 
-		void showCursor();
-		static void hideCursor();
+			void showCursor();
+			static void hideCursor();
 	};
 }

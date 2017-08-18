@@ -44,8 +44,7 @@ int main(int argc, char *args[]) {
 	}
 
 	game.setEngine(&engine);
-	game.loadResources();
-	game.loadScenes();
+	game.setup();
 	engine.start();
 
     return 0;

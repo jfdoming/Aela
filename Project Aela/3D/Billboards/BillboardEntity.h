@@ -42,8 +42,8 @@ class BillboardEntity : public Transformable3D, public Entity {
 			return texture;
 		}
 
-		void loadTexture(std::string path) {
-			texture = loadDDSToGLuint(path);
+		EntityType getEntityType() {
+			return EntityType::BILLBOARD;
 		}
 
 		void useSpecifiedRotation(bool use) {

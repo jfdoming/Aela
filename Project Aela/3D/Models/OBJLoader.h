@@ -34,7 +34,7 @@ namespace Aela {
 
 			void setupSubModel(SubModel* subModel, std::vector<unsigned int>* vertexIndices, std::vector<unsigned int>* uvIndices,
 				std::vector<unsigned int>* normalIndices, std::vector<glm::vec3>* tempVertices, std::vector<glm::vec2>* tempUVs,
-				std::vector<glm::vec3>* tempNormals, std::string material);
+				std::vector<glm::vec3>* tempNormals);
 
 			void indexVBO(std::vector<glm::vec3>* inputVertices, std::vector<glm::vec2>* inputUVs, std::vector<glm::vec3>* inputNormals,
 				std::vector<unsigned short>* outputIndices, std::vector<glm::vec3>* outputVertices, std::vector<glm::vec2>* outputUVs,

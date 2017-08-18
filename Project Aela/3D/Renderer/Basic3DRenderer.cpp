@@ -70,7 +70,6 @@ void Basic3DRenderer::setupFrameBuffers(unsigned int multisampling) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	colourFrameBufferTexture.setDimensions(0, 0, windowWidth, windowHeight);
-	colourFrameBufferTexture.setOutput(0, 0, windowWidth, windowHeight);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(colourFrameBufferTexture.getTexture()), 0);
 
@@ -90,7 +89,6 @@ void Basic3DRenderer::setupFrameBuffers(unsigned int multisampling) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		multisampledColourFrameBufferTexture.setDimensions(0, 0, windowWidth, windowHeight);
-		multisampledColourFrameBufferTexture.setOutput(0, 0, windowWidth, windowHeight);
 		glDrawBuffer(GL_COLOR_ATTACHMENT0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *(multisampledColourFrameBufferTexture.getTexture()), 0);
 	} else {
@@ -157,7 +155,7 @@ void Basic3DRenderer::setCamera(Camera3D* setCamera) {
 	camera = setCamera;
 }
 
-void Basic3DRenderer::bindLights(std::vector<LightEntity>* lights) {
+void Basic3DRenderer::bindLights(std::unordered_map<int, LightEntity>* lights) {
 	this->lights = lights;
 }
 
@@ -189,13 +187,13 @@ void Basic3DRenderer::renderShadow(ModelEntity* entity) {
 }
 
 // This renders a model.
-void Basic3DRenderer::render3DEntity(ModelEntity* entity, bool multisampling) {
+void Basic3DRenderer::renderModelEntity(ModelEntity* entity, bool multisampling) {
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	glViewport(0, 0, windowWidth, windowHeight);
 	if (multisampling) {
-		modelRenderer.render3DEntity(entity, multisampledColourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
+		modelRenderer.renderModelEntity(entity, multisampledColourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
 	} else {
-		modelRenderer.render3DEntity(entity, colourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
+		modelRenderer.renderModelEntity(entity, colourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
 	}
 }
 

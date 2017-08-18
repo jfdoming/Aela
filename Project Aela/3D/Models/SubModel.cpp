@@ -64,11 +64,3 @@ Material* Aela::SubModel::getMaterial() {
 void Aela::SubModel::setMaterial(Material* material) {
 	this->material = material;
 }
-
-std::string Aela::SubModel::getMaterialName() {
-	return materialName;
-}
-
-void Aela::SubModel::setMaterialName(std::string materialName) {
-	this->materialName = materialName;
-}

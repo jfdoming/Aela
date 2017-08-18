@@ -42,3 +42,7 @@ GLuint* LightEntity::getShadowMapBuffer() {
 void LightEntity::setShadowMapBuffer(GLuint* shadowMapBuffer) {
 	this->shadowMapBuffer = *shadowMapBuffer;
 }
+
+EntityType LightEntity::getEntityType() {
+	return EntityType::LIGHT;
+}

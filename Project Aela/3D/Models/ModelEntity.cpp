@@ -23,6 +23,10 @@ Cuboid<double>* Aela::ModelEntity::getBoundingBox() {
 	return &boundingBox;
 }
 
+EntityType ModelEntity::getEntityType() {
+	return EntityType::MODEL;
+}
+
 void Aela::ModelEntity::generateBoundingBox() {
 	if (model->getSubModels()->size() != 0) {
 		SubModel* firstSubModel = &model->getSubModels()->at(0);

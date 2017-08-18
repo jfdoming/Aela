@@ -16,14 +16,14 @@ class Camera3D : public Transformable3D {
 			fieldOfView = 45.0f;
 		}
 
-		// These are getters and setters for the matrices.
+		// These are getters and setters.
 		void setViewMatrix(glm::mat4 setViewMatrix);
 		void setProjectionMatrix(glm::mat4 setProjectionMatrix);
 		glm::mat4 getViewMatrix(), getProjectionMatrix();
-
-		// These are getters and setters for the field of view.
 		void setFieldOfView(float setFieldOfView);
 		float getFieldOfView();
+		void setInUse(bool inUse);
+		bool isInUse();
 
 		// These functions allow the camera to rotate and look at a point that is on its plane.
 		void focusAtPointOnPlane(glm::vec3 point, glm::vec3 offset);
@@ -42,4 +42,7 @@ class Camera3D : public Transformable3D {
 		glm::vec3 cartesionalDirection, right, up;
 
 		float fieldOfView;
+
+		// This tells the renderer whether the user is in control of the camera.
+		bool inUse = false;
 };

@@ -9,7 +9,7 @@
 
 namespace Aela {
 	enum class EntityType {
-		GENERIC, MODEL, LIGHT, BILLBOARD
+		GENERIC, MODEL, LIGHT, BILLBOARD, SKYBOX
 	};
 
 	class Entity {
@@ -22,6 +22,7 @@ namespace Aela {
 
 			}
 
+			virtual EntityType getEntityType();
 		private:
 	};
 }

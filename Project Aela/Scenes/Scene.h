@@ -1,13 +1,13 @@
 /*
 * Class: Scene
-* Author: Julian Dominguez-Schatz
+* Author: Julian Dominguez-Schatz and Robert Ciborowski
 * Date: 26/02/2017
-* Description: Represents a scene in the game.
+* Description: A class which represents a scene in the game.
 */
 
 #pragma once
 #include <vector>
-#include "../3D/Models/ModelEntity.h"
+#include "../3D/Maps/Map3D.h"
 #include "../Renderer/Renderer.h"
 #include "../Menus/Menu.h"
 
@@ -22,17 +22,23 @@ namespace Aela {
 
 			void enableMenu(Rect<unsigned int>* renderDimensions, Renderer* renderer);
 			void enableMenu(Rect<unsigned int>* renderDimensions, Renderer* renderer, int x, int y);
-			Menu* getMenu();
 
+			// These are getters and setters.
+			Menu* getMenu();
 			void setId(int id);
 			int getId();
+			void setMap(Map3D* map);
+			Map3D* getMap();
+			void setActiveSkybox(unsigned int activeSkybox);
+			unsigned int getActiveSkybox();
+
 		private:
-			Skybox skybox;
-			std::vector<ModelEntity*> models;
-			std::vector<BillboardEntity*> billboards;
+			Map3D* map;
+
+			// This keeps track of the skybox that is currently in use.
+			unsigned int activeSkybox = 0;
 
 			int id = 0;
-
 			Menu menu;
 	};
 }

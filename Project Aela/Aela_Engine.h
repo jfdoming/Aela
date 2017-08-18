@@ -17,6 +17,7 @@
 #include "2D/Texture/TextureLoader.h"
 #include "3D/Materials/MaterialLoader.h"
 #include "3D/Models/OBJLoader.h"
+#include "3D/Skybox/SkyboxLoader.h"
 #include "3D/Maps/Map3DLoader.h"
 #include "Audio/WAVEClipLoader.h"
 #include "Lua/LuaManager.h"
@@ -46,6 +47,7 @@ namespace Aela {
 			Renderer* getRenderer();
 			EventHandler* getEventHandler();
 			TimeManager* getTimeManager();
+			TextManager* getTextManager();
 			LuaManager* getLuaManager();
 			SceneManager* getSceneManager();
 			ResourceManager* getResourceManager();

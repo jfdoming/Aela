@@ -49,12 +49,20 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 		// This reads the first word of the line.
 		if (line.find("o ") != std::string::npos) {
 			if (res->getSubModels()->size() != 0) {
-				setupSubModel(&res->getSubModels()->at(res->getSubModels()->size() - 1), &vertexIndices, &uvIndices, &normalIndices, &tempVertices, &tempUVs, &tempNormals, materialName);
+				setupSubModel(&res->getSubModels()->at(res->getSubModels()->size() - 1), &vertexIndices, &uvIndices, &normalIndices, &tempVertices, &tempUVs, &tempNormals);
 			}
 			SubModel subModel;
 			res->getSubModels()->push_back(subModel);
 		} else if (line.find("usemtl ") != std::string::npos) {
 			materialName = line.substr(7, line.size() - 7);
+			Material* material;
+			bool success = resources.get<Material>(materialName, material);
+			if (!success) {
+				AelaErrorHandling::consoleWindowError("Aela OBJ Loader", "The material " + materialName + " requested by " + src + " was not found." +
+					" Are you sure that you loaded the material before loading the object?");
+				return false;
+			}
+			res->getSubModels()->at(res->getSubModels()->size() - 1).setMaterial(material);
 		} else if (line.find("v ") != std::string::npos) {
 			glm::vec3 vertex;
 			line.erase(0, 2);
@@ -98,9 +106,11 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 					// Error, somehow.
 				}
 			} else if (numberOfSlashes == 3) {
-				AelaErrorHandling::windowError("Aela OBJ Model Loader", "The requested model's normal (vn) information is missing.\nTry exporting the model with different information.");
+				AelaErrorHandling::windowError("Aela OBJ Model Loader", (std::string) "The requested model's normal (vn) information is missing.\n"
+					+ "Try exporting the model with different information.");
 			} else {
-				AelaErrorHandling::windowError("Aela OBJ Model Loader", "The formatting of the face ('f') section of the OBJ file\nis not the same that the loader uses.\nMake sure to specify vertex, UV\nand normal data in your OBJ file!");
+				AelaErrorHandling::windowError("Aela OBJ Model Loader", (std::string) "The formatting of the face ('f') section of the OBJ file\nis "
+					+ "not the same that the loader uses.\nMake sure to specify vertex, UV\nand normal data in your OBJ file!");
 				in.close();
 				delete res;
 				return false;
@@ -113,14 +123,15 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 
 	in.close();
 
-	setupSubModel(&res->getSubModels()->at(res->getSubModels()->size() - 1), &vertexIndices, &uvIndices, &normalIndices, &tempVertices, &tempUVs, &tempNormals, materialName);
+	setupSubModel(&res->getSubModels()->at(res->getSubModels()->size() - 1), &vertexIndices, &uvIndices, &normalIndices, &tempVertices, &tempUVs, 
+		&tempNormals);
 	resources.put(src, res);
 	return true;
 }
 
 void Aela::OBJLoader::setupSubModel(SubModel* subModel, std::vector<unsigned int>* vertexIndices, std::vector<unsigned int>* uvIndices,
 	std::vector<unsigned int>* normalIndices, std::vector<glm::vec3>* tempVertices, std::vector<glm::vec2>* tempUVs,
-	std::vector<glm::vec3>* tempNormals, std::string material) {
+	std::vector<glm::vec3>* tempNormals) {
 	std::vector<glm::vec3> sortedVertices;
 	std::vector<glm::vec2> sortedUVs;
 	std::vector<glm::vec3> sortedNormals;
@@ -143,14 +154,9 @@ void Aela::OBJLoader::setupSubModel(SubModel* subModel, std::vector<unsigned int
 
 	indexVBO(&sortedVertices, &sortedUVs, &sortedNormals, subModel->getIndices(), subModel->getVertices(), subModel->getUVs(), subModel->getNormals());
 
-	subModel->setMaterialName(material);
 	vertexIndices->clear();
 	uvIndices->clear();
 	normalIndices->clear();
-	/*tempVertices->clear();
-	tempUVs->clear();
-	tempNormals->clear();*/
-	material = "";
 }
 
 bool Aela::OBJLoader::getSimilarVertex(OBJLoader::VertexPacket* data, std::map<VertexPacket, unsigned short>* vertexDataMap, unsigned short* result) {

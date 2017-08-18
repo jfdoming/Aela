@@ -19,7 +19,7 @@ class Basic3DModelRenderer {
 
 		// This function renders a model. It requires a lot of GLuints that are provided by
 		// the Basic3DRenderer.
-		void render3DEntity(ModelEntity* entity, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID, GLuint modelMatrixID,
+		void renderModelEntity(ModelEntity* entity, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID, GLuint modelMatrixID,
 			GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition);
 
 		// These functions render a 2D texture in 3D space.
@@ -32,7 +32,7 @@ class Basic3DModelRenderer {
 		void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);
 
 		// This sends light data to the model shader.
-		void sendLightDataToShader(std::vector<LightEntity>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID,
+		void sendLightDataToShader(std::unordered_map<int, LightEntity>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID,
 			GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID);
 
 	private:

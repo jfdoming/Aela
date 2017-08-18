@@ -17,9 +17,13 @@ class AelaGame {
 
 		}
 
+		void setup();
+
 		void setEngine(Engine* engine);
-		void loadResources();
-		void loadScenes();
 	private:
 		Engine* engine;
+		ResourceManager* resourceManager;
+
+		void loadResources();
+		void loadScenes();
 };

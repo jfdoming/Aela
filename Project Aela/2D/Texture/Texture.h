@@ -37,14 +37,6 @@ class Texture : public Aela::Resource {
 			dimensions.setValues(x, y, width, height);
 		}
 
-		void setOutput(Rect<int>* output) {
-			this->output = *output;
-		}
-
-		void setOutput(int x, int y, int width, int height) {
-			output.setValues(x, y, width, height);
-		}
-
 		void setTexture(GLuint texture) {
 			if (texture != 0) {
 				deleteTexture();
@@ -54,10 +46,6 @@ class Texture : public Aela::Resource {
 
 		Rect<int>* getDimensions() {
 			return &dimensions;
-		}
-
-		Rect<int>* getOutput() {
-			return &output;
 		}
 
 		GLuint* getTexture() {
@@ -74,7 +62,6 @@ class Texture : public Aela::Resource {
 
 	private:
 		Rect<int> dimensions;
-		Rect<int> output;
 		GLuint texture = 0;
 
 		void deleteTexture() {

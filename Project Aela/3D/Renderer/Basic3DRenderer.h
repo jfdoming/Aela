@@ -17,6 +17,8 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
+#include <unordered_map>
+
 #include "../../Error Handler/ErrorHandler.h"
 #include "../../Old Garbage/shader.hpp"
 #include "../Particles/ParticleEmitter.h"
@@ -41,7 +43,7 @@ namespace Aela {
 
 			// These are some functions related to rendering.
 			void renderShadow(ModelEntity* entity);
-			void render3DEntity(ModelEntity* entity, bool multisampling);
+			void renderModelEntity(ModelEntity* entity, bool multisampling);
 			void clearColourFrameBuffer(bool multisampling);
 			void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3* position, glm::vec3* scaling, glm::vec3* lookAt, bool inverseRotation, bool multisampling);
 			void renderBillboard(BillboardEntity* billboard, bool multisampling);
@@ -52,7 +54,7 @@ namespace Aela {
 
 			// These are some functions related to setup.
 			void setup(unsigned int multisampling);
-			void bindLights(std::vector<LightEntity>* lights);
+			void bindLights(std::unordered_map<int, LightEntity>* lights);
 			void generateShadowMap(LightEntity* light);
 
 			// These are some getters and setters.
@@ -90,7 +92,7 @@ namespace Aela {
 			Camera3D* camera;
 
 			// This stores the lights to render.
-			std::vector<LightEntity>* lights;
+			std::unordered_map<int, LightEntity>* lights;
 
 			// These are used by the renderer so that "window->getWindowDimensions()->getWidth()"
 			// (and "...getHeight()") does not have to called all the time.

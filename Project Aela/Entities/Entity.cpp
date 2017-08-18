@@ -6,3 +6,9 @@
 */
 
 #include "Entity.h"
+
+using namespace Aela;
+
+EntityType Entity::getEntityType() {
+	return EntityType::GENERIC;
+}

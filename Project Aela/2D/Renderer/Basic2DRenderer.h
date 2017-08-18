@@ -42,10 +42,10 @@ namespace Aela {
 			void setup();
 
 			// These functions are accessible to Project Aela's main renderer in order to render 2D components.
-			void renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions);
-			void renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, GLuint customShader);
-			void renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<unsigned int>* windowDimensions);
-			void renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<unsigned int>* windowDimensions, GLuint customShader);
+			void renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions);
+			void renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, GLuint customShader);
+			void renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions);
+			void renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, GLuint customShader);
 			void renderTextToSimple2DFramebuffer(std::string text, TextFont* textFont, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
 				unsigned int pointsPerPixel);
 			void renderMultisampledBufferToBuffer(GLuint multisampledBuffer, GLuint secondaryBuffer, Rect<unsigned int>* windowDimensions);
