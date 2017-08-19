@@ -36,7 +36,11 @@ void setupScenes(Engine* engine) {
 	TextComponent* loadMapButtonText = new TextComponent("Load Map", arial, &VSPurple, textManager);
 	TextComponent* exitButtonText = new TextComponent("Exit", arial, &VSPurple, textManager);
 
-	auto newMap = [](Engine* engine) {engine->getSceneManager()->setCurrentScene(2);};
+	auto newMap = [](Engine* engine) {
+		engine->getSceneManager()->setCurrentScene(2);
+		engine->getWindow()->hideCursor();
+		engine->getRenderer()->getCamera()->setInUse(true);
+	};
 	auto loadMap = [](Engine* engine) {engine->getSceneManager()->setCurrentScene(2);};
 	auto exit = [](Engine* engine) {engine->getWindow()->quit(); };
 
@@ -85,11 +89,11 @@ void setupScenes(Engine* engine) {
 	mapCreationScene->getMenu()->add(topBarImage);
 
 	Map3D* map;
-	success = engine->getResourceManager()->obtain<Map3D>("res/maps/sample_map.txt", map);
+	success = engine->getResourceManager()->obtain<Map3D>("res/maps/default_map.txt", map);
 	if (success) {
-		mainMenuScene->setMap(map);
+		mapCreationScene->setMap(map);
 	} else {
-		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/sample_map.txt wasn't loaded properly or something.");
+		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/default_map.txt wasn't loaded properly or something.");
 	}
 
 	engine->getSceneManager()->registerScene(mainMenuScene, 1);

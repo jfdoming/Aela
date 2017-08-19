@@ -33,3 +33,7 @@ void SceneManager::setCurrentScene(int id) {
 Scene* SceneManager::getCurrentScene() {
 	return currentScene;
 }
+
+std::unordered_map<int, Aela::Scene*>* Aela::SceneManager::getScenes() {
+	return &scenes;
+}

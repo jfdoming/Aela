@@ -9,6 +9,7 @@
 using namespace Aela;
 
 std::string materialsAndModelsToLoad[] = {
+	"axis_helper",
 	"meme_mug",
 	"cat",
 	"house_1",
@@ -109,7 +110,7 @@ void loadStartupMap(ResourceManager* resourceManager, Renderer* renderer) {
 	mapLoader.bindRenderer(renderer);
 	resourceManager->bindLoader(&mapLoader);
 	resourceManager->bindGroup("maps");
-	resourceManager->addToGroup("res/maps/sample_map.txt", false);
+	resourceManager->addToGroup("res/maps/default_map.txt", false);
 	if (resourceManager->loadGroup("maps") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"maps\"!" << std::endl;
 	}

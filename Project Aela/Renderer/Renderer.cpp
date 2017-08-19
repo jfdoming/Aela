@@ -116,7 +116,7 @@ void Aela::Renderer::bindSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
 // This starts the rendering of a frame.
 void Renderer::startRenderingFrame() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
+	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// This would clear the main frame buffer, but it doesn't need to be cleared since everything would get overwritten when writing the 3D and 2D
@@ -125,7 +125,8 @@ void Renderer::startRenderingFrame() {
 	// glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
 	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	basic3DRenderer.clearColourFrameBuffer(multisampling3D > 0);
 }

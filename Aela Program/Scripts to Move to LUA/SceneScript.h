@@ -58,7 +58,7 @@ void setupScenes(Engine* engine) {
 	particleTextures.push_back(*(tResult->getTexture()));
 	particleEmitter->setupParticles(&particleTextures, 0.6f, 0.6f, 25);
 
-	Scene* mainMenuScene = new Scene;
+	Scene* mainMenuScene = new Scene();
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mainMenuScene->getParticleEmitters()->push_back(particleEmitter);
 	// mainMenuScene->getMenu()->add(image);

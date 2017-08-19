@@ -9,6 +9,7 @@
 #include "Aela_Game.h"
 #include "Scripts to Move to LUA/ResourceScript.h"
 #include "Scripts to Move to LUA/SceneScript.h"
+#include "Scripts to Move to LUA/GameStartupScript.h"
 
 using namespace Aela;
 
@@ -34,7 +35,19 @@ void AelaGame::setup() {
 	engine->getRenderer()->activateFeature(RendererFeature::MSAA_2D_X4);
 	loadResources();
 	loadScenes();
+	setupGameElements(engine, this);
 }
 
 void AelaGame::update() {
+}
+
+void AelaGame::onEvent(Event* event) {
+}
+
+void AelaGame::setMapBeingEdited(Map3D* mapBeingEdited) {
+	this->mapBeingEdited = mapBeingEdited;
+}
+
+Map3D* AelaGame::getMapBeingEdited() {
+	return mapBeingEdited;
 }
