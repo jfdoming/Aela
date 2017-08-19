@@ -42,9 +42,13 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
+	error = engine.setupSpecificationsManager();
+	if (error != 0) {
+		return error;
+	}
+
 	game.setEngine(&engine);
 	game.setup();
 	engine.start();
-
     return 0;
 }

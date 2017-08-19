@@ -38,6 +38,14 @@ TimeManager* ParticleEmitter::getTimeManager() {
 	return timeManager;
 }
 
+void ParticleEmitter::setStats(float baseSpeed, float baseLifetime, float speedOffset, float lifetimeOffset, float pathOffset) {
+	this->baseSpeed = baseSpeed;
+	this->baseLifetime = baseLifetime;
+	this->speedOffset = speedOffset;
+	this->lifetimeOffset = lifetimeOffset;
+	this->pathOffset = pathOffset;
+}
+
 float ParticleEmitter::getBaseSpeed() {
 	return baseSpeed;
 }
@@ -46,7 +54,7 @@ void ParticleEmitter::setBaseSpeed(float baseSpeed) {
 	this->baseSpeed = baseSpeed;
 }
 
-unsigned int ParticleEmitter::getBaseLifetime() {
+float ParticleEmitter::getBaseLifetime() {
 	return baseLifetime;
 }
 
@@ -62,7 +70,7 @@ void ParticleEmitter::setSpeedOffset(float speedOffset) {
 	this->speedOffset = speedOffset;
 }
 
-unsigned int ParticleEmitter::getLifetimeOffset() {
+float ParticleEmitter::getLifetimeOffset() {
 	return lifetimeOffset;
 }
 

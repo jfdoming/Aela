@@ -27,6 +27,8 @@
 #include "3D/Animator/Animator3D.h"
 #include "3D/Particles/PlanarParticleEmitter.h"
 #include "Menus/TextComponent.h"
+#include "Specifications Manager/SpecificationsManager.h"
+#include "Framerate Calculator/FramerateCalculator.h"
 
 namespace Aela {
 	class Engine {
@@ -40,6 +42,7 @@ namespace Aela {
 			int setupEventHandler();
 			int setupAudioPlayer();
 			int setupAnimator();
+			int setupSpecificationsManager();
 			void start();
 
 			// These are getters. Some of the Aela Objects inside of this class are not allowed to be accessed externally.
@@ -53,6 +56,8 @@ namespace Aela {
 			ResourceManager* getResourceManager();
 			AudioManager* getAudioPlayer();
 			Animator3D* getAnimator3D();
+			SpecificationsManager* getSpecificationManager();
+			FramerateCalculator* getFramerateCalculator();
 
 		private:
 			// These are global objects who's classes come from Project Aela.
@@ -66,6 +71,8 @@ namespace Aela {
 			ResourceManager resourceManager;
 			AudioManager audioPlayer;
 			Animator3D animator3D;
+			SpecificationsManager specificationsManager;
+			FramerateCalculator framerateCalculator;
 
 			int runningLoop();
 	};

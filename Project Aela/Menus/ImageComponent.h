@@ -24,6 +24,6 @@ namespace Aela {
 			Texture* getTexture();
 
 		protected:
-			Texture* texture;
+			Texture* texture = nullptr;
 	};
 }

@@ -52,7 +52,7 @@ bool Aela::MaterialLoader::load(ResourceMap& resources, std::string src) {
 		while (std::getline(in, line)) {
 			if (line.find("newmtl ") != std::string::npos) {
 				material = new Material();
-				std::string name = line.substr(7, line.size() - 7);
+				std::string name = line.substr(MATERIAL_NAME_START_POSITION, line.size() - MATERIAL_NAME_START_POSITION);
 				resources.put(name, material);
 			} else if (line.find("map_Kd ") != std::string::npos || line.find("map_Ka ") != std::string::npos) {
 				if (material == nullptr) {
@@ -61,7 +61,7 @@ bool Aela::MaterialLoader::load(ResourceMap& resources, std::string src) {
 				}
 
 				// If this part of the code is reached, the line may look like "map_Kd tire_1.dds".
-				std::string fileName = line.substr(7, line.size() - 7);
+				std::string fileName = line.substr(MATERIAL_PATH_START_POSITION, line.size() - MATERIAL_PATH_START_POSITION);
 
 				// This retrieves the folder path.
 				std::string path = "/";

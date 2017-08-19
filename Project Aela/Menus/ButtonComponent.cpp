@@ -7,9 +7,6 @@
 
 #include "ButtonComponent.h"
 #include "../Events/EventConstants.h"
-#include <ft2build.h>
-#include <freetype/freetype.h>
-#include <freetype/ftglyph.h>
 
 Aela::ButtonComponent::ButtonComponent() {
 }

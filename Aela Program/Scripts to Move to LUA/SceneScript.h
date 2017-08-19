@@ -40,8 +40,27 @@ void setupScenes(Engine* engine) {
 	Rect<int> textOutput(100, 100, 300, 300);
 	gameTitleText->setDimensions(&textOutput);
 
+	// This sets up particles.
+	PlanarParticleEmitter* particleEmitter = new PlanarParticleEmitter();
+	Rect<GLfloat> emitterDimensions(0, 0, 10, 10);
+	particleEmitter->setupDimensions(&emitterDimensions);
+	particleEmitter->setCamera(engine->getRenderer()->getCamera());
+	particleEmitter->setStats(0.001f, 20, 0.001f, 2, 2);
+	particleEmitter->setPosition(5, 0, 5);
+	particleEmitter->setRotation(0, 3.4f, 0.1f);
+	particleEmitter->setTimeManager(engine->getTimeManager());
+
+	std::vector<GLuint> particleTextures;
+	Texture* tResult;
+	success = engine->getResourceManager()->obtain<Texture>("res/particles/particle_1.dds", tResult);
+	particleTextures.push_back(*(tResult->getTexture()));
+	success = engine->getResourceManager()->obtain<Texture>("res/particles/particle_2.dds", tResult);
+	particleTextures.push_back(*(tResult->getTexture()));
+	particleEmitter->setupParticles(&particleTextures, 0.6f, 0.6f, 25);
+
 	Scene* mainMenuScene = new Scene;
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
+	mainMenuScene->getParticleEmitters()->push_back(particleEmitter);
 	// mainMenuScene->getMenu()->add(image);
 	// mainMenuScene->getMenu()->add(gameTitleText);
 	// mainMenuScene->getMenu()->add(button);

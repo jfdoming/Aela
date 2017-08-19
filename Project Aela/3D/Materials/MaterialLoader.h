@@ -18,5 +18,9 @@ namespace Aela {
 
 			virtual void expose(LuaManager& mgr);
 			virtual bool load(ResourceMap& resources, std::string src);
+
+		private:
+			unsigned int MATERIAL_PATH_START_POSITION = 7;
+			unsigned int MATERIAL_NAME_START_POSITION = 7;
 	};
 }

@@ -20,7 +20,7 @@ void setupScenes(Engine* engine) {
 	textManager->adjustFontSize(arialLarge, 35);
 	int arial = textManager->createNewTextFont("arial bold.ttf");
 	textManager->adjustFontSize(arial, 18);
-	ColourRGBA VSPurple(0.8392f, 0.8588, 0.9137, 1.0f);
+	ColourRGBA VSPurple(0.8392f, 0.8588f, 0.9137f, 1.0f);
 	Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getWindowDimensions());
 
 	// This sets up an image.

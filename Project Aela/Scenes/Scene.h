@@ -31,9 +31,11 @@ namespace Aela {
 			Map3D* getMap();
 			void setActiveSkybox(unsigned int activeSkybox);
 			unsigned int getActiveSkybox();
+			std::vector<ParticleEmitter*>* getParticleEmitters();
 
 		private:
 			Map3D* map;
+			std::vector<ParticleEmitter*> particleEmitters;
 
 			// This keeps track of the skybox that is currently in use.
 			unsigned int activeSkybox = 0;

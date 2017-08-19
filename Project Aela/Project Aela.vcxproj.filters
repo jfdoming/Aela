@@ -72,6 +72,8 @@
     <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="Menus\ImageComponent.cpp" />
     <ClCompile Include="Menus\ButtonComponent.cpp" />
+    <ClCompile Include="Specifications Manager\SpecificationsManager.cpp" />
+    <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -158,5 +160,7 @@
     <ClInclude Include="Window\Window.h" />
     <ClInclude Include="Menus\ImageComponent.h" />
     <ClInclude Include="Menus\ButtonComponent.h" />
+    <ClInclude Include="Specifications Manager\SpecificationsManager.h" />
+    <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
   </ItemGroup>
 </Project>

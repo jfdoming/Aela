@@ -33,13 +33,14 @@ class ParticleEmitter : public Transformable3D {
 		std::vector<Particle>* getParticles();
 		void setTimeManager(TimeManager* timeManager);
 		TimeManager* getTimeManager();
+		void setStats(float baseSpeed, float baseLifetime, float speedOffset, float lifetimeOffset, float pathOffset);
 		float getBaseSpeed();
 		void setBaseSpeed(float baseSpeed);
-		unsigned int getBaseLifetime();
+		float getBaseLifetime();
 		void setBaseLifetime(unsigned int baseLifetime);
 		float getSpeedOffset();
 		void setSpeedOffset(float speedOffset);
-		unsigned int getLifetimeOffset();
+		float getLifetimeOffset();
 		void setLifetimeOffset(unsigned int lifetimeOffset);
 		float getPathOffset();
 		void setPathOffset(float pathOffset);
@@ -51,11 +52,11 @@ class ParticleEmitter : public Transformable3D {
 
 		// This defines properties of the particles. Speed = distance / millisecond, lifetime = distance.
 		float baseSpeed = 0.001f;
-		unsigned int baseLifetime = 1000;
+		float baseLifetime = 1000;
 
 		// These are offsets that allow some particles to be slightly different in their behaviour compared to other particles.
 		float speedOffset = 0;
-		unsigned int lifetimeOffset = 0;
+		float lifetimeOffset = 0;
 		float pathOffset = 0;
 
 		// This is meant to reset a particle's position once it has completed its life.

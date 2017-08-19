@@ -13,6 +13,9 @@ void Scene::update() {
 	if (menu.isInitialized()) {
 		menu.update();
 	}
+	for (ParticleEmitter* emitter : particleEmitters) {
+		emitter->update();
+	}
 }
 
 void Scene::render(Renderer* renderer) {
@@ -31,6 +34,10 @@ void Scene::render(Renderer* renderer) {
 	}
 
 	renderer->renderSkybox(&(*map->getSkyboxes())[activeSkybox]);
+
+	for (ParticleEmitter* emitter : particleEmitters) {
+		renderer->renderParticles(emitter);
+	}
 
 	for (auto billboard : *map->getBillboards()) {
 		renderer->renderBillboard(&billboard.second);
@@ -81,4 +88,8 @@ void Scene::setActiveSkybox(unsigned int activeSkybox) {
 
 unsigned int Scene::getActiveSkybox() {
 	return activeSkybox;
+}
+
+std::vector<ParticleEmitter*>* Aela::Scene::getParticleEmitters() {
+	return &particleEmitters;
 }
