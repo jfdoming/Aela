@@ -16,11 +16,17 @@ void SceneManager::registerScene(Scene* scene, int id) {
 }
 
 void SceneManager::setCurrentScene(int id) {
+	if (currentScene != nullptr) {
+		currentScene->getMenu()->setUseOfChildren(false);
+		currentScene->getMenu()->setInUse(false);
+	}
 	auto item = scenes.find(id);
 	if (item == scenes.end()) {
 		currentScene = nullptr;
 	} else {
 		currentScene = item->second;
+		currentScene->getMenu()->setUseOfChildren(true);
+		currentScene->getMenu()->setInUse(true);
 	}
 }
 

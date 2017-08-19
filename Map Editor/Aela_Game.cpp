@@ -35,3 +35,6 @@ void AelaGame::setup() {
 	loadResources();
 	loadScenes();
 }
+
+void AelaGame::update() {
+}

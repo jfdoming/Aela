@@ -20,6 +20,8 @@ namespace Aela {
 			virtual bool isDirty();
 			void setDimensions(Rect<int>* dimensions);
 			Rect<int>* getDimensions();
+			void setInUse(bool inUse);
+			bool isInUse();
 
 			virtual void update() = 0;
 			virtual void render(Renderer* renderer) = 0;
@@ -29,5 +31,7 @@ namespace Aela {
 
 			// This stores the component's dimensions.
 			Rect<int> dimensions;
+
+			bool inUse = false;
 	};
 }

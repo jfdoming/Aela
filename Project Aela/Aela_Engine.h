@@ -43,7 +43,10 @@ namespace Aela {
 			int setupAudioPlayer();
 			int setupAnimator();
 			int setupSpecificationsManager();
-			void start();
+
+			// These functions should get called inside a running loop.
+			void update();
+			void render();
 
 			// These are getters. Some of the Aela Objects inside of this class are not allowed to be accessed externally.
 			Window* getWindow();

@@ -18,6 +18,7 @@ class AelaGame {
 		}
 
 		void setup();
+		void update();
 
 		void setEngine(Engine* engine);
 	private:

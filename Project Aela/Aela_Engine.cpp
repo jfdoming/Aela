@@ -11,11 +11,13 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <mutex>
 
 #include "Aela_Engine.h"
 
 using namespace Aela;
 
+// Thi function is old and will be deleted. It still contains code for elements which will be moved.
 int Aela::Engine::runningLoop() {
 	// This animates entities just to make sure that the animator3D actually works.
 	/*std::vector<KeyFrame3D> keyFrames;
@@ -73,10 +75,11 @@ int Aela::Engine::runningLoop() {
 	// -Robert
 	// entities.resize(0);
 
-	resourceManager.unloadGroup("materials");
+	// This should be moved into Aela Program!
+	/*resourceManager.unloadGroup("materials");
 	resourceManager.unloadGroup("models");
 	resourceManager.unloadGroup("particles");
-	resourceManager.unloadGroup("test");
+	resourceManager.unloadGroup("test");*/
 
 	return 0;
 }
@@ -174,9 +177,20 @@ int Aela::Engine::setupSpecificationsManager() {
 }
 
 // This method is meant to be run by another program that uses the Project Aela library. It starts Project Aela.
-void Aela::Engine::start() {
-	int errorCode = runningLoop();
-	std::cout << "Program exited with error code " << errorCode << std::endl;
+void Aela::Engine::update() {
+	// Note: Events should be updated first.
+	eventHandler.updateSDLEvents();
+	timeManager.updateTime();
+	animator3D.update();
+}
+
+void Aela::Engine::render() {
+	// This updates and renders the current scene.
+	Aela::Scene* currentScene = sceneManager.getCurrentScene();
+	if (currentScene != nullptr) {
+		currentScene->update();
+		currentScene->render(&renderer);
+	}
 }
 
 Window* Aela::Engine::getWindow() {

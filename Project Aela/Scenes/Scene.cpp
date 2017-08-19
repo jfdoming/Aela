@@ -19,31 +19,33 @@ void Scene::update() {
 }
 
 void Scene::render(Renderer* renderer) {
-	renderer->startRenderingFrame();
-	renderer->bindLights(map->getLights());
-	renderer->startRendering3D();
+	if (map != nullptr) {
+		renderer->startRenderingFrame();
+		renderer->bindLights(map->getLights());
+		renderer->startRendering3D();
 
-	for (auto model : *map->getModels()) {
-		renderer->renderModelEntityShadows(&model.second);
+		for (auto model : *map->getModels()) {
+			renderer->renderModelEntityShadows(&model.second);
+		}
+
+		renderer->sendBoundLightDataToShader();
+
+		for (auto model : *map->getModels()) {
+			renderer->renderModelEntity(&model.second);
+		}
+
+		renderer->renderSkybox(&(*map->getSkyboxes())[activeSkybox]);
+
+		for (ParticleEmitter* emitter : particleEmitters) {
+			renderer->renderParticles(emitter);
+		}
+
+		for (auto billboard : *map->getBillboards()) {
+			renderer->renderBillboard(&billboard.second);
+		}
+
+		renderer->endRendering3D();
 	}
-
-	renderer->sendBoundLightDataToShader();
-
-	for (auto model : *map->getModels()) {
-		renderer->renderModelEntity(&model.second);
-	}
-
-	renderer->renderSkybox(&(*map->getSkyboxes())[activeSkybox]);
-
-	for (ParticleEmitter* emitter : particleEmitters) {
-		renderer->renderParticles(emitter);
-	}
-
-	for (auto billboard : *map->getBillboards()) {
-		renderer->renderBillboard(&billboard.second);
-	}
-
-	renderer->endRendering3D();
 
 	if (menu.isInitialized()) {
 		if (menu.isDirty()) {

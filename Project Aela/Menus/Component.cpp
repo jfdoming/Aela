@@ -23,3 +23,11 @@ void Aela::Component::setDimensions(Rect<int>* dimensions) {
 Rect<int>* Aela::Component::getDimensions() {
 	return &dimensions;
 }
+
+void Aela::Component::setInUse(bool inUse) {
+	this->inUse = inUse;
+}
+
+bool Aela::Component::isInUse() {
+	return inUse;
+}

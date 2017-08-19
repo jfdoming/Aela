@@ -163,5 +163,6 @@
     <ClInclude Include="Specifications Manager\SpecificationsManager.h" />
     <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
     <ClInclude Include="Utilities\strut.h" />
+    <ClInclude Include="Utilities\AelaEngineFunctor.h" />
   </ItemGroup>
 </Project>

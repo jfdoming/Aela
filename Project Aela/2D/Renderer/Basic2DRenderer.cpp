@@ -322,7 +322,7 @@ void Basic2DRenderer::renderMultisampledBufferToBuffer(GLuint multisampledBuffer
 
 // This clears the 2D framebuffer.
 void Basic2DRenderer::clearSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 	if (framebuffer->getMultisampling() > 0) {
 		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
 	} else {

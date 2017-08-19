@@ -49,6 +49,12 @@ int main(int argc, char *args[]) {
 
 	game.setEngine(&engine);
 	game.setup();
-	engine.start();
+
+	do {
+		engine.update();
+		game.update();
+		engine.render();
+	} while (!engine.getWindow()->quitCheck() && !AelaErrorHandling::programCloseWasRequested());
+
     return 0;
 }

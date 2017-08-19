@@ -21,6 +21,7 @@ namespace Aela {
 
 			virtual void update();
 			virtual void render(Renderer* renderer);
+			void setUseOfChildren(bool inUse);
 
 		protected:
 			Container(int x, int y);

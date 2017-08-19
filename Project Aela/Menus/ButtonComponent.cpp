@@ -37,23 +37,35 @@ void Aela::ButtonComponent::render(Renderer* renderer) {
 }
 
 void Aela::ButtonComponent::onEvent(Event* event) {
-	if (event->getType() == EventConstants::MOUSE_PRESSED) {
-		if (!clicked) {
-			int x, y;
-			window->getCursorPositionInWindow(&x, &y);
-			if (x >= dimensions.getX() && x <= dimensions.getX() + dimensions.getWidth() && y >= dimensions.getY()
-				&& y <= dimensions.getY() + dimensions.getHeight()) {
-				clicked = true;
-				onClick();
+	if (inUse) {
+		if (event->getType() == EventConstants::MOUSE_PRESSED) {
+			if (!clicked) {
+				int x, y;
+				window->getCursorPositionInWindow(&x, &y);
+				if (x >= dimensions.getX() && x <= dimensions.getX() + dimensions.getWidth() && y >= dimensions.getY()
+					&& y <= dimensions.getY() + dimensions.getHeight()) {
+					clicked = true;
+					if (onClick != nullptr) {
+						onClick();
+					} else {
+						onClickFunctor();
+					}
+				}
 			}
+		} else if (event->getType() == EventConstants::MOUSE_RELEASED) {
+			clicked = false;
 		}
-	} else if (event->getType() == EventConstants::MOUSE_RELEASED) {
-		clicked = false;
 	}
 }
 
 void Aela::ButtonComponent::setupOnClick(void(*function)(), EventHandler* eventHandler) {
 	onClick = function;
+	eventHandler->addListener(EventConstants::MOUSE_PRESSED, this);
+	eventHandler->addListener(EventConstants::MOUSE_RELEASED, this);
+}
+
+void Aela::ButtonComponent::setupOnClick(AelaEngineFunctor* functor, EventHandler* eventHandler) {
+	onClickFunctor = *functor;
 	eventHandler->addListener(EventConstants::MOUSE_PRESSED, this);
 	eventHandler->addListener(EventConstants::MOUSE_RELEASED, this);
 }
