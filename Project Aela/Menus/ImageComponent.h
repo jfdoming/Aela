@@ -15,7 +15,7 @@ namespace Aela {
 			ImageComponent();
 			ImageComponent(Texture* texture);
 			ImageComponent(Texture* texture, Rect<int>* dimensions);
-			~ImageComponent();
+			virtual ~ImageComponent();
 
 			virtual void update();
 			virtual void render(Renderer* renderer);

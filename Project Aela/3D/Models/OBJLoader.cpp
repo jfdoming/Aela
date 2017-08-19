@@ -29,6 +29,7 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 	// try to open the file
 	std::ifstream in(src, std::ios::binary);
 	if (!isValid(in)) {
+		AelaErrorHandling::consoleWindowError("Aela OBJ Loader", "The file " + src + " could not be found.");
 		return false;
 	}
 

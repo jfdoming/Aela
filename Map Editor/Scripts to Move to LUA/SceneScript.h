@@ -32,8 +32,8 @@ void setupScenes(Engine* engine) {
 
 	// This sets up text.
 	TextComponent* titleText = new TextComponent("Project Aela Map Editor", arialLarge, &VSPurple, textManager);
-	titleText->getDimensions()->setX(windowDimensions.getWidth() / 20);
-	titleText->getDimensions()->setY(windowDimensions.getHeight() / 1.3f);
+	titleText->getDimensions()->setX((int) (windowDimensions.getWidth() / 20));
+	titleText->getDimensions()->setY((int) (windowDimensions.getHeight() / 1.3f));
 
 	TextComponent* newMapButtonText = new TextComponent("Create New Map", arial, &VSPurple, textManager);
 	int spacing = newMapButtonText->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
@@ -42,29 +42,29 @@ void setupScenes(Engine* engine) {
 
 	// This sets up some buttons. Note: setText() uses information about the button's dimensions. In order to setup text for
 	// a button, make sure that you set the button's position before hand.
-	ButtonComponent* newMapButton = new ButtonComponent;
+	ButtonComponent* newMapButton = new ButtonComponent();
 	newMapButton->setDimensions(newMapButtonText->getDimensions());
 	newMapButton->setupOnClick(&test, engine->getEventHandler());
-	newMapButton->getDimensions()->setX(windowDimensions.getWidth() / 20);
-	newMapButton->getDimensions()->setY(windowDimensions.getHeight() / 1.24f);
+	newMapButton->getDimensions()->setX((int) (windowDimensions.getWidth() / 20));
+	newMapButton->getDimensions()->setY((int) (windowDimensions.getHeight() / 1.24f));
 	newMapButton->setText(newMapButtonText, engine->getTextManager());
 
-	ButtonComponent* loadMapButton = new ButtonComponent;
+	ButtonComponent* loadMapButton = new ButtonComponent();
 	loadMapButton->setDimensions(loadMapButtonText->getDimensions());
 	loadMapButton->setupOnClick(&test, engine->getEventHandler());
-	loadMapButton->getDimensions()->setX(windowDimensions.getWidth() / 20);
-	loadMapButton->getDimensions()->setY(windowDimensions.getHeight() / 1.24f + spacing);
+	loadMapButton->getDimensions()->setX((int) (windowDimensions.getWidth() / 20));
+	loadMapButton->getDimensions()->setY((int) (windowDimensions.getHeight() / 1.24f + spacing));
 	loadMapButton->setText(loadMapButtonText, engine->getTextManager());
 
-	ButtonComponent* exitButton = new ButtonComponent;
+	ButtonComponent* exitButton = new ButtonComponent();
 	exitButton->setDimensions(exitButtonText->getDimensions());
 	exitButton->setupOnClick(&test, engine->getEventHandler());
-	exitButton->getDimensions()->setX(windowDimensions.getWidth() / 20);
-	exitButton->getDimensions()->setY(windowDimensions.getHeight() / 1.24f + spacing * 2);
+	exitButton->getDimensions()->setX((int) (windowDimensions.getWidth() / 20));
+	exitButton->getDimensions()->setY((int) (windowDimensions.getHeight() / 1.24f + spacing * 2));
 	exitButton->setText(exitButtonText, engine->getTextManager());
 
 	// This sets up the title screen scene.
-	Scene* mainMenuScene = new Scene;
+	Scene* mainMenuScene = new Scene();
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mainMenuScene->getMenu()->add(image);
 	mainMenuScene->getMenu()->add(titleText);

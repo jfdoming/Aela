@@ -162,5 +162,6 @@
     <ClInclude Include="Menus\ButtonComponent.h" />
     <ClInclude Include="Specifications Manager\SpecificationsManager.h" />
     <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
+    <ClInclude Include="Utilities\strut.h" />
   </ItemGroup>
 </Project>

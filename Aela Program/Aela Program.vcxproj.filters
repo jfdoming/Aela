@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Scripts to Move to LUA">
+      <UniqueIdentifier>{9b76b570-e1e2-4a70-8de9-50d547a4e08e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -21,29 +24,24 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Aela_Game.h">
+=======
+    <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NPCs\NPC.h">
+    <ClInclude Include="main.h">
+>>>>>>> afcf060400016ab749fcab83e3a018175056c348
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Aela_Game.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Scripts to Move to LUA\ResourceScript.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NPCs\NPCManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Relationships\Relationship.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Relationships\RelationshipManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Scripts to Move to LUA</Filter>
     </ClInclude>
     <ClInclude Include="Scripts to Move to LUA\SceneScript.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\Scripts to Move to LUA</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -54,21 +52,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Aela_Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NPCs\NPCManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Relationships\Relationship.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Relationships\Relationshipmanager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NPCs\NPC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

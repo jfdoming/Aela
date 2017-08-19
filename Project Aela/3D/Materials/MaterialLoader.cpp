@@ -16,8 +16,7 @@
 #include "Material.h"
 #include "../../Error Handler/ErrorHandler.h"
 
-// This is only here for temporary debug purposes!
-#include "../../Old Garbage/texture.hpp"
+#include "../../Utilities/strut.h"
 
 using namespace Aela;
 
@@ -62,6 +61,7 @@ bool Aela::MaterialLoader::load(ResourceMap& resources, std::string src) {
 
 				// If this part of the code is reached, the line may look like "map_Kd tire_1.dds".
 				std::string fileName = line.substr(MATERIAL_PATH_START_POSITION, line.size() - MATERIAL_PATH_START_POSITION);
+				trim(fileName);
 
 				// This retrieves the folder path.
 				std::string path = "/";

@@ -11,13 +11,10 @@
 Aela::ButtonComponent::ButtonComponent() {
 }
 
-Aela::ButtonComponent::ButtonComponent(Texture* texture) {
-	this->texture = texture;
+Aela::ButtonComponent::ButtonComponent(Texture* texture) : ImageComponent(texture) {
 }
 
-Aela::ButtonComponent::ButtonComponent(Texture* texture, Rect<int>* dimensions) {
-	this->texture = texture;
-	this->dimensions = *dimensions;
+Aela::ButtonComponent::ButtonComponent(Texture* texture, Rect<int>* dimensions) : ImageComponent(texture, dimensions) {
 }
 
 Aela::ButtonComponent::~ButtonComponent() {

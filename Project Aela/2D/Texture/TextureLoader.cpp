@@ -1,6 +1,9 @@
 #include "TextureLoader.h"
 #include <fstream>
 
+#include <windows.h>
+#include "../../Utilities/strut.h"
+
 using namespace Aela;
 
 TextureLoader::TextureLoader() {
@@ -30,7 +33,6 @@ bool Aela::TextureLoader::load(ResourceMap& resources, std::string src) {
 
 bool TextureLoader::loadTexture(Texture*& result, std::string src) {
 	// try to open the file
-	// std::ifstream in(src, std::ios::binary);
 	std::ifstream in(src, std::ios::binary);
 	if (!isValid(in)) {
 		AelaErrorHandling::consoleWindowError("Aela Texture Loader", "The file " + src + " could not be found.");
@@ -47,10 +49,9 @@ bool TextureLoader::loadTexture(Texture*& result, std::string src) {
 	unsigned int imageWidth, imageHeight;
 	if (!loadTextureToBoundId(in, GL_TEXTURE_2D, &imageWidth, &imageHeight)) {
 		in.close();
+		AelaErrorHandling::consoleWindowError("Aela Texture Loader", "The file " + src + " could not be read.");
 		return false;
 	}
-
-	//loadTextureUsingFILE(src, GL_TEXTURE_2D, &imageWidth, &imageHeight);
 
 	in.close();
 

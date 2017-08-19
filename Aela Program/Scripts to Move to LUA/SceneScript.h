@@ -18,7 +18,7 @@ void setupScenes(Engine* engine) {
 	TextManager* textManager = engine->getTextManager();
 	int arial = textManager->createNewTextFont("arial bold.ttf");
 	textManager->adjustFontSize(arial, 22);
-	ColourRGBA textColour(0.5f, 0.4f, 0.3f, 0.4f);
+	ColourRGBA textColour(0.5f, 0.4f, 0.3f, 1.0f);
 
 	// This sets up an image.
 	ImageComponent* image = new ImageComponent;
