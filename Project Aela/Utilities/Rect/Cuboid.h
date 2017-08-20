@@ -34,6 +34,12 @@ template <class T> class Cuboid : public Rect<T> {
 			zPosition = setZ;
 		}
 
+		void setXYZ(T setX, T setY, T setZ) {
+			xPosition = setX;
+			yPosition = setY;
+			zPosition = setZ;
+		}
+
 		void setDepth(T setDepth) {
 			depth = setDepth;
 		}

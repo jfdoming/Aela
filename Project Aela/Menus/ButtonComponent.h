@@ -29,6 +29,8 @@ namespace Aela {
 			void setupOnClick(AelaEngineFunctor* functor, EventHandler* eventHandler);
 			void setText(TextComponent* text, TextManager* textManager);
 			TextComponent* getText();
+			void setHoverTint(ColourRGBA* hoverTint);
+			void setClickTint(ColourRGBA* clickTint);
 
 			virtual void update();
 			virtual void render(Renderer* renderer);
@@ -41,5 +43,8 @@ namespace Aela {
 			void (*onClick)() = nullptr;
 			AelaEngineFunctor onClickFunctor;
 			TextComponent text;
+
+			// These are the tints used by the button. Keep in mind that a tint is a multiplier.
+			ColourRGBA hoverTint, clickTint;
 	};
 }

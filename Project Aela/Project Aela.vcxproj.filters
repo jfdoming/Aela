@@ -74,6 +74,7 @@
     <ClCompile Include="Menus\ButtonComponent.cpp" />
     <ClCompile Include="Specifications Manager\SpecificationsManager.cpp" />
     <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
+    <ClCompile Include="3D\Animator\KeyedAnimator3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -164,5 +165,6 @@
     <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
     <ClInclude Include="Utilities\strut.h" />
     <ClInclude Include="Utilities\AelaEngineFunctor.h" />
+    <ClInclude Include="3D\Animator\KeyedAnimator3D.h" />
   </ItemGroup>
 </Project>

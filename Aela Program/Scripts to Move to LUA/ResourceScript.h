@@ -9,6 +9,7 @@
 using namespace Aela;
 
 std::string materialsAndModelsToLoad[] = {
+	"axis_helper",
 	"meme_mug",
 	"cat",
 	"house_1",

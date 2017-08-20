@@ -153,6 +153,8 @@ int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
 	eventHandler.addListener(EventConstants::KEY_PRESSED, &renderer);
 	eventHandler.addListener(EventConstants::KEY_RELEASED, &renderer);
+	eventHandler.addListener(EventConstants::KEY_PRESSED, &keyedAnimator3D);
+	eventHandler.addListener(EventConstants::KEY_RELEASED, &keyedAnimator3D);
 	eventHandler.start();
 	return 0;
 }
@@ -161,8 +163,12 @@ int Aela::Engine::setupAudioPlayer() {
 	return audioPlayer.init() ? 0 : -1;
 }
 
-int Aela::Engine::setupAnimator() {
+int Aela::Engine::setupAnimation() {
 	animator3D.setTimeManager(&timeManager);
+	keyedAnimator3D.setTimeManager(&timeManager);
+	keyedAnimator3D.setWindow(&window);
+	eventHandler.addListener(EventConstants::KEY_PRESSED, &keyedAnimator3D);
+	eventHandler.addListener(EventConstants::KEY_RELEASED, &keyedAnimator3D);
 	return 0;
 }
 
@@ -181,7 +187,9 @@ void Aela::Engine::update() {
 	// Note: Events should be updated first.
 	eventHandler.updateSDLEvents();
 	timeManager.updateTime();
+	sceneManager.update();
 	animator3D.update();
+	keyedAnimator3D.update();
 }
 
 void Aela::Engine::render() {
@@ -231,6 +239,10 @@ AudioManager* Aela::Engine::getAudioPlayer() {
 
 Animator3D* Aela::Engine::getAnimator3D() {
 	return &animator3D;
+}
+
+KeyedAnimator3D* Aela::Engine::getKeyedAnimator3D() {
+	return &keyedAnimator3D;
 }
 
 SpecificationsManager* Aela::Engine::getSpecificationManager() {

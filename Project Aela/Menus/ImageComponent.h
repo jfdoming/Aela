@@ -15,15 +15,20 @@ namespace Aela {
 			ImageComponent();
 			ImageComponent(Texture* texture);
 			ImageComponent(Texture* texture, Rect<int>* dimensions);
+			ImageComponent(Texture* texture, Rect<int>* dimensions, ColourRGBA* tint);
 			virtual ~ImageComponent();
 
 			virtual void update();
 			virtual void render(Renderer* renderer);
 
+			// These are getters and setters.
 			void setTexture(Texture* texture);
 			Texture* getTexture();
+			void setTint(ColourRGBA* tint);
+			ColourRGBA* getTint();
 
 		protected:
 			Texture* texture = nullptr;
+			ColourRGBA tint;
 	};
 }

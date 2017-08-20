@@ -8,6 +8,8 @@
 *              to (0, 0, 0) in worldspace).
 */
 
+#pragma once
+
 #include <vector>
 
 #include "KeyFrame3DList.h"

@@ -8,13 +8,13 @@
 #include "ButtonComponent.h"
 #include "../Events/EventConstants.h"
 
-Aela::ButtonComponent::ButtonComponent() {
+Aela::ButtonComponent::ButtonComponent() : hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
 }
 
-Aela::ButtonComponent::ButtonComponent(Texture* texture) : ImageComponent(texture) {
+Aela::ButtonComponent::ButtonComponent(Texture* texture) : ImageComponent(texture), hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
 }
 
-Aela::ButtonComponent::ButtonComponent(Texture* texture, Rect<int>* dimensions) : ImageComponent(texture, dimensions) {
+Aela::ButtonComponent::ButtonComponent(Texture* texture, Rect<int>* dimensions) : ImageComponent(texture, dimensions), hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
 }
 
 Aela::ButtonComponent::~ButtonComponent() {
@@ -29,11 +29,19 @@ bool Aela::ButtonComponent::isClicked() {
 }
 
 void Aela::ButtonComponent::update() {
+	int x, y;
+	window->getCursorPositionInWindow(&x, &y);
+	if (x >= dimensions.getX() && x <= dimensions.getX() + dimensions.getWidth() && y >= dimensions.getY()
+		&& y <= dimensions.getY() + dimensions.getHeight() && !clicked) {
+		tint = hoverTint;
+	} else if (!clicked) {
+		tint.setValues(1, 1, 1, 1);
+	}
 }
 
 void Aela::ButtonComponent::render(Renderer* renderer) {
 	ImageComponent::render(renderer);
-	text.render(renderer);
+	text.render(renderer, &tint);
 }
 
 void Aela::ButtonComponent::onEvent(Event* event) {
@@ -45,15 +53,18 @@ void Aela::ButtonComponent::onEvent(Event* event) {
 				if (x >= dimensions.getX() && x <= dimensions.getX() + dimensions.getWidth() && y >= dimensions.getY()
 					&& y <= dimensions.getY() + dimensions.getHeight()) {
 					clicked = true;
-					if (onClick != nullptr) {
-						onClick();
-					} else {
-						onClickFunctor();
-					}
+					tint = clickTint;
 				}
 			}
 		} else if (event->getType() == EventConstants::MOUSE_RELEASED) {
-			clicked = false;
+			if (clicked) {
+				clicked = false;
+				if (onClick != nullptr) {
+					onClick();
+				} else {
+					onClickFunctor();
+				}
+			}
 		}
 	}
 }
@@ -81,4 +92,12 @@ void Aela::ButtonComponent::setText(TextComponent* text, TextManager* textManage
 
 TextComponent* Aela::ButtonComponent::getText() {
 	return &text;
+}
+
+void Aela::ButtonComponent::setHoverTint(ColourRGBA* hoverTint) {
+	this->hoverTint = *hoverTint;
+}
+
+void Aela::ButtonComponent::setClickTint(ColourRGBA* clickTint) {
+	this->clickTint = *clickTint;
 }

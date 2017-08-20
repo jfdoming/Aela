@@ -17,6 +17,8 @@ namespace Aela {
 		~SceneManager();
 
 		void registerScene(Aela::Scene* scene, int id);
+		void update();
+
 		void setCurrentScene(int id);
 		Scene* getCurrentScene();
 		std::unordered_map<int, Aela::Scene*>* getScenes();

@@ -14,10 +14,12 @@ layout(location = 0) out vec4 colour;
 // This is the texture to be used.
 uniform sampler2D quadTexture;
 
+uniform vec4 tintMultiplier = vec4(1, 1, 1, 1);
+
 // This is the output data.
 in vec2 UV;
 
 // This is main(), which simply gets colour.
 void main(){
-	colour = texture(quadTexture, UV);
+	colour = texture(quadTexture, UV) * tintMultiplier;
 }

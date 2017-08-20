@@ -39,6 +39,11 @@ void TextComponent::render(Renderer* renderer) {
 	renderer->renderText(text, font, &dimensions, &colour);
 }
 
+void TextComponent::render(Renderer* renderer, ColourRGBA* tint) {
+	ColourRGBA newColour(colour.getR() * tint->getR(), colour.getG() * tint->getG(), colour.getB() * tint->getB(), colour.getA() * tint->getA());
+	renderer->renderText(text, font, &dimensions, &newColour);
+}
+
 void Aela::TextComponent::setText(std::string text) {
 	this->text = text;
 }

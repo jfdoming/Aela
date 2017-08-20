@@ -7,6 +7,13 @@
 
 #include "LightEntity.h"
 
+void LightEntity::useDefaultValues() {
+	position = glm::vec3(0.0, 0.0, 0.0);
+	rotation = glm::vec3(0.0, 0.0, 0.0);
+	colour.setValues(1.0, 1.0, 1.0);
+	power = 1.0;
+}
+
 void LightEntity::setColour(ColourRGB* colour) {
 	this->colour = *colour;
 }

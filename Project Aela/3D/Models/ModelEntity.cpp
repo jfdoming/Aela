@@ -31,7 +31,8 @@ void Aela::ModelEntity::generateBoundingBox() {
 	if (model->getSubModels()->size() != 0) {
 		SubModel* firstSubModel = &model->getSubModels()->at(0);
 		float smallestX = firstSubModel->getVertices()->at(firstSubModel->getIndices()->at(0)).x, greatestX = smallestX,
-			smallestY = firstSubModel->getVertices()->at(firstSubModel->getIndices()->at(0)).y, greatestY, smallestZ, greatestZ;
+			smallestY = firstSubModel->getVertices()->at(firstSubModel->getIndices()->at(0)).y, greatestY = smallestY,
+			smallestZ = firstSubModel->getVertices()->at(firstSubModel->getIndices()->at(0)).z, greatestZ = smallestZ;
 
 		for (SubModel subModel : *model->getSubModels()) {
 			for (unsigned short index : *subModel.getIndices()) {

@@ -9,6 +9,12 @@
 
 using namespace Aela;
 
+#define TOP_BAR_IMAGE 0
+#define ENTITY_TEXT_ID 1
+#define POSITION_TEXT_ID 2
+#define ROTATION_TEXT_ID 3
+#define SCALING_TEXT_ID 4
+
 void setupScenes(Engine* engine) {
 	// This creates some objects for later.
 	TextManager* textManager = engine->getTextManager();
@@ -16,7 +22,7 @@ void setupScenes(Engine* engine) {
 	textManager->adjustFontSize(arialLarge, 35);
 	int arial = textManager->createNewTextFont("arial bold.ttf");
 	textManager->adjustFontSize(arial, 18);
-	ColourRGBA VSPurple(0.8392f, 0.8588f, 0.9137f, 1.0f);
+	ColourRGBA VSBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
 	Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getWindowDimensions());
 
 	// This sets up an image.
@@ -27,14 +33,14 @@ void setupScenes(Engine* engine) {
 	mainMenuImage->setTexture(mainMenuTexture);
 
 	// This sets up text.
-	TextComponent* titleText = new TextComponent("Project Aela Map Editor", arialLarge, &VSPurple, textManager);
+	TextComponent* titleText = new TextComponent("Project Aela Map Editor", arialLarge, &VSBlue, textManager);
 	titleText->getDimensions()->setX((int) (windowDimensions.getWidth() / 20));
 	titleText->getDimensions()->setY((int) (windowDimensions.getHeight() / 1.3f));
 
-	TextComponent* newMapButtonText = new TextComponent("Create New Map", arial, &VSPurple, textManager);
+	TextComponent* newMapButtonText = new TextComponent("Create New Map", arial, &VSBlue, textManager);
 	int spacing = newMapButtonText->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
-	TextComponent* loadMapButtonText = new TextComponent("Load Map", arial, &VSPurple, textManager);
-	TextComponent* exitButtonText = new TextComponent("Exit", arial, &VSPurple, textManager);
+	TextComponent* loadMapButtonText = new TextComponent("Load Map", arial, &VSBlue, textManager);
+	TextComponent* exitButtonText = new TextComponent("Exit", arial, &VSBlue, textManager);
 
 	auto newMap = [](Engine* engine) {
 		engine->getSceneManager()->setCurrentScene(2);
@@ -80,20 +86,33 @@ void setupScenes(Engine* engine) {
 	ImageComponent* topBarImage = new ImageComponent();
 	Texture* topBarTexture;
 	success = engine->getResourceManager()->obtain<Texture>("res/textures/map_editor_top_bar.dds", topBarTexture);
-	topBarImage->setDimensions(&Rect<int>(0, 0, 1280, 40));
+	topBarImage->setDimensions(&Rect<int>(0, 0, windowDimensions.getWidth(), windowDimensions.getHeight() / 18));
 	topBarImage->setTexture(topBarTexture);
+
+	TextComponent* entityTypeText = new TextComponent("Entity: Model", arial, &VSBlue, textManager);
+	entityTypeText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05f), (int) (windowDimensions.getHeight() * 0.05f));
+	TextComponent* positionText = new TextComponent("Position: 0, 0, 0", arial, &VSBlue, textManager);
+	positionText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.2f), (int) (windowDimensions.getHeight() * 0.05f));
+	TextComponent* rotationText = new TextComponent("Rotation: 0, 0, 0", arial, &VSBlue, textManager);
+	rotationText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.4f), (int) (windowDimensions.getHeight() * 0.05f));
+	TextComponent* scalingText = new TextComponent("Scaling: 1, 1, 1", arial, &VSBlue, textManager);
+	scalingText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.6f), (int) (windowDimensions.getHeight() * 0.05f));
 
 	Scene* mapCreationScene = new Scene();
 	mapCreationScene->setId(2);
 	mapCreationScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mapCreationScene->getMenu()->add(topBarImage);
+	mapCreationScene->getMenu()->add(entityTypeText);
+	mapCreationScene->getMenu()->add(positionText);
+	mapCreationScene->getMenu()->add(rotationText);
+	mapCreationScene->getMenu()->add(scalingText);
 
 	Map3D* map;
-	success = engine->getResourceManager()->obtain<Map3D>("res/maps/default_map.txt", map);
+	success = engine->getResourceManager()->obtain<Map3D>("res/maps/sample_map.txt", map);
 	if (success) {
 		mapCreationScene->setMap(map);
 	} else {
-		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/default_map.txt wasn't loaded properly or something.");
+		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/sample_map.txt wasn't loaded properly or something.");
 	}
 
 	engine->getSceneManager()->registerScene(mainMenuScene, 1);
@@ -101,4 +120,10 @@ void setupScenes(Engine* engine) {
 	engine->getSceneManager()->setCurrentScene(1);
 
 	// engine->getWindow()->hideCursor();
+	engine->getRenderer()->getCamera()->setUseControls(false);
+
+	// The renderer's camera must be bound to the KeyedAnimator3D for movement.
+	(*engine->getKeyedAnimator3D()->getTransformables())[0] = engine->getRenderer()->getCamera();
+	engine->getRenderer()->getCamera()->setPosition(0, 10, -10);
+	engine->getRenderer()->getCamera()->setRotation(0, glm::pi<float>() / -4, 0);
 }

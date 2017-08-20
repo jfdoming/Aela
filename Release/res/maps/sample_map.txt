@@ -1,5 +1,6 @@
 <Skybox src="res/skyboxes/skybox_2">
 <Skybox src="res/skyboxes/skybox_1">
+<Model src="res/models/axis_helper.obj">
 <Model src="res/models/meme_mug.obj" position="20,0,20">
 <Model src="res/models/cat.obj" position="5,0,0" scaling="1.5,1.5,1.5">
 <Model src="res/models/house_1.obj" position="0,0,-6">

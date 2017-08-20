@@ -25,6 +25,7 @@
 #include "Events/EventConstants.h"
 #include "Audio/AudioManager.h"
 #include "3D/Animator/Animator3D.h"
+#include "3D/Animator/KeyedAnimator3D.h"
 #include "3D/Particles/PlanarParticleEmitter.h"
 #include "Menus/TextComponent.h"
 #include "Specifications Manager/SpecificationsManager.h"
@@ -41,7 +42,7 @@ namespace Aela {
 			int setupLUA();
 			int setupEventHandler();
 			int setupAudioPlayer();
-			int setupAnimator();
+			int setupAnimation();
 			int setupSpecificationsManager();
 
 			// These functions should get called inside a running loop.
@@ -59,6 +60,7 @@ namespace Aela {
 			ResourceManager* getResourceManager();
 			AudioManager* getAudioPlayer();
 			Animator3D* getAnimator3D();
+			KeyedAnimator3D* getKeyedAnimator3D();
 			SpecificationsManager* getSpecificationManager();
 			FramerateCalculator* getFramerateCalculator();
 
@@ -74,6 +76,7 @@ namespace Aela {
 			ResourceManager resourceManager;
 			AudioManager audioPlayer;
 			Animator3D animator3D;
+			KeyedAnimator3D keyedAnimator3D;
 			SpecificationsManager specificationsManager;
 			FramerateCalculator framerateCalculator;
 

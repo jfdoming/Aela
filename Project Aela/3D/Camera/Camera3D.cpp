@@ -33,6 +33,14 @@ bool Camera3D::isInUse() {
 	return inUse;
 }
 
+void Camera3D::setUseControls(bool useControls) {
+	this->useControls = useControls;
+}
+
+bool Camera3D::isUsingControls() {
+	return useControls;
+}
+
 void Camera3D::setViewMatrix(glm::mat4 setViewMatrix) {
 	viewMatrix = setViewMatrix;
 }

@@ -23,11 +23,7 @@ using namespace Aela;
 class LightEntity : public Entity, public Transformable3D {
 	public:
 		LightEntity() {
-			// If no parameters are set, these values are chosen for the light.
-			position = glm::vec3(0.0, 0.0, 0.0);
-			rotation = glm::vec3(0.0, 0.0, 0.0);
-			colour.setValues(1.0, 1.0, 1.0);
-			power = 1.0;
+			useDefaultValues();
 		}
 
 		LightEntity(glm::vec3 position, glm::vec3 rotation, ColourRGB colour, float power) {
@@ -36,6 +32,8 @@ class LightEntity : public Entity, public Transformable3D {
 			this->colour = colour;
 			this->power = power;
 		}
+
+		void useDefaultValues();
 
 		// These are getters and setters.
 		void setColour(ColourRGB* colour);

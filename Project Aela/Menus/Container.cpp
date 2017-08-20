@@ -44,3 +44,7 @@ void Aela::Container::setUseOfChildren(bool inUse) {
 		child->setInUse(inUse);
 	}
 }
+
+std::vector<Component*>* Aela::Container::getChildren() {
+	return &children;
+}

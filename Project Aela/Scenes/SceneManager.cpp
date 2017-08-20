@@ -15,6 +15,10 @@ void SceneManager::registerScene(Scene* scene, int id) {
 	scenes.emplace(id, scene);
 }
 
+void Aela::SceneManager::update() {
+	currentScene->update();
+}
+
 void SceneManager::setCurrentScene(int id) {
 	if (currentScene != nullptr) {
 		currentScene->getMenu()->setUseOfChildren(false);
