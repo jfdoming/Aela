@@ -21,6 +21,7 @@ void Scene::update() {
 	if (menu.isInitialized()) {
 		menu.update();
 	}
+
 	for (ParticleEmitter* emitter : particleEmitters) {
 		emitter->update();
 	}
@@ -98,8 +99,4 @@ void Scene::setActiveSkybox(unsigned int activeSkybox) {
 
 unsigned int Scene::getActiveSkybox() {
 	return activeSkybox;
-}
-
-std::vector<ParticleEmitter*>* Aela::Scene::getParticleEmitters() {
-	return &particleEmitters;
 }

@@ -34,7 +34,6 @@ namespace Aela {
 			Map3D* getMap();
 			void setActiveSkybox(unsigned int activeSkybox);
 			unsigned int getActiveSkybox();
-			std::vector<ParticleEmitter*>* getParticleEmitters();
 
 		private:
 			Map3D* map = nullptr;

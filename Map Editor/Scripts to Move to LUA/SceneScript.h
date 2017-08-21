@@ -9,14 +9,7 @@
 
 using namespace Aela;
 
-#define TOP_BAR_IMAGE 0
-#define ENTITY_TEXT_ID 1
-#define POSITION_TEXT_ID 2
-#define ROTATION_TEXT_ID 3
-#define SCALING_TEXT_ID 4
-
-void setupScenes(Engine* engine) {
-	return;
+void setupScenes(Engine* engine, AelaGame* game) {
 	// This creates some objects for later.
 	TextManager* textManager = engine->getTextManager();
 	int arialLarge = textManager->createNewTextFont("arial bold.ttf");
@@ -92,12 +85,19 @@ void setupScenes(Engine* engine) {
 
 	TextComponent* entityTypeText = new TextComponent("Entity: Model", arial, &VSBlue, textManager);
 	entityTypeText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05f), (int) (windowDimensions.getHeight() * 0.05f));
+	game->setEntityTypeText(entityTypeText);
+
 	TextComponent* positionText = new TextComponent("Position: 0, 0, 0", arial, &VSBlue, textManager);
 	positionText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.2f), (int) (windowDimensions.getHeight() * 0.05f));
+	game->setPositionText(positionText);
+
 	TextComponent* rotationText = new TextComponent("Rotation: 0, 0, 0", arial, &VSBlue, textManager);
 	rotationText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.4f), (int) (windowDimensions.getHeight() * 0.05f));
+	game->setRotationText(rotationText);
+
 	TextComponent* scalingText = new TextComponent("Scaling: 1, 1, 1", arial, &VSBlue, textManager);
 	scalingText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.6f), (int) (windowDimensions.getHeight() * 0.05f));
+	game->setScalingText(scalingText);
 
 	Scene* mapCreationScene = new Scene();
 	mapCreationScene->setId(2);

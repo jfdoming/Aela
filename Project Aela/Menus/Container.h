@@ -23,7 +23,6 @@ namespace Aela {
 			virtual void render(Renderer* renderer);
 
 			virtual void setInUse(bool inUse);
-			std::vector<Component*>* getChildren();
 		protected:
 			Container(int x, int y);
 

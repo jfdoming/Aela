@@ -52,7 +52,7 @@ void AelaGame::loadResources() {
 }
 
 void AelaGame::loadScenes() {
-	setupScenes(engine);
+	setupScenes(engine, this);
 }
 
 void AelaGame::switchEntityBeingPlaced(EntityType typeOfNewEntity) {
