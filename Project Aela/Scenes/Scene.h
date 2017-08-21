@@ -17,6 +17,9 @@ namespace Aela {
 			Scene();
 			~Scene();
 
+			void show();
+			void hide();
+
 			void update();
 			void render(Renderer* renderer);
 

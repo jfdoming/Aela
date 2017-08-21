@@ -6,7 +6,6 @@ using namespace Aela;
 SceneManager::SceneManager() {
 }
 
-
 SceneManager::~SceneManager() {
 }
 
@@ -17,19 +16,32 @@ void SceneManager::registerScene(Scene* scene, int id) {
 
 void SceneManager::setCurrentScene(int id) {
 	if (currentScene != nullptr) {
-		currentScene->getMenu()->setUseOfChildren(false);
-		currentScene->getMenu()->setInUse(false);
+		previousScene = currentScene;
 	}
+
+	// determine the requested scene
 	auto item = scenes.find(id);
 	if (item == scenes.end()) {
 		currentScene = nullptr;
 	} else {
 		currentScene = item->second;
-		currentScene->getMenu()->setUseOfChildren(true);
-		currentScene->getMenu()->setInUse(true);
 	}
 }
 
 Scene* SceneManager::getCurrentScene() {
 	return currentScene;
+}
+
+bool SceneManager::consumeSceneChangeEvent() {
+	if (previousScene != nullptr) {
+		// hide the previous scene
+		previousScene->hide();
+
+		// show the current scene
+		currentScene->show();
+		
+		previousScene == nullptr;
+		return true;
+	}
+	return false;
 }

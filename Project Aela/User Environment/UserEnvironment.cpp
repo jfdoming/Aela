@@ -1,13 +1,6 @@
-/*
-* Class: Specifications Manager
-* Author: Robert Ciborowski
-* Date: 18/08/2017
-* Description: A class for finding and storing the specifications of the user's machine.
-*/
+#include "UserEnvironment.h"
 
-#include "SpecificationsManager.h"
-
-void Aela::SpecificationsManager::generateInfo(Renderer* renderer) {
+void Aela::UserEnvironment::generateInfo(Renderer* renderer) {
 	graphicsVendor = renderer->getInformation(RendererInformation::VENDOR);
 	graphicsRenderer = renderer->getInformation(RendererInformation::RENDERER);
 	openGLVersion = renderer->getInformation(RendererInformation::OPENGL_VERSION);
@@ -28,50 +21,50 @@ void Aela::SpecificationsManager::generateInfo(Renderer* renderer) {
 	systemRAM = SDL_GetSystemRAM();
 }
 
-std::vector<std::string>* Aela::SpecificationsManager::getAudioDeviceNames() {
+std::vector<std::string>* Aela::UserEnvironment::getAudioDeviceNames() {
 	return &audioDeviceNames;
 }
 
-std::vector<std::string>* Aela::SpecificationsManager::getAudioDeviceDrivers() {
+std::vector<std::string>* Aela::UserEnvironment::getAudioDeviceDrivers() {
 	return &audioDeviceDrivers;
 }
 
-std::string Aela::SpecificationsManager::getCurrentAudioDriver() {
+std::string Aela::UserEnvironment::getCurrentAudioDriver() {
 	return currentAudioDriver;
 }
 
-std::string Aela::SpecificationsManager::getGraphicsVendor() {
+std::string Aela::UserEnvironment::getGraphicsVendor() {
 	return graphicsVendor;
 }
 
-std::string Aela::SpecificationsManager::getGraphicsRenderer() {
+std::string Aela::UserEnvironment::getGraphicsRenderer() {
 	return graphicsRenderer;
 }
 
-std::string Aela::SpecificationsManager::getOpenGLVersion() {
+std::string Aela::UserEnvironment::getOpenGLVersion() {
 	return openGLVersion;
 }
 
-std::string Aela::SpecificationsManager::getGLSLVersion() {
+std::string Aela::UserEnvironment::getGLSLVersion() {
 	return GLSLVersion;
 }
 
-std::string Aela::SpecificationsManager::getOpenGLExtensions() {
+std::string Aela::UserEnvironment::getOpenGLExtensions() {
 	return openGLExtensions;
 }
 
-std::string Aela::SpecificationsManager::getPlatform() {
+std::string Aela::UserEnvironment::getPlatform() {
 	return platform;
 }
 
-unsigned int Aela::SpecificationsManager::getL1CacheLineSize() {
+unsigned int Aela::UserEnvironment::getL1CacheLineSize() {
 	return l1CacheLineSize;
 }
 
-unsigned int Aela::SpecificationsManager::getLogicalCPUCores() {
+unsigned int Aela::UserEnvironment::getLogicalCPUCores() {
 	return logicalCPUCores;
 }
 
-unsigned int Aela::SpecificationsManager::getSystemRAM() {
+unsigned int Aela::UserEnvironment::getSystemRAM() {
 	return systemRAM;
 }

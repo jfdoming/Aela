@@ -16,18 +16,18 @@ bool Component::isDirty() {
 	return dirty;
 }
 
-void Aela::Component::setDimensions(Rect<int>* dimensions) {
+void Component::setDimensions(Rect<int>* dimensions) {
 	this->dimensions = *dimensions;
 }
 
-Rect<int>* Aela::Component::getDimensions() {
+Rect<int>* Component::getDimensions() {
 	return &dimensions;
 }
 
-void Aela::Component::setInUse(bool inUse) {
+void Component::setInUse(bool inUse) {
 	this->inUse = inUse;
 }
 
-bool Aela::Component::isInUse() {
+bool Component::isInUse() {
 	return inUse;
 }

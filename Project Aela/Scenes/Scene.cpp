@@ -9,6 +9,14 @@ Scene::Scene() {
 Scene::~Scene() {
 }
 
+void Scene::show() {
+	menu.setInUse(true);
+}
+
+void Scene::hide() {
+	menu.setInUse(false);
+}
+
 void Scene::update() {
 	if (menu.isInitialized()) {
 		menu.update();

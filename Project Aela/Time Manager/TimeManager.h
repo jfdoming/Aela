@@ -35,7 +35,6 @@ namespace Aela {
 			return deltaTime;
 		}
 
-
 		private:
 		clock_t currentTime, lastTime;
 		float deltaTime;

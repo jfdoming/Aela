@@ -24,14 +24,10 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="Aela_Game.h">
-=======
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
->>>>>>> afcf060400016ab749fcab83e3a018175056c348
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Aela_Game.h">

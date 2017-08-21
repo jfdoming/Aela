@@ -20,7 +20,8 @@ namespace Aela {
 			virtual bool isDirty();
 			void setDimensions(Rect<int>* dimensions);
 			Rect<int>* getDimensions();
-			void setInUse(bool inUse);
+
+			virtual void setInUse(bool inUse);
 			bool isInUse();
 
 			virtual void update() = 0;

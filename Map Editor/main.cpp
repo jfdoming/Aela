@@ -42,7 +42,7 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
-	error = engine.setupSpecificationsManager();
+	error = engine.loadUserEnvironmentInformation();
 	if (error != 0) {
 		return error;
 	}

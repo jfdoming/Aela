@@ -27,7 +27,7 @@
 #include "3D/Animator/Animator3D.h"
 #include "3D/Particles/PlanarParticleEmitter.h"
 #include "Menus/TextComponent.h"
-#include "Specifications Manager/SpecificationsManager.h"
+#include "User Environment/UserEnvironment.h"
 #include "Framerate Calculator/FramerateCalculator.h"
 
 namespace Aela {
@@ -42,7 +42,7 @@ namespace Aela {
 			int setupEventHandler();
 			int setupAudioPlayer();
 			int setupAnimator();
-			int setupSpecificationsManager();
+			int loadUserEnvironmentInformation();
 
 			// These functions should get called inside a running loop.
 			void update();
@@ -59,7 +59,7 @@ namespace Aela {
 			ResourceManager* getResourceManager();
 			AudioManager* getAudioPlayer();
 			Animator3D* getAnimator3D();
-			SpecificationsManager* getSpecificationManager();
+			UserEnvironment* getUserEnvironment();
 			FramerateCalculator* getFramerateCalculator();
 
 		private:
@@ -74,7 +74,7 @@ namespace Aela {
 			ResourceManager resourceManager;
 			AudioManager audioPlayer;
 			Animator3D animator3D;
-			SpecificationsManager specificationsManager;
+			UserEnvironment userEnvironment;
 			FramerateCalculator framerateCalculator;
 
 			int runningLoop();

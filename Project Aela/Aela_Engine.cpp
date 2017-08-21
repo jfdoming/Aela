@@ -166,75 +166,85 @@ int Aela::Engine::setupAnimator() {
 	return 0;
 }
 
-int Aela::Engine::setupSpecificationsManager() {
+int Aela::Engine::loadUserEnvironmentInformation() {
 	if (SDL_WasInit(SDL_INIT_EVERYTHING) == 0) {
-		AelaErrorHandling::windowError("Aela Engine", "SDL was not initiaised before initialising the specification manager.");
+		AelaErrorHandling::windowError("Aela Engine", "SDL was not initialized before determining user environment information.");
 		return 1;
 	}
 
-	specificationsManager.generateInfo(&renderer);
+	userEnvironment.generateInfo(&renderer);
 	return 0;
 }
 
+Scene* currentScene;
+
 // This method is meant to be run by another program that uses the Project Aela library. It starts Project Aela.
-void Aela::Engine::update() {
+void Engine::update() {
+	// determine the current scene
+	if (sceneManager.consumeSceneChangeEvent()) {
+		currentScene = sceneManager.getCurrentScene();
+	}
+
 	// Note: Events should be updated first.
 	eventHandler.updateSDLEvents();
 	timeManager.updateTime();
 	animator3D.update();
-}
 
-void Aela::Engine::render() {
-	// This updates and renders the current scene.
-	Aela::Scene* currentScene = sceneManager.getCurrentScene();
+	// update the current scene
 	if (currentScene != nullptr) {
 		currentScene->update();
+	}
+}
+
+void Engine::render() {
+	// render the current scene
+	if (currentScene != nullptr) {
 		currentScene->render(&renderer);
 	}
 }
 
-Window* Aela::Engine::getWindow() {
+Window* Engine::getWindow() {
 	return &window;
 }
 
-Renderer* Aela::Engine::getRenderer() {
+Renderer* Engine::getRenderer() {
 	return &renderer;
 }
 
-EventHandler* Aela::Engine::getEventHandler() {
+EventHandler* Engine::getEventHandler() {
 	return &eventHandler;
 }
 
-TimeManager* Aela::Engine::getTimeManager() {
+TimeManager* Engine::getTimeManager() {
 	return &timeManager;
 }
 
-TextManager* Aela::Engine::getTextManager() {
+TextManager* Engine::getTextManager() {
 	return &textManager;
 }
 
-LuaManager* Aela::Engine::getLuaManager() {
+LuaManager* Engine::getLuaManager() {
 	return &luaManager;
 }
 
-SceneManager* Aela::Engine::getSceneManager() {
+SceneManager* Engine::getSceneManager() {
 	return &sceneManager;
 }
 
-ResourceManager* Aela::Engine::getResourceManager() {
+ResourceManager* Engine::getResourceManager() {
 	return &resourceManager;
 }
 
-AudioManager* Aela::Engine::getAudioPlayer() {
+AudioManager* Engine::getAudioPlayer() {
 	return &audioPlayer;
 }
 
-Animator3D* Aela::Engine::getAnimator3D() {
+Animator3D* Engine::getAnimator3D() {
 	return &animator3D;
 }
 
-SpecificationsManager* Aela::Engine::getSpecificationManager() {
-	return &specificationsManager;
+UserEnvironment* Engine::getUserEnvironment() {
+	return &userEnvironment;
 }
 
 FramerateCalculator* Aela::Engine::getFramerateCalculator() {

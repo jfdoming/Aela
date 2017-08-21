@@ -20,7 +20,6 @@
     <ClCompile Include="3D\Models\SubModel.cpp" />
     <ClCompile Include="3D\Particles\Particle.cpp" />
     <ClCompile Include="3D\Particles\ParticleEmitter.cpp" />
-    <ClCompile Include="3D\Particles\ParticleLoader.cpp" />
     <ClCompile Include="3D\Particles\PlanarParticleEmitter.cpp" />
     <ClCompile Include="3D\Particles\PointParticleEmitter.cpp" />
     <ClCompile Include="3D\Renderer\Basic3DModelRenderer.cpp" />
@@ -72,8 +71,7 @@
     <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="Menus\ImageComponent.cpp" />
     <ClCompile Include="Menus\ButtonComponent.cpp" />
-    <ClCompile Include="Specifications Manager\SpecificationsManager.cpp" />
-    <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
+    <ClCompile Include="User Environment\UserEnvironment.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -97,7 +95,6 @@
     <ClInclude Include="3D\Models\SubModel.h" />
     <ClInclude Include="3D\Particles\Particle.h" />
     <ClInclude Include="3D\Particles\ParticleEmitter.h" />
-    <ClInclude Include="3D\Particles\ParticleLoader.h" />
     <ClInclude Include="3D\Particles\PlanarParticleEmitter.h" />
     <ClInclude Include="3D\Particles\PointParticleEmitter.h" />
     <ClInclude Include="3D\Renderer\Basic3DModelRenderer.h" />
@@ -149,7 +146,6 @@
     <ClInclude Include="Time Manager\TimeManager.h" />
     <ClInclude Include="Utilities\Colour\ColourRGB.h" />
     <ClInclude Include="Utilities\Colour\ColourRGBA.h" />
-    <ClInclude Include="Utilities\Rect\Cuboid.h" />
     <ClInclude Include="Utilities\Rect\Rect.h" />
     <ClInclude Include="Aela_Engine.h" />
     <ClInclude Include="Resource Management\Resource.h" />
@@ -160,9 +156,7 @@
     <ClInclude Include="Window\Window.h" />
     <ClInclude Include="Menus\ImageComponent.h" />
     <ClInclude Include="Menus\ButtonComponent.h" />
-    <ClInclude Include="Specifications Manager\SpecificationsManager.h" />
-    <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
     <ClInclude Include="Utilities\strut.h" />
-    <ClInclude Include="Utilities\AelaEngineFunctor.h" />
+    <ClInclude Include="User Environment\UserEnvironment.h" />
   </ItemGroup>
 </Project>

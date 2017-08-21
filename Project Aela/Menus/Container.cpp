@@ -39,7 +39,9 @@ void Container::render(Renderer* renderer) {
 	}
 }
 
-void Aela::Container::setUseOfChildren(bool inUse) {
+void Aela::Container::setInUse(bool inUse) {
+	Component::setInUse(inUse);
+
 	for (Component* child : children) {
 		child->setInUse(inUse);
 	}

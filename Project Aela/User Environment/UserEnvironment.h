@@ -9,13 +9,13 @@
 #include "../Renderer/Renderer.h"
 
 namespace Aela {
-	class SpecificationsManager {
+	class UserEnvironment {
 		public:
-			SpecificationsManager() {
+			UserEnvironment() {
 
 			}
 
-			SpecificationsManager(Renderer* renderer) {
+			UserEnvironment(Renderer* renderer) {
 				generateInfo(renderer);
 			}
 
