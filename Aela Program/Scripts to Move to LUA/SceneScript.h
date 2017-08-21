@@ -60,7 +60,7 @@ void setupScenes(Engine* engine) {
 
 	Scene* mainMenuScene = new Scene();
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
-	mainMenuScene->getParticleEmitters()->push_back(particleEmitter);
+	mainMenuScene->putParticleEmitter(particleEmitter);
 	mainMenuScene->getMenu()->add(image);
 	mainMenuScene->getMenu()->add(gameTitleText);
 	mainMenuScene->getMenu()->add(button);

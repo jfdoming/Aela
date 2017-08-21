@@ -47,7 +47,7 @@ bool SceneManager::consumeSceneChangeEvent() {
 		// show the current scene
 		currentScene->show();
 		
-		previousScene == nullptr;
+		previousScene = nullptr;
 		return true;
 	}
 	return false;

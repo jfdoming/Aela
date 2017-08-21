@@ -35,6 +35,7 @@ namespace Aela {
 			void setActiveSkybox(unsigned int activeSkybox);
 			unsigned int getActiveSkybox();
 
+			void putParticleEmitter(ParticleEmitter* emitter);
 		private:
 			Map3D* map = nullptr;
 			std::vector<ParticleEmitter*> particleEmitters;

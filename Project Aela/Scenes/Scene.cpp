@@ -100,3 +100,7 @@ void Scene::setActiveSkybox(unsigned int activeSkybox) {
 unsigned int Scene::getActiveSkybox() {
 	return activeSkybox;
 }
+
+void Scene::putParticleEmitter(ParticleEmitter* emitter) {
+	particleEmitters.push_back(emitter);
+}
