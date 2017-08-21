@@ -24,6 +24,7 @@ void SceneManager::setCurrentScene(int id) {
 	}
 
 	currentScene = getScene(id);
+	sceneChangeRequested = true;
 }
 
 Scene* SceneManager::getCurrentScene() {
@@ -40,15 +41,21 @@ Scene* SceneManager::getScene(int id) {
 }
 
 bool SceneManager::consumeSceneChangeEvent() {
-	if (previousScene != nullptr) {
-		// hide the previous scene
-		previousScene->hide();
+	if (sceneChangeRequested) {
+		if (previousScene != nullptr) {
+			// hide the previous scene
+			previousScene->hide();
+			previousScene = nullptr;
+		}
 
-		// show the current scene
-		currentScene->show();
-		
-		previousScene = nullptr;
+		if (currentScene != nullptr) {
+			// show the current scene
+			currentScene->show();
+		}
+
+		sceneChangeRequested = false;
 		return true;
 	}
+
 	return false;
 }

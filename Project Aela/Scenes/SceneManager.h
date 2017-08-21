@@ -29,5 +29,6 @@ namespace Aela {
 
 		Scene* currentScene = nullptr;
 		Scene* previousScene = nullptr;
+		bool sceneChangeRequested = false;
 	};
 }
