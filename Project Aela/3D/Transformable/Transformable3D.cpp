@@ -177,4 +177,10 @@ void Transformable3D::forceValuesWithinRange(glm::vec3* vec3, float minimum, flo
 	}
 }
 
+void Transformable3D::cloneTransformable(Transformable3D* transformable) {
+	this->position = *transformable->getPosition();
+	this->rotation = *transformable->getRotation();
+	this->scaling = *transformable->getScaling();
+}
+
 

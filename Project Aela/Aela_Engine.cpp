@@ -205,7 +205,7 @@ void Engine::update() {
 }
 
 void Engine::render() {
-	// render the current scene
+	// This renders the current scene.
 	if (currentScene != nullptr) {
 		currentScene->render(&renderer);
 	}

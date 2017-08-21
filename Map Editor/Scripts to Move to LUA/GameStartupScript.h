@@ -15,8 +15,6 @@ void setupGameElements(Engine* engine, AelaGame* game) {
 	SceneManager* sceneManager = engine->getSceneManager();
 	Scene* editorScene = sceneManager->getScene(2);
 	game->setMapBeingEdited(editorScene->getMap());
-	game->setAxisHelper(&editorScene->getMap()->getModels()->at(0));
-	(*engine->getKeyedAnimator3D()->getTransformables())[1] = game->getAxisHelper();
 	/*game->setEntityTypeText((TextComponent*) editorScene->getMenu()->getChildren()->at(ENTITY_TEXT_ID));
 	game->setPositionText((TextComponent*) editorScene->getMenu()->getChildren()->at(POSITION_TEXT_ID));
 	game->setRotationText((TextComponent*) editorScene->getMenu()->getChildren()->at(ROTATION_TEXT_ID));

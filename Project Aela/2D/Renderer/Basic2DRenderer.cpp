@@ -46,7 +46,6 @@ void Basic2DRenderer::getGLSLVariableHandles() {
 	imageDimensionsBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "textureDimensions");
 	imageWindowDimensionsBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "windowDimensions");
 	imageTintID = glGetUniformLocation(bufferTextureToBufferProgramID, "tintMultiplier");
-	std::cout << imageTextureID << " " << imageTintID << " is the ID.\n";
 
 	characterTextureID = glGetUniformLocation(textToBufferProgramID, "quadTexture");
 	characterQuadVertexBufferID = glGetAttribLocation(textToBufferProgramID, "vertexPosition");

@@ -27,8 +27,6 @@ class AelaGame : public Listener {
 		void setMapBeingEdited(Map3D* mapBeingEdited);
 		Map3D* getMapBeingEdited();
 		void setEngine(Engine* engine);
-		void setAxisHelper(ModelEntity* axisHelper);
-		ModelEntity* getAxisHelper();
 		void setEntityTypeText(TextComponent* text);
 		void setPositionText(TextComponent* text);
 		void setRotationText(TextComponent* text);
@@ -38,10 +36,10 @@ class AelaGame : public Listener {
 		// These are handles to objects in the Aela namespace.
 		Engine* engine;
 		ResourceManager* resourceManager;
+		SceneManager* sceneManager;
 
 		// These are handles to other various objects.
 		Map3D* mapBeingEdited;
-		ModelEntity* axisHelper;
 		TextComponent* entityTypeText;
 		TextComponent* positionText;
 		TextComponent* rotationText;
@@ -54,6 +52,7 @@ class AelaGame : public Listener {
 		LightEntity lightEntity;
 		BillboardEntity billboardEntity;
 		int keyedAnimatorKey;
+		Transformable3D transformableBeingPlaced;
 
 		// These are used for storing the default resources.
 		const std::string defaultModelResource = "res/models/meme_mug.obj";

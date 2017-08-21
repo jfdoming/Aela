@@ -70,7 +70,7 @@ bool Renderer::setupGLEW() {
 	return true;
 }
 
-// This sets up several 3D elements.
+// This sets up seAlteHaasGroteskBoldl 3D elements.
 void Renderer::setup3D() {
 	if (window != NULL) {
 		setup3DRendering();
@@ -81,7 +81,7 @@ void Renderer::setup3D() {
 	}
 }
 
-// This sets up several 2D elements.
+// This sets up seAlteHaasGroteskBoldl 2D elements.
 void Renderer::setup2D() {
 	if (window != NULL) {
 		setup2DRendering();

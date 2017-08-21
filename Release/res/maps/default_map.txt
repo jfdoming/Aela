@@ -1,2 +1,1 @@
-<Skybox src="res/skyboxes/skybox_1">
-<Model src="res/models/axis_helper.obj">
+<Skybox src="~skybox_1">
