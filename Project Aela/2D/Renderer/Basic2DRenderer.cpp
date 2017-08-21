@@ -45,6 +45,8 @@ void Basic2DRenderer::getGLSLVariableHandles() {
 	imageWidthAndHeightBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "boundingBoxDimensions");
 	imageDimensionsBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "textureDimensions");
 	imageWindowDimensionsBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "windowDimensions");
+	imageTintID = glGetUniformLocation(bufferTextureToBufferProgramID, "tintMultiplier");
+	std::cout << imageTextureID << " " << imageTintID << " is the ID.\n";
 
 	characterTextureID = glGetUniformLocation(textToBufferProgramID, "quadTexture");
 	characterQuadVertexBufferID = glGetAttribLocation(textToBufferProgramID, "vertexPosition");
@@ -100,28 +102,28 @@ void Basic2DRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer,
 }
 
 // This function renders a texture directly to a specified framebuffer using the shader for rendering images.
-void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions) {
-	renderTextureToSimple2DFramebuffer(texture, framebuffer, output, windowDimensions, imageToBufferProgramID);
+void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
+	renderTextureToSimple2DFramebuffer(texture, framebuffer, output, windowDimensions, tint, imageToBufferProgramID);
 }
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
 // Note: Custom shaders can be used for post-process effects.
-void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, GLuint customShader) {
+void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader) {
 	if (framebuffer->getMultisampling() > 0) {
-		renderTextureToFramebuffer(texture, *framebuffer->getMultisampledFramebuffer(), output, windowDimensions, customShader);
+		renderTextureToFramebuffer(texture, *framebuffer->getMultisampledFramebuffer(), output, windowDimensions, tint, customShader);
 	} else {
-		renderTextureToFramebuffer(texture, *framebuffer->getFramebuffer(), output, windowDimensions, customShader);
+		renderTextureToFramebuffer(texture, *framebuffer->getFramebuffer(), output, windowDimensions, tint, customShader);
 	}
 }
 
 // This function renders a texture directly to a specified framebuffer.
-void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions) {
-	renderTextureToFramebuffer(texture, framebuffer, output, windowDimensions, bufferTextureToBufferProgramID);
+void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
+	renderTextureToFramebuffer(texture, framebuffer, output, windowDimensions, tint, bufferTextureToBufferProgramID);
 }
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
 // Note: Custom shaders can be used for post-process effects.
-void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, GLuint customShader) {
+void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader) {
 	// Due to the way that OpenGL seems to flip the texture, the shader needs to flip it back
 	// and show the texture's opposite side. Or the renderer could just send normal data.
 	// GL_CULL_FACE needs to be disabled if one uses the first option.
@@ -157,6 +159,11 @@ void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint frameb
 	glUniform1i(imageTextureID, 0);
 
 	// The following large chunk of code passes all necessary variables to the shader.
+	if (tint != nullptr) {
+		glm::vec4 tintAsVec4 = tint->getVec4();
+		glUniform4fv(imageTintID, 1, &tintAsVec4.r);
+	}
+
 	GLuint quadVertexBuffer;
 	glGenBuffers(1, &quadVertexBuffer);
 
@@ -322,7 +329,7 @@ void Basic2DRenderer::renderMultisampledBufferToBuffer(GLuint multisampledBuffer
 
 // This clears the 2D framebuffer.
 void Basic2DRenderer::clearSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
-	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
 	if (framebuffer->getMultisampling() > 0) {
 		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
 	} else {

@@ -9,7 +9,7 @@
 
 void FramerateCalculator::calculate(clock_t currentTime, float timeBetweenFrames) {
 	// This does some simple math for framerate calculating.
-	if (currentTime - timeOfLastFrameCheck >= timeBetweenFrameChecks) {
+	if ((unsigned) (currentTime - timeOfLastFrameCheck) >= timeBetweenFrameChecks) {
 		if (trueFPS == -1 && timeBetweenFrames != 0) {
 			trueFPS = 1000.0f / timeBetweenFrames;
 			smoothedFPS = trueFPS;

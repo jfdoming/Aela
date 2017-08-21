@@ -14,22 +14,29 @@ void SceneManager::registerScene(Scene* scene, int id) {
 	scenes.emplace(id, scene);
 }
 
+void Aela::SceneManager::update() {
+	currentScene->update();
+}
+
 void SceneManager::setCurrentScene(int id) {
 	if (currentScene != nullptr) {
 		previousScene = currentScene;
 	}
 
-	// determine the requested scene
-	auto item = scenes.find(id);
-	if (item == scenes.end()) {
-		currentScene = nullptr;
-	} else {
-		currentScene = item->second;
-	}
+	currentScene = getScene(id);
 }
 
 Scene* SceneManager::getCurrentScene() {
 	return currentScene;
+}
+
+Scene* SceneManager::getScene(int id) {
+	// determine the requested scene
+	auto item = scenes.find(id);
+	if (item == scenes.end()) {
+		return nullptr;
+	}
+	return item->second;
 }
 
 bool SceneManager::consumeSceneChangeEvent() {

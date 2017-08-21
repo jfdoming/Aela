@@ -38,7 +38,7 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
-	error = engine.setupAnimator();
+	error = engine.setupAnimation();
 	if (error != 0) {
 		return error;
 	}
@@ -55,7 +55,7 @@ int main(int argc, char *args[]) {
 		engine.update();
 		game.update();
 		engine.render();
-	} while (!engine.getWindow()->quitCheck() && !AelaErrorHandling::programCloseWasRequested());
+	} while (!engine.shouldExit());
 
     return 0;
 }

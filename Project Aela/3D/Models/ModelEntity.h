@@ -34,6 +34,10 @@ namespace Aela {
 
 			}
 
+			ModelEntity(Model* model) {
+				this->model = model;
+			}
+
 			~ModelEntity() {
 
 			}

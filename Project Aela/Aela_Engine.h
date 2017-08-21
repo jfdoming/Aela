@@ -25,6 +25,7 @@
 #include "Events/EventConstants.h"
 #include "Audio/AudioManager.h"
 #include "3D/Animator/Animator3D.h"
+#include "3D/Animator/KeyedAnimator3D.h"
 #include "3D/Particles/PlanarParticleEmitter.h"
 #include "Menus/TextComponent.h"
 #include "User Environment/UserEnvironment.h"
@@ -41,12 +42,14 @@ namespace Aela {
 			int setupLUA();
 			int setupEventHandler();
 			int setupAudioPlayer();
-			int setupAnimator();
+			int setupAnimation();
 			int loadUserEnvironmentInformation();
 
 			// These functions should get called inside a running loop.
 			void update();
 			void render();
+
+			bool shouldExit();
 
 			// These are getters. Some of the Aela Objects inside of this class are not allowed to be accessed externally.
 			Window* getWindow();
@@ -60,6 +63,7 @@ namespace Aela {
 			AudioManager* getAudioPlayer();
 			Animator3D* getAnimator3D();
 			UserEnvironment* getUserEnvironment();
+			KeyedAnimator3D* getKeyedAnimator3D();
 			FramerateCalculator* getFramerateCalculator();
 
 		private:
@@ -75,6 +79,7 @@ namespace Aela {
 			AudioManager audioPlayer;
 			Animator3D animator3D;
 			UserEnvironment userEnvironment;
+			KeyedAnimator3D keyedAnimator3D;
 			FramerateCalculator framerateCalculator;
 
 			int runningLoop();

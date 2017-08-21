@@ -27,8 +27,8 @@ void Scene::update() {
 }
 
 void Scene::render(Renderer* renderer) {
+	renderer->startRenderingFrame();
 	if (map != nullptr) {
-		renderer->startRenderingFrame();
 		renderer->bindLights(map->getLights());
 		renderer->startRendering3D();
 

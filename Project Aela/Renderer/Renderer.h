@@ -110,7 +110,7 @@ namespace Aela {
 			void clearSimple2DFramebuffer();
 
 			// These functions are related to 2D rendering.
-			void render2DTexture(Texture* texture, Rect<int>* output);
+			void render2DTexture(Texture* texture, Rect<int>* output, ColourRGBA* tint);
 			void renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour);
 			void renderRectangle(Rect<int>* output, ColourRGBA* colour);
 			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour);
@@ -180,10 +180,10 @@ namespace Aela {
 			// Speed: 0.001f is 1 unit per tick.
 			float speed, superSpeed, currentSpeed, mouseSpeed;
 
-			// Movement vars
-			bool forward, back, left, right, up, down;
+			// These store movements.
+			bool forward, backward, left, right, up, down;
 
-			// This keeps track of whether the camera shoudl be allowed to be upside down.
+			// This keeps track of whether the camera should be allowed to be upside down.
 			bool allowUpsideDownCamera;
 
 			// This is used when computing controls.

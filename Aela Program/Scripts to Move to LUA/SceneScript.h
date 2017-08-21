@@ -58,12 +58,12 @@ void setupScenes(Engine* engine) {
 	particleTextures.push_back(*(tResult->getTexture()));
 	particleEmitter->setupParticles(&particleTextures, 0.6f, 0.6f, 25);
 
-	Scene* mainMenuScene = new Scene;
+	Scene* mainMenuScene = new Scene();
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mainMenuScene->getParticleEmitters()->push_back(particleEmitter);
-	// mainMenuScene->getMenu()->add(image);
-	// mainMenuScene->getMenu()->add(gameTitleText);
-	// mainMenuScene->getMenu()->add(button);
+	mainMenuScene->getMenu()->add(image);
+	mainMenuScene->getMenu()->add(gameTitleText);
+	mainMenuScene->getMenu()->add(button);
 
 	Map3D* map;
 	success = engine->getResourceManager()->obtain<Map3D>("res/maps/sample_map.txt", map);
@@ -76,6 +76,6 @@ void setupScenes(Engine* engine) {
 	engine->getSceneManager()->registerScene(mainMenuScene, 1);
 	engine->getSceneManager()->setCurrentScene(1);
 
-	engine->getWindow()->hideCursor();
-	engine->getRenderer()->getCamera()->setInUse(true);
+	// engine->getWindow()->hideCursor();
+	// engine->getRenderer()->getCamera()->setInUse(true);
 }

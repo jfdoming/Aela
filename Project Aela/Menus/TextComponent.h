@@ -24,6 +24,7 @@ namespace Aela {
 			void setup(TextManager* textManager);
 			virtual void update();
 			virtual void render(Renderer* renderer);
+			virtual void render(Renderer* renderer, ColourRGBA* tint);
 
 			// These are getters and setters.
 			void setText(std::string text);

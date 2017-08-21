@@ -31,6 +31,11 @@ template <class T> class Rect {
 			yPosition = setY;
 		}
 
+		void setXY(T setX, T setY) {
+			xPosition = setX;
+			yPosition = setY;
+		}
+
 		void setWidth(T setWidth) {
 			width = setWidth;
 		}

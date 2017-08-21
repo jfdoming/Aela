@@ -12,7 +12,7 @@
 
 using namespace Aela;
 
-// Event stuff
+// This handles events.
 void Renderer::onEvent(Event* event) {
 	updateCameraEvents(event);
 }
@@ -116,7 +116,7 @@ void Aela::Renderer::bindSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
 // This starts the rendering of a frame.
 void Renderer::startRenderingFrame() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
+	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// This would clear the main frame buffer, but it doesn't need to be cleared since everything would get overwritten when writing the 3D and 2D
@@ -125,7 +125,8 @@ void Renderer::startRenderingFrame() {
 	// glClearColor(0.53f, 0.81f, 0.92f, 0.0f);
 	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	basic3DRenderer.clearColourFrameBuffer(multisampling3D > 0);
 }
@@ -166,8 +167,8 @@ void Aela::Renderer::renderParticles(ParticleEmitter* particleEmitter) {
 }
 
 // This renders a 2D texture using the 2D renderer.
-void Renderer::render2DTexture(Texture* texture, Rect<int>* output) {
-	basic2DRenderer.renderTextureToSimple2DFramebuffer(texture, bound2DFramebuffer, output, window->getWindowDimensions());
+void Renderer::render2DTexture(Texture* texture, Rect<int>* output, ColourRGBA* tint) {
+	basic2DRenderer.renderTextureToSimple2DFramebuffer(texture, bound2DFramebuffer, output, window->getWindowDimensions(), tint);
 }
 
 // This renders text using the 2D renderer.
@@ -200,18 +201,18 @@ void Renderer::renderSimple2DFramebuffer() {
 	if (bound2DFramebuffer->getMultisampling() > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*bound2DFramebuffer->getMultisampledFramebuffer(), *bound2DFramebuffer->getFramebuffer(), window->getWindowDimensions());
 	}
-	basic2DRenderer.renderTextureToFramebuffer(bound2DFramebuffer->getFramebufferTexture(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), effects2DShader);
+	basic2DRenderer.renderTextureToFramebuffer(bound2DFramebuffer->getFramebufferTexture(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr, effects2DShader);
 }
 
 void Renderer::endRendering3D() {
 	if (multisampling3D > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultisampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getWindowDimensions());
 	}
-	basic2DRenderer.renderTextureToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), effects3DShader);
+	basic2DRenderer.renderTextureToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr, effects3DShader);
 }
 
 void Renderer::endRenderingFrame() {
-	basic2DRenderer.renderTextureToFramebuffer(&mainFramebufferTexture, 0, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions());
+	basic2DRenderer.renderTextureToFramebuffer(&mainFramebufferTexture, 0, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr);
 	window->updateBuffer();
 }
 
@@ -404,56 +405,56 @@ void Renderer::updateCameraEvents(Event* event) {
 		}
 
 		switch (keyEvent->getType()) {
-			case EventConstants::KEY_PRESSED:
-				if (keyEvent->getKeycode() == SDLK_w) {
-					forward = true;
-				}
+		case EventConstants::KEY_PRESSED:
+			if (keyEvent->getKeycode() == SDLK_w) {
+				forward = true;
+			}
 
-				if (keyEvent->getKeycode() == SDLK_s) {
-					back = true;
-				}
+			if (keyEvent->getKeycode() == SDLK_s) {
+				backward = true;
+			}
 
-				if (keyEvent->getKeycode() == SDLK_d) {
-					right = true;
-				}
+			if (keyEvent->getKeycode() == SDLK_d) {
+				right = true;
+			}
 
-				if (keyEvent->getKeycode() == SDLK_a) {
-					left = true;
-				}
+			if (keyEvent->getKeycode() == SDLK_a) {
+				left = true;
+			}
 
-				if (keyEvent->getKeycode() == SDLK_SPACE) {
-					up = true;
-				}
+			if (keyEvent->getKeycode() == SDLK_SPACE) {
+				up = true;
+			}
 
-				if (keyEvent->getKeycode() == SDLK_LCTRL) {
-					down = true;
-				}
-				break;
-			case EventConstants::KEY_RELEASED:
-				if (keyEvent->getKeycode() == SDLK_w) {
-					forward = false;
-				}
+			if (keyEvent->getKeycode() == SDLK_LCTRL) {
+				down = true;
+			}
+			break;
+		case EventConstants::KEY_RELEASED:
+			if (keyEvent->getKeycode() == SDLK_w) {
+				forward = false;
+			}
 
-				if (keyEvent->getKeycode() == SDLK_s) {
-					back = false;
-				}
+			if (keyEvent->getKeycode() == SDLK_s) {
+				backward = false;
+			}
 
-				if (keyEvent->getKeycode() == SDLK_d) {
-					right = false;
-				}
+			if (keyEvent->getKeycode() == SDLK_d) {
+				right = false;
+			}
 
-				if (keyEvent->getKeycode() == SDLK_a) {
-					left = false;
-				}
+			if (keyEvent->getKeycode() == SDLK_a) {
+				left = false;
+			}
 
-				if (keyEvent->getKeycode() == SDLK_SPACE) {
-					up = false;
-				}
+			if (keyEvent->getKeycode() == SDLK_SPACE) {
+				up = false;
+			}
 
-				if (keyEvent->getKeycode() == SDLK_LCTRL) {
-					down = false;
-				}
-				break;
+			if (keyEvent->getKeycode() == SDLK_LCTRL) {
+				down = false;
+			}
+			break;
 		}
 	}
 }
@@ -474,40 +475,44 @@ void Aela::Renderer::updateCameraMatrices() {
 		float horizontalAngle = camera.getRotation()->x;
 		float verticalAngle = camera.getRotation()->y;
 
-		// This computes the new horizontal angle.
-		horizontalAngle += mouseSpeed * float(width / 2 - xpos);
+		// If the renderer is in charge of updating the camera controls (rather than an animator being responsible for doing so),
+		// the renderer must update the camera's rotation.
+		if (camera.isUsingControls()) {
+			// This computes the new horizontal angle.
+			horizontalAngle += mouseSpeed * float(width / 2 - xpos);
 
-		// This adjusts the horizontal angle so that it stays between 0 and PI * 2.
-		if (horizontalAngle >= glm::pi<float>() * 2) {
-			horizontalAngle -= glm::pi<float>() * 2;
+			// This adjusts the horizontal angle so that it stays between 0 and PI * 2.
+			if (horizontalAngle >= glm::pi<float>() * 2) {
+				horizontalAngle -= glm::pi<float>() * 2;
+			}
+			if (horizontalAngle <= 0) {
+				horizontalAngle += glm::pi<float>() * 2;
+			}
+
+			// This computes the new vertical angle.
+			float verticalModifier = mouseSpeed * float(height / 2 - ypos);
+
+			// This checks to see if the user is trying to make the camera go upside down by moving the camera up
+			// too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
+			// allowUpsideDownCamera is true.
+			if ((!allowUpsideDownCamera && verticalModifier > 0 && verticalAngle + verticalModifier <= glm::pi<float>() / 2) || allowUpsideDownCamera) {
+				verticalAngle += mouseSpeed * float(height / 2 - ypos);
+			} else if (!allowUpsideDownCamera && verticalModifier > 0) {
+				verticalAngle = glm::pi<float>() / 2;
+			}
+
+			// This checks to see if the user is trying to make the camera go upside down by moving the camera down
+			// too far (vertical angle of -PI/2 in radians). This also allows the camera to go upside down as long as
+			// allowUpsideDownCamera is true.
+			if ((!allowUpsideDownCamera && verticalModifier < 0 && verticalAngle + mouseSpeed * float(height / 2 - ypos) >= glm::pi<float>() / -2) || allowUpsideDownCamera) {
+				verticalAngle += mouseSpeed * float(height / 2 - ypos);
+			} else if (!allowUpsideDownCamera && verticalModifier < 0) {
+				verticalAngle = glm::pi<float>() / -2;
+			}
+
+			camera.setProperty(Transformable3DProperty::X_ROTATION, horizontalAngle);
+			camera.setProperty(Transformable3DProperty::Y_ROTATION, verticalAngle);
 		}
-		if (horizontalAngle <= 0) {
-			horizontalAngle += glm::pi<float>() * 2;
-		}
-
-		// This computes the new vertical angle.
-		float verticalModifier = mouseSpeed * float(height / 2 - ypos);
-
-		// This checks to see if the user is trying to make the camera go upside down by moving the camera up
-		// too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
-		// allowUpsideDownCamera is true.
-		if ((!allowUpsideDownCamera && verticalModifier > 0 && verticalAngle + verticalModifier <= glm::pi<float>() / 2) || allowUpsideDownCamera) {
-			verticalAngle += mouseSpeed * float(height / 2 - ypos);
-		} else if (!allowUpsideDownCamera && verticalModifier > 0) {
-			verticalAngle = glm::pi<float>() / 2;
-		}
-
-		// This checks to see if the user is trying to make the camera go upside down by moving the camera down
-		// too far (vertical angle of -PI/2 in radians). This also allows the camera to go upside down as long as
-		// allowUpsideDownCamera is true.
-		if ((!allowUpsideDownCamera && verticalModifier < 0 && verticalAngle + mouseSpeed * float(height / 2 - ypos) >= glm::pi<float>() / -2) || allowUpsideDownCamera) {
-			verticalAngle += mouseSpeed * float(height / 2 - ypos);
-		} else if (!allowUpsideDownCamera && verticalModifier < 0) {
-			verticalAngle = glm::pi<float>() / -2;
-		}
-
-		camera.setProperty(Transformable3DProperty::X_ROTATION, horizontalAngle);
-		camera.setProperty(Transformable3DProperty::Y_ROTATION, verticalAngle);
 
 		// Theis calculates vectors for the cartesian-plane system. Note: It is important to calculate the right vector before the up vector as the up
 		// vector is calculated using the right vector.
@@ -519,36 +524,40 @@ void Aela::Renderer::updateCameraMatrices() {
 		glm::mat4 viewMatrix = glm::lookAt(*camera.getPosition(), *camera.getPosition() + *camera.getCartesionalDirection(), *camera.getUpVector());
 		camera.setProjectionMatrix(projectionMatrix);
 		camera.setViewMatrix(viewMatrix);
+	
+		// If the renderer is in charge of updating the camera controls (rather than an animator being responsible for doing so),
+		// the renderer must update the camera's translation.
+		if (camera.isUsingControls()) {
+			// This is a position vector.
+			glm::vec3 position = *(camera.getPosition());
 
-		// This is a position vector.
-		glm::vec3 position = *(camera.getPosition());
+			if (up) {
+				position += straightUp * deltaTime * currentSpeed;
+			}
 
-		if (up) {
-			position += straightUp * deltaTime * currentSpeed;
+			if (down) {
+				position -= straightUp * deltaTime * currentSpeed;
+			}
+
+			if (left) {
+				position -= *camera.getRightVector() * deltaTime * currentSpeed;
+			}
+
+			if (right) {
+				position += *camera.getRightVector() * deltaTime * currentSpeed;
+			}
+
+			if (forward) {
+				position += *camera.getCartesionalDirection() * deltaTime * currentSpeed;
+			}
+
+			if (backward) {
+				position -= *camera.getCartesionalDirection() * deltaTime * currentSpeed;
+			}
+
+			// This sets all of the camera's position and view related properties.
+			camera.setPosition(position);
 		}
-
-		if (down) {
-			position -= straightUp * deltaTime * currentSpeed;
-		}
-
-		if (left) {
-			position -= *camera.getRightVector() * deltaTime * currentSpeed;
-		}
-
-		if (right) {
-			position += *camera.getRightVector() * deltaTime * currentSpeed;
-		}
-
-		if (forward) {
-			position += *camera.getCartesionalDirection() * deltaTime * currentSpeed;
-		}
-
-		if (back) {
-			position -= *camera.getCartesionalDirection() * deltaTime * currentSpeed;
-		}
-
-		// This sets all of the camera's position and view related properties.
-		camera.setPosition(position);
 	}
 }
 

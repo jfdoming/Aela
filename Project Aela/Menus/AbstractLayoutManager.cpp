@@ -9,5 +9,7 @@ AbstractLayoutManager::~AbstractLayoutManager() {
 }
 
 void AbstractLayoutManager::update(std::vector<Component*>& children) {
-	
+	for (auto child : children) {
+		child->update();
+	}
 }

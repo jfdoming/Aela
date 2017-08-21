@@ -24,6 +24,8 @@ class Camera3D : public Transformable3D {
 		float getFieldOfView();
 		void setInUse(bool inUse);
 		bool isInUse();
+		void setUseControls(bool useControls);
+		bool isUsingControls();
 
 		// These functions allow the camera to rotate and look at a point that is on its plane.
 		void focusAtPointOnPlane(glm::vec3 point, glm::vec3 offset);
@@ -45,4 +47,8 @@ class Camera3D : public Transformable3D {
 
 		// This tells the renderer whether the user is in control of the camera.
 		bool inUse = false;
+
+		// This tells the renderer whether it is responsible for updating camera translation. Keep in mind that the animators
+		// can also be responsible for transforming the camera and not only the renderer.
+		bool useControls = true;
 };

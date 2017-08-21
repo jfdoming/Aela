@@ -153,6 +153,8 @@ int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
 	eventHandler.addListener(EventConstants::KEY_PRESSED, &renderer);
 	eventHandler.addListener(EventConstants::KEY_RELEASED, &renderer);
+	eventHandler.addListener(EventConstants::KEY_PRESSED, &keyedAnimator3D);
+	eventHandler.addListener(EventConstants::KEY_RELEASED, &keyedAnimator3D);
 	eventHandler.start();
 	return 0;
 }
@@ -161,8 +163,12 @@ int Aela::Engine::setupAudioPlayer() {
 	return audioPlayer.init() ? 0 : -1;
 }
 
-int Aela::Engine::setupAnimator() {
+int Aela::Engine::setupAnimation() {
 	animator3D.setTimeManager(&timeManager);
+	keyedAnimator3D.setTimeManager(&timeManager);
+	keyedAnimator3D.setWindow(&window);
+	eventHandler.addListener(EventConstants::KEY_PRESSED, &keyedAnimator3D);
+	eventHandler.addListener(EventConstants::KEY_RELEASED, &keyedAnimator3D);
 	return 0;
 }
 
@@ -188,7 +194,9 @@ void Engine::update() {
 	// Note: Events should be updated first.
 	eventHandler.updateSDLEvents();
 	timeManager.updateTime();
+	sceneManager.update();
 	animator3D.update();
+	keyedAnimator3D.update();
 
 	// update the current scene
 	if (currentScene != nullptr) {
@@ -201,6 +209,10 @@ void Engine::render() {
 	if (currentScene != nullptr) {
 		currentScene->render(&renderer);
 	}
+}
+
+bool Engine::shouldExit() {
+	return window.quitCheck() || AelaErrorHandling::programCloseWasRequested();
 }
 
 Window* Engine::getWindow() {
@@ -247,6 +259,10 @@ UserEnvironment* Engine::getUserEnvironment() {
 	return &userEnvironment;
 }
 
-FramerateCalculator* Aela::Engine::getFramerateCalculator() {
+KeyedAnimator3D* Engine::getKeyedAnimator3D() {
+	return &keyedAnimator3D;
+}
+
+FramerateCalculator* Engine::getFramerateCalculator() {
 	return &framerateCalculator;
 }

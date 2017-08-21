@@ -29,6 +29,10 @@ class BillboardEntity : public Transformable3D, public Entity {
 
 		}
 
+		BillboardEntity(GLuint texture) {
+			this->texture = texture;
+		}
+
 		BillboardEntity(glm::vec3 setPosition, GLuint setTexture) {
 			position = setPosition;
 			texture = setTexture;
