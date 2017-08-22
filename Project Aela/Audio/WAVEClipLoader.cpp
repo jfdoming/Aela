@@ -83,7 +83,7 @@ bool WAVEClipLoader::load(ResourceMap& resources, std::string src) {
 
 	unsigned int numberOfChannels = *((unsigned int*) &(subchunk1[2])) & 0xFFFF;
 	unsigned int sampleRate = *((unsigned int*) &(subchunk1[4])) & 0xFFFFFFFF;
-	unsigned int averageByteRate = *((unsigned int*) &(subchunk1[8])) & 0xFFFFFFFF;
+	unsigned int aAlteHaasGroteskBoldgeByteRate = *((unsigned int*) &(subchunk1[8])) & 0xFFFFFFFF;
 	unsigned int dataBlockSizeInBytes = *((unsigned int*) &(subchunk1[12])) & 0xFFFF;
 	unsigned int bitsPerSample = *((unsigned int*) &(subchunk1[14])) & 0xFFFF;
 

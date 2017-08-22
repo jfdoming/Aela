@@ -26,7 +26,7 @@ namespace Aela {
 
 			// These are some functions that are made for interacting with the
 			// list of text fonts.
-			int createNewTextFont(std::string name);
+			unsigned int createNewTextFont(std::string name);
 			TextFont* getTextFont(unsigned int index);
 			bool deleteTextFont(unsigned int index);
 			bool adjustFontSize(unsigned int index, unsigned int size);

@@ -9,21 +9,14 @@
 #include "Aela_Game.h"
 #include "Scripts to Move to LUA/ResourceScript.h"
 #include "Scripts to Move to LUA/SceneScript.h"
-#include "Scripts to Move to LUA/GameStartupScript.h"
+#include "Utilities/strut.h"
 
 using namespace Aela;
 
 void AelaGame::setEngine(Engine* engine) {
 	this->engine = engine;
 	resourceManager = engine->getResourceManager();
-}
-
-void AelaGame::setAxisHelper(ModelEntity* axisHelper) {
-	this->axisHelper = axisHelper;
-}
-
-ModelEntity* AelaGame::getAxisHelper() {
-	return axisHelper;
+	sceneManager = engine->getSceneManager();
 }
 
 void AelaGame::setEntityTypeText(TextComponent* text) {
@@ -59,17 +52,14 @@ void AelaGame::switchEntityBeingPlaced(EntityType typeOfNewEntity) {
 	switch (typeOfNewEntity) {
 		case EntityType::MODEL:
 			entityBeingPlaced = &modelEntity;
-			(*engine->getKeyedAnimator3D()->getTransformables())[keyedAnimatorKey] = &modelEntity;
 			entityTypeText->setText("Entity: Model");
 			break;
 		case EntityType::LIGHT:
 			entityBeingPlaced = &lightEntity;
-			(*engine->getKeyedAnimator3D()->getTransformables())[keyedAnimatorKey] = &lightEntity;
 			entityTypeText->setText("Entity: Light");
 			break;
 		case EntityType::BILLBOARD:
 			entityBeingPlaced = &billboardEntity;
-			(*engine->getKeyedAnimator3D()->getTransformables())[keyedAnimatorKey] = &billboardEntity;
 			entityTypeText->setText("Entity: Billboard");
 			break;
 	}
@@ -79,36 +69,34 @@ void AelaGame::setup() {
 	engine->getRenderer()->activateFeature(RendererFeature::MSAA_2D_X4);
 	loadResources();
 	loadScenes();
-	setupGameElements(engine, this);
 	engine->getEventHandler()->addListener(EventConstants::KEY_RELEASED, this);
 
 	bool success = resourceManager->obtain<Model>(defaultModelResource, defaultModel);
 	if (!success) {
-		AelaErrorHandling::windowError("IDK");
+		AelaErrorHandling::windowError("The default model resource was not found!");
 	}
 	Texture* texture;
 	success = resourceManager->obtain<Texture>(defaultBillboardResource, texture);
 	if (!success) {
-		AelaErrorHandling::windowError("IDK");
+		AelaErrorHandling::windowError("The default billboard resource was not found!");
 	}
 	defaultTexture = *texture->getTexture();
 	modelEntity.setModel(defaultModel);
+	engine->getRenderer()->generateShadowMap(&lightEntity);
 	billboardEntity.setTexture(defaultTexture);
 
 	// Note: the default entity that is placed is a ModelEntity.
 	entityBeingPlaced = &modelEntity;
-	keyedAnimatorKey = engine->getKeyedAnimator3D()->getTransformables()->size();
-	(*engine->getKeyedAnimator3D()->getTransformables())[keyedAnimatorKey] = &modelEntity;
-	engine->getRenderer()->generateShadowMap(&lightEntity);
+	keyedAnimatorKey = engine->getKeyedAnimator3D()->addTransformable(&transformableBeingPlaced);
 }
 
 void AelaGame::update() {
-	positionText->setText("Position: " + std::to_string(axisHelper->getPosition()->x) + ", "
-		+ std::to_string(axisHelper->getPosition()->y) + ", " + std::to_string(axisHelper->getPosition()->z));
-	rotationText->setText("Rotation: " + std::to_string(axisHelper->getRotation()->x) + ", "
-		+ std::to_string(axisHelper->getRotation()->y) + ", " + std::to_string(axisHelper->getRotation()->z));
-	scalingText->setText("Scaling: " + std::to_string(axisHelper->getScaling()->x) + ", "
-		+ std::to_string(axisHelper->getScaling()->y) + ", " + std::to_string(axisHelper->getScaling()->z));
+	/*positionText->setText("Position: " + toStringWithDecimal(transformableBeingPlaced.getPosition()->x, 3) + ", "
+		+ toStringWithDecimal(transformableBeingPlaced.getPosition()->y, 3) + ", " + toStringWithDecimal(transformableBeingPlaced.getPosition()->z, 3));
+	rotationText->setText("Rotation: " + toStringWithDecimal(transformableBeingPlaced.getRotation()->x, 3) + ", "
+		+ toStringWithDecimal(transformableBeingPlaced.getRotation()->y, 3) + ", " + toStringWithDecimal(transformableBeingPlaced.getRotation()->z, 3));
+	scalingText->setText("Scaling: " + toStringWithDecimal(transformableBeingPlaced.getScaling()->x, 3) + ", "
+		+ toStringWithDecimal(transformableBeingPlaced.getScaling()->y, 3) + ", " + toStringWithDecimal(transformableBeingPlaced.getScaling()->z, 3));*/
 }
 
 void AelaGame::onEvent(Event* event) {
@@ -118,26 +106,20 @@ void AelaGame::onEvent(Event* event) {
 			case SDLK_RETURN:
 				switch (entityBeingPlaced->getEntityType()) {
 					case EntityType::MODEL:
+						modelEntity.cloneTransformable(&transformableBeingPlaced);
 						(*mapBeingEdited->getModels())[mapBeingEdited->getModels()->size()] = modelEntity;
 						modelEntity.setModel(defaultModel);
-						modelEntity.setPosition(*axisHelper->getPosition());
-						modelEntity.setRotation(*axisHelper->getRotation());
-						modelEntity.setScaling(*axisHelper->getScaling());
 						break;
 					case EntityType::LIGHT:
+						lightEntity.cloneTransformable(&transformableBeingPlaced);
 						(*mapBeingEdited->getLights())[mapBeingEdited->getLights()->size()] = lightEntity;
 						lightEntity.useDefaultValues();
 						engine->getRenderer()->generateShadowMap(&lightEntity);
-						lightEntity.setPosition(*axisHelper->getPosition());
-						lightEntity.setRotation(*axisHelper->getRotation());
-						lightEntity.setScaling(*axisHelper->getScaling());
 						break;
 					case EntityType::BILLBOARD:
+						billboardEntity.cloneTransformable(&transformableBeingPlaced);
 						(*mapBeingEdited->getBillboards())[mapBeingEdited->getBillboards()->size()] = billboardEntity;
 						billboardEntity.setTexture(defaultTexture);
-						billboardEntity.setPosition(*axisHelper->getPosition());
-						billboardEntity.setRotation(*axisHelper->getRotation());
-						billboardEntity.setScaling(*axisHelper->getScaling());
 						break;
 				}
 				break;
@@ -153,6 +135,14 @@ void AelaGame::onEvent(Event* event) {
 						switchEntityBeingPlaced(EntityType::MODEL);
 						break;
 				}
+				break;
+			case SDLK_ESCAPE:
+				if (sceneManager->getCurrentSceneId() == 2) {
+					sceneManager->setCurrentScene(3);
+				} else if (sceneManager->getCurrentSceneId() == 3) {
+					sceneManager->setCurrentScene(2);
+				}
+				break;
 		}
 	}
 }

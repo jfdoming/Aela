@@ -37,11 +37,11 @@ class ParticleEmitter : public Transformable3D {
 		float getBaseSpeed();
 		void setBaseSpeed(float baseSpeed);
 		float getBaseLifetime();
-		void setBaseLifetime(unsigned int baseLifetime);
+		void setBaseLifetime(float baseLifetime);
 		float getSpeedOffset();
 		void setSpeedOffset(float speedOffset);
 		float getLifetimeOffset();
-		void setLifetimeOffset(unsigned int lifetimeOffset);
+		void setLifetimeOffset(float lifetimeOffset);
 		float getPathOffset();
 		void setPathOffset(float pathOffset);
 

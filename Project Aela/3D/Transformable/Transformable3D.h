@@ -59,6 +59,10 @@ class Transformable3D {
 		// For example, if using the range 0 and 2a, 11a / 2 is forced to 3a / 2.
 		void forceValuesWithinRange(glm::vec3* vec3, float minimum, float maximum);
 
+		// This copies the values of one transformable into another. It can be especially
+		// useful for classes that extend this one.
+		void cloneTransformable(Transformable3D* transformable);
+
 	protected:
 		glm::vec3 position = glm::vec3(0);
 		glm::vec3 rotation = glm::vec3(0);

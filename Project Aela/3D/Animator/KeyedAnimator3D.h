@@ -35,7 +35,9 @@ class KeyedAnimator3D : public Listener {
 		TimeManager* getTimeManager();
 		void setWindow(Window* window);
 		Window* getWindow();
-		std::unordered_map<int, Transformable3D*>* getTransformables();
+		bool addTransformable(int key, Transformable3D* transformable);
+		int addTransformable(Transformable3D* transformable);
+		bool removeTransformable(int key);
 
 	private:
 		// These are the objects from Project Aela that the class uses.

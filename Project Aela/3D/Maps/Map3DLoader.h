@@ -25,5 +25,9 @@ namespace Aela {
 		private:
 			Renderer* renderer;
 			void setVec3UsingString(std::string* value, glm::vec3* vec3);
+
+			const std::string defaultSkyboxPath = "res/skyboxes/";
+			const std::string defaultModelPath = "res/models/";
+			const std::string defaultBillboardPath = "res/textures/";
 	};
 }

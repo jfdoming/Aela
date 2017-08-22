@@ -64,11 +64,11 @@ int Aela::Engine::runningLoop() {
 		animator3D.update();
 		
 		// This updates and renders the current scene.
-		Aela::Scene* currentScene = sceneManager.getCurrentScene();
+		/*Aela::Scene* currentScene = sceneManager.getCurrentScene();
 		if (currentScene != nullptr) {
 			currentScene->update();
 			currentScene->render(&renderer);
-		}
+		}*/
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 	// This will call each model's destructor, which will delete each model's texture. I'm not sure if this
 	// is done automatically by OpenGL or Windows when the program closes, so I added it just in case.
@@ -182,37 +182,22 @@ int Aela::Engine::loadUserEnvironmentInformation() {
 	return 0;
 }
 
-Scene* currentScene;
-
 // This method is meant to be run by another program that uses the Project Aela library. It starts Project Aela.
 void Engine::update() {
-	// determine the current scene
-	if (sceneManager.consumeSceneChangeEvent()) {
-		currentScene = sceneManager.getCurrentScene();
-	}
-
 	// Note: Events should be updated first.
 	eventHandler.updateSDLEvents();
+
 	timeManager.updateTime();
 	sceneManager.update();
 	animator3D.update();
 	keyedAnimator3D.update();
-
-	// update the current scene
-	if (currentScene != nullptr) {
-		currentScene->update();
-	}
 }
 
 void Engine::render() {
-	// render the current scene
-	if (currentScene != nullptr) {
-		currentScene->render(&renderer);
-	}
+	sceneManager.render(&renderer);
 }
 
 bool Engine::shouldExit() {
-	std::cout << "QuitCheck: | " << window.quitCheck() << " |\n";
 	return window.quitCheck() || AelaErrorHandling::programCloseWasRequested();
 }
 

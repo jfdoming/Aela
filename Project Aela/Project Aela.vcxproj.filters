@@ -71,8 +71,9 @@
     <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="Menus\ImageComponent.cpp" />
     <ClCompile Include="Menus\ButtonComponent.cpp" />
-    <ClCompile Include="User Environment\UserEnvironment.cpp" />
     <ClCompile Include="3D\Animator\KeyedAnimator3D.cpp" />
+    <ClCompile Include="User Environment\UserEnvironment.cpp" />
+    <ClCompile Include="Menus\RectComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -158,7 +159,8 @@
     <ClInclude Include="Menus\ImageComponent.h" />
     <ClInclude Include="Menus\ButtonComponent.h" />
     <ClInclude Include="Utilities\strut.h" />
-    <ClInclude Include="User Environment\UserEnvironment.h" />
     <ClInclude Include="3D\Animator\KeyedAnimator3D.h" />
+    <ClInclude Include="User Environment\UserEnvironment.h" />
+    <ClInclude Include="Menus\RectComponent.h" />
   </ItemGroup>
 </Project>

@@ -78,7 +78,20 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 				if (j != std::string::npos && k != std::string::npos) {
 					if (propertyType == "src") {
 						Resource* res;
-						bool success = resources.get(line.substr(j + 1, k - j - 1), res);
+						std::string source = line.substr(j + 1, k - j - 1);
+						if (source.at(0) == '~') {
+							source = source.substr(1, source.size() - 1);
+							if (entityType == EntityType::MODEL) {
+								source = defaultModelPath + source;
+							}
+							if (entityType == EntityType::BILLBOARD) {
+								source = defaultBillboardPath + source;
+							}
+							if (entityType == EntityType::SKYBOX) {
+								source = defaultSkyboxPath + source;
+							}
+						}
+						bool success = resources.get(source, res);
 						if (success) {
 							if (entityType == EntityType::MODEL) {
 								map->getModels()->at(map->getModels()->size() - 1).setModel((Model*) res);

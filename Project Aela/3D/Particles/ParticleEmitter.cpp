@@ -19,7 +19,7 @@ void ParticleEmitter::setupParticles(std::vector<GLuint>* textures, float partic
 		particle.setProperty(Transformable3DProperty::X_SCALING, particleWidthScaling);
 		particle.setProperty(Transformable3DProperty::Y_SCALING, particleHeightScaling);
 		particle.setSpeed(baseSpeed + (speedOffset * (rand() % 100) / 100));
-		particle.setLifetime(baseLifetime + (lifetimeOffset * (rand() % 100) / 100));
+		particle.setLifetime((unsigned int) (baseLifetime + (lifetimeOffset * (rand() % 100) / 100)));
 		particles.push_back(particle);
 		setupParticlePositioning(i, amount);
 	}
@@ -58,7 +58,7 @@ float ParticleEmitter::getBaseLifetime() {
 	return baseLifetime;
 }
 
-void ParticleEmitter::setBaseLifetime(unsigned int baseLifetime) {
+void ParticleEmitter::setBaseLifetime(float baseLifetime) {
 	this->baseLifetime = baseLifetime;
 }
 
@@ -74,7 +74,7 @@ float ParticleEmitter::getLifetimeOffset() {
 	return lifetimeOffset;
 }
 
-void ParticleEmitter::setLifetimeOffset(unsigned int lifetimeOffset) {
+void ParticleEmitter::setLifetimeOffset(float lifetimeOffset) {
 	this->lifetimeOffset = lifetimeOffset;
 }
 

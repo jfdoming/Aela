@@ -16,7 +16,7 @@ void test() {
 void setupScenes(Engine* engine) {
 	// This creates text-related objects.
 	TextManager* textManager = engine->getTextManager();
-	int arial = textManager->createNewTextFont("arial bold.ttf");
+	int arial = textManager->createNewTextFont("xerox.ttf");
 	textManager->adjustFontSize(arial, 22);
 	ColourRGBA textColour(0.5f, 0.4f, 0.3f, 1.0f);
 
@@ -76,6 +76,6 @@ void setupScenes(Engine* engine) {
 	engine->getSceneManager()->registerScene(mainMenuScene, 1);
 	engine->getSceneManager()->setCurrentScene(1);
 
-	 engine->getWindow()->hideCursor();
-	 engine->getRenderer()->getCamera()->setInUse(true);
+	engine->getWindow()->hideCursor();
+	engine->getRenderer()->getCamera()->setInUse(true);
 }

@@ -118,6 +118,24 @@ Window* KeyedAnimator3D::getWindow() {
 	return window;
 }
 
-std::unordered_map<int, Transformable3D*>* KeyedAnimator3D::getTransformables() {
-	return &transformables;
+bool KeyedAnimator3D::addTransformable(int key, Transformable3D* transformable) {
+	if (transformables.find(key) == transformables.end()) {
+		transformables[key] = transformable;
+		return true;
+	}
+	return false;
+}
+
+int KeyedAnimator3D::addTransformable(Transformable3D* transformable) {
+	transformables[transformables.size()] = transformable;
+	return transformables.size();
+}
+
+bool KeyedAnimator3D::removeTransformable(int key) {
+	auto position = transformables.find(key);
+	if (position != transformables.end()) {
+		transformables.erase(position);
+		return true;
+	}
+	return false;
 }

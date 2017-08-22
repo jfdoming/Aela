@@ -3,22 +3,37 @@
 
 using namespace Aela;
 
+// public members
+
 SceneManager::SceneManager() {
 }
 
 SceneManager::~SceneManager() {
 }
 
-void SceneManager::registerScene(Scene* scene, int id) {
+void SceneManager::registerScene(Scene* scene, unsigned int id) {
 	scene->setId(id);
 	scenes.emplace(id, scene);
 }
 
 void Aela::SceneManager::update() {
-	currentScene->update();
+	// determine the current scene
+	consumeSceneChangeEvent();
+
+	// update the current scene
+	if (currentScene != nullptr) {
+		currentScene->update();
+	}
 }
 
-void SceneManager::setCurrentScene(int id) {
+void Aela::SceneManager::render(Renderer* renderer) {
+	// render the current scene
+	if (currentScene != nullptr) {
+		currentScene->render(renderer);
+	}
+}
+
+void SceneManager::setCurrentScene(unsigned int id) {
 	if (currentScene != nullptr) {
 		previousScene = currentScene;
 	}
@@ -27,11 +42,13 @@ void SceneManager::setCurrentScene(int id) {
 	sceneChangeRequested = true;
 }
 
-Scene* SceneManager::getCurrentScene() {
-	return currentScene;
+unsigned int SceneManager::getCurrentSceneId() {
+	return currentScene->getId();
 }
 
-Scene* SceneManager::getScene(int id) {
+// private members
+
+Scene* SceneManager::getScene(unsigned int id) {
 	// determine the requested scene
 	auto item = scenes.find(id);
 	if (item == scenes.end()) {
@@ -40,7 +57,7 @@ Scene* SceneManager::getScene(int id) {
 	return item->second;
 }
 
-bool SceneManager::consumeSceneChangeEvent() {
+void SceneManager::consumeSceneChangeEvent() {
 	if (sceneChangeRequested) {
 		if (previousScene != nullptr) {
 			// hide the previous scene
@@ -54,8 +71,5 @@ bool SceneManager::consumeSceneChangeEvent() {
 		}
 
 		sceneChangeRequested = false;
-		return true;
 	}
-
-	return false;
 }

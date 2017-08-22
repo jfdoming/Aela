@@ -8,8 +8,9 @@
 #include "LightEntity.h"
 
 void LightEntity::useDefaultValues() {
-	position = glm::vec3(0.0, 0.0, 0.0);
-	rotation = glm::vec3(0.0, 0.0, 0.0);
+	position = glm::vec3(0, 0, 0);
+	rotation = glm::vec3(0, 0, 0);
+	scaling = glm::vec3(1, 1, 1);
 	colour.setValues(1.0, 1.0, 1.0);
 	power = 1.0;
 }
