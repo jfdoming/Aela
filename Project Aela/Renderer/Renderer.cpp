@@ -101,7 +101,7 @@ void Renderer::setTimeManager(TimeManager* timeManager) {
 	this->timeManager = timeManager;
 }
 
-void Renderer::setTextManager(TextManager* textManager) {
+void Renderer::setTextManager(FontManager* textManager) {
 	this->textManager = textManager;
 }
 
@@ -172,8 +172,8 @@ void Renderer::render2DTexture(Texture* texture, Rect<int>* output, ColourRGBA* 
 }
 
 // This renders text using the 2D renderer.
-void Renderer::renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour) {
-	basic2DRenderer.renderTextToSimple2DFramebuffer(text, textManager->getTextFont(textFontToUse), bound2DFramebuffer, output, window->getWindowDimensions(), colour,
+void Renderer::renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour) {
+	basic2DRenderer.renderTextToSimple2DFramebuffer(text, font, bound2DFramebuffer, output, window->getWindowDimensions(), colour,
 		textManager->POINTS_PER_PIXEL);
 }
 

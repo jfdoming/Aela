@@ -11,7 +11,7 @@
 #include "Window/Window.h"
 #include "Error Handler/ErrorHandler.h"
 #include "Time Manager/TimeManager.h"
-#include "2D/Text/TextManager.h"
+#include "2D/Text/FontManager.h"
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
 #include "2D/Texture/TextureLoader.h"
@@ -56,7 +56,7 @@ namespace Aela {
 			Renderer* getRenderer();
 			EventHandler* getEventHandler();
 			TimeManager* getTimeManager();
-			TextManager* getTextManager();
+			FontManager* getTextManager();
 			LuaManager* getLuaManager();
 			SceneManager* getSceneManager();
 			ResourceManager* getResourceManager();
@@ -72,7 +72,7 @@ namespace Aela {
 			Renderer renderer;
 			EventHandler eventHandler;
 			TimeManager timeManager;
-			TextManager textManager;
+			FontManager textManager;
 			LuaManager luaManager;
 			SceneManager sceneManager;
 			ResourceManager resourceManager;

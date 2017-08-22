@@ -15,9 +15,8 @@ void test() {
 
 void setupScenes(Engine* engine) {
 	// This creates text-related objects.
-	TextManager* textManager = engine->getTextManager();
-	int arial = textManager->createNewTextFont("res/fonts/xerox.ttf");
-	textManager->adjustFontSize(arial, 22);
+	FontManager* textManager = engine->getTextManager();
+	TextFont xerox = *textManager->obtainTextFont("res/fonts/xerox.ttf", 22);
 	ColourRGBA textColour(0.5f, 0.4f, 0.3f, 1.0f);
 
 	// This sets up an image.
@@ -27,7 +26,7 @@ void setupScenes(Engine* engine) {
 	image->setDimensions(&Rect<int>(0, 0, 1024, 60));
 	image->setTexture(texture);
 
-	TextComponent* buttonText = new TextComponent("Click me", arial, &textColour, textManager);
+	TextComponent* buttonText = new TextComponent("Click me", &xerox, &textColour, textManager);
 
 	ButtonComponent* button = new ButtonComponent;
 	success = engine->getResourceManager()->obtain<Texture>("res/textures/lol_button.dds", texture);
@@ -36,7 +35,7 @@ void setupScenes(Engine* engine) {
 	button->setupOnClick(&test, engine->getEventHandler());
 	button->setText(buttonText, engine->getTextManager());
 
-	TextComponent* gameTitleText = new TextComponent("Test", arial, &textColour, textManager);
+	TextComponent* gameTitleText = new TextComponent("Test", &xerox, &textColour, textManager);
 	Rect<int> textOutput(100, 100, 300, 300);
 	gameTitleText->setDimensions(&textOutput);
 

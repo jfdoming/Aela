@@ -141,8 +141,12 @@ void AelaGame::onEvent(Event* event) {
 			case SDLK_ESCAPE:
 				if (sceneManager->getCurrentScene()->getId() == 2) {
 					sceneManager->setCurrentScene(3);
+					engine->getWindow()->showCursor();
+					engine->getRenderer()->getCamera()->setInUse(false);
 				} else if (sceneManager->getCurrentScene()->getId() == 3) {
 					sceneManager->setCurrentScene(2);
+					engine->getWindow()->hideCursor();
+					engine->getRenderer()->getCamera()->setInUse(true);
 				}
 				break;
 		}

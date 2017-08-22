@@ -27,7 +27,7 @@
 #include "../Control Manager/ControlManager.h"
 #include "../3D/Renderer/Basic3DRenderer.h"
 #include "../2D/Renderer/Basic2DRenderer.h"
-#include "../2D/Text/TextManager.h"
+#include "../2D/Text/FontManager.h"
 #include "../3D/Light/LightEntity.h"
 #include "../3D/Models/ModelEntity.h"
 #include "../3D/Skybox/SkyboxEntity.h"
@@ -81,7 +81,7 @@ namespace Aela {
 			// before rendering.
 			void setWindow(Window* window);
 			void setTimeManager(TimeManager* timeManager);
-			void setTextManager(TextManager* textManager);
+			void setTextManager(FontManager* textManager);
 
 			// This stores a pointer to the list of lights. It's easier to bind a list of lights
 			// once than to send each light every frame.
@@ -111,7 +111,7 @@ namespace Aela {
 
 			// These functions are related to 2D rendering.
 			void render2DTexture(Texture* texture, Rect<int>* output, ColourRGBA* tint);
-			void renderText(std::string text, int textFontToUse, Rect<int>* output, ColourRGBA* colour);
+			void renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour);
 			void renderRectangle(Rect<int>* output, ColourRGBA* colour);
 			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour);
 			void renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, ColourRGBA* colour);
@@ -144,7 +144,7 @@ namespace Aela {
 			Camera3D camera;
 			TimeManager* timeManager;
 			Window* window;
-			TextManager* textManager;
+			FontManager* textManager;
 			Simple2DFramebuffer* bound2DFramebuffer;
 
 			// This represents the framebuffer that is attached to the screen.

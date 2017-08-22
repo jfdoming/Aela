@@ -12,15 +12,15 @@ using namespace Aela;
 TextComponent::TextComponent() {
 }
 
-Aela::TextComponent::TextComponent(std::string text, int font, TextManager* textManager) : colour(1, 1, 1, 1) {
+Aela::TextComponent::TextComponent(std::string text, TextFont* font, FontManager* textManager) : colour(1, 1, 1, 1) {
 	this->text = text;
-	this->font = font;
+	this->font = *font;
 	setup(textManager);
 }
 
-Aela::TextComponent::TextComponent(std::string text, int font, ColourRGBA* colour, TextManager* textManager) {
+Aela::TextComponent::TextComponent(std::string text, TextFont* font, ColourRGBA* colour, FontManager* textManager) {
 	this->text = text;
-	this->font = font;
+	this->font = *font;
 	this->colour = *colour;
 	setup(textManager);
 }
@@ -28,7 +28,7 @@ Aela::TextComponent::TextComponent(std::string text, int font, ColourRGBA* colou
 TextComponent::~TextComponent() {
 }
 
-void Aela::TextComponent::setup(TextManager* textManager) {
+void Aela::TextComponent::setup(FontManager* textManager) {
 	setupWidthAndHeight(textManager);
 }
 
@@ -36,12 +36,12 @@ void TextComponent::update() {
 }
 
 void TextComponent::render(Renderer* renderer) {
-	renderer->renderText(text, font, &dimensions, &colour);
+	renderer->renderText(text, &font, &dimensions, &colour);
 }
 
 void TextComponent::render(Renderer* renderer, ColourRGBA* tint) {
 	ColourRGBA newColour(colour.getR() * tint->getR(), colour.getG() * tint->getG(), colour.getB() * tint->getB(), colour.getA() * tint->getA());
-	renderer->renderText(text, font, &dimensions, &newColour);
+	renderer->renderText(text, &font, &dimensions, &newColour);
 }
 
 void Aela::TextComponent::setText(std::string text) {
@@ -52,12 +52,12 @@ std::string Aela::TextComponent::getText() {
 	return text;
 }
 
-void Aela::TextComponent::setFont(int font) {
-	this->font = font;
+void Aela::TextComponent::setFont(TextFont* font) {
+	this->font = *font;
 }
 
-int Aela::TextComponent::getFont() {
-	return font;
+TextFont* Aela::TextComponent::getFont() {
+	return &font;
 }
 
 void Aela::TextComponent::setColour(ColourRGBA* colour) {
@@ -68,8 +68,8 @@ ColourRGBA* Aela::TextComponent::getColour() {
 	return &colour;
 }
 
-void Aela::TextComponent::setupWidthAndHeight(TextManager* textManager) {
-	FT_Face face = (*(textManager->getTextFont(font)->getFace()));
+void Aela::TextComponent::setupWidthAndHeight(FontManager* textManager) {
+	FT_Face face = *font.getFace();
 	FT_GlyphSlot glyph = face->glyph;
 	FT_BBox bbox = face->bbox;
 
@@ -78,7 +78,7 @@ void Aela::TextComponent::setupWidthAndHeight(TextManager* textManager) {
 	int width = 0;
 	char* p;
 	for (unsigned int i = 0; i < text.size(); i++) {
-		p = &((char)(text.at(i)));
+		p = &((char) (text.at(i)));
 		// This loads the character.
 		if (FT_Load_Char(face, *p, FT_LOAD_RENDER)) {
 			continue;

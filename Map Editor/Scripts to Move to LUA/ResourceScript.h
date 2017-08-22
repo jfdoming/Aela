@@ -20,7 +20,8 @@ std::string materialsAndModelsToLoad[] = {
 std::string texturesToLoad[] = {
 	"map_editor_main_background",
 	"character",
-	"map_editor_top_bar"
+	"map_editor_top_bar",
+	"simple_button"
 };
 
 std::string particlesToLoad[] = {

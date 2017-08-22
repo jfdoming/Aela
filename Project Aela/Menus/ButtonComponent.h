@@ -27,7 +27,7 @@ namespace Aela {
 			bool isClicked();
 			void setupOnClick(void(*function)(), EventHandler* eventHandler);
 			void setupOnClick(AelaEngineFunctor* functor, EventHandler* eventHandler);
-			void setText(TextComponent* text, TextManager* textManager);
+			void setText(TextComponent* text, FontManager* textManager);
 			TextComponent* getText();
 			void setHoverTint(ColourRGBA* hoverTint);
 			void setClickTint(ColourRGBA* clickTint);

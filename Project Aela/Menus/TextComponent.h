@@ -15,13 +15,13 @@ namespace Aela {
 			TextComponent();
 
 			// These are constructors that do not require the user to call setup() as they do it for the user.
-			TextComponent(std::string text, int font, TextManager* textManager);
-			TextComponent(std::string text, int font, ColourRGBA* colour, TextManager* textManager);
+			TextComponent(std::string text, TextFont* font, FontManager* textManager);
+			TextComponent(std::string text, TextFont* font, ColourRGBA* colour, FontManager* textManager);
 
 			// This is the destructor.
 			~TextComponent();
 
-			void setup(TextManager* textManager);
+			void setup(FontManager* textManager);
 			virtual void update();
 			virtual void render(Renderer* renderer);
 			virtual void render(Renderer* renderer, ColourRGBA* tint);
@@ -29,16 +29,16 @@ namespace Aela {
 			// These are getters and setters.
 			void setText(std::string text);
 			std::string getText();
-			void setFont(int font);
-			int getFont();
+			void setFont(TextFont* font);
+			TextFont* getFont();
 			void setColour(ColourRGBA* colour);
 			ColourRGBA* getColour();
 
 		protected:
 			std::string text;
-			int font;
+			TextFont font;
 			ColourRGBA colour;
 
-			void setupWidthAndHeight(TextManager* textManager);
+			void setupWidthAndHeight(FontManager* textManager);
 	};
 }

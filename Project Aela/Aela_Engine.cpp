@@ -231,7 +231,7 @@ TimeManager* Engine::getTimeManager() {
 	return &timeManager;
 }
 
-TextManager* Engine::getTextManager() {
+FontManager* Engine::getTextManager() {
 	return &textManager;
 }
 

@@ -13,6 +13,7 @@ FT_Face* TextFont::getFace() {
 
 void TextFont::setSize(unsigned int size) {
 	this->size = size;
+	FT_Set_Pixel_Sizes(face, 0, size);
 }
 
 unsigned int TextFont::getSize() {

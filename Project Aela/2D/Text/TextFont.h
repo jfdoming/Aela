@@ -16,6 +16,10 @@ class TextFont {
 
 		}
 
+		TextFont(FT_Face* face) {
+			this->face = *face;
+		}
+
 		// These are the getters and setters.
 		void setFace(FT_Face* face);
 		FT_Face* getFace();

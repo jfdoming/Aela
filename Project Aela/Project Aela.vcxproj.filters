@@ -5,7 +5,6 @@
     <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp" />
     <ClCompile Include="2D\Texture\TextureLoader.cpp" />
     <ClCompile Include="2D\Text\TextFont.cpp" />
-    <ClCompile Include="2D\Text\TextManager.cpp" />
     <ClCompile Include="3D\Animator\Animator3D.cpp" />
     <ClCompile Include="3D\Animator\KeyFrame3D.cpp" />
     <ClCompile Include="3D\Animator\KeyFrame3DList.cpp" />
@@ -76,6 +75,7 @@
     <ClCompile Include="3D\Animator\KeyedAnimator3D.cpp" />
     <ClCompile Include="User Environment\UserEnvironment.cpp" />
     <ClCompile Include="Menus\RectComponent.cpp" />
+    <ClCompile Include="2D\Text\FontManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -83,7 +83,6 @@
     <ClInclude Include="2D\Texture\Texture.h" />
     <ClInclude Include="2D\Texture\TextureLoader.h" />
     <ClInclude Include="2D\Text\TextFont.h" />
-    <ClInclude Include="2D\Text\TextManager.h" />
     <ClInclude Include="3D\Animator\Animator3D.h" />
     <ClInclude Include="3D\Animator\KeyFrame3D.h" />
     <ClInclude Include="3D\Animator\KeyFrame3DList.h" />
@@ -168,5 +167,6 @@
     <ClInclude Include="3D\Animator\KeyedAnimator3D.h" />
     <ClInclude Include="User Environment\UserEnvironment.h" />
     <ClInclude Include="Menus\RectComponent.h" />
+    <ClInclude Include="2D\Text\FontManager.h" />
   </ItemGroup>
 </Project>

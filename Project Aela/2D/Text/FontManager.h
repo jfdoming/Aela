@@ -6,7 +6,7 @@
 */
 
 #pragma once
-#include <vector>
+#include <unordered_map>
 #include <string>
 #include <ft2build.h>
 #include <freetype/freetype.h>
@@ -15,9 +15,9 @@
 #include "TextFont.h"
 
 namespace Aela {
-	class TextManager {
+	class FontManager {
 		public:
-			TextManager() {
+			FontManager() {
 
 			}
 
@@ -26,18 +26,12 @@ namespace Aela {
 
 			// These are some functions that are made for interacting with the
 			// list of text fonts.
-			int createNewTextFont(std::string name);
-			TextFont* getTextFont(unsigned int index);
-			bool deleteTextFont(unsigned int index);
-			bool adjustFontSize(unsigned int index, unsigned int size);
+			TextFont* obtainTextFont(std::string name, unsigned int size);
 
 			// This stores the amount of points in a character that make up one pixel.
 			const unsigned short POINTS_PER_PIXEL = 64;
 
 		private:
-			// This is the list of fonts.
-			std::vector<TextFont> textFonts;
-
 			// This is the FreeType Library object.
 			FT_Library freetype;
 	};

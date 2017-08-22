@@ -81,7 +81,7 @@ void Aela::ButtonComponent::setupOnClick(AelaEngineFunctor* functor, EventHandle
 	eventHandler->addListener(EventConstants::MOUSE_RELEASED, this);
 }
 
-void Aela::ButtonComponent::setText(TextComponent* text, TextManager* textManager) {
+void Aela::ButtonComponent::setText(TextComponent* text, FontManager* textManager) {
 	this->text = *text;
 	Rect<int>* textDimensions = text->getDimensions();
 	int width = textDimensions->getWidth();
