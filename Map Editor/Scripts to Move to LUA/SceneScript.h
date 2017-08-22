@@ -7,6 +7,7 @@
 #include "Menus\ImageComponent.h"
 #include "Menus\Button.h"
 #include "Menus\RectComponent.h"
+#include "3D\Maps\Map3DExporter.h"
 
 using namespace Aela;
 
@@ -32,47 +33,50 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This sets up text.
 	Label* titleText = new Label("Project Aela Map Editor", xeroxLarge, &VSBlue, fontManager);
-	titleText->getDimensions()->setX((int) (windowDimensions.getWidth() / 20));
-	titleText->getDimensions()->setY((int) (windowDimensions.getHeight() / 1.3f));
+	titleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() / 1.3f));
 
 	Label* ekkonGamesText = new Label("Ekkon Games", xerox, &VSBlue, fontManager);
-	ekkonGamesText->getDimensions()->setX((int) (windowDimensions.getWidth() * 0.8));
-	ekkonGamesText->getDimensions()->setY((int) (windowDimensions.getHeight() * 0.95));
+	ekkonGamesText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), ((int) (windowDimensions.getHeight() * 0.95)));
 
-	Label* newMapButtonText = new Label("Create New Map", xerox, &VSBlue, fontManager);
-	int spacing = newMapButtonText->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
-	Label* loadMapButtonText = new Label("Load Map", xerox, &VSBlue, fontManager);
+	Label* editMapButtonText = new Label("Edit Map", xerox, &VSBlue, fontManager);
+	int spacing = editMapButtonText->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
+	Label* loadMapButtonText = new Label("Help", xerox, &VSBlue, fontManager);
 	Label* exitButtonText = new Label("Exit", xerox, &VSBlue, fontManager);
 
-	auto newMap = [](Engine* engine) {
+	auto editMapAction = [](Engine* engine) {
 		engine->getSceneManager()->setCurrentScene(2);
 		engine->getWindow()->hideCursor();
 		engine->getRenderer()->getCamera()->setInUse(true);
 	};
-	auto loadMap = [](Engine* engine) {engine->getSceneManager()->setCurrentScene(2);};
-	auto exit = [](Engine* engine) {engine->getWindow()->quit(); };
+	auto helpMapAction = [](Engine* engine) {
+		// Lol, this is temporary until I feel like creating a seperate scene for this garbage.
+		std::string controls = (std::string) "WASD - move camera\n"
+			+ "\\ - change entity type being placed\n"
+			+ "Esc - open pause menu";
+		AelaErrorHandling::windowWarning("Aela Map Editor: Controls", controls);
+		AelaErrorHandling::windowWarning("Aela Map Editor: Contact", "For more help, ask a lead developer on the Ekkon Discord!");
+		AelaErrorHandling::windowWarning("Aela Map Editor: Notes", "BTW, everything except export in the pause menu exits the program.");
+	};
+	auto exitAction = [](Engine* engine) {engine->getWindow()->quit(); };
 
-	// This sets up some buttons. Note: setText() uses information about the button's dimensions. In order to setup text for
+	// This sets up some errorButtons. Note: setText() uses information about the button's dimensions. In order to setup text for
 	// a button, make sure that you set the button's position before hand.
-	Button* newMapButton = new Button();
-	newMapButton->setDimensions(newMapButtonText->getDimensions());
-	newMapButton->setupOnClick(&AelaEngineFunctor(engine, newMap), engine->getEventHandler());
-	newMapButton->getDimensions()->setX((int) (windowDimensions.getWidth() / 20));
-	newMapButton->getDimensions()->setY((int) (windowDimensions.getHeight() / 1.24f));
-	newMapButton->setText(newMapButtonText, engine->getFontManager());
+	Button* editMapButton = new Button();
+	editMapButton->setDimensions(editMapButtonText->getDimensions());
+	editMapButton->setupOnClick(&AelaEngineFunctor(engine, editMapAction), engine->getEventHandler());
+	editMapButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f));
+	editMapButton->setText(editMapButtonText, engine->getFontManager());
 
-	Button* loadMapButton = new Button();
-	loadMapButton->setDimensions(loadMapButtonText->getDimensions());
-	loadMapButton->setupOnClick(&AelaEngineFunctor(engine, loadMap), engine->getEventHandler());
-	loadMapButton->getDimensions()->setX((int) (windowDimensions.getWidth() / 20));
-	loadMapButton->getDimensions()->setY((int) (windowDimensions.getHeight() / 1.24f + spacing));
-	loadMapButton->setText(loadMapButtonText, engine->getFontManager());
+	Button* helpButton = new Button();
+	helpButton->setDimensions(loadMapButtonText->getDimensions());
+	helpButton->setupOnClick(&AelaEngineFunctor(engine, helpMapAction), engine->getEventHandler());
+	helpButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f + spacing));
+	helpButton->setText(loadMapButtonText, engine->getFontManager());
 
 	Button* exitButton = new Button();
 	exitButton->setDimensions(exitButtonText->getDimensions());
-	exitButton->setupOnClick(&AelaEngineFunctor(engine, exit), engine->getEventHandler());
-	exitButton->getDimensions()->setX((int) (windowDimensions.getWidth() / 20));
-	exitButton->getDimensions()->setY((int) (windowDimensions.getHeight() / 1.24f + spacing * 2));
+	exitButton->setupOnClick(&AelaEngineFunctor(engine, exitAction), engine->getEventHandler());
+	exitButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f + spacing * 2));
 	exitButton->setText(exitButtonText, engine->getFontManager());
 
 	// This sets up the title screen scene.
@@ -82,8 +86,8 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	mainMenuScene->getMenu()->add(mainMenuImage);
 	mainMenuScene->getMenu()->add(titleText);
 	mainMenuScene->getMenu()->add(ekkonGamesText);
-	mainMenuScene->getMenu()->add(newMapButton);
-	mainMenuScene->getMenu()->add(loadMapButton);
+	mainMenuScene->getMenu()->add(editMapButton);
+	mainMenuScene->getMenu()->add(helpButton);
 	mainMenuScene->getMenu()->add(exitButton);
 
 	ImageComponent* topBarImage = new ImageComponent();
@@ -93,7 +97,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	topBarImage->setTexture(topBarTexture);
 
 	Label* entityTypeText = new Label("Entity: Model", xerox, &VSBlue, fontManager);
-	entityTypeText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.02f), (int) (windowDimensions.getHeight() * 0.04f));
+	entityTypeText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.015f), (int) (windowDimensions.getHeight() * 0.04f));
 	game->setEntityTypeText(entityTypeText);
 
 	Label* positionText = new Label("Position: 0, 0, 0", xerox, &VSBlue, fontManager);
@@ -122,15 +126,52 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	tintRect->setColour(&ColourRGBA(0.4f, 0.4f, 0.4f, 0.35f));
 
 	Label* entityToolText = new Label("Entity Tool", xerox, &almostWhite, fontManager);
+	Label* skyboxesText = new Label("Skyboxes", xerox, &almostWhite, fontManager);
+	Label* exportText = new Label("Export", xerox, &almostWhite, fontManager);
+	Label* optionsText = new Label("Options", xerox, &almostWhite, fontManager);
 
-	Button* entityToolButton = new Button();
+	ColourRGBA settingsHoverTint(0.8f, 0.8f, 0.8f, 1.0f);
+	ColourRGBA settingsClickTint(0.6f, 0.6f, 0.6f, 1.0f);
+
+	auto exportAction = [](Engine* engine) {
+		bool success = engine->getMapExporter()->exportMap("res/maps/map.txt",
+			engine->getSceneManager()->getScene(2)->getMap(), true);
+		if (success) {
+			AelaErrorHandling::windowWarning("Aela Map Creator", "The map was successfully exported to res/maps/map.txt.");
+		} else {
+			AelaErrorHandling::windowError("Aela Map Creator", "Error! The map could not be exported to res/maps/map.txt!");
+		}
+	};
+
+	Button* entityToolButton = new Button(&settingsHoverTint, &settingsClickTint);
 	Texture* simpleButtonTexture;
 	success = engine->getResourceManager()->obtain<Texture>("res/textures/simple_button.dds", simpleButtonTexture);
 	entityToolButton->setTexture(simpleButtonTexture);
-	entityToolButton->setDimensions(&Rect<int>(windowDimensions.getWidth() * 0.125, windowDimensions.getHeight() * 0.1111,
-		windowDimensions.getWidth() * 0.1875, windowDimensions.getHeight() * 0.1111));
-	entityToolButton->setupOnClick(&AelaEngineFunctor(engine, exit), engine->getEventHandler());
+	entityToolButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.1111),
+		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
+	entityToolButton->setupOnClick(&AelaEngineFunctor(engine, exitAction), engine->getEventHandler());
 	entityToolButton->setText(entityToolText, engine->getFontManager());
+
+	Button* skyboxesButton = new Button(&settingsHoverTint, &settingsClickTint);
+	skyboxesButton->setTexture(simpleButtonTexture);
+	skyboxesButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.2222),
+		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
+	skyboxesButton->setupOnClick(&AelaEngineFunctor(engine, exitAction), engine->getEventHandler());
+	skyboxesButton->setText(skyboxesText, engine->getFontManager());
+
+	Button* exportButton = new Button(&settingsHoverTint, &settingsClickTint);
+	exportButton->setTexture(simpleButtonTexture);
+	exportButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.3333),
+		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
+	exportButton->setupOnClick(&AelaEngineFunctor(engine, exportAction), engine->getEventHandler());
+	exportButton->setText(exportText, engine->getFontManager());
+
+	Button* optionsButton = new Button(&settingsHoverTint, &settingsClickTint);
+	optionsButton->setTexture(simpleButtonTexture);
+	optionsButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.4444),
+		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
+	optionsButton->setupOnClick(&AelaEngineFunctor(engine, exitAction), engine->getEventHandler());
+	optionsButton->setText(optionsText, engine->getFontManager());
 
 	RectComponent* rightRect = new RectComponent();
 	rightRect->setDimensions(&Rect<int>(windowDimensions.getWidth() * 0.3125, windowDimensions.getHeight() * 0.1111,
@@ -142,16 +183,19 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	optionsScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	optionsScene->getMenu()->add(tintRect);
 	optionsScene->getMenu()->add(entityToolButton);
+	optionsScene->getMenu()->add(skyboxesButton);
+	optionsScene->getMenu()->add(exportButton);
+	optionsScene->getMenu()->add(optionsButton);
 	optionsScene->getMenu()->add(rightRect);
 
 	Map3D* map;
-	success = engine->getResourceManager()->obtain<Map3D>("res/maps/sample_map.txt", map);
+	success = engine->getResourceManager()->obtain<Map3D>("res/maps/map.txt", map);
 	if (success) {
 		mapCreationScene->setMap(map);
 		optionsScene->setMap(map);
 		game->setMapBeingEdited(map);
 	} else {
-		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/sample_map.txt wasn't loaded properly or something.");
+		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/map.txt wasn't loaded properly or something.");
 	}
 
 	engine->getSceneManager()->registerScene(mainMenuScene, 1);

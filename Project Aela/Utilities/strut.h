@@ -32,3 +32,21 @@ static inline std::string toStringWithDecimal(float value, int places) {
 	s = s.substr(0, glm::clamp((int) s.find('.') + places + 1, 0, (int) s.size()));
 	return s;
 }
+
+static std::string toStringWithATrailingZero(float value) {
+	std::string s = std::to_string(value);
+	bool trailing = false;
+	int trailingPos = 0;
+	for (unsigned int pos = 0; pos < s.length(); pos++) {
+		if (s.at(pos) == '0' && !trailing) {
+			trailing = true;
+			trailingPos = pos;
+		} else if (s.at(pos) != '0') {
+			trailing = false;
+		}
+	}
+	if (trailing) {
+		s = s.substr(0, trailingPos + 1);
+	}
+	return s;
+}

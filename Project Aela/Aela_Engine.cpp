@@ -252,3 +252,7 @@ KeyedAnimator3D* Engine::getKeyedAnimator3D() {
 FramerateCalculator* Engine::getFramerateCalculator() {
 	return &framerateCalculator;
 }
+
+Map3DExporter* Aela::Engine::getMapExporter() {
+	return &mapExporter;
+}

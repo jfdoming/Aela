@@ -56,6 +56,14 @@ bool TextureLoader::loadTexture(Texture*& result, std::string src) {
 	in.close();
 
 	result = new Texture(modelTextureID);
+
+	// This checks to see if the resource can use the "~" shortcut for its path to signify that the resource is using the
+	// commonly excepted path for its resource type. Doing this saves memory.
+	if (src.substr(0, defaultTexturePath.size()) == defaultTexturePath) {
+		result->setSource("~" + src.substr(defaultTexturePath.size(), src.size()));
+	} else {
+		result->setSource(src);
+	}
 	result->setDimensions(0, 0, imageWidth, imageHeight);
 	return true;
 }

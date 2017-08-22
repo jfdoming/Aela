@@ -29,20 +29,20 @@ class BillboardEntity : public Transformable3D, public Entity {
 
 		}
 
-		BillboardEntity(GLuint texture) {
+		BillboardEntity(Texture* texture) {
 			this->texture = texture;
 		}
 
-		BillboardEntity(glm::vec3 setPosition, GLuint setTexture) {
+		BillboardEntity(glm::vec3 setPosition, Texture* setTexture) {
 			position = setPosition;
 			texture = setTexture;
 		}
 
-		void setTexture(GLuint setTexture) {
+		void setTexture(Texture* setTexture) {
 			texture = setTexture;
 		}
 
-		GLuint getTexture() {
+		Texture* getTexture() {
 			return texture;
 		}
 
@@ -59,6 +59,6 @@ class BillboardEntity : public Transformable3D, public Entity {
 		}
 
 	private:
-		GLuint texture;
+		Texture* texture;
 		bool useRotation = true;
 };

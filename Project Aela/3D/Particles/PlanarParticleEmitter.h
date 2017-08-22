@@ -19,7 +19,7 @@ class PlanarParticleEmitter : public ParticleEmitter {
 
 		// These are the functions that are overwritten from the ParticleEmitter class.
 		void setupDimensions(Rect<GLfloat>* dimensions);
-		void setupParticles(std::vector<GLuint>* textures, float particleWidth, float particleHeight, unsigned int amount);
+		void setupParticles(std::vector<Texture*>* textures, float particleWidth, float particleHeight, unsigned int amount);
 		void update();
 
 		// These are getters and setters.

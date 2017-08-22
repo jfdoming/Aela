@@ -53,12 +53,12 @@ void setupScenes(Engine* engine) {
 	particleEmitter->setRotation(0, 3.4f, 0.1f);
 	particleEmitter->setTimeManager(engine->getTimeManager());
 
-	std::vector<GLuint> particleTextures;
+	std::vector<Texture*> particleTextures;
 	Texture* tResult;
 	success = engine->getResourceManager()->obtain<Texture>("res/particles/particle_1.dds", tResult);
-	particleTextures.push_back(*(tResult->getTexture()));
+	particleTextures.push_back(tResult);
 	success = engine->getResourceManager()->obtain<Texture>("res/particles/particle_2.dds", tResult);
-	particleTextures.push_back(*(tResult->getTexture()));
+	particleTextures.push_back(tResult);
 	particleEmitter->setupParticles(&particleTextures, 0.6f, 0.6f, 25);
 
 	Scene* mainMenuScene = new Scene();

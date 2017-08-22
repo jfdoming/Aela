@@ -30,6 +30,7 @@
 #include "Menus/Label.h"
 #include "User Environment/UserEnvironment.h"
 #include "Framerate Calculator/FramerateCalculator.h"
+#include "3D/Maps/Map3DExporter.h"
 
 namespace Aela {
 	class Engine {
@@ -65,6 +66,7 @@ namespace Aela {
 			UserEnvironment* getUserEnvironment();
 			KeyedAnimator3D* getKeyedAnimator3D();
 			FramerateCalculator* getFramerateCalculator();
+			Map3DExporter* getMapExporter();
 
 		private:
 			// These are global objects who's classes come from Project Aela.
@@ -81,6 +83,7 @@ namespace Aela {
 			UserEnvironment userEnvironment;
 			KeyedAnimator3D keyedAnimator3D;
 			FramerateCalculator framerateCalculator;
+			Map3DExporter mapExporter;
 
 			int runningLoop();
 	};

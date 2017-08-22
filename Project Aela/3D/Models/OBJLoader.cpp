@@ -39,6 +39,14 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 	std::vector<glm::vec3> tempNormals;
 
 	Model* res = new Model();
+
+	// This checks to see if the resource can use the "~" shortcut for its path to signify that the resource is using the
+	// commonly excepted path for its resource type. Doing this saves memory.
+	if (src.substr(0, defaultModelPath.size()) == defaultModelPath) {
+		res->setSource("~" + src.substr(defaultModelPath.size(), src.size()));
+	} else {
+		res->setSource(src);
+	}
 	std::string materialName = "";
 
 	// This actually reads the file.

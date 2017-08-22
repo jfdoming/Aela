@@ -96,7 +96,7 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 							if (entityType == EntityType::MODEL) {
 								map->getModels()->at(map->getModels()->size() - 1).setModel((Model*) res);
 							} else if (entityType == EntityType::BILLBOARD) {
-								map->getBillboards()->at(map->getBillboards()->size() - 1).setTexture(*((Texture*) res)->getTexture());
+								map->getBillboards()->at(map->getBillboards()->size() - 1).setTexture((Texture*) res);
 							} else if (entityType == EntityType::SKYBOX) {
 								map->getSkyboxes()->at(map->getSkyboxes()->size() - 1).setSkybox((Skybox*) res);
 							}

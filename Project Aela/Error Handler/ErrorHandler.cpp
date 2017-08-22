@@ -49,6 +49,18 @@ void AelaErrorHandling::windowError(std::string title, std::string message) {
 	errorHandler.throwError(simpleError);
 }
 
+void AelaErrorHandling::windowWarning(std::string message) {
+	// This outputs an error using the operating system's error message window.
+	AelaSimpleError simpleError(AELA_WARNING_WINDOW, message);
+	errorHandler.throwError(simpleError);
+}
+
+void AelaErrorHandling::windowWarning(std::string title, std::string message) {
+	// This outputs an error using the operating system's error message window.
+	AelaSimpleError simpleError(AELA_WARNING_WINDOW, title, message);
+	errorHandler.throwError(simpleError);
+}
+
 bool AelaErrorHandling::programCloseWasRequested() {
 	return errorHandler.programShouldBeClosed;
 }

@@ -75,12 +75,10 @@ void AelaGame::setup() {
 	if (!success) {
 		AelaErrorHandling::windowError("The default model resource was not found!");
 	}
-	Texture* texture;
-	success = resourceManager->obtain<Texture>(defaultBillboardResource, texture);
+	success = resourceManager->obtain<Texture>(defaultBillboardResource, defaultTexture);
 	if (!success) {
 		AelaErrorHandling::windowError("The default billboard resource was not found!");
 	}
-	defaultTexture = *texture->getTexture();
 	modelEntity.setModel(defaultModel);
 	engine->getRenderer()->generateShadowMap(&lightEntity);
 	billboardEntity.setTexture(defaultTexture);
@@ -137,6 +135,7 @@ void AelaGame::onEvent(Event* event) {
 				}
 				break;
 			case SDLK_ESCAPE:
+				std::cout << defaultModel->getSource() << " is the src\n";
 				if (sceneManager->getCurrentSceneId() == 2) {
 					sceneManager->setCurrentScene(3);
 					engine->getWindow()->showCursor();

@@ -26,10 +26,16 @@ class AelaErrorHandler {
 			}
 		};
 
-		const int numberOfButtons = 2;
+		const int numberOfErrorButtons = 2;
 
-		const SDL_MessageBoxButtonData buttons[2] = {
+		const SDL_MessageBoxButtonData errorButtons[2] = {
 			{ 0, 0, "End Program" },
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Okay" }
+		};
+
+		const int numberOfWarningButtons = 1;
+
+		const SDL_MessageBoxButtonData warningButtons[2] = {
 			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Okay" }
 		};
 

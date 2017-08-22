@@ -39,6 +39,14 @@ void SkyboxLoader::expose(LuaManager& mgr) {
 bool SkyboxLoader::load(ResourceMap& resources, std::string src) {
 	Skybox* res = new Skybox();
 
+	// This checks to see if the resource can use the "~" shortcut for its path to signify that the resource is using the
+	// commonly excepted path for its resource type. Doing this saves memory.
+	if (src.substr(0, defaultSkyboxPath.size()) == defaultSkyboxPath) {
+		res->setSource("~" + src.substr(defaultSkyboxPath.size(), src.size()));
+	} else {
+		res->setSource(src);
+	}
+
 	GLuint* cubeMapTexture = res->getTexture();
 	glGenTextures(1, cubeMapTexture);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, *cubeMapTexture);

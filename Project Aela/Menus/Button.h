@@ -20,6 +20,7 @@ namespace Aela {
 			Button();
 			Button(Texture* texture);
 			Button(Texture* texture, Rect<int>* dimensions);
+			Button(ColourRGBA* hoverTint, ColourRGBA* clickTint);
 			virtual ~Button();
 
 			// These are getters and setters.
@@ -45,7 +46,7 @@ namespace Aela {
 
 			void (*onClick)() = nullptr;
 			AelaEngineFunctor onClickFunctor;
-			Label* text;
+			Label* text = nullptr;
 
 			// These are the tints used by the button. Keep in mind that a tint is a multiplier.
 			ColourRGBA hoverTint, clickTint;

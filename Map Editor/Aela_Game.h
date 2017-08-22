@@ -8,7 +8,6 @@
 #pragma once
 
 #include "Aela_Engine.h"
-#include "Menus\Label.h"
 
 using namespace Aela;
 
@@ -59,7 +58,7 @@ class AelaGame : public Listener {
 		const std::string defaultModelResource = "res/models/meme_mug.obj";
 		const std::string defaultBillboardResource = "res/textures/character.dds";
 		Model* defaultModel;
-		GLuint defaultTexture;
+		Texture* defaultTexture;
 
 		void loadResources();
 		void loadScenes();

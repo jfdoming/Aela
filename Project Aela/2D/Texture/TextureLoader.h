@@ -31,5 +31,8 @@ namespace Aela {
 			bool loadTextureToBoundId(std::ifstream& in, GLenum target, unsigned int* width, unsigned int* height);
 			bool loadTextureUsingFILE(std::string path, GLenum target);
 			bool loadTextureUsingFILE(std::string path, GLenum target, unsigned int* width, unsigned int* height);
+
+		private:
+			const std::string defaultTexturePath = "res/textures/";
 	};
 }

@@ -15,7 +15,7 @@ void PlanarParticleEmitter::setupDimensions(Rect<GLfloat>* dimensions) {
 	this->dimensions = *dimensions;
 }
 
-void PlanarParticleEmitter::setupParticles(std::vector<GLuint>* textures, float particleWidth, float particleHeight, unsigned int amount) {
+void PlanarParticleEmitter::setupParticles(std::vector<Texture*>* textures, float particleWidth, float particleHeight, unsigned int amount) {
 	ParticleEmitter::setupParticles(textures, particleWidth, particleHeight, amount);
 }
 

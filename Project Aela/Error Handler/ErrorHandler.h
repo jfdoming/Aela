@@ -19,7 +19,7 @@
 //			Example: Try pressing '~' in Valve Source games.
 //		Error Window Errors:
 //			This displays a seperate error message
-//			Example: A Windows error message with buttons and icons.
+//			Example: A Windows error message with errorButtons and icons.
 
 // This is the Error Handling namespace, which contains easy to use functions that output errors.
 // The namespace uses Aela's error-related classes, which would more annoying to use by a programmer
@@ -32,5 +32,7 @@ namespace AelaErrorHandling {
 	void consoleInternalError(std::string setTitle, std::string message);
 	void windowError(std::string message);
 	void windowError(std::string setTitle, std::string message);
+	void windowWarning(std::string message);
+	void windowWarning(std::string setTitle, std::string message);
 	bool programCloseWasRequested();
 }

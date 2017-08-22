@@ -15,6 +15,7 @@
 
 // This includes GLEW.
 #include <GL/glew.h>
+#include <string>
 
 #include "../../Resource Management/Resource.h"
 

@@ -11,7 +11,7 @@
 // This enum is used internally by the AelaErrorHandling namespace. It defines
 // the types of errors.
 enum AelaErrorMessageType {
-	AELA_ERROR_CONSOLE_WINDOW, AELA_ERROR_CONSOLE_INTERNAL, AELA_ERROR_WINDOW
+	AELA_ERROR_CONSOLE_WINDOW, AELA_ERROR_CONSOLE_INTERNAL, AELA_ERROR_WINDOW, AELA_WARNING_WINDOW
 };
 
 class AelaSimpleError {

@@ -14,25 +14,25 @@
 
 namespace Aela {
 	class SceneManager final {
-	public:
-		SceneManager();
-		~SceneManager();
+		public:
+			SceneManager();
+			~SceneManager();
 
-		void registerScene(Aela::Scene* scene, unsigned int id);
+			void registerScene(Aela::Scene* scene, unsigned int id);
 
-		void update();
-		void render(Renderer* renderer);
+			void update();
+			void render(Renderer* renderer);
 
-		void setCurrentScene(unsigned int id);
-		unsigned int getCurrentSceneId();
-	private:
-		std::unordered_map<unsigned int, Aela::Scene*> scenes;
+			void setCurrentScene(unsigned int id);
+			unsigned int getCurrentSceneId();
+			Scene* getScene(unsigned int id);
+		private:
+			std::unordered_map<unsigned int, Aela::Scene*> scenes;
 
-		Scene* currentScene = nullptr;
-		Scene* previousScene = nullptr;
-		bool sceneChangeRequested = false;
+			Scene* currentScene = nullptr;
+			Scene* previousScene = nullptr;
+			bool sceneChangeRequested = false;
 
-		Scene* getScene(unsigned int id);
-		void consumeSceneChangeEvent();
-	};
+			void consumeSceneChangeEvent();
+		};
 }

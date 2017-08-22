@@ -1,0 +1,17 @@
+<Skybox src="~skybox_2">
+<Skybox src="~skybox_1">
+<Model src="~jeep_1.obj" position="-2.0,0.0,10.0" scaling="0.750,0.750,0.750">
+<Model src="~lamp_post_1.obj" position="1.0,-1.0,5.0" scaling="1.0,1.0,1.0">
+<Model src="~sample_terrain_1.obj" position="0.0,0.0,1.0" scaling="2.0,0.0,2.0">
+<Model src="~meme_mug.obj" position="-11.369999,0.0,8.309995" scaling="1.0,1.0,1.0">
+<Model src="~meme_mug.obj" position="-5.159998,0.0,8.309995" scaling="1.0,1.0,1.0">
+<Model src="~meme_mug.obj" position="-8.759998,0.0,2.759995" scaling="1.0,1.0,1.0">
+<Model src="~meme_mug.obj" position="20.0,0.0,20.0" scaling="1.0,1.0,1.0">
+<Model src="~cat.obj" position="5.0,0.0,0.0" scaling="1.50,1.50,1.50">
+<Model src="~house_1.obj" position="0.0,0.0,-6.0" scaling="1.0,1.0,1.0">
+<Model src="~meme_mug.obj" position="-8.759998,0.0,-2.580005" scaling="1.0,1.0,1.0">
+<Model src="~meme_mug.obj" position="-3.420,0.0,5.909995" scaling="1.0,1.0,1.0">
+<Model src="~meme_mug.obj" position="1.740,0.0,5.909995" scaling="1.0,1.0,1.0">
+<Light colour="1.0,0.50,1.0" position="-18.0,10.0,10.0" scaling="1.0,1.0,1.0">
+<Light colour="1.0,1.0,0.50" position="1.0,6.80,5.0" scaling="1.0,1.0,1.0">
+<Billboard src="~character.dds" position="0.0,1.0,-1.50" rotation="0.0,3.141593,0.0" scaling="2.0,2.0,1.0">

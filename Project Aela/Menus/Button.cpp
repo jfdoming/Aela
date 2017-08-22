@@ -12,6 +12,11 @@ Aela::Button::Button(Texture* texture) : ImageComponent(texture), hoverTint(0.9f
 Aela::Button::Button(Texture* texture, Rect<int>* dimensions) : ImageComponent(texture, dimensions), hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
 }
 
+Aela::Button::Button(ColourRGBA* hoverTint, ColourRGBA* clickTint) {
+	this->hoverTint = *hoverTint;
+	this->clickTint = *clickTint;
+}
+
 Aela::Button::~Button() {
 }
 
@@ -31,7 +36,9 @@ void Aela::Button::update() {
 
 void Aela::Button::render(Renderer* renderer) {
 	ImageComponent::render(renderer);
-	text->render(renderer, &tint);
+	if (text != nullptr) {
+		text->render(renderer, &tint);
+	}
 }
 
 void Aela::Button::onEvent(Event* event) {

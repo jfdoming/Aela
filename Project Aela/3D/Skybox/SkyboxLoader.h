@@ -19,5 +19,8 @@ namespace Aela {
 			void operator=(SkyboxLoader const&) = delete;
 
 			virtual bool load(ResourceMap& resources, std::string src);
+
+		private:
+			const std::string defaultSkyboxPath = "res/skyboxes/";
 	};
 }

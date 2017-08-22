@@ -31,8 +31,8 @@ void AelaErrorHandler::throwError(AelaSimpleError error) {
 			NULL, /* .window */
 			titleAsChars, /* .title */
 			messageAsChars, /* .message */
-			numberOfButtons, /* .numbuttons */
-			buttons, /* .buttons */
+			numberOfErrorButtons, /* .numbuttons */
+			errorButtons, /* .errorButtons */
 			&colorScheme /* .colorScheme */
 		};
 
@@ -43,7 +43,35 @@ void AelaErrorHandler::throwError(AelaSimpleError error) {
 		}
 		if (buttonid == -1) {
 			SDL_Log("no selection");
-		} else if (buttons[buttonid].text == "End Program") {
+		} else if (errorButtons[buttonid].text == "End Program") {
+			requestProgramClose();
+		}
+	} else if (type == AELA_WARNING_WINDOW) {
+		// This must save the error message text as a string and then converting to a c string.
+		// Doing error.getTitle().c_str() returns nothing for some amazing reason.
+		std::string titleAsString = error.getTitle();
+		const char* titleAsChars = titleAsString.c_str();
+		std::string messageAsString = error.getMessage();
+		const char* messageAsChars = messageAsString.c_str();
+
+		SDL_MessageBoxData messageboxdata = {
+			SDL_MESSAGEBOX_INFORMATION, /* .flags */
+			NULL, /* .window */
+			titleAsChars, /* .title */
+			messageAsChars, /* .message */
+			numberOfWarningButtons, /* .numbuttons */
+			warningButtons, /* .errorButtons */
+			&colorScheme /* .colorScheme */
+		};
+
+		std::cout << error.getTitle().c_str() << "\n";
+		int buttonid;
+		if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
+			SDL_Log("error displaying message box");
+		}
+		if (buttonid == -1) {
+			SDL_Log("no selection");
+		} else if (errorButtons[buttonid].text == "End Program") {
 			requestProgramClose();
 		}
 	} else {
