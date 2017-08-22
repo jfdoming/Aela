@@ -76,6 +76,6 @@ void setupScenes(Engine* engine) {
 	engine->getSceneManager()->registerScene(mainMenuScene, 1);
 	engine->getSceneManager()->setCurrentScene(1);
 
-	// engine->getWindow()->hideCursor();
-	// engine->getRenderer()->getCamera()->setInUse(true);
+	 engine->getWindow()->hideCursor();
+	 engine->getRenderer()->getCamera()->setInUse(true);
 }

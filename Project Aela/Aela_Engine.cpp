@@ -212,6 +212,7 @@ void Engine::render() {
 }
 
 bool Engine::shouldExit() {
+	std::cout << "QuitCheck: | " << window.quitCheck() << " |\n";
 	return window.quitCheck() || AelaErrorHandling::programCloseWasRequested();
 }
 

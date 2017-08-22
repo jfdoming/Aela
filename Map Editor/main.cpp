@@ -56,5 +56,7 @@ int main(int argc, char *args[]) {
 		engine.render();
 	} while (!engine.shouldExit());
 
+	// TODO determine cause of black screen and crash
+
     return 0;
 }

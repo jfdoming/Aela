@@ -25,7 +25,7 @@ namespace Aela {
 			// These are typical window properties.
 			int windowWidth, windowHeight;
 			std::string windowName;
-			bool resizable, visibility, borderless, maximized, taskbarVisibility, hasFocus, shouldQuit;
+			bool resizable = false, visibility = false, borderless = false, maximized = false, taskbarVisibility = false, hasFocus = false, shouldQuit = false;
 
 			// This is the SDL_Window used by this class.
 			SDL_Window* window;
@@ -41,7 +41,6 @@ namespace Aela {
 		public:
 			// These are the constructors.
 			Window() {
-				hasFocus = true;
 				windowName = "Aela Window";
 			}
 
