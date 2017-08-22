@@ -3,7 +3,7 @@
 
 #include "Aela_Engine.h"
 #include "Scenes\SceneManager.h"
-#include "Menus\TextComponent.h"
+#include "Menus\Label.h"
 #include "Menus\ImageComponent.h"
 #include "Menus\ButtonComponent.h"
 #include "Menus\RectComponent.h"
@@ -15,6 +15,11 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	TextManager* textManager = engine->getTextManager();
 	int arialLarge = textManager->createNewTextFont("res/fonts/xerox.ttf");
 	textManager->adjustFontSize(arialLarge, 35);
+
+	if (arialLarge == -1) {
+		return;
+	}
+
 	int arial = textManager->createNewTextFont("res/fonts/xerox.ttf");
 	textManager->adjustFontSize(arial, 18);
 	ColourRGBA VSBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
@@ -28,18 +33,18 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	mainMenuImage->setTexture(mainMenuTexture);
 
 	// This sets up text.
-	TextComponent* titleText = new TextComponent("Project Aela Map Editor", arialLarge, &VSBlue, textManager);
+	Label* titleText = new Label("Project Aela Map Editor", arialLarge, &VSBlue, textManager);
 	titleText->getDimensions()->setX((int) (windowDimensions.getWidth() / 20));
 	titleText->getDimensions()->setY((int) (windowDimensions.getHeight() / 1.3f));
 
-	TextComponent* ekkonGamesText = new TextComponent("Ekkon Games", arial, &VSBlue, textManager);
+	Label* ekkonGamesText = new Label("Ekkon Games", arial, &VSBlue, textManager);
 	ekkonGamesText->getDimensions()->setX((int) (windowDimensions.getWidth() * 0.8));
 	ekkonGamesText->getDimensions()->setY((int) (windowDimensions.getHeight() * 0.95));
 
-	TextComponent* newMapButtonText = new TextComponent("Create New Map", arial, &VSBlue, textManager);
+	Label* newMapButtonText = new Label("Create New Map", arial, &VSBlue, textManager);
 	int spacing = newMapButtonText->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
-	TextComponent* loadMapButtonText = new TextComponent("Load Map", arial, &VSBlue, textManager);
-	TextComponent* exitButtonText = new TextComponent("Exit", arial, &VSBlue, textManager);
+	Label* loadMapButtonText = new Label("Load Map", arial, &VSBlue, textManager);
+	Label* exitButtonText = new Label("Exit", arial, &VSBlue, textManager);
 
 	auto newMap = [](Engine* engine) {
 		engine->getSceneManager()->setCurrentScene(2);
@@ -89,19 +94,19 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	topBarImage->setDimensions(&Rect<int>(0, 0, windowDimensions.getWidth(), windowDimensions.getHeight() / 18));
 	topBarImage->setTexture(topBarTexture);
 
-	TextComponent* entityTypeText = new TextComponent("Entity: Model", arial, &VSBlue, textManager);
+	Label* entityTypeText = new Label("Entity: Model", arial, &VSBlue, textManager);
 	entityTypeText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.02f), (int) (windowDimensions.getHeight() * 0.04f));
 	game->setEntityTypeText(entityTypeText);
 
-	TextComponent* positionText = new TextComponent("Position: 0, 0, 0", arial, &VSBlue, textManager);
+	Label* positionText = new Label("Position: 0, 0, 0", arial, &VSBlue, textManager);
 	positionText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.15f), (int) (windowDimensions.getHeight() * 0.04f));
 	game->setPositionText(positionText);
 
-	TextComponent* rotationText = new TextComponent("Rotation: 0, 0, 0", arial, &VSBlue, textManager);
+	Label* rotationText = new Label("Rotation: 0, 0, 0", arial, &VSBlue, textManager);
 	rotationText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.45f), (int) (windowDimensions.getHeight() * 0.04f));
 	game->setRotationText(rotationText);
 
-	TextComponent* scalingText = new TextComponent("Scaling: 1, 1, 1", arial, &VSBlue, textManager);
+	Label* scalingText = new Label("Scaling: 1, 1, 1", arial, &VSBlue, textManager);
 	scalingText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.75f), (int) (windowDimensions.getHeight() * 0.04f));
 	game->setScalingText(scalingText);
 

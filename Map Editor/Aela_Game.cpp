@@ -19,19 +19,19 @@ void AelaGame::setEngine(Engine* engine) {
 	sceneManager = engine->getSceneManager();
 }
 
-void AelaGame::setEntityTypeText(TextComponent* text) {
+void AelaGame::setEntityTypeText(Label* text) {
 	entityTypeText = text;
 }
 
-void AelaGame::setPositionText(TextComponent* text) {
+void AelaGame::setPositionText(Label* text) {
 	positionText = text;
 }
 
-void AelaGame::setRotationText(TextComponent* text) {
+void AelaGame::setRotationText(Label* text) {
 	rotationText = text;
 }
 
-void AelaGame::setScalingText(TextComponent* text) {
+void AelaGame::setScalingText(Label* text) {
 	scalingText = text;
 }
 
@@ -91,12 +91,12 @@ void AelaGame::setup() {
 }
 
 void AelaGame::update() {
-	/*positionText->setText("Position: " + toStringWithDecimal(transformableBeingPlaced.getPosition()->x, 3) + ", "
+	positionText->setText("Position: " + toStringWithDecimal(transformableBeingPlaced.getPosition()->x, 3) + ", "
 		+ toStringWithDecimal(transformableBeingPlaced.getPosition()->y, 3) + ", " + toStringWithDecimal(transformableBeingPlaced.getPosition()->z, 3));
 	rotationText->setText("Rotation: " + toStringWithDecimal(transformableBeingPlaced.getRotation()->x, 3) + ", "
 		+ toStringWithDecimal(transformableBeingPlaced.getRotation()->y, 3) + ", " + toStringWithDecimal(transformableBeingPlaced.getRotation()->z, 3));
 	scalingText->setText("Scaling: " + toStringWithDecimal(transformableBeingPlaced.getScaling()->x, 3) + ", "
-		+ toStringWithDecimal(transformableBeingPlaced.getScaling()->y, 3) + ", " + toStringWithDecimal(transformableBeingPlaced.getScaling()->z, 3));*/
+		+ toStringWithDecimal(transformableBeingPlaced.getScaling()->y, 3) + ", " + toStringWithDecimal(transformableBeingPlaced.getScaling()->z, 3));
 }
 
 void AelaGame::onEvent(Event* event) {

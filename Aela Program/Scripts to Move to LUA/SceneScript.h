@@ -5,7 +5,7 @@
 #include "Scenes\SceneManager.h"
 #include "Menus\TextComponent.h"
 #include "Menus\ImageComponent.h"
-#include "Menus\ButtonComponent.h"
+#include "Menus\Button.h"
 
 using namespace Aela;
 
@@ -27,9 +27,9 @@ void setupScenes(Engine* engine) {
 	image->setDimensions(&Rect<int>(0, 0, 1024, 60));
 	image->setTexture(texture);
 
-	TextComponent* buttonText = new TextComponent("Click me", arial, &textColour, textManager);
+	Label* buttonText = new Label("Click me", arial, &textColour, textManager);
 
-	ButtonComponent* button = new ButtonComponent;
+	Button* button = new Button();
 	success = engine->getResourceManager()->obtain<Texture>("res/textures/lol_button.dds", texture);
 	button->setDimensions(&Rect<int>(200, 200, 128, 64));
 	button->setTexture(texture);
@@ -76,6 +76,6 @@ void setupScenes(Engine* engine) {
 	engine->getSceneManager()->registerScene(mainMenuScene, 1);
 	engine->getSceneManager()->setCurrentScene(1);
 
-	engine->getWindow()->hideCursor();
-	engine->getRenderer()->getCamera()->setInUse(true);
+	//engine->getWindow()->hideCursor();
+	//engine->getRenderer()->getCamera()->setInUse(true);
 }

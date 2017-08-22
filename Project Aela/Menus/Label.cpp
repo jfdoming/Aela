@@ -1,67 +1,71 @@
-#include "TextComponent.h"
+/*
+* Class: TextComponent
+* Author: Julian Dominguez-Schatz and Robert Ciborowski
+* Date: 22/08/2017
+* Description: A class which represents a line of text.
+*/
+
+#include "Label.h"
 
 using namespace Aela;
 
-TextComponent::TextComponent() {
-}
-
-Aela::TextComponent::TextComponent(std::string text, int font, TextManager* textManager) : colour(1, 1, 1, 1) {
+Label::Label(std::string text, int font, TextManager* textManager) : colour(1, 1, 1, 1) {
 	this->text = text;
 	this->font = font;
 	setup(textManager);
 }
 
-Aela::TextComponent::TextComponent(std::string text, int font, ColourRGBA* colour, TextManager* textManager) {
+Label::Label(std::string text, int font, ColourRGBA* colour, TextManager* textManager) {
 	this->text = text;
 	this->font = font;
 	this->colour = *colour;
 	setup(textManager);
 }
 
-TextComponent::~TextComponent() {
+Label::~Label() {
 }
 
-void Aela::TextComponent::setup(TextManager* textManager) {
+void Label::setup(TextManager* textManager) {
 	setupWidthAndHeight(textManager);
 }
 
-void TextComponent::update() {
+void Label::update() {
 }
 
-void TextComponent::render(Renderer* renderer) {
+void Label::render(Renderer* renderer) {
 	renderer->renderText(text, font, &dimensions, &colour);
 }
 
-void TextComponent::render(Renderer* renderer, ColourRGBA* tint) {
+void Label::render(Renderer* renderer, ColourRGBA* tint) {
 	ColourRGBA newColour(colour.getR() * tint->getR(), colour.getG() * tint->getG(), colour.getB() * tint->getB(), colour.getA() * tint->getA());
 	renderer->renderText(text, font, &dimensions, &newColour);
 }
 
-void Aela::TextComponent::setText(std::string text) {
+void Label::setText(std::string text) {
 	this->text = text;
 }
 
-std::string Aela::TextComponent::getText() {
+std::string Label::getText() {
 	return text;
 }
 
-void Aela::TextComponent::setFont(int font) {
+void Label::setFont(int font) {
 	this->font = font;
 }
 
-int Aela::TextComponent::getFont() {
+int Label::getFont() {
 	return font;
 }
 
-void Aela::TextComponent::setColour(ColourRGBA* colour) {
+void Label::setColour(ColourRGBA* colour) {
 	this->colour = *colour;
 }
 
-ColourRGBA* Aela::TextComponent::getColour() {
+ColourRGBA* Label::getColour() {
 	return &colour;
 }
 
-void Aela::TextComponent::setupWidthAndHeight(TextManager* textManager) {
+void Label::setupWidthAndHeight(TextManager* textManager) {
 	FT_Face face = (*(textManager->getTextFont(font)->getFace()));
 	FT_GlyphSlot glyph = face->glyph;
 	FT_BBox bbox = face->bbox;

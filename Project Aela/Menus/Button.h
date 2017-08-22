@@ -2,7 +2,7 @@
 * Class: ButtonComponent
 * Author: Robert Ciborowski
 * Date: 16/08/2017
-* Description: A class which represents a button. The onclick action may either by a function or an AelaEngineFunctor, but only
+* Description: A class which represents a button. The onclick action may either be a function or an AelaEngineFunctor, but only
                one should be used.
 */
 
@@ -10,25 +10,24 @@
 
 #include "Component.h"
 #include "ImageComponent.h"
-#include "TextComponent.h"
+#include "Label.h"
 #include "../Events/EventHandler.h"
 #include "../Utilities/AelaEngineFunctor.h"
 
 namespace Aela {
-	class ButtonComponent : public ImageComponent, public Listener {
+	class Button : public ImageComponent, public Listener {
 		public:
-			ButtonComponent();
-			ButtonComponent(Texture* texture);
-			ButtonComponent(Texture* texture, Rect<int>* dimensions);
-			virtual ~ButtonComponent();
+			Button();
+			Button(Texture* texture);
+			Button(Texture* texture, Rect<int>* dimensions);
+			virtual ~Button();
 
 			// These are getters and setters.
-			void bindWindow(Window* window);
-			bool isClicked();
 			void setupOnClick(void(*function)(), EventHandler* eventHandler);
 			void setupOnClick(AelaEngineFunctor* functor, EventHandler* eventHandler);
-			void setText(TextComponent* text, TextManager* textManager);
-			TextComponent* getText();
+			void setText(Label* text, TextManager* textManager);
+			std::string getText();
+
 			void setHoverTint(ColourRGBA* hoverTint);
 			void setClickTint(ColourRGBA* clickTint);
 
@@ -38,11 +37,16 @@ namespace Aela {
 			void onEvent(Event* event);
 
 		private:
-			Window* window;
-			bool clicked = false;
+			enum class State {
+				NORMAL, HOVER, ACTIVE
+			};
+
+			bool clickStarted = false;
+			State state = State::NORMAL;
+
 			void (*onClick)() = nullptr;
 			AelaEngineFunctor onClickFunctor;
-			TextComponent text;
+			Label* text;
 
 			// These are the tints used by the button. Keep in mind that a tint is a multiplier.
 			ColourRGBA hoverTint, clickTint;

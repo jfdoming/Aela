@@ -74,6 +74,11 @@ template <class T> class Rect {
 			return height;
 		}
 
+		bool contains(T x, T y) {
+			return x >= xPosition && x < xPosition + width && y >= yPosition
+				&& y < yPosition + height;
+		}
+
 	protected:
 		T xPosition, yPosition, width, height;
 };
