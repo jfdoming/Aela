@@ -70,12 +70,13 @@
     <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp" />
     <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="Menus\ImageComponent.cpp" />
-    <ClCompile Include="Menus\ButtonComponent.cpp" />
     <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
     <ClCompile Include="3D\Animator\KeyedAnimator3D.cpp" />
     <ClCompile Include="User Environment\UserEnvironment.cpp" />
     <ClCompile Include="Menus\RectComponent.cpp" />
     <ClCompile Include="2D\Text\FontManager.cpp" />
+    <ClCompile Include="Menus\Label.cpp" />
+    <ClCompile Include="Menus\Button.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -160,7 +161,6 @@
     <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
     <ClInclude Include="Window\Window.h" />
     <ClInclude Include="Menus\ImageComponent.h" />
-    <ClInclude Include="Menus\ButtonComponent.h" />
     <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
     <ClInclude Include="Utilities\strut.h" />
     <ClInclude Include="Utilities\AelaEngineFunctor.h" />
@@ -168,5 +168,7 @@
     <ClInclude Include="User Environment\UserEnvironment.h" />
     <ClInclude Include="Menus\RectComponent.h" />
     <ClInclude Include="2D\Text\FontManager.h" />
+    <ClInclude Include="Menus\Label.h" />
+    <ClInclude Include="Menus\Button.h" />
   </ItemGroup>
 </Project>

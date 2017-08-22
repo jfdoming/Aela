@@ -64,11 +64,11 @@ int Aela::Engine::runningLoop() {
 		animator3D.update();
 		
 		// This updates and renders the current scene.
-		Aela::Scene* currentScene = sceneManager.getCurrentScene();
+		/*Aela::Scene* currentScene = sceneManager.getCurrentScene();
 		if (currentScene != nullptr) {
 			currentScene->update();
 			currentScene->render(&renderer);
-		}
+		}*/
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
 	// This will call each model's destructor, which will delete each model's texture. I'm not sure if this
 	// is done automatically by OpenGL or Windows when the program closes, so I added it just in case.
@@ -99,8 +99,8 @@ int Aela::Engine::setupWindow(unsigned int width, unsigned int height, unsigned 
 }
 
 int Aela::Engine::setupRenderer() {
-	// This makes the textManager initialize the FreeType library and setup other things.
-	textManager.setup();
+	// This makes the fontManager initialize the FreeType library and setup other things.
+	fontManager.setup();
 
 	// This initializes GLEW.
 	glewExperimental = true;
@@ -113,7 +113,7 @@ int Aela::Engine::setupRenderer() {
 	// Please note that the window must be set before calling setup functions.
 	renderer.setWindow(&window);
 	renderer.setTimeManager(&timeManager);
-	renderer.setTextManager(&textManager);
+	renderer.setFontManager(&fontManager);
 	renderer.setup3D();
 	renderer.setup2D();
 
@@ -182,33 +182,19 @@ int Aela::Engine::loadUserEnvironmentInformation() {
 	return 0;
 }
 
-Scene* currentScene;
-
 // This method is meant to be run by another program that uses the Project Aela library. It starts Project Aela.
 void Engine::update() {
-	// determine the current scene
-	if (sceneManager.consumeSceneChangeEvent()) {
-		currentScene = sceneManager.getCurrentScene();
-	}
-
 	// Note: Events should be updated first.
 	eventHandler.updateSDLEvents();
+
 	timeManager.updateTime();
 	sceneManager.update();
 	animator3D.update();
 	keyedAnimator3D.update();
-
-	// update the current scene
-	if (currentScene != nullptr) {
-		currentScene->update();
-	}
 }
 
 void Engine::render() {
-	// This renders the current scene.
-	if (currentScene != nullptr) {
-		currentScene->render(&renderer);
-	}
+	sceneManager.render(&renderer);
 }
 
 bool Engine::shouldExit() {
@@ -231,8 +217,8 @@ TimeManager* Engine::getTimeManager() {
 	return &timeManager;
 }
 
-FontManager* Engine::getTextManager() {
-	return &textManager;
+FontManager* Engine::getFontManager() {
+	return &fontManager;
 }
 
 LuaManager* Engine::getLuaManager() {

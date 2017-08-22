@@ -12,13 +12,13 @@ using namespace Aela;
 
 // This returns a TextFont with the specified properties.
 TextFont* FontManager::obtainTextFont(std::string name, unsigned int size) {
-	TextFont font;
-	if (FT_New_Face(freetype, name.c_str(), 0, font.getFace())) {
+	TextFont* font = new TextFont();
+	if (FT_New_Face(freetype, name.c_str(), 0, font->getFace())) {
 		AelaErrorHandling::consoleWindowError("Project Aela's Font Manager", "Could not open the font " + name + ".");
 		return nullptr;
 	}
-	font.setSize(size);
-	return &font;
+	font->setSize(size);
+	return font;
 }
 
 // This sets up the freetype library.

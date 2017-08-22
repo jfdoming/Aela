@@ -29,7 +29,7 @@ namespace Aela {
 			// These are getters and setters.
 			Menu* getMenu();
 			void setId(int id);
-			int getId();
+			unsigned int getId();
 			void setMap(Map3D* map);
 			Map3D* getMap();
 			void setActiveSkybox(unsigned int activeSkybox);
@@ -43,7 +43,7 @@ namespace Aela {
 			// This keeps track of the skybox that is currently in use.
 			unsigned int activeSkybox = 0;
 
-			int id = 0;
+			unsigned int id = 0;
 			Menu menu;
 	};
 }

@@ -81,7 +81,7 @@ void Scene::setId(int id) {
 	this->id = id;
 }
 
-int Scene::getId() {
+unsigned int Scene::getId() {
 	return id;
 }
 

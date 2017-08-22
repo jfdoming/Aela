@@ -9,7 +9,6 @@
 #include "Aela_Game.h"
 #include "Scripts to Move to LUA/ResourceScript.h"
 #include "Scripts to Move to LUA/SceneScript.h"
-#include "Scripts to Move to LUA/GameStartupScript.h"
 #include "Utilities/strut.h"
 
 using namespace Aela;
@@ -20,19 +19,19 @@ void AelaGame::setEngine(Engine* engine) {
 	sceneManager = engine->getSceneManager();
 }
 
-void AelaGame::setEntityTypeText(TextComponent* text) {
+void AelaGame::setEntityTypeText(Label* text) {
 	entityTypeText = text;
 }
 
-void AelaGame::setPositionText(TextComponent* text) {
+void AelaGame::setPositionText(Label* text) {
 	positionText = text;
 }
 
-void AelaGame::setRotationText(TextComponent* text) {
+void AelaGame::setRotationText(Label* text) {
 	rotationText = text;
 }
 
-void AelaGame::setScalingText(TextComponent* text) {
+void AelaGame::setScalingText(Label* text) {
 	scalingText = text;
 }
 
@@ -70,7 +69,6 @@ void AelaGame::setup() {
 	engine->getRenderer()->activateFeature(RendererFeature::MSAA_2D_X4);
 	loadResources();
 	loadScenes();
-	setupGameElements(engine, this);
 	engine->getEventHandler()->addListener(EventConstants::KEY_RELEASED, this);
 
 	bool success = resourceManager->obtain<Model>(defaultModelResource, defaultModel);
@@ -139,11 +137,11 @@ void AelaGame::onEvent(Event* event) {
 				}
 				break;
 			case SDLK_ESCAPE:
-				if (sceneManager->getCurrentScene()->getId() == 2) {
+				if (sceneManager->getCurrentSceneId() == 2) {
 					sceneManager->setCurrentScene(3);
 					engine->getWindow()->showCursor();
 					engine->getRenderer()->getCamera()->setInUse(false);
-				} else if (sceneManager->getCurrentScene()->getId() == 3) {
+				} else if (sceneManager->getCurrentSceneId() == 3) {
 					sceneManager->setCurrentScene(2);
 					engine->getWindow()->hideCursor();
 					engine->getRenderer()->getCamera()->setInUse(true);

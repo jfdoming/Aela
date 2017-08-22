@@ -101,8 +101,8 @@ void Renderer::setTimeManager(TimeManager* timeManager) {
 	this->timeManager = timeManager;
 }
 
-void Renderer::setTextManager(FontManager* textManager) {
-	this->textManager = textManager;
+void Renderer::setFontManager(FontManager* fontManager) {
+	this->fontManager = fontManager;
 }
 
 void Aela::Renderer::bindLights(std::unordered_map<int, LightEntity>* lights) {
@@ -174,7 +174,7 @@ void Renderer::render2DTexture(Texture* texture, Rect<int>* output, ColourRGBA* 
 // This renders text using the 2D renderer.
 void Renderer::renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour) {
 	basic2DRenderer.renderTextToSimple2DFramebuffer(text, font, bound2DFramebuffer, output, window->getWindowDimensions(), colour,
-		textManager->POINTS_PER_PIXEL);
+		fontManager->POINTS_PER_PIXEL);
 }
 
 // This renders a rectangle using the 2D renderer.

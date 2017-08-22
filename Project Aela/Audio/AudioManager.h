@@ -24,8 +24,8 @@ namespace Aela {
 			AudioListener getListener();
 
 		private:
-			ALCcontext* context;
-			ALCdevice* audioDevice;
+			ALCcontext* context = nullptr;
+			ALCdevice* audioDevice = nullptr;
 
 			void clearErrors();
 			bool checkError(std::string* msg);

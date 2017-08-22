@@ -5,7 +5,7 @@
 #include "Scenes\SceneManager.h"
 #include "Menus\TextComponent.h"
 #include "Menus\ImageComponent.h"
-#include "Menus\ButtonComponent.h"
+#include "Menus\Button.h"
 
 using namespace Aela;
 
@@ -15,8 +15,12 @@ void test() {
 
 void setupScenes(Engine* engine) {
 	// This creates text-related objects.
-	FontManager* textManager = engine->getTextManager();
-	TextFont xerox = *textManager->obtainTextFont("res/fonts/xerox.ttf", 22);
+	FontManager* fontManager = engine->getFontManager();
+	TextFont* xerox = fontManager->obtainTextFont("res/fonts/xerox.ttf", 22);
+	if (xerox == nullptr) {
+		AelaErrorHandling::windowError("A critical font (xerox.ttf) could not be loaded, aborting!");
+		return;
+	}
 	ColourRGBA textColour(0.5f, 0.4f, 0.3f, 1.0f);
 
 	// This sets up an image.
@@ -26,16 +30,16 @@ void setupScenes(Engine* engine) {
 	image->setDimensions(&Rect<int>(0, 0, 1024, 60));
 	image->setTexture(texture);
 
-	TextComponent* buttonText = new TextComponent("Click me", &xerox, &textColour, textManager);
+	Label* buttonText = new Label("Click me", xerox, &textColour, fontManager);
 
-	ButtonComponent* button = new ButtonComponent;
+	Button* button = new Button();
 	success = engine->getResourceManager()->obtain<Texture>("res/textures/lol_button.dds", texture);
 	button->setDimensions(&Rect<int>(200, 200, 128, 64));
 	button->setTexture(texture);
 	button->setupOnClick(&test, engine->getEventHandler());
-	button->setText(buttonText, engine->getTextManager());
+	button->setText(buttonText, engine->getFontManager());
 
-	TextComponent* gameTitleText = new TextComponent("Test", &xerox, &textColour, textManager);
+	TextComponent* gameTitleText = new TextComponent("Test", xerox, &textColour, fontManager);
 	Rect<int> textOutput(100, 100, 300, 300);
 	gameTitleText->setDimensions(&textOutput);
 
@@ -75,6 +79,6 @@ void setupScenes(Engine* engine) {
 	engine->getSceneManager()->registerScene(mainMenuScene, 1);
 	engine->getSceneManager()->setCurrentScene(1);
 
-	engine->getWindow()->hideCursor();
-	engine->getRenderer()->getCamera()->setInUse(true);
+	//engine->getWindow()->hideCursor();
+	//engine->getRenderer()->getCamera()->setInUse(true);
 }

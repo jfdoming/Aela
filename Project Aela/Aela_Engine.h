@@ -27,7 +27,7 @@
 #include "3D/Animator/Animator3D.h"
 #include "3D/Animator/KeyedAnimator3D.h"
 #include "3D/Particles/PlanarParticleEmitter.h"
-#include "Menus/TextComponent.h"
+#include "Menus/Label.h"
 #include "User Environment/UserEnvironment.h"
 #include "Framerate Calculator/FramerateCalculator.h"
 
@@ -56,7 +56,7 @@ namespace Aela {
 			Renderer* getRenderer();
 			EventHandler* getEventHandler();
 			TimeManager* getTimeManager();
-			FontManager* getTextManager();
+			FontManager* getFontManager();
 			LuaManager* getLuaManager();
 			SceneManager* getSceneManager();
 			ResourceManager* getResourceManager();
@@ -72,7 +72,7 @@ namespace Aela {
 			Renderer renderer;
 			EventHandler eventHandler;
 			TimeManager timeManager;
-			FontManager textManager;
+			FontManager fontManager;
 			LuaManager luaManager;
 			SceneManager sceneManager;
 			ResourceManager resourceManager;

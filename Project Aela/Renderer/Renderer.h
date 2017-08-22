@@ -81,7 +81,7 @@ namespace Aela {
 			// before rendering.
 			void setWindow(Window* window);
 			void setTimeManager(TimeManager* timeManager);
-			void setTextManager(FontManager* textManager);
+			void setFontManager(FontManager* fontManager);
 
 			// This stores a pointer to the list of lights. It's easier to bind a list of lights
 			// once than to send each light every frame.
@@ -144,7 +144,7 @@ namespace Aela {
 			Camera3D camera;
 			TimeManager* timeManager;
 			Window* window;
-			FontManager* textManager;
+			FontManager* fontManager;
 			Simple2DFramebuffer* bound2DFramebuffer;
 
 			// This represents the framebuffer that is attached to the screen.

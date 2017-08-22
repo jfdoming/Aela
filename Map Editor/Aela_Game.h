@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Aela_Engine.h"
+#include "Menus\Label.h"
 
 using namespace Aela;
 
@@ -27,10 +28,10 @@ class AelaGame : public Listener {
 		void setMapBeingEdited(Map3D* mapBeingEdited);
 		Map3D* getMapBeingEdited();
 		void setEngine(Engine* engine);
-		void setEntityTypeText(TextComponent* text);
-		void setPositionText(TextComponent* text);
-		void setRotationText(TextComponent* text);
-		void setScalingText(TextComponent* text);
+		void setEntityTypeText(Label* text);
+		void setPositionText(Label* text);
+		void setRotationText(Label* text);
+		void setScalingText(Label* text);
 
 	private:
 		// These are handles to objects in the Aela namespace.
@@ -40,10 +41,10 @@ class AelaGame : public Listener {
 
 		// These are handles to other various objects.
 		Map3D* mapBeingEdited;
-		TextComponent* entityTypeText;
-		TextComponent* positionText;
-		TextComponent* rotationText;
-		TextComponent* scalingText;
+		Label* entityTypeText;
+		Label* positionText;
+		Label* rotationText;
+		Label* scalingText;
 
 		// This is the entities that is being placed. It stores a pointer to one of the entities below. This is done to bypass
 		// the fact that types of entities such as ModelEntity cannot be casted upon a generic Entity.

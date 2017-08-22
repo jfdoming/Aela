@@ -1,25 +1,21 @@
 /*
-* Class: TextComponent
+* Class: Label
 * Author: Julian Dominguez-Schatz and Robert Ciborowski
-* Date: 20/03/2017
-* Description: A class which represents a text component. It allows the user to enter text.
+* Date: 22/08/2017
+* Description: A class which represents a line of text.
 */
 
 #pragma once
 #include "Component.h"
 
 namespace Aela {
-	class TextComponent : public Component {
+	class Label : public Component {
 		public:
-			// This is the default constructor, which will require the user to call setup() once the object's properties are set.
-			TextComponent();
-
 			// These are constructors that do not require the user to call setup() as they do it for the user.
-			TextComponent(std::string text, TextFont* font, FontManager* fontManager);
-			TextComponent(std::string text, TextFont* font, ColourRGBA* colour, FontManager* fontManager);
+			Label(std::string text, TextFont* font, FontManager* fontManager);
+			Label(std::string text, TextFont* font, ColourRGBA* colour, FontManager* fontManager);
 
-			// This is the destructor.
-			~TextComponent();
+			virtual ~Label();
 
 			void setup(FontManager* fontManager);
 			virtual void update();

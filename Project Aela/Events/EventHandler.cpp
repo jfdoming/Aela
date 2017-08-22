@@ -68,6 +68,14 @@ void EventHandler::updateSDLEvents() {
 											event.button.x,
 											event.button.y));
 				break;
+			case SDL_MOUSEMOTION:
+				fireEvent(new MouseEvent(EventConstants::MOUSE_MOVED,
+											event.button.button,
+											event.key.keysym.mod,
+											event.button.clicks,
+											event.button.x,
+											event.button.y));
+				break;
 		}
 	}
 }
