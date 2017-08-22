@@ -13,9 +13,9 @@ using namespace Aela;
 void setupScenes(Engine* engine, AelaGame* game) {
 	// This creates some objects for later.
 	TextManager* textManager = engine->getTextManager();
-	int arialLarge = textManager->createNewTextFont("xerox.ttf");
+	int arialLarge = textManager->createNewTextFont("res/fonts/xerox.ttf");
 	textManager->adjustFontSize(arialLarge, 35);
-	int arial = textManager->createNewTextFont("xerox.ttf");
+	int arial = textManager->createNewTextFont("res/fonts/xerox.ttf");
 	textManager->adjustFontSize(arial, 18);
 	ColourRGBA VSBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
 	Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getWindowDimensions());

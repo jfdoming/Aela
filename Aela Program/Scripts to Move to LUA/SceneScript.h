@@ -16,7 +16,7 @@ void test() {
 void setupScenes(Engine* engine) {
 	// This creates text-related objects.
 	TextManager* textManager = engine->getTextManager();
-	int arial = textManager->createNewTextFont("xerox.ttf");
+	int arial = textManager->createNewTextFont("res/fonts/xerox.ttf");
 	textManager->adjustFontSize(arial, 22);
 	ColourRGBA textColour(0.5f, 0.4f, 0.3f, 1.0f);
 
