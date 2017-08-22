@@ -17,11 +17,5 @@ namespace Aela {
 
 			Resource(const Resource&) = delete;
 			void operator=(const Resource&) = delete;
-
-			void setSource(std::string source);
-			std::string getSource();
-
-		protected:
-			std::string source;
 	};
 }

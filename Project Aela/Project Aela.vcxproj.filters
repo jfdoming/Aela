@@ -19,7 +19,6 @@
     <ClCompile Include="3D\Models\SubModel.cpp" />
     <ClCompile Include="3D\Particles\Particle.cpp" />
     <ClCompile Include="3D\Particles\ParticleEmitter.cpp" />
-    <ClCompile Include="3D\Particles\ParticleLoader.cpp" />
     <ClCompile Include="3D\Particles\PlanarParticleEmitter.cpp" />
     <ClCompile Include="3D\Particles\PointParticleEmitter.cpp" />
     <ClCompile Include="3D\Renderer\Basic3DModelRenderer.cpp" />
@@ -70,14 +69,13 @@
     <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp" />
     <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="Menus\ImageComponent.cpp" />
-    <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
     <ClCompile Include="3D\Animator\KeyedAnimator3D.cpp" />
     <ClCompile Include="User Environment\UserEnvironment.cpp" />
     <ClCompile Include="Menus\RectComponent.cpp" />
-    <ClCompile Include="2D\Text\FontManager.cpp" />
     <ClCompile Include="Menus\Label.cpp" />
     <ClCompile Include="Menus\Button.cpp" />
-    <ClCompile Include="3D\Maps\Map3DExporter.cpp" />
+    <ClCompile Include="3D\Particles\ParticleLoader.cpp" />
+    <ClCompile Include="2D\Text\FontManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -100,7 +98,6 @@
     <ClInclude Include="3D\Models\SubModel.h" />
     <ClInclude Include="3D\Particles\Particle.h" />
     <ClInclude Include="3D\Particles\ParticleEmitter.h" />
-    <ClInclude Include="3D\Particles\ParticleLoader.h" />
     <ClInclude Include="3D\Particles\PlanarParticleEmitter.h" />
     <ClInclude Include="3D\Particles\PointParticleEmitter.h" />
     <ClInclude Include="3D\Renderer\Basic3DModelRenderer.h" />
@@ -152,7 +149,6 @@
     <ClInclude Include="Time Manager\TimeManager.h" />
     <ClInclude Include="Utilities\Colour\ColourRGB.h" />
     <ClInclude Include="Utilities\Colour\ColourRGBA.h" />
-    <ClInclude Include="Utilities\Rect\Cuboid.h" />
     <ClInclude Include="Utilities\Rect\Rect.h" />
     <ClInclude Include="Aela_Engine.h" />
     <ClInclude Include="Resource Management\Resource.h" />
@@ -162,15 +158,16 @@
     <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
     <ClInclude Include="Window\Window.h" />
     <ClInclude Include="Menus\ImageComponent.h" />
-    <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
     <ClInclude Include="Utilities\strut.h" />
-    <ClInclude Include="Utilities\AelaEngineFunctor.h" />
     <ClInclude Include="3D\Animator\KeyedAnimator3D.h" />
     <ClInclude Include="User Environment\UserEnvironment.h" />
     <ClInclude Include="Menus\RectComponent.h" />
-    <ClInclude Include="2D\Text\FontManager.h" />
     <ClInclude Include="Menus\Label.h" />
     <ClInclude Include="Menus\Button.h" />
-    <ClInclude Include="3D\Maps\Map3DExporter.h" />
+    <ClInclude Include="2D\Text\TextManager.h" />
+    <ClInclude Include="3D\Particles\ParticleLoader.h" />
+    <ClInclude Include="Utilities\AelaEngineFunctor.h" />
+    <ClInclude Include="Utilities\Rect\Cuboid.h" />
+    <ClInclude Include="2D\Text\FontManager.h" />
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 
 #include "Aela_Engine.h"
 #include "Scenes\SceneManager.h"
-#include "Menus\TextComponent.h"
+#include "Menus\Label.h"
 #include "Menus\ImageComponent.h"
 #include "Menus\Button.h"
 
@@ -39,7 +39,7 @@ void setupScenes(Engine* engine) {
 	button->setupOnClick(&test, engine->getEventHandler());
 	button->setText(buttonText, engine->getFontManager());
 
-	TextComponent* gameTitleText = new TextComponent("Test", xerox, &textColour, fontManager);
+	Label* gameTitleText = new Label("Test", xerox, &textColour, fontManager);
 	Rect<int> textOutput(100, 100, 300, 300);
 	gameTitleText->setDimensions(&textOutput);
 

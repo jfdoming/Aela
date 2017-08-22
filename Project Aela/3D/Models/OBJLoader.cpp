@@ -40,13 +40,17 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 
 	Model* res = new Model();
 
-	// This checks to see if the resource can use the "~" shortcut for its path to signify that the resource is using the
+	// I'm removing this feature for now, since it's rather important to be consistent throughout Aela in resource conventions.
+	// In addition, this currently does not save any memory since an extra property was added to every resource.
+	// Please talk to me about re-adding this feature if you need it.
+
+	/*// This checks to see if the resource can use the "~" shortcut for its path to signify that the resource is using the
 	// commonly excepted path for its resource type. Doing this saves memory.
-	if (src.substr(0, defaultModelPath.size()) == defaultModelPath) {
-		res->setSource("~" + src.substr(defaultModelPath.size(), src.size()));
+	if (src.substr(0, defaultTexturePath.size()) == defaultTexturePath) {
+		result->setSource("~" + src.substr(defaultTexturePath.size(), src.size()));
 	} else {
-		res->setSource(src);
-	}
+		result->setSource(src);
+	}*/
 	std::string materialName = "";
 
 	// This actually reads the file.

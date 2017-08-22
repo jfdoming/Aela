@@ -39,13 +39,17 @@ void SkyboxLoader::expose(LuaManager& mgr) {
 bool SkyboxLoader::load(ResourceMap& resources, std::string src) {
 	Skybox* res = new Skybox();
 
-	// This checks to see if the resource can use the "~" shortcut for its path to signify that the resource is using the
+	// I'm removing this feature for now, since it's rather important to be consistent throughout Aela in resource conventions.
+	// In addition, this currently does not save any memory since an extra property was added to every resource.
+	// Please talk to me about re-adding this feature if you need it.
+
+	/*// This checks to see if the resource can use the "~" shortcut for its path to signify that the resource is using the
 	// commonly excepted path for its resource type. Doing this saves memory.
-	if (src.substr(0, defaultSkyboxPath.size()) == defaultSkyboxPath) {
-		res->setSource("~" + src.substr(defaultSkyboxPath.size(), src.size()));
+	if (src.substr(0, defaultTexturePath.size()) == defaultTexturePath) {
+		result->setSource("~" + src.substr(defaultTexturePath.size(), src.size()));
 	} else {
-		res->setSource(src);
-	}
+		result->setSource(src);
+	}*/
 
 	GLuint* cubeMapTexture = res->getTexture();
 	glGenTextures(1, cubeMapTexture);
