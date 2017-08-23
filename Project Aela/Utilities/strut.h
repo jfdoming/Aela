@@ -50,3 +50,8 @@ static std::string toStringWithATrailingZero(float value) {
 	}
 	return s;
 }
+
+static bool startsWith(std::string& haystack, std::string& searchString) {
+	return searchString.length() <= haystack.length()
+		&& equal(searchString.begin(), searchString.end(), haystack.begin());
+}

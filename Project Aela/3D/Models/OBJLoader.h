@@ -32,8 +32,6 @@ namespace Aela {
 				};
 			};
 
-			const std::string defaultModelPath = "res/models/";
-
 			void setupSubModel(SubModel* subModel, std::vector<unsigned int>* vertexIndices, std::vector<unsigned int>* uvIndices,
 				std::vector<unsigned int>* normalIndices, std::vector<glm::vec3>* tempVertices, std::vector<glm::vec2>* tempUVs,
 				std::vector<glm::vec3>* tempNormals);

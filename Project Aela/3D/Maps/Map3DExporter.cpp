@@ -6,7 +6,14 @@
 */
 
 #include "Map3DExporter.h"
+#include "Resource Management/ResourcePaths.h"
 #include "../../Utilities/strut.h"
+
+std::string abbreviate(std::string& src, std::string defaultPath) {
+	if (startsWith(src, defaultPath)) {
+		src = "~" + src.substr(defaultPath.size(), src.size());
+	}
+}
 
 bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsReadable) {
 	std::ofstream file;
@@ -15,25 +22,32 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 	bool success;
 	if (file.is_open()) {
 		success = true;
+
 		for (auto pair : *map->getSkyboxes()) {
 			SkyboxEntity* entity = &pair.second;
 			file << "<Skybox src=\"";
 			std::string path = entity->getSkybox()->getSrc();
+			abbreviate(path, DEFAULT_SKYBOX_PATH);
+
 			file << path << "\">";
 			if (mapIsReadable) {
 				file << "\n";
 			}
 		}
+
 		for (auto pair : *map->getModels()) {
 			ModelEntity* entity = &pair.second;
 			file << "<Model src=\"";
 			std::string path = entity->getModel()->getSrc();
+			abbreviate(path, DEFAULT_MODEL_PATH);
+
 			file << path << "\"";
 			file << getTransformableString(entity) << ">";
 			if (mapIsReadable) {
 				file << "\n";
 			}
 		}
+
 		for (auto pair : *map->getLights()) {
 			LightEntity* entity = &pair.second;
 			file << "<Light";
@@ -43,10 +57,13 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 				file << "\n";
 			}
 		}
+
 		for (auto pair : *map->getBillboards()) {
 			BillboardEntity* entity = &pair.second;
 			file << "<Billboard src=\"";
 			std::string path = entity->getTexture()->getSrc();
+			abbreviate(path, DEFAULT_TEXTURE_PATH);
+
 			file << path << "\"";
 			file << getBillboardString(entity);
 			file << getTransformableString(entity) << ">";

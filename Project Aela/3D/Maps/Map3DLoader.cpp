@@ -8,6 +8,7 @@
 #include "Map3DLoader.h"
 
 #include <glm/gtc/constants.hpp>
+#include "../../Resource Management/ResourcePaths.h"
 
 using namespace Aela;
 
@@ -82,13 +83,13 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						if (source.at(0) == '~') {
 							source = source.substr(1, source.size() - 1);
 							if (entityType == EntityType::MODEL) {
-								source = defaultModelPath + source;
+								source = DEFAULT_MODEL_PATH + source;
 							}
 							if (entityType == EntityType::BILLBOARD) {
-								source = defaultBillboardPath + source;
+								source = DEFAULT_TEXTURE_PATH + source;
 							}
 							if (entityType == EntityType::SKYBOX) {
-								source = defaultSkyboxPath + source;
+								source = DEFAULT_SKYBOX_PATH + source;
 							}
 						}
 						bool success = resources.get(source, res);

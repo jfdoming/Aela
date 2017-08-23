@@ -1,4 +1,4 @@
-/*
+/**
  * Class: SceneManager
  * Author: Julian Dominguez-Schatz
  * Date: 26/02/2017
