@@ -6,10 +6,10 @@
 */
 
 #include "Map3DExporter.h"
-#include "Resource Management/ResourcePaths.h"
+#include "../../Resource Management/ResourcePaths.h"
 #include "../../Utilities/strut.h"
 
-std::string abbreviate(std::string& src, std::string defaultPath) {
+void abbreviate(std::string& src, std::string defaultPath) {
 	if (startsWith(src, defaultPath)) {
 		src = "~" + src.substr(defaultPath.size(), src.size());
 	}

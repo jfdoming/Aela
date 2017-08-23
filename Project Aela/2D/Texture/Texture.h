@@ -13,7 +13,7 @@
 #include <GL/glew.h>
 #include "../../Utilities/Rect/Rect.h"
 #include "../../Resource Management/Resource.h"
-#include "2D/Texture/Image.h"
+#include "Image.h"
 
 class Texture : public Aela::Resource {
 	public:
