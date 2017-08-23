@@ -61,8 +61,8 @@ void Basic2DRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer,
 	// texture generation code to avoid only one of the two (buffer and texture) being generated.
 	// This is especially important since some textures are tied to the framebuffer.
 
-	GLuint* texture = framebuffer->getFramebufferTexture()->getTexture();
-	GLuint* multisampledTexture = framebuffer->getMultisampledFramebufferTexture()->getTexture();
+	GLuint* texture = framebuffer->getFramebufferImage()->getTexture();
+	GLuint* multisampledTexture = framebuffer->getMultisampledFramebufferImage()->getTexture();
 
 	if (multisampling > 0) {
 		// This generates the multisampled colour framebuffer, which later is blitted to the regular colour framebuffer.
@@ -79,7 +79,7 @@ void Basic2DRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer,
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		framebuffer->getMultisampledFramebufferTexture()->setDimensions(0, 0, windowWidth, windowHeight);
+		framebuffer->getMultisampledFramebufferImage()->setDimensions(0, 0, windowWidth, windowHeight);
 		glDrawBuffer(GL_COLOR_ATTACHMENT0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *multisampledTexture, 0);
 	}
@@ -96,33 +96,33 @@ void Basic2DRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer,
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *texture, 0);
 
-	framebuffer->getFramebufferTexture()->setDimensions(dimensions);
+	framebuffer->getFramebufferImage()->setDimensions(dimensions);
 	framebuffer->setMultisampling(multisampling);
 }
 
 // This function renders a texture directly to a specified framebuffer using the shader for rendering images.
-void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
-	renderTextureToSimple2DFramebuffer(texture, framebuffer, output, windowDimensions, tint, imageToBufferProgramID);
+void Basic2DRenderer::renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
+	renderImageToSimple2DFramebuffer(image, framebuffer, output, windowDimensions, tint, imageToBufferProgramID);
 }
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
 // Note: Custom shaders can be used for post-process effects.
-void Basic2DRenderer::renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader) {
+void Basic2DRenderer::renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader) {
 	if (framebuffer->getMultisampling() > 0) {
-		renderTextureToFramebuffer(texture, *framebuffer->getMultisampledFramebuffer(), output, windowDimensions, tint, customShader);
+		renderImageToFramebuffer(image, *framebuffer->getMultisampledFramebuffer(), output, windowDimensions, tint, customShader);
 	} else {
-		renderTextureToFramebuffer(texture, *framebuffer->getFramebuffer(), output, windowDimensions, tint, customShader);
+		renderImageToFramebuffer(image, *framebuffer->getFramebuffer(), output, windowDimensions, tint, customShader);
 	}
 }
 
 // This function renders a texture directly to a specified framebuffer.
-void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
-	renderTextureToFramebuffer(texture, framebuffer, output, windowDimensions, tint, bufferTextureToBufferProgramID);
+void Basic2DRenderer::renderImageToFramebuffer(Image* image, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
+	renderImageToFramebuffer(image, framebuffer, output, windowDimensions, tint, bufferTextureToBufferProgramID);
 }
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
 // Note: Custom shaders can be used for post-process effects.
-void Basic2DRenderer::renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader) {
+void Basic2DRenderer::renderImageToFramebuffer(Image* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader) {
 	// Due to the way that OpenGL seems to flip the texture, the shader needs to flip it back
 	// and show the texture's opposite side. Or the renderer could just send normal data.
 	// GL_CULL_FACE needs to be disabled if one uses the first option.

@@ -135,7 +135,6 @@ void AelaGame::onEvent(Event* event) {
 				}
 				break;
 			case SDLK_ESCAPE:
-				std::cout << defaultModel->getSource() << " is the src\n";
 				if (sceneManager->getCurrentSceneId() == 2) {
 					sceneManager->setCurrentScene(3);
 					engine->getWindow()->showCursor();

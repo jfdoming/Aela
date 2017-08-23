@@ -20,7 +20,7 @@
 
 // These are Project Aela headers.
 #include "../../Utilities/Rect/Rect.h"
-#include "../../2D/Texture/Texture.h"
+#include "../../2D/Texture/Image.h"
 #include "../Simple 2D Framebuffer/Simple2DFramebuffer.h"
 #include "../Text/TextFont.h"
 #include "../../Utilities/Colour/ColourRGBA.h"
@@ -42,10 +42,10 @@ namespace Aela {
 			void setup();
 
 			// These functions are accessible to Project Aela's main renderer in order to render 2D components.
-			void renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint);
-			void renderTextureToSimple2DFramebuffer(Texture* texture, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader);
-			void renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint);
-			void renderTextureToFramebuffer(Texture* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader);
+			void renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint);
+			void renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader);
+			void renderImageToFramebuffer(Image* image, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint);
+			void renderImageToFramebuffer(Image* image, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader);
 			void renderTextToSimple2DFramebuffer(std::string text, TextFont* textFont, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
 				unsigned int pointsPerPixel);
 			void renderMultisampledBufferToBuffer(GLuint multisampledBuffer, GLuint secondaryBuffer, Rect<unsigned int>* windowDimensions);

@@ -25,7 +25,7 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 		return false;
 	}
 
-	Map3D* map = new Map3D();
+	Map3D* map = new Map3D(src);
 
 	// This actually reads the file.
 	std::string line;

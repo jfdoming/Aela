@@ -22,7 +22,7 @@
 namespace Aela {
 	class Skybox : public Resource {
 	public:
-		Skybox();
+		Skybox(std::string src);
 
 		GLuint* getTexture();
 		float* getVertices();

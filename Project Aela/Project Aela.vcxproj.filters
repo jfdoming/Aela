@@ -76,6 +76,7 @@
     <ClCompile Include="Menus\Button.cpp" />
     <ClCompile Include="3D\Particles\ParticleLoader.cpp" />
     <ClCompile Include="2D\Text\FontManager.cpp" />
+    <ClCompile Include="3D\Maps\Map3DExporter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -169,5 +170,7 @@
     <ClInclude Include="Utilities\AelaEngineFunctor.h" />
     <ClInclude Include="Utilities\Rect\Cuboid.h" />
     <ClInclude Include="2D\Text\FontManager.h" />
+    <ClInclude Include="3D\Maps\Map3DExporter.h" />
+    <ClInclude Include="2D\Texture\Image.h" />
   </ItemGroup>
 </Project>

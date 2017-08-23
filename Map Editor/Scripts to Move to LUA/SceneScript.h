@@ -133,9 +133,9 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	ColourRGBA settingsHoverTint(0.8f, 0.8f, 0.8f, 1.0f);
 	ColourRGBA settingsClickTint(0.6f, 0.6f, 0.6f, 1.0f);
 
-	auto exportAction = [](Engine* engine) {
+	auto exportAction = [&](Engine* engine) {
 		bool success = engine->getMapExporter()->exportMap("res/maps/map.txt",
-			engine->getSceneManager()->getScene(2)->getMap(), true);
+			game->getMapBeingEdited(), true);
 		if (success) {
 			AelaErrorHandling::windowWarning("Aela Map Creator", "The map was successfully exported to res/maps/map.txt.");
 		} else {

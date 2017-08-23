@@ -1,6 +1,6 @@
 /*
-* Class: Texture
-* Author: Robert Ciborowski
+* Class: Image
+* Author: Julian Dominguez-Schatz, adapted from Texture (Robert Ciborowski)
 * Date: 21/02/2017
 * Description: A class used by Aela's Renderer to store properties of an OpenGL texture.
 */
@@ -12,41 +12,39 @@
 
 #include <GL/glew.h>
 #include "../../Utilities/Rect/Rect.h"
-#include "../../Resource Management/Resource.h"
-#include "2D/Texture/Image.h"
 
-class Texture : public Aela::Resource {
+class Image {
 	public:
-		Texture(std::string src, GLuint& texId) : Resource(src) {
-			image.setTexture(texId);
+		Image() {
+			dimensions.setValues(0, 0, 0, 0);
 		}
 
-		virtual ~Texture(){
+		virtual ~Image(){
+			deleteImage();
 		}
 
 		// These are some getters and setters.
 		void setDimensions(Rect<int>* dimensions) {
-			image.setDimensions(dimensions);
+			this->dimensions = *dimensions;
 		}
 
 		void setDimensions(int x, int y, int width, int height) {
-			image.setDimensions(x, y, width, height);
+			dimensions.setValues(x, y, width, height);
 		}
 
 		void setTexture(GLuint texture) {
-			image.setTexture(texture);
+			if (texture != 0) {
+				deleteImage();
+			}
+			this->texture = texture;
 		}
 
 		Rect<int>* getDimensions() {
-			return image.getDimensions();
-		}
-
-		Image* getImage() {
-			return &image;
+			return &dimensions;
 		}
 
 		GLuint* getTexture() {
-			return image.getTexture();
+			return &texture;
 		}
 
 		// This function returns if the object was initialised properly. If it is not
@@ -54,9 +52,14 @@ class Texture : public Aela::Resource {
 		// initialised if the output (dimensions on the screen) has a width and/or height
 		// of zero.
 		bool isInitialised() {
-			return image.isInitialised();
+			return (dimensions.getWidth() > 0 && dimensions.getHeight() > 0 && texture != 0);
 		}
 
 	private:
-		Image image;
+		Rect<int> dimensions;
+		GLuint texture = 0;
+
+		void deleteImage() {
+			glDeleteTextures(1, &texture);
+		}
 };

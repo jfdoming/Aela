@@ -38,7 +38,7 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 	std::vector<glm::vec2> tempUVs;
 	std::vector<glm::vec3> tempNormals;
 
-	Model* res = new Model();
+	Model* res = new Model(src);
 
 	// I'm removing this feature for now, since it's rather important to be consistent throughout Aela in resource conventions.
 	// In addition, this currently does not save any memory since an extra property was added to every resource.

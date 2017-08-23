@@ -11,7 +11,7 @@
 
 using namespace Aela;
 
-Aela::Model::Model() {
+Aela::Model::Model(std::string src) : Resource(src) {
 }
 
 Aela::Model::~Model() {

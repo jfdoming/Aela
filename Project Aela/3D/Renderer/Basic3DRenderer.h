@@ -28,6 +28,7 @@
 #include "Basic3DShadowRenderer.h"
 #include "Basic3DSkyboxRenderer.h"
 #include "../Light/LightEntity.h"
+#include "../../2D/Texture/Image.h"
 
 namespace Aela {
 	class Basic3DRenderer {
@@ -62,9 +63,9 @@ namespace Aela {
 			void setWindow(Window* setWindow);
 			void setCamera(Camera3D* camera);
 			GLuint* getColourFrameBuffer();
-			Texture* getColourFrameBufferTexture();
+			Image* getColourFrameBufferTexture();
 			GLuint* getMultisampledColourFrameBuffer();
-			Texture* getMultisampledColourFrameBufferTexture();
+			Image* getMultisampledColourFrameBufferTexture();
 
 			// Although this function is called in setup(), it should also be called to change the MSAA amount.
 			void setupFrameBuffers(unsigned int multisampling);
@@ -85,7 +86,7 @@ namespace Aela {
 
 			// These properties are used for the framebuffers.
 			GLuint multisampledColourFrameBuffer, colourFrameBuffer, depthRenderBuffer;
-			Texture multisampledColourFrameBufferTexture, colourFrameBufferTexture;
+			Image multisampledColourFrameBufferTexture, colourFrameBufferTexture;
 
 			// These are some Project Aela objects that the 3D renderer uses.
 			Window* window;

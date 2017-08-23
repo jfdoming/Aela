@@ -50,7 +50,7 @@ bool Aela::MaterialLoader::load(ResourceMap& resources, std::string src) {
 	if (in.is_open()) {
 		while (std::getline(in, line)) {
 			if (line.find("newmtl ") != std::string::npos) {
-				material = new Material();
+				material = new Material(src);
 				std::string name = line.substr(MATERIAL_NAME_START_POSITION, line.size() - MATERIAL_NAME_START_POSITION);
 				resources.put(name, material);
 			} else if (line.find("map_Kd ") != std::string::npos || line.find("map_Ka ") != std::string::npos) {

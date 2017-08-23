@@ -14,7 +14,7 @@
 
 // This includes GLEW.
 #include <GL/glew.h>
-#include "../../2D/Texture/Texture.h"
+#include "../../2D/Texture/Image.h"
 
 class Simple2DFramebuffer {
 	public:
@@ -26,13 +26,13 @@ class Simple2DFramebuffer {
 		void setFramebuffer(GLuint* framebuffer);
 		GLuint* getMultisampledFramebuffer();
 		void setMultisampledFramebuffer(GLuint* framebuffer);
-		Texture* getFramebufferTexture();
-		Texture* getMultisampledFramebufferTexture();
+		Image* getFramebufferImage();
+		Image* getMultisampledFramebufferImage();
 		unsigned int getMultisampling();
 		void setMultisampling(unsigned int multisampling);
 
 	private:
 		GLuint framebuffer, multisampledFramebuffer;
-		Texture framebufferTexture, multisampledFramebufferTexture;
+		Image framebufferTexture, multisampledFramebufferTexture;
 		unsigned int multisampling = 0;
 };

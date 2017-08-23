@@ -18,7 +18,7 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 		for (auto pair : *map->getSkyboxes()) {
 			SkyboxEntity* entity = &pair.second;
 			file << "<Skybox src=\"";
-			std::string path = entity->getSkybox()->getSource();
+			std::string path = entity->getSkybox()->getSrc();
 			file << path << "\">";
 			if (mapIsReadable) {
 				file << "\n";
@@ -27,7 +27,7 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 		for (auto pair : *map->getModels()) {
 			ModelEntity* entity = &pair.second;
 			file << "<Model src=\"";
-			std::string path = entity->getModel()->getSource();
+			std::string path = entity->getModel()->getSrc();
 			file << path << "\"";
 			file << getTransformableString(entity) << ">";
 			if (mapIsReadable) {
@@ -46,7 +46,7 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 		for (auto pair : *map->getBillboards()) {
 			BillboardEntity* entity = &pair.second;
 			file << "<Billboard src=\"";
-			std::string path = entity->getTexture()->getSource();
+			std::string path = entity->getTexture()->getSrc();
 			file << path << "\"";
 			file << getBillboardString(entity);
 			file << getTransformableString(entity) << ">";

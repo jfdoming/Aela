@@ -2,7 +2,7 @@
 
 using namespace Aela;
 
-AudioClip::AudioClip(char* data) {
+AudioClip::AudioClip(std::string src, char* data) : Resource(src) {
 	this->data = data;
 }
 

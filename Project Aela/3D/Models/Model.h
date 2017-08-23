@@ -17,7 +17,7 @@
 namespace Aela {
 	class Model : public Resource {
 		public:
-			Model();
+			Model(std::string src);
 			virtual ~Model();
 
 			std::vector<SubModel>* getSubModels();

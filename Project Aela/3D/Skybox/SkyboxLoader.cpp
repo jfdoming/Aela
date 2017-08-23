@@ -37,7 +37,7 @@ void SkyboxLoader::expose(LuaManager& mgr) {
 }
 
 bool SkyboxLoader::load(ResourceMap& resources, std::string src) {
-	Skybox* res = new Skybox();
+	Skybox* res = new Skybox(src);
 
 	// I'm removing this feature for now, since it's rather important to be consistent throughout Aela in resource conventions.
 	// In addition, this currently does not save any memory since an extra property was added to every resource.

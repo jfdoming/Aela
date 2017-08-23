@@ -23,11 +23,11 @@ void Simple2DFramebuffer::setMultisampledFramebuffer(GLuint* framebuffer) {
 	multisampledFramebuffer = *framebuffer;
 }
 
-Texture* Simple2DFramebuffer::getFramebufferTexture() {
+Image* Simple2DFramebuffer::getFramebufferImage() {
 	return &framebufferTexture;
 }
 
-Texture* Simple2DFramebuffer::getMultisampledFramebufferTexture() {
+Image* Simple2DFramebuffer::getMultisampledFramebufferImage() {
 	return &multisampledFramebufferTexture;
 }
 

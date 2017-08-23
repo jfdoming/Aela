@@ -31,6 +31,7 @@
 #include "../3D/Light/LightEntity.h"
 #include "../3D/Models/ModelEntity.h"
 #include "../3D/Skybox/SkyboxEntity.h"
+#include "../2D/Texture/Image.h"
 #include "../Events/Listener.h"
 #include "../Events/KeyEvent.h"
 
@@ -110,7 +111,7 @@ namespace Aela {
 			void clearSimple2DFramebuffer();
 
 			// These functions are related to 2D rendering.
-			void render2DTexture(Texture* texture, Rect<int>* output, ColourRGBA* tint);
+			void render2DImage(Image* image, Rect<int>* output, ColourRGBA* tint);
 			void renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour);
 			void renderRectangle(Rect<int>* output, ColourRGBA* colour);
 			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour);
@@ -149,7 +150,7 @@ namespace Aela {
 
 			// This represents the framebuffer that is attached to the screen.
 			GLuint mainFramebuffer;
-			Texture mainFramebufferTexture;
+			Image mainFramebufferImage;
 
 			// These are the post process shaders.
 			GLuint effects3DShader, effects2DShader;

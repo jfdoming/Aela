@@ -13,7 +13,7 @@
 namespace Aela {
 	class AudioClip : public Resource {
 		public:
-			AudioClip(char* data);
+			AudioClip(std::string src, char* data);
 			virtual ~AudioClip();
 
 			const char* getData();

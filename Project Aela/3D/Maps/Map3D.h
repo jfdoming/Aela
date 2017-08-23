@@ -19,8 +19,7 @@ using namespace Aela;
 
 class Map3D : public Resource {
 	public:
-		Map3D() {
-
+		Map3D(std::string src) : Resource(src) {
 		}
 
 		// These are the getters and setters of the class. When loading a map, it is better to load the entities directly into the map using

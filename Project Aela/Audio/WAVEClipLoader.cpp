@@ -109,7 +109,7 @@ bool WAVEClipLoader::load(ResourceMap& resources, std::string src) {
 	in.read(data, subchunk2Size);
 	in.close();
 
-	AudioClip* clip = new AudioClip(data);
+	AudioClip* clip = new AudioClip(src, data);
 	clip->setSize(subchunk2Size);
 	clip->setFormat(numberOfChannels, bitsPerSample);
 	clip->setSampleRate(sampleRate);

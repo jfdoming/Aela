@@ -44,8 +44,8 @@ void Renderer::setupMainFrameBuffer() {
 	glGenFramebuffers(1, &mainFramebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
 
-	glGenTextures(1, mainFramebufferTexture.getTexture());
-	glBindTexture(GL_TEXTURE_2D, *(mainFramebufferTexture.getTexture()));
+	glGenTextures(1, mainFramebufferImage.getTexture());
+	glBindTexture(GL_TEXTURE_2D, *(mainFramebufferImage.getTexture()));
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	/* Clamping to edges is important to prevent artifacts when scaling */
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -53,10 +53,10 @@ void Renderer::setupMainFrameBuffer() {
 	/* Linear filtering usually looks best for text */
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	mainFramebufferTexture.setDimensions(0, 0, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight());
+	mainFramebufferImage.setDimensions(0, 0, window->getWindowDimensions()->getWidth(), window->getWindowDimensions()->getHeight());
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(mainFramebufferTexture.getTexture()), 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(mainFramebufferImage.getTexture()), 0);
 	checkFrameBuffer();
 }
 
@@ -167,8 +167,8 @@ void Aela::Renderer::renderParticles(ParticleEmitter* particleEmitter) {
 }
 
 // This renders a 2D texture using the 2D renderer.
-void Renderer::render2DTexture(Texture* texture, Rect<int>* output, ColourRGBA* tint) {
-	basic2DRenderer.renderTextureToSimple2DFramebuffer(texture, bound2DFramebuffer, output, window->getWindowDimensions(), tint);
+void Renderer::render2DImage(Image* image, Rect<int>* output, ColourRGBA* tint) {
+	basic2DRenderer.renderImageToSimple2DFramebuffer(image, bound2DFramebuffer, output, window->getWindowDimensions(), tint);
 }
 
 // This renders text using the 2D renderer.
@@ -201,18 +201,18 @@ void Renderer::renderSimple2DFramebuffer() {
 	if (bound2DFramebuffer->getMultisampling() > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*bound2DFramebuffer->getMultisampledFramebuffer(), *bound2DFramebuffer->getFramebuffer(), window->getWindowDimensions());
 	}
-	basic2DRenderer.renderTextureToFramebuffer(bound2DFramebuffer->getFramebufferTexture(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr, effects2DShader);
+	basic2DRenderer.renderImageToFramebuffer(bound2DFramebuffer->getFramebufferImage(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr, effects2DShader);
 }
 
 void Renderer::endRendering3D() {
 	if (multisampling3D > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultisampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getWindowDimensions());
 	}
-	basic2DRenderer.renderTextureToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr, effects3DShader);
+	basic2DRenderer.renderImageToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr, effects3DShader);
 }
 
 void Renderer::endRenderingFrame() {
-	basic2DRenderer.renderTextureToFramebuffer(&mainFramebufferTexture, 0, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr);
+	basic2DRenderer.renderImageToFramebuffer(&mainFramebufferImage, 0, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr);
 	window->updateBuffer();
 }
 

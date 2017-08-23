@@ -25,7 +25,7 @@ class AelaEngineFunctor {
 
 		}
 
-		AelaEngineFunctor(Engine* engine, void (*action)(Engine* engine)) {
+		AelaEngineFunctor(Engine* engine, std::function<void(Engine* engine)> action) {
 			this->engine = engine;
 			this->action = action;
 		}
@@ -44,5 +44,5 @@ class AelaEngineFunctor {
 
 	private:
 		Engine* engine;
-		void (*action)(Engine* engine);
+		std::function<void(Engine* engine)> action;
 };

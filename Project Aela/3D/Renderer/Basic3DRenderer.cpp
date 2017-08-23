@@ -168,7 +168,7 @@ GLuint* Basic3DRenderer::getColourFrameBuffer() {
 }
 
 
-Texture* Basic3DRenderer::getColourFrameBufferTexture() {
+Image* Basic3DRenderer::getColourFrameBufferTexture() {
 	return &colourFrameBufferTexture;
 }
 
@@ -176,7 +176,7 @@ GLuint * Aela::Basic3DRenderer::getMultisampledColourFrameBuffer() {
 	return &multisampledColourFrameBuffer;
 }
 
-Texture * Aela::Basic3DRenderer::getMultisampledColourFrameBufferTexture() {
+Image* Aela::Basic3DRenderer::getMultisampledColourFrameBufferTexture() {
 	return &multisampledColourFrameBufferTexture;
 }
 

@@ -9,7 +9,7 @@
 
 using namespace Aela;
 
-Skybox::Skybox() {
+Skybox::Skybox(std::string src) : Resource(src) {
 	float vertexValues[] = {        
 		-1.0f,  1.0f, -1.0f,
 		-1.0f, -1.0f, -1.0f,

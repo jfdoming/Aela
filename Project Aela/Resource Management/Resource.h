@@ -12,10 +12,15 @@
 namespace Aela {
 	class Resource {
 		public:
-			Resource();
+			Resource(std::string src);
 			virtual ~Resource();
 
+			// you shouldn't copy resources
 			Resource(const Resource&) = delete;
 			void operator=(const Resource&) = delete;
+
+			std::string getSrc();
+		private:
+			std::string src;
 	};
 }

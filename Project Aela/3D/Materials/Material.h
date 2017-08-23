@@ -23,8 +23,7 @@
 namespace Aela {
 	class Material : public Resource {
 		public:
-			Material() {
-
+			Material(std::string src) : Resource(src) {
 			}
 
 			Texture* getTexture();

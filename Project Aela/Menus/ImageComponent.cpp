@@ -35,7 +35,7 @@ void Aela::ImageComponent::update() {
 
 void Aela::ImageComponent::render(Renderer* renderer) {
 	if (texture != nullptr) {
-		renderer->render2DTexture(texture, &dimensions, &tint);
+		renderer->render2DImage(texture->getImage(), &dimensions, &tint);
 	}
 }
 
