@@ -8,7 +8,7 @@
 
 using namespace Aela;
 
-std::string materialsAndModelsToLoad[] = {
+std::string materialsAndModelNames[] = {
 	"meme_mug",
 	"cat",
 	"house_1",
@@ -17,19 +17,19 @@ std::string materialsAndModelsToLoad[] = {
 	"sample_terrain_1"
 };
 
-std::string texturesToLoad[] = {
+std::string billboardNames[] = {
 	"character",
 	"gradient",
 	"ekkon",
 	"lol_button"
 };
 
-std::string particlesToLoad[] = {
+std::string particleNames[] = {
 	"particle_1",
 	"particle_2"
 };
 
-std::string skyboxesToLoad[] = {
+std::string skyboxNames[] = {
 	"skybox_1",
 	"skybox_2"
 };
@@ -39,7 +39,7 @@ void loadMaterials(ResourceManager* resourceManager) {
 	resourceManager->bindLoader(&materialLoader);
 	resourceManager->bindGroup("materials");
 
-	for (std::string path : materialsAndModelsToLoad) {
+	for (std::string path : materialsAndModelNames) {
 		resourceManager->addToGroup("res/materials/" + path + ".mtl", false);
 	}
 
@@ -53,7 +53,7 @@ void loadModels(ResourceManager* resourceManager) {
 	resourceManager->bindLoader(&objLoader);
 	resourceManager->bindGroup("models");
 
-	for (std::string path : materialsAndModelsToLoad) {
+	for (std::string path : materialsAndModelNames) {
 		resourceManager->addToGroup("res/models/" + path + ".obj", false);
 	}
 
@@ -67,7 +67,7 @@ void loadTextures(ResourceManager* resourceManager) {
 	resourceManager->bindLoader(&textureLoader);
 	resourceManager->bindGroup("textures");
 
-	for (std::string path : texturesToLoad) {
+	for (std::string path : billboardNames) {
 		resourceManager->addToGroup("res/textures/" + path + ".dds", false);
 	}
 
@@ -82,7 +82,7 @@ void loadParticles(ResourceManager* resourceManager) {
 	resourceManager->bindLoader(&textureLoader);
 	resourceManager->bindGroup("particles");
 
-	for (std::string path : particlesToLoad) {
+	for (std::string path : particleNames) {
 		resourceManager->addToGroup("res/particles/" + path + ".dds", false);
 	}
 
@@ -96,7 +96,7 @@ void loadSkyboxes(ResourceManager* resourceManager) {
 	resourceManager->bindLoader(&skyboxLoader);
 	resourceManager->bindGroup("skybox");
 
-	for (std::string path : skyboxesToLoad) {
+	for (std::string path : skyboxNames) {
 		resourceManager->addToGroup("res/skyboxes/" + path, false);
 	}
 

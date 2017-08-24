@@ -23,7 +23,7 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 	if (file.is_open()) {
 		success = true;
 
-		for (auto pair : *map->getSkyboxes()) {
+		for (auto& pair : *map->getSkyboxes()) {
 			SkyboxEntity* entity = &pair.second;
 			file << "<Skybox src=\"";
 			std::string path = entity->getSkybox()->getSrc();
@@ -35,20 +35,22 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 			}
 		}
 
-		for (auto pair : *map->getModels()) {
+		for (auto& pair : *map->getModels()) {
 			ModelEntity* entity = &pair.second;
-			file << "<Model src=\"";
-			std::string path = entity->getModel()->getSrc();
-			abbreviate(path, DEFAULT_MODEL_PATH);
+			if (entity->getModel() != nullptr) {
+				file << "<Model src=\"";
+				std::string path = entity->getModel()->getSrc();
+				abbreviate(path, DEFAULT_MODEL_PATH);
 
-			file << path << "\"";
-			file << getTransformableString(entity) << ">";
-			if (mapIsReadable) {
-				file << "\n";
+				file << path << "\"";
+				file << getTransformableString(entity) << ">";
+				if (mapIsReadable) {
+					file << "\n";
+				}
 			}
 		}
 
-		for (auto pair : *map->getLights()) {
+		for (auto& pair : *map->getLights()) {
 			LightEntity* entity = &pair.second;
 			file << "<Light";
 			file << getLightString(entity);
@@ -58,17 +60,19 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 			}
 		}
 
-		for (auto pair : *map->getBillboards()) {
+		for (auto& pair : *map->getBillboards()) {
 			BillboardEntity* entity = &pair.second;
-			file << "<Billboard src=\"";
-			std::string path = entity->getTexture()->getSrc();
-			abbreviate(path, DEFAULT_TEXTURE_PATH);
+			if (entity->getTexture() != nullptr) {
+				file << "<Billboard src=\"";
+				std::string path = entity->getTexture()->getSrc();
+				abbreviate(path, DEFAULT_TEXTURE_PATH);
 
-			file << path << "\"";
-			file << getBillboardString(entity);
-			file << getTransformableString(entity) << ">";
-			if (mapIsReadable) {
-				file << "\n";
+				file << path << "\"";
+				file << getBillboardString(entity);
+				file << getTransformableString(entity) << ">";
+				if (mapIsReadable) {
+					file << "\n";
+				}
 			}
 		}
 	} else {

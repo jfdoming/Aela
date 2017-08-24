@@ -15,6 +15,11 @@ void LightEntity::useDefaultValues() {
 	power = 1.0;
 }
 
+void LightEntity::setupForNewShadowMap() {
+	shadowMapBuffer = NULL;
+	shadowMapTexture = NULL;
+}
+
 void LightEntity::setColour(ColourRGB* colour) {
 	this->colour = *colour;
 }

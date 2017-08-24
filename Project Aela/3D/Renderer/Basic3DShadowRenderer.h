@@ -9,7 +9,7 @@
 #include "../Models/ModelEntity.h"
 #include "../Light/LightEntity.h"
 
-#include <unordered_map>
+#include <map>
 
 using namespace Aela;
 
@@ -20,10 +20,10 @@ class Basic3DShadowRenderer {
 		}
 
 		// This adds a model's shadow to the shadow map.
-		void renderShadow(ModelEntity* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::unordered_map<int, LightEntity>* lights, GLuint lightPositionsID);
+		void renderShadow(ModelEntity* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::map<int, LightEntity>* lights, GLuint lightPositionsID);
 
 		// This clears all shadow maps of lights.
-		void clearShadowMaps(std::unordered_map<int, LightEntity>* lights);
+		void clearShadowMaps(std::map<int, LightEntity>* lights);
 
 		// These are getters and setters.
 		unsigned int getDepthTextureWidth();

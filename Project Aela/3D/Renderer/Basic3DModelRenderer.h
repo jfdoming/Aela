@@ -10,6 +10,8 @@
 #include "../../Window/Window.h"
 #include "../Light/LightEntity.h"
 
+#include <map>
+
 using namespace Aela;
 
 class Basic3DModelRenderer {
@@ -32,7 +34,7 @@ class Basic3DModelRenderer {
 		void setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix);
 
 		// This sends light data to the model shader.
-		void sendLightDataToShader(std::unordered_map<int, LightEntity>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID,
+		void sendLightDataToShader(std::map<int, LightEntity>* lights, GLuint modelProgramID, GLuint numberOfLightsID, GLuint lightPositionsID,
 			GLuint lightDirectionsID, GLuint lightColoursID, GLuint lightPowersID, GLuint shadowMapID);
 
 	private:

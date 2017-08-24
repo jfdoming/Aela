@@ -115,13 +115,15 @@ void Basic3DRenderer::setupFrameBuffers(unsigned int multisampling) {
 
 // This generates a light's depth frame buffer.
 void Basic3DRenderer::generateShadowMap(LightEntity* light) {
-	GLuint* buffer = light->getShadowMapBuffer();
-	glGenFramebuffers(1, buffer);
+	GLuint buffer;
+	glGenFramebuffers(1, &buffer);
 
 	// This generates the depth texture, which is sampled from later when rendering models.
-	GLuint* texture = light->getShadowMapTexture();
-	glGenTextures(1, texture);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, *texture);
+	GLuint texture;
+	glGenTextures(1, &texture);
+	std::cout << "2. " << buffer << " - " << *light->getShadowMapTexture() << "\n";
+	
+	glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	for (unsigned int i = 0; i < 6; i++) {
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT24, shadowRenderer.getDepthTextureWidth(), shadowRenderer.getDepthTextureHeight(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
@@ -133,8 +135,8 @@ void Basic3DRenderer::generateShadowMap(LightEntity* light) {
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-	glBindFramebuffer(GL_FRAMEBUFFER, *buffer);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, *texture, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, buffer);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture, 0);
 
 	// There is no colour output in the bound framebuffer, only depth.
 	glDrawBuffer(GL_NONE);
@@ -143,6 +145,11 @@ void Basic3DRenderer::generateShadowMap(LightEntity* light) {
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 		AelaErrorHandling::windowError("Aela 3D",
 			"There was a problem setting up the depth framebuffer.\nIt's probably OpenGL's fault.\nOr maybe your graphics processor is a potato.");
+		light->setShadowMapBuffer(NULL);
+		light->setShadowMapTexture(NULL);
+	} else {
+		light->setShadowMapBuffer(&buffer);
+		light->setShadowMapTexture(&texture);
 	}
 }
 
@@ -155,7 +162,7 @@ void Basic3DRenderer::setCamera(Camera3D* setCamera) {
 	camera = setCamera;
 }
 
-void Basic3DRenderer::bindLights(std::unordered_map<int, LightEntity>* lights) {
+void Basic3DRenderer::bindLights(std::map<int, LightEntity>* lights) {
 	this->lights = lights;
 }
 
@@ -223,19 +230,21 @@ void Basic3DRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, gl
 
 // This renders a billboard, accounting for multisampling.
 void Basic3DRenderer::renderBillboard(BillboardEntity* billboard, bool multisampling) {
-	glViewport(0, 0, windowWidth, windowHeight);
-	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
-	if (billboard->usingSpecifiedRotation()) {
-		if (multisampling) {
-			modelRenderer.renderTextureIn3DSpace(true, *billboard->getTexture()->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getRotation(), billboard->getScaling());
+	if (billboard->getTexture() != nullptr) {
+		glViewport(0, 0, windowWidth, windowHeight);
+		modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
+		if (billboard->usingSpecifiedRotation()) {
+			if (multisampling) {
+				modelRenderer.renderTextureIn3DSpace(true, *billboard->getTexture()->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getRotation(), billboard->getScaling());
+			} else {
+				modelRenderer.renderTextureIn3DSpace(true, *billboard->getTexture()->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getRotation(), billboard->getScaling());
+			}
 		} else {
-			modelRenderer.renderTextureIn3DSpace(true, *billboard->getTexture()->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getRotation(), billboard->getScaling());
-		}
-	} else {
-		if (multisampling) {
-			modelRenderer.renderTextureIn3DSpace(true, *billboard->getTexture()->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getScaling(), camera->getPosition(), true);
-		} else {
-			modelRenderer.renderTextureIn3DSpace(true, *billboard->getTexture()->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getScaling(), camera->getPosition(), true);
+			if (multisampling) {
+				modelRenderer.renderTextureIn3DSpace(true, *billboard->getTexture()->getTexture(), billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getScaling(), camera->getPosition(), true);
+			} else {
+				modelRenderer.renderTextureIn3DSpace(true, *billboard->getTexture()->getTexture(), billboardTextureID, billboardProgramID, colourFrameBuffer, billboardMVPMatrixID, billboard->getPosition(), billboard->getScaling(), camera->getPosition(), true);
+			}
 		}
 	}
 }

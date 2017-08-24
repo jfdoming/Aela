@@ -105,7 +105,7 @@ void Renderer::setFontManager(FontManager* fontManager) {
 	this->fontManager = fontManager;
 }
 
-void Aela::Renderer::bindLights(std::unordered_map<int, LightEntity>* lights) {
+void Aela::Renderer::bindLights(std::map<int, LightEntity>* lights) {
 	basic3DRenderer.bindLights(lights);
 }
 

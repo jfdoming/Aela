@@ -34,6 +34,7 @@ class LightEntity : public Entity, public Transformable3D {
 		}
 
 		void useDefaultValues();
+		void setupForNewShadowMap();
 
 		// These are getters and setters.
 		void setColour(ColourRGB* colour);

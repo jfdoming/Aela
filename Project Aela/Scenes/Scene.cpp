@@ -33,13 +33,13 @@ void Scene::render(Renderer* renderer) {
 		renderer->bindLights(map->getLights());
 		renderer->startRendering3D();
 
-		for (auto model : *map->getModels()) {
+		for (auto& model : *map->getModels()) {
 			renderer->renderModelEntityShadows(&model.second);
 		}
 
 		renderer->sendBoundLightDataToShader();
 
-		for (auto model : *map->getModels()) {
+		for (auto& model : *map->getModels()) {
 			renderer->renderModelEntity(&model.second);
 		}
 

@@ -151,6 +151,14 @@ void Transformable3D::rotateAroundPoint(glm::vec3* rotation, glm::vec3* point) {
 	this->rotation += *rotation;
 }
 
+void Transformable3D::scaleUp(glm::vec3 scaling) {
+	this->scaling += scaling;
+}
+
+void Transformable3D::scaleUp(float x, float y, float z) {
+	scaleUp(glm::vec3(x, y, z));
+}
+
 void Transformable3D::forceValuesWithinRange(glm::vec3* vec3, float minimum, float maximum) {
 	if (vec3->x < minimum) {
 		vec3->x += (maximum - minimum) * ceil(abs((minimum - vec3->x) / (maximum - minimum)));

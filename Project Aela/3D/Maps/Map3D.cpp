@@ -7,38 +7,86 @@
 
 #include "Map3D.h"
 
-void Map3D::setLights(std::unordered_map<int, LightEntity>* lights) {
-	this->lights = *lights;
+SkyboxEntity* Map3D::getSkybox(int id) {
+	return &skyboxes[id];
 }
 
-std::unordered_map<int, LightEntity>* Map3D::getLights() {
+int Map3D::removeLight(int id) {
+	return lights.erase(id);
+}
+
+int Map3D::removeModel(int id) {
+	return models.erase(id);
+}
+
+int Map3D::removeBillboard(int id) {
+	return billboards.erase(id);
+}
+
+int Map3D::removeSkybox(int id) {
+	return skyboxes.erase(id);
+}
+
+std::map<int, LightEntity>* Map3D::getLights() {
 	return &lights;
 }
 
-void Map3D::setModels(std::unordered_map<int, ModelEntity>* models) {
-	this->models.clear();
-	for (auto& model : *models) {
-		this->models.emplace();
-		this->models.at(this->models.size() - 1).setModel(model.second.getModel());
-	}
-}
-
-std::unordered_map<int, ModelEntity>* Map3D::getModels() {
+std::map<int, ModelEntity>* Map3D::getModels() {
 	return &models;
 }
 
-void Map3D::setBillboards(std::unordered_map<int, BillboardEntity>* billboards) {
-	this->billboards = *billboards;
-}
-
-std::unordered_map<int, BillboardEntity>* Map3D::getBillboards() {
+std::map<int, BillboardEntity>* Map3D::getBillboards() {
 	return &billboards;
 }
 
-void Map3D::setSkyboxes(std::unordered_map<int, SkyboxEntity>* skyboxes) {
-	this->skyboxes = *skyboxes;
+std::map<int, SkyboxEntity>* Map3D::getSkyboxes() {
+	return &skyboxes;
 }
 
-std::unordered_map<int, SkyboxEntity>* Map3D::getSkyboxes() {
-	return &skyboxes;
+int Map3D::addLight(LightEntity* light) {
+	int index = 0;
+	while (lights.find(index) != lights.end()) {
+		index++;
+	};
+	lights[index] = *light;
+	return index;
+}
+
+int Map3D::addModel(ModelEntity* model) {
+	int index = 0;
+	while (models.find(index) != models.end()) {
+		index++;
+	};
+	models[index] = *model;
+	return index;
+}
+
+int Map3D::addSkybox(SkyboxEntity* skybox) {
+	int index = 0;
+	while (skyboxes.find(index) != skyboxes.end()) {
+		index++;
+	};
+	skyboxes[index] = *skybox;
+	return index;
+}
+
+int Map3D::addBillboard(BillboardEntity* billboard) {
+	int index = 0;
+	while (billboards.find(index) != billboards.end()) {
+		index++;
+	};
+	billboards[index] = *billboard;
+	return index;
+}
+
+LightEntity* Map3D::getLight(int id) {
+	return &lights[id];
+}
+
+ModelEntity* Map3D::getModel(int id) {
+	return &models[id];
+}
+
+BillboardEntity* Map3D::getBillboard(int id) {
+	return &billboards[id];
 }

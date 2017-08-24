@@ -26,20 +26,17 @@ class Transformable3D {
 		}
 
 		// These are positioning getters and setters.
-		void setPosition(float setX, float setY, float setZ);
-		void setPosition(glm::vec3 setPosition);
+		void setPosition(float setX, float setY, float setZ), setPosition(glm::vec3 setPosition);
 		glm::vec3* getPosition();
 		void getPosition(float* setX, float* setY, float* setZ);
 
 		// These are rotation getters and setters.
-		void setRotation(float setX, float setY, float setZ);
-		void setRotation(glm::vec3 setRotation);
+		void setRotation(float setX, float setY, float setZ), setRotation(glm::vec3 setRotation);
 		glm::vec3* getRotation();
 		void getRotation(float* setX, float* setY, float* setZ);
 
 		// These are scaling getters and setters.
-		void setScaling(float setX, float setY, float setZ);
-		void setScaling(glm::vec3 setScaling);
+		void setScaling(float setX, float setY, float setZ), setScaling(glm::vec3 setScaling);
 		glm::vec3* getScaling();
 		void getScaling(float* setX, float* setY, float* setZ);
 
@@ -48,12 +45,10 @@ class Transformable3D {
 		float getProperty(Transformable3DProperty property);
 
 		// These functions are used for transforming the 3D object.
-		void translate(glm::vec3 translation);
-		void translate(float x, float y, float z);
-		void rotate(glm::vec3 rotation);
-		void rotate(float x, float y, float z);
-		void rotateAroundPoint(PointRotation3D* pointRotation);
-		void rotateAroundPoint(glm::vec3* rotation, glm::vec3* point);
+		void translate(glm::vec3 translation), translate(float x, float y, float z);
+		void rotate(glm::vec3 rotation), rotate(float x, float y, float z);
+		void rotateAroundPoint(PointRotation3D* pointRotation), rotateAroundPoint(glm::vec3* rotation, glm::vec3* point);
+		void scaleUp(glm::vec3 scaling), scaleUp(float x, float y, float z);
 
 		// This function is used to force a value within a specific range (not clamping).
 		// For example, if using the range 0 and 2a, 11a / 2 is forced to 3a / 2.

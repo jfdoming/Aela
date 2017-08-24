@@ -21,6 +21,7 @@
 
 // This includes GLEW.
 #include <GL/glew.h>
+#include <iostream>
 
 #include "../../Entities/Entity.h"
 #include "../Transformable/Transformable3D.h"
@@ -39,7 +40,7 @@ namespace Aela {
 			}
 
 			~ModelEntity() {
-
+				std::cout << "DIE!\n";
 			}
 
 			// These are the getters and setters.

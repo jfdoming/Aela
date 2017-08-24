@@ -13,7 +13,7 @@
 #include "../Billboards/BillboardEntity.h"
 #include "../Skybox/SkyboxEntity.h"
 
-#include <unordered_map>
+#include <map>
 
 using namespace Aela;
 
@@ -22,21 +22,29 @@ class Map3D : public Resource {
 		Map3D(std::string src) : Resource(src) {
 		}
 
-		// These are the getters and setters of the class. When loading a map, it is better to load the entities directly into the map using
-		// something such as "map3D.getLights()->push_back()" rather than creating seperate std::maps for those entities and using the set functions.
-		void setLights(std::unordered_map<int, LightEntity>* lights);
-		std::unordered_map<int, LightEntity>* getLights();
-		void setModels(std::unordered_map<int, ModelEntity>* models);
-		std::unordered_map<int, ModelEntity>* getModels();
-		void setBillboards(std::unordered_map<int, BillboardEntity>* billboards);
-		std::unordered_map<int, BillboardEntity>* getBillboards();
-		void setSkyboxes(std::unordered_map<int, SkyboxEntity>* skyboxes);
-		std::unordered_map<int, SkyboxEntity>* getSkyboxes();
+		// These allow the user to interact with the map using single entities.
+		int addLight(LightEntity* light), addModel(ModelEntity* model), addBillboard(BillboardEntity* billboard), addSkybox(SkyboxEntity* skybox);
+		LightEntity* getLight(int id);
+		ModelEntity* getModel(int id);
+		BillboardEntity* getBillboard(int id);
+		SkyboxEntity* getSkybox(int id);
+		int removeLight(int id), removeModel(int id), removeBillboard(int id), removeSkybox(int id);
+
+		// These should only be used in situations such as when the user needs to iterate through the maps of entities.
+		std::map<int, LightEntity>* getLights();
+		std::map<int, ModelEntity>* getModels();
+		std::map<int, BillboardEntity>* getBillboards();
+		std::map<int, SkyboxEntity>* getSkyboxes();
 
 	private:
 		// These are the maps of entities in the world.
-		std::unordered_map<int, LightEntity> lights;
-		std::unordered_map<int, ModelEntity> models;
-		std::unordered_map<int, BillboardEntity> billboards;
-		std::unordered_map<int, SkyboxEntity> skyboxes;
+		// Q: Why would you use maps when you can use unordered_maps? Maps are slower!
+		// A: Whenever you use unordered_map::erase(), it doesn't actually delete the elements from the container, it just calls
+		// the destructor, leaving a blank element in that spot. The size of the container doesn't change, and this can break
+		// the program in certain areas. On the other hand, maps actually remove the element entirely, causing their size
+		// to change after the call to map::erase().
+		std::map<int, LightEntity> lights;
+		std::map<int, ModelEntity> models;
+		std::map<int, BillboardEntity> billboards;
+		std::map<int, SkyboxEntity> skyboxes;
 };

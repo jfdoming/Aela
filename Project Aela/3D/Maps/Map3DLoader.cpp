@@ -31,6 +31,7 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 	// This actually reads the file.
 	std::string line;
 	EntityType entityType = EntityType::GENERIC;
+	int entityID;
 
 	while (std::getline(in, line)) {
 		while (line.length() > 0) {
@@ -48,17 +49,17 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 
 				if (tagID == "Model") {
 					entityType = EntityType::MODEL;
-					map->getModels()->emplace(std::pair<int, ModelEntity>(map->getModels()->size(), {}));
+					entityID = map->addModel(&ModelEntity());
 				} else if (tagID == "Light") {
 					entityType = EntityType::LIGHT;
-					map->getLights()->emplace(std::pair<int, LightEntity>(map->getLights()->size(), {}));
+					entityID = map->addLight(&LightEntity());
 					renderer->generateShadowMap(&map->getLights()->at(map->getLights()->size() - 1));
 				} else if(tagID == "Billboard") {
 					entityType = EntityType::BILLBOARD;
-					map->getBillboards()->emplace(std::pair<int, BillboardEntity>(map->getBillboards()->size(), {}));
+					entityID = map->addBillboard(&BillboardEntity());
 				} else if (tagID == "Skybox") {
 					entityType = EntityType::SKYBOX;
-					map->getSkyboxes()->emplace(std::pair<int, SkyboxEntity>(map->getSkyboxes()->size(), {}));
+					entityID = map->addSkybox(&SkyboxEntity());
 				}
 			} else if (character == '>') {
 				entityType = EntityType::GENERIC;
@@ -95,11 +96,11 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						bool success = resources.get(source, res);
 						if (success) {
 							if (entityType == EntityType::MODEL) {
-								map->getModels()->at(map->getModels()->size() - 1).setModel((Model*) res);
+								map->getModel(entityID)->setModel((Model*) res);
 							} else if (entityType == EntityType::BILLBOARD) {
-								map->getBillboards()->at(map->getBillboards()->size() - 1).setTexture((Texture*) res);
+								map->getBillboard(entityID)->setTexture((Texture*) res);
 							} else if (entityType == EntityType::SKYBOX) {
-								map->getSkyboxes()->at(map->getSkyboxes()->size() - 1).setSkybox((Skybox*) res);
+								map->getSkybox(entityID)->setSkybox((Skybox*) res);
 							}
 						} else {
 							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", line.substr(j + 1, k - j - 1) + " was requested by "
@@ -109,25 +110,25 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 					} else if (propertyType == "power" && entityType == EntityType::LIGHT) {
 						std::string value = line.substr(j + 1, k - j - 1);
 						float power = (float) std::stof(value);
-						map->getLights()->at(map->getLights()->size() - 1).setPower(power);
+						map->getLight(entityID)->setPower(power);
 					} else if (propertyType == "colour" && entityType == EntityType::LIGHT) {
 						std::string value = line.substr(j + 1, k - j - 1);
 						glm::vec3 vec3;
 						setVec3UsingString(&value, &vec3);
-						map->getLights()->at(map->getLights()->size() - 1).setColour(&(ColourRGB(&vec3)));
+						map->getLight(entityID)->setColour(&(ColourRGB(&vec3)));
 					} else if (propertyType == "position") {
 						std::string value = line.substr(j + 1, k - j - 1);
 						glm::vec3 vec3;
 						setVec3UsingString(&value, &vec3);
 
 						if (entityType == EntityType::MODEL) {
-							map->getModels()->at(map->getModels()->size() - 1).setPosition(vec3);
+							map->getModel(entityID)->setPosition(vec3);
 						} else if (entityType == EntityType::LIGHT) {
-							map->getLights()->at(map->getLights()->size() - 1).setPosition(vec3);
+							map->getLight(entityID)->setPosition(vec3);
 						} else if (entityType == EntityType::BILLBOARD) {
-							map->getBillboards()->at(map->getBillboards()->size() - 1).setPosition(vec3);
+							map->getBillboard(entityID)->setPosition(vec3);
 						} else {
-							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", src + " has invalid syntax regarding the < and > characters.");
+							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", src + " has invalid syntax regarding position.");
 							return false;
 						}
 					} else if (propertyType == "rotation") {
@@ -136,13 +137,13 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						setVec3UsingString(&value, &vec3);
 
 						if (entityType == EntityType::MODEL) {
-							map->getModels()->at(map->getModels()->size() - 1).setRotation(vec3);
+							map->getModel(entityID)->setRotation(vec3);
 						} else if (entityType == EntityType::LIGHT) {
-							map->getLights()->at(map->getLights()->size() - 1).setRotation(vec3);
+							map->getLight(entityID)->setRotation(vec3);
 						} else if (entityType == EntityType::BILLBOARD) {
-							map->getBillboards()->at(map->getBillboards()->size() - 1).setRotation(vec3);
+							map->getBillboard(entityID)->setRotation(vec3);
 						} else {
-							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", src + " has invalid syntax regarding the < and > characters.");
+							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", src + " has invalid syntax regarding rotation.");
 							return false;
 						}
 					} else if (propertyType == "scaling") {
@@ -151,13 +152,13 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						setVec3UsingString(&value, &vec3);
 
 						if (entityType == EntityType::MODEL) {
-							map->getModels()->at(map->getModels()->size() - 1).setScaling(vec3);
+							map->getModel(entityID)->setScaling(vec3);
 						} else if (entityType == EntityType::LIGHT) {
-							map->getLights()->at(map->getLights()->size() - 1).setScaling(vec3);
+							map->getLight(entityID)->setScaling(vec3);
 						} else if (entityType == EntityType::BILLBOARD) {
-							map->getBillboards()->at(map->getBillboards()->size() - 1).setScaling(vec3);
+							map->getBillboard(entityID)->setScaling(vec3);
 						} else {
-							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", src + " has invalid syntax regarding the < and > characters.");
+							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", src + " has invalid syntax regarding scaling.");
 							return false;
 						}
 					}

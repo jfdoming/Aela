@@ -86,7 +86,7 @@ namespace Aela {
 
 			// This stores a pointer to the list of lights. It's easier to bind a list of lights
 			// once than to send each light every frame.
-			void bindLights(std::unordered_map<int, LightEntity>* lights);
+			void bindLights(std::map<int, LightEntity>* lights);
 
 			// This binds a simple 2D framebuffer for rendering 2D to.
 			void bindSimple2DFramebuffer(Simple2DFramebuffer* framebuffer);

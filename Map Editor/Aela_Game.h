@@ -20,6 +20,8 @@ class AelaGame : public Listener {
 		void setup();
 		void update();
 
+		void exportMap(std::string src);
+
 		// This is triggered on an event.
 		void onEvent(Event* event);
 
@@ -51,16 +53,22 @@ class AelaGame : public Listener {
 		ModelEntity modelEntity;
 		LightEntity lightEntity;
 		BillboardEntity billboardEntity;
-		int keyedAnimatorKey;
+		int keyedAnimatorKey, idOfEntityInMap;
 		Transformable3D transformableBeingPlaced;
 
-		// These are used for storing the default resources.
-		const std::string defaultModelResource = "res/models/meme_mug.obj";
-		const std::string defaultBillboardResource = "res/textures/character.dds";
-		Model* defaultModel;
-		Texture* defaultTexture;
+		const float THIRTY_SECOND_OF_PI = glm::pi<float>() / 32;
+
+		// These are used to keep track of whether the up and down arrows are being held.
+		bool holdingUp = false, holdingDown = false;
+
+		unsigned int currentModelResource = 0, currentBillboardResource = 0;
 
 		void loadResources();
 		void loadScenes();
 		void switchEntityBeingPlaced(EntityType typeOfNewEntity);
+
+		// These function names are long but idk what else to call them without people thinking that they perform something else.
+		void removeEntityBeingPlaced(), addEntityBeingPlaced(EntityType type);
+
+		void switchModelResource(unsigned int resource), switchBillboardResource(unsigned int resource);
 };

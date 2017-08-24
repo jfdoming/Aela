@@ -17,7 +17,7 @@
 // This includes GLEW.
 #include <GL/glew.h>
 
-#include <unordered_map>
+#include <map>
 
 #include "../../Error Handler/ErrorHandler.h"
 #include "../../Old Garbage/shader.hpp"
@@ -55,7 +55,7 @@ namespace Aela {
 
 			// These are some functions related to setup.
 			void setup(unsigned int multisampling);
-			void bindLights(std::unordered_map<int, LightEntity>* lights);
+			void bindLights(std::map<int, LightEntity>* lights);
 			void generateShadowMap(LightEntity* light);
 
 			// These are some getters and setters.
@@ -93,7 +93,7 @@ namespace Aela {
 			Camera3D* camera;
 
 			// This stores the lights to render.
-			std::unordered_map<int, LightEntity>* lights;
+			std::map<int, LightEntity>* lights;
 
 			// These are used by the renderer so that "window->getWindowDimensions()->getWidth()"
 			// (and "...getHeight()") does not have to called all the time.
