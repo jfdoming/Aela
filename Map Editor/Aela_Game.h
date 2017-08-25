@@ -20,7 +20,7 @@ class AelaGame : public Listener {
 		void setup();
 		void update();
 
-		void exportMap(std::string src);
+		void exportMap(std::string src, bool readable);
 
 		// This is triggered on an event.
 		void onEvent(Event* event);
@@ -61,14 +61,20 @@ class AelaGame : public Listener {
 		// These are used to keep track of whether the up and down arrows are being held.
 		bool holdingUp = false, holdingDown = false;
 
+		// When the user places a light, the light cannot be instantly reset 
+		bool placeLightNextUpdate = false;
+
+		// These keep track of the resource th use for the entity that is being placed.
 		unsigned int currentModelResource = 0, currentBillboardResource = 0;
 
+		// Thse functions load from scripts.
 		void loadResources();
 		void loadScenes();
+
+		// These functions are related to the entity that is being placed.
 		void switchEntityBeingPlaced(EntityType typeOfNewEntity);
-
-		// These function names are long but idk what else to call them without people thinking that they perform something else.
 		void removeEntityBeingPlaced(), addEntityBeingPlaced(EntityType type);
-
 		void switchModelResource(unsigned int resource), switchBillboardResource(unsigned int resource);
+
+		void placeModel(), placeLight(), placeBillboard();
 };

@@ -48,6 +48,7 @@ void AelaGame::loadScenes() {
 	setupScenes(engine, this);
 }
 
+// This switched the entity that is being placed by removing the current entity and then adding the new one.
 void AelaGame::switchEntityBeingPlaced(EntityType type) {
 	if (entityBeingPlaced->getEntityType() != type) {
 		removeEntityBeingPlaced();
@@ -55,10 +56,11 @@ void AelaGame::switchEntityBeingPlaced(EntityType type) {
 	}
 }
 
+// This removes the entity that is being placed from the map.
 void AelaGame::removeEntityBeingPlaced() {
 	switch (entityBeingPlaced->getEntityType()) {
 		case EntityType::MODEL:
-			std::cout << mapBeingEdited->removeModel(idOfEntityInMap);
+			mapBeingEdited->removeModel(idOfEntityInMap);
 			break;
 		case EntityType::LIGHT:
 			mapBeingEdited->removeLight(idOfEntityInMap);
@@ -69,6 +71,8 @@ void AelaGame::removeEntityBeingPlaced() {
 	}
 }
 
+// This adds the entity that is being placed to the map. This is done before the entity's properties (such as rotation)
+// are finalized so that the user can see how the entity looks like in the map before they finalize it.
 void AelaGame::addEntityBeingPlaced(EntityType type) {
 	switch (type) {
 		case EntityType::MODEL:
@@ -89,10 +93,10 @@ void AelaGame::addEntityBeingPlaced(EntityType type) {
 	}
 }
 
+// This obtains a new resource for the model that is being placed into the map.
 void AelaGame::switchModelResource(unsigned int resource) {
 	Model* model;
 	bool success = resourceManager->obtain<Model>("res/models/" + materialsAndModelNames[currentModelResource] + ".obj", model);
-	std::cout << currentModelResource << " - " << materialsAndModelNames[currentModelResource] << "\n";
 	if (!success) {
 		AelaErrorHandling::windowError("The model resource was not found!");
 		return;
@@ -103,6 +107,7 @@ void AelaGame::switchModelResource(unsigned int resource) {
 	}
 }
 
+// This obtains a new resource for the billboard that is being placed into the map.
 void AelaGame::switchBillboardResource(unsigned int resource) {
 	Texture* texture;
 	bool success = resourceManager->obtain<Texture>("res/textures/" + billboardNames[currentBillboardResource] + ".dds", texture);
@@ -116,20 +121,47 @@ void AelaGame::switchBillboardResource(unsigned int resource) {
 	}
 }
 
+void AelaGame::placeModel() {
+	modelEntity.cloneTransformable(&transformableBeingPlaced);
+	(*mapBeingEdited->getModels())[mapBeingEdited->getModels()->size()] = modelEntity;
+}
+
+void AelaGame::placeLight() {
+	lightEntity.cloneTransformable(&transformableBeingPlaced);
+	(*mapBeingEdited->getLights())[mapBeingEdited->getLights()->size()] = lightEntity;
+	lightEntity.useDefaultValues();
+	lightEntity.setupForNewShadowMap();
+	engine->getRenderer()->generateShadowMap(&lightEntity);
+}
+
+void AelaGame::placeBillboard() {
+	billboardEntity.cloneTransformable(&transformableBeingPlaced);
+	(*mapBeingEdited->getBillboards())[mapBeingEdited->getBillboards()->size()] = billboardEntity;
+}
+
 void AelaGame::setup() {
+	// Certain renderer settings will be changeable in the options menu.
 	engine->getRenderer()->activateFeature(RendererFeature::MSAA_2D_X4);
+	engine->getRenderer()->activateFeature(RendererFeature::MSAA_3D_X4);
+
+	// This loads scripts.
 	loadResources();
 	loadScenes();
+
 	engine->getEventHandler()->addListener(EventConstants::KEY_RELEASED, this);
 	engine->getEventHandler()->addListener(EventConstants::KEY_PRESSED, this);
 
 	// Note: the default entity that is placed is a ModelEntity.
 	entityBeingPlaced = &modelEntity;
 
+	// This sets up the entities that are being placed.
 	switchModelResource(currentModelResource);
 	switchBillboardResource(currentBillboardResource);
 	idOfEntityInMap = mapBeingEdited->addModel(&modelEntity);
 	engine->getRenderer()->generateShadowMap(&lightEntity);
+
+	// The keyed animator will translate the transformable object that represents the properties of the entity being placed using
+	// key inputs.
 	keyedAnimatorKey = engine->getKeyedAnimator3D()->addTransformable(&transformableBeingPlaced);
 }
 
@@ -151,12 +183,16 @@ void AelaGame::update() {
 			mapBeingEdited->getBillboard(idOfEntityInMap)->cloneTransformable(&transformableBeingPlaced);
 			break;
 	}
+	if (placeLightNextUpdate) {
+		placeLight();
+		placeLightNextUpdate = false;
+	}
 }
 
-void AelaGame::exportMap(std::string src) {
+void AelaGame::exportMap(std::string src, bool readable) {
 	EntityType type = entityBeingPlaced->getEntityType();
 	removeEntityBeingPlaced();
-	bool success = engine->getMapExporter()->exportMap(src, mapBeingEdited, true);
+	bool success = engine->getMapExporter()->exportMap(src, mapBeingEdited, readable);
 	if (success) {
 		AelaErrorHandling::windowWarning("Aela Map Creator", "The map was successfully exported to " + src + ".");
 	} else {
@@ -268,20 +304,13 @@ void AelaGame::onEvent(Event* event) {
 			case SDLK_RETURN:
 				switch (entityBeingPlaced->getEntityType()) {
 					case EntityType::MODEL:
-						modelEntity.cloneTransformable(&transformableBeingPlaced);
-						(*mapBeingEdited->getModels())[mapBeingEdited->getModels()->size()] = modelEntity;
+						placeModel();
 						break;
 					case EntityType::LIGHT:
-						lightEntity.cloneTransformable(&transformableBeingPlaced);
-						(*mapBeingEdited->getLights())[mapBeingEdited->getLights()->size()] = lightEntity;
-						lightEntity.useDefaultValues();
-						lightEntity.setupForNewShadowMap();
-						std::cout << "1. " << *lightEntity.getShadowMapBuffer() << " - " << *lightEntity.getShadowMapTexture() << "\n";
-						engine->getRenderer()->generateShadowMap(&lightEntity);
+						placeLightNextUpdate = true;
 						break;
 					case EntityType::BILLBOARD:
-						billboardEntity.cloneTransformable(&transformableBeingPlaced);
-						(*mapBeingEdited->getBillboards())[mapBeingEdited->getBillboards()->size()] = billboardEntity;
+						placeBillboard();
 						break;
 				}
 				break;
@@ -299,12 +328,13 @@ void AelaGame::onEvent(Event* event) {
 				}
 				break;
 			case SDLK_ESCAPE:
-				if (sceneManager->getCurrentSceneId() == 2) {
+				if (sceneManager->getCurrentSceneId() == EDITOR_SCENE) {
 					sceneManager->setCurrentScene(3);
 					engine->getWindow()->showCursor();
 					engine->getRenderer()->getCamera()->setInUse(false);
-				} else if (sceneManager->getCurrentSceneId() == 3) {
-					sceneManager->setCurrentScene(2);
+				} else if (sceneManager->getCurrentSceneId() == PAUSE_ENTITY_TOOL_SCENE || sceneManager->getCurrentSceneId() == PAUSE_EXPORT_SCENE
+					|| sceneManager->getCurrentSceneId() == PAUSE_OPTIONS_SCENE || sceneManager->getCurrentSceneId() == PAUSE_SKYBOX_SCENE) {
+					sceneManager->setCurrentScene(EDITOR_SCENE);
 					engine->getWindow()->hideCursor();
 					engine->getRenderer()->getCamera()->setInUse(true);
 				}

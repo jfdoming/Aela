@@ -36,7 +36,7 @@ void Basic3DModelRenderer::sendLightDataToShader(std::map<int, LightEntity>* lig
 		if (numberOfLights > 0) {
 			unsigned int i = 0;
 			for (auto& light : *lights) {
-				if (*light.second.getShadowMapTexture() != NULL && *light.second.getShadowMapBuffer() != NULL) {
+				if (*light.second.getShadowMapTexture() != NULL && *light.second.getShadowMapBuffer() != NULL && light.second.getPower() != NULL) {
 					if (i + 1 > MAX_LIGHT_AMOUNT) {
 						break;
 					}
@@ -47,10 +47,10 @@ void Basic3DModelRenderer::sendLightDataToShader(std::map<int, LightEntity>* lig
 					glUniform3fv(lightColoursID + i, 1, &value.x);
 
 					float power = light.second.getPower();
-					glUniform1fv(lightPowersID + i, numberOfLights, &power);
+					glUniform1fv(lightPowersID + i, 1, &power);
 
 					glActiveTexture(GL_TEXTURE1 + i);
-					glBindTexture(GL_TEXTURE_CUBE_MAP, *lights->at(i).getShadowMapTexture());
+					glBindTexture(GL_TEXTURE_CUBE_MAP, *light.second.getShadowMapTexture());
 					glUniform1i(shadowMapID + i, 1 + i);
 					i++;
 				}

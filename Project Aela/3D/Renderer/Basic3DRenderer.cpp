@@ -116,15 +116,14 @@ void Basic3DRenderer::setupFrameBuffers(unsigned int multisampling) {
 
 // This generates a light's depth frame buffer.
 void Basic3DRenderer::generateShadowMap(LightEntity* light) {
-	GLuint buffer;
-	glGenFramebuffers(1, &buffer);
+	GLuint* buffer = light->getShadowMapBuffer();
+	glGenFramebuffers(1, buffer);
 
 	// This generates the depth texture, which is sampled from later when rendering models.
-	GLuint texture;
-	glGenTextures(1, &texture);
-	std::cout << "2. " << buffer << " - " << *light->getShadowMapTexture() << "\n";
+	GLuint* texture = light->getShadowMapTexture();
+	glGenTextures(1, texture);
 	
-	glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, *texture);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	for (unsigned int i = 0; i < 6; i++) {
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT24, shadowRenderer.getDepthTextureWidth(), shadowRenderer.getDepthTextureHeight(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
@@ -136,8 +135,8 @@ void Basic3DRenderer::generateShadowMap(LightEntity* light) {
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
-	glBindFramebuffer(GL_FRAMEBUFFER, buffer);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, *buffer);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, *texture, 0);
 
 	// There is no colour output in the bound framebuffer, only depth.
 	glDrawBuffer(GL_NONE);
@@ -149,8 +148,8 @@ void Basic3DRenderer::generateShadowMap(LightEntity* light) {
 		light->setShadowMapBuffer(NULL);
 		light->setShadowMapTexture(NULL);
 	} else {
-		light->setShadowMapBuffer(&buffer);
-		light->setShadowMapTexture(&texture);
+		light->setShadowMapBuffer(buffer);
+		light->setShadowMapTexture(texture);
 	}
 }
 

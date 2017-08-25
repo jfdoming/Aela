@@ -34,5 +34,5 @@ class Basic3DShadowRenderer {
 
 	private:
 		const unsigned int DEPTH_TEXTURE_WIDTH = 2048, DEPTH_TEXTURE_HEIGHT = 2048;
-		const unsigned int MAX_LIGHT_AMOUNT = 2;
+		const unsigned int MAX_LIGHT_AMOUNT = 5;
 };
