@@ -69,7 +69,7 @@ void Basic3DModelRenderer::sendLightDataToShader(std::map<int, LightEntity>* lig
 
 // This function renders a subModel.
 void Basic3DModelRenderer::renderModelEntity(ModelEntity* entity, GLuint frameBuffer, GLuint modelProgramID, GLuint modelMVPMatrixID,
-	GLuint modelMatrixID, GLuint modelViewMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition) {
+	GLuint modelMatrixID, GLuint modelViewMatrixID, GLuint modelRotationMatrixID, GLuint modelTextureID, GLuint cameraPositionID, glm::vec3* cameraPosition) {
 
 	if (entity != nullptr && entity->getModel() != nullptr) {
 		// This sets up buffers.
@@ -114,10 +114,12 @@ void Basic3DModelRenderer::renderModelEntity(ModelEntity* entity, GLuint frameBu
 			glm::vec3* scaling = entity->getScaling();
 
 			// This computes more matrices.
-			glm::mat4 modelMatrix = glm::scale(glm::translate(glm::mat4(1.0), *position), *scaling) * glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
+			glm::mat4 rotationMatrix = glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
+			glm::mat4 modelMatrix = glm::scale(glm::translate(glm::mat4(1.0), *position), *scaling) * rotationMatrix;
 			glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 
 			// This sends more uniforms to the shader.
+			glUniformMatrix4fv(modelRotationMatrixID, 1, GL_FALSE, &rotationMatrix[0][0]);
 			glUniformMatrix4fv(modelMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
 			glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
 			glUniformMatrix4fv(modelViewMatrixID, 1, GL_FALSE, &viewMatrix[0][0]);

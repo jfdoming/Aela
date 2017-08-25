@@ -110,7 +110,7 @@ void loadStartupMap(ResourceManager* resourceManager, Renderer* renderer) {
 	mapLoader.bindRenderer(renderer);
 	resourceManager->bindLoader(&mapLoader);
 	resourceManager->bindGroup("maps");
-	resourceManager->addToGroup("res/maps/sample_map.txt", false);
+	resourceManager->addToGroup("res/maps/map.txt", false);
 	if (resourceManager->loadGroup("maps") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"maps\"!" << std::endl;
 	}

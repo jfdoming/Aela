@@ -1,21 +1,28 @@
 <Skybox src="~skybox_2">
 <Skybox src="~skybox_1">
-<Model src="~meme_mug.obj" position="5.0,0.0,0.0" scaling="1.50,1.50,1.50">
+<Model src="~meme_mug.obj" position="20.0,0.0,20.0" scaling="1.0,1.0,1.0">
+<Model src="~cat.obj" position="5.0,0.0,0.0" scaling="1.50,1.50,1.50">
 <Model src="~house_1.obj" position="0.0,0.0,-6.0" scaling="1.0,1.0,1.0">
 <Model src="~jeep_1.obj" position="-2.0,0.0,10.0" scaling="0.750,0.750,0.750">
 <Model src="~lamp_post_1.obj" position="1.0,-1.0,5.0" scaling="1.0,1.0,1.0">
 <Model src="~sample_terrain_1.obj" position="0.0,0.0,1.0" scaling="2.0,0.0,2.0">
-<Model src="~meme_mug.obj" position="5.130,4.530,-5.220" scaling="1.0,1.0,1.0">
-<Model src="~meme_mug.obj" position="10.170,4.530,0.210" scaling="1.0,1.0,1.0">
-<Model src="~meme_mug.obj" position="5.040001,4.260,2.880001" rotation="0.098175,0.098171,4.516043" scaling="1.0,1.0,1.0">
-<Model src="~meme_mug.obj" position="5.640002,4.260,11.430001" rotation="0.490874,0.098171,0.098178" scaling="2.50,2.50,2.50">
-<Model src="~meme_mug.obj" position="-0.360002,7.080,26.249996" scaling="5.0,5.0,5.0">
-<Model src="~meme_mug.obj" position="-0.360002,12.660,26.249996" scaling="2.250,2.250,2.250">
-<Model src="~meme_mug.obj" position="-0.360002,15.359999,26.009989" scaling="1.0,1.0,1.0">
-<Model src="~meme_mug.obj" position="-0.360001,16.260012,26.069988" scaling="0.250,0.250,0.250">
+<Model src="~meme_mug.obj" position="21.149998,5.520,26.400002" rotation="0.392699,0.392699,0.392699" scaling="1.0,1.0,1.0">
+<Model src="~meme_mug.obj" position="15.119997,5.520,24.090" rotation="0.392699,0.392699,0.392699" scaling="1.0,1.0,1.0">
+<Model src="~meme_mug.obj" position="15.119997,5.520,29.070002" rotation="0.392699,0.392699,0.392699" scaling="1.0,1.0,1.0">
+<Model src="~meme_mug.obj" position="9.689998,5.520,25.769999" rotation="0.392699,0.392699,0.392699" scaling="1.0,1.0,1.0">
+<Model src="~meme_mug.obj" position="18.209999,5.520,20.339994" rotation="0.392699,0.392699,0.392699" scaling="1.0,1.0,1.0">
+<Model src="~meme_mug.obj" position="1.439999,5.520,19.349989" rotation="6.283185,6.283185,6.283185" scaling="2.0,2.0,2.0">
+<Model src="~meme_mug.obj" position="8.099998,5.520,14.429986" rotation="6.283185,6.283185,6.283185" scaling="2.0,2.0,2.0">
+<Model src="~meme_mug.obj" position="-3.150002,5.520,25.949980" rotation="6.283185,6.283185,6.283185" scaling="2.0,2.0,2.0">
+<Model src="~meme_mug.obj" position="-13.080001,5.520,22.469978" rotation="6.283185,6.283185,6.283185" scaling="3.0,3.0,3.0">
+<Model src="~cat.obj" position="15.720001,5.520,3.899976" rotation="6.283185,6.283185,6.283185" scaling="3.0,3.0,3.0">
+<Model src="~cat.obj" position="6.600001,5.520,9.359976" rotation="6.283185,6.283185,6.283185" scaling="3.0,3.0,3.0">
+<Model src="~cat.obj" position="-1.589998,5.520,-1.200025" rotation="6.283185,6.283185,6.283185" scaling="3.0,3.0,3.0">
+<Model src="~cat.obj" position="-10.889999,5.520,-0.870025" rotation="6.283185,6.283185,6.283185" scaling="3.0,3.0,3.0">
+<Model src="~cat.obj" position="-5.729999,5.520,10.079973" rotation="6.283185,6.283185,6.283185" scaling="3.0,3.0,3.0">
+<Model src="~cat.obj" position="-1.229999,5.520,1.979972" rotation="6.283185,6.283185,6.283185" scaling="3.0,3.0,3.0">
+<Model src="~cat.obj" position="6.390001,5.70,-1.230026" rotation="6.283185,6.283185,6.283185" scaling="3.0,3.0,3.0">
+<Model src="~house_1.obj" position="-0.780001,3.480003,12.089987" rotation="0.098175,3.141589,0.098175" scaling="0.50,0.50,0.50">
 <Light colour="1.0,0.50,1.0" position="-18.0,10.0,10.0" scaling="1.0,1.0,1.0">
 <Light colour="1.0,1.0,0.50" position="1.0,6.80,5.0" scaling="1.0,1.0,1.0">
 <Billboard src="~character.dds" position="0.0,1.0,-1.50" rotation="0.0,3.141593,0.0" scaling="2.0,2.0,1.0">
-<Billboard src="~character.dds" position="-8.999999,4.530,0.210" scaling="1.0,1.0,1.0">
-<Billboard src="~character.dds" position="-0.089999,4.260,-1.709998" rotation="0.098175,0.098171,4.516043" scaling="1.0,1.0,1.0">
-<Billboard src="~character.dds" position="-6.059999,4.260,3.060002" rotation="0.098175,0.098171,4.516043" scaling="1.0,1.0,1.0">

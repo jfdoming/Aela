@@ -79,7 +79,7 @@ namespace Aela {
 			// These are a bunch of handles to GLSL variables that get passed to the shadow and
 			// model renderer during rendering.
 			GLuint depthProgramID, modelProgramID, billboardProgramID, skyboxProgramID;
-			GLuint modelTextureID, modelMVPMatrixID, depthMatrixID, modelViewMatrixID, modelMatrixID, cameraPositionID, shadowMapID, shadowMatrixID, shadowModelMatrixID;
+			GLuint modelTextureID, modelMVPMatrixID, depthMatrixID, modelViewMatrixID, modelMatrixID, modelRotationMatrixID, cameraPositionID, shadowMapID, shadowMatrixID, shadowModelMatrixID;
 			GLuint billboardTextureID, billboardMVPMatrixID;
 			GLuint skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID;
 			GLuint numberOfLightsID, lightPositionsID, lightDirectionsID, lightColoursID, lightPowersID, lightShadowPositionsID;

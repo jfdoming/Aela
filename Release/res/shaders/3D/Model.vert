@@ -24,6 +24,7 @@ out vec3 normal;
 uniform mat4 modelViewProjectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
+uniform mat4 rotationMatrix;
 
 void main(){
 
@@ -32,7 +33,7 @@ void main(){
 	
 	modelViewProjectionPosition = vertexPosition;
 	
-	normal = vertexNormal;
+	normal = vec3(rotationMatrix * vec4(vertexNormal, 1));
 	
 	// This is the position of the vertex in the world space.
 	worldSpacePosition = vec3(modelMatrix * vec4(vertexPosition, 1.0));

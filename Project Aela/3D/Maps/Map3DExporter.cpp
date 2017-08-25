@@ -25,19 +25,21 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 
 		for (auto& pair : *map->getSkyboxes()) {
 			SkyboxEntity* entity = &pair.second;
-			file << "<Skybox src=\"";
-			std::string path = entity->getSkybox()->getSrc();
-			abbreviate(path, DEFAULT_SKYBOX_PATH);
+			if (entity->getSkybox() != nullptr && entity->getSkybox()->getSrc() != "") {
+				file << "<Skybox src=\"";
+				std::string path = entity->getSkybox()->getSrc();
+				abbreviate(path, DEFAULT_SKYBOX_PATH);
 
-			file << path << "\">";
-			if (mapIsReadable) {
-				file << "\n";
+				file << path << "\">";
+				if (mapIsReadable) {
+					file << "\n";
+				}
 			}
 		}
 
 		for (auto& pair : *map->getModels()) {
 			ModelEntity* entity = &pair.second;
-			if (entity->getModel() != nullptr) {
+			if (entity->getModel() != nullptr && entity->getModel()->getSrc() != "") {
 				file << "<Model src=\"";
 				std::string path = entity->getModel()->getSrc();
 				abbreviate(path, DEFAULT_MODEL_PATH);
@@ -62,7 +64,7 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 
 		for (auto& pair : *map->getBillboards()) {
 			BillboardEntity* entity = &pair.second;
-			if (entity->getTexture() != nullptr) {
+			if (entity->getTexture() != nullptr && entity->getTexture()->getSrc() != "") {
 				file << "<Billboard src=\"";
 				std::string path = entity->getTexture()->getSrc();
 				abbreviate(path, DEFAULT_TEXTURE_PATH);

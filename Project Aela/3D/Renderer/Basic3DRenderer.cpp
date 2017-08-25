@@ -32,6 +32,7 @@ void Basic3DRenderer::getIDs() {
 	modelMVPMatrixID = glGetUniformLocation(modelProgramID, "modelViewProjectionMatrix");
 	modelViewMatrixID = glGetUniformLocation(modelProgramID, "viewMatrix");
 	modelMatrixID = glGetUniformLocation(modelProgramID, "modelMatrix");
+	modelRotationMatrixID = glGetUniformLocation(modelProgramID, "rotationMatrix");
 	cameraPositionID = glGetUniformLocation(modelProgramID, "cameraPosition");
 	shadowMapID = glGetUniformLocation(modelProgramID, "shadowMaps[0]");
 	numberOfLightsID = glGetUniformLocation(modelProgramID, "numberOfLights");
@@ -198,9 +199,9 @@ void Basic3DRenderer::renderModelEntity(ModelEntity* entity, bool multisampling)
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	glViewport(0, 0, windowWidth, windowHeight);
 	if (multisampling) {
-		modelRenderer.renderModelEntity(entity, multisampledColourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
+		modelRenderer.renderModelEntity(entity, multisampledColourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelRotationMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
 	} else {
-		modelRenderer.renderModelEntity(entity, colourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
+		modelRenderer.renderModelEntity(entity, colourFrameBuffer, modelProgramID, modelMVPMatrixID, modelMatrixID, modelViewMatrixID, modelRotationMatrixID, modelTextureID, cameraPositionID, camera->getPosition());
 	}
 }
 

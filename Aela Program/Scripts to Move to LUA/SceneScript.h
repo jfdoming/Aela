@@ -69,16 +69,16 @@ void setupScenes(Engine* engine) {
 	mainMenuScene->getMenu()->add(button);
 
 	Map3D* map;
-	success = engine->getResourceManager()->obtain<Map3D>("res/maps/sample_map.txt", map);
+	success = engine->getResourceManager()->obtain<Map3D>("res/maps/map.txt", map);
 	if (success) {
 		mainMenuScene->setMap(map);
 	} else {
-		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/sample_map.txt wasn't loaded properly or something.");
+		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/map.txt wasn't loaded properly or something.");
 	}
 
 	engine->getSceneManager()->registerScene(mainMenuScene, 1);
 	engine->getSceneManager()->setCurrentScene(1);
 
-	//engine->getWindow()->hideCursor();
-	//engine->getRenderer()->getCamera()->setInUse(true);
+	engine->getWindow()->hideCursor();
+	engine->getRenderer()->getCamera()->setInUse(true);
 }

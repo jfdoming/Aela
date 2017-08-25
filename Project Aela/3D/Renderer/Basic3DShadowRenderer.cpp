@@ -91,7 +91,7 @@ void Basic3DShadowRenderer::renderShadow(ModelEntity* entity, GLuint depthProgra
 					glUniform3fv(lightPositionsID, 1, &(light.second.getPosition()->x));
 
 					// This computes more matrices.
-					glm::mat4 modelMatrix = glm::translate(glm::scale(glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z), *scaling), *position);
+					glm::mat4 modelMatrix = glm::scale(glm::translate(glm::mat4(1.0), *position), *scaling) * glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
 
 					// This sends all transformations to the shader.
 					glUniformMatrix4fv(shadowModelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
