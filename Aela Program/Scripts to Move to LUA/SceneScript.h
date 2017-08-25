@@ -50,7 +50,7 @@ void setupScenes(Engine* engine) {
 	particleEmitter->setCamera(engine->getRenderer()->getCamera());
 	particleEmitter->setStats(0.001f, 20, 0.001f, 2, 2);
 	particleEmitter->setPosition(5, 0, 5);
-	particleEmitter->setRotation(0, 3.4f, 0.1f);
+	particleEmitter->setRotation(0, 3.4f, 0.7f);
 	particleEmitter->setTimeManager(engine->getTimeManager());
 
 	std::vector<Texture*> particleTextures;

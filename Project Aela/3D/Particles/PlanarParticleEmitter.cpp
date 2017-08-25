@@ -45,7 +45,13 @@ void PlanarParticleEmitter::setupParticlePositioning(unsigned int whichParticle,
 	// This chooses the position of the particle, relative to the emitter.
 	srand(timeManager->getCurrentTime() + whichParticle);
 	float particleZ = dimensions.getHeight() - (dimensions.getHeight() / numberOfParticles) * whichParticle;
-	particles.at(whichParticle).setPosition((rand() % 100) / 100.0f * dimensions.getWidth(), pathOffset * (rand() % 100) / 100.0f, particleZ);
+	particles[whichParticle].setPosition((rand() % 100) / 100.0f * dimensions.getWidth(), pathOffset * (rand() % 100) / 100.0f, particleZ);
+	for (unsigned int i = 0; i < particles.size(); i++) {
+		if (particles[i].getPosition()->z >= particles[whichParticle].getPosition()->z) {
+			particles.insert(particles.begin() + i, particles[whichParticle]);
+			particles.erase(particles.begin() + whichParticle + 1);
+		}
+	}
 }
 
 // This sorts particles so that the particles that have a greater depth are earlier in the particle list and are rendered first.

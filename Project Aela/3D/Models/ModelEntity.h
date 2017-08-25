@@ -40,7 +40,7 @@ namespace Aela {
 			}
 
 			~ModelEntity() {
-				std::cout << "DIE!\n";
+				
 			}
 
 			// These are the getters and setters.
