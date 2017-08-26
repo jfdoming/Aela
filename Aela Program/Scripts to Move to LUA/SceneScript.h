@@ -9,39 +9,75 @@
 
 using namespace Aela;
 
-void test() {
-	AelaErrorHandling::windowError("This error message is a test.", "Test.");
-}
+#define EKKON_INTRO_SCENE 1
+#define MAIN_MENU_SCENE 2
+#define GAMEPLAY_SCENE 3
 
 void setupScenes(Engine* engine) {
-	// This creates text-related objects.
+	// This creates some objects for later.
 	FontManager* fontManager = engine->getFontManager();
-	TextFont* xerox = fontManager->obtainTextFont("res/fonts/xerox.ttf", 22);
-	if (xerox == nullptr) {
+	TextFont* xeroxLarge = fontManager->obtainTextFont("res/fonts/xerox.ttf", 35);
+	TextFont* xerox = fontManager->obtainTextFont("res/fonts/xerox.ttf", 18);
+	if (xeroxLarge == nullptr || xerox == nullptr) {
 		AelaErrorHandling::windowError("A critical font (xerox.ttf) could not be loaded, aborting!");
 		return;
 	}
-	ColourRGBA textColour(0.5f, 0.4f, 0.3f, 1.0f);
+	ColourRGBA VSBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
+	ColourRGBA almostWhite(0.9f, 0.9f, 0.9f, 1.0f);
+	Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getWindowDimensions());
 
-	// This sets up an image.
-	ImageComponent* image = new ImageComponent;
-	Texture* texture;
-	bool success = engine->getResourceManager()->obtain<Texture>("res/textures/ekkon.dds", texture);
-	image->setDimensions(&Rect<int>(0, 0, 1024, 60));
-	image->setTexture(texture);
+	// The following blocks of code set up the Ekkon intro scene.
+	ImageComponent* ekkonImage = new ImageComponent();
+	Texture* ekkonTexture;
+	bool success = engine->getResourceManager()->obtain<Texture>("res/textures/ekkon.dds", ekkonTexture);
+	ekkonImage->setDimensions(&windowDimensions);
+	ekkonImage->setTexture(ekkonTexture);
 
-	Label* buttonText = new Label("Click me", xerox, &textColour, fontManager);
+	// This sets up the ekkon scene.
+	Scene* ekkonScene = new Scene();
+	ekkonScene->setId(EKKON_INTRO_SCENE);
+	ekkonScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
+	ekkonScene->getMenu()->add(ekkonImage);
 
-	Button* button = new Button();
-	success = engine->getResourceManager()->obtain<Texture>("res/textures/lol_button.dds", texture);
-	button->setDimensions(&Rect<int>(200, 200, 128, 64));
-	button->setTexture(texture);
-	button->setupOnClick(&test, engine->getEventHandler());
-	button->setText(buttonText, engine->getFontManager());
+	// The following blocks of code set up the main menu scene.
+	// This sets up text. You know what's annoying though? When Visual Studio turns "(int) (...)" into "(int)(...)" when I copy
+	// and paste the former!
+	Label* titleText = new Label("Aela Program", xeroxLarge, &VSBlue, fontManager);
+	titleText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.05), (int)(windowDimensions.getHeight() / 1.3f));
+	Label* ekkonGamesText = new Label("Ekkon Games", xerox, &VSBlue, fontManager);
+	ekkonGamesText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.8), ((int)(windowDimensions.getHeight() * 0.95)));
+	Label* continueGameButtonText = new Label("Edit Map", xerox, &VSBlue, fontManager);
+	int spacing = continueGameButtonText->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
+	Label* optionsButtonText = new Label("Help", xerox, &VSBlue, fontManager);
+	Label* exitButtonText = new Label("Exit", xerox, &VSBlue, fontManager);
 
-	Label* gameTitleText = new Label("Test", xerox, &textColour, fontManager);
-	Rect<int> textOutput(100, 100, 300, 300);
-	gameTitleText->setDimensions(&textOutput);
+	// This sets up actions for the main menu buttons.
+	auto continueGameAction = [](Engine* engine) {
+		
+	};
+	auto optionsAction = [](Engine* engine) {
+	};
+	auto exitAction = [](Engine* engine) {engine->getWindow()->quit(); };
+
+	// This sets up some textureless buttons. Note: setText() uses information about the button's dimensions. In order to setup text for
+	// a button, make sure that you set the button's position before hand.
+	Button* continueGameButton = new Button();
+	continueGameButton->setDimensions(continueGameButtonText->getDimensions());
+	continueGameButton->setupOnClick(&AelaEngineFunctor(engine, continueGameAction), engine->getEventHandler());
+	continueGameButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f));
+	continueGameButton->setText(continueGameButtonText, engine->getFontManager());
+
+	Button* optionsButton = new Button();
+	optionsButton->setDimensions(optionsButtonText->getDimensions());
+	optionsButton->setupOnClick(&AelaEngineFunctor(engine, optionsAction), engine->getEventHandler());
+	optionsButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f + spacing));
+	optionsButton->setText(optionsButtonText, engine->getFontManager());
+
+	Button* exitButton = new Button();
+	exitButton->setDimensions(exitButtonText->getDimensions());
+	exitButton->setupOnClick(&AelaEngineFunctor(engine, exitAction), engine->getEventHandler());
+	exitButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f + spacing * 2));
+	exitButton->setText(exitButtonText, engine->getFontManager());
 
 	// This sets up particles.
 	PlanarParticleEmitter* particleEmitter = new PlanarParticleEmitter();
@@ -53,6 +89,17 @@ void setupScenes(Engine* engine) {
 	particleEmitter->setRotation(0, 3.4f, 0.7f);
 	particleEmitter->setTimeManager(engine->getTimeManager());
 
+	// This sets up the title screen scene.
+	Scene* mainMenuScene = new Scene();
+	mainMenuScene->setId(MAIN_MENU_SCENE);
+	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
+	mainMenuScene->getMenu()->add(titleText);
+	mainMenuScene->getMenu()->add(ekkonGamesText);
+	mainMenuScene->getMenu()->add(continueGameButton);
+	mainMenuScene->getMenu()->add(optionsButton);
+	mainMenuScene->getMenu()->add(exitButton);
+	mainMenuScene->putParticleEmitter(particleEmitter);
+
 	std::vector<Texture*> particleTextures;
 	Texture* tResult;
 	success = engine->getResourceManager()->obtain<Texture>("res/particles/particle_1.dds", tResult);
@@ -60,13 +107,6 @@ void setupScenes(Engine* engine) {
 	success = engine->getResourceManager()->obtain<Texture>("res/particles/particle_2.dds", tResult);
 	particleTextures.push_back(tResult);
 	particleEmitter->setupParticles(&particleTextures, 0.6f, 0.6f, 25);
-
-	Scene* mainMenuScene = new Scene();
-	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
-	mainMenuScene->putParticleEmitter(particleEmitter);
-	mainMenuScene->getMenu()->add(image);
-	mainMenuScene->getMenu()->add(gameTitleText);
-	mainMenuScene->getMenu()->add(button);
 
 	Map3D* map;
 	success = engine->getResourceManager()->obtain<Map3D>("res/maps/map.txt", map);
@@ -76,9 +116,10 @@ void setupScenes(Engine* engine) {
 		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/map.txt wasn't loaded properly or something.");
 	}
 
-	engine->getSceneManager()->registerScene(mainMenuScene, 1);
-	engine->getSceneManager()->setCurrentScene(1);
+	engine->getSceneManager()->registerScene(ekkonScene, EKKON_INTRO_SCENE);
+	engine->getSceneManager()->registerScene(mainMenuScene, MAIN_MENU_SCENE);
+	engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE);
 
-	engine->getWindow()->hideCursor();
-	engine->getRenderer()->getCamera()->setInUse(true);
+	// engine->getWindow()->hideCursor();
+	// engine->getRenderer()->getCamera()->setInUse(true);
 }

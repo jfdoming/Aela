@@ -1,5 +1,5 @@
-<Skybox src="~skybox_2">
 <Skybox src="~skybox_1">
+<Skybox src="~skybox_2">
 <Model src="~meme_mug.obj" position="20.0,0.0,20.0" scaling="1.0,1.0,1.0">
 <Model src="~cat.obj" position="5.0,0.0,0.0" scaling="1.50,1.50,1.50">
 <Model src="~house_1.obj" position="0.0,0.0,-6.0" rotation="0.0,3.14150,0.0" scaling="1.0,1.0,1.0">
