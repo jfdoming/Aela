@@ -121,7 +121,7 @@ void setupScenes(Engine* engine) {
 	engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE);
 	engine->getSceneManager()->setDisposingScenesOnDestroy(true);
 
-	// engine->getWindow()->hideCursor();
+	engine->getWindow()->hideCursor();
 	// TODO investigate this
-	// engine->getRenderer()->getCamera()->setInUse(true);
+	engine->getRenderer()->getCamera()->setInUse(true);
 }

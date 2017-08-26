@@ -15,7 +15,7 @@ namespace Aela {
 			AbstractLayoutManager(Container* parent);
 			~AbstractLayoutManager();
 
-			virtual void update(std::vector<Component*>& components);
+			virtual void update(std::vector<std::shared_ptr<Component*>>& components);
 		protected:
 			Container* parent;
 	};

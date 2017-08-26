@@ -8,10 +8,11 @@
 #pragma once
 #include "Component.h"
 #include <vector>
+#include <memory>
 
 namespace Aela {
 	class LayoutManager {
 		public:
-			virtual void update(std::vector<Component*>& components) = 0;
+			virtual void update(std::vector<std::shared_ptr<Component*>>& components) = 0;
 	};
 }

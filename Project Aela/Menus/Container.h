@@ -10,6 +10,7 @@
 #include "Component.h"
 #include "LayoutManager.h"
 #include <vector>
+#include <memory>
 
 namespace Aela {
 	class Container : public Component {
@@ -28,6 +29,6 @@ namespace Aela {
 
 		private:
 			LayoutManager* layout;
-			std::vector<Component*> children;
+			std::vector<std::shared_ptr<Component*>> children;
 	};
 }

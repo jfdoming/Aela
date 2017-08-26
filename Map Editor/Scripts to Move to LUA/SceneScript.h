@@ -9,6 +9,8 @@
 #include "Menus\RectComponent.h"
 #include "3D\Maps\Map3DExporter.h"
 
+#include <memory>
+
 using namespace Aela;
 
 #define MAIN_MENU_SCENE 1
