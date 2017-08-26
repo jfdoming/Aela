@@ -20,8 +20,12 @@ void Menu::init(Rect<int>* renderDimensions, Renderer* renderer, int x, int y) {
 
 void Menu::render(Renderer* renderer) {
 	renderer->bindSimple2DFramebuffer(&buffer);
-	renderer->clearSimple2DFramebuffer();
-	Container::render(renderer);
+
+	if (initialized && dirty) {
+		renderer->clearSimple2DFramebuffer();
+		Container::render(renderer);
+	}
+
 	renderer->renderSimple2DFramebuffer();
 }
 

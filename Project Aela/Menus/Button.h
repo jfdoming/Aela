@@ -24,15 +24,14 @@ namespace Aela {
 			virtual ~Button();
 
 			// These are getters and setters.
-			void setupOnClick(void(*function)(), EventHandler* eventHandler);
-			void setupOnClick(AelaEngineFunctor* functor, EventHandler* eventHandler);
+			void setupOnClick(std::function<void()> function, EventHandler* eventHandler);
 			void setText(Label* text, FontManager* fontManager);
 			std::string getText();
 			void setHoverTint(ColourRGBA* hoverTint);
 			void setClickTint(ColourRGBA* clickTint);
 
-			virtual void update();
-			virtual void render(Renderer* renderer);
+			virtual void updateComponent();
+			virtual void renderComponent(Renderer* renderer);
 
 			void onEvent(Event* event);
 
@@ -44,8 +43,7 @@ namespace Aela {
 			bool clickStarted = false;
 			State state = State::NORMAL;
 
-			void (*onClick)() = nullptr;
-			AelaEngineFunctor onClickFunctor;
+			std::function<void()> onClick;
 			Label* text = nullptr;
 
 			// These are the tints used by the button. Keep in mind that a tint is a multiplier.

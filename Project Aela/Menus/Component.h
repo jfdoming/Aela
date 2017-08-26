@@ -17,15 +17,14 @@ namespace Aela {
 			virtual ~Component();
 
 			// These are getters and setters.
-			virtual bool isDirty();
 			void setDimensions(Rect<int>* dimensions);
 			Rect<int>* getDimensions();
 
 			virtual void setInUse(bool inUse);
 			bool isInUse();
 
-			virtual void update() = 0;
-			virtual void render(Renderer* renderer) = 0;
+			virtual void update();
+			virtual void render(Renderer* renderer);
 		protected:
 			// whether this component needs to be repainted
 			bool dirty = true;
@@ -34,5 +33,8 @@ namespace Aela {
 			Rect<int> dimensions;
 
 			bool inUse = false;
+
+			virtual void updateComponent() = 0;
+			virtual void renderComponent(Renderer* renderer) = 0;
 	};
 }

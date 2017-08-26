@@ -15,7 +15,7 @@ namespace Aela {
 	class Menu : public Container {
 		public:
 			Menu();
-			~Menu();
+			virtual ~Menu();
 
 			void init(Rect<int>* renderDimensions, Renderer* renderer);
 			void init(Rect<int>* renderDimensions, Renderer* renderer, int x, int y);

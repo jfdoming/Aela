@@ -55,7 +55,6 @@
     <ClCompile Include="Menus\Component.cpp" />
     <ClCompile Include="Menus\Container.cpp" />
     <ClCompile Include="Menus\Menu.cpp" />
-    <ClCompile Include="Menus\TextComponent.cpp" />
     <ClCompile Include="Old Garbage\shader.cpp" />
     <ClCompile Include="Old Garbage\texture.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
@@ -70,7 +69,6 @@
     <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp" />
     <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="Menus\ImageComponent.cpp" />
-    <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
     <ClCompile Include="3D\Animator\KeyedAnimator3D.cpp" />
     <ClCompile Include="User Environment\UserEnvironment.cpp" />
     <ClCompile Include="Menus\RectComponent.cpp" />
@@ -78,6 +76,7 @@
     <ClCompile Include="Menus\Label.cpp" />
     <ClCompile Include="Menus\Button.cpp" />
     <ClCompile Include="3D\Maps\Map3DExporter.cpp" />
+    <ClCompile Include="Menus\TextInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -139,7 +138,6 @@
     <ClInclude Include="Menus\LayoutManager.h" />
     <ClInclude Include="Menus\Menu.h" />
     <ClInclude Include="Menus\stdafx.h" />
-    <ClInclude Include="Menus\TextComponent.h" />
     <ClInclude Include="Old Garbage\shader.hpp" />
     <ClInclude Include="Old Garbage\texture.hpp" />
     <ClInclude Include="Renderer\Renderer.h" />
@@ -162,7 +160,6 @@
     <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
     <ClInclude Include="Window\Window.h" />
     <ClInclude Include="Menus\ImageComponent.h" />
-    <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
     <ClInclude Include="Utilities\strut.h" />
     <ClInclude Include="Utilities\AelaEngineFunctor.h" />
     <ClInclude Include="3D\Animator\KeyedAnimator3D.h" />
@@ -174,5 +171,7 @@
     <ClInclude Include="3D\Maps\Map3DExporter.h" />
     <ClInclude Include="2D\Texture\Image.h" />
     <ClInclude Include="Resource Management\ResourcePaths.h" />
+    <ClInclude Include="2D\Text\TextManager.h" />
+    <ClInclude Include="Menus\TextInput.h" />
   </ItemGroup>
 </Project>

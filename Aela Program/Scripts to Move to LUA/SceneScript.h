@@ -76,9 +76,12 @@ void setupScenes(Engine* engine) {
 		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/map.txt wasn't loaded properly or something.");
 	}
 
+	engine->getSceneManager()->setDisposingScenesOnDestroy(true);
+
 	engine->getSceneManager()->registerScene(mainMenuScene, 1);
 	engine->getSceneManager()->setCurrentScene(1);
 
-	engine->getWindow()->hideCursor();
-	engine->getRenderer()->getCamera()->setInUse(true);
+	engine->getWindow()->showCursor();
+	// TODO investigate this
+	engine->getRenderer()->getCamera()->setInUse(false);
 }

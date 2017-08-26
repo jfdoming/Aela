@@ -1,5 +1,5 @@
 /*
-* Class: TextComponent
+* Class: TextInput
 * Author: Julian Dominguez-Schatz and Robert Ciborowski
 * Date: 20/03/2017
 * Description: A class which represents a text component. It allows the user to enter text.
@@ -9,17 +9,12 @@
 #include "Component.h"
 
 namespace Aela {
-	class TextComponent : public Component {
+	class TextComponent : public Component, public Listener {
 		public:
-			// This is the default constructor, which will require the user to call setup() once the object's properties are set.
-			TextComponent();
-
-			// These are constructors that do not require the user to call setup() as they do it for the user.
 			TextComponent(std::string text, TextFont* font, FontManager* fontManager);
 			TextComponent(std::string text, TextFont* font, ColourRGBA* colour, FontManager* fontManager);
 
-			// This is the destructor.
-			~TextComponent();
+			virtual ~TextComponent();
 
 			void setup(FontManager* fontManager);
 			virtual void update();
@@ -27,18 +22,16 @@ namespace Aela {
 			virtual void render(Renderer* renderer, ColourRGBA* tint);
 
 			// These are getters and setters.
-			void setText(std::string text);
 			std::string getText();
-			void setFont(TextFont* font);
 			TextFont* getFont();
-			void setColour(ColourRGBA* colour);
 			ColourRGBA* getColour();
 
 		protected:
 			std::string text;
+			int cursorPosition = 0;
+			int selectionPosition = 0;
+
 			TextFont* font;
 			ColourRGBA colour;
-
-			void setupWidthAndHeight(FontManager* fontManager);
 	};
 }

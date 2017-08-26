@@ -13,10 +13,10 @@ RectComponent::RectComponent() : colour(1, 1, 1, 1) {
 RectComponent::~RectComponent() {
 }
 
-void RectComponent::update() {
+void RectComponent::updateComponent() {
 }
 
-void RectComponent::render(Renderer* renderer) {
+void RectComponent::renderComponent(Renderer* renderer) {
 	renderer->renderRectangle(&dimensions, &colour);
 }
 

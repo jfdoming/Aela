@@ -12,11 +12,6 @@
 
 using namespace Aela;
 
-void AelaGame::setEngine(Engine* engine) {
-	this->engine = engine;
-	resourceManager = engine->getResourceManager();
-}
-
 void AelaGame::loadResources() {
 	loadMaterials(resourceManager);
 	loadModels(resourceManager);
@@ -37,4 +32,8 @@ void AelaGame::setup() {
 
 void AelaGame::update() {
 
+}
+
+void AelaGame::cleanup() {
+	unloadResources(resourceManager);
 }

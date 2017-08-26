@@ -9,6 +9,11 @@ SceneManager::SceneManager() {
 }
 
 SceneManager::~SceneManager() {
+	if (disposingScenesOnDestroy) {
+		for (auto ptr : scenes) {
+			delete ptr.second;
+		}
+	}
 }
 
 void SceneManager::registerScene(Scene* scene, unsigned int id) {
@@ -44,6 +49,14 @@ void SceneManager::setCurrentScene(unsigned int id) {
 
 unsigned int SceneManager::getCurrentSceneId() {
 	return currentScene->getId();
+}
+
+void SceneManager::setDisposingScenesOnDestroy(bool disposingScenesOnDestroy) {
+	this->disposingScenesOnDestroy = disposingScenesOnDestroy;
+}
+
+bool SceneManager::isDisposingScenesOnDestroy() {
+	return disposingScenesOnDestroy;
 }
 
 // private members
