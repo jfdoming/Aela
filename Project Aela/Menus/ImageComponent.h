@@ -18,8 +18,8 @@ namespace Aela {
 			ImageComponent(Texture* texture, Rect<int>* dimensions, ColourRGBA* tint);
 			virtual ~ImageComponent();
 
-			virtual void update();
-			virtual void render(Renderer* renderer);
+			virtual void updateComponent();
+			virtual void renderComponent(Renderer* renderer);
 
 			// These are getters and setters.
 			void setTexture(Texture* texture);

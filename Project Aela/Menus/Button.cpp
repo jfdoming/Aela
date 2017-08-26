@@ -20,7 +20,7 @@ Aela::Button::Button(ColourRGBA* hoverTint, ColourRGBA* clickTint) {
 Aela::Button::~Button() {
 }
 
-void Aela::Button::update() {
+void Aela::Button::updateComponent() {
 	switch (state) {
 		case State::NORMAL:
 			tint.setValues(1, 1, 1, 1);
@@ -34,8 +34,8 @@ void Aela::Button::update() {
 	}
 }
 
-void Aela::Button::render(Renderer* renderer) {
-	ImageComponent::render(renderer);
+void Aela::Button::renderComponent(Renderer* renderer) {
+	ImageComponent::renderComponent(renderer);
 	if (text != nullptr) {
 		text->render(renderer, &tint);
 	}
@@ -67,12 +67,7 @@ void Aela::Button::onEvent(Event* event) {
 				y = mouseEvent->getMouseY();
 
 				if (dimensions.contains(x, y)) {
-					if (onClick != nullptr) {
-						onClick();
-					} else {
-						onClickFunctor();
-					}
-
+					onClick();
 					state = State::HOVER;
 				} else {
 					state = State::NORMAL;
@@ -95,15 +90,8 @@ void Aela::Button::onEvent(Event* event) {
 	}
 }
 
-void Aela::Button::setupOnClick(void(*function)(), EventHandler* eventHandler) {
+void Aela::Button::setupOnClick(std::function<void()> function, EventHandler* eventHandler) {
 	onClick = function;
-	eventHandler->addListener(EventConstants::MOUSE_PRESSED, this);
-	eventHandler->addListener(EventConstants::MOUSE_RELEASED, this);
-	eventHandler->addListener(EventConstants::MOUSE_MOVED, this);
-}
-
-void Aela::Button::setupOnClick(AelaEngineFunctor* functor, EventHandler* eventHandler) {
-	onClickFunctor = *functor;
 	eventHandler->addListener(EventConstants::MOUSE_PRESSED, this);
 	eventHandler->addListener(EventConstants::MOUSE_RELEASED, this);
 	eventHandler->addListener(EventConstants::MOUSE_MOVED, this);

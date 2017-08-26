@@ -29,10 +29,10 @@ void Label::setup(FontManager* fontManager) {
 	setupWidthAndHeight(fontManager);
 }
 
-void Label::update() {
+void Label::updateComponent() {
 }
 
-void Label::render(Renderer* renderer) {
+void Label::renderComponent(Renderer* renderer) {
 	renderer->renderText(text, font, &dimensions, &colour);
 }
 

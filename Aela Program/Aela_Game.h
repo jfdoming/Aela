@@ -13,14 +13,13 @@ using namespace Aela;
 
 class AelaGame {
 	public:
-		AelaGame() {
-
+		AelaGame(Engine* engine) : engine(engine) {
+			resourceManager = engine->getResourceManager();
 		}
 
 		void setup();
 		void update();
-
-		void setEngine(Engine* engine);
+		void cleanup();
 	private:
 		Engine* engine;
 		ResourceManager* resourceManager;

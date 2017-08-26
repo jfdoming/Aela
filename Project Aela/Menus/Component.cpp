@@ -12,13 +12,10 @@ Aela::Component::Component(int x, int y, int width, int height) :dimensions(x, y
 Component::~Component() {
 }
 
-bool Component::isDirty() {
-	return dirty;
-}
-
 void Component::setDimensions(Rect<int>* dimensions) {
 	this->dimensions = *dimensions;
 }
+
 
 Rect<int>* Component::getDimensions() {
 	return &dimensions;
@@ -30,4 +27,15 @@ void Component::setInUse(bool inUse) {
 
 bool Component::isInUse() {
 	return inUse;
+}
+
+void Component::update() {
+	updateComponent();
+}
+
+void Component::render(Renderer* renderer) {
+	if (dirty) {
+		renderComponent(renderer);
+		dirty = false;
+	}
 }

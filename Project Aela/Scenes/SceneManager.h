@@ -25,12 +25,17 @@ namespace Aela {
 
 			void setCurrentScene(unsigned int id);
 			unsigned int getCurrentSceneId();
+
+			void setDisposingScenesOnDestroy(bool disposingScenesOnDestroy);
+			bool isDisposingScenesOnDestroy();
 		private:
 			std::unordered_map<unsigned int, Aela::Scene*> scenes;
 
 			Scene* currentScene = nullptr;
 			Scene* previousScene = nullptr;
 			bool sceneChangeRequested = false;
+
+			bool disposingScenesOnDestroy = true;
 
 			/**
 			 * Why does this need to be private? Well, keep in mind that avoiding getters is necessary whenever possible,

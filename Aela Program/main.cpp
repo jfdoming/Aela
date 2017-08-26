@@ -11,7 +11,6 @@
 
 int main(int argc, char *args[]) {
 	Aela::Engine engine;
-	AelaGame game;
 
 	int error = engine.setupWindow(1280, 720, 50, 50);
 	if (error != 0) {
@@ -48,7 +47,7 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
-	game.setEngine(&engine);
+	AelaGame game(&engine);
 	game.setup();
 
 	do {
@@ -56,6 +55,8 @@ int main(int argc, char *args[]) {
 		game.update();
 		engine.render();
 	} while (!engine.shouldExit());
+
+	game.cleanup();
 
     return 0;
 }

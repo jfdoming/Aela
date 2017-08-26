@@ -126,3 +126,11 @@ void loadStartupMap(ResourceManager* resourceManager, Renderer* renderer) {
 		std::cerr << "Failed to load a resource from group \"maps\"!" << std::endl;
 	}
 }
+
+void unloadResources(ResourceManager* resourceManager) {
+	resourceManager->unloadGroup("materials");
+	resourceManager->unloadGroup("textures");
+	resourceManager->unloadGroup("particles");
+	resourceManager->unloadGroup("skybox");
+	resourceManager->unloadGroup("maps");
+}

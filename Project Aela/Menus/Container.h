@@ -19,8 +19,8 @@ namespace Aela {
 
 			void add(Component* component);
 
-			virtual void update();
-			virtual void render(Renderer* renderer);
+			virtual void updateComponent();
+			virtual void renderComponent(Renderer* renderer);
 
 			virtual void setInUse(bool inUse);
 		protected:

@@ -31,15 +31,13 @@ void Container::add(Component* component) {
 	children.push_back(component);
 }
 
-void Container::update() {
+void Container::updateComponent() {
 	layout->update(children);
 }
 
-void Container::render(Renderer* renderer) {
+void Container::renderComponent(Renderer* renderer) {
 	for (Component* child : children) {
-		if (child->isDirty()) {
-			child->render(renderer);
-		}
+		child->render(renderer);
 	}
 }
 

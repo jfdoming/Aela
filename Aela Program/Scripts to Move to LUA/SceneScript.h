@@ -63,19 +63,19 @@ void setupScenes(Engine* engine) {
 	// a button, make sure that you set the button's position before hand.
 	Button* continueGameButton = new Button();
 	continueGameButton->setDimensions(continueGameButtonText->getDimensions());
-	continueGameButton->setupOnClick(&AelaEngineFunctor(engine, continueGameAction), engine->getEventHandler());
+	continueGameButton->setupOnClick(std::bind(continueGameAction, engine), engine->getEventHandler());
 	continueGameButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f));
 	continueGameButton->setText(continueGameButtonText, engine->getFontManager());
 
 	Button* optionsButton = new Button();
 	optionsButton->setDimensions(optionsButtonText->getDimensions());
-	optionsButton->setupOnClick(&AelaEngineFunctor(engine, optionsAction), engine->getEventHandler());
+	optionsButton->setupOnClick(std::bind(optionsAction, engine), engine->getEventHandler());
 	optionsButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f + spacing));
 	optionsButton->setText(optionsButtonText, engine->getFontManager());
 
 	Button* exitButton = new Button();
 	exitButton->setDimensions(exitButtonText->getDimensions());
-	exitButton->setupOnClick(&AelaEngineFunctor(engine, exitAction), engine->getEventHandler());
+	exitButton->setupOnClick(std::bind(exitAction, engine), engine->getEventHandler());
 	exitButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f + spacing * 2));
 	exitButton->setText(exitButtonText, engine->getFontManager());
 
@@ -119,7 +119,9 @@ void setupScenes(Engine* engine) {
 	engine->getSceneManager()->registerScene(ekkonScene, EKKON_INTRO_SCENE);
 	engine->getSceneManager()->registerScene(mainMenuScene, MAIN_MENU_SCENE);
 	engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE);
+	engine->getSceneManager()->setDisposingScenesOnDestroy(true);
 
 	// engine->getWindow()->hideCursor();
+	// TODO investigate this
 	// engine->getRenderer()->getCamera()->setInUse(true);
 }

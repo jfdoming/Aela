@@ -73,19 +73,19 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// a button, make sure that you set the button's position before hand.
 	Button* editMapButton = new Button();
 	editMapButton->setDimensions(editMapButtonText->getDimensions());
-	editMapButton->setupOnClick(&AelaEngineFunctor(engine, editMapAction), engine->getEventHandler());
+	editMapButton->setupOnClick(std::bind(editMapAction, engine), engine->getEventHandler());
 	editMapButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f));
 	editMapButton->setText(editMapButtonText, engine->getFontManager());
 
 	Button* helpButton = new Button();
 	helpButton->setDimensions(loadMapButtonText->getDimensions());
-	helpButton->setupOnClick(&AelaEngineFunctor(engine, helpMapAction), engine->getEventHandler());
+	helpButton->setupOnClick(std::bind(helpMapAction, engine), engine->getEventHandler());
 	helpButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f + spacing));
 	helpButton->setText(loadMapButtonText, engine->getFontManager());
 
 	Button* exitButton = new Button();
 	exitButton->setDimensions(exitButtonText->getDimensions());
-	exitButton->setupOnClick(&AelaEngineFunctor(engine, exitAction), engine->getEventHandler());
+	exitButton->setupOnClick(std::bind(exitAction, engine), engine->getEventHandler());
 	exitButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f + spacing * 2));
 	exitButton->setText(exitButtonText, engine->getFontManager());
 
@@ -222,38 +222,38 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	entityToolButton->setTexture(simpleButtonTextureLight);
 	entityToolButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.1111),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
-	entityToolButton->setupOnClick(&AelaEngineFunctor(engine, goToEntityToolSceneAction), engine->getEventHandler());
+	entityToolButton->setupOnClick(std::bind(goToEntityToolSceneAction, engine), engine->getEventHandler());
 	entityToolButton->setText(entityToolText, engine->getFontManager());
 
 	skyboxesButton->setTexture(simpleButtonTexture);
 	skyboxesButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.2222),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
-	skyboxesButton->setupOnClick(&AelaEngineFunctor(engine, goToSkyboxSceneAction), engine->getEventHandler());
+	skyboxesButton->setupOnClick(std::bind(goToSkyboxSceneAction, engine), engine->getEventHandler());
 	skyboxesButton->setText(skyboxesText, engine->getFontManager());
 
 	exportButton->setTexture(simpleButtonTexture);
 	exportButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.3333),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
-	exportButton->setupOnClick(&AelaEngineFunctor(engine, goToExportSceneAction), engine->getEventHandler());
+	exportButton->setupOnClick(std::bind(goToExportSceneAction, engine), engine->getEventHandler());
 	exportButton->setText(exportText, engine->getFontManager());
 
 	optionsButton->setTexture(simpleButtonTexture);
 	optionsButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.4444),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
-	optionsButton->setupOnClick(&AelaEngineFunctor(engine, goToOptionsAction), engine->getEventHandler());
+	optionsButton->setupOnClick(std::bind(goToOptionsAction, engine), engine->getEventHandler());
 	optionsButton->setText(optionsText, engine->getFontManager());
 
 	// This sets up buttons from the export scene.
 	exportRegularMapButton->setTexture(simpleButtonTexture);
 	exportRegularMapButton->setDimensions(exportToRegularMapText->getDimensions());
 	exportRegularMapButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.375), (int) (windowDimensions.getHeight() * 0.3333));
-	exportRegularMapButton->setupOnClick(&AelaEngineFunctor(engine, exportRegularMapAction), engine->getEventHandler());
+	exportRegularMapButton->setupOnClick(std::bind(exportRegularMapAction, engine), engine->getEventHandler());
 	exportRegularMapButton->setText(exportToRegularMapText, engine->getFontManager());
 
 	exportReadableMapButton->setTexture(simpleButtonTexture);
 	exportReadableMapButton->setDimensions(exportToReadableMapText->getDimensions());
 	exportReadableMapButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.375), (int)(windowDimensions.getHeight() * 0.4444));
-	exportReadableMapButton->setupOnClick(&AelaEngineFunctor(engine, exportReadableMapAction), engine->getEventHandler());
+	exportReadableMapButton->setupOnClick(std::bind(exportReadableMapAction, engine), engine->getEventHandler());
 	exportReadableMapButton->setText(exportToReadableMapText, engine->getFontManager());
 
 	// This sets up a rectangle that the pause menu scenes will use.

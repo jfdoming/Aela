@@ -56,11 +56,7 @@ void Scene::render(Renderer* renderer) {
 		renderer->endRendering3D();
 	}
 
-	if (menu.isInitialized()) {
-		if (menu.isDirty()) {
-			menu.render(renderer);
-		}
-	}
+	menu.render(renderer);
 
 	renderer->endRenderingFrame();
 }

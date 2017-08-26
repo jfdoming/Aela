@@ -30,10 +30,10 @@ Aela::ImageComponent::ImageComponent(Texture* texture, Rect<int>* dimensions, Co
 Aela::ImageComponent::~ImageComponent() {
 }
 
-void Aela::ImageComponent::update() {
+void Aela::ImageComponent::updateComponent() {
 }
 
-void Aela::ImageComponent::render(Renderer* renderer) {
+void Aela::ImageComponent::renderComponent(Renderer* renderer) {
 	if (texture != nullptr) {
 		renderer->render2DImage(texture->getImage(), &dimensions, &tint);
 	}
