@@ -5,6 +5,8 @@
 #include "KeyEvent.h"
 #include "MouseEvent.h"
 
+#include <memory>
+
 using namespace Aela;
 
 EventHandler::EventHandler() {
@@ -82,20 +84,21 @@ void EventHandler::updateSDLEvents() {
 
 void EventHandler::dispatchEvents() {
 	while (running) {
-		if (!eventQueue.empty()) {
+		while (!eventQueue.empty()) {
 			Event* event = eventQueue.front();
 
-			auto iter = listeners.find(event->getType());
-			if (iter != listeners.end()) {
-				std::forward_list<Listener*> list = iter->second;
+			if (event != nullptr) {
+				auto iter = listeners.find(event->getType());
+				if (iter != listeners.end()) {
+					std::forward_list<Listener*> list = iter->second;
 
-				for (auto i = list.begin(); i != list.end(); ++i) {
-					(*i)->onEvent(event);
+					for (auto i = list.begin(); i != list.end(); ++i) {
+						(*i)->onEvent(event);
+					}
 				}
+				delete event;
 			}
-
 			eventQueue.pop();
-			delete event;
 		}
 	}
 }
