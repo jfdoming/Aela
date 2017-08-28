@@ -22,6 +22,10 @@ class ColourRGBA {
 			setValues(r, g, b, a);
 		}
 
+		ColourRGBA(float value) {
+			setValues(value, value, value, value);
+		}
+
 		void setR(float r) {
 			this->r = r;
 		}

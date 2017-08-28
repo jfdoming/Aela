@@ -11,15 +11,15 @@
 #pragma once
 
 #include <vector>
-
-#include "KeyFrame3DList.h"
-#include "../../Time Manager/TimeManager.h"
+#include "../2D/Animation/KeyFrame2DList.h"
+#include "../3D/Animation/KeyFrame3DList.h"
+#include "../Time Manager/TimeManager.h"
 
 using namespace Aela;
 
-class Animator3D {
+class Animator {
 	public:
-		Animator3D() {
+		Animator() {
 
 		}
 
@@ -29,14 +29,21 @@ class Animator3D {
 		// These are getters and setters.
 		void setTimeManager(TimeManager* timeManager);
 		TimeManager* getTimeManager();
-		void addKeyFrameList(KeyFrame3DList* keyFrameList);
-		std::vector<KeyFrame3DList>* getKeyFrames();
+		void addKeyFrame3DList(KeyFrame3DList* keyFrameList);
+		std::vector<KeyFrame3DList>* get3DKeyFrames();
+		void addKeyFrame2DList(KeyFrame2DList* keyFrameList);
+		std::vector<KeyFrame2DList>* get2DKeyFrames();
 
 	private:
 		// These are the Aela objects that this class uses.
 		TimeManager* timeManager;
-		std::vector<KeyFrame3DList> keyFrameLists;
+
+		// These are basically the "tracks" in which the lists of keyframes are layed out. Note that 3D animation
+		// uses a seperate track from 2D animation.
+		std::vector<KeyFrame3DList> keyFrame3DLists;
+		std::vector<KeyFrame2DList> keyFrame2DLists;
 
 		// This stores the time since the most recently finished key frame.
-		unsigned int timeSinceLastKeyFrameList = 0;
+		unsigned int timeSinceLastKeyFrame3DList = 0;
+		unsigned int timeSinceLastKeyFrame2DList = 0;
 };

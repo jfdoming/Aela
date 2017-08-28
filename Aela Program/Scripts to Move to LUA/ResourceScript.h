@@ -82,6 +82,10 @@ void loadTextures(ResourceManager* resourceManager) {
 		resourceManager->addToGroup("res/textures/" + path + ".dds", false);
 	}
 
+	for (std::string path : textureNames) {
+		resourceManager->addToGroup("res/textures/" + path + ".dds", false);
+	}
+
 	if (resourceManager->loadGroup("textures") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"textures\"!" << std::endl;
 	}

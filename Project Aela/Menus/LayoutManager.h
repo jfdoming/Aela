@@ -13,6 +13,6 @@
 namespace Aela {
 	class LayoutManager {
 		public:
-			virtual void update(std::vector<std::shared_ptr<Component*>>& components) = 0;
+			virtual void update(std::vector<std::shared_ptr<Component>>& components) = 0;
 	};
 }

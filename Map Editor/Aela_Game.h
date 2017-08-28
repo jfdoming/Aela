@@ -29,10 +29,10 @@ class AelaGame : public Listener {
 		void setMapBeingEdited(Map3D* mapBeingEdited);
 		Map3D* getMapBeingEdited();
 		void setEngine(Engine* engine);
-		void setEntityTypeText(Label* text);
-		void setPositionText(Label* text);
-		void setRotationText(Label* text);
-		void setScalingText(Label* text);
+		void setEntityTypeText(std::shared_ptr<Label> text);
+		void setPositionText(std::shared_ptr<Label> text);
+		void setRotationText(std::shared_ptr<Label> text);
+		void setScalingText(std::shared_ptr<Label> text);
 
 	private:
 		// These are handles to objects in the Aela namespace.
@@ -42,10 +42,7 @@ class AelaGame : public Listener {
 
 		// These are handles to other various objects.
 		Map3D* mapBeingEdited;
-		Label* entityTypeText;
-		Label* positionText;
-		Label* rotationText;
-		Label* scalingText;
+		std::shared_ptr<Label> entityTypeText, positionText, rotationText, scalingText;
 
 		// This is the entities that is being placed. It stores a pointer to one of the entities below. This is done to bypass
 		// the fact that types of entities such as ModelEntity cannot be casted upon a generic Entity.

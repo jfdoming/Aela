@@ -2,16 +2,20 @@
 * Class: Project Aela's 3D Key Frame
 * Author: Robert Ciborowski
 * Date: 10/07/2017
-* Description: A class used by Aela's 3D Animator3D to perform transformations on Transformables.
+* Description: A class used by Aela's 3D Animator to perform transformations on Transformables.
 */
 
 #include "KeyFrame3D.h"
 
-void KeyFrame3D::setObject(Transformable3D* object) {
+KeyFrameType KeyFrame3D::getType() {
+	return KeyFrameType::THREE_DIMENSIONAL;
+}
+
+void KeyFrame3D::setObject(std::shared_ptr<Transformable3D> object) {
 	this->object = object;
 }
 
-Transformable3D* KeyFrame3D::getObject() {
+std::shared_ptr<Transformable3D> KeyFrame3D::getObject() {
 	return object;
 }
 

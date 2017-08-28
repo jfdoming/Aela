@@ -8,30 +8,21 @@
 #pragma once
 
 #include <vector>
-
+#include "../../Animation/KeyFrameList.h"
 #include "KeyFrame3D.h"
 
-class KeyFrame3DList {
+class KeyFrame3DList : public KeyFrameList<KeyFrame3D> {
 	public:
 		KeyFrame3DList() {
 
 		}
 
-		void setTimeAfterPreviousKeyFrame(unsigned int time);
-		unsigned int getTimeAfterPreviousKeyFrame();
-		void addKeyFrame(KeyFrame3D* keyFrame);
-		std::vector<KeyFrame3D>* getKeyFrames();
 		std::vector<glm::vec3>* getOriginalPositions();
 		std::vector<glm::vec3>* getOriginalRotations();
 		std::vector<glm::vec3>* getOriginalScalings();
 		void storeOriginalTransformations();
 
 	private:
-		// This specifies the time that this key frame list should fire after the previous one.
-		unsigned int timeAfterPreviousKeyFrame = 0;
-
-		std::vector<KeyFrame3D> keyFrames;
-
 		// This stores the original properties of an object before it was modified by the key frames.
 		std::vector<glm::vec3> originalPositions;
 		std::vector<glm::vec3> originalRotations;

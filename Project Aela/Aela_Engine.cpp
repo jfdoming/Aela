@@ -19,7 +19,7 @@ using namespace Aela;
 
 // Thi function is old and will be deleted. It still contains code for elements which will be moved.
 int Aela::Engine::runningLoop() {
-	// This animates entities just to make sure that the animator3D actually works.
+	// This animates entities just to make sure that the Animator actually works.
 	/*std::vector<KeyFrame3D> keyFrames;
 	for (unsigned int i = 0; i < 0; i++) {
 		KeyFrame3DList keyFrameList;
@@ -39,7 +39,7 @@ int Aela::Engine::runningLoop() {
 			keyFrameList.addKeyFrame(&keyFrame);
 		}
 		keyFrameList.setTimeAfterPreviousKeyFrame(5000 * i + 5000);
-		animator3D.addKeyFrameList(&keyFrameList);
+		Animator.addKeyFrame3DList(&keyFrameList);
 	}*/
 
 	resourceManager.bindGroup("test");
@@ -61,7 +61,7 @@ int Aela::Engine::runningLoop() {
 		// This updates events. It must be done first.
 		eventHandler.updateSDLEvents();
 		timeManager.updateTime();
-		animator3D.update();
+		Animator.update();
 		
 		// This updates and renders the current scene.
 		/*Aela::Scene* currentScene = sceneManager.getCurrentScene();
@@ -153,8 +153,8 @@ int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
 	eventHandler.addListener(EventConstants::KEY_PRESSED, &renderer);
 	eventHandler.addListener(EventConstants::KEY_RELEASED, &renderer);
-	eventHandler.addListener(EventConstants::KEY_PRESSED, &keyedAnimator3D);
-	eventHandler.addListener(EventConstants::KEY_RELEASED, &keyedAnimator3D);
+	eventHandler.addListener(EventConstants::KEY_PRESSED, &keyedAnimator);
+	eventHandler.addListener(EventConstants::KEY_RELEASED, &keyedAnimator);
 	eventHandler.start();
 	return 0;
 }
@@ -164,11 +164,11 @@ int Aela::Engine::setupAudioPlayer() {
 }
 
 int Aela::Engine::setupAnimation() {
-	animator3D.setTimeManager(&timeManager);
-	keyedAnimator3D.setTimeManager(&timeManager);
-	keyedAnimator3D.setWindow(&window);
-	eventHandler.addListener(EventConstants::KEY_PRESSED, &keyedAnimator3D);
-	eventHandler.addListener(EventConstants::KEY_RELEASED, &keyedAnimator3D);
+	Animator.setTimeManager(&timeManager);
+	keyedAnimator.setTimeManager(&timeManager);
+	keyedAnimator.setWindow(&window);
+	eventHandler.addListener(EventConstants::KEY_PRESSED, &keyedAnimator);
+	eventHandler.addListener(EventConstants::KEY_RELEASED, &keyedAnimator);
 	return 0;
 }
 
@@ -189,8 +189,8 @@ void Engine::update() {
 
 	timeManager.updateTime();
 	sceneManager.update();
-	animator3D.update();
-	keyedAnimator3D.update();
+	Animator.update();
+	keyedAnimator.update();
 }
 
 void Engine::render() {
@@ -237,16 +237,16 @@ AudioManager* Engine::getAudioPlayer() {
 	return &audioPlayer;
 }
 
-Animator3D* Engine::getAnimator3D() {
-	return &animator3D;
+Animator* Engine::getAnimator() {
+	return &Animator;
 }
 
 UserEnvironment* Engine::getUserEnvironment() {
 	return &userEnvironment;
 }
 
-KeyedAnimator3D* Engine::getKeyedAnimator3D() {
-	return &keyedAnimator3D;
+KeyedAnimator* Engine::getKeyedAnimator() {
+	return &keyedAnimator;
 }
 
 FramerateCalculator* Engine::getFramerateCalculator() {

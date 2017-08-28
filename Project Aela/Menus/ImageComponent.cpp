@@ -9,14 +9,14 @@
 
 using namespace Aela;
 
-Aela::ImageComponent::ImageComponent() : tint(1, 1, 1, 1) {
+Aela::ImageComponent::ImageComponent() {
 }
 
-Aela::ImageComponent::ImageComponent(Texture* texture) : tint(1, 1, 1, 1) {
+Aela::ImageComponent::ImageComponent(Texture* texture) {
 	this->texture = texture;
 }
 
-Aela::ImageComponent::ImageComponent(Texture* texture, Rect<int>* dimensions) : tint(1, 1, 1, 1) {
+Aela::ImageComponent::ImageComponent(Texture* texture, Rect<int>* dimensions) {
 	this->texture = texture;
 	this->dimensions = *dimensions;
 }
@@ -45,12 +45,4 @@ void Aela::ImageComponent::setTexture(Texture* texture) {
 
 Texture* Aela::ImageComponent::getTexture() {
 	return texture;
-}
-
-void Aela::ImageComponent::setTint(ColourRGBA* tint) {
-	this->tint = *tint;
-}
-
-ColourRGBA* Aela::ImageComponent::getTint() {
-	return &tint;
 }

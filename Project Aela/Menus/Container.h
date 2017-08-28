@@ -18,7 +18,7 @@ namespace Aela {
 			Container();
 			virtual ~Container();
 
-			void add(Component* component);
+			void add(std::shared_ptr<Component> component);
 
 			virtual void updateComponent();
 			virtual void renderComponent(Renderer* renderer);
@@ -29,6 +29,6 @@ namespace Aela {
 
 		private:
 			LayoutManager* layout;
-			std::vector<std::shared_ptr<Component*>> children;
+			std::vector<std::shared_ptr<Component>> children;
 	};
 }

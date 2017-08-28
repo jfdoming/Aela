@@ -5,9 +5,6 @@
     <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DFramebuffer.cpp" />
     <ClCompile Include="2D\Texture\TextureLoader.cpp" />
     <ClCompile Include="2D\Text\TextFont.cpp" />
-    <ClCompile Include="3D\Animator\Animator3D.cpp" />
-    <ClCompile Include="3D\Animator\KeyFrame3D.cpp" />
-    <ClCompile Include="3D\Animator\KeyFrame3DList.cpp" />
     <ClCompile Include="3D\Camera\Camera3D.cpp" />
     <ClCompile Include="3D\Light\LightEntity.cpp" />
     <ClCompile Include="3D\Maps\Map3D.cpp" />
@@ -70,7 +67,6 @@
     <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="Menus\ImageComponent.cpp" />
     <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
-    <ClCompile Include="3D\Animator\KeyedAnimator3D.cpp" />
     <ClCompile Include="User Environment\UserEnvironment.cpp" />
     <ClCompile Include="Menus\RectComponent.cpp" />
     <ClCompile Include="2D\Text\FontManager.cpp" />
@@ -78,6 +74,14 @@
     <ClCompile Include="Menus\Button.cpp" />
     <ClCompile Include="3D\Maps\Map3DExporter.cpp" />
     <ClCompile Include="Menus\TextInput.cpp" />
+    <ClCompile Include="2D\Transformable\Transformable2D.cpp" />
+    <ClCompile Include="3D\Animation\KeyedAnimator3D.cpp" />
+    <ClCompile Include="3D\Animation\KeyFrame3D.cpp" />
+    <ClCompile Include="3D\Animation\KeyFrame3DList.cpp" />
+    <ClCompile Include="Animation\Animator.cpp" />
+    <ClCompile Include="Animation\KeyFrame.cpp" />
+    <ClCompile Include="2D\Animation\KeyFrame2D.cpp" />
+    <ClCompile Include="2D\Animation\KeyFrame2DList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -85,9 +89,6 @@
     <ClInclude Include="2D\Texture\Texture.h" />
     <ClInclude Include="2D\Texture\TextureLoader.h" />
     <ClInclude Include="2D\Text\TextFont.h" />
-    <ClInclude Include="3D\Animator\Animator3D.h" />
-    <ClInclude Include="3D\Animator\KeyFrame3D.h" />
-    <ClInclude Include="3D\Animator\KeyFrame3DList.h" />
     <ClInclude Include="3D\Billboards\BillboardEntity.h" />
     <ClInclude Include="3D\Camera\Camera3D.h" />
     <ClInclude Include="3D\Light\LightEntity.h" />
@@ -164,7 +165,6 @@
     <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
     <ClInclude Include="Utilities\strut.h" />
     <ClInclude Include="Utilities\AelaEngineFunctor.h" />
-    <ClInclude Include="3D\Animator\KeyedAnimator3D.h" />
     <ClInclude Include="User Environment\UserEnvironment.h" />
     <ClInclude Include="Menus\RectComponent.h" />
     <ClInclude Include="2D\Text\FontManager.h" />
@@ -174,5 +174,14 @@
     <ClInclude Include="2D\Texture\Image.h" />
     <ClInclude Include="Resource Management\ResourcePaths.h" />
     <ClInclude Include="Menus\TextInput.h" />
+    <ClInclude Include="2D\Transformable\Transformable2D.h" />
+    <ClInclude Include="3D\Animation\KeyedAnimator3D.h" />
+    <ClInclude Include="3D\Animation\KeyFrame3D.h" />
+    <ClInclude Include="3D\Animation\KeyFrame3DList.h" />
+    <ClInclude Include="Animation\Animator.h" />
+    <ClInclude Include="Animation\KeyFrame.h" />
+    <ClInclude Include="2D\Animation\KeyFrame2D.h" />
+    <ClInclude Include="2D\Animation\KeyFrame2DList.h" />
+    <ClInclude Include="Animation\KeyFrameList.h" />
   </ItemGroup>
 </Project>

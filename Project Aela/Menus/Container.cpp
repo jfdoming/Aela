@@ -20,14 +20,14 @@ Container::Container(int x, int y) : Component(x, y) {
 }
 
 Container::~Container() {
-	for (std::shared_ptr<Component*> ptr : children) {
+	for (std::shared_ptr<Component> ptr : children) {
 		ptr.reset();
 	}
 	delete layout;
 }
 
-void Container::add(Component* component) {
-	children.push_back(std::make_shared<Component*>(component));
+void Container::add(std::shared_ptr<Component> component) {
+	children.push_back(component);
 }
 
 void Container::updateComponent() {
@@ -35,8 +35,8 @@ void Container::updateComponent() {
 }
 
 void Container::renderComponent(Renderer* renderer) {
-	for (std::shared_ptr<Component*> ptr : children) {
-		(*ptr)->render(renderer);
+	for (std::shared_ptr<Component> ptr : children) {
+		ptr->render(renderer);
 	}
 }
 
@@ -44,6 +44,6 @@ void Aela::Container::setInUse(bool inUse) {
 	Component::setInUse(inUse);
 
 	for (auto child : children) {
-		(*child)->setInUse(inUse);
+		child->setInUse(inUse);
 	}
 }

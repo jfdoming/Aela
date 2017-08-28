@@ -19,19 +19,19 @@ void AelaGame::setEngine(Engine* engine) {
 	sceneManager = engine->getSceneManager();
 }
 
-void AelaGame::setEntityTypeText(Label* text) {
+void AelaGame::setEntityTypeText(std::shared_ptr<Label> text) {
 	entityTypeText = text;
 }
 
-void AelaGame::setPositionText(Label* text) {
+void AelaGame::setPositionText(std::shared_ptr<Label> text) {
 	positionText = text;
 }
 
-void AelaGame::setRotationText(Label* text) {
+void AelaGame::setRotationText(std::shared_ptr<Label> text) {
 	rotationText = text;
 }
 
-void AelaGame::setScalingText(Label* text) {
+void AelaGame::setScalingText(std::shared_ptr<Label> text) {
 	scalingText = text;
 }
 
@@ -162,7 +162,7 @@ void AelaGame::setup() {
 
 	// The keyed animator will translate the transformable object that represents the properties of the entity being placed using
 	// key inputs.
-	keyedAnimatorKey = engine->getKeyedAnimator3D()->addTransformable(&transformableBeingPlaced);
+	keyedAnimatorKey = engine->getKeyedAnimator()->addTransformable(&transformableBeingPlaced);
 }
 
 void AelaGame::update() {

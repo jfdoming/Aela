@@ -24,8 +24,8 @@
 #include "Events/EventHandler.h"
 #include "Events/EventConstants.h"
 #include "Audio/AudioManager.h"
-#include "3D/Animator/Animator3D.h"
-#include "3D/Animator/KeyedAnimator3D.h"
+#include "Animation/Animator.h"
+#include "3D/Animation/KeyedAnimator3D.h"
 #include "3D/Particles/PlanarParticleEmitter.h"
 #include "Menus/Label.h"
 #include "User Environment/UserEnvironment.h"
@@ -62,9 +62,9 @@ namespace Aela {
 			SceneManager* getSceneManager();
 			ResourceManager* getResourceManager();
 			AudioManager* getAudioPlayer();
-			Animator3D* getAnimator3D();
+			Animator* getAnimator();
 			UserEnvironment* getUserEnvironment();
-			KeyedAnimator3D* getKeyedAnimator3D();
+			KeyedAnimator* getKeyedAnimator();
 			FramerateCalculator* getFramerateCalculator();
 			Map3DExporter* getMapExporter();
 
@@ -79,9 +79,9 @@ namespace Aela {
 			SceneManager sceneManager;
 			ResourceManager resourceManager;
 			AudioManager audioPlayer;
-			Animator3D animator3D;
+			Animator Animator;
 			UserEnvironment userEnvironment;
-			KeyedAnimator3D keyedAnimator3D;
+			KeyedAnimator keyedAnimator;
 			FramerateCalculator framerateCalculator;
 			Map3DExporter mapExporter;
 

@@ -26,6 +26,7 @@ namespace Aela {
 			// These are getters and setters.
 			void setupOnClick(std::function<void()> function, EventHandler* eventHandler);
 			void setText(Label* text, FontManager* fontManager);
+			void setText(std::shared_ptr<Label> text, FontManager* fontManager);
 			std::string getText();
 			void setHoverTint(ColourRGBA* hoverTint);
 			void setClickTint(ColourRGBA* clickTint);
@@ -44,7 +45,7 @@ namespace Aela {
 			State state = State::NORMAL;
 
 			std::function<void()> onClick;
-			Label* text = nullptr;
+			std::shared_ptr<Label> text = nullptr;
 
 			// These are the tints used by the button. Keep in mind that a tint is a multiplier.
 			ColourRGBA hoverTint, clickTint;

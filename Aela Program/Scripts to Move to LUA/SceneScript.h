@@ -27,14 +27,14 @@ void setupScenes(Engine* engine) {
 	Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getWindowDimensions());
 
 	// The following blocks of code set up the Ekkon intro scene.
-	ImageComponent* ekkonImage = new ImageComponent();
+	auto ekkonImage = std::make_shared<ImageComponent>();
 	Texture* ekkonTexture;
 	bool success = engine->getResourceManager()->obtain<Texture>("res/textures/ekkon.dds", ekkonTexture);
 	ekkonImage->setDimensions(&windowDimensions);
 	ekkonImage->setTexture(ekkonTexture);
 
 	// This sets up the ekkon scene.
-	Scene* ekkonScene = new Scene();
+	auto ekkonScene = new Scene();
 	ekkonScene->setId(EKKON_INTRO_SCENE);
 	ekkonScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	ekkonScene->getMenu()->add(ekkonImage);
@@ -42,14 +42,14 @@ void setupScenes(Engine* engine) {
 	// The following blocks of code set up the main menu scene.
 	// This sets up text. You know what's annoying though? When Visual Studio turns "(int) (...)" into "(int)(...)" when I copy
 	// and paste the former!
-	Label* titleText = new Label("Aela Program", xeroxLarge, &VSBlue, fontManager);
+	auto titleText = std::make_shared<Label>("Aela Program", xeroxLarge, &VSBlue, fontManager);
 	titleText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.05), (int)(windowDimensions.getHeight() / 1.3f));
-	Label* ekkonGamesText = new Label("Ekkon Games", xerox, &VSBlue, fontManager);
+	auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xerox, &VSBlue, fontManager);
 	ekkonGamesText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.8), ((int)(windowDimensions.getHeight() * 0.95)));
-	Label* continueGameButtonText = new Label("Edit Map", xerox, &VSBlue, fontManager);
+	auto continueGameButtonText = std::make_shared<Label>("Edit Map", xerox, &VSBlue, fontManager);
 	int spacing = continueGameButtonText->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
-	Label* optionsButtonText = new Label("Help", xerox, &VSBlue, fontManager);
-	Label* exitButtonText = new Label("Exit", xerox, &VSBlue, fontManager);
+	auto optionsButtonText = std::make_shared<Label>("Help", xerox, &VSBlue, fontManager);
+	auto exitButtonText = std::make_shared<Label>("Exit", xerox, &VSBlue, fontManager);
 
 	// This sets up actions for the main menu buttons.
 	auto continueGameAction = [](Engine* engine) {
@@ -61,23 +61,23 @@ void setupScenes(Engine* engine) {
 
 	// This sets up some textureless buttons. Note: setText() uses information about the button's dimensions. In order to setup text for
 	// a button, make sure that you set the button's position before hand.
-	Button* continueGameButton = new Button();
+	auto continueGameButton = std::make_shared<Button>();
 	continueGameButton->setDimensions(continueGameButtonText->getDimensions());
 	continueGameButton->setupOnClick(std::bind(continueGameAction, engine), engine->getEventHandler());
 	continueGameButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f));
-	continueGameButton->setText(continueGameButtonText, engine->getFontManager());
+	continueGameButton->setText(continueGameButtonText.get(), engine->getFontManager());
 
-	Button* optionsButton = new Button();
+	auto optionsButton = std::make_shared<Button>();
 	optionsButton->setDimensions(optionsButtonText->getDimensions());
 	optionsButton->setupOnClick(std::bind(optionsAction, engine), engine->getEventHandler());
 	optionsButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f + spacing));
-	optionsButton->setText(optionsButtonText, engine->getFontManager());
+	optionsButton->setText(optionsButtonText.get(), engine->getFontManager());
 
-	Button* exitButton = new Button();
+	auto exitButton = std::make_shared<Button>();
 	exitButton->setDimensions(exitButtonText->getDimensions());
 	exitButton->setupOnClick(std::bind(exitAction, engine), engine->getEventHandler());
 	exitButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f + spacing * 2));
-	exitButton->setText(exitButtonText, engine->getFontManager());
+	exitButton->setText(exitButtonText.get(), engine->getFontManager());
 
 	// This sets up particles.
 	PlanarParticleEmitter* particleEmitter = new PlanarParticleEmitter();
@@ -118,10 +118,28 @@ void setupScenes(Engine* engine) {
 
 	engine->getSceneManager()->registerScene(ekkonScene, EKKON_INTRO_SCENE);
 	engine->getSceneManager()->registerScene(mainMenuScene, MAIN_MENU_SCENE);
-	engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE);
+	engine->getSceneManager()->setCurrentScene(EKKON_INTRO_SCENE);
 	engine->getSceneManager()->setDisposingScenesOnDestroy(true);
 
-	engine->getWindow()->hideCursor();
-	// TODO investigate this
-	engine->getRenderer()->getCamera()->setInUse(true);
+	// engine->getWindow()->hideCursor();
+	// engine->getRenderer()->getCamera()->setInUse(true);
+
+
+	// Experimentation with Animators.
+	Animator* animator = engine->getAnimator();
+	for (int i = 0; i < 2; i++) {
+		KeyFrame2DList list;
+		KeyFrame2D frame;
+		frame.setObject(ekkonImage);
+		if (i == 1) {
+			auto action = [](Engine* engine) {engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE); };
+			frame.setEndingAction(std::bind(action, engine));
+		}
+		// What this does is make the alpha go below zero when i == 1 so that there can be a short pause
+		// after the logo fades completely out.
+		frame.setTint(&ColourRGBA(1, 1, 1, 1 - (i % 2) * 1.5));
+		list.addKeyFrame(&frame);
+		list.setTimeAfterPreviousKeyFrame(4000 - (i % 2) * 2000);
+		animator->addKeyFrame2DList(&list);
+	}
 }

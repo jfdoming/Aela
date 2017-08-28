@@ -8,8 +8,8 @@ AbstractLayoutManager::AbstractLayoutManager(Container* parent) : parent(parent)
 AbstractLayoutManager::~AbstractLayoutManager() {
 }
 
-void AbstractLayoutManager::update(std::vector<std::shared_ptr<Component*>>& components) {
+void AbstractLayoutManager::update(std::vector<std::shared_ptr<Component>>& components) {
 	for (auto ptr : components) {
-		(*ptr)->update();
+		ptr->update();
 	}
 }

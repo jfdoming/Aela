@@ -98,6 +98,10 @@ void Aela::Button::setupOnClick(std::function<void()> function, EventHandler* ev
 }
 
 void Aela::Button::setText(Label* text, FontManager* fontManager) {
+	setText(std::make_shared<Label>(*text), fontManager);
+}
+
+void Aela::Button::setText(std::shared_ptr<Label> text, FontManager* fontManager) {
 	this->text = text;
 	Rect<int>* textDimensions = text->getDimensions();
 	int width = textDimensions->getWidth();

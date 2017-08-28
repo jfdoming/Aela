@@ -18,9 +18,9 @@
 
 using namespace Aela;
 
-class KeyedAnimator3D : public Listener {
+class KeyedAnimator : public Listener {
 	public:
-		KeyedAnimator3D() {
+		KeyedAnimator() {
 
 		}
 

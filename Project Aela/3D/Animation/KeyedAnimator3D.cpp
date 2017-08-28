@@ -10,7 +10,7 @@
 #include "../../Events/KeyEvent.h"
 #include "../../Events/EventConstants.h"
 
-void KeyedAnimator3D::onEvent(Event* event) {
+void KeyedAnimator::onEvent(Event* event) {
 	KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
 
 	if (window->isFocused()) {
@@ -75,7 +75,7 @@ void KeyedAnimator3D::onEvent(Event* event) {
 	}
 }
 
-void KeyedAnimator3D::update() {
+void KeyedAnimator::update() {
 	float deltaTime = timeManager->getTimeBetweenFrames();
 	for (auto pair : transformables) {
 		Transformable3D* transformable = pair.second;
@@ -102,23 +102,23 @@ void KeyedAnimator3D::update() {
 	}
 }
 
-void KeyedAnimator3D::setTimeManager(TimeManager* timeManager) {
+void KeyedAnimator::setTimeManager(TimeManager* timeManager) {
 	this->timeManager = timeManager;
 }
 
-TimeManager* KeyedAnimator3D::getTimeManager() {
+TimeManager* KeyedAnimator::getTimeManager() {
 	return timeManager;
 }
 
-void KeyedAnimator3D::setWindow(Window* window) {
+void KeyedAnimator::setWindow(Window* window) {
 	this->window = window;
 }
 
-Window* KeyedAnimator3D::getWindow() {
+Window* KeyedAnimator::getWindow() {
 	return window;
 }
 
-bool KeyedAnimator3D::addTransformable(int key, Transformable3D* transformable) {
+bool KeyedAnimator::addTransformable(int key, Transformable3D* transformable) {
 	if (transformables.find(key) == transformables.end()) {
 		transformables[key] = transformable;
 		return true;
@@ -126,12 +126,12 @@ bool KeyedAnimator3D::addTransformable(int key, Transformable3D* transformable) 
 	return false;
 }
 
-int KeyedAnimator3D::addTransformable(Transformable3D* transformable) {
+int KeyedAnimator::addTransformable(Transformable3D* transformable) {
 	transformables[transformables.size()] = transformable;
 	return transformables.size();
 }
 
-bool KeyedAnimator3D::removeTransformable(int key) {
+bool KeyedAnimator::removeTransformable(int key) {
 	auto position = transformables.find(key);
 	if (position != transformables.end()) {
 		transformables.erase(position);

@@ -36,6 +36,7 @@ void Component::update() {
 void Component::render(Renderer* renderer) {
 	if (dirty) {
 		renderComponent(renderer);
-		dirty = false;
+		// Once the dirtying system is complete, feel free to uncomment the line below.
+		// dirty = false;
 	}
 }

@@ -35,21 +35,21 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// The following blocks of code setup the main menu scene.
 	// This sets up an image.
-	ImageComponent* mainMenuImage = new ImageComponent();
+	auto mainMenuImage = std::make_shared<ImageComponent>();
 	Texture* mainMenuTexture;
 	bool success = engine->getResourceManager()->obtain<Texture>("res/textures/map_editor_main_background.dds", mainMenuTexture);
 	mainMenuImage->setDimensions(&windowDimensions);
 	mainMenuImage->setTexture(mainMenuTexture);
 
 	// This sets up text.
-	Label* titleText = new Label("Project Aela Map Editor", xeroxLarge, &VSBlue, fontManager);
+	auto titleText = std::make_shared<Label>("Project Aela Map Editor", xeroxLarge, &VSBlue, fontManager);
 	titleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() / 1.3f));
-	Label* ekkonGamesText = new Label("Ekkon Games", xerox, &VSBlue, fontManager);
+	auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xerox, &VSBlue, fontManager);
 	ekkonGamesText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), ((int) (windowDimensions.getHeight() * 0.95)));
-	Label* editMapButtonText = new Label("Edit Map", xerox, &VSBlue, fontManager);
+	auto editMapButtonText = std::make_shared<Label>("Edit Map", xerox, &VSBlue, fontManager);
 	int spacing = editMapButtonText->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
-	Label* loadMapButtonText = new Label("Help", xerox, &VSBlue, fontManager);
-	Label* exitButtonText = new Label("Exit", xerox, &VSBlue, fontManager);
+	auto loadMapButtonText = std::make_shared<Label>("Help", xerox, &VSBlue, fontManager);
+	auto exitButtonText = std::make_shared<Label>("Exit", xerox, &VSBlue, fontManager);
 
 	// This sets up actions for the main menu buttons.
 	auto editMapAction = [](Engine* engine) {
@@ -73,26 +73,27 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This sets up some textureless buttons. Note: setText() uses information about the button's dimensions. In order to setup text for
 	// a button, make sure that you set the button's position before hand.
-	Button* editMapButton = new Button();
+	auto editMapButton = std::make_shared<Button>();
 	editMapButton->setDimensions(editMapButtonText->getDimensions());
 	editMapButton->setupOnClick(std::bind(editMapAction, engine), engine->getEventHandler());
 	editMapButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f));
 	editMapButton->setText(editMapButtonText, engine->getFontManager());
+	std::cout << editMapButtonText << " is a pointer.\n";
 
-	Button* helpButton = new Button();
+	auto helpButton = std::make_shared<Button>();
 	helpButton->setDimensions(loadMapButtonText->getDimensions());
 	helpButton->setupOnClick(std::bind(helpMapAction, engine), engine->getEventHandler());
 	helpButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f + spacing));
 	helpButton->setText(loadMapButtonText, engine->getFontManager());
 
-	Button* exitButton = new Button();
+	auto exitButton = std::make_shared<Button>();
 	exitButton->setDimensions(exitButtonText->getDimensions());
 	exitButton->setupOnClick(std::bind(exitAction, engine), engine->getEventHandler());
 	exitButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f + spacing * 2));
 	exitButton->setText(exitButtonText, engine->getFontManager());
 
 	// This sets up the title screen scene.
-	Scene* mainMenuScene = new Scene();
+	auto mainMenuScene = new Scene();
 	mainMenuScene->setId(MAIN_MENU_SCENE);
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mainMenuScene->getMenu()->add(mainMenuImage);
@@ -104,28 +105,28 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// The following blocks of code setup the map editor scene.
 	// This sets up the top bar image.
-	ImageComponent* topBarImage = new ImageComponent();
+	auto topBarImage = std::make_shared<ImageComponent>();
 	Texture* topBarTexture;
 	success = engine->getResourceManager()->obtain<Texture>("res/textures/map_editor_top_bar.dds", topBarTexture);
 	topBarImage->setDimensions(&Rect<int>(0, 0, windowDimensions.getWidth(), windowDimensions.getHeight() / 18));
 	topBarImage->setTexture(topBarTexture);
 
-	// These setup text.
-	Label* entityTypeText = new Label("Entity: Model", xerox, &VSBlue, fontManager);
+	// This sets sup text.
+	auto entityTypeText = std::make_shared<Label>("Entity: Model", xerox, &VSBlue, fontManager);
 	entityTypeText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.015f), (int) (windowDimensions.getHeight() * 0.04f));
 	game->setEntityTypeText(entityTypeText);
-	Label* positionText = new Label("Position: 0, 0, 0", xerox, &VSBlue, fontManager);
+	auto positionText = std::make_shared<Label>("Position: 0, 0, 0", xerox, &VSBlue, fontManager);
 	positionText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.15f), (int) (windowDimensions.getHeight() * 0.04f));
 	game->setPositionText(positionText);
-	Label* rotationText = new Label("Rotation: 0, 0, 0", xerox, &VSBlue, fontManager);
+	auto rotationText = std::make_shared<Label>("Rotation: 0, 0, 0", xerox, &VSBlue, fontManager);
 	rotationText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.45f), (int) (windowDimensions.getHeight() * 0.04f));
 	game->setRotationText(rotationText);
-	Label* scalingText = new Label("Scaling: 1, 1, 1", xerox, &VSBlue, fontManager);
+	auto scalingText = std::make_shared<Label>("Scaling: 1, 1, 1", xerox, &VSBlue, fontManager);
 	scalingText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.75f), (int) (windowDimensions.getHeight() * 0.04f));
 	game->setScalingText(scalingText);
 
 	// This creates the map creation scene.
-	Scene* mapCreationScene = new Scene();
+	auto mapCreationScene = new Scene();
 	mapCreationScene->setId(EDITOR_SCENE);
 	mapCreationScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mapCreationScene->getMenu()->add(topBarImage);
@@ -135,32 +136,32 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	mapCreationScene->getMenu()->add(scalingText);
 
 	// The following blocks of code setup the pause menu scenes.
-	RectComponent* tintRect = new RectComponent();
+	auto tintRect = std::make_shared<RectComponent>();
 	tintRect->setDimensions(&windowDimensions);
 	tintRect->setColour(&ColourRGBA(0.4f, 0.4f, 0.4f, 0.35f));
 
 	// This sets up text for buttons in the pause menu's sidebar.
-	Label* entityToolText = new Label("Entity Tool", xerox, &almostWhite, fontManager),
-		*skyboxesText = new Label("Skyboxes", xerox, &almostWhite, fontManager),
-		*exportText = new Label("Export", xerox, &almostWhite, fontManager),
-		*optionsText = new Label("Options", xerox, &almostWhite, fontManager);
+	auto entityToolText = std::make_shared<Label>("Entity Tool", xerox, &almostWhite, fontManager);
+	auto skyboxesText = std::make_shared<Label>("Skyboxes", xerox, &almostWhite, fontManager);
+	auto exportText = std::make_shared<Label>("Export", xerox, &almostWhite, fontManager);
+	auto optionsText = std::make_shared<Label>("Options", xerox, &almostWhite, fontManager);
 
 	// This sets up text for the entity tool pause menu scene.
-	Label *entityToolTitleText = new Label("Entity Tool", xeroxLarge, &almostWhite, fontManager);
+	auto entityToolTitleText = std::make_shared<Label>("Entity Tool", xeroxLarge, &almostWhite, fontManager);
 	entityToolTitleText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.375), (int)(windowDimensions.getHeight() * 0.2222));
 
 	// This sets up text for the skybox pause menu scene.
-	Label *skyboxTitleText = new Label("Skybox", xeroxLarge, &almostWhite, fontManager);
+	auto skyboxTitleText = std::make_shared<Label>("Skybox", xeroxLarge, &almostWhite, fontManager);
 	skyboxTitleText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.375), (int)(windowDimensions.getHeight() * 0.2222));
 
 	// This sets up text for the export pause menu scene.
-	Label* exportToRegularMapText = new Label("Export to Regular Map File (recommended)", xerox, &almostWhite, fontManager),
-		*exportToReadableMapText = new Label("Export to Readable Map File", xerox, &almostWhite, fontManager),
-		*exportTitleText = new Label("Export", xeroxLarge, &almostWhite, fontManager);
+	auto exportToRegularMapText = std::make_shared<Label>("Export to Regular Map File (recommended)", xerox, &almostWhite, fontManager);
+	auto exportToReadableMapText = std::make_shared<Label>("Export to Readable Map File", xerox, &almostWhite, fontManager);
+	auto exportTitleText = std::make_shared<Label>("Export", xeroxLarge, &almostWhite, fontManager);
 	exportTitleText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.375), (int)(windowDimensions.getHeight() * 0.2222));
 
 	// This sets up text for the options pause menu scene.
-	Label *optionsTitleText = new Label("Options", xeroxLarge, &almostWhite, fontManager);
+	auto optionsTitleText = std::make_shared<Label>("Options", xeroxLarge, &almostWhite, fontManager);
 	optionsTitleText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.375), (int)(windowDimensions.getHeight() * 0.2222));
 
 	// These are tints for buttons.
@@ -168,11 +169,14 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	ColourRGBA settingsClickTint(0.6f, 0.6f, 0.6f, 1.0f);
 
 	// This creates sidebar buttons for the pause menu.
-	Button* entityToolButton = new Button(&settingsHoverTint, &settingsClickTint), *skyboxesButton = new Button(&settingsHoverTint, &settingsClickTint),
-		*exportButton = new Button(&settingsHoverTint, &settingsClickTint), *optionsButton = new Button(&settingsHoverTint, &settingsClickTint);
+	auto entityToolButton = std::make_shared<Button>(&settingsHoverTint, &settingsClickTint);
+	auto skyboxesButton = std::make_shared<Button>(&settingsHoverTint, &settingsClickTint);
+	auto exportButton = std::make_shared<Button>(&settingsHoverTint, &settingsClickTint);
+	auto optionsButton = std::make_shared<Button>(&settingsHoverTint, &settingsClickTint);
 
 	// This creates export scene buttons.
-	Button* exportRegularMapButton = new Button(&settingsHoverTint, &settingsClickTint), *exportReadableMapButton = new Button(&settingsHoverTint, &settingsClickTint);
+	auto exportRegularMapButton = std::make_shared<Button>(&settingsHoverTint, &settingsClickTint);
+	auto exportReadableMapButton = std::make_shared<Button>(&settingsHoverTint, &settingsClickTint);
 
 	// This gets textures for the pause menu buttons.
 	Texture* simpleButtonTexture, *simpleButtonTextureLight;
@@ -259,7 +263,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	exportReadableMapButton->setText(exportToReadableMapText, engine->getFontManager());
 
 	// This sets up a rectangle that the pause menu scenes will use.
-	RectComponent* rightRect = new RectComponent();
+	auto rightRect = std::make_shared<RectComponent>();
 	rightRect->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.3125), (int) (windowDimensions.getHeight() * 0.1111),
 		(int) (windowDimensions.getWidth() * 0.5625), (int) (windowDimensions.getHeight() * 0.7777)));
 	rightRect->setColour(&ColourRGBA(0.2f, 0.2f, 0.2f, 0.95f));
@@ -337,8 +341,8 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// engine->getWindow()->hideCursor();
 	engine->getRenderer()->getCamera()->setUseControls(false);
 
-	// The renderer's camera must be bound to the KeyedAnimator3D for movement.
-	engine->getKeyedAnimator3D()->addTransformable(engine->getRenderer()->getCamera());
+	// The renderer's camera must be bound to the KeyedAnimator for movement.
+	engine->getKeyedAnimator()->addTransformable(engine->getRenderer()->getCamera());
 	engine->getRenderer()->getCamera()->setPosition(0, 10, -10);
 	engine->getRenderer()->getCamera()->setRotation(0, glm::pi<float>() / -4, 0);
 }

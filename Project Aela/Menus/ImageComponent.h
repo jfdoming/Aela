@@ -8,9 +8,10 @@
 #pragma once
 #include "Component.h"
 #include "../2D/Texture/Texture.h"
+#include "../2D/Transformable/Transformable2D.h"
 
 namespace Aela {
-	class ImageComponent : public Component {
+	class ImageComponent : public Component, public Transformable2D {
 		public:
 			ImageComponent();
 			ImageComponent(Texture* texture);
@@ -24,11 +25,8 @@ namespace Aela {
 			// These are getters and setters.
 			void setTexture(Texture* texture);
 			Texture* getTexture();
-			void setTint(ColourRGBA* tint);
-			ColourRGBA* getTint();
 
 		protected:
 			Texture* texture = nullptr;
-			ColourRGBA tint;
 	};
 }
