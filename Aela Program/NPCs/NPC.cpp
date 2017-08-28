@@ -7,3 +7,7 @@
 
 #include "stdafx.h"
 #include "NPC.h"
+
+void NPC::setEntity(ModelEntity* entity) {
+	this->entity = *entity;
+}

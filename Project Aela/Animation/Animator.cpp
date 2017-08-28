@@ -149,7 +149,6 @@ void Animator::update() {
 					(float) ((finalTint->getB() - originalTint->getB()) / timing) * timeSinceLastKeyFrame2DList + originalTint->getB(),
 					(float) ((finalTint->getA() - originalTint->getA()) / timing) * timeSinceLastKeyFrame2DList + originalTint->getA());
 				object->setTint(&newTint);
-				std::cout << newTint.getR() << " is R.\n";
 			}
 		}
 	}

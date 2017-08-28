@@ -22,16 +22,31 @@ void AelaGame::loadResources() {
 }
 
 void AelaGame::loadScenes() {
-	setupScenes(engine);
+	setupScenes(engine, this);
+}
+
+void AelaGame::continueGame() {
+	engine->getRenderer()->getCamera()->setRotation(0, 0, 0);
 }
 
 void AelaGame::setup() {
 	loadResources();
 	loadScenes();
+
+	engine->getRenderer()->activateFeature(RendererFeature::MSAA_2D_X4);
+	engine->getRenderer()->activateFeature(RendererFeature::MSAA_3D_X4);
+	std::cout << engine->getUserEnvironment()->getGraphicsVendor() << "\n";
+
+	// This sets up a camera angle to use for the title screen.
+	camera->setPosition(51.16, -14.63, 7.51);
+	camera->setRotation(5.74, 0.04, 0);
+	camera->setInUse(true);
+	camera->setUseControls(false);
+	camera->setForceCursorToMiddle(false);
 }
 
 void AelaGame::update() {
-
+	gameplayManager.update();
 }
 
 void AelaGame::cleanup() {

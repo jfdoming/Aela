@@ -79,7 +79,7 @@ namespace Aela {
 			SceneManager sceneManager;
 			ResourceManager resourceManager;
 			AudioManager audioPlayer;
-			Animator Animator;
+			Animator animator;
 			UserEnvironment userEnvironment;
 			KeyedAnimator keyedAnimator;
 			FramerateCalculator framerateCalculator;

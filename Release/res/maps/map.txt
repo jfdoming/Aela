@@ -1,13 +1,5 @@
 <Skybox src="~skybox_1">
 <Skybox src="~skybox_2">
-<Model src="~meme_mug.obj" position="20.0,0.0,20.0" scaling="1.0,1.0,1.0">
-<Model src="~cat.obj" position="5.0,0.0,0.0" scaling="1.50,1.50,1.50">
-<Model src="~house_1.obj" position="0.0,0.0,-6.0" rotation="0.0,3.14150,0.0" scaling="1.0,1.0,1.0">
-<Model src="~jeep_1.obj" position="-2.0,0.0,10.0" scaling="0.750,0.750,0.750">
-<Model src="~lamp_post_1.obj" position="1.0,-1.0,5.0" scaling="1.0,1.0,1.0">
-<Model src="~sample_terrain_1.obj" position="0.0,0.0,1.0" scaling="2.0,0.0,2.0">
-<Model src="~house_1.obj" position="0.420,2.640,31.799997" scaling="1.0,1.0,1.0">
-<Model src="~house_1.obj" position="0.420,2.640,24.299999" scaling="1.0,1.0,1.0">
-<Light colour="1.0,1.0,1.0" power"0.80" position="-18.0,10.0,10.0" scaling="1.0,1.0,1.0">
-<Light colour="1.0,1.0,0.50" power"0.80" position="1.0,6.80,5.0" scaling="1.0,1.0,1.0">
-<Billboard src="~character.dds" position="0.0,1.0,-1.50" rotation="0.0,3.141593,0.0" scaling="2.0,2.0,1.0">
+<Model src="~meme_mug.obj" scaling="1.0,1.0,1.0">
+<Model src="~test scene for graphics.obj" position="44.550003,-15.749999,0.600001" scaling="1.0,1.0,1.0">
+<Light power="0.95" position="51.750004,5,12.509996" scaling="1.0,1.0,1.0">

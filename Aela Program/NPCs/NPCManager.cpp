@@ -7,3 +7,16 @@
 
 #include "stdafx.h"
 #include "NPCManager.h"
+
+int NPCManager::addNPC(NPC* npc) {
+	int index = 0;
+	while (npcs.find(index) != npcs.end()) {
+		index++;
+	};
+	npcs[index] = *npc;
+	return index;
+}
+
+int NPCManager::removeNPC(int index) {
+	return npcs.erase(index);
+}

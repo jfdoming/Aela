@@ -141,7 +141,7 @@ void AelaGame::placeBillboard() {
 
 void AelaGame::setup() {
 	// Certain renderer settings will be changeable in the options menu.
-	engine->getRenderer()->activateFeature(RendererFeature::MSAA_2D_X4);
+	engine->getRenderer()->activateFeature(RendererFeature::MSAA_2D_X2);
 	engine->getRenderer()->activateFeature(RendererFeature::MSAA_3D_X4);
 
 	// This loads scripts.

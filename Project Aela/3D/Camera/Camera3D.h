@@ -26,6 +26,8 @@ class Camera3D : public Transformable3D {
 		bool isInUse();
 		void setUseControls(bool useControls);
 		bool isUsingControls();
+		void setForceCursorToMiddle(bool forceCursorToMiddle);
+		bool isForcingCursorToMiddle();
 
 		// These functions allow the camera to rotate and look at a point that is on its plane.
 		void focusAtPointOnPlane(glm::vec3 point, glm::vec3 offset);
@@ -51,4 +53,7 @@ class Camera3D : public Transformable3D {
 		// This tells the renderer whether it is responsible for updating camera translation. Keep in mind that the animators
 		// can also be responsible for transforming the camera and not only the renderer.
 		bool useControls = true;
+
+		// This tells the renderer to keep the cursor in the middle of the window when it updates its camera.
+		bool forceCursorToMiddle = true;
 };

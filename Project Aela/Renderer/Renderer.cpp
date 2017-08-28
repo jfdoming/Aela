@@ -226,7 +226,7 @@ void Renderer::startRendering3D() {
 	// if (useShadows) {
 		basic3DRenderer.clearShadowMaps();
 	// }
-		updateCameraMatrices();
+	updateCameraMatrices();
 }
 
 void Renderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer, Rect<int>* dimensions, Rect<int>* output) {
@@ -382,7 +382,7 @@ void Renderer::decreaseFOV() {
 void Renderer::updateCameraEvents(Event* event) {
 	KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
 
-	if (window->isFocused()) {
+	if (camera.isInUse() && window->isFocused()) {
 		float deltaTime = timeManager->getTimeBetweenFrames();
 
 		// This gets the cursor's position.
@@ -398,7 +398,7 @@ void Renderer::updateCameraEvents(Event* event) {
 		float horizontalAngle = camera.getRotation()->x;
 		float verticalAngle = camera.getRotation()->y;
 
-		if (keyEvent->getKeycode() == 225) {
+		if (keyEvent->getKeycode() == SDLK_LSHIFT) {
 			currentSpeed = superSpeed;
 		} else {
 			currentSpeed = speed;
@@ -469,7 +469,10 @@ void Aela::Renderer::updateCameraMatrices() {
 		// This gets the cursor's position.
 		int xpos, ypos;
 		window->getCursorPositionInWindow(&xpos, &ypos);
-		window->setCursorPositionInWindow(width / 2, height / 2);
+
+		if (camera.isForcingCursorToMiddle()) {
+			window->setCursorPositionInWindow(width / 2, height / 2);
+		}
 
 		// This gets the horizontal and vertical angles.
 		float horizontalAngle = camera.getRotation()->x;

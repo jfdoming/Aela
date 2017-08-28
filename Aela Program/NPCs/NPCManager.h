@@ -7,13 +7,18 @@
 
 #pragma once
 
+#include <map>
+
+#include "../NPCs/NPC.h"
+
 class NPCManager {
 	public:
 		NPCManager() {
 
 		}
 
-	private:
-		
+		int addNPC(NPC* npc), removeNPC(int index);
 
+	private:
+		std::map<int, NPC> npcs;
 };

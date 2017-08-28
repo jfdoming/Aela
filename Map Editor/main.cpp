@@ -50,10 +50,20 @@ int main(int argc, char *args[]) {
 	game.setEngine(&engine);
 	game.setup();
 
+	// This is temporary and is here for framerate.
+	FramerateCalculator calc;
+	int counter = 0;
+
 	do {
 		engine.update();
 		game.update();
 		engine.render();
+		if (counter >= 100) {
+			calc.calculate(engine.getTimeManager()->getCurrentTime(), engine.getTimeManager()->getTimeBetweenFrames());
+			std::cout << calc.getSmoothedFPS() << " FPS\n";
+			counter = 0;
+		}
+		counter++;
 	} while (!engine.shouldExit());
 
     return 0;

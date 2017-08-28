@@ -98,7 +98,7 @@ void main(){
 	vec3 MaterialAmbientColor = vec3(0.15, 0.15, 0.15) * MaterialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(0.3, 0.3, 0.3);
 	vec3 diffuseColours[MAX_LIGHT_AMOUNT];
-	vec3 finalDiffuseColour;
+	vec3 finalDiffuseColour = vec3(0, 0, 0);
 	
 	float visibility = 1.0;
 	

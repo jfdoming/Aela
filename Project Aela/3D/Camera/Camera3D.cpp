@@ -41,6 +41,14 @@ bool Camera3D::isUsingControls() {
 	return useControls;
 }
 
+void Camera3D::setForceCursorToMiddle(bool forceCursorToMiddle) {
+	this->forceCursorToMiddle = forceCursorToMiddle;
+}
+
+bool Camera3D::isForcingCursorToMiddle() {
+	return forceCursorToMiddle;
+}
+
 void Camera3D::setViewMatrix(glm::mat4 setViewMatrix) {
 	viewMatrix = setViewMatrix;
 }

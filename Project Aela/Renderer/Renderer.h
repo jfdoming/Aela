@@ -53,8 +53,8 @@ namespace Aela {
 		public:
 			Renderer() {
 				windowFocus = false;
-				speed = 0.03f;
-				superSpeed = 0.12f;
+				speed = 0.015f;
+				superSpeed = 0.045f;
 				currentSpeed = 0.0f;
 				mouseSpeed = 0.005f;
 				allowUpsideDownCamera = false;

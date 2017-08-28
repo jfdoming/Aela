@@ -10,6 +10,7 @@
 
 #pragma once
 #include <glm/glm.hpp>
+#include <string>
 #include "../../Utilities/Transformations/PointRotation3D.h"
 
 // This enum is used in an Camera3D function to change a single property.
@@ -40,7 +41,10 @@ class Transformable3D {
 		glm::vec3* getScaling();
 		void getScaling(float* setX, float* setY, float* setZ);
 
-		// These are functions used for changing any single transformation-related property.
+		// This returns a string with all of the properties of the transformable.
+		std::string getPropertiesAsString(int numberOfTrailingZeroes);
+
+		// These are functions used for changing and getting any single transformation-related property.
 		void setProperty(Transformable3DProperty property, float value);
 		float getProperty(Transformable3DProperty property);
 

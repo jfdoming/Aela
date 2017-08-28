@@ -13,7 +13,7 @@ using namespace Aela;
 #define MAIN_MENU_SCENE 2
 #define GAMEPLAY_SCENE 3
 
-void setupScenes(Engine* engine) {
+void setupScenes(Engine* engine, AelaGame* game) {
 	// This creates some objects for later.
 	FontManager* fontManager = engine->getFontManager();
 	TextFont* xeroxLarge = fontManager->obtainTextFont("res/fonts/xerox.ttf", 35);
@@ -32,6 +32,7 @@ void setupScenes(Engine* engine) {
 	bool success = engine->getResourceManager()->obtain<Texture>("res/textures/ekkon.dds", ekkonTexture);
 	ekkonImage->setDimensions(&windowDimensions);
 	ekkonImage->setTexture(ekkonTexture);
+	ekkonImage->setTint(&ColourRGBA(1, 1, 1, 0));
 
 	// This sets up the ekkon scene.
 	auto ekkonScene = new Scene();
@@ -52,10 +53,16 @@ void setupScenes(Engine* engine) {
 	auto exitButtonText = std::make_shared<Label>("Exit", xerox, &VSBlue, fontManager);
 
 	// This sets up actions for the main menu buttons.
-	auto continueGameAction = [](Engine* engine) {
-		
+	auto continueGameAction = [game](Engine* engine) {
+		Rect<unsigned int>* dimensions = engine->getWindow()->getWindowDimensions();
+		engine->getWindow()->setCursorPositionInWindow(dimensions->getWidth() / 2, dimensions->getHeight() / 2);
+		engine->getWindow()->hideCursor();
+		engine->getRenderer()->getCamera()->setInUse(true);
+		engine->getSceneManager()->setCurrentScene(GAMEPLAY_SCENE);
+		game->continueGame();
 	};
 	auto optionsAction = [](Engine* engine) {
+		AelaErrorHandling::windowWarning("There's nothing to see here.");
 	};
 	auto exitAction = [](Engine* engine) {engine->getWindow()->quit(); };
 
@@ -108,38 +115,56 @@ void setupScenes(Engine* engine) {
 	particleTextures.push_back(tResult);
 	particleEmitter->setupParticles(&particleTextures, 0.6f, 0.6f, 25);
 
+	Scene* gameplayScene = new Scene();
+	gameplayScene->setId(GAMEPLAY_SCENE);
+	gameplayScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
+	gameplayScene->putParticleEmitter(particleEmitter);
+
 	Map3D* map;
 	success = engine->getResourceManager()->obtain<Map3D>("res/maps/map.txt", map);
 	if (success) {
 		mainMenuScene->setMap(map);
+		gameplayScene->setMap(map);
 	} else {
 		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/map.txt wasn't loaded properly or something.");
 	}
 
 	engine->getSceneManager()->registerScene(ekkonScene, EKKON_INTRO_SCENE);
 	engine->getSceneManager()->registerScene(mainMenuScene, MAIN_MENU_SCENE);
+	engine->getSceneManager()->registerScene(gameplayScene, GAMEPLAY_SCENE);
 	engine->getSceneManager()->setCurrentScene(EKKON_INTRO_SCENE);
 	engine->getSceneManager()->setDisposingScenesOnDestroy(true);
-
-	// engine->getWindow()->hideCursor();
-	// engine->getRenderer()->getCamera()->setInUse(true);
 
 
 	// Experimentation with Animators.
 	Animator* animator = engine->getAnimator();
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 4; i++) {
 		KeyFrame2DList list;
 		KeyFrame2D frame;
 		frame.setObject(ekkonImage);
-		if (i == 1) {
+		if (i == 3) {
 			auto action = [](Engine* engine) {engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE); };
 			frame.setEndingAction(std::bind(action, engine));
 		}
-		// What this does is make the alpha go below zero when i == 1 so that there can be a short pause
-		// after the logo fades completely out.
-		frame.setTint(&ColourRGBA(1, 1, 1, 1 - (i % 2) * 1.5));
+		switch (i) {
+			case 0:
+				frame.setTint(&ColourRGBA(1, 1, 1, 0));
+				list.setTimeAfterPreviousKeyFrame(2500);
+				break;
+			case 1:
+				frame.setTint(&ColourRGBA(1, 1, 1, 1));
+				list.setTimeAfterPreviousKeyFrame(2800);
+				break;
+			case 2:
+				frame.setTint(&ColourRGBA(1, 1, 1, 1));
+				list.setTimeAfterPreviousKeyFrame(2500);
+				break;
+			case 3:
+				frame.setTint(&ColourRGBA(1, 1, 1, -0.3f));
+				list.setTimeAfterPreviousKeyFrame(2300);
+				break;
+		}
 		list.addKeyFrame(&frame);
-		list.setTimeAfterPreviousKeyFrame(4000 - (i % 2) * 2000);
 		animator->addKeyFrame2DList(&list);
 	}
 }

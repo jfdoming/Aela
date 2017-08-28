@@ -6,7 +6,19 @@
 */
 
 #pragma once
+#include "3D/Models/ModelEntity.h"
+#include "../NPCs/NPC.h"
 
-class Player {
+using namespace Aela;
 
+class Player : public NPC {
+	public:
+		Player() {
+
+		}
+
+		
+
+	private:
+		
 };

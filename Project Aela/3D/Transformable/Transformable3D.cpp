@@ -1,4 +1,16 @@
+/*
+* Class: Transformable3D
+* Author : Robert Ciborowski
+* Date : November 2016
+* Description : A class used to store the properties of a light.
+*              Note : The position of the point used when rotating a Transformable3D using
+*              PointRotation3D is relative to the Transformable3D(as opposed to being relative
+*              to(0, 0, 0) in worldspace).
+*/
+
+
 #include "Transformable3D.h"
+#include "../../Utilities/strut.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -55,6 +67,17 @@ void Transformable3D::getScaling(float* setX, float* setY, float* setZ) {
 	*setX = scaling.x;
 	*setY = scaling.y;
 	*setZ = scaling.z;
+}
+
+std::string Transformable3D::getPropertiesAsString(int numberOfTrailingZeroes) {
+	std::string s = "";
+	s += "Position: " + toStringWithATrailingZero(position.x) + " " + toStringWithATrailingZero(position.y)
+		+ " " + toStringWithATrailingZero(position.z) + ", ";
+	s += "Rotation: " + toStringWithATrailingZero(rotation.x) + " " + toStringWithATrailingZero(rotation.y)
+		+ " " + toStringWithATrailingZero(rotation.z) + ", ";
+	s += "Scaling: " + toStringWithATrailingZero(scaling.x) + toStringWithATrailingZero(scaling.y)
+		+ " " + toStringWithATrailingZero(scaling.z);
+	return s;
 }
 
 void Transformable3D::setProperty(Transformable3DProperty property, float value) {
