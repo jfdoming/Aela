@@ -12,7 +12,6 @@
 #include "ImageComponent.h"
 #include "Label.h"
 #include "../Events/EventHandler.h"
-#include "../Utilities/AelaEngineFunctor.h"
 
 namespace Aela {
 	class Button : public ImageComponent, public Listener {

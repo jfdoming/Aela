@@ -20,8 +20,8 @@ Container::Container(int x, int y) : Component(x, y) {
 }
 
 Container::~Container() {
-	for (std::shared_ptr<Component> ptr : children) {
-		ptr.reset();
+	for (std::shared_ptr<Component> child : children) {
+		child.reset();
 	}
 	delete layout;
 }
@@ -31,12 +31,16 @@ void Container::add(std::shared_ptr<Component> component) {
 }
 
 void Container::updateComponent() {
+	for (auto child : children) {
+		child->update();
+	}
+
 	layout->update(children);
 }
 
 void Container::renderComponent(Renderer* renderer) {
-	for (std::shared_ptr<Component> ptr : children) {
-		ptr->render(renderer);
+	for (auto child : children) {
+		child->render(renderer);
 	}
 }
 

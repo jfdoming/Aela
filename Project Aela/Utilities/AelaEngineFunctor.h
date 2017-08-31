@@ -17,6 +17,20 @@
 
 #include "../Aela_Engine.h"
 
+
+
+
+
+
+
+// Hey you! Yes, you, scrolling through the commit changes on Gitlab. Why does this file exist? We don't need it anymore.
+
+
+
+
+
+
+
 using namespace Aela;
 
 class AelaEngineFunctor {
