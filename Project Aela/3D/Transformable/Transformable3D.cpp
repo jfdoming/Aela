@@ -75,7 +75,7 @@ std::string Transformable3D::getPropertiesAsString(int numberOfTrailingZeroes) {
 		+ " " + toStringWithATrailingZero(position.z) + ", ";
 	s += "Rotation: " + toStringWithATrailingZero(rotation.x) + " " + toStringWithATrailingZero(rotation.y)
 		+ " " + toStringWithATrailingZero(rotation.z) + ", ";
-	s += "Scaling: " + toStringWithATrailingZero(scaling.x) + toStringWithATrailingZero(scaling.y)
+	s += "Scaling: " + toStringWithATrailingZero(scaling.x) + " " + toStringWithATrailingZero(scaling.y)
 		+ " " + toStringWithATrailingZero(scaling.z);
 	return s;
 }

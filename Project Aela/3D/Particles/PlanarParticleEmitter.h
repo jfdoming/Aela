@@ -2,7 +2,7 @@
 * Class: Planar Particle Emitter
 * Author: Robert Ciborowski
 * Date: 16/07/2017
-* Description: A class used to emit particles along a plane The particles travel perpendicular to the plane.
+* Description: A class used to emit particles along a plane. The particles travel perpendicular to the plane.
 */
 
 #pragma once
@@ -34,5 +34,4 @@ class PlanarParticleEmitter : public ParticleEmitter {
 		Camera3D* camera;
 
 		void setupParticlePositioning(unsigned int whichParticle, unsigned int numberOfParticles);
-		void sortParticles();
 };

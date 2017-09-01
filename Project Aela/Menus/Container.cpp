@@ -34,6 +34,10 @@ void Container::updateComponent() {
 	layout->update(children);
 }
 
+void Aela::Container::render(Renderer* renderer) {
+	renderComponent(renderer);
+}
+
 void Container::renderComponent(Renderer* renderer) {
 	for (std::shared_ptr<Component> ptr : children) {
 		ptr->render(renderer);

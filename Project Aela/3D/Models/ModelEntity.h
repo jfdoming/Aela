@@ -26,7 +26,7 @@
 #include "../../Entities/Entity.h"
 #include "../Transformable/Transformable3D.h"
 #include "Model.h"
-#include "../../Utilities/Rect/Cuboid.h"
+#include "../Bounding Box/BoundingBox3D.h"
 
 namespace Aela {
 	class ModelEntity : public Entity, public Transformable3D {
@@ -46,12 +46,12 @@ namespace Aela {
 			// These are the getters and setters.
 			Model* getModel();
 			void setModel(Model* model);
-			Cuboid<double>* getBoundingBox();
+			BoundingBox3D* getBoundingBox();
 			void generateBoundingBox();
 			EntityType getEntityType();
 
 		private:
 			Model* model;
-			Cuboid<double> boundingBox;
+			BoundingBox3D boundingBox;
 	};
 }

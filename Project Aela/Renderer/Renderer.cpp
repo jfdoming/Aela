@@ -392,7 +392,6 @@ void Renderer::updateCameraEvents(Event* event) {
 		// This moves the cursor back to the middle of the window.
 		int width, height;
 		window->getWindowDimensions(&width, &height);
-		window->setCursorPositionInWindow(width / 2, height / 2);
 
 		// This gets the horizontal and vertical angles.
 		float horizontalAngle = camera.getRotation()->x;

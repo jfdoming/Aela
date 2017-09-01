@@ -23,7 +23,6 @@ void ParticleEmitter::setupParticles(std::vector<Texture*>* textures, float part
 		particles.push_back(particle);
 		setupParticlePositioning(i, amount);
 	}
-	sortParticles();
 }
 
 std::vector<Particle>* ParticleEmitter::getParticles() {
@@ -90,8 +89,3 @@ void ParticleEmitter::setPathOffset(float pathOffset) {
 // its life. This creates the effect of spawning in a new particle, even though its actually just resetting the particle in the pool.
 void ParticleEmitter::setupParticlePositioning(unsigned int whichParticle, unsigned int numberOfParticles) {
 }
-
-void ParticleEmitter::sortParticles() {
-	// Implement your own sorting algorithms here!
-}
-

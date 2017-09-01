@@ -34,7 +34,7 @@ void Basic3DShadowRenderer::clearShadowMaps(std::map<int, LightEntity>* lights) 
 
 // This renders a shadow of a entity to each light's depth buffer.
 void Basic3DShadowRenderer::renderShadow(ModelEntity* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::map<int, LightEntity>* lights, GLuint lightPositionsID) {
-	if (entity != nullptr && entity->getModel() != nullptr) {
+	if (entity != nullptr && entity->getModel() != nullptr && entity->getModel()->getSubModels() != nullptr) {
 		// This enables face culling.
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_FRONT);

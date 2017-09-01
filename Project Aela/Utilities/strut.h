@@ -5,7 +5,7 @@
 #include <cctype>
 
 // Note: If I had C++ 2017, I woudn't need to include this. I could also just make my own function for clamping.
-#include <glm/glm.hpp>
+// #include <glm/glm.hpp>
 
 // trim from start (in place)
 static inline void ltrim(std::string &s) {
@@ -29,7 +29,7 @@ static inline void trim(std::string &s) {
 
 static inline std::string toStringWithDecimal(float value, int places) {
 	std::string s = std::to_string(value);
-	s = s.substr(0, glm::clamp((int) s.find('.') + places + 1, 0, (int) s.size()));
+	// s = s.substr(0, glm::clamp((int) s.find('.') + places + 1, 0, (int) s.size()));
 	return s;
 }
 

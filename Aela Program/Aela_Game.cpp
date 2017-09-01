@@ -26,6 +26,10 @@ void AelaGame::loadScenes() {
 }
 
 void AelaGame::continueGame() {
+	engine->getWindow()->hideCursor();
+	camera->setInUse(true);
+	camera->setForceCursorToMiddle(true);
+	camera->setUseControls(true);
 	engine->getRenderer()->getCamera()->setRotation(0, 0, 0);
 }
 
@@ -38,8 +42,8 @@ void AelaGame::setup() {
 	std::cout << engine->getUserEnvironment()->getGraphicsVendor() << "\n";
 
 	// This sets up a camera angle to use for the title screen.
-	camera->setPosition(51.16, -14.63, 7.51);
-	camera->setRotation(5.74, 0.04, 0);
+	camera->setPosition(51.16f, -14.63f, 7.51f);
+	camera->setRotation(5.74f, 0.04f, 0);
 	camera->setInUse(true);
 	camera->setUseControls(false);
 	camera->setForceCursorToMiddle(false);
@@ -47,6 +51,17 @@ void AelaGame::setup() {
 
 void AelaGame::update() {
 	gameplayManager.update();
+
+	/*ModelEntity* model;
+	Map3D* map;
+	if (!resourceManager->obtain<Map3D>("res/maps/map.txt", map)) {
+		std::cout << "WTF.\n";
+	} else {
+		model = map->getModel(0);
+		model->generateBoundingBox();
+		std::cout << model->getBoundingBox()->getVerticesAsString() << "\n";
+	}*/
+
 }
 
 void AelaGame::cleanup() {

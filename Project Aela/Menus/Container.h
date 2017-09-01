@@ -21,6 +21,7 @@ namespace Aela {
 			void add(std::shared_ptr<Component> component);
 
 			virtual void updateComponent();
+			virtual void render(Renderer* renderer);
 			virtual void renderComponent(Renderer* renderer);
 
 			virtual void setInUse(bool inUse);

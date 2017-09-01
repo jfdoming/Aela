@@ -56,8 +56,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	auto continueGameAction = [game](Engine* engine) {
 		Rect<unsigned int>* dimensions = engine->getWindow()->getWindowDimensions();
 		engine->getWindow()->setCursorPositionInWindow(dimensions->getWidth() / 2, dimensions->getHeight() / 2);
-		engine->getWindow()->hideCursor();
-		engine->getRenderer()->getCamera()->setInUse(true);
 		engine->getSceneManager()->setCurrentScene(GAMEPLAY_SCENE);
 		game->continueGame();
 	};

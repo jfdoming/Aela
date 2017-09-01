@@ -72,14 +72,13 @@ namespace Aela {
 			// These are handles to shaders.
 			GLuint bufferTextureToBufferProgramID, textToBufferProgramID, imageToBufferProgramID;
 			// These are handles to variables inside of the image shader.
-			GLuint imageTextureID, imageQuadVertexBufferID, imageTopLeftBufferID, imageWidthAndHeightBufferID, imageDimensionsBufferID,
-				imageWindowDimensionsBufferID, imageTintID;
+			GLuint imageTextureID, imageQuadVertexBufferID, imageTopLeftCoordID, imageWindowDimensionsID, imageTintID;
 			// These are handles to variables inside of the text shader as well as the actual texture used for text.
-			GLuint characterTextureID, characterTexture, characterQuadVertexBufferID, characterTopLeftBufferID, characterWidthAndHeightBufferID,
-				characterDimensionsBufferID, characterWindowDimensionsBufferID, characterColourBufferID;
+			GLuint characterTextureID, characterTexture, characterQuadVertexBufferID, characterTopLeftCoordID,
+				characterDimensionsID, characterWindowDimensionsID, characterColourID;
 
 			// This function is used to render a single character.
-			void renderCharacter(char* character, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, FT_GlyphSlot glyph, ColourRGBA* colour);
+			void renderCharacter(Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, FT_GlyphSlot glyph, ColourRGBA* colour);
 
 			// These functions are used in the setup of the 2D renderer.
 			void load2DShaders();

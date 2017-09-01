@@ -19,7 +19,7 @@ void Aela::ModelEntity::setModel(Model* model) {
 	this->model = model;
 }
 
-Cuboid<double>* Aela::ModelEntity::getBoundingBox() {
+BoundingBox3D* Aela::ModelEntity::getBoundingBox() {
 	return &boundingBox;
 }
 
@@ -28,7 +28,7 @@ EntityType ModelEntity::getEntityType() {
 }
 
 void Aela::ModelEntity::generateBoundingBox() {
-	if (model->getSubModels()->size() != 0) {
+	if (model != nullptr && model->getSubModels() != nullptr && model->getSubModels()->size() != 0) {
 		SubModel* firstSubModel = &model->getSubModels()->at(0);
 		float smallestX = firstSubModel->getVertices()->at(firstSubModel->getIndices()->at(0)).x, greatestX = smallestX,
 			smallestY = firstSubModel->getVertices()->at(firstSubModel->getIndices()->at(0)).y, greatestY = smallestY,
@@ -55,7 +55,8 @@ void Aela::ModelEntity::generateBoundingBox() {
 			}
 		}
 
-		boundingBox = Cuboid<double>(smallestX, smallestY, smallestZ, greatestX - smallestX, greatestY - smallestY, greatestZ - smallestZ);
+		boundingBox = BoundingBox3D(smallestX, smallestY, smallestZ, greatestX - smallestX, greatestY - smallestY, greatestZ - smallestZ);
+		boundingBox.generateVertices();
 	} else {
 		AelaErrorHandling::consoleWindowError("ModelEntity", "Something tried to generate an entity's bounding box without loading its model first!");
 	}
