@@ -27,15 +27,15 @@ void ParticleLoader::expose(LuaManager& mgr) {
 }
 
 bool Aela::ParticleLoader::load(std::unordered_map<std::string, Resource*>* resources, std::string src) {
-	// This is not done!
-	GLuint modelTextureID;
-	glGenTextures(1, &modelTextureID);
+	//// This is not done!
+	//GLuint modelTextureID;
+	//glGenTextures(1, &modelTextureID);
 
-	// This tells openGL that future functions will reference this texture.
-	glBindTexture(GL_TEXTURE_2D, modelTextureID);
+	//// This tells openGL that future functions will reference this texture.
+	//glBindTexture(GL_TEXTURE_2D, modelTextureID);
 
-	unsigned int imageWidth, imageHeight;
-	return loadTextureUsingFILE(src, GL_TEXTURE_2D, &imageWidth, &imageHeight);
+	//unsigned int imageWidth, imageHeight;
+	//return loadTexture(src, GL_TEXTURE_2D, &imageWidth, &imageHeight);
 
-	// (*resources)[src] = res;
+	//// (*resources)[src] = res;
 }

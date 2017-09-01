@@ -66,7 +66,6 @@
     <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp" />
     <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="Menus\ImageComponent.cpp" />
-    <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
     <ClCompile Include="User Environment\UserEnvironment.cpp" />
     <ClCompile Include="Menus\RectComponent.cpp" />
     <ClCompile Include="2D\Text\FontManager.cpp" />
@@ -74,7 +73,6 @@
     <ClCompile Include="Menus\Button.cpp" />
     <ClCompile Include="3D\Maps\Map3DExporter.cpp" />
     <ClCompile Include="Menus\TextInput.cpp" />
-    <ClCompile Include="2D\Transformable\Transformable2D.cpp" />
     <ClCompile Include="3D\Animation\KeyedAnimator3D.cpp" />
     <ClCompile Include="3D\Animation\KeyFrame3D.cpp" />
     <ClCompile Include="3D\Animation\KeyFrame3DList.cpp" />
@@ -82,7 +80,12 @@
     <ClCompile Include="Animation\KeyFrame.cpp" />
     <ClCompile Include="2D\Animation\KeyFrame2D.cpp" />
     <ClCompile Include="2D\Animation\KeyFrame2DList.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="3D\Bounding Box\BoundingBox3D.cpp" />
+=======
+    <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
+    <ClCompile Include="2D\Transformable\Transformable2D.cpp" />
+>>>>>>> 5a7b3124724f54a89df4013dfc475b0c04112d8a
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -163,7 +166,6 @@
     <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
     <ClInclude Include="Window\Window.h" />
     <ClInclude Include="Menus\ImageComponent.h" />
-    <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
     <ClInclude Include="Utilities\strut.h" />
     <ClInclude Include="Utilities\AelaEngineFunctor.h" />
     <ClInclude Include="User Environment\UserEnvironment.h" />
@@ -175,15 +177,21 @@
     <ClInclude Include="2D\Texture\Image.h" />
     <ClInclude Include="Resource Management\ResourcePaths.h" />
     <ClInclude Include="Menus\TextInput.h" />
-    <ClInclude Include="2D\Transformable\Transformable2D.h" />
+    <ClInclude Include="2D\Text\TextManager.h" />
     <ClInclude Include="3D\Animation\KeyedAnimator3D.h" />
     <ClInclude Include="3D\Animation\KeyFrame3D.h" />
     <ClInclude Include="3D\Animation\KeyFrame3DList.h" />
     <ClInclude Include="Animation\Animator.h" />
     <ClInclude Include="Animation\KeyFrame.h" />
+    <ClInclude Include="Animation\KeyFrameList.h" />
     <ClInclude Include="2D\Animation\KeyFrame2D.h" />
     <ClInclude Include="2D\Animation\KeyFrame2DList.h" />
+<<<<<<< HEAD
     <ClInclude Include="Animation\KeyFrameList.h" />
     <ClInclude Include="3D\Bounding Box\BoundingBox3D.h" />
+=======
+    <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
+    <ClInclude Include="2D\Transformable\Transformable2D.h" />
+>>>>>>> 5a7b3124724f54a89df4013dfc475b0c04112d8a
   </ItemGroup>
 </Project>

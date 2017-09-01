@@ -1,10 +1,3 @@
-/*
-* Class: TextComponent
-* Author: Julian Dominguez-Schatz and Robert Ciborowski
-* Date: 22/08/2017
-* Description: A class which represents a line of text.
-*/
-
 #include "Label.h"
 
 using namespace Aela;

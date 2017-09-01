@@ -9,17 +9,16 @@
 #include "Component.h"
 
 namespace Aela {
-	class TextComponent : public Component, public Listener {
+	class TextInput : public Component, public Listener {
 		public:
-			TextComponent(std::string text, TextFont* font, FontManager* fontManager);
-			TextComponent(std::string text, TextFont* font, ColourRGBA* colour, FontManager* fontManager);
+			TextInput(std::string text, TextFont* font, FontManager* fontManager);
+			TextInput(std::string text, TextFont* font, ColourRGBA* colour, FontManager* fontManager);
 
-			virtual ~TextComponent();
+			virtual ~TextInput();
 
 			void setup(FontManager* fontManager);
-			virtual void update();
-			virtual void render(Renderer* renderer);
-			virtual void render(Renderer* renderer, ColourRGBA* tint);
+			virtual void updateComponent();
+			virtual void renderComponent(Renderer* renderer);
 
 			// These are getters and setters.
 			std::string getText();
