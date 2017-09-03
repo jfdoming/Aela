@@ -53,6 +53,12 @@ template <class T> class Cuboid : public Rect<T> {
 			return depth;
 		}
 
+		void setWidthHeightDepth(T width, T height, T depth) {
+			this->width = width;
+			this->height = height;
+			this->depth = depth;
+		}
+
 		void getValues(T* setX, T* setY, T* setZ, T* setWidth, T* setHeight, T* setDepth) {
 			*setX = xPosition;
 			*setY = yPosition;

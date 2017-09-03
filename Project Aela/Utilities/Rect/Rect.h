@@ -45,6 +45,11 @@ template <class T> class Rect {
 			height = setHeight;
 		}
 
+		void setWidthHeight(T width, T height) {
+			this->width = width;
+			this->height = height;
+		}
+
 		void getValues(T* setX, T* setY, T* setWidth, T* setHeight) {
 			*setX = xPosition;
 			*setY = yPosition;

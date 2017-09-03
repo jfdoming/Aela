@@ -78,7 +78,7 @@ namespace Aela {
 				characterDimensionsID, characterWindowDimensionsID, characterColourID;
 
 			// This function is used to render a single character.
-			void renderCharacter(Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, FT_GlyphSlot glyph, ColourRGBA* colour);
+			void renderCharacterBuffer(Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, std::vector<unsigned char>* buffer, unsigned int width, unsigned int rows, ColourRGBA* colour);
 
 			// These functions are used in the setup of the 2D renderer.
 			void load2DShaders();
