@@ -39,6 +39,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	Texture* mainMenuTexture;
 	bool success = engine->getResourceManager()->obtain<Texture>("res/textures/map_editor_main_background.dds", mainMenuTexture);
 	mainMenuImage->setDimensions(&windowDimensions);
+	mainMenuImage->setCropping(&windowDimensions);
 	mainMenuImage->setTexture(mainMenuTexture);
 
 	// This sets up text.
@@ -109,6 +110,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	Texture* topBarTexture;
 	success = engine->getResourceManager()->obtain<Texture>("res/textures/map_editor_top_bar.dds", topBarTexture);
 	topBarImage->setDimensions(&Rect<int>(0, 0, windowDimensions.getWidth(), windowDimensions.getHeight() / 18));
+	topBarImage->setCropping(topBarTexture->getDimensions());
 	topBarImage->setTexture(topBarTexture);
 
 	// This sets sup text.

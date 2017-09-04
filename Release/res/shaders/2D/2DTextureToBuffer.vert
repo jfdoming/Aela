@@ -9,6 +9,7 @@
 
 // These is the input data.
 layout(location = 0) in vec3 vertexPosition;
+layout(location = 1) in vec2 UVPosition;
 uniform vec2 positionOfTextureOnScreen;
 
 // This is the output data.
@@ -22,7 +23,8 @@ float convertFromPositionToUV(float value) {
 // otherwise be rendered upside-down.
 void main(){
 	gl_Position = vec4(vertexPosition.x, 0 - vertexPosition.y, vertexPosition.z, 1);
-	UV = vec2(convertFromPositionToUV(vertexPosition.x) - positionOfTextureOnScreen.x, convertFromPositionToUV(vertexPosition.y) - positionOfTextureOnScreen.y);
+	UV = UVPosition;
+	// UV = vec2(convertFromPositionToUV(vertexPosition.x), convertFromPositionToUV(vertexPosition.y));
 	
 	// gl_Position = vec4(vertexPosition.x, 0 - vertexPosition.y, vertexPosition.z, 1);
 	// vec2 UVScaling = (textureDimensions * 2 / windowDimensions) * (boundingBoxDimensions / textureDimensions);

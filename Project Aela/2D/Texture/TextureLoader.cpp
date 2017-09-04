@@ -90,12 +90,11 @@ bool TextureLoader::loadTextureToBoundId(std::ifstream& in, GLenum target, unsig
 		return false;
 	}
 
-	unsigned int imageHeight = *(unsigned int*) &(textureHeader[12]);
-	unsigned int imageWidth = *(unsigned int*) &(textureHeader[16]);
-	unsigned int linearSize = *(unsigned int*) &(textureHeader[20]);
-	unsigned int mipMapAmount = *(unsigned int*) &(textureHeader[28]);
-	unsigned int fourCCType = *(unsigned int*) &(textureHeader[84]);
-	unsigned int bufferSize;
+	unsigned int imageHeight = *(unsigned int*) &(textureHeader[12]), imageWidth = *(unsigned int*) &(textureHeader[16]),
+		linearSize = *(unsigned int*) &(textureHeader[20]), mipMapAmount = *(unsigned int*) &(textureHeader[28]),
+		fourCCType = *(unsigned int*) &(textureHeader[84]), bufferSize;
+
+	unsigned int heightToReturn = imageHeight, widthToReturn = imageWidth;
 
 	// calculate texture size, including mip-maps
 	bufferSize = (mipMapAmount > 1) ? (linearSize * 2) : linearSize;
@@ -146,10 +145,10 @@ bool TextureLoader::loadTextureToBoundId(std::ifstream& in, GLenum target, unsig
 	delete[] buffer;
 
 	if (width != nullptr) {
-		*width = imageWidth;
+		*width = widthToReturn;
 	}
 	if (height != nullptr) {
-		*height = imageHeight;
+		*height = heightToReturn;
 	}
 
 	return true;

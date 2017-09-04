@@ -16,7 +16,9 @@ namespace Aela {
 			ImageComponent();
 			ImageComponent(Texture* texture);
 			ImageComponent(Texture* texture, Rect<int>* dimensions);
+			ImageComponent(Texture* texture, Rect<int>* dimensions, Rect<int>* cropping);
 			ImageComponent(Texture* texture, Rect<int>* dimensions, ColourRGBA* tint);
+			ImageComponent(Texture* texture, Rect<int>* dimensions, Rect<int>* cropping, ColourRGBA* tint);
 			virtual ~ImageComponent();
 
 			virtual void updateComponent();
@@ -25,8 +27,14 @@ namespace Aela {
 			// These are getters and setters.
 			void setTexture(Texture* texture);
 			Texture* getTexture();
+			void setCropping(Rect<int>* cropping);
+			void setCropping(int x, int y, int width, int height);
 
 		protected:
 			Texture* texture = nullptr;
+			Rect<int> cropping;
+
+			// This is used to make sure that the cropping is set to the texture dimensions if it was never set.
+			bool croppingWasInitialised = false;
 	};
 }

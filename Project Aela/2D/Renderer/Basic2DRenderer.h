@@ -42,10 +42,10 @@ namespace Aela {
 			void setup();
 
 			// These functions are accessible to Project Aela's main renderer in order to render 2D components.
-			void renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint);
-			void renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader);
-			void renderImageToFramebuffer(Image* image, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint);
-			void renderImageToFramebuffer(Image* image, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader);
+			void renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint);
+			void renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader);
+			void renderImageToFramebuffer(Image* image, GLuint framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint);
+			void renderImageToFramebuffer(Image* image, GLuint framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader);
 			void renderTextToSimple2DFramebuffer(std::string text, TextFont* textFont, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
 				unsigned int pointsPerPixel);
 			void renderMultisampledBufferToBuffer(GLuint multisampledBuffer, GLuint secondaryBuffer, Rect<unsigned int>* windowDimensions);
@@ -72,7 +72,7 @@ namespace Aela {
 			// These are handles to shaders.
 			GLuint bufferTextureToBufferProgramID, textToBufferProgramID, imageToBufferProgramID;
 			// These are handles to variables inside of the image shader.
-			GLuint imageTextureID, imageQuadVertexBufferID, imageTopLeftCoordID, imageWindowDimensionsID, imageTintID;
+			GLuint imageTextureID, imageVertexBufferID, imageUVBufferID, imageTopLeftCoordID, imageWindowDimensionsID, imageTintID;
 			// These are handles to variables inside of the text shader as well as the actual texture used for text.
 			GLuint characterTextureID, characterTexture, characterQuadVertexBufferID, characterTopLeftCoordID,
 				characterDimensionsID, characterWindowDimensionsID, characterColourID;

@@ -40,7 +40,7 @@ void PlanarParticleEmitter::setCamera(Camera3D* camera) {
 
 void PlanarParticleEmitter::setupParticlePositioning(unsigned int whichParticle, unsigned int numberOfParticles) {
 	// This chooses the position of the particle, relative to the emitter.
-	srand(timeManager->getCurrentTime() + whichParticle);
+	srand((unsigned int) timeManager->getCurrentTime() + whichParticle);
 	float particleZ = dimensions.getHeight() - (dimensions.getHeight() / numberOfParticles) * whichParticle;
 	particles[whichParticle].setPosition((rand() % 100) / 100.0f * dimensions.getWidth(), pathOffset * (rand() % 100) / 100.0f, particleZ);
 	for (unsigned int i = 0; i < particles.size(); i++) {
