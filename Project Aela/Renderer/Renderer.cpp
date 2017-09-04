@@ -383,7 +383,7 @@ void Renderer::updateCameraEvents(Event* event) {
 	KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
 
 	if (camera.isInUse() && window->isFocused()) {
-		float deltaTime = timeManager->getTimeBetweenFrames();
+		float deltaTime = (float) timeManager->getTimeBetweenFrames();
 
 		// This gets the cursor's position.
 		int xpos, ypos;
@@ -397,70 +397,71 @@ void Renderer::updateCameraEvents(Event* event) {
 		float horizontalAngle = camera.getRotation()->x;
 		float verticalAngle = camera.getRotation()->y;
 
-		if (keyEvent->getKeycode() == SDLK_LSHIFT) {
-			currentSpeed = superSpeed;
-		} else {
-			currentSpeed = speed;
-		}
-
 		switch (keyEvent->getType()) {
-		case EventConstants::KEY_PRESSED:
-			if (keyEvent->getKeycode() == SDLK_w) {
-				forward = true;
-			}
+			case EventConstants::KEY_PRESSED:
+				if (keyEvent->getKeycode() == SDLK_w) {
+					forward = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_s) {
-				backward = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_s) {
+					backward = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_d) {
-				right = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_d) {
+					right = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_a) {
-				left = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_a) {
+					left = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_SPACE) {
-				up = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_SPACE) {
+					up = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_LCTRL) {
-				down = true;
-			}
-			break;
-		case EventConstants::KEY_RELEASED:
-			if (keyEvent->getKeycode() == SDLK_w) {
-				forward = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_LCTRL) {
+					down = true;
+				}
+				if (keyEvent->getKeycode() == SDLK_LSHIFT) {
+					currentSpeed = superSpeed;
+				}
+				break;
+			case EventConstants::KEY_RELEASED:
+				if (keyEvent->getKeycode() == SDLK_w) {
+					forward = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_s) {
-				backward = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_s) {
+					backward = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_d) {
-				right = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_d) {
+					right = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_a) {
-				left = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_a) {
+					left = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_SPACE) {
-				up = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_SPACE) {
+					up = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_LCTRL) {
-				down = false;
-			}
-			break;
+				if (keyEvent->getKeycode() == SDLK_LCTRL) {
+					down = false;
+				}
+				if (keyEvent->getKeycode() == SDLK_LSHIFT) {
+					currentSpeed = speed;
+				}
+				break;
 		}
 	}
 }
 
 void Aela::Renderer::updateCameraMatrices() {
 	if (window->isFocused() && camera.isInUse()) {
-		float deltaTime = timeManager->getTimeBetweenFrames();
+		// Since glm::vec3s use floats, we unfortunately have to take this wonderful int64 and make it a nasty float.
+		float deltaTime = (float) timeManager->getTimeBetweenFrames();
 
 		int width, height;
 		window->getWindowDimensions(&width, &height);
@@ -522,7 +523,7 @@ void Aela::Renderer::updateCameraMatrices() {
 		camera.calculateRightVector();
 		camera.calculateUpVector();
 
-		glm::mat4 projectionMatrix = glm::perspective(camera.getFieldOfView(), (float)width / height, 0.1f, 100.0f);
+		glm::mat4 projectionMatrix = glm::perspective(camera.getFieldOfView(), (float) width / height, 0.1f, 100.0f);
 		glm::mat4 viewMatrix = glm::lookAt(*camera.getPosition(), *camera.getPosition() + *camera.getCartesionalDirection(), *camera.getUpVector());
 		camera.setProjectionMatrix(projectionMatrix);
 		camera.setViewMatrix(viewMatrix);

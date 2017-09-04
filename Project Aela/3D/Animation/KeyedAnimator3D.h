@@ -45,8 +45,8 @@ class KeyedAnimator : public Listener {
 		Window* window;
 		std::unordered_map<int, Transformable3D*> transformables;
 
-		// Speed: 0.001f is 1 unit per tick.
-		float speed = 0.03f, superSpeed = 0.12f, currentSpeed = 0.0f, mouseSpeed;
+		// Speed: 0.000000001f is 1 unit per ns.
+		float speed = 0.00000003f, superSpeed = 0.00000012f, currentSpeed = 0.0f, mouseSpeed;
 
 		// These store movements.
 		bool forward, backward, left, right, up, down;

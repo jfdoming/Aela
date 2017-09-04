@@ -89,7 +89,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	Rect<GLfloat> emitterDimensions(0, 0, 10, 10);
 	particleEmitter->setupDimensions(&emitterDimensions);
 	particleEmitter->setCamera(engine->getRenderer()->getCamera());
-	particleEmitter->setStats(0.001f, 20, 0.001f, 2, 2);
+	particleEmitter->setStats(0.000000001f, 20, 0.000000001f, 2, 2);
 	particleEmitter->setPosition(5, 0, 5);
 	particleEmitter->setRotation(0, 3.4f, 0.7f);
 	particleEmitter->setTimeManager(engine->getTimeManager());
@@ -147,19 +147,19 @@ void setupScenes(Engine* engine, AelaGame* game) {
 		switch (i) {
 			case 0:
 				frame.setTint(&ColourRGBA(1, 1, 1, 0));
-				list.setTimeAfterPreviousKeyFrame(2500);
+				list.setTimeAfterPreviousKeyFrameInMillis(2500);
 				break;
 			case 1:
 				frame.setTint(&ColourRGBA(1, 1, 1, 1));
-				list.setTimeAfterPreviousKeyFrame(2800);
+				list.setTimeAfterPreviousKeyFrameInMillis(2800);
 				break;
 			case 2:
 				frame.setTint(&ColourRGBA(1, 1, 1, 1));
-				list.setTimeAfterPreviousKeyFrame(2500);
+				list.setTimeAfterPreviousKeyFrameInMillis(2500);
 				break;
 			case 3:
 				frame.setTint(&ColourRGBA(1, 1, 1, -0.3f));
-				list.setTimeAfterPreviousKeyFrame(2300);
+				list.setTimeAfterPreviousKeyFrameInMillis(2300);
 				break;
 		}
 		list.addKeyFrame(&frame);

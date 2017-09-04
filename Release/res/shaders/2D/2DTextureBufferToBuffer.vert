@@ -23,7 +23,6 @@ float convertFromPositionToUV(float value) {
 // This is main(), which applies scaling to the texture.
 void main(){
 		gl_Position = vec4(vertexPosition.x, vertexPosition.y, vertexPosition.z, 1);
-		vec2 UVScaling = windowDimensions;
 		UV = vec2(convertFromPositionToUV(vertexPosition.x) - positionOfTextureOnScreen.x, convertFromPositionToUV(vertexPosition.y) - positionOfTextureOnScreen.y);
 }
 

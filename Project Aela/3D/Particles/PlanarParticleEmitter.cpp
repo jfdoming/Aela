@@ -9,8 +9,6 @@
 
 #include <glm/gtc/constants.hpp>
 
-#define PI 3.14159265358979323846
-
 void PlanarParticleEmitter::setupDimensions(Rect<GLfloat>* dimensions) {
 	this->dimensions = *dimensions;
 }

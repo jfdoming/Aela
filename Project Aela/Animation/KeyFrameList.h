@@ -21,6 +21,12 @@ template <class T> class KeyFrameList {
 			}
 		}
 
+		void setTimeAfterPreviousKeyFrameInMillis(unsigned int time) {
+			if (time != 0) {
+				timeAfterPreviousKeyFrame = time * 1000000;
+			}
+		}
+
 		unsigned int getTimeAfterPreviousKeyFrame() {
 			return timeAfterPreviousKeyFrame;
 		}

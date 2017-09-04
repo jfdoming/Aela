@@ -290,7 +290,7 @@ void Basic2DRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFont
 	// This creates one buffer out of each glyph's individual buffer.
 	if (glyphs.size() > 0) {
 		for (int i = 0; i < characterPositioning.getHeight(); i++) {
-			for (int whichGlyph = 0; whichGlyph < glyphs.size(); whichGlyph++) {
+			for (unsigned int whichGlyph = 0; whichGlyph < glyphs.size(); whichGlyph++) {
 				for (int whichChar = 0; whichChar < glyphs[whichGlyph].width; whichChar++) {
 					int whichRowToAccess = i - (originY - glyphs[whichGlyph].originY);
 					if (glyphs[whichGlyph].buffer != nullptr && whichRowToAccess >= 0 && whichRowToAccess * glyphs[whichGlyph].width + whichChar < glyphs[whichGlyph].width * glyphs[whichGlyph].rows) {

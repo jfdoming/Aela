@@ -14,7 +14,6 @@
 void ParticleEmitter::setupParticles(std::vector<Texture*>* textures, float particleWidthScaling, float particleHeightScaling, unsigned int amount) {
 	for (unsigned int i = 0; i < amount; i++) {
 		Particle particle;
-		srand(timeManager->getCurrentTime() + i);
 		particle.setTexture(textures->at(rand() % textures->size()));
 		particle.setProperty(Transformable3DProperty::X_SCALING, particleWidthScaling);
 		particle.setProperty(Transformable3DProperty::Y_SCALING, particleHeightScaling);

@@ -6,7 +6,7 @@
 */
 
 #pragma once
-#include <time.h>
+#include <chrono>
 
 class FramerateCalculator {
 	public:
@@ -14,14 +14,14 @@ class FramerateCalculator {
 
 		}
 
-		void calculate(clock_t currentTime, float timeBetweenFrames);
+		void calculate(long long currentTime, long long timeBetweenFrames);
 
 		// These are getters and setters.
-		float getTrueFPS(), getSmoothedFPS(), getFPSSmoothingAmount();
-		void setFPSSmoothing(float fpsSmoothingAmount), setTimeBetweenFrameChecks(unsigned int timeBetweenFrameChecks);
+		double getTrueFPS(), getSmoothedFPS(), getFPSSmoothingAmount();
+		void setFPSSmoothing(double fpsSmoothingAmount), setTimeBetweenFrameChecks(long long timeBetweenFrameChecks);
 
 	private:
-		float trueFPS = -1, smoothedFPS = -1, fpsSmoothingAmount = 0.9f;
-		unsigned int timeBetweenFrameChecks = 250;
-		clock_t timeOfLastFrameCheck = 0;
+		double trueFPS = -1, smoothedFPS = -1, fpsSmoothingAmount = 0.9f;
+		long long timeBetweenFrameChecks = 250;
+		long long timeOfLastFrameCheck = 0;
 };

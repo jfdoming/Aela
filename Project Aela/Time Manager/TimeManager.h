@@ -6,37 +6,40 @@
 */
 
 #pragma once
-#include "time.h"
+#include <chrono>
 #include <iostream>
+
+using steady_clock = std::chrono::steady_clock;
+using time_point = std::chrono::time_point<steady_clock>;
 
 namespace Aela {
 	class TimeManager {
 		public:
-		TimeManager() {
-			updateTime();
-		}
+			TimeManager() {
+				updateTime();
+			}
 
-		void updateTime() {
-			// This updates the time and the time difference between the current and the last frame.
-			lastTime = currentTime;
-			currentTime = clock();
-			deltaTime = float(currentTime - lastTime) * (CLOCKS_PER_SEC / 1000);
-		}
+			void updateTime() {
+				// This updates the time and the time difference between the current and the last frame.
+				lastTime = currentTime;
+				currentTime = steady_clock::now();
+				deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count();
+			}
 
-		clock_t getCurrentTime() {
-			return currentTime;
-		}
+			long long getCurrentTime() {
+				return std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime.time_since_epoch()).count();
+			}
 
-		clock_t getLastFrameTime() {
-			return lastTime;
-		}
+			long long getLastFrameTime() {
+				return std::chrono::duration_cast<std::chrono::nanoseconds>(lastTime.time_since_epoch()).count();
+			}
 
-		float getTimeBetweenFrames() {
-			return deltaTime;
-		}
+			long long getTimeBetweenFrames() {
+				return deltaTime;
+			}
 
 		private:
-		clock_t currentTime, lastTime;
-		float deltaTime;
+			time_point currentTime, lastTime;
+			long long deltaTime;
 	};
 }

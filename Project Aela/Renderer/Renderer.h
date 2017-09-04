@@ -53,9 +53,9 @@ namespace Aela {
 		public:
 			Renderer() {
 				windowFocus = false;
-				speed = 0.015f;
-				superSpeed = 0.045f;
-				currentSpeed = 0.0f;
+				speed = 0.000000015f;
+				superSpeed = 0.000000045f;
+				currentSpeed = speed;
 				mouseSpeed = 0.005f;
 				allowUpsideDownCamera = false;
 			}
@@ -178,8 +178,11 @@ namespace Aela {
 			// This stores the window's state.
 			bool windowFocus;
 
-			// Speed: 0.001f is 1 unit per tick.
-			float speed, superSpeed, currentSpeed, mouseSpeed;
+			// Speed: 0.000000001f is 1 unit per ns.
+			float speed, superSpeed, currentSpeed;
+			
+			// Mouse speed: the radians of rotation per pixel of mouse movement 
+			float mouseSpeed;
 
 			// These store movements.
 			bool forward, backward, left, right, up, down;
