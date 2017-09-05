@@ -5,12 +5,12 @@
  * Description: Project Aela's Texture Renderer, which renders a 2D texture to a buffer.
 */
 
-#version 330 core
+#version 430 core
 
 // These is the input data.
 layout(location = 0) in vec3 vertexPosition;
 layout(location = 1) in vec2 UVPosition;
-uniform vec2 positionOfTextureOnScreen;
+layout(location = 0) uniform vec2 positionOfTextureOnScreen;
 
 // This is the output data.
 out vec2 UV;

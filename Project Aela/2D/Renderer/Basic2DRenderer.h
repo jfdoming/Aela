@@ -71,7 +71,9 @@ namespace Aela {
 		private:
 			// These are handles to shaders.
 			GLuint bufferTextureToBufferProgramID, textToBufferProgramID, imageToBufferProgramID;
-			// These are handles to variables inside of the image shader.
+			// These are handles to variables inside of the image shader. Note: shaders that use the same uniforms and buffers as the
+			// 2DTextureBufferToBuffer shader (bufferTextureToBufferProgramID) should set the same locations of uniforms as they are in
+			// the 2DTextureBufferToBuffer shader.
 			GLuint imageTextureID, imageVertexBufferID, imageUVBufferID, imageTopLeftCoordID, imageWindowDimensionsID, imageTintID;
 			// These are handles to variables inside of the text shader as well as the actual texture used for text.
 			GLuint characterTextureID, characterTexture, characterQuadVertexBufferID, characterTopLeftCoordID,

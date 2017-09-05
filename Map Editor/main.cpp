@@ -10,7 +10,7 @@
 
 int main(int argc, char *args[]) {
 	Aela::Engine engine;
-	AelaGame game;
+	AelaGame game(&engine);
 
 	int error = engine.setupWindow(1280, 720, 50, 50);
 	if (error != 0) {
@@ -47,7 +47,6 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
-	game.setEngine(&engine);
 	game.setup();
 
 	// This is temporary and is here for framerate.

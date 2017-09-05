@@ -104,3 +104,9 @@ glm::vec3* Camera3D::getRightVector() {
 glm::vec3* Camera3D::getUpVector() {
 	return &up;
 }
+
+glm::vec3 Camera3D::getPointInFrontOfCamera(float distanceFromCamera) {
+	glm::vec3 point = position;
+	point += cartesionalDirection * distanceFromCamera;
+	return point;
+}

@@ -5,7 +5,7 @@
  * Description: Project Aela's billboard vertex shader.
 */
 
-#version 330 core
+#version 430 core
 
 // This is the input data.
 layout(location = 0) in vec3 vertexPosition;

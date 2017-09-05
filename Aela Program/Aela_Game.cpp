@@ -25,12 +25,16 @@ void AelaGame::loadScenes() {
 	setupScenes(engine, this);
 }
 
-void AelaGame::continueGame() {
-	engine->getWindow()->hideCursor();
-	camera->setInUse(true);
-	camera->setForceCursorToMiddle(true);
-	camera->setUseControls(true);
-	engine->getRenderer()->getCamera()->setRotation(0, 0, 0);
+void AelaGame::performActionOnSceneSwitch(int sceneID) {
+	switch (sceneID) {
+		case GAMEPLAY_SCENE:
+			engine->getWindow()->hideCursor();
+			camera->setInUse(true);
+			camera->setForceCursorToMiddle(true);
+			camera->setUseControls(true);
+			engine->getRenderer()->getCamera()->setRotation(0, 0, 0);
+			break;
+	}
 }
 
 void AelaGame::setup() {

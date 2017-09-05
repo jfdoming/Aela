@@ -129,6 +129,8 @@ void Basic2DRenderer::renderImageToFramebuffer(Image* image, GLuint framebuffer,
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
 // Note: Custom shaders can be used for post-process effects.
+// Note: Shaders that use the same uniforms and buffers as the 2DTextureBufferToBuffer shader (bufferTextureToBufferProgramID) should set the same
+// locations of uniforms as they are in the 2DTextureBufferToBuffer shader.
 void Basic2DRenderer::renderImageToFramebuffer(Image* image, GLuint framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader) {
 	glDisable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

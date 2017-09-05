@@ -39,7 +39,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	Texture* mainMenuTexture;
 	bool success = engine->getResourceManager()->obtain<Texture>("res/textures/map_editor_main_background.dds", mainMenuTexture);
 	mainMenuImage->setDimensions(&windowDimensions);
-	mainMenuImage->setCropping(&windowDimensions);
+	mainMenuImage->setCropping(mainMenuTexture->getDimensions());
 	mainMenuImage->setTexture(mainMenuTexture);
 
 	// This sets up text.
@@ -53,10 +53,9 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	auto exitButtonText = std::make_shared<Label>("Exit", xerox, &VSBlue, fontManager);
 
 	// This sets up actions for the main menu buttons.
-	auto editMapAction = [](Engine* engine) {
+	auto editMapAction = [game](Engine* engine) {
 		engine->getSceneManager()->setCurrentScene(EDITOR_SCENE);
-		engine->getWindow()->hideCursor();
-		engine->getRenderer()->getCamera()->setInUse(true);
+		game->performActionOnSceneSwitch(EDITOR_SCENE);
 	};
 	auto helpMapAction = [](Engine* engine) {
 		// Lol, this is temporary until I feel like creating a seperate scene for this garbage.
@@ -66,7 +65,8 @@ void setupScenes(Engine* engine, AelaGame* game) {
 			+ "Left/Right Arrows - change resource of entity\n"
 			+ "1/2/3 - modify rotation\n"
 			+ "4/5/6 - modify scaling\n"
-			+ "Up/Down Arrows - increase/decrease rotation/scaling";
+			+ "Up/Down Arrows - increase/decrease rotation/scaling"
+			+ "7/8 - decrease/increase distance of object from camera";
 		AelaErrorHandling::windowWarning("Aela Map Editor: Controls", controls);
 		AelaErrorHandling::windowWarning("Aela Map Editor: Contact", "For more help, ask a lead developer on the Ekkon Discord!");
 	};
@@ -341,10 +341,9 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE);
 
 	// engine->getWindow()->hideCursor();
-	engine->getRenderer()->getCamera()->setUseControls(false);
+	// engine->getRenderer()->getCamera()->setUseControls(false);
 
 	// The renderer's camera must be bound to the KeyedAnimator for movement.
-	engine->getKeyedAnimator()->addTransformable(engine->getRenderer()->getCamera());
 	engine->getRenderer()->getCamera()->setPosition(0, 10, -10);
 	engine->getRenderer()->getCamera()->setRotation(0, glm::pi<float>() / -4, 0);
 }

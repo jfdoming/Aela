@@ -33,8 +33,7 @@ class AelaGame {
 		void update();
 		void cleanup();
 
-		// This should be called when the user presses "continue game".
-		void continueGame();
+		void performActionOnSceneSwitch(int sceneID);
 	private:
 		// These are Aela Engine objects.
 		Engine* engine;

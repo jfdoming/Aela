@@ -57,7 +57,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 		Rect<unsigned int>* dimensions = engine->getWindow()->getWindowDimensions();
 		engine->getWindow()->setCursorPositionInWindow(dimensions->getWidth() / 2, dimensions->getHeight() / 2);
 		engine->getSceneManager()->setCurrentScene(GAMEPLAY_SCENE);
-		game->continueGame();
+		game->performActionOnSceneSwitch(GAMEPLAY_SCENE);
 	};
 	auto optionsAction = [](Engine* engine) {
 		AelaErrorHandling::windowWarning("There's nothing to see here.");

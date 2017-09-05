@@ -13,12 +13,6 @@
 
 using namespace Aela;
 
-void AelaGame::setEngine(Engine* engine) {
-	this->engine = engine;
-	resourceManager = engine->getResourceManager();
-	sceneManager = engine->getSceneManager();
-}
-
 void AelaGame::setEntityTypeText(std::shared_ptr<Label> text) {
 	entityTypeText = text;
 }
@@ -159,13 +153,10 @@ void AelaGame::setup() {
 	switchBillboardResource(currentBillboardResource);
 	idOfEntityInMap = mapBeingEdited->addModel(&modelEntity);
 	engine->getRenderer()->generateShadowMap(&lightEntity);
-
-	// The keyed animator will translate the transformable object that represents the properties of the entity being placed using
-	// key inputs.
-	keyedAnimatorKey = engine->getKeyedAnimator()->addTransformable(&transformableBeingPlaced);
 }
 
 void AelaGame::update() {
+	transformableBeingPlaced.setPosition(camera->getPointInFrontOfCamera(distanceFromCameraToObject));
 	positionText->setText("Position: " + toStringWithDecimal(transformableBeingPlaced.getPosition()->x, 3) + ", "
 		+ toStringWithDecimal(transformableBeingPlaced.getPosition()->y, 3) + ", " + toStringWithDecimal(transformableBeingPlaced.getPosition()->z, 3));
 	rotationText->setText("Rotation: " + toStringWithDecimal(transformableBeingPlaced.getRotation()->x, 3) + ", "
@@ -252,6 +243,12 @@ void AelaGame::onEvent(Event* event) {
 				} else if (holdingDown) {
 					transformableBeingPlaced.scaleUp(0, 0, -0.25);
 				}
+				break;
+			case SDLK_7:
+				distanceFromCameraToObject -= 0.25;
+				break;
+			case SDLK_8:
+				distanceFromCameraToObject += 0.25;
 				break;
 			case SDLK_RIGHT:
 				switch (entityBeingPlaced->getEntityType()) {
@@ -340,6 +337,18 @@ void AelaGame::onEvent(Event* event) {
 				}
 				break;
 		}
+	}
+}
+
+void AelaGame::performActionOnSceneSwitch(int sceneID) {
+	switch (sceneID) {
+		case EDITOR_SCENE:
+			engine->getWindow()->hideCursor();
+			camera->setInUse(true);
+			camera->setForceCursorToMiddle(true);
+			camera->setUseControls(true);
+			engine->getRenderer()->getCamera()->setRotation(0, 0, 0);
+			break;
 	}
 }
 

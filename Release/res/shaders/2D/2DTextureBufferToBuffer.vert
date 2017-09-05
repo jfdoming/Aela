@@ -6,12 +6,12 @@
  *              specifically render a framebuffer's texture to another buffer.
 */
 
-#version 330 core
+#version 430 core
 
 // This is the input data.
 layout(location = 0) in vec3 vertexPosition;
-uniform vec2 positionOfTextureOnScreen;
-uniform vec2 windowDimensions;
+layout(location = 0) uniform vec2 positionOfTextureOnScreen;
+layout(location = 1) uniform vec2 windowDimensions;
 
 // This is the output data.
 out vec2 UV;

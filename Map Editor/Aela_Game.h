@@ -13,8 +13,19 @@ using namespace Aela;
 
 class AelaGame : public Listener {
 	public:
-		AelaGame() {
-			
+		AelaGame(Engine* engine) : engine(engine) {
+			window = engine->getWindow();
+			renderer = engine->getRenderer();
+			eventHandler = engine->getEventHandler();
+			timeManager = engine->getTimeManager();
+			luaManager = engine->getLuaManager();
+			sceneManager = engine->getSceneManager();
+			resourceManager = engine->getResourceManager();
+			audioPlayer = engine->getAudioPlayer();
+			animator = engine->getAnimator();
+			userEnvironment = engine->getUserEnvironment();
+			framerateCalculator = engine->getFramerateCalculator();
+			camera = engine->getRenderer()->getCamera();
 		}
 
 		void setup();
@@ -25,20 +36,31 @@ class AelaGame : public Listener {
 		// This is triggered on an event.
 		void onEvent(Event* event);
 
+		void performActionOnSceneSwitch(int sceneID);
+
 		// These are getters and setters.
 		void setMapBeingEdited(Map3D* mapBeingEdited);
 		Map3D* getMapBeingEdited();
-		void setEngine(Engine* engine);
 		void setEntityTypeText(std::shared_ptr<Label> text);
 		void setPositionText(std::shared_ptr<Label> text);
 		void setRotationText(std::shared_ptr<Label> text);
 		void setScalingText(std::shared_ptr<Label> text);
 
 	private:
-		// These are handles to objects in the Aela namespace.
+		// These are Aela Engine objects.
 		Engine* engine;
-		ResourceManager* resourceManager;
+		Window* window;
+		Renderer* renderer;
+		EventHandler* eventHandler;
+		TimeManager* timeManager;
+		LuaManager* luaManager;
 		SceneManager* sceneManager;
+		ResourceManager* resourceManager;
+		AudioManager* audioPlayer;
+		Animator* animator;
+		UserEnvironment* userEnvironment;
+		FramerateCalculator* framerateCalculator;
+		Camera3D* camera;
 
 		// These are handles to other various objects.
 		Map3D* mapBeingEdited;
@@ -54,6 +76,7 @@ class AelaGame : public Listener {
 		Transformable3D transformableBeingPlaced;
 
 		const float THIRTY_SECOND_OF_PI = glm::pi<float>() / 32;
+		float distanceFromCameraToObject = 8;
 
 		// These are used to keep track of whether the up and down arrows are being held.
 		bool holdingUp = false, holdingDown = false;
