@@ -23,6 +23,7 @@
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 #include "Events/EventConstants.h"
+#include "Events/MouseEvent.h"
 #include "Audio/AudioManager.h"
 #include "Animation/Animator.h"
 #include "3D/Animation/KeyedAnimator3D.h"

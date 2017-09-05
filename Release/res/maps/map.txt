@@ -1,5 +1,5 @@
 <Skybox src="~skybox_1">
 <Skybox src="~skybox_2">
-<Model src="~meme_mug.obj" scaling="1.0,1.0,1.0">
+<Model src="~jeep_1.obj" position="44.550003,15.749999,0.600001">
 <Model src="~test scene for graphics.obj" position="44.550003,-15.749999,0.600001" scaling="1.0,1.0,1.0">
 <Light power="0.95" position="51.750004,5,12.509996" scaling="1.0,1.0,1.0">

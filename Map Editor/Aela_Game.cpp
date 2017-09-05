@@ -144,14 +144,16 @@ void AelaGame::setup() {
 
 	engine->getEventHandler()->addListener(EventConstants::KEY_RELEASED, this);
 	engine->getEventHandler()->addListener(EventConstants::KEY_PRESSED, this);
+	engine->getEventHandler()->addListener(EventConstants::MOUSE_WHEEL, this);
+	engine->getEventHandler()->addListener(EventConstants::MOUSE_PRESSED, this);
 
 	// Note: the default entity that is placed is a ModelEntity.
 	entityBeingPlaced = &modelEntity;
 
 	// This sets up the entities that are being placed.
+	idOfEntityInMap = mapBeingEdited->addModel(&modelEntity);
 	switchModelResource(currentModelResource);
 	switchBillboardResource(currentBillboardResource);
-	idOfEntityInMap = mapBeingEdited->addModel(&modelEntity);
 	engine->getRenderer()->generateShadowMap(&lightEntity);
 }
 
@@ -193,9 +195,10 @@ void AelaGame::exportMap(std::string src, bool readable) {
 }
 
 void AelaGame::onEvent(Event* event) {
-	if (event->getType() == EventConstants::KEY_PRESSED) {
-		KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
-		switch (keyEvent->getKeycode()) {
+	if (sceneManager->getCurrentSceneId() == EDITOR_SCENE) {
+		if (event->getType() == EventConstants::KEY_PRESSED) {
+			KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
+			switch (keyEvent->getKeycode()) {
 			case SDLK_UP:
 				holdingUp = true;
 				break;
@@ -244,54 +247,48 @@ void AelaGame::onEvent(Event* event) {
 					transformableBeingPlaced.scaleUp(0, 0, -0.25);
 				}
 				break;
-			case SDLK_7:
-				distanceFromCameraToObject -= 0.25;
-				break;
-			case SDLK_8:
-				distanceFromCameraToObject += 0.25;
-				break;
 			case SDLK_RIGHT:
 				switch (entityBeingPlaced->getEntityType()) {
-					case EntityType::MODEL:
-						currentModelResource++;
-						if (currentModelResource >= numberOfMaterialsAndModels) {
-							currentModelResource = 0;
-						}
-						switchModelResource(currentModelResource);
-						break;
-					case EntityType::BILLBOARD:
-						currentBillboardResource++;
-						if (currentBillboardResource >= numberOfBillboards) {
-							currentBillboardResource = 0;
-						}
-						switchBillboardResource(currentBillboardResource);
-						break;
+				case EntityType::MODEL:
+					currentModelResource++;
+					if (currentModelResource >= numberOfMaterialsAndModels) {
+						currentModelResource = 0;
+					}
+					switchModelResource(currentModelResource);
+					break;
+				case EntityType::BILLBOARD:
+					currentBillboardResource++;
+					if (currentBillboardResource >= numberOfBillboards) {
+						currentBillboardResource = 0;
+					}
+					switchBillboardResource(currentBillboardResource);
+					break;
 				}
 				break;
 			case SDLK_LEFT:
 				switch (entityBeingPlaced->getEntityType()) {
-					case EntityType::MODEL:
-						if (currentModelResource == 0) {
-							currentModelResource = numberOfMaterialsAndModels - 1;
-						} else {
-							currentModelResource--;
-						}
-						switchModelResource(currentModelResource);
-						break;
-					case EntityType::BILLBOARD:
-						if (currentBillboardResource == 0) {
-							currentBillboardResource = numberOfBillboards - 1;
-						} else {
-							currentBillboardResource--;
-						}
-						switchBillboardResource(currentBillboardResource);
-						break;
+				case EntityType::MODEL:
+					if (currentModelResource == 0) {
+						currentModelResource = numberOfMaterialsAndModels - 1;
+					} else {
+						currentModelResource--;
 					}
+					switchModelResource(currentModelResource);
+					break;
+				case EntityType::BILLBOARD:
+					if (currentBillboardResource == 0) {
+						currentBillboardResource = numberOfBillboards - 1;
+					} else {
+						currentBillboardResource--;
+					}
+					switchBillboardResource(currentBillboardResource);
+					break;
+				}
 				break;
-		}
-	} else if (event->getType() == EventConstants::KEY_RELEASED) {
-		KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
-		switch (keyEvent->getKeycode()) {
+			}
+		} else if (event->getType() == EventConstants::KEY_RELEASED) {
+			KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
+			switch (keyEvent->getKeycode()) {
 			case SDLK_UP:
 				holdingUp = false;
 				break;
@@ -300,28 +297,28 @@ void AelaGame::onEvent(Event* event) {
 				break;
 			case SDLK_RETURN:
 				switch (entityBeingPlaced->getEntityType()) {
-					case EntityType::MODEL:
-						placeModel();
-						break;
-					case EntityType::LIGHT:
-						placeLightNextUpdate = true;
-						break;
-					case EntityType::BILLBOARD:
-						placeBillboard();
-						break;
+				case EntityType::MODEL:
+					placeModel();
+					break;
+				case EntityType::LIGHT:
+					placeLightNextUpdate = true;
+					break;
+				case EntityType::BILLBOARD:
+					placeBillboard();
+					break;
 				}
 				break;
 			case SDLK_BACKSLASH:
 				switch (entityBeingPlaced->getEntityType()) {
-					case EntityType::MODEL:
-						switchEntityBeingPlaced(EntityType::LIGHT);
-						break;
-					case EntityType::LIGHT:
-						switchEntityBeingPlaced(EntityType::BILLBOARD);
-						break;
-					case EntityType::BILLBOARD:
-						switchEntityBeingPlaced(EntityType::MODEL);
-						break;
+				case EntityType::MODEL:
+					switchEntityBeingPlaced(EntityType::LIGHT);
+					break;
+				case EntityType::LIGHT:
+					switchEntityBeingPlaced(EntityType::BILLBOARD);
+					break;
+				case EntityType::BILLBOARD:
+					switchEntityBeingPlaced(EntityType::MODEL);
+					break;
 				}
 				break;
 			case SDLK_ESCAPE:
@@ -336,6 +333,29 @@ void AelaGame::onEvent(Event* event) {
 					engine->getRenderer()->getCamera()->setInUse(true);
 				}
 				break;
+			}
+		} else if (event->getType() == EventConstants::MOUSE_WHEEL) {
+			MouseEvent* mouseEvent = dynamic_cast<MouseEvent*>(event);
+			switch (mouseEvent->getWheel()) {
+			case 1:
+				distanceFromCameraToObject += 0.25;
+				break;
+			case -1:
+				distanceFromCameraToObject -= 0.25;
+				break;
+			}
+		} else if (event->getType() == EventConstants::MOUSE_PRESSED) {
+			switch (entityBeingPlaced->getEntityType()) {
+			case EntityType::MODEL:
+				placeModel();
+				break;
+			case EntityType::LIGHT:
+				placeLightNextUpdate = true;
+				break;
+			case EntityType::BILLBOARD:
+				placeBillboard();
+				break;
+			}
 		}
 	}
 }

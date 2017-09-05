@@ -60,7 +60,8 @@ void EventHandler::updateSDLEvents() {
 											event.key.keysym.mod,
 											event.button.clicks,
 											event.button.x,
-											event.button.y));
+											event.button.y,
+											event.wheel.y));
 				break;
 			case SDL_MOUSEBUTTONUP:
 				fireEvent(new MouseEvent(EventConstants::MOUSE_RELEASED, 
@@ -68,7 +69,8 @@ void EventHandler::updateSDLEvents() {
 											event.key.keysym.mod,
 											event.button.clicks,
 											event.button.x,
-											event.button.y));
+											event.button.y,
+											event.wheel.y));
 				break;
 			case SDL_MOUSEMOTION:
 				fireEvent(new MouseEvent(EventConstants::MOUSE_MOVED,
@@ -76,7 +78,17 @@ void EventHandler::updateSDLEvents() {
 											event.key.keysym.mod,
 											event.button.clicks,
 											event.button.x,
-											event.button.y));
+											event.button.y,
+											event.wheel.y));
+				break;
+			case SDL_MOUSEWHEEL:
+				fireEvent(new MouseEvent(EventConstants::MOUSE_WHEEL,
+											event.button.button,
+											event.key.keysym.mod,
+											event.button.clicks,
+											event.button.x,
+											event.button.y,
+											event.wheel.y));
 				break;
 		}
 	}

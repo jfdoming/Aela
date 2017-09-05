@@ -2,12 +2,13 @@
 
 using namespace Aela;
 
-MouseEvent::MouseEvent(int _type, int _button, int _modifier, int _clicks, int _x, int _y) : Event (_type) {
+MouseEvent::MouseEvent(int _type, int _button, int _modifier, int _clicks, int _x, int _y, int _wheel) : Event (_type) {
 	button = _button;
 	modifier = _modifier;
 	clicks = _clicks;
 	x = _x;
 	y = _y;
+	wheel = _wheel;
 }
 
 MouseEvent::~MouseEvent() {
@@ -31,4 +32,8 @@ int MouseEvent::getMouseX() {
 
 int MouseEvent::getMouseY() {
 	return y;
+}
+
+int Aela::MouseEvent::getWheel() {
+	return wheel;
 }

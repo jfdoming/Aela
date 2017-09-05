@@ -65,8 +65,9 @@ void setupScenes(Engine* engine, AelaGame* game) {
 			+ "Left/Right Arrows - change resource of entity\n"
 			+ "1/2/3 - modify rotation\n"
 			+ "4/5/6 - modify scaling\n"
-			+ "Up/Down Arrows - increase/decrease rotation/scaling"
-			+ "7/8 - decrease/increase distance of object from camera";
+			+ "Up/Down Arrows - increase/decrease rotation/scaling\n"
+			+ "Scroll wheel - decrease/increase distance of object from camera\n"
+			+ "Left-Click/Enter - place entity";
 		AelaErrorHandling::windowWarning("Aela Map Editor: Controls", controls);
 		AelaErrorHandling::windowWarning("Aela Map Editor: Contact", "For more help, ask a lead developer on the Ekkon Discord!");
 	};
