@@ -176,20 +176,20 @@ void Basic2DRenderer::renderImageToFramebuffer(Image* image, GLuint framebuffer,
 	glBindTexture(GL_TEXTURE_2D, *(image->getTexture()));
 	glUniform1i(imageTextureID, 0);
 
-	// The following large chunk of code passes all necessary variables to the shader.
+	// If there is a tint, use it. Otherwise, the shader will use its own default tint value.
 	if (tint != nullptr) {
 		glm::vec4 tintAsVec4 = tint->getVec4();
 		glUniform4fv(imageTintID, 1, &tintAsVec4.r);
 	}
 
-	GLuint quadVertexBuffer;
-	glGenBuffers(1, &quadVertexBuffer);
+	GLuint vertexBuffer;
+	glGenBuffers(1, &vertexBuffer);
 
-	glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData), vertexBufferData, GL_DYNAMIC_DRAW);
 
 	glEnableVertexAttribArray(imageVertexBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(
 		imageVertexBufferID,
 		3,
@@ -199,14 +199,14 @@ void Basic2DRenderer::renderImageToFramebuffer(Image* image, GLuint framebuffer,
 		(void*) 0
 	);
 
-	GLuint quadUVBuffer;
-	glGenBuffers(1, &quadUVBuffer);
+	GLuint UVBuffer;
+	glGenBuffers(1, &UVBuffer);
 
-	glBindBuffer(GL_ARRAY_BUFFER, quadUVBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, UVBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(UVBufferData), UVBufferData, GL_DYNAMIC_DRAW);
 
 	glEnableVertexAttribArray(imageUVBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, quadUVBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, UVBuffer);
 	glVertexAttribPointer(
 		imageUVBufferID,
 		2,
@@ -232,8 +232,8 @@ void Basic2DRenderer::renderImageToFramebuffer(Image* image, GLuint framebuffer,
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glDisableVertexAttribArray(imageVertexBufferID);
 	glDisableVertexAttribArray(imageUVBufferID);
-	glDeleteBuffers(1, &quadVertexBuffer);
-	glDeleteBuffers(1, &imageUVBufferID);
+	glDeleteBuffers(1, &vertexBuffer);
+	glDeleteBuffers(1, &UVBuffer);
 }
 
 // This function renders text directly to the 2D renderer's buffer.
