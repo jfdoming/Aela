@@ -23,25 +23,31 @@ class KeyFrame3D : public KeyFrame {
 		KeyFrameType getType();
 
 		// These are getters and setters.
-		void setObject(std::shared_ptr<Transformable3D> object);
-		std::shared_ptr<Transformable3D> getObject();
-		void setTranslation(glm::vec3* translation);
-		glm::vec3* getTranslation();
-		void setRotation(glm::vec3* rotation);
-		glm::vec3* getRotation();
-		void setPointRotation(PointRotation3D* pointRotation);
+		void setObject(Transformable3D* object), setTranslation(glm::vec3* translation), setRotation(glm::vec3* rotation),
+			setPointRotation(PointRotation3D* pointRotation), setScaling(glm::vec3* scaling);
+		Transformable3D* getObject();
+		glm::vec3* getTranslation(), *getRotation(), *getScaling();
 		PointRotation3D* getPointRotation();
-		void setScaling(glm::vec3* scaling);
-		glm::vec3* getScaling();
+		void setUseTranslation(bool use), setUseRotation(bool use), setUsePointRotation(bool use), setUseScaling(bool use);
+		bool isUsingTranslation(), isUsingRotation(), isUsingPointRotation(), isUsingScaling();
 
 	private:
 		// When using 3D transformations on a Transformable3D, make sure that you set object to a value first! Also,
 		// if you do not need to use one of the transformations (such as if you do not need to modify the rotation of
 		// the object), just don't set that transformation to a value and it will not have an effect on the object due
 		// to the way it is auto-initialised.
-		std::shared_ptr<Transformable3D> object = nullptr;
+
+		// The object is NOT a shared ptr like in a 2D keyframe since menu objects are meant to be allocated to the heap and
+		// shared while 3D transformables are meant to be stored inside of a map.
+		Transformable3D* object = nullptr;
 		glm::vec3 translation;
 		glm::vec3 rotation;
 		PointRotation3D pointRotation;
 		glm::vec3 scaling = glm::vec3(1);
+
+		// These are booleans which specify whether a property of the object should be modified. Even if not modifying one of these
+		// properties in a key frame, it's usually okay to leave it as being used since the animator will just force that value to
+		// stay the same throughout the keyframe. Setting one of these values to false is only necessary if something else, such as a
+		// KeyedAnimator, needs to modify that value.
+		bool useTranslation = true, useRotation = true, usePointRotation = true, useScaling = true;
 };

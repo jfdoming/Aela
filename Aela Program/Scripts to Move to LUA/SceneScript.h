@@ -1,11 +1,11 @@
 // The contents of this file will be moved to LUA once we can get LUA to work!
 #pragma once
-
 #include "Aela_Engine.h"
 #include "Scenes\SceneManager.h"
 #include "Menus\Label.h"
 #include "Menus\ImageComponent.h"
 #include "Menus\Button.h"
+#include "..\Aela_Game.h"
 
 using namespace Aela;
 
@@ -123,6 +123,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	if (success) {
 		mainMenuScene->setMap(map);
 		gameplayScene->setMap(map);
+		game->setCurrentMap(map);
 	} else {
 		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/map.txt wasn't loaded properly or something.");
 	}

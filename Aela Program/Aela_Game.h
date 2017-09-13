@@ -6,7 +6,6 @@
 */
 
 #pragma once
-
 #include "Aela_Engine.h"
 #include "Gameplay Manager\GameplayManager.h"
 
@@ -27,6 +26,7 @@ class AelaGame {
 			userEnvironment = engine->getUserEnvironment();
 			framerateCalculator = engine->getFramerateCalculator();
 			camera = engine->getRenderer()->getCamera();
+			physicsManager = engine->getPhysicsManager();
 		}
 
 		void setup();
@@ -34,6 +34,8 @@ class AelaGame {
 		void cleanup();
 
 		void performActionOnSceneSwitch(int sceneID);
+
+		void setCurrentMap(Map3D* map);
 	private:
 		// These are Aela Engine objects.
 		Engine* engine;
@@ -49,6 +51,7 @@ class AelaGame {
 		UserEnvironment* userEnvironment;
 		FramerateCalculator* framerateCalculator;
 		Camera3D* camera;
+		PhysicsManager* physicsManager;
 
 		// These are game-related objects.
 		GameplayManager gameplayManager;

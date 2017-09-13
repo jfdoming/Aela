@@ -20,31 +20,32 @@ void BoundingBox3D::generateVertices() {
 	for (unsigned int i = 0; i < 8; i++) {
 		glm::vec3 pos;
 		if (i % 4 < 2) {
-			pos.x = -width / 2.0f;
+			pos.x = position.x - width / 2.0f;
 		} else {
-			pos.x = width / 2.0f;
+			pos.x = position.x + width / 2.0f;
 		}
 		if (i < 4) {
-			pos.y = height / 2.0f;
+			pos.y = position.y - height / 2.0f;
 		} else {
-			pos.y = -height / 2.0f;
+			pos.y = position.y + height / 2.0f;
 		}
-		if (i % 2 == 0) {
-			pos.z = depth / 2.0f;
+		if (i % 4 == 1 || i % 4 == 2) {
+			pos.z = position.z + depth / 2.0f;
 		} else {
-			pos.z = -depth / 2.0f;
+			pos.z = position.z - depth / 2.0f;
 		}
 		vertices.push_back(pos);
 	}
 
-	// This does matrix calculations on the vertices.
+	// This does matrix calculations on the vertices. It's not done yet.
 	/* glm::mat4 matrix = glm::scale(glm::mat4(1), scaling) * glm::eulerAngleYXZ(rotation.y, rotation.x, rotation.z);
 	for (unsigned int i = 0; i < 8; i++) {
 		vertices.at(i) *= matrix;
 	}*/
 }
 
-void BoundingBox3D::isInside(glm::vec3 point) {
+bool BoundingBox3D::verticesWereGenerated() {
+	return vertices.size() != 0;
 }
 
 glm::vec3 BoundingBox3D::getVertex(int id) {
@@ -61,4 +62,37 @@ std::string BoundingBox3D::getVerticesAsString() {
 		}
 	}
 	return s;
+}
+
+void BoundingBox3D::setWidth(float width) {
+	this->width = width;
+}
+
+void BoundingBox3D::setHeight(float height) {
+	this->height = height;
+}
+
+void BoundingBox3D::setDpeth(float depth) {
+	this->depth = depth;
+}
+
+float BoundingBox3D::getWidth() {
+	return width;
+}
+
+float BoundingBox3D::getHeight() {
+	return height;
+}
+
+float BoundingBox3D::getDepth() {
+	return depth;
+}
+
+void BoundingBox3D::setValues(float x, float y, float z, float width, float height, float depth) {
+	position.x = x;
+	position.y = y;
+	position.z = z;
+	this->width = width;
+	this->height = height;
+	this->depth = depth;
 }

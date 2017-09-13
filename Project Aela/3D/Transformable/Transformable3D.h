@@ -54,10 +54,6 @@ class Transformable3D {
 		void rotateAroundPoint(PointRotation3D* pointRotation), rotateAroundPoint(glm::vec3* rotation, glm::vec3* point);
 		void scaleUp(glm::vec3 scaling), scaleUp(float x, float y, float z);
 
-		// This function is used to force a value within a specific range (not clamping).
-		// For example, if using the range 0 and 2a, 11a / 2 is forced to 3a / 2.
-		void forceValuesWithinRange(glm::vec3* vec3, float minimum, float maximum);
-
 		// This copies the values of one transformable into another. It can be especially
 		// useful for classes that extend this one.
 		void cloneTransformable(Transformable3D* transformable);

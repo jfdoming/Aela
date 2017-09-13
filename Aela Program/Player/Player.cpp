@@ -7,3 +7,19 @@
 
 #include "stdafx.h"
 #include "Player.h"
+
+void Player::setRotationSpeed(float rotationSpeed) {
+	this->rotationSpeed = rotationSpeed;
+}
+
+void Player::setWalkingSpeed(float walkingSpeed) {
+	this->walkingSpeed = walkingSpeed;
+}
+
+float Player::getRotationSpeed() {
+	return rotationSpeed;
+}
+
+float Player::getWalkingSpeed() {
+	return walkingSpeed;
+}

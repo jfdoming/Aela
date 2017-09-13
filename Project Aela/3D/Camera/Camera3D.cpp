@@ -6,7 +6,7 @@
 */
 
 #include "Camera3D.h"
-
+#include "../../Utilities/flut.h"
 #include <glm\gtc\constants.hpp>
 
 glm::mat4 Camera3D::getViewMatrix() {

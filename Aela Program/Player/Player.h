@@ -17,8 +17,8 @@ class Player : public NPC {
 
 		}
 
-		
-
+		void setRotationSpeed(float rotationSpeed), setWalkingSpeed(float walkingSpeed);
+		float getRotationSpeed(), getWalkingSpeed();
 	private:
-		
+		float rotationSpeed = 0.00000001f, walkingSpeed = 0.00000001f;
 };

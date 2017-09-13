@@ -38,4 +38,5 @@ bool Aela::ParticleLoader::load(std::unordered_map<std::string, Resource*>* reso
 	//return loadTexture(src, GL_TEXTURE_2D, &imageWidth, &imageHeight);
 
 	//// (*resources)[src] = res;
+	return false;
 }

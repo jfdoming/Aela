@@ -9,5 +9,17 @@
 #include "NPC.h"
 
 void NPC::setEntity(ModelEntity* entity) {
-	this->entity = *entity;
+	this->entity = entity;
+}
+
+ModelEntity* NPC::getEntity() {
+	return entity;
+}
+
+void NPC::storeEntityIDInMap(int ID) {
+	entityIDInMap = ID;
+}
+
+int NPC::getEntityIDInMap() {
+	return entityIDInMap;
 }

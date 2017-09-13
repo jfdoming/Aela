@@ -60,6 +60,12 @@ void Renderer::setupMainFrameBuffer() {
 	checkFrameBuffer();
 }
 
+void Aela::Renderer::setupWindow() {
+	startRenderingFrame();
+	endRenderingFrame();
+	window->show();
+}
+
 // This initializes GLEW.
 bool Renderer::setupGLEW() {
 	glewExperimental = true;

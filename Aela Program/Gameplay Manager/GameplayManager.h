@@ -12,24 +12,60 @@
 
 using namespace Aela;
 
-class GameplayManager {
+class GameplayManager : public Listener {
 	public:
 		GameplayManager(Engine* engine) : engine(engine) {
-
+			window = engine->getWindow();
+			renderer = engine->getRenderer();
+			eventHandler = engine->getEventHandler();
+			timeManager = engine->getTimeManager();
+			luaManager = engine->getLuaManager();
+			sceneManager = engine->getSceneManager();
+			resourceManager = engine->getResourceManager();
+			audioPlayer = engine->getAudioPlayer();
+			animator = engine->getAnimator();
+			userEnvironment = engine->getUserEnvironment();
+			framerateCalculator = engine->getFramerateCalculator();
+			camera = engine->getRenderer()->getCamera();
+			physicsManager = engine->getPhysicsManager();
 		}
 
 		void setup();
 		void update();
 
+		// This is triggered on an event.
+		void onEvent(Event* event);
+
 		// These are getters and setters.
 		Player* getPlayer();
 		NPCManager* getNPCManager();
+		void setCurrentMap(Map3D* map);
 
 	private:
 		// These are Aela Engine objects.
-		Engine* engine = nullptr;
+		Engine* engine;
+		Window* window;
+		Renderer* renderer;
+		EventHandler* eventHandler;
+		TimeManager* timeManager;
+		LuaManager* luaManager;
+		SceneManager* sceneManager;
+		ResourceManager* resourceManager;
+		AudioManager* audioPlayer;
+		Animator* animator;
+		UserEnvironment* userEnvironment;
+		FramerateCalculator* framerateCalculator;
+		Camera3D* camera;
+		PhysicsManager* physicsManager;
 
 		// These are game-related objects.
 		Player player;
 		NPCManager npcManager;
+		Map3D* currentMap = nullptr;
+
+		// These store the states of keys.
+		bool movingLeft = false, movingRight = false, movingUp = false, movingDown = false;
+		bool previousMovingLeft = false, previousMovingRight = false, previousMovingUp = false, previousMovingDown = false;
+
+		float directionToMovePlayerTowards = 0;
 };

@@ -39,6 +39,14 @@ template <class T> class KeyFrameList {
 			return &keyFrames;
 		}
 
+		void setTag(std::string tag) {
+			this->tag = tag;
+		}
+
+		std::string getTag() {
+			return tag;
+		}
+
 		// This function is meant to store the original properties of an object. See examples of this in KeyFrameList3D
 		// and KeyFrameList2D for more.
 		virtual void storeOriginalTransformations() = 0;
@@ -47,5 +55,11 @@ template <class T> class KeyFrameList {
 		// This specifies the time that this key frame list should fire after the previous one.
 		unsigned int timeAfterPreviousKeyFrame = 0;
 
+		// This is the list of KeyFrames.
 		std::vector<T> keyFrames;
+
+		// This is used in order to let the Animator perform actions upon this list. For example, if something tells the Animator
+		// to delete all lists with the tag "camera_animation" in order to get rid of all camera animations and this list has that
+		// exact tag, then this list will be deleted.
+		std::string tag = "list";
 };

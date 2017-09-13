@@ -31,15 +31,19 @@ void Container::add(std::shared_ptr<Component> component) {
 }
 
 void Container::updateComponent() {
-	for (auto child : children) {
-		child->update();
-	}
+	if (inUse) {
+		for (auto child : children) {
+			child->update();
+		}
 
-	layout->update(children);
+		layout->update(children);
+	}
 }
 
 void Aela::Container::render(Renderer* renderer) {
-	renderComponent(renderer);
+	if (inUse) {
+		renderComponent(renderer);
+	}
 }
 
 void Container::renderComponent(Renderer* renderer) {
@@ -50,8 +54,4 @@ void Container::renderComponent(Renderer* renderer) {
 
 void Aela::Container::setInUse(bool inUse) {
 	Component::setInUse(inUse);
-
-	for (auto child : children) {
-		child->setInUse(inUse);
-	}
 }

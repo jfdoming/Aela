@@ -27,6 +27,10 @@ EntityType ModelEntity::getEntityType() {
 	return EntityType::MODEL;
 }
 
+// This generates a bounding box by taking the greatest and smallest values for x, and and z of the model. Keep in mind that an
+// entity's bounding box's position most likely won't be at (0, 0, 0) relative to the model. To see why, consider a model in which
+// the vertex with the greatest x position has an x position of 3 while the vertex with the smallest x position has an x position
+// of -6. The bounding box's own x position (which represents where the center of the bounding box is) will be -1.5.
 void Aela::ModelEntity::generateBoundingBox() {
 	if (model != nullptr && model->getSubModels() != nullptr && model->getSubModels()->size() != 0) {
 		SubModel* firstSubModel = &model->getSubModels()->at(0);
@@ -55,7 +59,7 @@ void Aela::ModelEntity::generateBoundingBox() {
 			}
 		}
 
-		boundingBox = BoundingBox3D(smallestX, smallestY, smallestZ, greatestX - smallestX, greatestY - smallestY, greatestZ - smallestZ);
+		boundingBox.setValues(position.x - ((greatestX - smallestX) / 2 - greatestX), position.y - ((greatestY - smallestY) / 2 - greatestY), position.z - ((greatestZ - smallestZ) / 2 - greatestZ), greatestX - smallestX, greatestY - smallestY, greatestZ - smallestZ);
 		boundingBox.generateVertices();
 	} else {
 		AelaErrorHandling::consoleWindowError("ModelEntity", "Something tried to generate an entity's bounding box without loading its model first!");

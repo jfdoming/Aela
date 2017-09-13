@@ -30,9 +30,6 @@
     <ClInclude Include="Scripts to Move to LUA\SceneScript.h">
       <Filter>Source Files\Scripts to Move to LUA</Filter>
     </ClInclude>
-    <ClInclude Include="main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Relationships\Relationship.h">
       <Filter>Header Files</Filter>
     </ClInclude>

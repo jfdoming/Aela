@@ -78,6 +78,9 @@ namespace Aela {
 			void setup3D();
 			void setup2D();
 
+			// This clears the window to black and makes it shown.
+			void setupWindow();
+
 			// These functions bind the Renderer with other Aela classes. They must be called
 			// before rendering.
 			void setWindow(Window* window);
@@ -185,7 +188,7 @@ namespace Aela {
 			float mouseSpeed;
 
 			// These store movements.
-			bool forward, backward, left, right, up, down;
+			bool forward = false, backward = false, left = false, right = false, up = false, down = false;
 
 			// This keeps track of whether the camera should be allowed to be upside down.
 			bool allowUpsideDownCamera;

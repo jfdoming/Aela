@@ -1,3 +1,12 @@
+/*
+* Name: String Utilities
+* Author: Julian Dominguez-Schatz and Robert Ciborowski
+* Date: August 2017
+* Description: A file used for performing operations on strings.
+*/
+
+// PLEASE READ!
+// Why not just call this file StringUtils.h? It makes it easier for other programmers to understand what this file is for.
 #pragma once
 
 #include <string>
@@ -51,7 +60,7 @@ static std::string toStringWithATrailingZero(float value) {
 	return s;
 }
 
-static bool startsWith(std::string& haystack, std::string& searchString) {
+static inline bool startsWith(std::string& haystack, std::string& searchString) {
 	return searchString.length() <= haystack.length()
 		&& equal(searchString.begin(), searchString.end(), haystack.begin());
 }

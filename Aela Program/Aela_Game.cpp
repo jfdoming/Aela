@@ -28,13 +28,19 @@ void AelaGame::loadScenes() {
 void AelaGame::performActionOnSceneSwitch(int sceneID) {
 	switch (sceneID) {
 		case GAMEPLAY_SCENE:
-			engine->getWindow()->hideCursor();
+			// First person camera:
+			/*engine->getWindow()->hideCursor();
 			camera->setInUse(true);
 			camera->setForceCursorToMiddle(true);
 			camera->setUseControls(true);
-			engine->getRenderer()->getCamera()->setRotation(0, 0, 0);
+			engine->getRenderer()->getCamera()->setRotation(0, 0, 0);*/
+			gameplayManager.setup();
 			break;
 	}
+}
+
+void AelaGame::setCurrentMap(Map3D* map) {
+	gameplayManager.setCurrentMap(map);
 }
 
 void AelaGame::setup() {

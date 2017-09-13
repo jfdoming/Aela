@@ -42,51 +42,49 @@ void Aela::Button::renderComponent(Renderer* renderer) {
 }
 
 void Aela::Button::onEvent(Event* event) {
-	if (inUse) {
-		MouseEvent* mouseEvent = nullptr;
-		int x, y;
+	MouseEvent* mouseEvent = nullptr;
+	int x, y;
 
-		switch (event->getType()) {
-			case EventConstants::MOUSE_PRESSED:
-				mouseEvent = static_cast<MouseEvent*>(event);
-				x = mouseEvent->getMouseX();
-				y = mouseEvent->getMouseY();
+	switch (event->getType()) {
+		case EventConstants::MOUSE_PRESSED:
+			mouseEvent = static_cast<MouseEvent*>(event);
+			x = mouseEvent->getMouseX();
+			y = mouseEvent->getMouseY();
 
-				if (dimensions.contains(x, y)) {
-					clickStarted = true;
-					state = State::ACTIVE;
-				}
+			if (dimensions.contains(x, y)) {
+				clickStarted = true;
+				state = State::ACTIVE;
+			}
+			break;
+		case EventConstants::MOUSE_RELEASED:
+			if (!clickStarted) {
 				break;
-			case EventConstants::MOUSE_RELEASED:
-				if (!clickStarted) {
-					break;
-				}
+			}
 
-				mouseEvent = static_cast<MouseEvent*>(event);
-				x = mouseEvent->getMouseX();
-				y = mouseEvent->getMouseY();
+			mouseEvent = static_cast<MouseEvent*>(event);
+			x = mouseEvent->getMouseX();
+			y = mouseEvent->getMouseY();
 
-				if (dimensions.contains(x, y)) {
-					onClick();
-					state = State::HOVER;
-				} else {
-					state = State::NORMAL;
-				}
+			if (dimensions.contains(x, y)) {
+				onClick();
+				state = State::HOVER;
+			} else {
+				state = State::NORMAL;
+			}
 
-				clickStarted = false;
-				break;
-			case EventConstants::MOUSE_MOVED:
-				mouseEvent = static_cast<MouseEvent*>(event);
-				x = mouseEvent->getMouseX();
-				y = mouseEvent->getMouseY();
+			clickStarted = false;
+			break;
+		case EventConstants::MOUSE_MOVED:
+			mouseEvent = static_cast<MouseEvent*>(event);
+			x = mouseEvent->getMouseX();
+			y = mouseEvent->getMouseY();
 
-				if (dimensions.contains(x, y)) {
-					state = (clickStarted ? State::ACTIVE : State::HOVER);
-				} else {
-					state = State::NORMAL;
-				}
-				break;
-		}
+			if (dimensions.contains(x, y)) {
+				state = (clickStarted ? State::ACTIVE : State::HOVER);
+			} else {
+				state = State::NORMAL;
+			}
+			break;
 	}
 }
 

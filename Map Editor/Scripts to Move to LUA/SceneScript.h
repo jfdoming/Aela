@@ -1,6 +1,5 @@
 // The contents of this file will be moved to LUA once we can get LUA to work!
 #pragma once
-
 #include "Aela_Engine.h"
 #include "Scenes\SceneManager.h"
 #include "Menus\Label.h"
@@ -8,17 +7,14 @@
 #include "Menus\Button.h"
 #include "Menus\RectComponent.h"
 #include "3D\Maps\Map3DExporter.h"
-
+#include "..\Aela_Game.h"
 #include <memory>
 
 using namespace Aela;
 
 #define MAIN_MENU_SCENE 1
 #define EDITOR_SCENE 2
-#define PAUSE_ENTITY_TOOL_SCENE 3
-#define PAUSE_SKYBOX_SCENE 4
-#define PAUSE_EXPORT_SCENE 5
-#define PAUSE_OPTIONS_SCENE 6
+#define PAUSE_SCENE 3
 
 void setupScenes(Engine* engine, AelaGame* game) {
 	// This creates some objects for later.
@@ -80,7 +76,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	editMapButton->setupOnClick(std::bind(editMapAction, engine), engine->getEventHandler());
 	editMapButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f));
 	editMapButton->setText(editMapButtonText, engine->getFontManager());
-	std::cout << editMapButtonText << " is a pointer.\n";
 
 	auto helpButton = std::make_shared<Button>();
 	helpButton->setDimensions(loadMapButtonText->getDimensions());
@@ -114,7 +109,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	topBarImage->setCropping(topBarTexture->getDimensions());
 	topBarImage->setTexture(topBarTexture);
 
-	// This sets sup text.
+	// This sets up text.
 	auto entityTypeText = std::make_shared<Label>("Entity: Model", xerox, &VSBlue, fontManager);
 	entityTypeText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.015f), (int) (windowDimensions.getHeight() * 0.04f));
 	game->setEntityTypeText(entityTypeText);
@@ -186,29 +181,44 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	success = engine->getResourceManager()->obtain<Texture>("res/textures/simple_button.dds", simpleButtonTexture);
 	success = engine->getResourceManager()->obtain<Texture>("res/textures/simple_button_light.dds", simpleButtonTextureLight);
 
+	auto entitySubMenu = std::make_shared<Container>(), skyboxSubMenu = std::make_shared<Container>(),
+		exportSubMenu = std::make_shared<Container>(), optionsSubMenu = std::make_shared<Container>();
+
 	// This sets up actions for buttons.
-	auto goToEntityToolSceneAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton, simpleButtonTexture, simpleButtonTextureLight](Engine* engine) {
+	auto goToEntityToolSceneAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton,
+		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu](Engine* engine) {
 		entityToolButton->setTexture(simpleButtonTextureLight);
 		skyboxesButton->setTexture(simpleButtonTexture);
 		exportButton->setTexture(simpleButtonTexture);
 		optionsButton->setTexture(simpleButtonTexture);
-		engine->getSceneManager()->setCurrentScene(PAUSE_ENTITY_TOOL_SCENE);
+		entitySubMenu->setInUse(true);
+		skyboxSubMenu->setInUse(false);
+		exportSubMenu->setInUse(false);
+		optionsSubMenu->setInUse(false);
 	};
 
-	auto goToSkyboxSceneAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton, simpleButtonTexture, simpleButtonTextureLight](Engine* engine) {
+	auto goToSkyboxSceneAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton,
+		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu](Engine* engine) {
 		entityToolButton->setTexture(simpleButtonTexture);
 		skyboxesButton->setTexture(simpleButtonTextureLight);
 		exportButton->setTexture(simpleButtonTexture);
 		optionsButton->setTexture(simpleButtonTexture);
-		engine->getSceneManager()->setCurrentScene(PAUSE_SKYBOX_SCENE);
+		entitySubMenu->setInUse(false);
+		skyboxSubMenu->setInUse(true);
+		exportSubMenu->setInUse(false);
+		optionsSubMenu->setInUse(false);
 	};
 
-	auto goToExportSceneAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton, simpleButtonTexture, simpleButtonTextureLight](Engine* engine) {
+	auto goToExportSceneAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton,
+		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu](Engine* engine) {
 		entityToolButton->setTexture(simpleButtonTexture);
 		skyboxesButton->setTexture(simpleButtonTexture);
 		exportButton->setTexture(simpleButtonTextureLight);
 		optionsButton->setTexture(simpleButtonTexture);
-		engine->getSceneManager()->setCurrentScene(PAUSE_EXPORT_SCENE);
+		entitySubMenu->setInUse(false);
+		skyboxSubMenu->setInUse(false);
+		exportSubMenu->setInUse(true);
+		optionsSubMenu->setInUse(false);
 	};
 
 	auto exportRegularMapAction = [game](Engine* engine) {
@@ -219,12 +229,16 @@ void setupScenes(Engine* engine, AelaGame* game) {
 		game->exportMap("res/maps/map.txt", true);
 	};
 
-	auto goToOptionsAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton, simpleButtonTexture, simpleButtonTextureLight](Engine* engine) {
+	auto goToOptionsAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton,
+		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu](Engine* engine) {
 		entityToolButton->setTexture(simpleButtonTexture);
 		skyboxesButton->setTexture(simpleButtonTexture);
 		exportButton->setTexture(simpleButtonTexture);
 		optionsButton->setTexture(simpleButtonTextureLight);
-		engine->getSceneManager()->setCurrentScene(PAUSE_OPTIONS_SCENE);
+		entitySubMenu->setInUse(false);
+		skyboxSubMenu->setInUse(false);
+		exportSubMenu->setInUse(false);
+		optionsSubMenu->setInUse(true);
 	};
 
 	// This sets up buttons.
@@ -272,61 +286,55 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	rightRect->setColour(&ColourRGBA(0.2f, 0.2f, 0.2f, 0.95f));
 
 	// This sets up the scenes for the pause menu.
-	Scene* pauseEntityToolScene = new Scene();
-	pauseEntityToolScene->setId(PAUSE_ENTITY_TOOL_SCENE);
-	pauseEntityToolScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
-	pauseEntityToolScene->getMenu()->add(tintRect);
-	pauseEntityToolScene->getMenu()->add(entityToolButton);
-	pauseEntityToolScene->getMenu()->add(skyboxesButton);
-	pauseEntityToolScene->getMenu()->add(exportButton);
-	pauseEntityToolScene->getMenu()->add(optionsButton);
-	pauseEntityToolScene->getMenu()->add(rightRect);
-	pauseEntityToolScene->getMenu()->add(entityToolTitleText);
+	Scene* pauseScene = new Scene();
+	pauseScene->setId(PAUSE_SCENE);
+	pauseScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
+	
+	entitySubMenu->add(tintRect);
+	entitySubMenu->add(entityToolButton);
+	entitySubMenu->add(skyboxesButton);
+	entitySubMenu->add(exportButton);
+	entitySubMenu->add(optionsButton);
+	entitySubMenu->add(rightRect);
+	entitySubMenu->add(entityToolTitleText);
+	entitySubMenu->setInUse(true);
+	pauseScene->getMenu()->add(entitySubMenu);
 
-	Scene* pauseSkyboxScene = new Scene();
-	pauseSkyboxScene->setId(PAUSE_SKYBOX_SCENE);
-	pauseSkyboxScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
-	pauseSkyboxScene->getMenu()->add(tintRect);
-	pauseSkyboxScene->getMenu()->add(entityToolButton);
-	pauseSkyboxScene->getMenu()->add(skyboxesButton);
-	pauseSkyboxScene->getMenu()->add(exportButton);
-	pauseSkyboxScene->getMenu()->add(optionsButton);
-	pauseSkyboxScene->getMenu()->add(rightRect);
-	pauseSkyboxScene->getMenu()->add(skyboxTitleText);
+	skyboxSubMenu->add(tintRect);
+	skyboxSubMenu->add(entityToolButton);
+	skyboxSubMenu->add(skyboxesButton);
+	skyboxSubMenu->add(exportButton);
+	skyboxSubMenu->add(optionsButton);
+	skyboxSubMenu->add(rightRect);
+	skyboxSubMenu->add(skyboxTitleText);
+	pauseScene->getMenu()->add(skyboxSubMenu);
 
-	Scene* pauseExportScene = new Scene();
-	pauseExportScene->setId(PAUSE_EXPORT_SCENE);
-	pauseExportScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
-	pauseExportScene->getMenu()->add(tintRect);
-	pauseExportScene->getMenu()->add(entityToolButton);
-	pauseExportScene->getMenu()->add(skyboxesButton);
-	pauseExportScene->getMenu()->add(exportButton);
-	pauseExportScene->getMenu()->add(optionsButton);
-	pauseExportScene->getMenu()->add(rightRect);
-	pauseExportScene->getMenu()->add(exportTitleText);
-	pauseExportScene->getMenu()->add(exportRegularMapButton);
-	pauseExportScene->getMenu()->add(exportReadableMapButton);
+	exportSubMenu->add(tintRect);
+	exportSubMenu->add(entityToolButton);
+	exportSubMenu->add(skyboxesButton);
+	exportSubMenu->add(exportButton);
+	exportSubMenu->add(optionsButton);
+	exportSubMenu->add(rightRect);
+	exportSubMenu->add(exportTitleText);
+	exportSubMenu->add(exportRegularMapButton);
+	exportSubMenu->add(exportReadableMapButton);
+	pauseScene->getMenu()->add(exportSubMenu);
 
-	Scene* pauseOptionsScene = new Scene();
-	pauseOptionsScene->setId(PAUSE_OPTIONS_SCENE);
-	pauseOptionsScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
-	pauseOptionsScene->getMenu()->add(tintRect);
-	pauseOptionsScene->getMenu()->add(entityToolButton);
-	pauseOptionsScene->getMenu()->add(skyboxesButton);
-	pauseOptionsScene->getMenu()->add(exportButton);
-	pauseOptionsScene->getMenu()->add(optionsButton);
-	pauseOptionsScene->getMenu()->add(rightRect);
-	pauseOptionsScene->getMenu()->add(optionsTitleText);
+	optionsSubMenu->add(tintRect);
+	optionsSubMenu->add(entityToolButton);
+	optionsSubMenu->add(skyboxesButton);
+	optionsSubMenu->add(exportButton);
+	optionsSubMenu->add(optionsButton);
+	optionsSubMenu->add(rightRect);
+	optionsSubMenu->add(optionsTitleText);
+	pauseScene->getMenu()->add(optionsSubMenu);
 
 	// This loads a map.
 	Map3D* map;
 	success = engine->getResourceManager()->obtain<Map3D>("res/maps/map.txt", map);
 	if (success) {
 		mapCreationScene->setMap(map);
-		pauseEntityToolScene->setMap(map);
-		pauseSkyboxScene->setMap(map);
-		pauseExportScene->setMap(map);
-		pauseOptionsScene->setMap(map);
+		pauseScene->setMap(map);
 		game->setMapBeingEdited(map);
 	} else {
 		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/map.txt wasn't loaded properly or something.");
@@ -335,10 +343,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// This registers all scenes with the scene manager.
 	engine->getSceneManager()->registerScene(mainMenuScene, MAIN_MENU_SCENE);
 	engine->getSceneManager()->registerScene(mapCreationScene, EDITOR_SCENE);
-	engine->getSceneManager()->registerScene(pauseEntityToolScene, PAUSE_ENTITY_TOOL_SCENE);
-	engine->getSceneManager()->registerScene(pauseSkyboxScene, PAUSE_SKYBOX_SCENE);
-	engine->getSceneManager()->registerScene(pauseExportScene, PAUSE_EXPORT_SCENE);
-	engine->getSceneManager()->registerScene(pauseOptionsScene, PAUSE_OPTIONS_SCENE);
+	engine->getSceneManager()->registerScene(pauseScene, PAUSE_SCENE);
 	engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE);
 
 	// engine->getWindow()->hideCursor();

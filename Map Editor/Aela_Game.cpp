@@ -197,106 +197,148 @@ void AelaGame::exportMap(std::string src, bool readable) {
 void AelaGame::onEvent(Event* event) {
 	if (sceneManager->getCurrentSceneId() == EDITOR_SCENE) {
 		if (event->getType() == EventConstants::KEY_PRESSED) {
-			KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
+			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
 			switch (keyEvent->getKeycode()) {
-			case SDLK_UP:
-				holdingUp = true;
-				break;
-			case SDLK_DOWN:
-				holdingDown = true;
-				break;
-			case SDLK_1:
-				if (holdingUp) {
-					transformableBeingPlaced.rotate(THIRTY_SECOND_OF_PI, 0, 0);
-				} else if (holdingDown) {
-					transformableBeingPlaced.rotate(-THIRTY_SECOND_OF_PI, 0, 0);
-				}
-				break;
-			case SDLK_2:
-				if (holdingUp) {
-					transformableBeingPlaced.rotate(0, THIRTY_SECOND_OF_PI, 0);
-				} else if (holdingDown) {
-					transformableBeingPlaced.rotate(0, -THIRTY_SECOND_OF_PI, 0);
-				}
-				break;
-			case SDLK_3:
-				if (holdingUp) {
-					transformableBeingPlaced.rotate(0, 0, THIRTY_SECOND_OF_PI);
-				} else if (holdingDown) {
-					transformableBeingPlaced.rotate(0, 0, -THIRTY_SECOND_OF_PI);
-				}
-				break;
-			case SDLK_4:
-				if (holdingUp) {
-					transformableBeingPlaced.scaleUp(0.25, 0, 0);
-				} else if (holdingDown) {
-					transformableBeingPlaced.scaleUp(-0.25, 0, 0);
-				}
-				break;
-			case SDLK_5:
-				if (holdingUp) {
-					transformableBeingPlaced.scaleUp(0, 0.25, 0);
-				} else if (holdingDown) {
-					transformableBeingPlaced.scaleUp(0, -0.25, 0);
-				}
-				break;
-			case SDLK_6:
-				if (holdingUp) {
-					transformableBeingPlaced.scaleUp(0, 0, 0.25);
-				} else if (holdingDown) {
-					transformableBeingPlaced.scaleUp(0, 0, -0.25);
-				}
-				break;
-			case SDLK_RIGHT:
-				switch (entityBeingPlaced->getEntityType()) {
-				case EntityType::MODEL:
-					currentModelResource++;
-					if (currentModelResource >= numberOfMaterialsAndModels) {
-						currentModelResource = 0;
-					}
-					switchModelResource(currentModelResource);
+				case SDLK_UP:
+					holdingUp = true;
 					break;
-				case EntityType::BILLBOARD:
-					currentBillboardResource++;
-					if (currentBillboardResource >= numberOfBillboards) {
-						currentBillboardResource = 0;
-					}
-					switchBillboardResource(currentBillboardResource);
+				case SDLK_DOWN:
+					holdingDown = true;
 					break;
-				}
-				break;
-			case SDLK_LEFT:
-				switch (entityBeingPlaced->getEntityType()) {
-				case EntityType::MODEL:
-					if (currentModelResource == 0) {
-						currentModelResource = numberOfMaterialsAndModels - 1;
-					} else {
-						currentModelResource--;
+				case SDLK_1:
+					if (holdingUp) {
+						transformableBeingPlaced.rotate(THIRTY_SECOND_OF_PI, 0, 0);
+					} else if (holdingDown) {
+						transformableBeingPlaced.rotate(-THIRTY_SECOND_OF_PI, 0, 0);
 					}
-					switchModelResource(currentModelResource);
 					break;
-				case EntityType::BILLBOARD:
-					if (currentBillboardResource == 0) {
-						currentBillboardResource = numberOfBillboards - 1;
-					} else {
-						currentBillboardResource--;
+				case SDLK_2:
+					if (holdingUp) {
+						transformableBeingPlaced.rotate(0, THIRTY_SECOND_OF_PI, 0);
+					} else if (holdingDown) {
+						transformableBeingPlaced.rotate(0, -THIRTY_SECOND_OF_PI, 0);
 					}
-					switchBillboardResource(currentBillboardResource);
 					break;
+				case SDLK_3:
+					if (holdingUp) {
+						transformableBeingPlaced.rotate(0, 0, THIRTY_SECOND_OF_PI);
+					} else if (holdingDown) {
+						transformableBeingPlaced.rotate(0, 0, -THIRTY_SECOND_OF_PI);
+					}
+					break;
+				case SDLK_4:
+					if (holdingUp) {
+						transformableBeingPlaced.scaleUp(0.25, 0, 0);
+					} else if (holdingDown) {
+						transformableBeingPlaced.scaleUp(-0.25, 0, 0);
+					}
+					break;
+				case SDLK_5:
+					if (holdingUp) {
+						transformableBeingPlaced.scaleUp(0, 0.25, 0);
+					} else if (holdingDown) {
+						transformableBeingPlaced.scaleUp(0, -0.25, 0);
+					}
+					break;
+				case SDLK_6:
+					if (holdingUp) {
+						transformableBeingPlaced.scaleUp(0, 0, 0.25);
+					} else if (holdingDown) {
+						transformableBeingPlaced.scaleUp(0, 0, -0.25);
+					}
+					break;
+				case SDLK_RIGHT:
+					switch (entityBeingPlaced->getEntityType()) {
+					case EntityType::MODEL:
+						currentModelResource++;
+						if (currentModelResource >= numberOfMaterialsAndModels) {
+							currentModelResource = 0;
+						}
+						switchModelResource(currentModelResource);
+						break;
+					case EntityType::BILLBOARD:
+						currentBillboardResource++;
+						if (currentBillboardResource >= numberOfBillboards) {
+							currentBillboardResource = 0;
+						}
+						switchBillboardResource(currentBillboardResource);
+						break;
+					}
+					break;
+				case SDLK_LEFT:
+					switch (entityBeingPlaced->getEntityType()) {
+					case EntityType::MODEL:
+						if (currentModelResource == 0) {
+							currentModelResource = numberOfMaterialsAndModels - 1;
+						} else {
+							currentModelResource--;
+						}
+						switchModelResource(currentModelResource);
+						break;
+					case EntityType::BILLBOARD:
+						if (currentBillboardResource == 0) {
+							currentBillboardResource = numberOfBillboards - 1;
+						} else {
+							currentBillboardResource--;
+						}
+						switchBillboardResource(currentBillboardResource);
+						break;
 				}
 				break;
 			}
 		} else if (event->getType() == EventConstants::KEY_RELEASED) {
-			KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
+			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
 			switch (keyEvent->getKeycode()) {
-			case SDLK_UP:
-				holdingUp = false;
-				break;
-			case SDLK_DOWN:
-				holdingDown = false;
-				break;
-			case SDLK_RETURN:
-				switch (entityBeingPlaced->getEntityType()) {
+				case SDLK_UP:
+					holdingUp = false;
+					break;
+				case SDLK_DOWN:
+					holdingDown = false;
+					break;
+				case SDLK_RETURN:
+					switch (entityBeingPlaced->getEntityType()) {
+					case EntityType::MODEL:
+						placeModel();
+						break;
+					case EntityType::LIGHT:
+						placeLightNextUpdate = true;
+						break;
+					case EntityType::BILLBOARD:
+						placeBillboard();
+						break;
+					}
+					break;
+				case SDLK_BACKSLASH:
+					switch (entityBeingPlaced->getEntityType()) {
+					case EntityType::MODEL:
+						switchEntityBeingPlaced(EntityType::LIGHT);
+						break;
+					case EntityType::LIGHT:
+						switchEntityBeingPlaced(EntityType::BILLBOARD);
+						break;
+					case EntityType::BILLBOARD:
+						switchEntityBeingPlaced(EntityType::MODEL);
+						break;
+					}
+					break;
+				case SDLK_ESCAPE:
+					sceneManager->setCurrentScene(PAUSE_SCENE);
+					engine->getWindow()->showCursor();
+					engine->getRenderer()->getCamera()->setInUse(false);
+					break;
+			}
+		} else if (event->getType() == EventConstants::MOUSE_WHEEL) {
+			MouseEvent* mouseEvent = static_cast<MouseEvent*>(event);
+			switch (mouseEvent->getWheel()) {
+				case 1:
+					distanceFromCameraToObject += 0.25;
+					break;
+				case -1:
+					distanceFromCameraToObject -= 0.25;
+					break;
+			}
+		} else if (event->getType() == EventConstants::MOUSE_PRESSED) {
+			switch (entityBeingPlaced->getEntityType()) {
 				case EntityType::MODEL:
 					placeModel();
 					break;
@@ -306,55 +348,17 @@ void AelaGame::onEvent(Event* event) {
 				case EntityType::BILLBOARD:
 					placeBillboard();
 					break;
-				}
-				break;
-			case SDLK_BACKSLASH:
-				switch (entityBeingPlaced->getEntityType()) {
-				case EntityType::MODEL:
-					switchEntityBeingPlaced(EntityType::LIGHT);
-					break;
-				case EntityType::LIGHT:
-					switchEntityBeingPlaced(EntityType::BILLBOARD);
-					break;
-				case EntityType::BILLBOARD:
-					switchEntityBeingPlaced(EntityType::MODEL);
-					break;
-				}
-				break;
-			case SDLK_ESCAPE:
-				if (sceneManager->getCurrentSceneId() == EDITOR_SCENE) {
-					sceneManager->setCurrentScene(3);
-					engine->getWindow()->showCursor();
-					engine->getRenderer()->getCamera()->setInUse(false);
-				} else if (sceneManager->getCurrentSceneId() == PAUSE_ENTITY_TOOL_SCENE || sceneManager->getCurrentSceneId() == PAUSE_EXPORT_SCENE
-					|| sceneManager->getCurrentSceneId() == PAUSE_OPTIONS_SCENE || sceneManager->getCurrentSceneId() == PAUSE_SKYBOX_SCENE) {
+			}
+		}
+	} else if (sceneManager->getCurrentSceneId() == PAUSE_SCENE) {
+		if (event->getType() == EventConstants::KEY_RELEASED) {
+			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+			switch (keyEvent->getKeycode()) {
+				case SDLK_ESCAPE:
 					sceneManager->setCurrentScene(EDITOR_SCENE);
 					engine->getWindow()->hideCursor();
 					engine->getRenderer()->getCamera()->setInUse(true);
-				}
-				break;
-			}
-		} else if (event->getType() == EventConstants::MOUSE_WHEEL) {
-			MouseEvent* mouseEvent = dynamic_cast<MouseEvent*>(event);
-			switch (mouseEvent->getWheel()) {
-			case 1:
-				distanceFromCameraToObject += 0.25;
-				break;
-			case -1:
-				distanceFromCameraToObject -= 0.25;
-				break;
-			}
-		} else if (event->getType() == EventConstants::MOUSE_PRESSED) {
-			switch (entityBeingPlaced->getEntityType()) {
-			case EntityType::MODEL:
-				placeModel();
-				break;
-			case EntityType::LIGHT:
-				placeLightNextUpdate = true;
-				break;
-			case EntityType::BILLBOARD:
-				placeBillboard();
-				break;
+					break;
 			}
 		}
 	}
