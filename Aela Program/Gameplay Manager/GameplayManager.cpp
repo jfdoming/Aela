@@ -35,8 +35,9 @@ void GameplayManager::setup() {
 		camera->setInUse(true);
 	}
 
-	eventHandler->addListener(EventConstants::KEY_RELEASED, this);
-	eventHandler->addListener(EventConstants::KEY_PRESSED, this);
+	// TODO refactor the onEvent function to separate functions specific to certain events (see menus for style)
+	eventHandler->addListener(EventConstants::KEY_RELEASED, bindListener(GameplayManager::onEvent, this));
+	eventHandler->addListener(EventConstants::KEY_PRESSED, bindListener(GameplayManager::onEvent, this));
 }
 
 void GameplayManager::update() {

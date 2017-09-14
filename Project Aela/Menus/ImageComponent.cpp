@@ -48,7 +48,7 @@ void Aela::ImageComponent::updateComponent() {
 
 void Aela::ImageComponent::renderComponent(Renderer& renderer) {
 	if (texture != nullptr) {
-		renderer->render2DImage(texture->getImage(), &dimensions, &cropping, &tint);
+		renderer.render2DImage(texture->getImage(), &dimensions, &cropping, &tint);
 	}
 }
 

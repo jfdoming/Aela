@@ -79,13 +79,13 @@
     <ClCompile Include="Resource Management\Resource.cpp" />
     <ClCompile Include="Resource Management\ResourceManager.cpp" />
     <ClCompile Include="User Environment\UserEnvironment.cpp" />
-    <ClCompile Include="3D\Bounding Box\BoundingBox3D.cpp" />
     <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp" />
     <ClCompile Include="Window\Window.cpp" />
-    <ClCompile Include="3D\Physics\PhysicsManager.cpp" />
     <ClCompile Include="Audio\AudioPlayer.cpp" />
     <ClCompile Include="Events\EventListenerList.cpp" />
     <ClCompile Include="Events\EventDispatcher.cpp" />
+    <ClCompile Include="3D\Bounding Box\BoundingBox3D.cpp" />
+    <ClCompile Include="Physics\PhysicsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Animation\KeyFrame2D.h" />
@@ -175,7 +175,6 @@
     <ClInclude Include="Utilities\AelaEngineFunctor.h" />
     <ClInclude Include="Utilities\Colour\ColourRGB.h" />
     <ClInclude Include="Utilities\Colour\ColourRGBA.h" />
-    <ClInclude Include="3D\Bounding Box\BoundingBox3D.h" />
     <ClInclude Include="Utilities\Rect\Cuboid.h" />
     <ClInclude Include="Utilities\Rect\Rect.h" />
     <ClInclude Include="Aela_Engine.h" />
@@ -186,11 +185,13 @@
     <ClInclude Include="Utilities\strut.h" />
     <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
     <ClInclude Include="Window\Window.h" />
-    <ClInclude Include="Utilities\flut.h" />
-    <ClInclude Include="3D\Physics\PhysicsManager.h" />
     <ClInclude Include="Audio\AudioPlayer.h" />
     <ClInclude Include="Events\EventListenerList.h" />
     <ClInclude Include="Events\EventListener.h" />
     <ClInclude Include="Events\EventDispatcher.h" />
+    <ClInclude Include="2D\Text\TextManager.h" />
+    <ClInclude Include="Utilities\flut.h" />
+    <ClInclude Include="3D\Bounding Box\BoundingBox3D.h" />
+    <ClInclude Include="Physics\PhysicsManager.h" />
   </ItemGroup>
 </Project>

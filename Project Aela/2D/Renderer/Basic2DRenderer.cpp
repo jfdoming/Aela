@@ -245,7 +245,7 @@ void Basic2DRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFont
 
 	// This creates a bounding box for the text.
 	Rect<int> characterPositioning = *output;
-	characterPositioning.setWidthHeight(0, 0);
+	characterPositioning.setDimensions(0, 0);
 
 	// This is the y position of the origin if the top of the glyph had a y position of zero. It's basically just bearingY.
 	int originY = 0;

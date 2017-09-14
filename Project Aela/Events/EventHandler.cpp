@@ -75,7 +75,7 @@ void EventHandler::updateSDLEvents() {
 											event.wheel.y));
 				break;
 			case SDL_MOUSEWHEEL:
-				fireEvent(new MouseEvent(EventConstants::MOUSE_WHEEL,
+				dispatcher.fireEvent(new MouseEvent(EventConstants::MOUSE_WHEEL,
 											event.button.button,
 											event.key.keysym.mod,
 											event.button.clicks,

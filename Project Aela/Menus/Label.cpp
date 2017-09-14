@@ -59,6 +59,6 @@ ColourRGBA* Label::getColour() {
 }
 
 void Label::setupWidthAndHeight() {
-	Rect<int> newDimensions = fontManager->dimensionsOfText(font, text);
-	dimensions.setWidthHeight(newDimensions.getWidth(), newDimensions.getHeight());
+	Rect<int> newDimensions = FontManager::dimensionsOfText(font, text);
+	dimensions.setDimensions(newDimensions.getWidth(), newDimensions.getHeight());
 }

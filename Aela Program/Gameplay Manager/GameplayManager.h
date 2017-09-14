@@ -12,11 +12,10 @@
 
 using namespace Aela;
 
-class GameplayManager : public Listener {
+class GameplayManager {
 	public:
 		GameplayManager(Engine* engine) : engine(engine) {
 			window = engine->getWindow();
-			renderer = engine->getRenderer();
 			eventHandler = engine->getEventHandler();
 			timeManager = engine->getTimeManager();
 			luaManager = engine->getLuaManager();
@@ -26,7 +25,7 @@ class GameplayManager : public Listener {
 			animator = engine->getAnimator();
 			userEnvironment = engine->getUserEnvironment();
 			framerateCalculator = engine->getFramerateCalculator();
-			camera = engine->getRenderer()->getCamera();
+			camera = engine->getRenderer().getCamera();
 			physicsManager = engine->getPhysicsManager();
 		}
 
@@ -45,13 +44,12 @@ class GameplayManager : public Listener {
 		// These are Aela Engine objects.
 		Engine* engine;
 		Window* window;
-		Renderer* renderer;
 		EventHandler* eventHandler;
 		TimeManager* timeManager;
 		LuaManager* luaManager;
 		SceneManager* sceneManager;
 		ResourceManager* resourceManager;
-		AudioManager* audioPlayer;
+		AudioPlayer* audioPlayer;
 		Animator* animator;
 		UserEnvironment* userEnvironment;
 		FramerateCalculator* framerateCalculator;

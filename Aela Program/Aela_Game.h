@@ -16,7 +16,7 @@ class AelaGame {
 	public:
 		AelaGame(Engine* engine) : engine(engine), gameplayManager(engine) {
 			window = engine->getWindow();
-			renderer = engine->getRenderer();
+			renderer = &(engine->getRenderer());
 			eventHandler = engine->getEventHandler();
 			timeManager = engine->getTimeManager();
 			luaManager = engine->getLuaManager();

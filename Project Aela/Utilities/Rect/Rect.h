@@ -45,7 +45,7 @@ template <class T> class Rect {
 			height = setHeight;
 		}
 
-		void setWidthHeight(T width, T height) {
+		void setDimensions(T width, T height) {
 			this->width = width;
 			this->height = height;
 		}

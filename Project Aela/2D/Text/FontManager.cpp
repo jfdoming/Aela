@@ -22,7 +22,10 @@ TextFont* FontManager::obtainTextFont(std::string name, unsigned int size) {
 	return font;
 }
 
-Rect<int> Aela::FontManager::dimensionsOfText(TextFont* font, std::string text) {
+
+//// ROBERT: I made this static for now to fix some bugs. In reality this function should be a member function of TextFont. It is the behaviour of the font.
+
+Rect<int> FontManager::dimensionsOfText(TextFont* font, std::string text) {
 	Rect<int> dimensions;
 	FT_Face face = *font->getFace();
 	FT_GlyphSlot glyph = face->glyph;

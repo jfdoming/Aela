@@ -54,6 +54,9 @@ bool PhysicsManager::isTouching(glm::vec3 point, BoundingBox3D* box) {
 // This function works by checking each vertex of boxA against boxB, and then each vertex of boxB against boxA. This happens
 // since during a collision, one of a box's vertices may be in the other but the other box's vertices may not be in the first box.
 // However, during a collision, at least one vertex has to be inside of the other box.
+
+
+// HOW ON EARTH COULD ONE BOX'S VERTICES BE INSIDE THE OTHER BOX, BUT NOT VICE VERSA???????
 bool PhysicsManager::areColliding(BoundingBox3D* boxA, BoundingBox3D* boxB) {
 	if (boxA->verticesWereGenerated() && boxB->verticesWereGenerated()) {
 		// In order for the boxes to be colliding, at least one of one box's vertices must be touching the other box.

@@ -8,8 +8,8 @@
 */
 
 #pragma once
-#include "../Bounding Box/BoundingBox3D.h"
-#include "../Maps/Map3D.h"
+#include "../3D/Bounding Box/BoundingBox3D.h"
+#include "../3D/Maps/Map3D.h"
 
 class PhysicsManager {
 	public:

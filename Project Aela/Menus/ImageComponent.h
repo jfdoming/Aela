@@ -22,7 +22,7 @@ namespace Aela {
 			virtual ~ImageComponent();
 
 			virtual void updateComponent();
-			virtual void renderComponent(Renderer* renderer);
+			virtual void renderComponent(Renderer& renderer);
 
 			// These are getters and setters.
 			void setTexture(Texture* texture);

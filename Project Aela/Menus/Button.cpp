@@ -31,15 +31,9 @@ void Aela::Button::updateComponent() {
 }
 
 void Aela::Button::renderComponent(Renderer& renderer) {
-	std::cout << "rendering button\n";
-
 	ImageComponent::renderComponent(renderer);
 	if (text != nullptr) {
-		text->render(renderer, &tint);
-	}
-	
-	if (texture != nullptr) {
-		renderer.render2DImage(texture->getImage(), &dimensions, &tint);
+		text->renderWithTint(renderer, &tint);
 	}
 }
 
