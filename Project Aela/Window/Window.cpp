@@ -126,6 +126,10 @@ void Window::setFocus(bool focus) {
 	hasFocus = focus;
 }
 
+void Aela::Window::show() {
+	SDL_ShowWindow(window);
+}
+
 std::string Window::getWindowName() {
 	return windowName;
 }

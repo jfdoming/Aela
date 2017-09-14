@@ -16,6 +16,7 @@ class AelaGame {
 	public:
 		AelaGame(Engine* engine) : engine(engine), gameplayManager(engine) {
 			window = engine->getWindow();
+			renderer = engine->getRenderer();
 			eventHandler = engine->getEventHandler();
 			timeManager = engine->getTimeManager();
 			luaManager = engine->getLuaManager();
@@ -26,18 +27,21 @@ class AelaGame {
 			userEnvironment = engine->getUserEnvironment();
 			framerateCalculator = engine->getFramerateCalculator();
 			camera = engine->getRenderer().getCamera();
+			physicsManager = engine->getPhysicsManager();
 		}
 
 		void setup();
 		void update();
 		void cleanup();
 
-		// This should be called when the user presses "continue game".
-		void continueGame();
+		void performActionOnSceneSwitch(int sceneID);
+
+		void setCurrentMap(Map3D* map);
 	private:
 		// These are Aela Engine objects.
 		Engine* engine;
 		Window* window;
+		Renderer* renderer;
 		EventHandler* eventHandler;
 		TimeManager* timeManager;
 		LuaManager* luaManager;
@@ -48,6 +52,7 @@ class AelaGame {
 		UserEnvironment* userEnvironment;
 		FramerateCalculator* framerateCalculator;
 		Camera3D* camera;
+		PhysicsManager* physicsManager;
 
 		// These are game-related objects.
 		GameplayManager gameplayManager;

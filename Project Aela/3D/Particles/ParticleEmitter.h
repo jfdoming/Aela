@@ -61,7 +61,4 @@ class ParticleEmitter : public Transformable3D {
 
 		// This is meant to reset a particle's position once it has completed its life.
 		virtual void setupParticlePositioning(unsigned int whichParticle, unsigned int numberOfParticles);
-
-		// This function sorts particles so that they may be rendered properly.
-		virtual void sortParticles();
 };

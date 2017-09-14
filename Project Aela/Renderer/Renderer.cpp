@@ -60,6 +60,12 @@ void Renderer::setupMainFrameBuffer() {
 	checkFrameBuffer();
 }
 
+void Aela::Renderer::setupWindow() {
+	startRenderingFrame();
+	endRenderingFrame();
+	window->show();
+}
+
 // This initializes GLEW.
 bool Renderer::setupGLEW() {
 	glewExperimental = true;
@@ -167,8 +173,8 @@ void Aela::Renderer::renderParticles(ParticleEmitter* particleEmitter) {
 }
 
 // This renders a 2D texture using the 2D renderer.
-void Renderer::render2DImage(Image* image, Rect<int>* output, ColourRGBA* tint) {
-	basic2DRenderer.renderImageToSimple2DFramebuffer(image, bound2DFramebuffer, output, window->getWindowDimensions(), tint);
+void Renderer::render2DImage(Image* image, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint) {
+	basic2DRenderer.renderImageToSimple2DFramebuffer(image, bound2DFramebuffer, output, cropping, window->getWindowDimensions(), tint);
 }
 
 // This renders text using the 2D renderer.
@@ -201,18 +207,18 @@ void Renderer::renderSimple2DFramebuffer() {
 	if (bound2DFramebuffer->getMultisampling() > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*bound2DFramebuffer->getMultisampledFramebuffer(), *bound2DFramebuffer->getFramebuffer(), window->getWindowDimensions());
 	}
-	basic2DRenderer.renderImageToFramebuffer(bound2DFramebuffer->getFramebufferImage(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr, effects2DShader);
+	basic2DRenderer.renderImageToFramebuffer(bound2DFramebuffer->getFramebufferImage(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr, effects2DShader);
 }
 
 void Renderer::endRendering3D() {
 	if (multisampling3D > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultisampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getWindowDimensions());
 	}
-	basic2DRenderer.renderImageToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr, effects3DShader);
+	basic2DRenderer.renderImageToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getWindowDimensions(), (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr, effects3DShader);
 }
 
 void Renderer::endRenderingFrame() {
-	basic2DRenderer.renderImageToFramebuffer(&mainFramebufferImage, 0, (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr);
+	basic2DRenderer.renderImageToFramebuffer(&mainFramebufferImage, 0, (Rect<int>*) window->getWindowDimensions(), (Rect<int>*) window->getWindowDimensions(), window->getWindowDimensions(), nullptr);
 	window->updateBuffer();
 }
 
@@ -400,7 +406,7 @@ void Renderer::updateCameraEvents(Event* event) {
 	KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
 
 	if (camera.isInUse() && window->isFocused()) {
-		float deltaTime = timeManager->getTimeBetweenFrames();
+		float deltaTime = (float) timeManager->getTimeBetweenFrames();
 
 		// This gets the cursor's position.
 		int xpos, ypos;
@@ -409,76 +415,76 @@ void Renderer::updateCameraEvents(Event* event) {
 		// This moves the cursor back to the middle of the window.
 		int width, height;
 		window->getWindowDimensions(&width, &height);
-		window->setCursorPositionInWindow(width / 2, height / 2);
 
 		// This gets the horizontal and vertical angles.
 		float horizontalAngle = camera.getRotation()->x;
 		float verticalAngle = camera.getRotation()->y;
 
-		if (keyEvent->getKeycode() == SDLK_LSHIFT) {
-			currentSpeed = superSpeed;
-		} else {
-			currentSpeed = speed;
-		}
-
 		switch (keyEvent->getType()) {
-		case EventConstants::KEY_PRESSED:
-			if (keyEvent->getKeycode() == SDLK_w) {
-				forward = true;
-			}
+			case EventConstants::KEY_PRESSED:
+				if (keyEvent->getKeycode() == SDLK_w) {
+					forward = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_s) {
-				backward = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_s) {
+					backward = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_d) {
-				right = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_d) {
+					right = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_a) {
-				left = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_a) {
+					left = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_SPACE) {
-				up = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_SPACE) {
+					up = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_LCTRL) {
-				down = true;
-			}
-			break;
-		case EventConstants::KEY_RELEASED:
-			if (keyEvent->getKeycode() == SDLK_w) {
-				forward = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_LCTRL) {
+					down = true;
+				}
+				if (keyEvent->getKeycode() == SDLK_LSHIFT) {
+					currentSpeed = superSpeed;
+				}
+				break;
+			case EventConstants::KEY_RELEASED:
+				if (keyEvent->getKeycode() == SDLK_w) {
+					forward = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_s) {
-				backward = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_s) {
+					backward = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_d) {
-				right = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_d) {
+					right = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_a) {
-				left = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_a) {
+					left = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_SPACE) {
-				up = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_SPACE) {
+					up = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_LCTRL) {
-				down = false;
-			}
-			break;
+				if (keyEvent->getKeycode() == SDLK_LCTRL) {
+					down = false;
+				}
+				if (keyEvent->getKeycode() == SDLK_LSHIFT) {
+					currentSpeed = speed;
+				}
+				break;
 		}
 	}
 }
 
 void Aela::Renderer::updateCameraMatrices() {
 	if (window->isFocused() && camera.isInUse()) {
-		float deltaTime = timeManager->getTimeBetweenFrames();
+		// Since glm::vec3s use floats, we unfortunately have to take this wonderful int64 and make it a nasty float.
+		float deltaTime = (float) timeManager->getTimeBetweenFrames();
 
 		int width, height;
 		window->getWindowDimensions(&width, &height);
@@ -540,7 +546,7 @@ void Aela::Renderer::updateCameraMatrices() {
 		camera.calculateRightVector();
 		camera.calculateUpVector();
 
-		glm::mat4 projectionMatrix = glm::perspective(camera.getFieldOfView(), (float)width / height, 0.1f, 100.0f);
+		glm::mat4 projectionMatrix = glm::perspective(camera.getFieldOfView(), (float) width / height, 0.1f, 100.0f);
 		glm::mat4 viewMatrix = glm::lookAt(*camera.getPosition(), *camera.getPosition() + *camera.getCartesionalDirection(), *camera.getUpVector());
 		camera.setProjectionMatrix(projectionMatrix);
 		camera.setViewMatrix(viewMatrix);

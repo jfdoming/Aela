@@ -76,7 +76,7 @@ void KeyedAnimator::onEvent(Event* event) {
 }
 
 void KeyedAnimator::update() {
-	float deltaTime = timeManager->getTimeBetweenFrames();
+	long long deltaTime = timeManager->getTimeBetweenFrames();
 	for (auto pair : transformables) {
 		Transformable3D* transformable = pair.second;
 		float amount = currentSpeed * deltaTime;

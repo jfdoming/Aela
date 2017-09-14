@@ -21,6 +21,6 @@ class Particle : public BillboardEntity {
 		void setLifetime(unsigned int baseLifetime);
 
 	private:
-		float baseSpeed = 0.001f;
+		float baseSpeed = 0.000000001f;
 		unsigned int baseLifetime = 1000;
 };

@@ -13,12 +13,6 @@
 
 using namespace Aela;
 
-AelaGame::AelaGame(Engine* engine) {
-	this->engine = engine;
-	resourceManager = engine->getResourceManager();
-	sceneManager = engine->getSceneManager();
-}
-
 void AelaGame::setEntityTypeText(std::shared_ptr<Label> text) {
 	entityTypeText = text;
 }
@@ -150,22 +144,21 @@ void AelaGame::setup() {
 
 	engine->getEventHandler()->addListener(EventConstants::KEY_RELEASED, bindListener(AelaGame::onEvent, this));
 	engine->getEventHandler()->addListener(EventConstants::KEY_PRESSED, bindListener(AelaGame::onEvent, this));
+	engine->getEventHandler()->addListener(EventConstants::MOUSE_WHEEL, this);
+	engine->getEventHandler()->addListener(EventConstants::MOUSE_PRESSED, this);
 
 	// Note: the default entity that is placed is a ModelEntity.
 	entityBeingPlaced = &modelEntity;
 
 	// This sets up the entities that are being placed.
+	idOfEntityInMap = mapBeingEdited->addModel(&modelEntity);
 	switchModelResource(currentModelResource);
 	switchBillboardResource(currentBillboardResource);
-	idOfEntityInMap = mapBeingEdited->addModel(&modelEntity);
 	engine->getRenderer().generateShadowMap(&lightEntity);
-
-	// The keyed animator will translate the transformable object that represents the properties of the entity being placed using
-	// key inputs.
-	keyedAnimatorKey = engine->getKeyedAnimator()->addTransformable(&transformableBeingPlaced);
 }
 
 void AelaGame::update() {
+	transformableBeingPlaced.setPosition(camera->getPointInFrontOfCamera(distanceFromCameraToObject));
 	positionText->setText("Position: " + toStringWithDecimal(transformableBeingPlaced.getPosition()->x, 3) + ", "
 		+ toStringWithDecimal(transformableBeingPlaced.getPosition()->y, 3) + ", " + toStringWithDecimal(transformableBeingPlaced.getPosition()->z, 3));
 	rotationText->setText("Rotation: " + toStringWithDecimal(transformableBeingPlaced.getRotation()->x, 3) + ", "
@@ -206,59 +199,60 @@ void AelaGame::exportMap(std::string src, bool readable) {
 }
 
 void AelaGame::onEvent(Event* event) {
-	if (event->getType() == EventConstants::KEY_PRESSED) {
-		KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
-		switch (keyEvent->getKeycode()) {
-			case SDLK_UP:
-				holdingUp = true;
-				break;
-			case SDLK_DOWN:
-				holdingDown = true;
-				break;
-			case SDLK_1:
-				if (holdingUp) {
-					transformableBeingPlaced.rotate(THIRTY_SECOND_OF_PI, 0, 0);
-				} else if (holdingDown) {
-					transformableBeingPlaced.rotate(-THIRTY_SECOND_OF_PI, 0, 0);
-				}
-				break;
-			case SDLK_2:
-				if (holdingUp) {
-					transformableBeingPlaced.rotate(0, THIRTY_SECOND_OF_PI, 0);
-				} else if (holdingDown) {
-					transformableBeingPlaced.rotate(0, -THIRTY_SECOND_OF_PI, 0);
-				}
-				break;
-			case SDLK_3:
-				if (holdingUp) {
-					transformableBeingPlaced.rotate(0, 0, THIRTY_SECOND_OF_PI);
-				} else if (holdingDown) {
-					transformableBeingPlaced.rotate(0, 0, -THIRTY_SECOND_OF_PI);
-				}
-				break;
-			case SDLK_4:
-				if (holdingUp) {
-					transformableBeingPlaced.scaleUp(0.25, 0, 0);
-				} else if (holdingDown) {
-					transformableBeingPlaced.scaleUp(-0.25, 0, 0);
-				}
-				break;
-			case SDLK_5:
-				if (holdingUp) {
-					transformableBeingPlaced.scaleUp(0, 0.25, 0);
-				} else if (holdingDown) {
-					transformableBeingPlaced.scaleUp(0, -0.25, 0);
-				}
-				break;
-			case SDLK_6:
-				if (holdingUp) {
-					transformableBeingPlaced.scaleUp(0, 0, 0.25);
-				} else if (holdingDown) {
-					transformableBeingPlaced.scaleUp(0, 0, -0.25);
-				}
-				break;
-			case SDLK_RIGHT:
-				switch (entityBeingPlaced->getEntityType()) {
+	if (sceneManager->getCurrentSceneId() == EDITOR_SCENE) {
+		if (event->getType() == EventConstants::KEY_PRESSED) {
+			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+			switch (keyEvent->getKeycode()) {
+				case SDLK_UP:
+					holdingUp = true;
+					break;
+				case SDLK_DOWN:
+					holdingDown = true;
+					break;
+				case SDLK_1:
+					if (holdingUp) {
+						transformableBeingPlaced.rotate(THIRTY_SECOND_OF_PI, 0, 0);
+					} else if (holdingDown) {
+						transformableBeingPlaced.rotate(-THIRTY_SECOND_OF_PI, 0, 0);
+					}
+					break;
+				case SDLK_2:
+					if (holdingUp) {
+						transformableBeingPlaced.rotate(0, THIRTY_SECOND_OF_PI, 0);
+					} else if (holdingDown) {
+						transformableBeingPlaced.rotate(0, -THIRTY_SECOND_OF_PI, 0);
+					}
+					break;
+				case SDLK_3:
+					if (holdingUp) {
+						transformableBeingPlaced.rotate(0, 0, THIRTY_SECOND_OF_PI);
+					} else if (holdingDown) {
+						transformableBeingPlaced.rotate(0, 0, -THIRTY_SECOND_OF_PI);
+					}
+					break;
+				case SDLK_4:
+					if (holdingUp) {
+						transformableBeingPlaced.scaleUp(0.25, 0, 0);
+					} else if (holdingDown) {
+						transformableBeingPlaced.scaleUp(-0.25, 0, 0);
+					}
+					break;
+				case SDLK_5:
+					if (holdingUp) {
+						transformableBeingPlaced.scaleUp(0, 0.25, 0);
+					} else if (holdingDown) {
+						transformableBeingPlaced.scaleUp(0, -0.25, 0);
+					}
+					break;
+				case SDLK_6:
+					if (holdingUp) {
+						transformableBeingPlaced.scaleUp(0, 0, 0.25);
+					} else if (holdingDown) {
+						transformableBeingPlaced.scaleUp(0, 0, -0.25);
+					}
+					break;
+				case SDLK_RIGHT:
+					switch (entityBeingPlaced->getEntityType()) {
 					case EntityType::MODEL:
 						currentModelResource++;
 						if (currentModelResource >= numberOfMaterialsAndModels) {
@@ -273,10 +267,10 @@ void AelaGame::onEvent(Event* event) {
 						}
 						switchBillboardResource(currentBillboardResource);
 						break;
-				}
-				break;
-			case SDLK_LEFT:
-				switch (entityBeingPlaced->getEntityType()) {
+					}
+					break;
+				case SDLK_LEFT:
+					switch (entityBeingPlaced->getEntityType()) {
 					case EntityType::MODEL:
 						if (currentModelResource == 0) {
 							currentModelResource = numberOfMaterialsAndModels - 1;
@@ -293,20 +287,20 @@ void AelaGame::onEvent(Event* event) {
 						}
 						switchBillboardResource(currentBillboardResource);
 						break;
-					}
+				}
 				break;
-		}
-	} else if (event->getType() == EventConstants::KEY_RELEASED) {
-		KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
-		switch (keyEvent->getKeycode()) {
-			case SDLK_UP:
-				holdingUp = false;
-				break;
-			case SDLK_DOWN:
-				holdingDown = false;
-				break;
-			case SDLK_RETURN:
-				switch (entityBeingPlaced->getEntityType()) {
+			}
+		} else if (event->getType() == EventConstants::KEY_RELEASED) {
+			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+			switch (keyEvent->getKeycode()) {
+				case SDLK_UP:
+					holdingUp = false;
+					break;
+				case SDLK_DOWN:
+					holdingDown = false;
+					break;
+				case SDLK_RETURN:
+					switch (entityBeingPlaced->getEntityType()) {
 					case EntityType::MODEL:
 						placeModel();
 						break;
@@ -316,10 +310,10 @@ void AelaGame::onEvent(Event* event) {
 					case EntityType::BILLBOARD:
 						placeBillboard();
 						break;
-				}
-				break;
-			case SDLK_BACKSLASH:
-				switch (entityBeingPlaced->getEntityType()) {
+					}
+					break;
+				case SDLK_BACKSLASH:
+					switch (entityBeingPlaced->getEntityType()) {
 					case EntityType::MODEL:
 						switchEntityBeingPlaced(EntityType::LIGHT);
 						break;
@@ -329,21 +323,60 @@ void AelaGame::onEvent(Event* event) {
 					case EntityType::BILLBOARD:
 						switchEntityBeingPlaced(EntityType::MODEL);
 						break;
-				}
-				break;
-			case SDLK_ESCAPE:
-				if (sceneManager->getCurrentSceneId() == EDITOR_SCENE) {
-					sceneManager->setCurrentScene(3);
+					}
+					break;
+				case SDLK_ESCAPE:
+					sceneManager->setCurrentScene(PAUSE_SCENE);
 					engine->getWindow()->showCursor();
 					engine->getRenderer().getCamera()->setInUse(false);
-				} else if (sceneManager->getCurrentSceneId() == PAUSE_ENTITY_TOOL_SCENE || sceneManager->getCurrentSceneId() == PAUSE_EXPORT_SCENE
-					|| sceneManager->getCurrentSceneId() == PAUSE_OPTIONS_SCENE || sceneManager->getCurrentSceneId() == PAUSE_SKYBOX_SCENE) {
+					break;
+			}
+		} else if (event->getType() == EventConstants::MOUSE_WHEEL) {
+			MouseEvent* mouseEvent = static_cast<MouseEvent*>(event);
+			switch (mouseEvent->getWheel()) {
+				case 1:
+					distanceFromCameraToObject += 0.25;
+					break;
+				case -1:
+					distanceFromCameraToObject -= 0.25;
+					break;
+			}
+		} else if (event->getType() == EventConstants::MOUSE_PRESSED) {
+			switch (entityBeingPlaced->getEntityType()) {
+				case EntityType::MODEL:
+					placeModel();
+					break;
+				case EntityType::LIGHT:
+					placeLightNextUpdate = true;
+					break;
+				case EntityType::BILLBOARD:
+					placeBillboard();
+					break;
+			}
+		}
+	} else if (sceneManager->getCurrentSceneId() == PAUSE_SCENE) {
+		if (event->getType() == EventConstants::KEY_RELEASED) {
+			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+			switch (keyEvent->getKeycode()) {
+				case SDLK_ESCAPE:
 					sceneManager->setCurrentScene(EDITOR_SCENE);
 					engine->getWindow()->hideCursor();
 					engine->getRenderer().getCamera()->setInUse(true);
-				}
-				break;
+					break;
+			}
 		}
+	}
+}
+
+void AelaGame::performActionOnSceneSwitch(int sceneID) {
+	switch (sceneID) {
+		case EDITOR_SCENE:
+			engine->getWindow()->hideCursor();
+			camera->setInUse(true);
+			camera->setForceCursorToMiddle(true);
+			camera->setUseControls(true);
+			engine->getRenderer()->getCamera()->setRotation(0, 0, 0);
+			break;
 	}
 }
 

@@ -17,12 +17,14 @@
 #include "2D/Texture/TextureLoader.h"
 #include "3D/Materials/MaterialLoader.h"
 #include "3D/Models/OBJLoader.h"
+#include "3D/Physics/PhysicsManager.h"
 #include "3D/Skybox/SkyboxLoader.h"
 #include "3D/Maps/Map3DLoader.h"
 #include "Audio/WAVEClipLoader.h"
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 #include "Events/EventConstants.h"
+#include "Events/MouseEvent.h"
 #include "Audio/AudioPlayer.h"
 #include "Animation/Animator.h"
 #include "3D/Animation/KeyedAnimator3D.h"
@@ -68,6 +70,7 @@ namespace Aela {
 			KeyedAnimator* getKeyedAnimator();
 			FramerateCalculator* getFramerateCalculator();
 			Map3DExporter* getMapExporter();
+			PhysicsManager* getPhysicsManager();
 
 		private:
 			// These are global objects who's classes come from Project Aela.
@@ -85,6 +88,7 @@ namespace Aela {
 			KeyedAnimator keyedAnimator;
 			FramerateCalculator framerateCalculator;
 			Map3DExporter mapExporter;
+			PhysicsManager physicsManager;
 
 			int runningLoop();
 	};

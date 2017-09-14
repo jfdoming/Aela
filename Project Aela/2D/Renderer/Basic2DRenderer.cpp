@@ -9,6 +9,7 @@
 #include "../../Old Garbage/texture.hpp"
 #include "../../Error Handler/ErrorHandler.h"
 #include "../../Old Garbage/shader.hpp"
+#include "../../Time Manager/TimeManager.h"
 #include <freetype/ftglyph.h>
 #include <iostream>
 
@@ -26,6 +27,14 @@ void Basic2DRenderer::setup() {
 	glGenTextures(1, &characterTexture);
 	glBindTexture(GL_TEXTURE_2D, characterTexture);
 
+	// This sets up the character texture.
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	// Apparently, linear filtering looks best for text.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 	// This checks the framebuffer.
 	checkFrameBuffer();
 }
@@ -40,20 +49,18 @@ void Basic2DRenderer::load2DShaders() {
 // This function gets handles to GLSL variables from GLSL shaders.
 void Basic2DRenderer::getGLSLVariableHandles() {
 	imageTextureID = glGetUniformLocation(bufferTextureToBufferProgramID, "quadTexture");
-	imageQuadVertexBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "vertexPosition");
-	imageTopLeftBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "positionOfTextureOnScreen");
-	imageWidthAndHeightBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "boundingBoxDimensions");
-	imageDimensionsBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "textureDimensions");
-	imageWindowDimensionsBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "windowDimensions");
+	imageVertexBufferID = glGetAttribLocation(bufferTextureToBufferProgramID, "vertexPosition");
+	imageUVBufferID = glGetAttribLocation(imageToBufferProgramID, "UVPosition");
+	imageTopLeftCoordID = glGetUniformLocation(bufferTextureToBufferProgramID, "positionOfTextureOnScreen");
+	imageWindowDimensionsID = glGetUniformLocation(bufferTextureToBufferProgramID, "windowDimensions");
 	imageTintID = glGetUniformLocation(bufferTextureToBufferProgramID, "tintMultiplier");
 
 	characterTextureID = glGetUniformLocation(textToBufferProgramID, "quadTexture");
 	characterQuadVertexBufferID = glGetAttribLocation(textToBufferProgramID, "vertexPosition");
-	characterTopLeftBufferID = glGetAttribLocation(textToBufferProgramID, "positionOfTextureOnScreen");
-	characterWidthAndHeightBufferID = glGetAttribLocation(textToBufferProgramID, "boundingBoxDimensions");
-	characterDimensionsBufferID = glGetAttribLocation(textToBufferProgramID, "textureDimensions");
-	characterWindowDimensionsBufferID = glGetAttribLocation(textToBufferProgramID, "windowDimensions");
-	characterColourBufferID = glGetAttribLocation(textToBufferProgramID, "textColour");
+	characterTopLeftCoordID = glGetUniformLocation(textToBufferProgramID, "positionOfTextureOnScreen");
+	characterDimensionsID = glGetUniformLocation(textToBufferProgramID, "textureDimensions");
+	characterWindowDimensionsID = glGetUniformLocation(textToBufferProgramID, "windowDimensions");
+	characterColourID = glGetUniformLocation(textToBufferProgramID, "textColour");
 }
 
 void Basic2DRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer, unsigned int multisampling, Rect<int>* dimensions, Rect<int>* output) {
@@ -101,51 +108,63 @@ void Basic2DRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffer,
 }
 
 // This function renders a texture directly to a specified framebuffer using the shader for rendering images.
-void Basic2DRenderer::renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
-	renderImageToSimple2DFramebuffer(image, framebuffer, output, windowDimensions, tint, imageToBufferProgramID);
+void Basic2DRenderer::renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
+	renderImageToSimple2DFramebuffer(image, framebuffer, output, cropping, windowDimensions, tint, imageToBufferProgramID);
 }
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
 // Note: Custom shaders can be used for post-process effects.
-void Basic2DRenderer::renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader) {
+void Basic2DRenderer::renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader) {
 	if (framebuffer->getMultisampling() > 0) {
-		renderImageToFramebuffer(image, *framebuffer->getMultisampledFramebuffer(), output, windowDimensions, tint, customShader);
+		renderImageToFramebuffer(image, *framebuffer->getMultisampledFramebuffer(), output, cropping, windowDimensions, tint, customShader);
 	} else {
-		renderImageToFramebuffer(image, *framebuffer->getFramebuffer(), output, windowDimensions, tint, customShader);
+		renderImageToFramebuffer(image, *framebuffer->getFramebuffer(), output, cropping, windowDimensions, tint, customShader);
 	}
 }
 
 // This function renders a texture directly to a specified framebuffer.
-void Basic2DRenderer::renderImageToFramebuffer(Image* image, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
-	renderImageToFramebuffer(image, framebuffer, output, windowDimensions, tint, bufferTextureToBufferProgramID);
+void Basic2DRenderer::renderImageToFramebuffer(Image* image, GLuint framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
+	renderImageToFramebuffer(image, framebuffer, output, cropping, windowDimensions, tint, bufferTextureToBufferProgramID);
 }
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
 // Note: Custom shaders can be used for post-process effects.
-void Basic2DRenderer::renderImageToFramebuffer(Image* texture, GLuint framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader) {
-	// Due to the way that OpenGL seems to flip the texture, the shader needs to flip it back
-	// and show the texture's opposite side. Or the renderer could just send normal data.
-	// GL_CULL_FACE needs to be disabled if one uses the first option.
+// Note: Shaders that use the same uniforms and buffers as the 2DTextureBufferToBuffer shader (bufferTextureToBufferProgramID) should set the same
+// locations of uniforms as they are in the 2DTextureBufferToBuffer shader.
+void Basic2DRenderer::renderImageToFramebuffer(Image* image, GLuint framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, GLuint customShader) {
 	glDisable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
 	int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
-	float topLeftX = (float) (-1 + ((float) output->getX() / (windowWidth / 2))),
-		topLeftY = (float) (-1 + ((float) output->getY() / (windowHeight / 2))),
-		bottomRightX = (-1 + ((float) (output->getX() + output->getWidth()) / (windowWidth / 2))),
-		bottomRightY = (float) (-1 + ((float) (output->getY() + output->getHeight()) / (windowHeight / 2)));
+	int textureWidth = image->getDimensions()->getWidth(), textureHeight = image->getDimensions()->getHeight();
+	float vertexTopLeftX = (float) (-1 + ((float) output->getX() / (windowWidth / 2))),
+		vertexTopLeftY = (float) (-1 + ((float) output->getY() / (windowHeight / 2))),
+		vertexBottomRightX = (-1 + ((float) (output->getX() + output->getWidth()) / (windowWidth / 2))),
+		vertexBottomRightY = (float) (-1 + ((float) (output->getY() + output->getHeight()) / (windowHeight / 2)));
 
 	GLfloat vertexBufferData[] = {
-		topLeftX,  bottomRightY, 0.0f,
-		topLeftX, topLeftY, 0.0f,
-		bottomRightX, topLeftY, 0.0f,
-		topLeftX,  bottomRightY, 0.0f,
-		bottomRightX, topLeftY, 0.0f,
-		bottomRightX,  bottomRightY, 0.0f
+		vertexTopLeftX,  vertexBottomRightY, 0.0f,
+		vertexTopLeftX, vertexTopLeftY, 0.0f,
+		vertexBottomRightX, vertexTopLeftY, 0.0f,
+		vertexTopLeftX,  vertexBottomRightY, 0.0f,
+		vertexBottomRightX, vertexTopLeftY, 0.0f,
+		vertexBottomRightX,  vertexBottomRightY, 0.0f
 	};
 
-	int textureWidth = texture->getDimensions()->getWidth(), textureHeight = texture->getDimensions()->getHeight();
+	float UVTopLeftX = (float) cropping->getX() / textureWidth,
+		UVTopLeftY = (float) cropping->getY() / textureHeight,
+		UVBottomRightX = (float) (cropping->getX() + cropping->getWidth()) / textureWidth,
+		UVBottomRightY = (float) (cropping->getY() + cropping->getHeight()) / textureHeight;
+
+	GLfloat UVBufferData[] = {
+		UVTopLeftX,  UVBottomRightY,
+		UVTopLeftX, UVTopLeftY,
+		UVBottomRightX, UVTopLeftY,
+		UVTopLeftX,  UVBottomRightY,
+		UVBottomRightX, UVTopLeftY,
+		UVBottomRightX,  UVBottomRightY
+	};
 
 	// These are some functions needed by OpenGL.
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
@@ -154,25 +173,25 @@ void Basic2DRenderer::renderImageToFramebuffer(Image* texture, GLuint framebuffe
 
 	// This passes the texture to OpenGL.
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, *(texture->getTexture()));
+	glBindTexture(GL_TEXTURE_2D, *(image->getTexture()));
 	glUniform1i(imageTextureID, 0);
 
-	// The following large chunk of code passes all necessary variables to the shader.
+	// If there is a tint, use it. Otherwise, the shader will use its own default tint value.
 	if (tint != nullptr) {
 		glm::vec4 tintAsVec4 = tint->getVec4();
 		glUniform4fv(imageTintID, 1, &tintAsVec4.r);
 	}
 
-	GLuint quadVertexBuffer;
-	glGenBuffers(1, &quadVertexBuffer);
+	GLuint vertexBuffer;
+	glGenBuffers(1, &vertexBuffer);
 
-	glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData), vertexBufferData, GL_DYNAMIC_DRAW);
 
-	glEnableVertexAttribArray(imageQuadVertexBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
+	glEnableVertexAttribArray(imageVertexBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	glVertexAttribPointer(
-		imageQuadVertexBufferID,
+		imageVertexBufferID,
 		3,
 		GL_FLOAT,
 		GL_FALSE,
@@ -180,128 +199,74 @@ void Basic2DRenderer::renderImageToFramebuffer(Image* texture, GLuint framebuffe
 		(void*) 0
 	);
 
+	GLuint UVBuffer;
+	glGenBuffers(1, &UVBuffer);
+
+	glBindBuffer(GL_ARRAY_BUFFER, UVBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(UVBufferData), UVBufferData, GL_DYNAMIC_DRAW);
+
+	glEnableVertexAttribArray(imageUVBufferID);
+	glBindBuffer(GL_ARRAY_BUFFER, UVBuffer);
+	glVertexAttribPointer(
+		imageUVBufferID,
+		2,
+		GL_FLOAT,
+		GL_FALSE,
+		0,
+		(void*) 0
+	);
+
 	GLfloat topLeftArray[] = { 
-		1.0f + topLeftX, 1.0f + topLeftY,
-		1.0f + topLeftX, 1.0f + topLeftY,
-		1.0f + topLeftX, 1.0f + topLeftY,
-		1.0f + topLeftX, 1.0f + topLeftY,
-		1.0f + topLeftX, 1.0f + topLeftY,
-		1.0f + topLeftX, 1.0f + topLeftY
+		1.0f + vertexTopLeftX, 1.0f + vertexTopLeftY
 	};
 
-	GLuint topLeftBuffer;
-	glGenBuffers(1, &topLeftBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, topLeftBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(topLeftArray), topLeftArray, GL_DYNAMIC_DRAW);
-
-	glEnableVertexAttribArray(imageTopLeftBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, topLeftBuffer);
-	glVertexAttribPointer(
-		imageTopLeftBufferID,
-		2,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*) 0
-	);
-
-	GLfloat widthAndHeightArray[] = {
-		(float) output->getWidth(), (float) output->getHeight(),
-		(float) output->getWidth(), (float) output->getHeight(),
-		(float) output->getWidth(), (float) output->getHeight(),
-		(float) output->getWidth(), (float) output->getHeight(),
-		(float) output->getWidth(), (float) output->getHeight(),
-		(float) output->getWidth(), (float) output->getHeight()
-	};
-
-	GLuint widthAndHeightBuffer;
-	glGenBuffers(1, &widthAndHeightBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, widthAndHeightBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(widthAndHeightArray), widthAndHeightArray, GL_DYNAMIC_DRAW);
-
-	glEnableVertexAttribArray(imageWidthAndHeightBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, widthAndHeightBuffer);
-	glVertexAttribPointer(
-		imageWidthAndHeightBufferID,
-		2,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*) 0
-	);
-
-	GLfloat textureDimensionsArray[] = {
-		(float) textureWidth, (float) textureHeight,
-		(float) textureWidth, (float) textureHeight,
-		(float) textureWidth, (float) textureHeight,
-		(float) textureWidth, (float) textureHeight,
-		(float) textureWidth, (float) textureHeight,
-		(float) textureWidth, (float) textureHeight
-	};
-
-	GLuint textureDimensionsBuffer;
-	glGenBuffers(1, &textureDimensionsBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, textureDimensionsBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textureDimensionsArray), textureDimensionsArray, GL_DYNAMIC_DRAW);
-
-	glEnableVertexAttribArray(imageDimensionsBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, textureDimensionsBuffer);
-	glVertexAttribPointer(
-		imageDimensionsBufferID,
-		2,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*) 0
-	);
+	glUniform2fv(imageTopLeftCoordID, 1, &topLeftArray[0]);
 
 	GLfloat windowDimensionsArray[] = {
-		(float) windowWidth, (float) windowHeight,
-		(float) windowWidth, (float) windowHeight,
-		(float) windowWidth, (float) windowHeight,
-		(float) windowWidth, (float) windowHeight,
-		(float) windowWidth, (float) windowHeight,
 		(float) windowWidth, (float) windowHeight
 	};
 
-	GLuint windowDimensionsBuffer;
-	glGenBuffers(1, &windowDimensionsBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, windowDimensionsBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(windowDimensionsArray), windowDimensionsArray, GL_DYNAMIC_DRAW);
-
-	glEnableVertexAttribArray(imageWindowDimensionsBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, windowDimensionsBuffer);
-	glVertexAttribPointer(
-		imageWindowDimensionsBufferID,
-		2,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*) 0
-	);
+	glUniform2fv(imageWindowDimensionsID, 1, &windowDimensionsArray[0]);
 
 	// This draws the texture and deletes the buffers that were used.
 	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glDisableVertexAttribArray(imageQuadVertexBufferID);
-	glDisableVertexAttribArray(imageTopLeftBufferID);
-	glDisableVertexAttribArray(imageWidthAndHeightBufferID);
-	glDisableVertexAttribArray(imageDimensionsBufferID);
-	glDisableVertexAttribArray(imageWindowDimensionsBufferID);
-	glDeleteBuffers(1, &quadVertexBuffer);
-	glDeleteBuffers(1, &topLeftBuffer);
-	glDeleteBuffers(1, &widthAndHeightBuffer);
-	glDeleteBuffers(1, &textureDimensionsBuffer);
-	glDeleteBuffers(1, &windowDimensionsBuffer);
+	glDisableVertexAttribArray(imageVertexBufferID);
+	glDisableVertexAttribArray(imageUVBufferID);
+	glDeleteBuffers(1, &vertexBuffer);
+	glDeleteBuffers(1, &UVBuffer);
 }
 
 // This function renders text directly to the 2D renderer's buffer.
-void Basic2DRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFont* textFont, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, unsigned int pointsPerPixel) {
-	// This sets up some variables for later use.
+void Basic2DRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFont* textFont, Simple2DFramebuffer* framebuffer, Rect<int>* output,
+	Rect<unsigned int>* windowDimensions, ColourRGBA* colour, unsigned int pointsPerPixel) {
+	// Some of the terms used in this function may be confusing. See https://www.freetype.org/freetype2/docs/tutorial/step2.html to look up the terms.
+	// This function creates a buffer that represents the texture of the text. It does this by combining the buffers of the individual glyphs.
+	// Then it renders the buffer of the entire text. This is faster than rendering each individual character using the GPU.
+
+	// This creates a bounding box for the text.
 	Rect<int> characterPositioning = *output;
+	characterPositioning.setWidthHeight(0, 0);
+
+	// This is the y position of the origin if the top of the glyph had a y position of zero. It's basically just bearingY.
+	int originY = 0;
+
+	// Distance to top is bearingY, distance to bottom is height - bearingY.
+	int distanceToTop = 0, distanceToBottom = 0;
+
+	// These are some more glyph-related variables.
 	FT_GlyphSlot glyph = (*(textFont->getFace()))->glyph;
 	char* p;
 
-	// This renders the characters, one at a time.
+	struct RenderableGlyph {
+		unsigned char* buffer;
+		int width, rows, originY;
+		char character;
+	};
+
+	std::vector<RenderableGlyph> glyphs;
+	std::vector<unsigned char> buffer;
+
+	// This goes through every glyph to perform actions upon every glyph's properties.
 	for (unsigned int i = 0; i < text.length(); i++) {
 		p = &((char) (text.at(i)));
 
@@ -309,13 +274,76 @@ void Basic2DRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFont
 		if (FT_Load_Char(*(textFont->getFace()), *p, FT_LOAD_RENDER)) {
 			continue;
 		}
+		
+		characterPositioning.setWidth(characterPositioning.getWidth() + glyph->bitmap.width);
 
-		// This positions and renders the character.
-		characterPositioning.setY(output->getY() - (glyph->metrics.horiBearingY / pointsPerPixel));
-		characterPositioning.setWidth(glyph->bitmap.width);
-		characterPositioning.setHeight(glyph->bitmap.rows);
-		renderCharacter(p, framebuffer, &characterPositioning, windowDimensions, glyph, colour);
-		characterPositioning.setX(characterPositioning.getX() + (glyph->metrics.horiAdvance / pointsPerPixel));
+		if (glyph->metrics.horiBearingY / (signed int) pointsPerPixel > distanceToTop) {
+			distanceToTop = glyph->metrics.horiBearingY / (signed int) pointsPerPixel;
+		}
+
+		if ((glyph->metrics.height - glyph->metrics.horiBearingY) / (signed int) pointsPerPixel > distanceToBottom) {
+			distanceToBottom = (glyph->metrics.height - glyph->metrics.horiBearingY) / (signed int) pointsPerPixel;
+		}
+
+		if (glyph->metrics.horiBearingY / (signed int) pointsPerPixel > originY) {
+			originY = glyph->metrics.horiBearingY / (signed int) pointsPerPixel;
+		}
+
+		// This sets up a Renderable glyph using the glyph's properties. These have to be stored in a struct since FT_GlyphSlot is just a
+		// typedef'd pointer.
+		if (glyph->bitmap.buffer != nullptr) {
+			RenderableGlyph charBuffer;
+			unsigned char* data = (unsigned char*) malloc(glyph->bitmap.width * glyph->bitmap.rows);
+			memcpy(data, glyph->bitmap.buffer, glyph->bitmap.width * glyph->bitmap.rows);
+			charBuffer.buffer = data;
+			charBuffer.width = glyph->bitmap.width;
+			charBuffer.rows = glyph->bitmap.rows;
+			charBuffer.originY = glyph->metrics.horiBearingY / pointsPerPixel;
+			charBuffer.character = *p;
+			glyphs.push_back(charBuffer);
+		} else if (*p != ' ') {
+			continue;
+		}
+
+		// This sets up a RenderableGlyph for the space in between characters. It also makes a space for the character ' '.
+		RenderableGlyph advancementBuffer;
+		unsigned int advancement = glyph->metrics.horiAdvance / pointsPerPixel - glyph->bitmap.width;
+		characterPositioning.setWidth(characterPositioning.getWidth() + advancement);
+		advancementBuffer.width = advancement;
+		advancementBuffer.rows = 0;
+		advancementBuffer.originY = 0;
+		advancementBuffer.buffer = nullptr;
+		advancementBuffer.character = ' ';
+		glyphs.push_back(advancementBuffer);
+	}
+
+	characterPositioning.setHeight(distanceToTop + distanceToBottom);
+	characterPositioning.setY(characterPositioning.getY() - distanceToTop);
+
+	// This creates one buffer out of each glyph's individual buffer.
+	if (glyphs.size() > 0) {
+		for (int i = 0; i < characterPositioning.getHeight(); i++) {
+			for (unsigned int whichGlyph = 0; whichGlyph < glyphs.size(); whichGlyph++) {
+				for (int whichChar = 0; whichChar < glyphs[whichGlyph].width; whichChar++) {
+					int whichRowToAccess = i - (originY - glyphs[whichGlyph].originY);
+					if (glyphs[whichGlyph].buffer != nullptr && whichRowToAccess >= 0 && whichRowToAccess * glyphs[whichGlyph].width + whichChar < glyphs[whichGlyph].width * glyphs[whichGlyph].rows) {
+						buffer.push_back(glyphs[whichGlyph].buffer[whichRowToAccess * glyphs[whichGlyph].width + whichChar]);
+					} else {
+						buffer.push_back(0);
+					}
+				}
+			}
+		}
+	}
+
+	// This renders the text's buffer using the GPU.
+	renderCharacterBuffer(framebuffer, &characterPositioning, windowDimensions, &buffer, characterPositioning.getWidth(), characterPositioning.getHeight(), colour);
+
+	// This frees the memory of each glyph's individual buffer.
+	for (unsigned int i = 0; i < glyphs.size(); i++) {
+		if (glyphs[i].buffer != nullptr) {
+			free(glyphs[i].buffer);
+		}
 	}
 }
 
@@ -338,213 +366,98 @@ void Basic2DRenderer::clearSimple2DFramebuffer(Simple2DFramebuffer* framebuffer)
 }
 
 // This renders a single character using the character shader.
-void Basic2DRenderer::renderCharacter(char* character, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, FT_GlyphSlot glyph, ColourRGBA* colour) {
-	glBindTexture(GL_TEXTURE_2D, characterTexture);
-	// Note: 1 byte alignment is required when uploading texture data.
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	// Apparently, linear filtering looks best for text.
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, glyph->bitmap.width, glyph->bitmap.rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
+void Basic2DRenderer::renderCharacterBuffer(Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, std::vector<unsigned char>* buffer, unsigned int width, unsigned int rows, ColourRGBA* colour) {
+	if (buffer != nullptr && buffer->size() > 0) {
+		glBindTexture(GL_TEXTURE_2D, characterTexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE, &buffer->at(0));
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
 
-	// Due to the way that OpenGL seems to flip the texture, the shader needs to flip it back
-	// and show the texture's opposite side. Or the renderer could just send normal data.
-	// GL_CULL_FACE needs to be disabled if one uses the first option.
-	glDisable(GL_CULL_FACE);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
+		// This sets up positioning data.
+		int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
+		float topLeftX = (float) (-1 + ((float) output->getX() / (windowWidth / 2))),
+			topLeftY = (float) (-1 + ((float) output->getY() / (windowHeight / 2))),
+			bottomRightX = (-1 + ((float) (output->getX() + output->getWidth()) / (windowWidth / 2))),
+			bottomRightY = (float) (-1 + ((float) (output->getY() + output->getHeight()) / (windowHeight / 2)));
 
-	// This sets up positioning data.
-	int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
-	float topLeftX = (float) (-1 + ((float) output->getX() / (windowWidth / 2))),
-		topLeftY = (float) (-1 + ((float) output->getY() / (windowHeight / 2))),
-		bottomRightX = (-1 + ((float) (output->getX() + output->getWidth()) / (windowWidth / 2))),
-		bottomRightY = (float) (-1 + ((float) (output->getY() + output->getHeight()) / (windowHeight / 2)));
+		GLfloat vertexBufferData[] = {
+			topLeftX,  bottomRightY, 0.0f,
+			topLeftX, topLeftY, 0.0f,
+			bottomRightX, topLeftY, 0.0f,
+			topLeftX,  bottomRightY, 0.0f,
+			bottomRightX, topLeftY, 0.0f,
+			bottomRightX,  bottomRightY, 0.0f
+		};
 
-	GLfloat vertexBufferData[] = {
-		topLeftX,  bottomRightY, 0.0f,
-		topLeftX, topLeftY, 0.0f,
-		bottomRightX, topLeftY, 0.0f,
-		topLeftX,  bottomRightY, 0.0f,
-		bottomRightX, topLeftY, 0.0f,
-		bottomRightX,  bottomRightY, 0.0f
-	};
+		int textureWidth = output->getWidth(), textureHeight = output->getHeight();
 
-	int textureWidth = output->getWidth(), textureHeight = output->getHeight();
+		// This calls some OpenGL functions necessary before rendering.
+		if (framebuffer->getMultisampling() > 0) {
+			glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
+		} else {
+			glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getFramebuffer());
+		}
+		glViewport(0, 0, windowWidth, windowHeight);
+		glUseProgram(textToBufferProgramID);
 
-	// This calls some OpenGL functions necessary before rendering.
-	if (framebuffer->getMultisampling() > 0) {
-		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
-	} else {
-		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getFramebuffer());
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, characterTexture);
+		glUniform1i(characterTextureID, 0);
+
+		// This sets up some variables necessary for the GLSL shader.
+		GLuint quadVertexBuffer;
+		glGenBuffers(1, &quadVertexBuffer);
+
+		glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData), vertexBufferData, GL_DYNAMIC_DRAW);
+
+		glEnableVertexAttribArray(characterQuadVertexBufferID);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
+		glVertexAttribPointer(
+			characterQuadVertexBufferID,
+			3,
+			GL_FLOAT,
+			GL_FALSE,
+			0,
+			(void*) 0
+		);
+
+		GLfloat topLeftArray[] = {
+			1.0f + topLeftX, 1.0f + topLeftY
+		};
+
+		glUniform2fv(characterTopLeftCoordID, 1, &topLeftArray[0]);
+
+		GLfloat textureDimensionsArray[] = {
+			(float) textureWidth, (float) textureHeight
+		};
+
+		glUniform2fv(characterDimensionsID, 1, &textureDimensionsArray[0]);
+
+		GLfloat windowDimensionsArray[] = {
+			(float) windowWidth, (float) windowHeight
+		};
+
+		glUniform2fv(characterWindowDimensionsID, 1, &windowDimensionsArray[0]);
+
+		GLfloat colourArray[] = {
+			colour->getR(), colour->getG(), colour->getB(), colour->getA()
+		};
+
+		glUniform4fv(characterColourID, 1, &colourArray[0]);
+
+		// This renders the character and disables buffers afterwards.
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDisableVertexAttribArray(characterQuadVertexBufferID);
+		glDisableVertexAttribArray(characterTopLeftCoordID);
+		glDisableVertexAttribArray(characterDimensionsID);
+		glDisableVertexAttribArray(characterWindowDimensionsID);
+		glDisableVertexAttribArray(characterColourID);
+		glDeleteBuffers(1, &quadVertexBuffer);
 	}
-	glViewport(0, 0, windowWidth, windowHeight);
-	glUseProgram(textToBufferProgramID);
-
-	// This sets up some variables necessary for the GLSL shader.
-	GLuint quadVertexBuffer;
-	glGenBuffers(1, &quadVertexBuffer);
-
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, characterTexture);
-	glUniform1i(characterTextureID, 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData), vertexBufferData, GL_DYNAMIC_DRAW);
-
-	glEnableVertexAttribArray(characterQuadVertexBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, quadVertexBuffer);
-	glVertexAttribPointer(
-		characterQuadVertexBufferID,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*) 0
-	);
-
-	GLfloat topLeftArray[] = {
-		1.0f + topLeftX, 1.0f + topLeftY,
-		1.0f + topLeftX, 1.0f + topLeftY,
-		1.0f + topLeftX, 1.0f + topLeftY,
-		1.0f + topLeftX, 1.0f + topLeftY,
-		1.0f + topLeftX, 1.0f + topLeftY,
-		1.0f + topLeftX, 1.0f + topLeftY
-	};
-
-	GLuint topLeftBuffer;
-	glGenBuffers(1, &topLeftBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, topLeftBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(topLeftArray), topLeftArray, GL_DYNAMIC_DRAW);
-
-	glEnableVertexAttribArray(characterTopLeftBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, topLeftBuffer);
-	glVertexAttribPointer(
-		characterTopLeftBufferID,
-		2,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*) 0
-	);
-
-	GLfloat widthAndHeightArray[] = {
-		(float) output->getWidth(), (float) output->getHeight(),
-		(float) output->getWidth(), (float) output->getHeight(),
-		(float) output->getWidth(), (float) output->getHeight(),
-		(float) output->getWidth(), (float) output->getHeight(),
-		(float) output->getWidth(), (float) output->getHeight(),
-		(float) output->getWidth(), (float) output->getHeight()
-	};
-
-	GLuint widthAndHeightBuffer;
-	glGenBuffers(1, &widthAndHeightBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, widthAndHeightBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(widthAndHeightArray), widthAndHeightArray, GL_DYNAMIC_DRAW);
-
-	glEnableVertexAttribArray(characterWidthAndHeightBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, widthAndHeightBuffer);
-	glVertexAttribPointer(
-		characterWidthAndHeightBufferID,
-		2,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*) 0
-	);
-
-	GLfloat textureDimensionsArray[] = {
-		(float) textureWidth, (float) textureHeight,
-		(float) textureWidth, (float) textureHeight,
-		(float) textureWidth, (float) textureHeight,
-		(float) textureWidth, (float) textureHeight,
-		(float) textureWidth, (float) textureHeight,
-		(float) textureWidth, (float) textureHeight
-	};
-
-	GLuint textureDimensionsBuffer;
-	glGenBuffers(1, &textureDimensionsBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, textureDimensionsBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textureDimensionsArray), textureDimensionsArray, GL_DYNAMIC_DRAW);
-
-	glEnableVertexAttribArray(characterDimensionsBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, textureDimensionsBuffer);
-	glVertexAttribPointer(
-		characterDimensionsBufferID,
-		2,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*) 0
-	);
-
-	GLfloat windowDimensionsArray[] = {
-		(float) windowWidth, (float) windowHeight,
-		(float) windowWidth, (float) windowHeight,
-		(float) windowWidth, (float) windowHeight,
-		(float) windowWidth, (float) windowHeight,
-		(float) windowWidth, (float) windowHeight,
-		(float) windowWidth, (float) windowHeight
-	};
-
-	GLuint windowDimensionsBuffer;
-	glGenBuffers(1, &windowDimensionsBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, windowDimensionsBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(windowDimensionsArray), windowDimensionsArray, GL_DYNAMIC_DRAW);
-
-	glEnableVertexAttribArray(characterWindowDimensionsBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, windowDimensionsBuffer);
-	glVertexAttribPointer(
-		characterWindowDimensionsBufferID,
-		2,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*) 0
-	);
-
-	GLfloat colourArray[] = {
-		colour->getR(), colour->getG(), colour->getB(), colour->getA(),
-		colour->getR(), colour->getG(), colour->getB(), colour->getA(),
-		colour->getR(), colour->getG(), colour->getB(), colour->getA(),
-		colour->getR(), colour->getG(), colour->getB(), colour->getA(),
-		colour->getR(), colour->getG(), colour->getB(), colour->getA(),
-		colour->getR(), colour->getG(), colour->getB(), colour->getA()
-	};
-
-	GLuint colourBuffer;
-	glGenBuffers(1, &colourBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, colourBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colourArray), colourArray, GL_DYNAMIC_DRAW);
-
-	glEnableVertexAttribArray(characterColourBufferID);
-	glBindBuffer(GL_ARRAY_BUFFER, colourBuffer);
-	glVertexAttribPointer(
-		characterColourBufferID,
-		4,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*) 0
-	);
-
-	// This renders the character and disables buffers afterwards.
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-	glDisableVertexAttribArray(characterQuadVertexBufferID);
-	glDisableVertexAttribArray(characterTopLeftBufferID);
-	glDisableVertexAttribArray(characterWidthAndHeightBufferID);
-	glDisableVertexAttribArray(characterDimensionsBufferID);
-	glDisableVertexAttribArray(characterWindowDimensionsBufferID);
-	glDisableVertexAttribArray(characterColourBufferID);
-	glDeleteBuffers(1, &quadVertexBuffer);
-	glDeleteBuffers(1, &topLeftBuffer);
-	glDeleteBuffers(1, &widthAndHeightBuffer);
-	glDeleteBuffers(1, &textureDimensionsBuffer);
-	glDeleteBuffers(1, &windowDimensionsBuffer);
-	glDeleteBuffers(1, &colourBuffer);
 }
 
 // This function is used to draw a quad (for testing purposes).

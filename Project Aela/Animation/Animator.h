@@ -28,11 +28,11 @@ class Animator {
 
 		// These are getters and setters.
 		void setTimeManager(TimeManager* timeManager);
-		TimeManager* getTimeManager();
 		void addKeyFrame3DList(KeyFrame3DList* keyFrameList);
 		std::vector<KeyFrame3DList>* get3DKeyFrames();
 		void addKeyFrame2DList(KeyFrame2DList* keyFrameList);
 		std::vector<KeyFrame2DList>* get2DKeyFrames();
+		int delete3DListsByTag(std::string tag), delete2DListsByTag(std::string tag), deleteListsByTag(std::string tag);
 
 	private:
 		// These are the Aela objects that this class uses.

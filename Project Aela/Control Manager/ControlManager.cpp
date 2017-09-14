@@ -33,7 +33,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 	if (window->isFocused()) {
 		windowFocus = true;
 
-		float deltaTime = timeManager->getTimeBetweenFrames();
+		float deltaTime = (float) timeManager->getTimeBetweenFrames();
 
 		// This gets the cursor's position.
 		int xpos, ypos;
@@ -151,7 +151,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 
 void ControlManager::transform3DObject(Transformable3D* object, float speedModifier) {
 	if (window->isFocused()) {
-		float deltaTime = timeManager->getTimeBetweenFrames();
+		float deltaTime = (float) timeManager->getTimeBetweenFrames();
 
 		// This is for translation.
 		// This occurs when "LEFT" is pressed.

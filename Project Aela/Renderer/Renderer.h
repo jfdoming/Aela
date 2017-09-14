@@ -32,6 +32,7 @@
 #include "../3D/Models/ModelEntity.h"
 #include "../3D/Skybox/SkyboxEntity.h"
 #include "../2D/Texture/Image.h"
+#include "../Events/Listener.h"
 #include "../Events/KeyEvent.h"
 
 // These are some enums used by the Renderer.
@@ -51,6 +52,10 @@ namespace Aela {
 	class Renderer {
 		public:
 			Renderer() {
+				windowFocus = false;
+				speed = 0.000000015f;
+				superSpeed = 0.000000045f;
+				currentSpeed = speed;
 			}
 
 			Renderer(Window* windowToSet) {
@@ -70,6 +75,9 @@ namespace Aela {
 			// They MUST be called before performing their type of rendering.
 			void setup3D();
 			void setup2D();
+
+			// This clears the window to black and makes it shown.
+			void setupWindow();
 
 			// These functions bind the Renderer with other Aela classes. They must be called
 			// before rendering.
@@ -104,7 +112,7 @@ namespace Aela {
 			void clearSimple2DFramebuffer();
 
 			// These functions are related to 2D rendering.
-			void render2DImage(Image* image, Rect<int>* output, ColourRGBA* tint);
+			void render2DImage(Image* image, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint);
 			void renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour);
 			void renderRectangle(Rect<int>* output, ColourRGBA* colour);
 			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour);
@@ -171,8 +179,11 @@ namespace Aela {
 			// This stores the window's state.
 			bool windowFocus = false;
 
-			// Speed: 0.001f is 1 unit per tick.
-			float speed = 0.015f, superSpeed = 0.045f, currentSpeed = 0.0f, mouseSpeed = 0.005f;
+			// Speed: 0.000000001f is 1 unit per ns.
+			float speed, superSpeed, currentSpeed;
+			
+			// Mouse speed: the radians of rotation per pixel of mouse movement 
+			float mouseSpeed;
 
 			// These store movements.
 			bool forward = false, backward = false, left = false, right = false, up = false, down = false;

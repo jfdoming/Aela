@@ -6,6 +6,7 @@
 #include "Menus\Label.h"
 #include "Menus\ImageComponent.h"
 #include "Menus\Button.h"
+#include "..\Aela_Game.h"
 
 using namespace Aela;
 
@@ -55,10 +56,8 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	auto continueGameAction = [game](Engine* engine) {
 		Rect<unsigned int>* dimensions = engine->getWindow()->getWindowDimensions();
 		engine->getWindow()->setCursorPositionInWindow(dimensions->getWidth() / 2, dimensions->getHeight() / 2);
-		engine->getWindow()->hideCursor();
-		engine->getRenderer().getCamera()->setInUse(true);
 		engine->getSceneManager()->setCurrentScene(GAMEPLAY_SCENE);
-		game->continueGame();
+		game->performActionOnSceneSwitch(GAMEPLAY_SCENE);
 	};
 	auto optionsAction = [](Engine* engine) {
 		AelaErrorHandling::windowWarning("There's nothing to see here.");
@@ -92,13 +91,14 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	Rect<GLfloat> emitterDimensions(0, 0, 10, 10);
 	particleEmitter->setupDimensions(&emitterDimensions);
 	particleEmitter->setCamera(engine->getRenderer().getCamera());
-	particleEmitter->setStats(0.001f, 20, 0.001f, 2, 2);
+	particleEmitter->setStats(0.000000001f, 20, 0.000000001f, 2, 2);
 	particleEmitter->setPosition(5, 0, 5);
 	particleEmitter->setRotation(0, 3.4f, 0.7f);
 	particleEmitter->setTimeManager(engine->getTimeManager());
 
 	// This sets up the title screen scene.
 	Scene* mainMenuScene = new Scene();
+	mainMenuScene->setId(MAIN_MENU_SCENE);
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mainMenuScene->getMenu()->add(titleText);
 	mainMenuScene->getMenu()->add(ekkonGamesText);
@@ -124,6 +124,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	if (success) {
 		mainMenuScene->setMap(map);
 		gameplayScene->setMap(map);
+		game->setCurrentMap(map);
 	} else {
 		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/map.txt wasn't loaded properly or something.");
 	}
@@ -148,19 +149,19 @@ void setupScenes(Engine* engine, AelaGame* game) {
 		switch (i) {
 			case 0:
 				frame.setTint(&ColourRGBA(1, 1, 1, 0));
-				list.setTimeAfterPreviousKeyFrame(2500);
+				list.setTimeAfterPreviousKeyFrameInMillis(2500);
 				break;
 			case 1:
 				frame.setTint(&ColourRGBA(1, 1, 1, 1));
-				list.setTimeAfterPreviousKeyFrame(2800);
+				list.setTimeAfterPreviousKeyFrameInMillis(2800);
 				break;
 			case 2:
 				frame.setTint(&ColourRGBA(1, 1, 1, 1));
-				list.setTimeAfterPreviousKeyFrame(2500);
+				list.setTimeAfterPreviousKeyFrameInMillis(2500);
 				break;
 			case 3:
 				frame.setTint(&ColourRGBA(1, 1, 1, -0.3f));
-				list.setTimeAfterPreviousKeyFrame(2300);
+				list.setTimeAfterPreviousKeyFrameInMillis(2300);
 				break;
 		}
 		list.addKeyFrame(&frame);

@@ -16,6 +16,7 @@ namespace Aela {
 
 			static const int MOUSE_ENTERED_COMPONENT = 7;
 			static const int MOUSE_EXITED_COMPONENT = 8;
+			static const int MOUSE_WHEEL = 9;
 
 			virtual void expose(LuaManager& mgr);
 	};

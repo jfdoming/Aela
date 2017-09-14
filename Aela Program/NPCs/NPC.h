@@ -18,7 +18,11 @@ class NPC {
 
 		// These are getters and setters.
 		void setEntity(ModelEntity* entity);
+		ModelEntity* getEntity();
+		void storeEntityIDInMap(int ID);
+		int getEntityIDInMap();
 
 	private:
-		ModelEntity entity;
+		ModelEntity* entity;
+		int entityIDInMap;
 };

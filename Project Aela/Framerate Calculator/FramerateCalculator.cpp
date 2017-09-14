@@ -7,41 +7,41 @@
 
 #include "FramerateCalculator.h"
 
-void FramerateCalculator::calculate(clock_t currentTime, float timeBetweenFrames) {
+void FramerateCalculator::calculate(long long currentTime, long long timeBetweenFrames) {
 	// This does some simple math for framerate calculating.
-	if ((unsigned) (currentTime - timeOfLastFrameCheck) >= timeBetweenFrameChecks) {
+	if ((currentTime - timeOfLastFrameCheck) >= timeBetweenFrameChecks) {
 		if (trueFPS == -1 && timeBetweenFrames != 0) {
-			trueFPS = 1000.0f / timeBetweenFrames;
+			trueFPS = 1000000000.0 / timeBetweenFrames;
 			smoothedFPS = trueFPS;
 		} else if (timeBetweenFrames != 0) {
-			trueFPS = 1000.0f / timeBetweenFrames;
-			smoothedFPS = (smoothedFPS * fpsSmoothingAmount) + ((1000.0f / timeBetweenFrames) * (1.0f - fpsSmoothingAmount));
+			trueFPS = 1000000000.0 / timeBetweenFrames;
+			smoothedFPS = (smoothedFPS * fpsSmoothingAmount) + ((1000000000.0 / timeBetweenFrames) * (1.0 - fpsSmoothingAmount));
 			timeOfLastFrameCheck = currentTime;
 		} else {
 			// timeBetweenFrames = 0? Whoa, your computer is THAT fast? If you're really that rich, buy me a new PC!
 			trueFPS = 1000;
-			smoothedFPS = (smoothedFPS * fpsSmoothingAmount) + (1000.0f * (1.0f - fpsSmoothingAmount));
+			smoothedFPS = (smoothedFPS * fpsSmoothingAmount) + (1000.0 * (1.0 - fpsSmoothingAmount));
 			timeOfLastFrameCheck = currentTime;
 		}
 	}
 }
 
-float FramerateCalculator::getTrueFPS() {
+double FramerateCalculator::getTrueFPS() {
 	return trueFPS;
 }
 
-float FramerateCalculator::getSmoothedFPS() {
+double FramerateCalculator::getSmoothedFPS() {
 	return trueFPS;
 }
 
-float FramerateCalculator::getFPSSmoothingAmount() {
+double FramerateCalculator::getFPSSmoothingAmount() {
 	return fpsSmoothingAmount;
 }
 
-void FramerateCalculator::setFPSSmoothing(float fpsSmoothingAmount) {
+void FramerateCalculator::setFPSSmoothing(double fpsSmoothingAmount) {
 	this->fpsSmoothingAmount = fpsSmoothingAmount;
 }
 
-void FramerateCalculator::setTimeBetweenFrameChecks(unsigned int timeBetweenFrameChecks) {
+void FramerateCalculator::setTimeBetweenFrameChecks(long long timeBetweenFrameChecks) {
 	this->timeBetweenFrameChecks = timeBetweenFrameChecks;
 }

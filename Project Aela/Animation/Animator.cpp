@@ -26,7 +26,7 @@ void Animator::update() {
 			// This sets the transformations of all of the objects to their final transformations. It also runs their
 			// action.
 			for (KeyFrame3D keyFrame : *keyFrameVector) {
-				std::shared_ptr<Transformable3D> object = keyFrame.getObject();
+				Transformable3D* object = keyFrame.getObject();
 
 				if (keyFrame.getEndingAction() != nullptr) {
 					keyFrame.getEndingAction()();
@@ -34,17 +34,31 @@ void Animator::update() {
 
 				if (object != nullptr) {
 					// This finds the final scaling of the model.
-					object->setScaling(*keyFrame.getScaling());
+					if (keyFrame.isUsingScaling()) {
+						object->setScaling(*keyFrame.getScaling());
+					}
 
-					// This finds the matrix for the point rotation.
 					glm::mat4 pointRotationMatrix = glm::mat4(1);
-					glm::vec3* pointRotationRotation = keyFrame.getPointRotation()->getRotation();
-					pointRotationMatrix *= glm::eulerAngleYXZ(pointRotationRotation->y, pointRotationRotation->x, pointRotationRotation->z);
+					glm::vec3* pointRotationValue = nullptr;
+					if (keyFrame.isUsingPointRotation()) {
+						// This finds the matrix for the point rotation.
+						pointRotationValue = keyFrame.getPointRotation()->getRotation();
+						pointRotationMatrix *= glm::eulerAngleYXZ(pointRotationValue->y, pointRotationValue->x, pointRotationValue->z);
+					}
 
 					// This finds the final position and rotation values and applies them.
-					object->setPosition(*keyFrame.getTranslation() + glm::vec3(pointRotationMatrix
-						* glm::vec4(*keyFrame.getPointRotation()->getPoint() * glm::vec3(-1), 0)) + *keyFrame.getPointRotation()->getPoint());
-					object->setRotation(*keyFrame.getRotation() + *pointRotationRotation);
+					if (keyFrame.isUsingTranslation()) {
+						object->setPosition(*keyFrame.getTranslation() + glm::vec3(pointRotationMatrix
+							* glm::vec4(*keyFrame.getPointRotation()->getPoint() * glm::vec3(-1), 0)) + *keyFrame.getPointRotation()->getPoint());
+					}
+
+					if (keyFrame.isUsingPointRotation() && keyFrame.isUsingRotation()) {
+						object->setRotation(*keyFrame.getRotation() + *pointRotationValue);
+					} else if (keyFrame.isUsingRotation()) {
+						object->setRotation(*keyFrame.getRotation());
+					} else if (keyFrame.isUsingPointRotation()) {
+						object->setRotation(*pointRotationValue);
+					}
 				}
 			}
 			keyFrame3DLists.erase(keyFrame3DLists.begin());
@@ -62,7 +76,7 @@ void Animator::update() {
 		// This updates objects using the current key frame list.
 		for (unsigned int whichFrame = 0; whichFrame < keyFrameVector->size(); whichFrame++) {
 			KeyFrame3D* keyFrame = &keyFrameVector->at(whichFrame);
-			std::shared_ptr<Transformable3D> object = keyFrame->getObject();
+			Transformable3D* object = keyFrame->getObject();
 
 			if (object != nullptr) {
 				// This figures out a bunch of transformational values and finds the final scaling value to use.
@@ -70,30 +84,51 @@ void Animator::update() {
 				glm::vec3* originalPosition = &keyFrameList->getOriginalPositions()->at(whichFrame);
 				glm::vec3* originalRotation = &keyFrameList->getOriginalRotations()->at(whichFrame);
 				glm::vec3* originalScaling = &keyFrameList->getOriginalScalings()->at(whichFrame);
-				glm::vec3* finalTranslation = keyFrame->getTranslation();
-				glm::vec3 newPosition((((float)finalTranslation->x - originalPosition->x) / timing) * timeSinceLastKeyFrame3DList,
-					(((float)finalTranslation->y - originalPosition->y) / timing) * timeSinceLastKeyFrame3DList,
-					(((float)finalTranslation->z - originalPosition->z) / timing) * timeSinceLastKeyFrame3DList);
-				glm::vec3* finalRotation = keyFrame->getRotation();
-				glm::vec3 newRotation((((float)finalRotation->x - originalRotation->x) / timing) * timeSinceLastKeyFrame3DList,
-					(((float)finalRotation->y - originalRotation->y) / timing) * timeSinceLastKeyFrame3DList,
-					(((float)finalRotation->z - originalRotation->z) / timing) * timeSinceLastKeyFrame3DList);
-				glm::vec3* finalScaling = keyFrame->getScaling();
-				glm::vec3 newScaling(originalScaling->x + (((float)finalScaling->x - originalScaling->x) / timing) * timeSinceLastKeyFrame3DList,
-					originalScaling->y + (((float)finalScaling->y - originalScaling->y) / timing) * timeSinceLastKeyFrame3DList,
-					originalScaling->z + (((float)finalScaling->z - originalScaling->z) / timing) * timeSinceLastKeyFrame3DList);
-				object->setScaling(newScaling);
+				glm::vec3 newPosition, newRotation;
+				if (keyFrame->isUsingTranslation()) {
+					glm::vec3* finalTranslation = keyFrame->getTranslation();
+					newPosition = glm::vec3((((float)finalTranslation->x - originalPosition->x) / timing) * timeSinceLastKeyFrame3DList,
+						(((float)finalTranslation->y - originalPosition->y) / timing) * timeSinceLastKeyFrame3DList,
+						(((float)finalTranslation->z - originalPosition->z) / timing) * timeSinceLastKeyFrame3DList);
+				}
+				if (keyFrame->isUsingRotation()) {
+					glm::vec3* finalRotation = keyFrame->getRotation();
+					newRotation = glm::vec3((((float)finalRotation->x - originalRotation->x) / timing) * timeSinceLastKeyFrame3DList,
+						(((float)finalRotation->y - originalRotation->y) / timing) * timeSinceLastKeyFrame3DList,
+						(((float)finalRotation->z - originalRotation->z) / timing) * timeSinceLastKeyFrame3DList);
+				}
+				if (keyFrame->isUsingScaling()) {
+					glm::vec3* finalScaling = keyFrame->getScaling();
+					glm::vec3 newScaling(originalScaling->x + (((float)finalScaling->x - originalScaling->x) / timing) * timeSinceLastKeyFrame3DList,
+						originalScaling->y + (((float)finalScaling->y - originalScaling->y) / timing) * timeSinceLastKeyFrame3DList,
+						originalScaling->z + (((float)finalScaling->z - originalScaling->z) / timing) * timeSinceLastKeyFrame3DList);
+					object->setScaling(newScaling);
+				}
 
 				// This finds the matrix for the point rotation.
 				glm::mat4 pointRotationMatrix = glm::mat4(1);
 				glm::vec3* pointRotationRotation = keyFrame->getPointRotation()->getRotation();
-				pointRotationMatrix *= glm::eulerAngleYXZ(pointRotationRotation->y / timing * timeSinceLastKeyFrame3DList,
-					pointRotationRotation->x / timing * timeSinceLastKeyFrame3DList, pointRotationRotation->z / timing * timeSinceLastKeyFrame3DList);
+				if (keyFrame->isUsingPointRotation()) {
+					pointRotationMatrix *= glm::eulerAngleYXZ(pointRotationRotation->y / timing * timeSinceLastKeyFrame3DList,
+						pointRotationRotation->x / timing * timeSinceLastKeyFrame3DList, pointRotationRotation->z / timing * timeSinceLastKeyFrame3DList);
+				}
 
-				// This finds the final position and rotation values and applies them.
-				object->setPosition(*originalPosition + newPosition + glm::vec3(pointRotationMatrix
-					* glm::vec4(*keyFrame->getPointRotation()->getPoint() * glm::vec3(-1), 0)) + *keyFrame->getPointRotation()->getPoint());
-				object->setRotation(*originalRotation + newRotation + *pointRotationRotation * glm::vec3((float)timeSinceLastKeyFrame3DList / timing));
+				// This finds the final position values and applies them.
+				if (keyFrame->isUsingTranslation() && keyFrame->isUsingPointRotation()) {
+					object->setPosition(*originalPosition + newPosition + glm::vec3(pointRotationMatrix
+						* glm::vec4(*keyFrame->getPointRotation()->getPoint() * glm::vec3(-1), 0)) + *keyFrame->getPointRotation()->getPoint());
+				} else if (keyFrame->isUsingTranslation()) {
+					object->setPosition(*originalPosition + newPosition);
+				}
+
+				// This finds the final rotation values and applies them.
+				if (keyFrame->isUsingRotation() && keyFrame->isUsingPointRotation()) {
+					object->setRotation(*originalRotation + newRotation + *pointRotationRotation * glm::vec3((float) timeSinceLastKeyFrame3DList / timing));
+				} else if (keyFrame->isUsingRotation()) {
+					object->setRotation(*originalRotation + newRotation);
+				} else if (keyFrame->isUsingPointRotation()) {
+					object->setRotation(*pointRotationRotation * glm::vec3((float) timeSinceLastKeyFrame3DList / timing));
+				}
 			}
 		}
 	}
@@ -158,10 +193,6 @@ void Animator::setTimeManager(TimeManager* timeManager) {
 	this->timeManager = timeManager;
 }
 
-TimeManager* Animator::getTimeManager() {
-	return timeManager;
-}
-
 void Animator::addKeyFrame3DList(KeyFrame3DList* keyFrameList) {
 	if (keyFrame3DLists.size() == 0) {
 		keyFrameList->storeOriginalTransformations();
@@ -182,4 +213,41 @@ void Animator::addKeyFrame2DList(KeyFrame2DList* keyFrameList) {
 
 std::vector<KeyFrame2DList>* Animator::get2DKeyFrames() {
 	return &keyFrame2DLists;
+}
+
+int Animator::delete3DListsByTag(std::string tag) {
+	int counter = 0;
+	for (unsigned int i = 0; i < keyFrame3DLists.size(); i++) {
+		if (keyFrame3DLists[i].getTag() == tag) {
+			counter++;
+			if (i == 0) {
+				keyFrame3DLists[i].setTimeAfterPreviousKeyFrameInMillis(0);
+			} else {
+				keyFrame3DLists.erase(keyFrame3DLists.begin() + i);
+			}
+		}
+	}
+	return counter;
+}
+
+int Animator::delete2DListsByTag(std::string tag) {
+	int counter = 0;
+	for (unsigned int i = 0; i < keyFrame2DLists.size(); i++) {
+		if (keyFrame2DLists[i].getTag() == tag) {
+			counter++;
+			if (i == 0) {
+				keyFrame2DLists[i].setTimeAfterPreviousKeyFrameInMillis(0);
+			} else {
+				keyFrame2DLists.erase(keyFrame2DLists.begin() + i);
+			}
+		}
+	}
+	return counter;
+}
+
+int Animator::deleteListsByTag(std::string tag) {
+	int counter = 0;
+	counter += delete3DListsByTag(tag);
+	counter += delete2DListsByTag(tag);
+	return counter;
 }

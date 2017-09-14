@@ -25,8 +25,22 @@ void AelaGame::loadScenes() {
 	setupScenes(engine, this);
 }
 
-void AelaGame::continueGame() {
-	engine->getRenderer().getCamera()->setRotation(0, 0, 0);
+void AelaGame::performActionOnSceneSwitch(int sceneID) {
+	switch (sceneID) {
+		case GAMEPLAY_SCENE:
+			// First person camera:
+			/*engine->getWindow()->hideCursor();
+			camera->setInUse(true);
+			camera->setForceCursorToMiddle(true);
+			camera->setUseControls(true);
+			engine->getRenderer()->getCamera()->setRotation(0, 0, 0);*/
+			gameplayManager.setup();
+			break;
+	}
+}
+
+void AelaGame::setCurrentMap(Map3D* map) {
+	gameplayManager.setCurrentMap(map);
 }
 
 void AelaGame::setup() {
@@ -47,6 +61,17 @@ void AelaGame::setup() {
 
 void AelaGame::update() {
 	gameplayManager.update();
+
+	/*ModelEntity* model;
+	Map3D* map;
+	if (!resourceManager->obtain<Map3D>("res/maps/map.txt", map)) {
+		std::cout << "WTF.\n";
+	} else {
+		model = map->getModel(0);
+		model->generateBoundingBox();
+		std::cout << model->getBoundingBox()->getVerticesAsString() << "\n";
+	}*/
+
 }
 
 void AelaGame::cleanup() {

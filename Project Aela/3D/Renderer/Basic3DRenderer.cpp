@@ -7,6 +7,7 @@
 */
 
 #include "Basic3DRenderer.h"
+#include "../../Utilities/flut.h"
 #include <glm/gtx/component_wise.hpp>
 
 using namespace Aela;
@@ -280,8 +281,8 @@ void Aela::Basic3DRenderer::renderParticles(ParticleEmitter* particleEmitter, Ca
 	glm::vec3 actualCameraRotation = glm::vec3(camera->getRotation()->y, camera->getRotation()->x, camera->getRotation()->z);
 	glm::vec3 differenceA = actualCameraRotation - *particleEmitter->getRotation();
 	glm::vec3 differenceB = *particleEmitter->getRotation() - actualCameraRotation;
-	camera->forceValuesWithinRange(&differenceA, 0, glm::pi<float>() * 2);
-	camera->forceValuesWithinRange(&differenceB, 0, glm::pi<float>() * 2);
+	forceValuesWithinRange(&differenceA, 0, glm::pi<float>() * 2);
+	forceValuesWithinRange(&differenceB, 0, glm::pi<float>() * 2);
 	glm::vec3 difference = glm::vec3(glm::min(differenceA.x, differenceB.x), glm::min(differenceA.y, differenceB.y),
 		glm::min(differenceA.z, differenceB.z));
 	float angle = glm::compMax(difference);

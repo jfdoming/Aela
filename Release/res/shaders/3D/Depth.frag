@@ -5,7 +5,7 @@
  * Description: Project Aela's depth fragment shader.
 */
 
-#version 330 core
+#version 430 core
 
 // This is the fragment position, which is obtained from the geometry shader.
 in vec4 fragmentPosition;

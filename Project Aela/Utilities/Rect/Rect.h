@@ -6,6 +6,7 @@
 */
 
 #pragma once
+#include "../strut.h"
 
 template <class T> class Rect {
 	public:
@@ -44,6 +45,11 @@ template <class T> class Rect {
 			height = setHeight;
 		}
 
+		void setWidthHeight(T width, T height) {
+			this->width = width;
+			this->height = height;
+		}
+
 		void getValues(T* setX, T* setY, T* setWidth, T* setHeight) {
 			*setX = xPosition;
 			*setY = yPosition;
@@ -77,6 +83,16 @@ template <class T> class Rect {
 		bool contains(T x, T y) {
 			return x >= xPosition && x < xPosition + width && y >= yPosition
 				&& y < yPosition + height;
+		}
+
+		// This returns a string with all of the properties of the transformable.
+		virtual std::string getPropertiesAsString(int numberOfTrailingZeroes) {
+			std::string s = "";
+			s += "Position: " + toStringWithATrailingZero((float) xPosition) + " " + toStringWithATrailingZero((float) yPosition)
+				+ ", ";
+			s += "Width: " + toStringWithATrailingZero((float) width) + ", ";
+			s += "Height: " + toStringWithATrailingZero((float) height);
+			return s;
 		}
 
 	protected:

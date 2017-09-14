@@ -11,6 +11,7 @@
 
 #include "Transformable3D.h"
 #include "../../Utilities/strut.h"
+#include "../../Utilities/flut.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -39,6 +40,7 @@ void Transformable3D::setRotation(float setX, float setY, float setZ) {
 
 void Transformable3D::setRotation(glm::vec3 setRotation) {
 	rotation = setRotation;
+	forceValuesWithinRange(&rotation, 0, glm::pi<float>() * 2);
 }
 
 glm::vec3* Transformable3D::getRotation() {
@@ -75,7 +77,7 @@ std::string Transformable3D::getPropertiesAsString(int numberOfTrailingZeroes) {
 		+ " " + toStringWithATrailingZero(position.z) + ", ";
 	s += "Rotation: " + toStringWithATrailingZero(rotation.x) + " " + toStringWithATrailingZero(rotation.y)
 		+ " " + toStringWithATrailingZero(rotation.z) + ", ";
-	s += "Scaling: " + toStringWithATrailingZero(scaling.x) + toStringWithATrailingZero(scaling.y)
+	s += "Scaling: " + toStringWithATrailingZero(scaling.x) + " " + toStringWithATrailingZero(scaling.y)
 		+ " " + toStringWithATrailingZero(scaling.z);
 	return s;
 }
@@ -180,32 +182,6 @@ void Transformable3D::scaleUp(glm::vec3 scaling) {
 
 void Transformable3D::scaleUp(float x, float y, float z) {
 	scaleUp(glm::vec3(x, y, z));
-}
-
-void Transformable3D::forceValuesWithinRange(glm::vec3* vec3, float minimum, float maximum) {
-	if (vec3->x < minimum) {
-		vec3->x += (maximum - minimum) * ceil(abs((minimum - vec3->x) / (maximum - minimum)));
-	}
-
-	if (vec3->x > maximum) {
-		vec3->x -= (maximum - minimum) * ceil(abs((maximum - vec3->x) / (maximum - minimum)));
-	}
-
-	if (vec3->y < minimum) {
-		vec3->y += (maximum - minimum) * ceil(abs((minimum - vec3->y) / (maximum - minimum)));
-	}
-
-	if (vec3->y > maximum) {
-		vec3->y -= (maximum - minimum) * ceil(abs((maximum - vec3->y) / (maximum - minimum)));
-	}
-
-	if (vec3->z < minimum) {
-		vec3->z += (maximum - minimum) * ceil(abs((minimum - vec3->z) / (maximum - minimum)));
-	}
-
-	if (vec3->z > maximum) {
-		vec3->z -= (maximum - minimum) * ceil(abs((maximum - vec3->z) / (maximum - minimum)));
-	}
 }
 
 void Transformable3D::cloneTransformable(Transformable3D* transformable) {

@@ -62,6 +62,9 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 					entityID = map->addSkybox(&SkyboxEntity());
 				}
 			} else if (character == '>') {
+				if (entityType == EntityType::MODEL) {
+					map->getModel(entityID)->generateBoundingBox();
+				}
 				entityType = EntityType::GENERIC;
 			} else if (character == '/' && line.at(1) == '/') {
 				// This is a comment. Stay calm and move to the next line.

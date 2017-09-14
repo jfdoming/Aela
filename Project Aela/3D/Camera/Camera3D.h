@@ -37,6 +37,7 @@ class Camera3D : public Transformable3D {
 		// These functions are mainly used by the renderer to update the camera.
 		void calculateCartesionalDirection(), calculateRightVector(), calculateUpVector();
 		glm::vec3* getCartesionalDirection(), *getRightVector(), *getUpVector();
+		glm::vec3 getPointInFrontOfCamera(float distanceFromCamera);
 
 	private:
 		// These are the camera's matrices.

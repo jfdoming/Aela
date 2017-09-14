@@ -11,11 +11,11 @@ KeyFrameType KeyFrame3D::getType() {
 	return KeyFrameType::THREE_DIMENSIONAL;
 }
 
-void KeyFrame3D::setObject(std::shared_ptr<Transformable3D> object) {
+void KeyFrame3D::setObject(Transformable3D* object) {
 	this->object = object;
 }
 
-std::shared_ptr<Transformable3D> KeyFrame3D::getObject() {
+Transformable3D* KeyFrame3D::getObject() {
 	return object;
 }
 
@@ -41,6 +41,38 @@ void KeyFrame3D::setPointRotation(PointRotation3D* pointRotation) {
 
 PointRotation3D* KeyFrame3D::getPointRotation() {
 	return &pointRotation;
+}
+
+void KeyFrame3D::setUseTranslation(bool use) {
+	useTranslation = use;
+}
+
+void KeyFrame3D::setUseRotation(bool use) {
+	useRotation = use;
+}
+
+void KeyFrame3D::setUsePointRotation(bool use) {
+	usePointRotation = use;
+}
+
+void KeyFrame3D::setUseScaling(bool use) {
+	useScaling = use;
+}
+
+bool KeyFrame3D::isUsingTranslation() {
+	return useTranslation;
+}
+
+bool KeyFrame3D::isUsingRotation() {
+	return useRotation;
+}
+
+bool KeyFrame3D::isUsingPointRotation() {
+	return usePointRotation;
+}
+
+bool KeyFrame3D::isUsingScaling() {
+	return useScaling;
 }
 
 void KeyFrame3D::setScaling(glm::vec3* scaling) {

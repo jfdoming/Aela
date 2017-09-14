@@ -28,6 +28,7 @@ template <class T> class Cuboid : public Rect<T> {
 			width = setWidth;
 			height = setHeight;
 			depth = setDepth;
+			std::cout << this->width << " is the width according to Cuboid.\n";
 		}
 
 		void setZ(T setZ) {
@@ -52,6 +53,12 @@ template <class T> class Cuboid : public Rect<T> {
 			return depth;
 		}
 
+		void setWidthHeightDepth(T width, T height, T depth) {
+			this->width = width;
+			this->height = height;
+			this->depth = depth;
+		}
+
 		void getValues(T* setX, T* setY, T* setZ, T* setWidth, T* setHeight, T* setDepth) {
 			*setX = xPosition;
 			*setY = yPosition;
@@ -70,6 +77,17 @@ template <class T> class Cuboid : public Rect<T> {
 			depth = setDepth;
 		}
 
-	private:
+		// This returns a string with all of the properties of the transformable.
+		std::string getPropertiesAsString() {
+			std::string s = "";
+			s += "Position: " + toStringWithATrailingZero((float) xPosition) + " " + toStringWithATrailingZero((float) yPosition)
+				+ " " + toStringWithATrailingZero((float) zPosition) + ", ";
+			s += "Width: " + toStringWithATrailingZero((float) width) + ", ";
+			s += "Height: " + toStringWithATrailingZero((float) height) + ", ";
+			s += "Depth: " + toStringWithATrailingZero((float) depth);
+			return s;
+		}
+
+	protected:
 		T zPosition, depth;
 };

@@ -26,7 +26,7 @@
 #include "../../Entities/Entity.h"
 #include "../Transformable/Transformable3D.h"
 #include "Model.h"
-#include "../../Utilities/Rect/Cuboid.h"
+#include "../Bounding Box/BoundingBox3D.h"
 
 namespace Aela {
 	class ModelEntity : public Entity, public Transformable3D {
@@ -46,12 +46,17 @@ namespace Aela {
 			// These are the getters and setters.
 			Model* getModel();
 			void setModel(Model* model);
-			Cuboid<double>* getBoundingBox();
+			BoundingBox3D* getBoundingBox();
 			void generateBoundingBox();
 			EntityType getEntityType();
 
 		private:
+			// The model stores all of the vertex, UV and normal data of the ModelEntity.
 			Model* model;
-			Cuboid<double> boundingBox;
+
+			// The bounding box is the smallest box that the model fits inside of and is used for physics. The position of the center
+			// of the bounding box is what the bounding box's position represents. The width, height and depth represent how far the
+			// bounding box reaches from its center.
+			BoundingBox3D boundingBox;
 	};
 }

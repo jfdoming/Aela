@@ -6,13 +6,13 @@
                 as well as scaling.
 */
 
-#version 330 core
+#version 430 core
 
 // This is the output data.
 layout(location = 0) out vec4 colour;
 
 // This is the texture to be used.
-uniform sampler2D quadTexture;
+layout(location = 2) uniform sampler2D quadTexture;
 
 // This is the input data.
 in vec2 UV;

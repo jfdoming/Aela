@@ -57,6 +57,7 @@ namespace Aela {
 			void setCursorPositionInWindow(int x, int y);
 			void setCursorPositionGlobally(int x, int y);
 			void setFocus(bool focus);
+			void show();
 			std::string getWindowName();
 			void quit();
 			bool quitCheck();

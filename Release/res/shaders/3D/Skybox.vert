@@ -5,7 +5,7 @@
  * Description: Project Aela's skybox vertex shader.
 */
 
-#version 330 core
+#version 430 core
 
 // This is the input data. It's self explanatory.
 layout (location = 0) in vec3 vertexPosition;

@@ -85,7 +85,8 @@ int Aela::Engine::runningLoop() {
 }
 
 int Aela::Engine::setupWindow(unsigned int width, unsigned int height, unsigned int windowXPosition, unsigned int windowYPosition) {
-	window.addProperty(WindowFlag::AELA_WINDOW_SHOWN);
+	// Note: the renderer will render black and then set the window to be shown rather than hidden once the window is bound with it.
+	window.addProperty(WindowFlag::AELA_WINDOW_HIDDEN);
 	window.addProperty(WindowFlag::AELA_WINDOW_OPENGL);
 	bool windowCreationSuccess = window.createWindow(width, height, windowXPosition, windowYPosition, "Project Aela");
 
@@ -116,13 +117,14 @@ int Aela::Engine::setupRenderer() {
 	renderer.setFontManager(&fontManager);
 	renderer.setup3D();
 	renderer.setup2D();
+	renderer.setupWindow();
 
 	// This activates features of the renderer. These can be changed at any point during the runtime of the application.
 	renderer.activateFeature(RendererFeature::SHADOWS);
 	renderer.activateFeature(RendererFeature::BILLBOARDS);
 	renderer.activateFeature(RendererFeature::SKYBOX);
-	renderer.activateFeature(RendererFeature::MSAA_3D_X4);
-	renderer.activateFeature(RendererFeature::MSAA_2D_X4);
+	renderer.activateFeature(RendererFeature::MSAA_3D_X0);
+	renderer.activateFeature(RendererFeature::MSAA_2D_X0);
 	return 0;
 }
 
@@ -259,4 +261,8 @@ FramerateCalculator* Engine::getFramerateCalculator() {
 
 Map3DExporter* Aela::Engine::getMapExporter() {
 	return &mapExporter;
+}
+
+PhysicsManager* Aela::Engine::getPhysicsManager() {
+	return &physicsManager;
 }

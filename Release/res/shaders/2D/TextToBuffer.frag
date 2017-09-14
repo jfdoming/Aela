@@ -5,7 +5,7 @@
  * Description: Project Aela's Text Renderer, which renders text.
 */
 
-#version 330 core
+#version 430 core
 
 // This is the output data.
 layout(location = 0) out vec4 colour;

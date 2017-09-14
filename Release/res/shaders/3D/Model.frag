@@ -5,7 +5,7 @@
  * Description: Project Aela's Depth Texture Renderer, which is used for shadows.
 */
 
-#version 330 core
+#version 430 core
 
 // This is the input data.
 in vec2 UV;
