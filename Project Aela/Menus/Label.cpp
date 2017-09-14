@@ -25,13 +25,13 @@ void Label::setup() {
 void Label::updateComponent() {
 }
 
-void Label::renderComponent(Renderer* renderer) {
-	renderer->renderText(text, font, &dimensions, &colour);
+void Label::renderComponent(Renderer& renderer) {
+	renderer.renderText(text, font, &dimensions, &colour);
 }
 
-void Label::render(Renderer* renderer, ColourRGBA* tint) {
+void Label::render(Renderer& renderer, ColourRGBA* tint) {
 	ColourRGBA newColour(colour.getR() * tint->getR(), colour.getG() * tint->getG(), colour.getB() * tint->getB(), colour.getA() * tint->getA());
-	renderer->renderText(text, font, &dimensions, &newColour);
+	renderer.renderText(text, font, &dimensions, &newColour);
 }
 
 void Label::setText(std::string text) {

@@ -16,8 +16,8 @@ RectComponent::~RectComponent() {
 void RectComponent::updateComponent() {
 }
 
-void RectComponent::renderComponent(Renderer* renderer) {
-	renderer->renderRectangle(&dimensions, &colour);
+void RectComponent::renderComponent(Renderer& renderer) {
+	renderer.renderRectangle(&dimensions, &colour);
 }
 
 void RectComponent::setColour(ColourRGBA* colour) {

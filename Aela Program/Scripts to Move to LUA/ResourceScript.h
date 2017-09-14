@@ -56,7 +56,7 @@ void loadMaterials(ResourceManager* resourceManager) {
 	}
 
 	if (resourceManager->loadGroup("materials") != Aela::ResourceManager::Status::OK) {
-		std::cerr << "Failed to load a resource from group \"materials\"!" << std::endl;
+		std::cerr << "Failed to load a resource from group \"materials\": " << resourceManager->getNewInvalidResourceKeys()[0] << "\n";
 	}
 }
 
@@ -121,9 +121,9 @@ void loadSkyboxes(ResourceManager* resourceManager) {
 	}
 }
 
-void loadStartupMap(ResourceManager* resourceManager, Renderer* renderer) {
+void loadStartupMap(ResourceManager* resourceManager, Renderer& renderer) {
 	Map3DLoader mapLoader;
-	mapLoader.bindRenderer(renderer);
+	mapLoader.bindRenderer(&renderer);
 	resourceManager->bindLoader(&mapLoader);
 	resourceManager->bindGroup("maps");
 	resourceManager->addToGroup("res/maps/map.txt", false);

@@ -16,7 +16,6 @@ class AelaGame {
 	public:
 		AelaGame(Engine* engine) : engine(engine), gameplayManager(engine) {
 			window = engine->getWindow();
-			renderer = engine->getRenderer();
 			eventHandler = engine->getEventHandler();
 			timeManager = engine->getTimeManager();
 			luaManager = engine->getLuaManager();
@@ -26,7 +25,7 @@ class AelaGame {
 			animator = engine->getAnimator();
 			userEnvironment = engine->getUserEnvironment();
 			framerateCalculator = engine->getFramerateCalculator();
-			camera = engine->getRenderer()->getCamera();
+			camera = engine->getRenderer().getCamera();
 		}
 
 		void setup();
@@ -39,7 +38,6 @@ class AelaGame {
 		// These are Aela Engine objects.
 		Engine* engine;
 		Window* window;
-		Renderer* renderer;
 		EventHandler* eventHandler;
 		TimeManager* timeManager;
 		LuaManager* luaManager;

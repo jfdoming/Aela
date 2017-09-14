@@ -11,7 +11,7 @@
 #include "../../Events/EventConstants.h"
 
 void KeyedAnimator::onEvent(Event* event) {
-	KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
+	KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
 
 	if (window->isFocused()) {
 		if (keyEvent->getKeycode() == 225) {

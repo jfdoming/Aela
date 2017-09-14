@@ -11,7 +11,7 @@
 
 using namespace Aela;
 
-class AelaGame : public Listener {
+class AelaGame {
 	public:
 		AelaGame(Engine* engine);
 

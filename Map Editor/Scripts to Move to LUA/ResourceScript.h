@@ -121,9 +121,9 @@ void loadSkyboxes(ResourceManager* resourceManager) {
 	}
 }
 
-void loadStartupMap(ResourceManager* resourceManager, Renderer* renderer) {
+void loadStartupMap(ResourceManager* resourceManager, Renderer& renderer) {
 	Map3DLoader mapLoader;
-	mapLoader.bindRenderer(renderer);
+	mapLoader.bindRenderer(&renderer);
 	resourceManager->bindLoader(&mapLoader);
 	resourceManager->bindGroup("maps");
 	resourceManager->addToGroup("res/maps/map.txt", false);

@@ -11,10 +11,12 @@
 #include "Component.h"
 #include "ImageComponent.h"
 #include "Label.h"
+
 #include "../Events/EventHandler.h"
+#include "../Events/MouseEvent.h"
 
 namespace Aela {
-	class Button : public ImageComponent, public Listener {
+	class Button : public ImageComponent {
 		public:
 			Button();
 			Button(Texture* texture);
@@ -23,25 +25,23 @@ namespace Aela {
 			virtual ~Button();
 
 			// These are getters and setters.
-			void setupOnClick(std::function<void()> function, EventHandler* eventHandler);
-			void setText(Label* text, FontManager* fontManager);
-			void setText(std::shared_ptr<Label> text, FontManager* fontManager);
+			void setupOnClick(std::function<void()> function);
+			void setText(Label* text);
+			void setText(std::shared_ptr<Label> text);
 			std::string getText();
 			void setHoverTint(ColourRGBA* hoverTint);
 			void setClickTint(ColourRGBA* clickTint);
 
 			virtual void updateComponent();
-			virtual void renderComponent(Renderer* renderer);
+			virtual void renderComponent(Renderer& renderer);
 
-			void onEvent(Event* event);
+			virtual void onMousePressed(MouseEvent* event);
+			virtual void onMouseReleased(MouseEvent* event);
+			virtual void onMouseEntered(MouseEvent* event);
+			virtual void onMouseExited(MouseEvent* event);
 
 		private:
-			enum class State {
-				NORMAL, HOVER, ACTIVE
-			};
-
-			bool clickStarted = false;
-			State state = State::NORMAL;
+			bool clickStarted = false, active = false;
 
 			std::function<void()> onClick;
 			std::shared_ptr<Label> text = nullptr;

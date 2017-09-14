@@ -16,8 +16,17 @@ SceneManager::~SceneManager() {
 	}
 }
 
+int SceneManager::init(EventHandler& eventHandler) {
+	//eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(SceneManager::onEvent, this));
+	//eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(SceneManager::onEvent, this));
+	eventHandler.addListener(EventConstants::MOUSE_PRESSED, bindListener(SceneManager::handleMousePressed, this));
+	eventHandler.addListener(EventConstants::MOUSE_RELEASED, bindListener(SceneManager::handleMouseReleased, this));
+	eventHandler.addListener(EventConstants::MOUSE_MOVED, bindListener(SceneManager::handleMouseMoved, this));
+
+	return 0;
+}
+
 void SceneManager::registerScene(Scene* scene, unsigned int id) {
-	scene->setId(id);
 	scenes.emplace(id, scene);
 }
 
@@ -31,7 +40,7 @@ void Aela::SceneManager::update() {
 	}
 }
 
-void Aela::SceneManager::render(Renderer* renderer) {
+void Aela::SceneManager::render(Renderer& renderer) {
 	// render the current scene
 	if (currentScene != nullptr) {
 		currentScene->render(renderer);
@@ -44,11 +53,12 @@ void SceneManager::setCurrentScene(unsigned int id) {
 	}
 
 	currentScene = getScene(id);
+	currentSceneId = id;
 	sceneChangeRequested = true;
 }
 
 unsigned int SceneManager::getCurrentSceneId() {
-	return currentScene->getId();
+	return currentSceneId;
 }
 
 void SceneManager::setDisposingScenesOnDestroy(bool disposingScenesOnDestroy) {
@@ -84,5 +94,26 @@ void SceneManager::consumeSceneChangeEvent() {
 		}
 
 		sceneChangeRequested = false;
+	}
+}
+
+void SceneManager::handleMousePressed(Event* event) {
+	// send the event to the current scene
+	if (currentScene != nullptr) {
+		currentScene->handleMousePressed(event);
+	}
+}
+
+void SceneManager::handleMouseReleased(Event* event) {
+	// send the event to the current scene
+	if (currentScene != nullptr) {
+		currentScene->handleMouseReleased(event);
+	}
+}
+
+void SceneManager::handleMouseMoved(Event* event) {
+	// send the event to the current scene
+	if (currentScene != nullptr) {
+		currentScene->handleMouseMoved(event);
 	}
 }

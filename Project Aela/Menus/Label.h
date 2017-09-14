@@ -25,7 +25,7 @@ namespace Aela {
 			void setColour(ColourRGBA* colour);
 			ColourRGBA* getColour();
 
-			virtual void render(Renderer* renderer, ColourRGBA* tint);
+			virtual void render(Renderer& renderer, ColourRGBA* tint);
 		protected:
 			std::string text;
 			TextFont* font;
@@ -33,7 +33,7 @@ namespace Aela {
 
 			void setupWidthAndHeight();
 			virtual void updateComponent();
-			virtual void renderComponent(Renderer* renderer);
+			virtual void renderComponent(Renderer& renderer);
 		private:
 			void setup();
 	};

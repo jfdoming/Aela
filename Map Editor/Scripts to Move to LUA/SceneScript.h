@@ -55,7 +55,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	auto editMapAction = [](Engine* engine) {
 		engine->getSceneManager()->setCurrentScene(EDITOR_SCENE);
 		engine->getWindow()->hideCursor();
-		engine->getRenderer()->getCamera()->setInUse(true);
+		engine->getRenderer().getCamera()->setInUse(true);
 	};
 	auto helpMapAction = [](Engine* engine) {
 		// Lol, this is temporary until I feel like creating a seperate scene for this garbage.
@@ -77,24 +77,23 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	editMapButton->setDimensions(editMapButtonText->getDimensions());
 	editMapButton->setupOnClick(std::bind(editMapAction, engine), engine->getEventHandler());
 	editMapButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f));
-	editMapButton->setText(editMapButtonText, engine->getFontManager());
+	editMapButton->setText(editMapButtonText);
 	std::cout << editMapButtonText << " is a pointer.\n";
 
 	auto helpButton = std::make_shared<Button>();
 	helpButton->setDimensions(loadMapButtonText->getDimensions());
 	helpButton->setupOnClick(std::bind(helpMapAction, engine), engine->getEventHandler());
 	helpButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f + spacing));
-	helpButton->setText(loadMapButtonText, engine->getFontManager());
+	helpButton->setText(loadMapButtonText);
 
 	auto exitButton = std::make_shared<Button>();
 	exitButton->setDimensions(exitButtonText->getDimensions());
 	exitButton->setupOnClick(std::bind(exitAction, engine), engine->getEventHandler());
 	exitButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f + spacing * 2));
-	exitButton->setText(exitButtonText, engine->getFontManager());
+	exitButton->setText(exitButtonText);
 
 	// This sets up the title screen scene.
 	auto mainMenuScene = new Scene();
-	mainMenuScene->setId(MAIN_MENU_SCENE);
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mainMenuScene->getMenu()->add(mainMenuImage);
 	mainMenuScene->getMenu()->add(titleText);
@@ -127,7 +126,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This creates the map creation scene.
 	auto mapCreationScene = new Scene();
-	mapCreationScene->setId(EDITOR_SCENE);
 	mapCreationScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mapCreationScene->getMenu()->add(topBarImage);
 	mapCreationScene->getMenu()->add(entityTypeText);
@@ -230,38 +228,38 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	entityToolButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.1111),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	entityToolButton->setupOnClick(std::bind(goToEntityToolSceneAction, engine), engine->getEventHandler());
-	entityToolButton->setText(entityToolText, engine->getFontManager());
+	entityToolButton->setText(entityToolText);
 
 	skyboxesButton->setTexture(simpleButtonTexture);
 	skyboxesButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.2222),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	skyboxesButton->setupOnClick(std::bind(goToSkyboxSceneAction, engine), engine->getEventHandler());
-	skyboxesButton->setText(skyboxesText, engine->getFontManager());
+	skyboxesButton->setText(skyboxesText);
 
 	exportButton->setTexture(simpleButtonTexture);
 	exportButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.3333),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	exportButton->setupOnClick(std::bind(goToExportSceneAction, engine), engine->getEventHandler());
-	exportButton->setText(exportText, engine->getFontManager());
+	exportButton->setText(exportText);
 
 	optionsButton->setTexture(simpleButtonTexture);
 	optionsButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.4444),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	optionsButton->setupOnClick(std::bind(goToOptionsAction, engine), engine->getEventHandler());
-	optionsButton->setText(optionsText, engine->getFontManager());
+	optionsButton->setText(optionsText);
 
 	// This sets up buttons from the export scene.
 	exportRegularMapButton->setTexture(simpleButtonTexture);
 	exportRegularMapButton->setDimensions(exportToRegularMapText->getDimensions());
 	exportRegularMapButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.375), (int) (windowDimensions.getHeight() * 0.3333));
 	exportRegularMapButton->setupOnClick(std::bind(exportRegularMapAction, engine), engine->getEventHandler());
-	exportRegularMapButton->setText(exportToRegularMapText, engine->getFontManager());
+	exportRegularMapButton->setText(exportToRegularMapText);
 
 	exportReadableMapButton->setTexture(simpleButtonTexture);
 	exportReadableMapButton->setDimensions(exportToReadableMapText->getDimensions());
 	exportReadableMapButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.375), (int)(windowDimensions.getHeight() * 0.4444));
 	exportReadableMapButton->setupOnClick(std::bind(exportReadableMapAction, engine), engine->getEventHandler());
-	exportReadableMapButton->setText(exportToReadableMapText, engine->getFontManager());
+	exportReadableMapButton->setText(exportToReadableMapText);
 
 	// This sets up a rectangle that the pause menu scenes will use.
 	auto rightRect = std::make_shared<RectComponent>();
@@ -271,7 +269,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This sets up the scenes for the pause menu.
 	Scene* pauseEntityToolScene = new Scene();
-	pauseEntityToolScene->setId(PAUSE_ENTITY_TOOL_SCENE);
 	pauseEntityToolScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	pauseEntityToolScene->getMenu()->add(tintRect);
 	pauseEntityToolScene->getMenu()->add(entityToolButton);
@@ -282,7 +279,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	pauseEntityToolScene->getMenu()->add(entityToolTitleText);
 
 	Scene* pauseSkyboxScene = new Scene();
-	pauseSkyboxScene->setId(PAUSE_SKYBOX_SCENE);
 	pauseSkyboxScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	pauseSkyboxScene->getMenu()->add(tintRect);
 	pauseSkyboxScene->getMenu()->add(entityToolButton);
@@ -293,7 +289,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	pauseSkyboxScene->getMenu()->add(skyboxTitleText);
 
 	Scene* pauseExportScene = new Scene();
-	pauseExportScene->setId(PAUSE_EXPORT_SCENE);
 	pauseExportScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	pauseExportScene->getMenu()->add(tintRect);
 	pauseExportScene->getMenu()->add(entityToolButton);
@@ -306,7 +301,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	pauseExportScene->getMenu()->add(exportReadableMapButton);
 
 	Scene* pauseOptionsScene = new Scene();
-	pauseOptionsScene->setId(PAUSE_OPTIONS_SCENE);
 	pauseOptionsScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	pauseOptionsScene->getMenu()->add(tintRect);
 	pauseOptionsScene->getMenu()->add(entityToolButton);
@@ -342,10 +336,10 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 
 	// engine->getWindow()->hideCursor();
-	engine->getRenderer()->getCamera()->setUseControls(false);
+	engine->getRenderer().getCamera()->setUseControls(false);
 
 	// The renderer's camera must be bound to the KeyedAnimator for movement.
-	engine->getKeyedAnimator()->addTransformable(engine->getRenderer()->getCamera());
-	engine->getRenderer()->getCamera()->setPosition(0, 10, -10);
-	engine->getRenderer()->getCamera()->setRotation(0, glm::pi<float>() / -4, 0);
+	engine->getKeyedAnimator()->addTransformable(engine->getRenderer().getCamera());
+	engine->getRenderer().getCamera()->setPosition(0, 10, -10);
+	engine->getRenderer().getCamera()->setRotation(0, glm::pi<float>() / -4, 0);
 }

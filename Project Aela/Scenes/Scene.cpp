@@ -10,11 +10,11 @@ Scene::~Scene() {
 }
 
 void Scene::show() {
-	menu.setInUse(true);
+	menu.show();
 }
 
 void Scene::hide() {
-	menu.setInUse(false);
+	menu.hide();
 }
 
 void Scene::update() {
@@ -27,58 +27,50 @@ void Scene::update() {
 	}
 }
 
-void Scene::render(Renderer* renderer) {
-	renderer->startRenderingFrame();
+void Scene::render(Renderer& renderer) {
+	renderer.startRenderingFrame();
 	if (map != nullptr) {
-		renderer->bindLights(map->getLights());
-		renderer->startRendering3D();
+		renderer.bindLights(map->getLights());
+		renderer.startRendering3D();
 
 		for (auto& model : *map->getModels()) {
-			renderer->renderModelEntityShadows(&model.second);
+			renderer.renderModelEntityShadows(&model.second);
 		}
 
-		renderer->sendBoundLightDataToShader();
+		renderer.sendBoundLightDataToShader();
 
 		for (auto& model : *map->getModels()) {
-			renderer->renderModelEntity(&model.second);
+			renderer.renderModelEntity(&model.second);
 		}
 
-		renderer->renderSkybox(&(*map->getSkyboxes())[activeSkybox]);
+		renderer.renderSkybox(&(*map->getSkyboxes())[activeSkybox]);
 
 		for (ParticleEmitter* emitter : particleEmitters) {
-			renderer->renderParticles(emitter);
+			renderer.renderParticles(emitter);
 		}
 
 		for (auto billboard : *map->getBillboards()) {
-			renderer->renderBillboard(&billboard.second);
+			renderer.renderBillboard(&billboard.second);
 		}
 
-		renderer->endRendering3D();
+		renderer.endRendering3D();
 	}
 
 	menu.render(renderer);
 
-	renderer->endRenderingFrame();
+	renderer.endRenderingFrame();
 }
 
-void Scene::enableMenu(Rect<unsigned int>* renderDimensions, Renderer* renderer) {
+void Scene::enableMenu(Rect<unsigned int>* renderDimensions, Renderer& renderer) {
 	menu.init((Rect<int>*) renderDimensions, renderer);
 }
 
-void Scene::enableMenu(Rect<unsigned int>* renderDimensions, Renderer* renderer, int x, int y) {
+void Scene::enableMenu(Rect<unsigned int>* renderDimensions, Renderer& renderer, int x, int y) {
 	menu.init((Rect<int>*) renderDimensions, renderer, x, y);
 }
 
 Menu* Scene::getMenu() {
 	return &menu;
-}
-
-void Scene::setId(int id) {
-	this->id = id;
-}
-
-unsigned int Scene::getId() {
-	return id;
 }
 
 void Scene::setMap(Map3D* map) {
@@ -99,4 +91,43 @@ unsigned int Scene::getActiveSkybox() {
 
 void Scene::putParticleEmitter(ParticleEmitter* emitter) {
 	particleEmitters.push_back(emitter);
+}
+
+void Scene::handleMousePressed(Event* event) {
+	if (!menu.isInitialized()) {
+		return;
+	}
+
+	if (!menu.isVisible()) {
+		return;
+	}
+
+	// send the event to the menu
+	menu.handleMousePressed(event);
+}
+
+void Scene::handleMouseReleased(Event* event) {
+	if (!menu.isInitialized()) {
+		return;
+	}
+
+	if (!menu.isVisible()) {
+		return;
+	}
+
+	// send the event to the menu
+	menu.handleMouseReleased(event);
+}
+
+void Scene::handleMouseMoved(Event* event) {
+	if (!menu.isInitialized()) {
+		return;
+	}
+
+	if (!menu.isVisible()) {
+		return;
+	}
+
+	// send the event to the menu
+	menu.handleMouseMoved(event);
 }

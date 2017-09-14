@@ -20,7 +20,9 @@ namespace Aela {
 
 			void add(std::shared_ptr<Component> component);
 
-			virtual void setInUse(bool inUse);
+			virtual void onMousePressed(MouseEvent* event);
+			virtual void onMouseReleased(MouseEvent* event);
+			virtual void onMouseMoved(MouseEvent* event);
 		protected:
 			Container(int x, int y);
 
@@ -29,6 +31,6 @@ namespace Aela {
 			std::vector<std::shared_ptr<Component>> children;
 
 			virtual void updateComponent();
-			virtual void renderComponent(Renderer* renderer);
+			virtual void renderComponent(Renderer& renderer);
 	};
 }

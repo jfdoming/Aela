@@ -8,6 +8,10 @@
 
 #pragma once
 #include "Container.h"
+#include "../Events/Event.h"
+#include "../Events/EventConstants.h"
+#include "../Events/EventListenerList.h"
+#include "../Events/EventListener.h"
 #include "../2D/Simple 2D Framebuffer/Simple2DFramebuffer.h"
 #include "../Utilities\Rect\Rect.h"
 
@@ -17,14 +21,18 @@ namespace Aela {
 			Menu();
 			virtual ~Menu();
 
-			void init(Rect<int>* renderDimensions, Renderer* renderer);
-			void init(Rect<int>* renderDimensions, Renderer* renderer, int x, int y);
+			void init(Rect<int>* renderDimensions, Renderer& renderer);
+			void init(Rect<int>* renderDimensions, Renderer& renderer, int x, int y);
 
-			virtual void render(Renderer* renderer);
+			virtual void render(Renderer& renderer);
+
+			void show();
+			void hide();
 
 			bool isInitialized();
+			bool isVisible();
 		private:
-			bool initialized;
+			bool initialized = false, visible = false;
 			Simple2DFramebuffer buffer;
 	};
 }

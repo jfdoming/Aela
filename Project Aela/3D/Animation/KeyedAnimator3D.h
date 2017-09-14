@@ -13,12 +13,13 @@
 
 #include "../../Time Manager/TimeManager.h"
 #include "../../Window/Window.h"
-#include "../../Events/EventHandler.h"
+#include "../../Events/EventConstants.h"
+#include "../../Events/KeyEvent.h"
 #include "../Transformable/Transformable3D.h"
 
 using namespace Aela;
 
-class KeyedAnimator : public Listener {
+class KeyedAnimator {
 	public:
 		KeyedAnimator() {
 

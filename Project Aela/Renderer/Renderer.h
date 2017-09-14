@@ -32,7 +32,6 @@
 #include "../3D/Models/ModelEntity.h"
 #include "../3D/Skybox/SkyboxEntity.h"
 #include "../2D/Texture/Image.h"
-#include "../Events/Listener.h"
 #include "../Events/KeyEvent.h"
 
 // These are some enums used by the Renderer.
@@ -49,7 +48,7 @@ namespace Aela {
 		MSAA_2D_X0, MSAA_2D_X2, MSAA_2D_X4, MSAA_2D_X8, MSAA_2D_X16
 	};
 
-	class Renderer : public Listener {
+	class Renderer {
 		public:
 			Renderer() {
 			}

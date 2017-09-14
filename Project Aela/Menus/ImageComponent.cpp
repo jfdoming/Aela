@@ -33,9 +33,9 @@ Aela::ImageComponent::~ImageComponent() {
 void Aela::ImageComponent::updateComponent() {
 }
 
-void Aela::ImageComponent::renderComponent(Renderer* renderer) {
+void Aela::ImageComponent::renderComponent(Renderer& renderer) {
 	if (texture != nullptr) {
-		renderer->render2DImage(texture->getImage(), &dimensions, &tint);
+		renderer.render2DImage(texture->getImage(), &dimensions, &tint);
 	}
 }
 

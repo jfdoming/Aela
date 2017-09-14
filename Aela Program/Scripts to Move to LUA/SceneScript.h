@@ -36,7 +36,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This sets up the ekkon scene.
 	auto ekkonScene = new Scene();
-	ekkonScene->setId(EKKON_INTRO_SCENE);
 	ekkonScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	ekkonScene->getMenu()->add(ekkonImage);
 
@@ -57,40 +56,42 @@ void setupScenes(Engine* engine, AelaGame* game) {
 		Rect<unsigned int>* dimensions = engine->getWindow()->getWindowDimensions();
 		engine->getWindow()->setCursorPositionInWindow(dimensions->getWidth() / 2, dimensions->getHeight() / 2);
 		engine->getWindow()->hideCursor();
-		engine->getRenderer()->getCamera()->setInUse(true);
+		engine->getRenderer().getCamera()->setInUse(true);
 		engine->getSceneManager()->setCurrentScene(GAMEPLAY_SCENE);
 		game->continueGame();
 	};
 	auto optionsAction = [](Engine* engine) {
 		AelaErrorHandling::windowWarning("There's nothing to see here.");
 	};
-	auto exitAction = [](Engine* engine) {engine->getWindow()->quit(); };
+	auto exitAction = [](Engine* engine) {
+		engine->getWindow()->quit();
+	};
 
 	// This sets up some textureless buttons. Note: setText() uses information about the button's dimensions. In order to setup text for
 	// a button, make sure that you set the button's position before hand.
 	auto continueGameButton = std::make_shared<Button>();
 	continueGameButton->setDimensions(continueGameButtonText->getDimensions());
-	continueGameButton->setupOnClick(std::bind(continueGameAction, engine), engine->getEventHandler());
+	continueGameButton->setupOnClick(std::bind(continueGameAction, engine));
 	continueGameButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f));
-	continueGameButton->setText(continueGameButtonText.get(), engine->getFontManager());
+	continueGameButton->setText(continueGameButtonText.get());
 
 	auto optionsButton = std::make_shared<Button>();
 	optionsButton->setDimensions(optionsButtonText->getDimensions());
-	optionsButton->setupOnClick(std::bind(optionsAction, engine), engine->getEventHandler());
+	optionsButton->setupOnClick(std::bind(optionsAction, engine));
 	optionsButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f + spacing));
-	optionsButton->setText(optionsButtonText.get(), engine->getFontManager());
+	optionsButton->setText(optionsButtonText.get());
 
 	auto exitButton = std::make_shared<Button>();
 	exitButton->setDimensions(exitButtonText->getDimensions());
-	exitButton->setupOnClick(std::bind(exitAction, engine), engine->getEventHandler());
+	exitButton->setupOnClick(std::bind(exitAction, engine));
 	exitButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f + spacing * 2));
-	exitButton->setText(exitButtonText.get(), engine->getFontManager());
+	exitButton->setText(exitButtonText.get());
 
 	// This sets up particles.
 	PlanarParticleEmitter* particleEmitter = new PlanarParticleEmitter();
 	Rect<GLfloat> emitterDimensions(0, 0, 10, 10);
 	particleEmitter->setupDimensions(&emitterDimensions);
-	particleEmitter->setCamera(engine->getRenderer()->getCamera());
+	particleEmitter->setCamera(engine->getRenderer().getCamera());
 	particleEmitter->setStats(0.001f, 20, 0.001f, 2, 2);
 	particleEmitter->setPosition(5, 0, 5);
 	particleEmitter->setRotation(0, 3.4f, 0.7f);
@@ -98,7 +99,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This sets up the title screen scene.
 	Scene* mainMenuScene = new Scene();
-	mainMenuScene->setId(MAIN_MENU_SCENE);
 	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	mainMenuScene->getMenu()->add(titleText);
 	mainMenuScene->getMenu()->add(ekkonGamesText);
@@ -116,7 +116,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	particleEmitter->setupParticles(&particleTextures, 0.6f, 0.6f, 25);
 
 	Scene* gameplayScene = new Scene();
-	gameplayScene->setId(GAMEPLAY_SCENE);
 	gameplayScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	gameplayScene->putParticleEmitter(particleEmitter);
 

@@ -42,6 +42,7 @@ namespace Aela {
 			int setupControlManager();
 			int setupLUA();
 			int setupEventHandler();
+			int setupScenes();
 			int setupAudioPlayer();
 			int setupAnimation();
 			int loadUserEnvironmentInformation();
@@ -54,7 +55,7 @@ namespace Aela {
 
 			// These are getters. Some of the Aela Objects inside of this class are not allowed to be accessed externally.
 			Window* getWindow();
-			Renderer* getRenderer();
+			Renderer& getRenderer();
 			EventHandler* getEventHandler();
 			TimeManager* getTimeManager();
 			FontManager* getFontManager();

@@ -131,7 +131,7 @@ void AelaGame::placeLight() {
 	(*mapBeingEdited->getLights())[mapBeingEdited->getLights()->size()] = lightEntity;
 	lightEntity.useDefaultValues();
 	lightEntity.setupForNewShadowMap();
-	engine->getRenderer()->generateShadowMap(&lightEntity);
+	engine->getRenderer().generateShadowMap(&lightEntity);
 }
 
 void AelaGame::placeBillboard() {
@@ -141,15 +141,15 @@ void AelaGame::placeBillboard() {
 
 void AelaGame::setup() {
 	// Certain renderer settings will be changeable in the options menu.
-	engine->getRenderer()->activateFeature(RendererFeature::MSAA_2D_X2);
-	engine->getRenderer()->activateFeature(RendererFeature::MSAA_3D_X4);
+	engine->getRenderer().activateFeature(RendererFeature::MSAA_2D_X2);
+	engine->getRenderer().activateFeature(RendererFeature::MSAA_3D_X4);
 
 	// This loads scripts.
 	loadResources();
 	loadScenes();
 
-	engine->getEventHandler()->addListener(EventConstants::KEY_RELEASED, this);
-	engine->getEventHandler()->addListener(EventConstants::KEY_PRESSED, this);
+	engine->getEventHandler()->addListener(EventConstants::KEY_RELEASED, bindListener(AelaGame::onEvent, this));
+	engine->getEventHandler()->addListener(EventConstants::KEY_PRESSED, bindListener(AelaGame::onEvent, this));
 
 	// Note: the default entity that is placed is a ModelEntity.
 	entityBeingPlaced = &modelEntity;
@@ -158,7 +158,7 @@ void AelaGame::setup() {
 	switchModelResource(currentModelResource);
 	switchBillboardResource(currentBillboardResource);
 	idOfEntityInMap = mapBeingEdited->addModel(&modelEntity);
-	engine->getRenderer()->generateShadowMap(&lightEntity);
+	engine->getRenderer().generateShadowMap(&lightEntity);
 
 	// The keyed animator will translate the transformable object that represents the properties of the entity being placed using
 	// key inputs.
@@ -335,12 +335,12 @@ void AelaGame::onEvent(Event* event) {
 				if (sceneManager->getCurrentSceneId() == EDITOR_SCENE) {
 					sceneManager->setCurrentScene(3);
 					engine->getWindow()->showCursor();
-					engine->getRenderer()->getCamera()->setInUse(false);
+					engine->getRenderer().getCamera()->setInUse(false);
 				} else if (sceneManager->getCurrentSceneId() == PAUSE_ENTITY_TOOL_SCENE || sceneManager->getCurrentSceneId() == PAUSE_EXPORT_SCENE
 					|| sceneManager->getCurrentSceneId() == PAUSE_OPTIONS_SCENE || sceneManager->getCurrentSceneId() == PAUSE_SKYBOX_SCENE) {
 					sceneManager->setCurrentScene(EDITOR_SCENE);
 					engine->getWindow()->hideCursor();
-					engine->getRenderer()->getCamera()->setInUse(true);
+					engine->getRenderer().getCamera()->setInUse(true);
 				}
 				break;
 		}

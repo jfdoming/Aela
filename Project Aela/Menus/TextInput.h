@@ -9,7 +9,7 @@
 #include "Component.h"
 
 namespace Aela {
-	class TextInput : public Component, public Listener {
+	class TextInput : public Component {
 		public:
 			TextInput(std::string text, TextFont* font, FontManager* fontManager);
 			TextInput(std::string text, TextFont* font, ColourRGBA* colour, FontManager* fontManager);
@@ -31,6 +31,6 @@ namespace Aela {
 			TextFont* font;
 			ColourRGBA colour;
 			virtual void updateComponent();
-			virtual void renderComponent(Renderer* renderer);
+			virtual void renderComponent(Renderer& renderer);
 	};
 }

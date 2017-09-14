@@ -2,7 +2,7 @@
 * Class: AudioPlayer
 * Author: Julian Dominguez-Schatz
 * Date: 28/06/2017
-* Description: Represents a class that manages all in-game audio.
+* Description: Represents a class that facilitates playing all in-game audio.
 */
 
 #pragma once

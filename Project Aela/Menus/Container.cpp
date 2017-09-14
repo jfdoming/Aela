@@ -20,13 +20,14 @@ Container::Container(int x, int y) : Component(x, y) {
 }
 
 Container::~Container() {
-	for (std::shared_ptr<Component> child : children) {
+	for (auto child : children) {
 		child.reset();
 	}
 	delete layout;
 }
 
 void Container::add(std::shared_ptr<Component> component) {
+	component.get()->onAdd(std::bind(&Component::markDirty, this));
 	children.push_back(component);
 }
 
@@ -38,16 +39,38 @@ void Container::updateComponent() {
 	layout->update(children);
 }
 
-void Container::renderComponent(Renderer* renderer) {
+void Container::renderComponent(Renderer& renderer) {
 	for (auto child : children) {
 		child->render(renderer);
 	}
 }
 
-void Aela::Container::setInUse(bool inUse) {
-	Component::setInUse(inUse);
+void Container::onMousePressed(MouseEvent* event) {
+	int x = event->getMouseX();
+	int y = event->getMouseY();
 
-	for (auto child : children) {
-		child->setInUse(inUse);
+	for (auto i = children.rbegin(); i != children.rend(); ++i) {
+		auto child = *i;
+		child->handleMousePressed(event);
+	}
+}
+
+void Container::onMouseReleased(MouseEvent* event) {
+	int x = event->getMouseX();
+	int y = event->getMouseY();
+
+	for (auto i = children.rbegin(); i != children.rend(); ++i) {
+		auto child = *i;
+		child->handleMouseReleased(event);
+	}
+}
+
+void Container::onMouseMoved(MouseEvent* event) {
+	int x = event->getMouseX();
+	int y = event->getMouseY();
+
+	for (auto i = children.rbegin(); i != children.rend(); ++i) {
+		auto child = *i;
+		child->handleMouseMoved(event);
 	}
 }

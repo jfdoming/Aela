@@ -37,6 +37,11 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
+	error = engine.setupScenes();
+	if (error != 0) {
+		return error;
+	}
+
 	error = engine.setupAnimation();
 	if (error != 0) {
 		return error;

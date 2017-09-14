@@ -27,6 +27,6 @@ namespace Aela {
 			Texture* texture = nullptr;
 
 			virtual void updateComponent();
-			virtual void renderComponent(Renderer* renderer);
+			virtual void renderComponent(Renderer& renderer);
 	};
 }

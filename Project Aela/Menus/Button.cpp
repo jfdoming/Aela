@@ -1,12 +1,12 @@
 #include "Button.h"
 
 #include "../Events/EventConstants.h"
-#include "../Events/MouseEvent.h"
 
 Aela::Button::Button() : hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
+	
 }
 
-Aela::Button::Button(Texture* texture) : ImageComponent(texture), hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
+Aela::Button::Button(Texture* texture) : ImageComponent(texture), hoverTint(0.7f, 0.7f, 0.7f, 1.0f), clickTint(0.5f, 0.5f, 0.5f, 1.0) {
 }
 
 Aela::Button::Button(Texture* texture, Rect<int>* dimensions) : ImageComponent(texture, dimensions), hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
@@ -21,87 +21,82 @@ Aela::Button::~Button() {
 }
 
 void Aela::Button::updateComponent() {
-	switch (state) {
-		case State::NORMAL:
-			tint.setValues(1, 1, 1, 1);
-			break;
-		case State::HOVER:
-			tint = hoverTint;
-			break;
-		case State::ACTIVE:
-			tint = clickTint;
-			break;
+	if (active) {
+		tint = clickTint;
+	} else if (hovered) {
+		tint = hoverTint;
+	} else {
+		tint.setValues(1, 1, 1, 1);
 	}
 }
 
-void Aela::Button::renderComponent(Renderer* renderer) {
+void Aela::Button::renderComponent(Renderer& renderer) {
+	std::cout << "rendering button\n";
+
 	ImageComponent::renderComponent(renderer);
 	if (text != nullptr) {
 		text->render(renderer, &tint);
 	}
-}
-
-void Aela::Button::onEvent(Event* event) {
-	if (inUse) {
-		MouseEvent* mouseEvent = nullptr;
-		int x, y;
-
-		switch (event->getType()) {
-			case EventConstants::MOUSE_PRESSED:
-				mouseEvent = static_cast<MouseEvent*>(event);
-				x = mouseEvent->getMouseX();
-				y = mouseEvent->getMouseY();
-
-				if (dimensions.contains(x, y)) {
-					clickStarted = true;
-					state = State::ACTIVE;
-				}
-				break;
-			case EventConstants::MOUSE_RELEASED:
-				if (!clickStarted) {
-					break;
-				}
-
-				mouseEvent = static_cast<MouseEvent*>(event);
-				x = mouseEvent->getMouseX();
-				y = mouseEvent->getMouseY();
-
-				if (dimensions.contains(x, y)) {
-					onClick();
-					state = State::HOVER;
-				} else {
-					state = State::NORMAL;
-				}
-
-				clickStarted = false;
-				break;
-			case EventConstants::MOUSE_MOVED:
-				mouseEvent = static_cast<MouseEvent*>(event);
-				x = mouseEvent->getMouseX();
-				y = mouseEvent->getMouseY();
-
-				if (dimensions.contains(x, y)) {
-					state = (clickStarted ? State::ACTIVE : State::HOVER);
-				} else {
-					state = State::NORMAL;
-				}
-				break;
-		}
+	
+	if (texture != nullptr) {
+		renderer.render2DImage(texture->getImage(), &dimensions, &tint);
 	}
 }
 
-void Aela::Button::setupOnClick(std::function<void()> function, EventHandler* eventHandler) {
+void Button::onMousePressed(MouseEvent* event) {
+	int x = event->getMouseX();
+	int y = event->getMouseY();
+
+	if (dimensions.contains(x, y)) {
+		clickStarted = true;
+		active = true;
+		markDirty();
+
+		event->consume();
+	}
+}
+
+void Button::onMouseReleased(MouseEvent* event) {
+	if (!clickStarted) {
+		return;
+	}
+
+	int x = event->getMouseX();
+	int y = event->getMouseY();
+
+	if (dimensions.contains(x, y)) {
+		onClick();
+		active = false;
+		markDirty();
+
+		event->consume();
+	}
+
+	clickStarted = false;
+}
+
+void Button::onMouseEntered(MouseEvent* event) {
+	if (clickStarted) {
+		active = true;
+	}
+
+	markDirty();
+}
+
+void Button::onMouseExited(MouseEvent* event) {
+	markDirty();
+	active = false;
+}
+
+void Aela::Button::setupOnClick(std::function<void()> function) {
 	onClick = function;
-	eventHandler->addListener(EventConstants::MOUSE_PRESSED, this);
-	eventHandler->addListener(EventConstants::MOUSE_RELEASED, this);
-	eventHandler->addListener(EventConstants::MOUSE_MOVED, this);
 }
 
-void Aela::Button::setText(Label* text, FontManager* fontManager) {
-	setText(std::make_shared<Label>(*text), fontManager);
+void Aela::Button::setText(Label* text) {
+	setText(std::make_shared<Label>(*text));
 }
 
-void Aela::Button::setText(std::shared_ptr<Label> text, FontManager* fontManager) {
+void Aela::Button::setText(std::shared_ptr<Label> text) {
 	this->text = text;
 	Rect<int>* textDimensions = text->getDimensions();
 	int width = textDimensions->getWidth();

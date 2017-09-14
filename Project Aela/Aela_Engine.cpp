@@ -151,12 +151,16 @@ int Aela::Engine::setupLUA() {
 
 int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
-	eventHandler.addListener(EventConstants::KEY_PRESSED, &renderer);
-	eventHandler.addListener(EventConstants::KEY_RELEASED, &renderer);
-	eventHandler.addListener(EventConstants::KEY_PRESSED, &keyedAnimator);
-	eventHandler.addListener(EventConstants::KEY_RELEASED, &keyedAnimator);
+	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(Renderer::onEvent, &renderer));
+	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(Renderer::onEvent, &renderer));
+	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
+	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
 	eventHandler.start();
 	return 0;
+}
+
+int Engine::setupScenes() {
+	return sceneManager.init(eventHandler);
 }
 
 int Aela::Engine::setupAudioPlayer() {
@@ -167,8 +171,8 @@ int Aela::Engine::setupAnimation() {
 	animator.setTimeManager(&timeManager);
 	keyedAnimator.setTimeManager(&timeManager);
 	keyedAnimator.setWindow(&window);
-	eventHandler.addListener(EventConstants::KEY_PRESSED, &keyedAnimator);
-	eventHandler.addListener(EventConstants::KEY_RELEASED, &keyedAnimator);
+	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
+	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
 	return 0;
 }
 
@@ -194,7 +198,7 @@ void Engine::update() {
 }
 
 void Engine::render() {
-	sceneManager.render(&renderer);
+	sceneManager.render(renderer);
 }
 
 bool Engine::shouldExit() {
@@ -205,8 +209,8 @@ Window* Engine::getWindow() {
 	return &window;
 }
 
-Renderer* Engine::getRenderer() {
-	return &renderer;
+Renderer& Engine::getRenderer() {
+	return renderer;
 }
 
 EventHandler* Engine::getEventHandler() {

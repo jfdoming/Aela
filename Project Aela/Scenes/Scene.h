@@ -21,21 +21,23 @@ namespace Aela {
 			void hide();
 
 			void update();
-			void render(Renderer* renderer);
+			void render(Renderer& renderer);
 
-			void enableMenu(Rect<unsigned int>* renderDimensions, Renderer* renderer);
-			void enableMenu(Rect<unsigned int>* renderDimensions, Renderer* renderer, int x, int y);
+			void enableMenu(Rect<unsigned int>* renderDimensions, Renderer& renderer);
+			void enableMenu(Rect<unsigned int>* renderDimensions, Renderer& renderer, int x, int y);
 
 			// These are getters and setters.
 			Menu* getMenu();
-			void setId(int id);
-			unsigned int getId();
 			void setMap(Map3D* map);
 			Map3D* getMap();
 			void setActiveSkybox(unsigned int activeSkybox);
 			unsigned int getActiveSkybox();
 
 			void putParticleEmitter(ParticleEmitter* emitter);
+
+			void handleMousePressed(Event* event);
+			void handleMouseReleased(Event* event);
+			void handleMouseMoved(Event* event);
 		private:
 			Map3D* map = nullptr;
 			std::vector<ParticleEmitter*> particleEmitters;
@@ -43,7 +45,6 @@ namespace Aela {
 			// This keeps track of the skybox that is currently in use.
 			unsigned int activeSkybox = 0;
 
-			unsigned int id = 0;
 			Menu menu;
 	};
 }

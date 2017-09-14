@@ -1,8 +1,8 @@
 /*
-* Class: Listener
+* Class: AudioListener
 * Author: Julian Dominguez-Schatz
 * Date: 29/06/2017
-* Description: Represents a class that manages all in-game audio.
+* Description: Represents the entity that is perceiving sound.
 */
 
 #pragma once

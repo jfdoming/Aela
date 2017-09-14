@@ -9,8 +9,11 @@
 
 #pragma once
 #include "stdafx.h"
-#include <unordered_map>
 #include "Scene.h"
+#include "../Events/Event.h"
+#include "../Events/EventListenerList.h"
+
+#include <unordered_map>
 
 namespace Aela {
 	class SceneManager final {
@@ -18,10 +21,12 @@ namespace Aela {
 			SceneManager();
 			~SceneManager();
 
+			int init(EventHandler& eventHandler);
+
 			void registerScene(Aela::Scene* scene, unsigned int id);
 
 			void update();
-			void render(Renderer* renderer);
+			void render(Renderer& renderer);
 
 			void setCurrentScene(unsigned int id);
 			unsigned int getCurrentSceneId();
@@ -32,6 +37,9 @@ namespace Aela {
 			std::unordered_map<unsigned int, Aela::Scene*> scenes;
 
 			Scene* currentScene = nullptr;
+			unsigned int currentSceneId = 0;
+			EventListenerList* listeners = nullptr;
+
 			Scene* previousScene = nullptr;
 			bool sceneChangeRequested = false;
 
@@ -59,5 +67,9 @@ namespace Aela {
 			Scene* getScene(unsigned int id);
 
 			void consumeSceneChangeEvent();
+
+			void handleMousePressed(Event* event);
+			void handleMouseReleased(Event* event);
+			void handleMouseMoved(Event* event);
 		};
 }
