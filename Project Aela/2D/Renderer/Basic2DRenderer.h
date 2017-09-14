@@ -86,10 +86,10 @@ namespace Aela {
 			void getGLSLVariableHandles();
 
 			// These are some Project Aela objects that the 3D renderer uses.
-			Window* window;
+			Window* window = nullptr;
 
 			// These are used by the renderer so that "window->getWindowDimensions()->getWidth()"
 			// (and "...getHeight()") does not have to called all the time.
-			int windowWidth, windowHeight;
+			int windowWidth = 0, windowHeight = 0;
 	};
 }

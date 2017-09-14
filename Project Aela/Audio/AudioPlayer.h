@@ -1,5 +1,5 @@
 /*
-* Class: AudioManager
+* Class: AudioPlayer
 * Author: Julian Dominguez-Schatz
 * Date: 28/06/2017
 * Description: Represents a class that manages all in-game audio.
@@ -13,10 +13,10 @@
 #include "AudioClip.h"
 
 namespace Aela {
-	class AudioManager {
+	class AudioPlayer {
 		public:
-			AudioManager();
-			~AudioManager();
+			AudioPlayer();
+			~AudioPlayer();
 
 			bool init();
 			void playClip(AudioClip* clip);

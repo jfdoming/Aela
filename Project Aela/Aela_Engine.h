@@ -23,7 +23,7 @@
 #include "Lua/LuaManager.h"
 #include "Events/EventHandler.h"
 #include "Events/EventConstants.h"
-#include "Audio/AudioManager.h"
+#include "Audio/AudioPlayer.h"
 #include "Animation/Animator.h"
 #include "3D/Animation/KeyedAnimator3D.h"
 #include "3D/Particles/PlanarParticleEmitter.h"
@@ -61,7 +61,7 @@ namespace Aela {
 			LuaManager* getLuaManager();
 			SceneManager* getSceneManager();
 			ResourceManager* getResourceManager();
-			AudioManager* getAudioPlayer();
+			AudioPlayer* getAudioPlayer();
 			Animator* getAnimator();
 			UserEnvironment* getUserEnvironment();
 			KeyedAnimator* getKeyedAnimator();
@@ -78,7 +78,7 @@ namespace Aela {
 			LuaManager luaManager;
 			SceneManager sceneManager;
 			ResourceManager resourceManager;
-			AudioManager audioPlayer;
+			AudioPlayer audioPlayer;
 			Animator animator;
 			UserEnvironment userEnvironment;
 			KeyedAnimator keyedAnimator;

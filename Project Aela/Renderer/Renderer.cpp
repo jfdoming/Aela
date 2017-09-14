@@ -367,6 +367,23 @@ void Aela::Renderer::toggleFeature(RendererFeature feature) {
 	}
 }
 
+int getTextWidth(std::string text, TextFont* font) {
+	FT_Face face = *(font->getFace());
+	FT_GlyphSlot glyph = face->glyph;
+
+	int width = 0;
+	char* p;
+	for (unsigned int i = 0; i < text.size(); i++) {
+		p = &((char)(text.at(i)));
+		// This loads the character.
+		if (FT_Load_Char(face, *p, FT_LOAD_RENDER)) {
+			continue;
+		}
+		width += glyph->metrics.horiAdvance / FontManager::POINTS_PER_PIXEL;
+	}
+	return width;
+}
+
 void Aela::Renderer::setFOV(float value) {
 	camera.setFieldOfView(value);
 }

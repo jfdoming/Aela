@@ -52,12 +52,6 @@ namespace Aela {
 	class Renderer : public Listener {
 		public:
 			Renderer() {
-				windowFocus = false;
-				speed = 0.015f;
-				superSpeed = 0.045f;
-				currentSpeed = 0.0f;
-				mouseSpeed = 0.005f;
-				allowUpsideDownCamera = false;
 			}
 
 			Renderer(Window* windowToSet) {
@@ -143,10 +137,10 @@ namespace Aela {
 			Basic3DRenderer basic3DRenderer;
 			Basic2DRenderer basic2DRenderer;
 			Camera3D camera;
-			TimeManager* timeManager;
-			Window* window;
-			FontManager* fontManager;
-			Simple2DFramebuffer* bound2DFramebuffer;
+			TimeManager* timeManager = nullptr;
+			Window* window = nullptr;
+			FontManager* fontManager = nullptr;
+			Simple2DFramebuffer* bound2DFramebuffer = nullptr;
 
 			// This represents the framebuffer that is attached to the screen.
 			GLuint mainFramebuffer;
@@ -176,16 +170,16 @@ namespace Aela {
 			void updateCameraMatrices();
 
 			// This stores the window's state.
-			bool windowFocus;
+			bool windowFocus = false;
 
 			// Speed: 0.001f is 1 unit per tick.
-			float speed, superSpeed, currentSpeed, mouseSpeed;
+			float speed = 0.015f, superSpeed = 0.045f, currentSpeed = 0.0f, mouseSpeed = 0.005f;
 
 			// These store movements.
-			bool forward, backward, left, right, up, down;
+			bool forward = false, backward = false, left = false, right = false, up = false, down = false;
 
 			// This keeps track of whether the camera should be allowed to be upside down.
-			bool allowUpsideDownCamera;
+			bool allowUpsideDownCamera = false;
 
 			// This is used when computing controls.
 			const glm::vec3 straightUp = glm::vec3(0, 0.5, 0);

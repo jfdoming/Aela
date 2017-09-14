@@ -233,7 +233,7 @@ ResourceManager* Engine::getResourceManager() {
 	return &resourceManager;
 }
 
-AudioManager* Engine::getAudioPlayer() {
+AudioPlayer* Engine::getAudioPlayer() {
 	return &audioPlayer;
 }
 

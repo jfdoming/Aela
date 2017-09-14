@@ -2,24 +2,24 @@
 
 using namespace Aela;
 
-Label::Label(std::string text, TextFont* font, FontManager* fontManager) : colour(1, 1, 1, 1) {
+Label::Label(std::string text, TextFont* font) : colour(1, 1, 1, 1) {
 	this->text = text;
 	this->font = font;
-	setup(fontManager);
+	setup();
 }
 
-Label::Label(std::string text, TextFont* font, ColourRGBA* colour, FontManager* fontManager) {
+Label::Label(std::string text, TextFont* font, ColourRGBA* colour) {
 	this->text = text;
 	this->font = font;
 	this->colour = *colour;
-	setup(fontManager);
+	setup();
 }
 
 Label::~Label() {
 }
 
-void Label::setup(FontManager* fontManager) {
-	setupWidthAndHeight(fontManager);
+void Label::setup() {
+	setupWidthAndHeight();
 }
 
 void Label::updateComponent() {
@@ -58,7 +58,7 @@ ColourRGBA* Label::getColour() {
 	return &colour;
 }
 
-void Label::setupWidthAndHeight(FontManager* fontManager) {
+void Label::setupWidthAndHeight() {
 	FT_Face face = *font->getFace();
 	FT_GlyphSlot glyph = face->glyph;
 	FT_BBox bbox = face->bbox;
@@ -73,10 +73,10 @@ void Label::setupWidthAndHeight(FontManager* fontManager) {
 		if (FT_Load_Char(face, *p, FT_LOAD_RENDER)) {
 			continue;
 		}
-		width += glyph->metrics.horiAdvance / fontManager->POINTS_PER_PIXEL;
+		width += glyph->metrics.horiAdvance / FontManager::POINTS_PER_PIXEL;
 	}
 
 	// This sets the dimensions object of the text to what it should be.
 	dimensions.setWidth(width);
-	dimensions.setHeight((bbox.yMax - bbox.yMin) / fontManager->POINTS_PER_PIXEL);
+	dimensions.setHeight((bbox.yMax - bbox.yMin) / FontManager::POINTS_PER_PIXEL);
 }

@@ -89,8 +89,8 @@ namespace Aela {
 			Image multisampledColourFrameBufferTexture, colourFrameBufferTexture;
 
 			// These are some Project Aela objects that the 3D renderer uses.
-			Window* window;
-			Camera3D* camera;
+			Window* window = nullptr;
+			Camera3D* camera = nullptr;
 
 			// This stores the lights to render.
 			std::map<int, LightEntity>* lights;

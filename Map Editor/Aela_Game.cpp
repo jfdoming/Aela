@@ -13,7 +13,7 @@
 
 using namespace Aela;
 
-void AelaGame::setEngine(Engine* engine) {
+AelaGame::AelaGame(Engine* engine) {
 	this->engine = engine;
 	resourceManager = engine->getResourceManager();
 	sceneManager = engine->getSceneManager();
@@ -187,6 +187,10 @@ void AelaGame::update() {
 		placeLight();
 		placeLightNextUpdate = false;
 	}
+}
+
+void AelaGame::cleanup() {
+	unloadResources(resourceManager);
 }
 
 void AelaGame::exportMap(std::string src, bool readable) {

@@ -5,12 +5,12 @@
 * Description: A 3D map tool for the Project Aela library.
 */
 
+#include "stdafx.h"
 #include "Aela_Engine.h"
 #include "Aela_Game.h"
 
 int main(int argc, char *args[]) {
 	Aela::Engine engine;
-	AelaGame game;
 
 	int error = engine.setupWindow(1280, 720, 50, 50);
 	if (error != 0) {
@@ -47,7 +47,7 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
-	game.setEngine(&engine);
+	AelaGame game(&engine);
 	game.setup();
 
 	// This is temporary and is here for framerate.
@@ -65,6 +65,8 @@ int main(int argc, char *args[]) {
 		}
 		counter++;
 	} while (!engine.shouldExit());
+
+	game.cleanup();
 
     return 0;
 }

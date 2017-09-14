@@ -13,12 +13,7 @@ using namespace Aela;
 
 class AelaGame : public Listener {
 	public:
-		AelaGame() {
-			
-		}
-
-		void setup();
-		void update();
+		AelaGame(Engine* engine);
 
 		void exportMap(std::string src, bool readable);
 
@@ -28,11 +23,14 @@ class AelaGame : public Listener {
 		// These are getters and setters.
 		void setMapBeingEdited(Map3D* mapBeingEdited);
 		Map3D* getMapBeingEdited();
-		void setEngine(Engine* engine);
 		void setEntityTypeText(std::shared_ptr<Label> text);
 		void setPositionText(std::shared_ptr<Label> text);
 		void setRotationText(std::shared_ptr<Label> text);
 		void setScalingText(std::shared_ptr<Label> text);
+
+		void setup();
+		void update();
+		void cleanup();
 
 	private:
 		// These are handles to objects in the Aela namespace.

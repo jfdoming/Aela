@@ -134,6 +134,7 @@ void loadStartupMap(ResourceManager* resourceManager, Renderer* renderer) {
 
 void unloadResources(ResourceManager* resourceManager) {
 	resourceManager->unloadGroup("materials");
+	resourceManager->unloadGroup("models");
 	resourceManager->unloadGroup("textures");
 	resourceManager->unloadGroup("particles");
 	resourceManager->unloadGroup("skybox");

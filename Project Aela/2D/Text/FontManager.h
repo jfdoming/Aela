@@ -29,7 +29,7 @@ namespace Aela {
 			TextFont* obtainTextFont(std::string name, unsigned int size);
 
 			// This stores the amount of points in a character that make up one pixel.
-			const unsigned short POINTS_PER_PIXEL = 64;
+			static const unsigned short POINTS_PER_PIXEL = 64;
 
 		private:
 			// This is the FreeType Library object.

@@ -30,7 +30,6 @@
     <ClCompile Include="Aela_Engine.cpp" />
     <ClCompile Include="Audio\AudioClip.cpp" />
     <ClCompile Include="Audio\AudioListener.cpp" />
-    <ClCompile Include="Audio\AudioManager.cpp" />
     <ClCompile Include="Audio\WAVEClipLoader.cpp" />
     <ClCompile Include="Control Manager\ControlManager.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
@@ -82,6 +81,7 @@
     <ClCompile Include="2D\Animation\KeyFrame2DList.cpp" />
     <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
     <ClCompile Include="2D\Transformable\Transformable2D.cpp" />
+    <ClCompile Include="Audio\AudioPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Renderer\Basic2DRenderer.h" />
@@ -114,7 +114,6 @@
     <ClInclude Include="3D\Transformable\Transformable3D.h" />
     <ClInclude Include="Audio\AudioClip.h" />
     <ClInclude Include="Audio\AudioListener.h" />
-    <ClInclude Include="Audio\AudioManager.h" />
     <ClInclude Include="Audio\WAVEClipLoader.h" />
     <ClInclude Include="Control Manager\ControlManager.h" />
     <ClInclude Include="Entities\Entity.h" />
@@ -184,5 +183,6 @@
     <ClInclude Include="2D\Animation\KeyFrame2DList.h" />
     <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
     <ClInclude Include="2D\Transformable\Transformable2D.h" />
+    <ClInclude Include="Audio\AudioPlayer.h" />
   </ItemGroup>
 </Project>

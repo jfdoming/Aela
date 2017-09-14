@@ -45,7 +45,7 @@ class AelaGame {
 		LuaManager* luaManager;
 		SceneManager* sceneManager;
 		ResourceManager* resourceManager;
-		AudioManager* audioPlayer;
+		AudioPlayer* audioPlayer;
 		Animator* animator;
 		UserEnvironment* userEnvironment;
 		FramerateCalculator* framerateCalculator;

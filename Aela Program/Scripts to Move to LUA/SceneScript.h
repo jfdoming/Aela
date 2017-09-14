@@ -43,14 +43,14 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// The following blocks of code set up the main menu scene.
 	// This sets up text. You know what's annoying though? When Visual Studio turns "(int) (...)" into "(int)(...)" when I copy
 	// and paste the former!
-	auto titleText = std::make_shared<Label>("Aela Program", xeroxLarge, &VSBlue, fontManager);
+	auto titleText = std::make_shared<Label>("Aela Program", xeroxLarge, &VSBlue);
 	titleText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.05), (int)(windowDimensions.getHeight() / 1.3f));
-	auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xerox, &VSBlue, fontManager);
+	auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xerox, &VSBlue);
 	ekkonGamesText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.8), ((int)(windowDimensions.getHeight() * 0.95)));
-	auto continueGameButtonText = std::make_shared<Label>("Edit Map", xerox, &VSBlue, fontManager);
+	auto continueGameButtonText = std::make_shared<Label>("Edit Map", xerox, &VSBlue);
 	int spacing = continueGameButtonText->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
-	auto optionsButtonText = std::make_shared<Label>("Help", xerox, &VSBlue, fontManager);
-	auto exitButtonText = std::make_shared<Label>("Exit", xerox, &VSBlue, fontManager);
+	auto optionsButtonText = std::make_shared<Label>("Help", xerox, &VSBlue);
+	auto exitButtonText = std::make_shared<Label>("Exit", xerox, &VSBlue);
 
 	// This sets up actions for the main menu buttons.
 	auto continueGameAction = [game](Engine* engine) {

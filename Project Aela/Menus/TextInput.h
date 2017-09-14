@@ -17,8 +17,6 @@ namespace Aela {
 			virtual ~TextInput();
 
 			void setup(FontManager* fontManager);
-			virtual void updateComponent();
-			virtual void renderComponent(Renderer* renderer);
 
 			// These are getters and setters.
 			std::string getText();
@@ -32,5 +30,7 @@ namespace Aela {
 
 			TextFont* font;
 			ColourRGBA colour;
+			virtual void updateComponent();
+			virtual void renderComponent(Renderer* renderer);
 	};
 }

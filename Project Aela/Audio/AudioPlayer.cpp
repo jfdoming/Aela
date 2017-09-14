@@ -1,13 +1,13 @@
-#include "AudioManager.h"
+#include "AudioPlayer.h"
 #include "../Error Handler/ErrorHandler.h"
 
 using namespace Aela;
 
-void AudioManager::clearErrors() {
+void AudioPlayer::clearErrors() {
 	alGetError();
 }
 
-bool AudioManager::checkError(std::string* msg) {
+bool AudioPlayer::checkError(std::string* msg) {
 	ALenum error = alGetError();
 	bool cond = error != AL_NO_ERROR;
 	if (cond) {
@@ -16,7 +16,7 @@ bool AudioManager::checkError(std::string* msg) {
 	return cond;
 }
 
-void AudioManager::parseErrorMessage(ALuint error, std::string* msg) {
+void AudioPlayer::parseErrorMessage(ALuint error, std::string* msg) {
 	switch (error) {
 		case AL_NO_ERROR:
 			*msg = "No error occurred.";
@@ -46,7 +46,7 @@ void AudioManager::parseErrorMessage(ALuint error, std::string* msg) {
 	expr;															\
 	std::string msg;												\
 	if (checkError(&msg)) {											\
-		AelaErrorHandling::consoleWindowError("AudioManager", msg);	\
+		AelaErrorHandling::consoleWindowError("AudioPlayer", msg);	\
 		return;														\
 	}																\
 }
@@ -55,14 +55,14 @@ void AudioManager::parseErrorMessage(ALuint error, std::string* msg) {
 	expr;															\
 	std::string msg;												\
 	if (checkError(&msg)) {											\
-		AelaErrorHandling::consoleWindowError("AudioManager", msg);	\
+		AelaErrorHandling::consoleWindowError("AudioPlayer", msg);	\
 	}																\
 }
 
-AudioManager::AudioManager() {
+AudioPlayer::AudioPlayer() {
 }
 
-AudioManager::~AudioManager() {
+AudioPlayer::~AudioPlayer() {
 	if (context != nullptr) {
 		alcMakeContextCurrent(NULL);
 		alcDestroyContext(context);
@@ -73,7 +73,7 @@ AudioManager::~AudioManager() {
 	}
 }
 
-bool AudioManager::init() {
+bool AudioPlayer::init() {
 	audioDevice = alcOpenDevice(nullptr);
 	if (!audioDevice) {
 		return false;
@@ -89,9 +89,9 @@ bool AudioManager::init() {
 	return true;
 }
 
-void AudioManager::playClip(AudioClip* clip) {
+void AudioPlayer::playClip(AudioClip* clip) {
 	if (clip == nullptr) {
-		AelaErrorHandling::consoleWindowError("AudioManager", "AudioClip was null.");
+		AelaErrorHandling::consoleWindowError("AudioPlayer", "AudioClip was null.");
 		return;
 	}
 
