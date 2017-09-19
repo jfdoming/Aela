@@ -31,6 +31,7 @@ class GameplayManager {
 
 		void setup();
 		void update();
+		void updatePlayerMovements();
 
 		// This is triggered on an event.
 		void onEvent(Event* event);
@@ -54,7 +55,7 @@ class GameplayManager {
 		UserEnvironment* userEnvironment;
 		FramerateCalculator* framerateCalculator;
 		Camera3D* camera;
-		PhysicsManager* physicsManager;
+		Physics* physicsManager;
 
 		// These are game-related objects.
 		Player player;

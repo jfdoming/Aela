@@ -3,17 +3,15 @@
 * Author: Robert Ciborowski
 * Date: 10/09/2017
 * Description: A class used to manage the physical elements of a world.
-*              Note: I'm not 100% sure as to what to call this class, so I'm calling it Physics Manager for now.
-*              In fact, this class probably won't exist once we figure out how to structure to physics system differently.
 */
 
 #pragma once
 #include "../3D/Bounding Box/BoundingBox3D.h"
 #include "../3D/Maps/Map3D.h"
 
-class PhysicsManager {
+class Physics {
 	public:
-		PhysicsManager() {
+		Physics() {
 
 		}
 

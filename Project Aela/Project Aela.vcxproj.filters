@@ -193,5 +193,8 @@
     <ClInclude Include="Events\EventListenerList.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
     <ClInclude Include="Audio\AudioPlayer.h" />
+    <ClInclude Include="Utilities\Paths\PathSegment.h" />
+    <ClInclude Include="Utilities\Paths\PathSegment2D.h" />
+    <ClInclude Include="Utilities\Paths\PathSegment3D.h" />
   </ItemGroup>
 </Project>

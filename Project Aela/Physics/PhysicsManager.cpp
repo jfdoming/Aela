@@ -8,7 +8,7 @@
 #include "PhysicsManager.h"
 
 // Have fun: https://math.stackexchange.com/questions/1472049/check-if-a-point-is-inside-a-rectangular-shaped-area-3d
-bool PhysicsManager::isInside(glm::vec3 point, BoundingBox3D* box) {
+bool Physics::isInside(glm::vec3 point, BoundingBox3D* box) {
 	/*glm::vec3 u = vertices[0] - vertices[1], v = vertices[0] - vertices[3], w = vertices[0] - vertices[4];
 	// glm::vec3 u2 = glm::cross(v, w), v2 = glm::cross(u, w), w2 = glm::cross(u, v);
 	glm::vec3 u2 = u, v2 = v, w2 = w;
@@ -41,7 +41,7 @@ bool PhysicsManager::isInside(glm::vec3 point, BoundingBox3D* box) {
 	}
 }
 
-bool PhysicsManager::isTouching(glm::vec3 point, BoundingBox3D* box) {
+bool Physics::isTouching(glm::vec3 point, BoundingBox3D* box) {
 	if (box->verticesWereGenerated()) {
 		glm::vec3 i = box->getVertex(1) - box->getVertex(0), j = box->getVertex(3) - box->getVertex(0), k = box->getVertex(4) - box->getVertex(0), v = point - box->getVertex(0);
 		float dotVI = glm::dot(v, i), dotVJ = glm::dot(v, j), dotVK = glm::dot(v, k);
@@ -57,7 +57,7 @@ bool PhysicsManager::isTouching(glm::vec3 point, BoundingBox3D* box) {
 
 
 // HOW ON EARTH COULD ONE BOX'S VERTICES BE INSIDE THE OTHER BOX, BUT NOT VICE VERSA???????
-bool PhysicsManager::areColliding(BoundingBox3D* boxA, BoundingBox3D* boxB) {
+bool Physics::areColliding(BoundingBox3D* boxA, BoundingBox3D* boxB) {
 	if (boxA->verticesWereGenerated() && boxB->verticesWereGenerated()) {
 		// In order for the boxes to be colliding, at least one of one box's vertices must be touching the other box.
 		for (unsigned int i = 0; i < 8; i++) {
@@ -77,7 +77,7 @@ bool PhysicsManager::areColliding(BoundingBox3D* boxA, BoundingBox3D* boxB) {
 	}
 }
 
-bool PhysicsManager::collidingInMap(int whichModel, Map3D* map) {
+bool Physics::collidingInMap(int whichModel, Map3D* map) {
 	ModelEntity* model = map->getModel(whichModel);
 	if (model->getBoundingBox()->verticesWereGenerated()) {
 		for (auto pair : *map->getModels()) {
