@@ -2,6 +2,7 @@
 
 void Transformable2D::setTint(ColourRGBA* tint) {
 	this->tint = *tint;
+	modified = true;
 }
 
 ColourRGBA* Transformable2D::getTint() {
@@ -9,6 +10,7 @@ ColourRGBA* Transformable2D::getTint() {
 }
 
 void Transformable2D::setProperty(Transformable2DProperty property, float value) {
+	modified = true;
 	switch (property) {
 		case Transformable2DProperty::TINT_R:
 			tint.setR(value);
@@ -22,9 +24,16 @@ void Transformable2D::setProperty(Transformable2DProperty property, float value)
 		case Transformable2DProperty::TINT_A:
 			tint.setA(value);
 			break;
+		default:
+			modified = false;
+			break;
 	}
 }
 
 float Transformable2D::getProperty(Transformable2DProperty property) {
 	return 0.0f;
+}
+
+bool Transformable2D::wasTransformed() {
+	return modified;
 }

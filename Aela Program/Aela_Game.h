@@ -52,7 +52,7 @@ class AelaGame {
 		UserEnvironment* userEnvironment;
 		FramerateCalculator* framerateCalculator;
 		Camera3D* camera;
-		PhysicsManager* physicsManager;
+		Physics* physicsManager;
 
 		// These are game-related objects.
 		GameplayManager gameplayManager;

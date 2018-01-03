@@ -70,7 +70,7 @@ namespace Aela {
 			KeyedAnimator* getKeyedAnimator();
 			FramerateCalculator* getFramerateCalculator();
 			Map3DExporter* getMapExporter();
-			PhysicsManager* getPhysicsManager();
+			Physics* getPhysicsManager();
 
 		private:
 			// These are global objects who's classes come from Project Aela.
@@ -88,7 +88,7 @@ namespace Aela {
 			KeyedAnimator keyedAnimator;
 			FramerateCalculator framerateCalculator;
 			Map3DExporter mapExporter;
-			PhysicsManager physicsManager;
+			Physics physicsManager;
 
 			int runningLoop();
 	};

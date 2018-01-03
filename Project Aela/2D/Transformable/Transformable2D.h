@@ -26,6 +26,10 @@ class Transformable2D {
 		void setProperty(Transformable2DProperty property, float value);
 		float getProperty(Transformable2DProperty property);
 
+		bool wasTransformed();
 	protected:
 		ColourRGBA tint;
+
+	private:
+		bool modified = false;
 };

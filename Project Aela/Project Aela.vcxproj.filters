@@ -79,12 +79,11 @@
     <ClCompile Include="User Environment\UserEnvironment.cpp" />
     <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp" />
     <ClCompile Include="Window\Window.cpp" />
-    <ClCompile Include="Audio\AudioPlayer.cpp" />
-    <ClCompile Include="Events\EventListenerList.cpp" />
-    <ClCompile Include="Events\EventDispatcher.cpp" />
     <ClCompile Include="3D\Bounding Box\BoundingBox3D.cpp" />
+    <ClCompile Include="Events\EventDispatcher.cpp" />
+    <ClCompile Include="Events\EventListenerList.cpp" />
     <ClCompile Include="Physics\PhysicsManager.cpp" />
-    <ClCompile Include="Old Garbage\shader.cpp" />
+    <ClCompile Include="Audio\AudioPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Animation\KeyFrame2D.h" />
@@ -182,14 +181,16 @@
     <ClInclude Include="Utilities\strut.h" />
     <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
     <ClInclude Include="Window\Window.h" />
-    <ClInclude Include="Audio\AudioPlayer.h" />
-    <ClInclude Include="Events\EventListenerList.h" />
-    <ClInclude Include="Events\EventListener.h" />
-    <ClInclude Include="Events\EventDispatcher.h" />
-    <ClInclude Include="2D\Text\TextManager.h" />
     <ClInclude Include="Utilities\flut.h" />
     <ClInclude Include="3D\Bounding Box\BoundingBox3D.h" />
+    <ClInclude Include="Events\Listener.h" />
+    <ClInclude Include="Events\EventDispatcher.h" />
+    <ClInclude Include="Events\EventListener.h" />
+    <ClInclude Include="Events\EventListenerList.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
-    <ClInclude Include="Old Garbage\shader.hpp" />
+    <ClInclude Include="Audio\AudioPlayer.h" />
+    <ClInclude Include="Utilities\Paths\PathSegment.h" />
+    <ClInclude Include="Utilities\Paths\PathSegment2D.h" />
+    <ClInclude Include="Utilities\Paths\PathSegment3D.h" />
   </ItemGroup>
 </Project>

@@ -263,6 +263,6 @@ Map3DExporter* Aela::Engine::getMapExporter() {
 	return &mapExporter;
 }
 
-PhysicsManager* Aela::Engine::getPhysicsManager() {
+Physics* Aela::Engine::getPhysicsManager() {
 	return &physicsManager;
 }
