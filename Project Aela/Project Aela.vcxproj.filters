@@ -66,8 +66,6 @@
     <ClCompile Include="Menus\Menu.cpp" />
     <ClCompile Include="Menus\RectComponent.cpp" />
     <ClCompile Include="Menus\TextInput.cpp" />
-    <ClCompile Include="Old Garbage\shader.cpp" />
-    <ClCompile Include="Old Garbage\texture.cpp" />
     <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Resource Management\ResourceGroup.cpp" />
@@ -86,6 +84,7 @@
     <ClCompile Include="Events\EventDispatcher.cpp" />
     <ClCompile Include="3D\Bounding Box\BoundingBox3D.cpp" />
     <ClCompile Include="Physics\PhysicsManager.cpp" />
+    <ClCompile Include="Old Garbage\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Animation\KeyFrame2D.h" />
@@ -159,8 +158,6 @@
     <ClInclude Include="Menus\RectComponent.h" />
     <ClInclude Include="Menus\stdafx.h" />
     <ClInclude Include="Menus\TextInput.h" />
-    <ClInclude Include="Old Garbage\shader.hpp" />
-    <ClInclude Include="Old Garbage\texture.hpp" />
     <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Resource Management\ResourceGroup.h" />
@@ -193,5 +190,6 @@
     <ClInclude Include="Utilities\flut.h" />
     <ClInclude Include="3D\Bounding Box\BoundingBox3D.h" />
     <ClInclude Include="Physics\PhysicsManager.h" />
+    <ClInclude Include="Old Garbage\shader.hpp" />
   </ItemGroup>
 </Project>
