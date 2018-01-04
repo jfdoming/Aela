@@ -10,7 +10,7 @@
 #include "Map3D.h"
 #include "../../Resource Management/ResourceLoader.h"
 #include "../../Resource Management/ResourceMap.h"
-#include "../../Renderer/Renderer.h"
+#include "../../Renderer/GLRenderer.h"
 
 namespace Aela {
 	class Map3DLoader : public ResourceLoader {
@@ -20,10 +20,9 @@ namespace Aela {
 
 			virtual bool load(ResourceMap& resources, std::string src);
 
-			void bindRenderer(Renderer* renderer);
+			void bindRenderer(GLRenderer* renderer);
 
 		private:
-			Renderer* renderer;
-			void setVec3UsingString(std::string* value, glm::vec3* vec3);
+			GLRenderer* renderer;
 	};
 }

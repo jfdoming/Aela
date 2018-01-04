@@ -1,22 +1,20 @@
 // The contents of this file will be moved to LUA once we can get LUA to work!
 #pragma once
 #include "Resource Management\ResourceManager.h"
-#include "3D\Materials\MaterialLoader.h"
+#include "3D\Materials\GLMaterialLoader.h"
 #include "3D\Models\OBJLoader.h"
-#include "3D\Skybox\SkyboxLoader.h"
+#include "3D\Skybox\GLSkyboxLoader.h"
 #include "3D\Maps\Map3DLoader.h"
 
 using namespace Aela;
 
-const unsigned int numberOfMaterialsAndModels = 7;
+const unsigned int numberOfMaterialsAndModels = 5;
 std::string materialsAndModelNames[] = {
 	"meme_mug",
-	"cat",
-	"house_1",
 	"jeep_1",
-	"lamp_post_1",
-	"sample_terrain_1",
-	"test scene for graphics"
+	"grass_1",
+	"mansion_2",
+	"lamp_post_1"
 };
 
 const unsigned int numberOfTextures = 5;
@@ -25,7 +23,7 @@ std::string textureNames[] = {
 	"map_editor_top_bar",
 	"simple_button",
 	"simple_button_light",
-	"arrow"
+	"arrow",
 };
 
 const unsigned int numberOfBillboards = 2;
@@ -75,7 +73,7 @@ void loadModels(ResourceManager* resourceManager) {
 }
 
 void loadTextures(ResourceManager* resourceManager) {
-	TextureLoader textureLoader;
+	GLTextureLoader textureLoader;
 	resourceManager->bindLoader(&textureLoader);
 	resourceManager->bindGroup("textures");
 
@@ -94,7 +92,7 @@ void loadTextures(ResourceManager* resourceManager) {
 
 void loadParticles(ResourceManager* resourceManager) {
 	// We may want to create a seperate particle loader later.
-	TextureLoader textureLoader;
+	GLTextureLoader textureLoader;
 	resourceManager->bindLoader(&textureLoader);
 	resourceManager->bindGroup("particles");
 
@@ -108,7 +106,7 @@ void loadParticles(ResourceManager* resourceManager) {
 }
 
 void loadSkyboxes(ResourceManager* resourceManager) {
-	SkyboxLoader skyboxLoader;
+	GLSkyboxLoader skyboxLoader;
 	resourceManager->bindLoader(&skyboxLoader);
 	resourceManager->bindGroup("skybox");
 
@@ -121,7 +119,7 @@ void loadSkyboxes(ResourceManager* resourceManager) {
 	}
 }
 
-void loadStartupMap(ResourceManager* resourceManager, Renderer& renderer) {
+void loadStartupMap(ResourceManager* resourceManager, GLRenderer& renderer) {
 	Map3DLoader mapLoader;
 	mapLoader.bindRenderer(&renderer);
 	resourceManager->bindLoader(&mapLoader);

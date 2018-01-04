@@ -14,17 +14,21 @@ enum class KeyFrameType {
 
 class KeyFrame {
 	public:
-		KeyFrame() {
-		}
+		KeyFrame() {}
 
 		virtual KeyFrameType getType() {
 			return KeyFrameType::GENERIC;
 		}
 
+		virtual void start();
+		bool hasBeenStarted();
+
 		void setEndingAction(std::function<void()> endingAction);
 		std::function<void()> getEndingAction();
 
-	private:
+	protected:
 		// A keyframe can run an std::function after its life has been completed.
 		std::function<void()> endingAction = nullptr;
+
+		bool started = false;
 };

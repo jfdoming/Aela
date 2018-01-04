@@ -34,7 +34,7 @@ namespace Aela {
 		}
 
 		// This computes matrices for a Camera3D.
-		void computeMatricesWithInputs(Camera3D* camera);
+		void updateCameraTransforms(Camera3D* camera);
 
 		// This is a temporary function used for testing. It translates
 		// a Transformable.

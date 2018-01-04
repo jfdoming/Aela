@@ -1,16 +1,13 @@
 /*
 * Class: Image
-* Author: Julian Dominguez-Schatz, adapted from Texture (Robert Ciborowski)
+* Author: Julian Dominguez-Schatz, adapted from GLTexture (Robert Ciborowski)
 * Date: 21/02/2017
 * Description: A class used by Aela's Renderer to store properties of an OpenGL texture.
+*              Note: This class contains calls to a pure virtual function. This means that
+*              only subclasses of this class can be used as objects.
 */
 
 #pragma once
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif
-
-#include <GL/glew.h>
 #include "../../Utilities/Rect/Rect.h"
 
 class Image {
@@ -19,8 +16,8 @@ class Image {
 			dimensions.setValues(0, 0, 0, 0);
 		}
 
-		virtual ~Image(){
-			deleteImage();
+		virtual ~Image() {
+			// Remember to delete texture in your subclass's destructor!
 		}
 
 		// These are some getters and setters.
@@ -32,34 +29,23 @@ class Image {
 			dimensions.setValues(x, y, width, height);
 		}
 
-		void setTexture(GLuint texture) {
-			if (texture != 0) {
-				deleteImage();
-			}
-			this->texture = texture;
-		}
-
 		Rect<int>* getDimensions() {
 			return &dimensions;
 		}
 
-		GLuint* getTexture() {
+		unsigned int* getTexture() {
 			return &texture;
 		}
 
 		// This function returns if the object was initialised properly. If it is not
-		// initialised then rendering propblems will occur. Note that a Texture is still
+		// initialised then rendering propblems will occur. Note that a GLTexture is still
 		// initialised if the output (dimensions on the screen) has a width and/or height
 		// of zero.
 		bool isInitialised() {
 			return (dimensions.getWidth() > 0 && dimensions.getHeight() > 0 && texture != 0);
 		}
 
-	private:
+	protected:
 		Rect<int> dimensions;
-		GLuint texture = 0;
-
-		void deleteImage() {
-			glDeleteTextures(1, &texture);
-		}
+		unsigned int texture = 0;
 };

@@ -210,7 +210,7 @@ void loadDDSToCubemapSide(GLuint* cubeMap, int side, std::string filePath) {
 
 // I (Julian) commented this out because I don't want to fix code we will never need again.
 // Uncomment this to see why it doesn't work.
-/*Texture loadDDSToTexture(std::string filePath) {
+/*GLTexture loadDDSToTexture(std::string filePath) {
 	unsigned char fileHeader[124];
 	FILE* imageFile;
 
@@ -303,7 +303,7 @@ void loadDDSToCubemapSide(GLuint* cubeMap, int side, std::string filePath) {
 	}
 	free(buffer);
 
-	Texture texture(modelTextureID);
+	GLTexture texture(modelTextureID);
 	texture.setDimensions(0, 0, actualTextureWidth, actualTextureHeight);
 	texture.setOutput(0, 0, actualTextureWidth, actualTextureHeight);
 	return texture;
@@ -320,7 +320,8 @@ GLuint loadBMPToGLuint(std::string path) {
 	unsigned char* data;
 
 	// This opens the file with the "read - binary" mode.
-	FILE * file = fopen(path.c_str(), "rb");
+	FILE* file;
+	fopen_s(&file, path.c_str(), "rb");
 	if (!file) { 
 		AelaErrorHandling::consoleWindowError("Project Aela's BMP loader", path + " could not be found.");
 		return 0;

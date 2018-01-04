@@ -6,15 +6,7 @@
 */
 
 #pragma once
-
-// This makes GLEW Static to avoid errors.
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif
-
-// This includes GLEW.
-#include <GL/glew.h>
-#include "../../2D/Texture/Image.h"
+#include "../Texture/Image.h"
 
 class Simple2DFramebuffer {
 	public:
@@ -22,17 +14,20 @@ class Simple2DFramebuffer {
 
 		}
 
-		GLuint* getFramebuffer();
-		void setFramebuffer(GLuint* framebuffer);
-		GLuint* getMultisampledFramebuffer();
-		void setMultisampledFramebuffer(GLuint* framebuffer);
-		Image* getFramebufferImage();
-		Image* getMultisampledFramebufferImage();
+		~Simple2DFramebuffer() {
+
+		}
+
+		unsigned int* getFramebuffer();
+		void setFramebuffer(unsigned int* framebuffer);
+		unsigned int* getMultisampledFramebuffer();
+		void setMultisampledFramebuffer(unsigned int* framebuffer);
+		virtual Image* getFramebufferImage() = 0;
+		virtual Image* getMultisampledFramebufferImage() = 0;
 		unsigned int getMultisampling();
 		void setMultisampling(unsigned int multisampling);
 
-	private:
-		GLuint framebuffer, multisampledFramebuffer;
-		Image framebufferTexture, multisampledFramebufferTexture;
+	protected:
+		unsigned int framebuffer, multisampledFramebuffer;
 		unsigned int multisampling = 0;
 };

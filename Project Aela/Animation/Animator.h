@@ -11,8 +11,8 @@
 #pragma once
 
 #include <vector>
-#include "../2D/Animation/KeyFrame2DList.h"
-#include "../3D/Animation/KeyFrame3DList.h"
+#include "../2D/Animation/AnimationTrack2D.h"
+#include "../3D/Animation/AnimationTrack3D.h"
 #include "../Time Manager/TimeManager.h"
 
 using namespace Aela;
@@ -28,11 +28,13 @@ class Animator {
 
 		// These are getters and setters.
 		void setTimeManager(TimeManager* timeManager);
-		void addKeyFrame3DList(KeyFrame3DList* keyFrameList);
-		std::vector<KeyFrame3DList>* get3DKeyFrames();
-		void addKeyFrame2DList(KeyFrame2DList* keyFrameList);
-		std::vector<KeyFrame2DList>* get2DKeyFrames();
-		int delete3DListsByTag(std::string tag), delete2DListsByTag(std::string tag), deleteListsByTag(std::string tag);
+		void addAnimationTrack3D(AnimationTrack3D* track);
+		std::vector<AnimationTrack3D>* get3DKeyFrames();
+		void addAnimationTrack2D(AnimationTrack2D* track);
+		std::vector<AnimationTrack2D>* get2DKeyFrames();
+		int delete3DTrackByTag(std::string tag), delete2DListsByTag(std::string tag), deleteListsByTag(std::string tag);
+		bool trackWithTagExists(std::string tag);
+		long long tracksWithTag(std::string tag);
 
 	private:
 		// These are the Aela objects that this class uses.
@@ -40,10 +42,6 @@ class Animator {
 
 		// These are basically the "tracks" in which the lists of keyframes are layed out. Note that 3D animation
 		// uses a seperate track from 2D animation.
-		std::vector<KeyFrame3DList> keyFrame3DLists;
-		std::vector<KeyFrame2DList> keyFrame2DLists;
-
-		// This stores the time since the most recently finished key frame.
-		unsigned int timeSinceLastKeyFrame3DList = 0;
-		unsigned int timeSinceLastKeyFrame2DList = 0;
+		std::vector<AnimationTrack3D> tracks3D;
+		std::vector<AnimationTrack2D> tracks2D;
 };

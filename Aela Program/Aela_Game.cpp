@@ -18,21 +18,21 @@ void AelaGame::loadResources() {
 	loadTextures(resourceManager);
 	loadParticles(resourceManager);
 	loadSkyboxes(resourceManager);
-	loadStartupMap(resourceManager, engine->getRenderer());
+	loadStartupMap(resourceManager, engine->getRendererReference());
 }
 
 void AelaGame::loadScenes() {
 	setupScenes(engine, this);
 }
 
-void AelaGame::performActionOnSceneSwitch(int sceneID) {
+void AelaGame::switchScene(int sceneID) {
 	switch (sceneID) {
 		case GAMEPLAY_SCENE:
 			// First person camera:
 			/*engine->getWindow()->hideCursor();
 			camera->setInUse(true);
 			camera->setForceCursorToMiddle(true);
-			camera->setUseControls(true);
+			camera->useControls(true);
 			engine->getRenderer()->getCamera()->setRotation(0, 0, 0);*/
 			gameplayManager.setup();
 			break;
@@ -47,15 +47,15 @@ void AelaGame::setup() {
 	loadResources();
 	loadScenes();
 
-	engine->getRenderer().activateFeature(RendererFeature::MSAA_2D_X4);
-	engine->getRenderer().activateFeature(RendererFeature::MSAA_3D_X4);
+	engine->getRendererReference().activateFeature(RendererFeature::MSAA_2D_X4);
+	engine->getRendererReference().activateFeature(RendererFeature::MSAA_3D_X4);
 	std::cout << engine->getUserEnvironment()->getGraphicsVendor() << "\n";
 
 	// This sets up a camera angle to use for the title screen.
 	camera->setPosition(51.16f, -14.63f, 7.51f);
 	camera->setRotation(5.74f, 0.04f, 0);
 	camera->setInUse(true);
-	camera->setUseControls(false);
+	camera->useControls(false);
 	camera->setForceCursorToMiddle(false);
 }
 

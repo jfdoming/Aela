@@ -1,3 +1,10 @@
+/*
+* Class: Aela Game
+* Author: Waseef Nayeem
+* Date: We would know if Waseef put a header when he made this.
+* Description: A class used to hold contansts.
+*/
+
 #pragma once
 
 #include "../Lua/Exposable.h"
@@ -8,9 +15,12 @@ namespace Aela {
 		public:
 			static const int KEY_PRESSED = 0;
 			static const int KEY_RELEASED = 1;
+
 			static const int MOUSE_PRESSED = 2;
 			static const int MOUSE_RELEASED = 3;
-			static const int MOUSE_MOVED = 4;
+			// "MOUSE_MOVED" would be better, but Visual Studio interprets that as a macro or something,
+			// meaning that projects which use Aela won't compile!
+			static const int MOUSE_MOTIONED = 4;
 			static const int MOUSE_ENTERED = 5;
 			static const int MOUSE_EXITED = 6;
 

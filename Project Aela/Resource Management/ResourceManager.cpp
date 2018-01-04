@@ -109,7 +109,6 @@ ResourceManager::Status ResourceManager::load(std::string src, bool crucial, Res
 ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 	bool crucial = query.isCrucial();
 	std::string src = query.getSrc();
-
 	bool success = boundLoader->load(resources, src);
 	
 	if (!success) {

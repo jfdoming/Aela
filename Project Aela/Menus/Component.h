@@ -6,7 +6,7 @@
 */
 
 #pragma once
-#include "../Renderer/Renderer.h"
+#include "../Renderer/GLRenderer.h"
 #include "../Events/MouseEvent.h"
 #include "../Events/Event.h"
 #include "../Events/EventHandler.h"
@@ -27,7 +27,7 @@ namespace Aela {
 			Rect<int>* getDimensions();
 
 			virtual void update();
-			virtual void render(Renderer& renderer);
+			virtual void render(GLRenderer& renderer);
 
 			void handleMousePressed(Event* event);
 			void handleMouseReleased(Event* event);
@@ -40,6 +40,10 @@ namespace Aela {
 			virtual void onMouseExited(MouseEvent* event);
 
 			void addListener(int type, EventListener listener);
+
+			void markDirty();
+			void setParent(Component* parent);
+
 		protected:
 			// whether this component is moused over
 			bool hovered = false;
@@ -50,12 +54,13 @@ namespace Aela {
 			// This stores the component's dimensions.
 			Rect<int> dimensions;
 
+			// If this is marked as dirty, here is a parent that must also be marked as dirty.
+			Component* parent = nullptr;
+
 			EventListenerList listeners;
 
 			virtual void updateComponent() = 0;
-			virtual void renderComponent(Renderer& renderer) = 0;
-
-			void markDirty();
+			virtual void renderComponent(GLRenderer& renderer) = 0;
 			bool isDirty();
 		private:
 			// whether this component needs to be repainted

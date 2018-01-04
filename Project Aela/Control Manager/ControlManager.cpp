@@ -28,12 +28,12 @@ void ControlManager::setTimeManager(TimeManager* setTime) {
 	timeManager = setTime;
 }
 
-void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
+void ControlManager::updateCameraTransforms(Camera3D* camera) {
 	// This will only run if the window is focused.
 	if (window->isFocused()) {
 		windowFocus = true;
 
-		float deltaTime = (float) timeManager->getTimeBetweenFrames();
+		float deltaTime = (float) timeManager->getTimeBetweenFramesInNanos();
 
 		// This gets the cursor's position.
 		int xpos, ypos;
@@ -48,44 +48,44 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		float horizontalAngle = camera->getRotation()->x;
 		float verticalAngle = camera->getRotation()->y;
 
-		// std::cout << horizontalAngle << " " << verticalAngle << " are the control manager's values.\n";
+		// If the renderer is in charge of updating the camera controls (rather than an animator being responsible for doing so),
+		// the renderer must update the camera's rotation.
+		if (camera->isUsingKeyboardControls()) {
+			// This computes the new horizontal angle.
+			horizontalAngle += mouseSpeed * float(width / 2 - xpos);
 
-		// This computes the new horizontal angle.
-		/* horizontalAngle += mouseSpeed * float(width / 2 - xpos);
+			// This adjusts the horizontal angle so that it stays between 0 and PI * 2.
+			if (horizontalAngle >= glm::pi<float>() * 2) {
+				horizontalAngle -= glm::pi<float>() * 2;
+			}
+			if (horizontalAngle <= 0) {
+				horizontalAngle += glm::pi<float>() * 2;
+			}
 
-		// This adjusts the horizontal angle so that it stays between 0 and PI * 2.
-		if (horizontalAngle >= glm::pi<float>() * 2) {
-			horizontalAngle -= glm::pi<float>() * 2;
-		}
-		if (horizontalAngle <= 0) {
-			horizontalAngle += glm::pi<float>() * 2;
-		}
+			// This computes the new vertical angle.
+			float verticalModifier = mouseSpeed * float(height / 2 - ypos);
 
-		// This computes the new vertical angle.
-		float verticalModifier = 0;// mouseSpeed * float(height / 2 - ypos);
-		
+			// This checks to see if the user is trying to make the camera go upside down by moving the camera up
+			// too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
+			// allowUpsideDownCamera is true.
+			if ((!allowUpsideDownCamera && verticalModifier > 0 && verticalAngle + verticalModifier <= glm::pi<float>() / 2) || allowUpsideDownCamera) {
+				verticalAngle += mouseSpeed * float(height / 2 - ypos);
+			} else if (!allowUpsideDownCamera && verticalModifier > 0) {
+				verticalAngle = glm::pi<float>() / 2;
+			}
 
-		// This checks to see if the user is trying to make the camera go upside down by moving the camera up
-		// too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
-		// allowUpsideDownCamera is true.
-		if ((!allowUpsideDownCamera && verticalModifier > 0 && verticalAngle + verticalModifier <= glm::pi<float>() / 2) || allowUpsideDownCamera) {
-			verticalAngle += mouseSpeed * float(height / 2 - ypos);
-		} else if (!allowUpsideDownCamera && verticalModifier > 0) {
-			verticalAngle = glm::pi<float>() / 2;
+			// This checks to see if the user is trying to make the camera go upside down by moving the camera down
+			// too far (vertical angle of -PI/2 in radians). This also allows the camera to go upside down as long as
+			// allowUpsideDownCamera is true.
+			if ((!allowUpsideDownCamera && verticalModifier < 0 && verticalAngle + mouseSpeed * float(height / 2 - ypos) >= glm::pi<float>() / -2) || allowUpsideDownCamera) {
+				verticalAngle += mouseSpeed * float(height / 2 - ypos);
+			} else if (!allowUpsideDownCamera && verticalModifier < 0) {
+				verticalAngle = glm::pi<float>() / -2;
+			}
+
+			camera->setProperty(Transformable3DProperty::X_ROTATION, horizontalAngle);
+			camera->setProperty(Transformable3DProperty::Y_ROTATION, verticalAngle);
 		}
-		
-		// This checks to see if the user is trying to make the camera go upside down by moving the camera down
-		// too far (vertical angle of -PI/2 in radians). This also allows the camera to go upside down as long as
-		// allowUpsideDownCamera is true.
-		if ((!allowUpsideDownCamera && verticalModifier < 0 && verticalAngle + mouseSpeed * float(height / 2 - ypos) >= glm::pi<float>() / -2) || allowUpsideDownCamera) {
-			verticalAngle += mouseSpeed * float(height / 2 - ypos);
-		} else if (!allowUpsideDownCamera && verticalModifier < 0) {
-			verticalAngle = glm::pi<float>() / -2;
-		}
-		
-		camera->setProperty(Transformable3DProperty::X_ROTATION, horizontalAngle);
-		camera->setProperty(Transformable3DProperty::Y_ROTATION, verticalAngle);
-		*/
 
 		// This converts the coordinates from rotational to cartesian-planar.
 		glm::vec3 direction(
@@ -95,12 +95,12 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 		);
 
 		// These are vectors for the cartesian-plane system.
-		glm::vec3 right = glm::vec3(
+		glm::vec3 movingRight = glm::vec3(
 			sin(horizontalAngle - 3.14f / 2.0f),
 			0,
 			cos(horizontalAngle - 3.14f / 2.0f)
 		);
-		glm::vec3 up = glm::cross(right, direction);
+		glm::vec3 movingUp = glm::cross(movingRight, direction);
 
 		// This is a position vector.
 		glm::vec3 position = *(camera->getPosition());
@@ -133,17 +133,13 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 			position += straightUp * deltaTime * currentSpeed;
 		}
 
-		// This occurs when left ctrl is pressed.
+		// This occurs when movingLeft ctrl is pressed.
 		if (keystate[224]) {
 			position -= straightUp * deltaTime * currentSpeed;
 		}*/
 
 		// This sets all of the camera's position and view related properties.
 		camera->setPosition(position);
-		glm::mat4 projectionMatrix = glm::perspective(camera->getFieldOfView(), (float) width / height, 0.1f, 100.0f);
-		glm::mat4 viewMatrix = glm::lookAt(position, position + direction, up);
-		camera->setProjectionMatrix(projectionMatrix);
-		camera->setViewMatrix(viewMatrix);
 	} else {
 		windowFocus = false;
 	}
@@ -151,7 +147,7 @@ void ControlManager::computeMatricesWithInputs(Camera3D* camera) {
 
 void ControlManager::transform3DObject(Transformable3D* object, float speedModifier) {
 	if (window->isFocused()) {
-		float deltaTime = (float) timeManager->getTimeBetweenFrames();
+		float deltaTime = (float) timeManager->getTimeBetweenFramesInNanos();
 
 		// This is for translation.
 		// This occurs when "LEFT" is pressed.

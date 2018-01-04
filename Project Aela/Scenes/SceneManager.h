@@ -26,7 +26,7 @@ namespace Aela {
 			void registerScene(Aela::Scene* scene, unsigned int id);
 
 			void update();
-			void render(Renderer& renderer);
+			void render(GLRenderer& renderer);
 
 			void setCurrentScene(unsigned int id);
 			unsigned int getCurrentSceneId();

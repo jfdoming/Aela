@@ -8,7 +8,7 @@
 #pragma once
 #include <vector>
 #include "../3D/Maps/Map3D.h"
-#include "../Renderer/Renderer.h"
+#include "../Renderer/GLRenderer.h"
 #include "../Menus/Menu.h"
 
 namespace Aela {
@@ -21,10 +21,10 @@ namespace Aela {
 			void hide();
 
 			void update();
-			void render(Renderer& renderer);
+			void render(GLRenderer& renderer);
 
-			void enableMenu(Rect<unsigned int>* renderDimensions, Renderer& renderer);
-			void enableMenu(Rect<unsigned int>* renderDimensions, Renderer& renderer, int x, int y);
+			void enableMenu(Rect<unsigned int>* renderDimensions, GLRenderer& renderer);
+			void enableMenu(Rect<unsigned int>* renderDimensions, GLRenderer& renderer, int x, int y);
 
 			// These are getters and setters.
 			Menu* getMenu();

@@ -7,6 +7,14 @@
 
 #include "KeyFrame.h"
 
+void KeyFrame::start() {
+	started = true;
+}
+
+bool KeyFrame::hasBeenStarted() {
+	return started;
+}
+
 void KeyFrame::setEndingAction(std::function<void()> endingAction) {
 	this->endingAction = endingAction;
 }

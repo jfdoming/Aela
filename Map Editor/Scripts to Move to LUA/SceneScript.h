@@ -9,6 +9,7 @@
 #include "Menus\RectComponent.h"
 #include "3D\Maps\Map3DExporter.h"
 #include "..\Aela_Game.h"
+#include "Menus\SubMenu.h"
 #include <memory>
 
 using namespace Aela;
@@ -20,6 +21,7 @@ using namespace Aela;
 void setupScenes(Engine* engine, AelaGame* game) {
 	// This creates some objects for later.
 	FontManager* fontManager = engine->getFontManager();
+	GLRenderer* renderer = engine->getRenderer();
 	TextFont* xeroxLarge = fontManager->obtainTextFont("res/fonts/xerox.ttf", 35);
 	TextFont* xerox = fontManager->obtainTextFont("res/fonts/xerox.ttf", 18);
 	if (xeroxLarge == nullptr || xerox == nullptr) {
@@ -33,8 +35,8 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// The following blocks of code setup the main menu scene.
 	// This sets up an image.
 	auto mainMenuImage = std::make_shared<ImageComponent>();
-	Texture* mainMenuTexture;
-	bool success = engine->getResourceManager()->obtain<Texture>("res/textures/map_editor_main_background.dds", mainMenuTexture);
+	GLTexture* mainMenuTexture;
+	bool success = engine->getResourceManager()->obtain<GLTexture>("res/textures/map_editor_main_background.dds", mainMenuTexture);
 	mainMenuImage->setDimensions(&windowDimensions);
 	mainMenuImage->setCropping(mainMenuTexture->getDimensions());
 	mainMenuImage->setTexture(mainMenuTexture);
@@ -52,7 +54,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// This sets up actions for the main menu buttons.
 	auto editMapAction = [game](Engine* engine) {
 		engine->getSceneManager()->setCurrentScene(EDITOR_SCENE);
-		game->performActionOnSceneSwitch(EDITOR_SCENE);
+		game->switchScene(EDITOR_SCENE);
 	};
 	auto helpMapAction = [](Engine* engine) {
 		// Lol, this is temporary until I feel like creating a seperate scene for this garbage.
@@ -74,25 +76,25 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// a button, make sure that you set the button's position before hand.
 	auto editMapButton = std::make_shared<Button>();
 	editMapButton->setDimensions(editMapButtonText->getDimensions());
-	editMapButton->setupOnClick(std::bind(editMapAction, engine), engine->getEventHandler());
+	editMapButton->setupOnClick(std::bind(editMapAction, engine));
 	editMapButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f));
 	editMapButton->setText(editMapButtonText);
 
 	auto helpButton = std::make_shared<Button>();
 	helpButton->setDimensions(loadMapButtonText->getDimensions());
-	helpButton->setupOnClick(std::bind(helpMapAction, engine), engine->getEventHandler());
+	helpButton->setupOnClick(std::bind(helpMapAction, engine));
 	helpButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f + spacing));
 	helpButton->setText(loadMapButtonText);
 
 	auto exitButton = std::make_shared<Button>();
 	exitButton->setDimensions(exitButtonText->getDimensions());
-	exitButton->setupOnClick(std::bind(exitAction, engine), engine->getEventHandler());
+	exitButton->setupOnClick(std::bind(exitAction, engine));
 	exitButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f + spacing * 2));
 	exitButton->setText(exitButtonText);
 
 	// This sets up the title screen scene.
 	auto mainMenuScene = new Scene();
-	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
+	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
 	mainMenuScene->getMenu()->add(mainMenuImage);
 	mainMenuScene->getMenu()->add(titleText);
 	mainMenuScene->getMenu()->add(ekkonGamesText);
@@ -103,8 +105,8 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// The following blocks of code setup the map editor scene.
 	// This sets up the top bar image.
 	auto topBarImage = std::make_shared<ImageComponent>();
-	Texture* topBarTexture;
-	success = engine->getResourceManager()->obtain<Texture>("res/textures/map_editor_top_bar.dds", topBarTexture);
+	GLTexture* topBarTexture;
+	success = engine->getResourceManager()->obtain<GLTexture>("res/textures/map_editor_top_bar.dds", topBarTexture);
 	topBarImage->setDimensions(&Rect<int>(0, 0, windowDimensions.getWidth(), windowDimensions.getHeight() / 18));
 	topBarImage->setCropping(topBarTexture->getDimensions());
 	topBarImage->setTexture(topBarTexture);
@@ -125,7 +127,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This creates the map creation scene.
 	auto mapCreationScene = new Scene();
-	mapCreationScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
+	mapCreationScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
 	mapCreationScene->getMenu()->add(topBarImage);
 	mapCreationScene->getMenu()->add(entityTypeText);
 	mapCreationScene->getMenu()->add(positionText);
@@ -176,49 +178,70 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	auto exportReadableMapButton = std::make_shared<Button>(&settingsHoverTint, &settingsClickTint);
 
 	// This gets textures for the pause menu buttons.
-	Texture* simpleButtonTexture;
-	Texture* simpleButtonTextureLight;
-	success = engine->getResourceManager()->obtain<Texture>("res/textures/simple_button.dds", simpleButtonTexture);
-	success = engine->getResourceManager()->obtain<Texture>("res/textures/simple_button_light.dds", simpleButtonTextureLight);
+	GLTexture* simpleButtonTexture;
+	GLTexture* simpleButtonTextureLight;
+	success = engine->getResourceManager()->obtain<GLTexture>("res/textures/simple_button.dds", simpleButtonTexture);
+	success = engine->getResourceManager()->obtain<GLTexture>("res/textures/simple_button_light.dds", simpleButtonTextureLight);
 
-	auto entitySubMenu = std::make_shared<Container>(), skyboxSubMenu = std::make_shared<Container>(),
-		exportSubMenu = std::make_shared<Container>(), optionsSubMenu = std::make_shared<Container>();
+	auto entitySubMenu = std::make_shared<SubMenu>(), skyboxSubMenu = std::make_shared<SubMenu>(),
+		exportSubMenu = std::make_shared<SubMenu>(), optionsSubMenu = std::make_shared<SubMenu>();
+
+	// This sets up the scenes for the pause menu.
+	Scene* pauseScene = new Scene();
+	pauseScene->enableMenu(engine->getWindow()->getWindowDimensions(), *engine->getRenderer());
+
+	entitySubMenu->init(&windowDimensions, *renderer);
+	skyboxSubMenu->init(&windowDimensions, *renderer);
+	exportSubMenu->init(&windowDimensions, *renderer);
+	optionsSubMenu->init(&windowDimensions, *renderer);
 
 	// This sets up actions for buttons.
 	auto goToEntityToolSceneAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton,
-		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu](Engine* engine) {
+		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu,
+		pauseScene](Engine* engine) {
 		entityToolButton->setTexture(simpleButtonTextureLight);
 		skyboxesButton->setTexture(simpleButtonTexture);
 		exportButton->setTexture(simpleButtonTexture);
 		optionsButton->setTexture(simpleButtonTexture);
-		entitySubMenu->setInUse(true);
-		skyboxSubMenu->setInUse(false);
-		exportSubMenu->setInUse(false);
-		optionsSubMenu->setInUse(false);
+		entitySubMenu->show();
+		skyboxSubMenu->hide();
+		exportSubMenu->hide();
+		optionsSubMenu->hide();
+
+		// Force a rerender.
+		pauseScene->getMenu()->show();
 	};
 
 	auto goToSkyboxSceneAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton,
-		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu](Engine* engine) {
+		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu,
+		pauseScene](Engine* engine) {
 		entityToolButton->setTexture(simpleButtonTexture);
 		skyboxesButton->setTexture(simpleButtonTextureLight);
 		exportButton->setTexture(simpleButtonTexture);
 		optionsButton->setTexture(simpleButtonTexture);
-		entitySubMenu->setInUse(false);
-		skyboxSubMenu->setInUse(true);
-		exportSubMenu->setInUse(false);
-		optionsSubMenu->setInUse(false);
+		entitySubMenu->hide();
+		skyboxSubMenu->show();
+		exportSubMenu->hide();
+		optionsSubMenu->hide();
+
+		// Force a rerender.
+		pauseScene->getMenu()->show();
 	};
 
 	auto goToExportSceneAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton,
-		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu](Engine* engine) {
+		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu,
+		pauseScene](Engine* engine) {
 		entityToolButton->setTexture(simpleButtonTexture);
 		skyboxesButton->setTexture(simpleButtonTexture);
 		exportButton->setTexture(simpleButtonTextureLight);
 		optionsButton->setTexture(simpleButtonTexture);
-		entitySubMenu->setInUse(false);
-		skyboxSubMenu->setInUse(false);
-		exportSubMenu->setInUse(true);
-		optionsSubMenu->setInUse(false);
+		entitySubMenu->hide();
+		skyboxSubMenu->hide();
+		exportSubMenu->show();
+		optionsSubMenu->hide();
+
+		// Force a rerender.
+		pauseScene->getMenu()->show();
 	};
 
 	auto exportRegularMapAction = [game](Engine* engine) {
@@ -230,53 +253,57 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	};
 
 	auto goToOptionsAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton,
-		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu](Engine* engine) {
+		simpleButtonTexture, simpleButtonTextureLight, entitySubMenu, skyboxSubMenu, exportSubMenu, optionsSubMenu,
+		pauseScene](Engine* engine) {
 		entityToolButton->setTexture(simpleButtonTexture);
 		skyboxesButton->setTexture(simpleButtonTexture);
 		exportButton->setTexture(simpleButtonTexture);
 		optionsButton->setTexture(simpleButtonTextureLight);
-		entitySubMenu->setInUse(false);
-		skyboxSubMenu->setInUse(false);
-		exportSubMenu->setInUse(false);
-		optionsSubMenu->setInUse(true);
+		entitySubMenu->hide();
+		skyboxSubMenu->hide();
+		exportSubMenu->hide();
+		optionsSubMenu->show();
+
+		// Force a rerender.
+		pauseScene->getMenu()->show();
 	};
 
 	// This sets up buttons.
 	entityToolButton->setTexture(simpleButtonTextureLight);
 	entityToolButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.1111),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
-	entityToolButton->setupOnClick(std::bind(goToEntityToolSceneAction, engine), engine->getEventHandler());
+	entityToolButton->setupOnClick(std::bind(goToEntityToolSceneAction, engine));
 	entityToolButton->setText(entityToolText);
 
 	skyboxesButton->setTexture(simpleButtonTexture);
 	skyboxesButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.2222),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
-	skyboxesButton->setupOnClick(std::bind(goToSkyboxSceneAction, engine), engine->getEventHandler());
+	skyboxesButton->setupOnClick(std::bind(goToSkyboxSceneAction, engine));
 	skyboxesButton->setText(skyboxesText);
 
 	exportButton->setTexture(simpleButtonTexture);
 	exportButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.3333),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
-	exportButton->setupOnClick(std::bind(goToExportSceneAction, engine), engine->getEventHandler());
+	exportButton->setupOnClick(std::bind(goToExportSceneAction, engine));
 	exportButton->setText(exportText);
 
 	optionsButton->setTexture(simpleButtonTexture);
 	optionsButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.4444),
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
-	optionsButton->setupOnClick(std::bind(goToOptionsAction, engine), engine->getEventHandler());
+	optionsButton->setupOnClick(std::bind(goToOptionsAction, engine));
 	optionsButton->setText(optionsText);
 
 	// This sets up buttons from the export scene.
 	exportRegularMapButton->setTexture(simpleButtonTexture);
 	exportRegularMapButton->setDimensions(exportToRegularMapText->getDimensions());
 	exportRegularMapButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.375), (int) (windowDimensions.getHeight() * 0.3333));
-	exportRegularMapButton->setupOnClick(std::bind(exportRegularMapAction, engine), engine->getEventHandler());
+	exportRegularMapButton->setupOnClick(std::bind(exportRegularMapAction, engine));
 	exportRegularMapButton->setText(exportToRegularMapText);
 
 	exportReadableMapButton->setTexture(simpleButtonTexture);
 	exportReadableMapButton->setDimensions(exportToReadableMapText->getDimensions());
 	exportReadableMapButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.375), (int)(windowDimensions.getHeight() * 0.4444));
-	exportReadableMapButton->setupOnClick(std::bind(exportReadableMapAction, engine), engine->getEventHandler());
+	exportReadableMapButton->setupOnClick(std::bind(exportReadableMapAction, engine));
 	exportReadableMapButton->setText(exportToReadableMapText);
 
 	// This sets up a rectangle that the pause menu scenes will use.
@@ -284,10 +311,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	rightRect->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.3125), (int) (windowDimensions.getHeight() * 0.1111),
 		(int) (windowDimensions.getWidth() * 0.5625), (int) (windowDimensions.getHeight() * 0.7777)));
 	rightRect->setColour(&ColourRGBA(0.2f, 0.2f, 0.2f, 0.95f));
-
-	// This sets up the scenes for the pause menu.
-	Scene* pauseScene = new Scene();
-	pauseScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
 	
 	entitySubMenu->add(tintRect);
 	entitySubMenu->add(entityToolButton);
@@ -296,7 +319,6 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	entitySubMenu->add(optionsButton);
 	entitySubMenu->add(rightRect);
 	entitySubMenu->add(entityToolTitleText);
-	entitySubMenu->setInUse(true);
 	pauseScene->getMenu()->add(entitySubMenu);
 
 	skyboxSubMenu->add(tintRect);
@@ -328,6 +350,11 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	optionsSubMenu->add(optionsTitleText);
 	pauseScene->getMenu()->add(optionsSubMenu);
 
+	entitySubMenu->show();
+	skyboxSubMenu->hide();
+	exportSubMenu->hide();
+	optionsSubMenu->hide();
+
 	// This loads a map.
 	Map3D* map;
 	success = engine->getResourceManager()->obtain<Map3D>("res/maps/map.txt", map);
@@ -348,9 +375,9 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 
 	// engine->getWindow()->hideCursor();
-	// engine->getRenderer()->getCamera()->setUseControls(false);
+	// engine->getRenderer()->getCamera()->useControls(false);
 
 	// The renderer's camera must be bound to the KeyedAnimator for movement.
-	engine->getRenderer().getCamera()->setPosition(0, 10, -10);
-	engine->getRenderer().getCamera()->setRotation(0, glm::pi<float>() / -4, 0);
+	/*engine->getRenderer().getCamera()->setPosition(0, 10, -10);
+	engine->getRenderer().getCamera()->setRotation(0, glm::pi<float>() / -4, 0);*/
 }

@@ -22,8 +22,17 @@ namespace Aela {
 
 			std::vector<SubModel>* getSubModels();
 			void setSubModels(std::vector<SubModel>* subModels);
+			unsigned long long getNumberOfVertices();
+			unsigned long long getNumberOfUVs();
+			unsigned long long getNumberOfNormals();
+			unsigned long long getNumberOfIndices();
 
 		private:
 			std::vector<SubModel> subModels;
+
+			unsigned long long numberOfVertices = 0;
+			unsigned long long numberOfUVs = 0;
+			unsigned long long numberOfNormals = 0;
+			unsigned long long numberOfIndices = 0;
 	};
 }

@@ -6,7 +6,7 @@
 
 #include <GL/glew.h>
 #include <string>
-#include "../2D/Texture/Texture.h"
+#include "../2D/Texture/GLTexture.h"
 #include "../3D/Skybox/Skybox.h"
 
 #ifndef TEXTURE_HPP
@@ -15,7 +15,7 @@
 // GLuint loadBMP_custom(const char* imagepath);
 
 GLuint loadDDSToGLuint(std::string filePath);
-Texture loadDDSToTexture(std::string filePath);
+GLTexture loadDDSToTexture(std::string filePath);
 void loadDDSToCubemapSide(GLuint* cubeMap, int side, std::string filePath);
 GLuint loadBMPToGLuint(std::string filePath);
 void loadSkybox(Aela::Skybox* skybox, std::string paths[6], int width, int height);

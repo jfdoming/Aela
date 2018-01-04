@@ -25,7 +25,7 @@ class GameplayManager {
 			animator = engine->getAnimator();
 			userEnvironment = engine->getUserEnvironment();
 			framerateCalculator = engine->getFramerateCalculator();
-			camera = engine->getRenderer().getCamera();
+			camera = engine->getRendererReference().getCamera();
 			physicsManager = engine->getPhysicsManager();
 		}
 
@@ -38,7 +38,7 @@ class GameplayManager {
 
 		// These are getters and setters.
 		Player* getPlayer();
-		NPCManager* getNPCManager();
+		CharacterManager* getNPCManager();
 		void setCurrentMap(Map3D* map);
 
 	private:
@@ -59,7 +59,7 @@ class GameplayManager {
 
 		// These are game-related objects.
 		Player player;
-		NPCManager npcManager;
+		CharacterManager characterManager;
 		Map3D* currentMap = nullptr;
 
 		// These store the states of keys.

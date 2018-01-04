@@ -49,7 +49,7 @@ class Transformable3D {
 		float getProperty(Transformable3DProperty property);
 
 		// These functions are used for transforming the 3D object.
-		void translate(glm::vec3 translation), translate(float x, float y, float z);
+		void translate(glm::vec3 position), translate(float x, float y, float z);
 		void rotate(glm::vec3 rotation), rotate(float x, float y, float z);
 		void rotateAroundPoint(PointRotation3D* pointRotation), rotateAroundPoint(glm::vec3* rotation, glm::vec3* point);
 		void scaleUp(glm::vec3 scaling), scaleUp(float x, float y, float z);

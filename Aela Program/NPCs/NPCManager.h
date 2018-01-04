@@ -1,5 +1,5 @@
 /*
-* Class: NPC Manager
+* Class: Character Manager
 * Author: Robert Ciborowski
 * Date: 07/08/2017
 * Description: A class used to manage NPCs.
@@ -11,14 +11,14 @@
 
 #include "../NPCs/NPC.h"
 
-class NPCManager {
+class CharacterManager {
 	public:
-		NPCManager() {
+		CharacterManager() {
 
 		}
 
-		int addNPC(NPC* npc), removeNPC(int index);
+		unsigned long long addCharacter(Character* npc), removeCharacter(unsigned long long index);
 
 	private:
-		std::map<int, NPC> npcs;
+		std::map<unsigned long long, Character> characters;
 };

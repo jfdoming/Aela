@@ -23,4 +23,27 @@ std::vector<SubModel>* Aela::Model::getSubModels() {
 
 void Aela::Model::setSubModels(std::vector<SubModel>* subModels) {
 	this->subModels = *subModels;
+
+	for (SubModel& subModel : this->subModels) {
+		numberOfVertices += subModel.getVertexSize();
+		numberOfUVs += subModel.getUVSize();
+		numberOfNormals += subModel.getNormalSize();
+		numberOfIndices += subModel.getIndexSize();
+	}
+}
+
+unsigned long long Aela::Model::getNumberOfVertices() {
+	return numberOfVertices;
+}
+
+unsigned long long Aela::Model::getNumberOfUVs() {
+	return numberOfUVs;
+}
+
+unsigned long long Aela::Model::getNumberOfNormals() {
+	return numberOfNormals;
+}
+
+unsigned long long Aela::Model::getNumberOfIndices() {
+	return numberOfIndices;
 }

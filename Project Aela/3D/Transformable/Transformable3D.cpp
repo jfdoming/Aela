@@ -148,8 +148,8 @@ float Transformable3D::getProperty(Transformable3DProperty property) {
 	}
 }
 
-void Transformable3D::translate(glm::vec3 translation) {
-	position += translation;
+void Transformable3D::translate(glm::vec3 position) {
+	position += position;
 }
 
 void Transformable3D::rotate(glm::vec3 rotation) {

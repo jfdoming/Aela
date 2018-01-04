@@ -23,14 +23,17 @@ namespace Aela {
 			virtual void onMousePressed(MouseEvent* event);
 			virtual void onMouseReleased(MouseEvent* event);
 			virtual void onMouseMoved(MouseEvent* event);
+
+			virtual void markDirty();
+
 		protected:
 			Container(int x, int y);
+			std::vector<std::shared_ptr<Component>> children;
 
 		private:
 			LayoutManager* layout;
-			std::vector<std::shared_ptr<Component>> children;
 
 			virtual void updateComponent();
-			virtual void renderComponent(Renderer& renderer);
+			virtual void renderComponent(GLRenderer& renderer);
 	};
 }

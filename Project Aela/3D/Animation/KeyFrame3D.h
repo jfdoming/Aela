@@ -21,13 +21,14 @@ class KeyFrame3D : public KeyFrame {
 		}
 
 		KeyFrameType getType();
+		virtual void start();
 
 		// These are getters and setters.
-		void setObject(Transformable3D* object), setTranslation(glm::vec3* translation), setRotation(glm::vec3* rotation),
+		void setObject(Transformable3D* object), setTranslation(glm::vec3* position), setRotation(glm::vec3* rotation),
 			setPointRotation(PointRotation3D* pointRotation), setScaling(glm::vec3* scaling);
 		Transformable3D* getObject();
-		glm::vec3* getTranslation(), *getRotation(), *getScaling();
-		PointRotation3D* getPointRotation();
+		glm::vec3* getPosition(), *getRotation(), *getScaling(), *getOriginalPosition(), *getOriginalRotation(), *getOriginalScaling();
+		PointRotation3D* getPointRotation(), *getOriginalPointRotation();
 		void setUseTranslation(bool use), setUseRotation(bool use), setUsePointRotation(bool use), setUseScaling(bool use);
 		bool isUsingTranslation(), isUsingRotation(), isUsingPointRotation(), isUsingScaling();
 
@@ -40,10 +41,10 @@ class KeyFrame3D : public KeyFrame {
 		// The object is NOT a shared ptr like in a 2D keyframe since menu objects are meant to be allocated to the heap and
 		// shared while 3D transformables are meant to be stored inside of a map.
 		Transformable3D* object = nullptr;
-		glm::vec3 translation;
-		glm::vec3 rotation;
-		PointRotation3D pointRotation;
-		glm::vec3 scaling = glm::vec3(1);
+		glm::vec3 position, originalPosition;
+		glm::vec3 rotation, originalRotation;
+		PointRotation3D pointRotation, originalPointRotation;
+		glm::vec3 scaling = glm::vec3(1), originalScaling;
 
 		// These are booleans which specify whether a property of the object should be modified. Even if not modifying one of these
 		// properties in a key frame, it's usually okay to leave it as being used since the animator will just force that value to

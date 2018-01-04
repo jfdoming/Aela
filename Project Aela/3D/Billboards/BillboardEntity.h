@@ -13,14 +13,6 @@
 #include <string>
 #include <glm/glm.hpp>
 
-// This makes GLEW Static to avoid errors.
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif
-
-// This includes GLEW.
-#include <GL/glew.h>
-
 using namespace Aela;
 
 class BillboardEntity : public Transformable3D, public Entity {

@@ -22,7 +22,6 @@ Resource* ResourceMap::get_impl(std::string key) {
 	if (iter == resources.end()) {
 		return nullptr;
 	}
-
 	return iter->second;
 }
 

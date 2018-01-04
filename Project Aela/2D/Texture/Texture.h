@@ -6,57 +6,34 @@
 */
 
 #pragma once
-#ifndef GLEW_STATIC
-#define GLEW_STATIC
-#endif
-
-#include <GL/glew.h>
 #include "../../Utilities/Rect/Rect.h"
 #include "../../Resource Management/Resource.h"
 #include "Image.h"
 
 class Texture : public Aela::Resource {
 	public:
-		Texture(std::string src, GLuint& texId) : Resource(src) {
-			image.setTexture(texId);
+		Texture(std::string src, unsigned int& texId) : Resource(src) {
 		}
 
-		virtual ~Texture(){
+		virtual ~Texture() {
 		}
 
 		// These are some getters and setters.
-		void setDimensions(Rect<int>* dimensions) {
-			image.setDimensions(dimensions);
-		}
+		virtual void setDimensions(Rect<int>* dimensions) = 0;
 
-		void setDimensions(int x, int y, int width, int height) {
-			image.setDimensions(x, y, width, height);
-		}
+		virtual void setDimensions(int x, int y, int width, int height) = 0;
 
-		void setTexture(GLuint texture) {
-			image.setTexture(texture);
-		}
+		virtual void setTexture(unsigned int texture) = 0;
 
-		Rect<int>* getDimensions() {
-			return image.getDimensions();
-		}
+		virtual Rect<int>* getDimensions() = 0;
 
-		Image* getImage() {
-			return &image;
-		}
+		virtual Image* getImage() = 0;
 
-		GLuint* getTexture() {
-			return image.getTexture();
-		}
+		virtual unsigned int* getTexture() = 0;
 
 		// This function returns if the object was initialised properly. If it is not
 		// initialised then rendering propblems will occur. Note that a Texture is still
 		// initialised if the output (dimensions on the screen) has a width and/or height
 		// of zero.
-		bool isInitialised() {
-			return image.isInitialised();
-		}
-
-	private:
-		Image image;
+		virtual bool isInitialised() = 0;
 };

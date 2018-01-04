@@ -19,8 +19,8 @@ namespace Aela {
 	class Button : public ImageComponent {
 		public:
 			Button();
-			Button(Texture* texture);
-			Button(Texture* texture, Rect<int>* dimensions);
+			Button(GLTexture* texture);
+			Button(GLTexture* texture, Rect<int>* dimensions);
 			Button(ColourRGBA* hoverTint, ColourRGBA* clickTint);
 			virtual ~Button();
 
@@ -33,7 +33,7 @@ namespace Aela {
 			void setClickTint(ColourRGBA* clickTint);
 
 			virtual void updateComponent();
-			virtual void renderComponent(Renderer& renderer);
+			virtual void renderComponent(GLRenderer& renderer);
 
 			virtual void onMousePressed(MouseEvent* event);
 			virtual void onMouseReleased(MouseEvent* event);

@@ -41,19 +41,19 @@ void Aela::SubModel::setIndices(std::vector<unsigned short>* indices) {
 	this->indices = *indices;
 }
 
-unsigned int Aela::SubModel::getVertexSize() {
+unsigned long long Aela::SubModel::getVertexSize() {
 	return vertices.size();
 }
 
-unsigned int Aela::SubModel::getUVSize() {
+unsigned long long Aela::SubModel::getUVSize() {
 	return UVs.size();
 }
 
-unsigned int Aela::SubModel::getNormalSize() {
+unsigned long long Aela::SubModel::getNormalSize() {
 	return normals.size();
 }
 
-unsigned int Aela::SubModel::getIndexSize() {
+unsigned long long Aela::SubModel::getIndexSize() {
 	return indices.size();
 }
 

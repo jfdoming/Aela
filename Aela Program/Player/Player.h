@@ -11,7 +11,7 @@
 
 using namespace Aela;
 
-class Player : public NPC {
+class Player : public Character {
 	public:
 		Player() {
 

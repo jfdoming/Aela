@@ -1,8 +1,8 @@
 /*
-* Class: NPC
+* Class: Character
 * Author: Robert Ciborowski
 * Date: 07/08/2017
-* Description: A class used to represent an NPC.
+* Description: A class used to represent an Character.
 */
 
 #pragma once
@@ -10,9 +10,9 @@
 
 using namespace Aela;
 
-class NPC {
+class Character {
 	public:
-		NPC() {
+		Character() {
 
 		}
 

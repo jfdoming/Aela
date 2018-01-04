@@ -22,7 +22,7 @@ int Aela::Engine::runningLoop() {
 	// This animates entities just to make sure that the Animator actually works.
 	/*std::vector<KeyFrame3D> keyFrames;
 	for (unsigned int i = 0; i < 0; i++) {
-		KeyFrame3DList keyFrameList;
+		AnimationTrack3D track;
 		for (int j = 2; j < 3; j++) {
 			KeyFrame3D keyFrame;
 			keyFrame.setObject(&entities[j]);
@@ -36,10 +36,10 @@ int Aela::Engine::runningLoop() {
 			keyFrame.setPointRotation(&pointRotation);
 			glm::vec3 scaling(1, 1, 1);
 			keyFrame.setScaling(&scaling);
-			keyFrameList.addKeyFrame(&keyFrame);
+			track.addKeyFrame(&keyFrame);
 		}
-		keyFrameList.setTimeAfterPreviousKeyFrame(5000 * i + 5000);
-		Animator.addKeyFrame3DList(&keyFrameList);
+		track.setPositionInTrack(5000 * i + 5000);
+		Animator.addAnimationTrack3D(&track);
 	}*/
 
 	resourceManager.bindGroup("test");
@@ -133,15 +133,6 @@ int Aela::Engine::setupControlManager() {
 	return 0;
 }
 
-class Lol {
-	public:
-		void testStuff(std::string out) {
-			std::cout << " Test: " << out << "\n";
-		}
-};
-
-Lol lol;
-
 int Aela::Engine::setupLUA() {
 	// This was here just as a test but it breaks.
 	/* luaManager.exposeObject(&lol, "lol");
@@ -153,10 +144,8 @@ int Aela::Engine::setupLUA() {
 
 int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
-	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(Renderer::onEvent, &renderer));
-	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(Renderer::onEvent, &renderer));
-	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
-	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
+	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(Camera3D::onEvent, renderer.getCamera()));
+	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(Camera3D::onEvent, renderer.getCamera()));
 	eventHandler.start();
 	return 0;
 }
@@ -211,8 +200,12 @@ Window* Engine::getWindow() {
 	return &window;
 }
 
-Renderer& Engine::getRenderer() {
+GLRenderer& Engine::getRendererReference() {
 	return renderer;
+}
+
+GLRenderer* Aela::Engine::getRenderer() {
+	return &renderer;
 }
 
 EventHandler* Engine::getEventHandler() {

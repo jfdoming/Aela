@@ -14,11 +14,11 @@
 #include "2D/Text/FontManager.h"
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
-#include "2D/Texture/TextureLoader.h"
-#include "3D/Materials/MaterialLoader.h"
+#include "2D/Texture/GLTextureLoader.h"
+#include "3D/Materials/GLMaterialLoader.h"
 #include "3D/Models/OBJLoader.h"
 #include "Physics/PhysicsManager.h"
-#include "3D/Skybox/SkyboxLoader.h"
+#include "3D/Skybox/GLSkyboxLoader.h"
 #include "3D/Maps/Map3DLoader.h"
 #include "Audio/WAVEClipLoader.h"
 #include "Lua/LuaManager.h"
@@ -57,7 +57,9 @@ namespace Aela {
 
 			// These are getters. Some of the Aela Objects inside of this class are not allowed to be accessed externally.
 			Window* getWindow();
-			Renderer& getRenderer();
+			// I don't know why, but someone changed getRenderer() to return &, causing many conflicts. I added back the version that returns *.
+			GLRenderer& getRendererReference();
+			GLRenderer* getRenderer();
 			EventHandler* getEventHandler();
 			TimeManager* getTimeManager();
 			FontManager* getFontManager();
@@ -75,7 +77,7 @@ namespace Aela {
 		private:
 			// These are global objects who's classes come from Project Aela.
 			Window window;
-			Renderer renderer;
+			GLRenderer renderer;
 			EventHandler eventHandler;
 			TimeManager timeManager;
 			FontManager fontManager;

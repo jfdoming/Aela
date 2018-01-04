@@ -37,6 +37,11 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
+	error = engine.setupScenes();
+	if (error != 0) {
+		return error;
+	}
+
 	error = engine.setupAnimation();
 	if (error != 0) {
 		return error;
@@ -59,7 +64,7 @@ int main(int argc, char *args[]) {
 		game.update();
 		engine.render();
 		if (counter >= 100) {
-			fpsCalculator.calculate(engine.getTimeManager()->getCurrentTime(), engine.getTimeManager()->getTimeBetweenFrames());
+			fpsCalculator.calculate(engine.getTimeManager()->getCurrentTimeInNanos(), engine.getTimeManager()->getTimeBetweenFramesInNanos());
 			std::cout << fpsCalculator.getSmoothedFPS() << " FPS\n";
 			counter = 0;
 		}

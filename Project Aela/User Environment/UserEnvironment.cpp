@@ -1,11 +1,11 @@
 #include "UserEnvironment.h"
 
-void Aela::UserEnvironment::generateInfo(Renderer* renderer) {
-	graphicsVendor = renderer->getInformation(RendererInformation::VENDOR);
-	graphicsRenderer = renderer->getInformation(RendererInformation::RENDERER);
-	openGLVersion = renderer->getInformation(RendererInformation::OPENGL_VERSION);
-	GLSLVersion = renderer->getInformation(RendererInformation::GLSL_VERSION);
-	openGLExtensions = renderer->getInformation(RendererInformation::OPENGL_EXTENSIONS);
+void Aela::UserEnvironment::generateInfo(GLRenderer* renderer) {
+	graphicsVendor = renderer->getInformation(GLRendererInformation::VENDOR);
+	graphicsRenderer = renderer->getInformation(GLRendererInformation::RENDERER);
+	openGLVersion = renderer->getInformation(GLRendererInformation::OPENGL_VERSION);
+	GLSLVersion = renderer->getInformation(GLRendererInformation::GLSL_VERSION);
+	openGLExtensions = renderer->getInformation(GLRendererInformation::OPENGL_EXTENSIONS);
 
 	for (int i = 0; i < SDL_GetNumAudioDevices(0); i++) {
 		audioDeviceNames.push_back(std::string(SDL_GetAudioDeviceName(i, 0)));

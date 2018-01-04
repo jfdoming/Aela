@@ -14,7 +14,7 @@ class FramerateCalculator {
 
 		}
 
-		void calculate(long long currentTime, long long timeBetweenFrames);
+		void calculate(long long currentTimeInNanos, long long timeBetweenFrames);
 
 		// These are getters and setters.
 		double getTrueFPS(), getSmoothedFPS(), getFPSSmoothingAmount();

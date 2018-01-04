@@ -29,15 +29,15 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// The following blocks of code set up the Ekkon intro scene.
 	auto ekkonImage = std::make_shared<ImageComponent>();
-	Texture* ekkonTexture;
-	bool success = engine->getResourceManager()->obtain<Texture>("res/textures/ekkon.dds", ekkonTexture);
+	GLTexture* ekkonTexture;
+	bool success = engine->getResourceManager()->obtain<GLTexture>("res/textures/ekkon.dds", ekkonTexture);
 	ekkonImage->setDimensions(&windowDimensions);
 	ekkonImage->setTexture(ekkonTexture);
 	ekkonImage->setTint(&ColourRGBA(1, 1, 1, 0));
 
 	// This sets up the ekkon scene.
 	auto ekkonScene = new Scene();
-	ekkonScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
+	ekkonScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
 	ekkonScene->getMenu()->add(ekkonImage);
 
 	// The following blocks of code set up the main menu scene.
@@ -57,7 +57,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 		Rect<unsigned int>* dimensions = engine->getWindow()->getWindowDimensions();
 		engine->getWindow()->setCursorPositionInWindow(dimensions->getWidth() / 2, dimensions->getHeight() / 2);
 		engine->getSceneManager()->setCurrentScene(GAMEPLAY_SCENE);
-		game->performActionOnSceneSwitch(GAMEPLAY_SCENE);
+		game->switchScene(GAMEPLAY_SCENE);
 	};
 	auto optionsAction = [](Engine* engine) {
 		AelaErrorHandling::windowWarning("There's nothing to see here.");
@@ -90,7 +90,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	PlanarParticleEmitter* particleEmitter = new PlanarParticleEmitter();
 	Rect<GLfloat> emitterDimensions(0, 0, 10, 10);
 	particleEmitter->setupDimensions(&emitterDimensions);
-	particleEmitter->setCamera(engine->getRenderer().getCamera());
+	particleEmitter->setCamera(engine->getRendererReference().getCamera());
 	particleEmitter->setStats(0.000000001f, 20, 0.000000001f, 2, 2);
 	particleEmitter->setPosition(5, 0, 5);
 	particleEmitter->setRotation(0, 3.4f, 0.7f);
@@ -98,7 +98,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This sets up the title screen scene.
 	Scene* mainMenuScene = new Scene();
-	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
+	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
 	mainMenuScene->getMenu()->add(titleText);
 	mainMenuScene->getMenu()->add(ekkonGamesText);
 	mainMenuScene->getMenu()->add(continueGameButton);
@@ -106,16 +106,16 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	mainMenuScene->getMenu()->add(exitButton);
 	mainMenuScene->putParticleEmitter(particleEmitter);
 
-	std::vector<Texture*> particleTextures;
-	Texture* tResult;
-	success = engine->getResourceManager()->obtain<Texture>("res/particles/particle_1.dds", tResult);
+	std::vector<GLTexture*> particleTextures;
+	GLTexture* tResult;
+	success = engine->getResourceManager()->obtain<GLTexture>("res/particles/particle_1.dds", tResult);
 	particleTextures.push_back(tResult);
-	success = engine->getResourceManager()->obtain<Texture>("res/particles/particle_2.dds", tResult);
+	success = engine->getResourceManager()->obtain<GLTexture>("res/particles/particle_2.dds", tResult);
 	particleTextures.push_back(tResult);
 	particleEmitter->setupParticles(&particleTextures, 0.6f, 0.6f, 25);
 
 	Scene* gameplayScene = new Scene();
-	gameplayScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRenderer());
+	gameplayScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
 	gameplayScene->putParticleEmitter(particleEmitter);
 
 	Map3D* map;
@@ -136,9 +136,9 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 
 	// Experimentation with Animators.
-	Animator* animator = engine->getAnimator();
+	/*Animator* animator = engine->getAnimator();
 	for (int i = 0; i < 4; i++) {
-		KeyFrame2DList list;
+		AnimationTrack2D list;
 		KeyFrame2D frame;
 		frame.setObject(ekkonImage);
 		if (i == 3) {
@@ -148,22 +148,22 @@ void setupScenes(Engine* engine, AelaGame* game) {
 		switch (i) {
 			case 0:
 				frame.setTint(&ColourRGBA(1, 1, 1, 0));
-				list.setTimeAfterPreviousKeyFrameInMillis(2500);
+				list.setPositionInTrackInMillis(2500);
 				break;
 			case 1:
 				frame.setTint(&ColourRGBA(1, 1, 1, 1));
-				list.setTimeAfterPreviousKeyFrameInMillis(2800);
+				list.setPositionInTrackInMillis(2800);
 				break;
 			case 2:
 				frame.setTint(&ColourRGBA(1, 1, 1, 1));
-				list.setTimeAfterPreviousKeyFrameInMillis(2500);
+				list.setPositionInTrackInMillis(2500);
 				break;
 			case 3:
 				frame.setTint(&ColourRGBA(1, 1, 1, -0.3f));
-				list.setTimeAfterPreviousKeyFrameInMillis(2300);
+				list.setPositionInTrackInMillis(2300);
 				break;
 		}
 		list.addKeyFrame(&frame);
-		animator->addKeyFrame2DList(&list);
-	}
+		animator->addAnimationTrack2D(&list);
+	}*/
 }

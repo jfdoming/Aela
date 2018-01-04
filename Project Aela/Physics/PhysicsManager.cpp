@@ -80,17 +80,17 @@ bool Physics::areColliding(BoundingBox3D* boxA, BoundingBox3D* boxB) {
 bool Physics::collidingInMap(int whichModel, Map3D* map) {
 	ModelEntity* model = map->getModel(whichModel);
 	if (model->getBoundingBox()->verticesWereGenerated()) {
-		for (auto pair : *map->getModels()) {
-			if (whichModel != pair.first) {
-				pair.second.generateBoundingBox();
+		/*for (auto pair : *map->getModels()) {
+			if (whichModel != pair) {
+				pair.generateBoundingBox();
 			}
-			if (whichModel != pair.first && pair.second.getBoundingBox()->verticesWereGenerated() && areColliding(model->getBoundingBox(), pair.second.getBoundingBox())) {
-				std::cout << model->getPosition()->x << " " << pair.second.getBoundingBox()->getPosition()->x << " " << pair.second.getModel()->getSrc() << "TRUE!\n";
+			if (whichModel != pair && pair.getBoundingBox()->verticesWereGenerated() && areColliding(model->getBoundingBox(), pair.getBoundingBox())) {
+				std::cout << model->getPosition()->x << " " << pair.getBoundingBox()->getPosition()->x << " " << pair.getModel()->getSrc() << "TRUE!\n";
 				return true;
-			} else if (whichModel != pair.first && pair.second.getBoundingBox()->verticesWereGenerated()) {
+			} else if (whichModel != pair && pair.getBoundingBox()->verticesWereGenerated()) {
 			}
 		}
-		return false;
+		return false*/;
 	} else {
 		return false;
 	}

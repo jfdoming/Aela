@@ -24,7 +24,7 @@ class ParticleEmitter : public Transformable3D {
 		}
 
 		// This sets up a particle. Basic implementation has been done on this function.
-		virtual void setupParticles(std::vector<Texture*>* textures, float particleWidth, float particleHeight, unsigned int amount);
+		virtual void setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight, unsigned int amount);
 
 		// This is the update function, which has no actual implementation.
 		virtual void update() = 0;

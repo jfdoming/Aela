@@ -30,7 +30,7 @@ void Aela::TextInput::setup(FontManager* fontManager) {
 void TextInput::updateComponent() {
 }
 
-void TextInput::renderComponent(Renderer& renderer) {
+void TextInput::renderComponent(GLRenderer& renderer) {
 	renderer.renderText(text, font, &dimensions, &colour);
 }
 

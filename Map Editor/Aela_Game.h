@@ -36,7 +36,7 @@ class AelaGame {
 		// This is triggered on an event.
 		void onEvent(Event* event);
 
-		void performActionOnSceneSwitch(int sceneID);
+		void switchScene(int sceneID);
 
 		// These are getters and setters.
 		void setMapBeingEdited(Map3D* mapBeingEdited);
@@ -46,21 +46,19 @@ class AelaGame {
 		void setRotationText(std::shared_ptr<Label> text);
 		void setScalingText(std::shared_ptr<Label> text);
 
-		void setup();
-		void update();
 		void cleanup();
 
 	private:
 		// These are Aela Engine objects.
 		Engine* engine;
 		Window* window;
-		Renderer* renderer;
+		GLRenderer* renderer;
 		EventHandler* eventHandler;
 		TimeManager* timeManager;
 		LuaManager* luaManager;
 		SceneManager* sceneManager;
 		ResourceManager* resourceManager;
-		AudioManager* audioPlayer;
+		AudioPlayer* audioPlayer;
 		Animator* animator;
 		UserEnvironment* userEnvironment;
 		FramerateCalculator* framerateCalculator;

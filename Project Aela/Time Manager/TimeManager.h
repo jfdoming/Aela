@@ -26,16 +26,40 @@ namespace Aela {
 				deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count();
 			}
 
-			long long getCurrentTime() {
+			long long getCurrentTimeInNanos() {
 				return std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime.time_since_epoch()).count();
 			}
 
-			long long getLastFrameTime() {
+			long long getCurrentTimeInMicros() {
+				return std::chrono::duration_cast<std::chrono::microseconds>(currentTime.time_since_epoch()).count();
+			}
+
+			long long getCurrentTimeInMillis() {
+				return std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count();
+			}
+
+			long long getLastFrameTimeInNanos() {
 				return std::chrono::duration_cast<std::chrono::nanoseconds>(lastTime.time_since_epoch()).count();
 			}
 
-			long long getTimeBetweenFrames() {
+			long long getLastFrameTimeInMicro() {
+				return std::chrono::duration_cast<std::chrono::microseconds>(lastTime.time_since_epoch()).count();
+			}
+
+			long long getLastFrameTimeInMillis() {
+				return std::chrono::duration_cast<std::chrono::milliseconds>(lastTime.time_since_epoch()).count();
+			}
+
+			long long getTimeBetweenFramesInNanos() {
 				return deltaTime;
+			}
+
+			long long getTimeBetweenFramesInMicros() {
+				return deltaTime / 1000;
+			}
+
+			long long getTimeBetweenFramesInMillis() {
+				return deltaTime / 1000000;
 			}
 
 		private:

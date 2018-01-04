@@ -2,12 +2,14 @@
 * Class: 3D Camera
 * Author: Robert Ciborowski
 * Date: November 2016
-* Description: A class used by Project Aela's Renderer to store properties of a camera.
+* Description: A class used by Project Aela's GLRenderer to store properties of a camera.
 */
 
 #include "Camera3D.h"
 #include "../../Utilities/flut.h"
 #include <glm\gtc\constants.hpp>
+
+using namespace Aela;
 
 glm::mat4 Camera3D::getViewMatrix() {
 	return viewMatrix;
@@ -33,12 +35,12 @@ bool Camera3D::isInUse() {
 	return inUse;
 }
 
-void Camera3D::setUseControls(bool useControls) {
-	this->useControls = useControls;
+void Camera3D::useControls(bool usingControls) {
+	this->usingControls = usingControls;
 }
 
-bool Camera3D::isUsingControls() {
-	return useControls;
+bool Camera3D::isUsingKeyboardControls() {
+	return usingControls;
 }
 
 void Camera3D::setForceCursorToMiddle(bool forceCursorToMiddle) {
@@ -47,6 +49,159 @@ void Camera3D::setForceCursorToMiddle(bool forceCursorToMiddle) {
 
 bool Camera3D::isForcingCursorToMiddle() {
 	return forceCursorToMiddle;
+}
+
+void Camera3D::setTimeManager(TimeManager* timeManager) {
+	this->timeManager = timeManager;
+}
+
+void Camera3D::setWindow(Window* window) {
+	this->window = window;
+}
+
+void Camera3D::onEvent(Event* event) {
+	KeyEvent* keyEvent = dynamic_cast<KeyEvent*>(event);
+
+	switch (keyEvent->getType()) {
+		case EventConstants::KEY_PRESSED:
+			if (keyEvent->getKeycode() == SDLK_w) {
+				movingForward = true;
+			}
+
+			if (keyEvent->getKeycode() == SDLK_s) {
+				movingBackward = true;
+			}
+
+			if (keyEvent->getKeycode() == SDLK_d) {
+				movingRight = true;
+			}
+
+			if (keyEvent->getKeycode() == SDLK_a) {
+				movingLeft = true;
+			}
+
+			if (keyEvent->getKeycode() == SDLK_SPACE) {
+				movingUp = true;
+			}
+
+			if (keyEvent->getKeycode() == SDLK_LCTRL) {
+				movingDown = true;
+			}
+			if (keyEvent->getKeycode() == SDLK_LSHIFT) {
+				currentSpeed = superSpeed;
+			}
+			break;
+		case EventConstants::KEY_RELEASED:
+			if (keyEvent->getKeycode() == SDLK_w) {
+				movingForward = false;
+			}
+
+			if (keyEvent->getKeycode() == SDLK_s) {
+				movingBackward = false;
+			}
+
+			if (keyEvent->getKeycode() == SDLK_d) {
+				movingRight = false;
+			}
+
+			if (keyEvent->getKeycode() == SDLK_a) {
+				movingLeft = false;
+			}
+
+			if (keyEvent->getKeycode() == SDLK_SPACE) {
+				movingUp = false;
+			}
+
+			if (keyEvent->getKeycode() == SDLK_LCTRL) {
+				movingDown = false;
+			}
+			if (keyEvent->getKeycode() == SDLK_LSHIFT) {
+				currentSpeed = speed;
+			}
+			break;
+		}
+}
+
+void Camera3D::update() {
+	// std::cout << position.x << " " << position.y << " " << position.z << "\n";
+	if (usingControls && inUse && window->isFocused()) {
+		// This gets the cursor's position.
+		int xpos, ypos;
+		window->getCursorPositionInWindow(&xpos, &ypos);
+
+		// This moves the cursor back to the middle of the window.
+		int width, height;
+		window->getWindowDimensions(&width, &height);
+
+		if (forceCursorToMiddle) {
+			window->setCursorPositionInWindow(width / 2, height / 2);
+		}
+
+		// This gets the horizontal and vertical angles.
+		float horizontalAngle = rotation.x;
+		float verticalAngle = rotation.y;
+
+		// This computes the new horizontal angle.
+		horizontalAngle += mouseSpeed * float(width / 2 - xpos);
+
+		// This adjusts the horizontal angle so that it stays between 0 and PI * 2.
+		if (horizontalAngle >= glm::pi<float>() * 2) {
+			horizontalAngle -= glm::pi<float>() * 2;
+		}
+		if (horizontalAngle <= 0) {
+			horizontalAngle += glm::pi<float>() * 2;
+		}
+
+		// This computes the new vertical angle.
+		float verticalModifier = mouseSpeed * float(height / 2 - ypos);
+
+		// This checks to see if the user is trying to make the camera go upside down by moving the camera up
+		// too far (vertical angle of PI/2 in radians). This also allows the camera to go upside down as long as
+		// allowUpsideDownCamera is true.
+		if ((!allowUpsideDown && verticalModifier > 0 && verticalAngle + verticalModifier <= glm::pi<float>() / 2) || allowUpsideDown) {
+			verticalAngle += mouseSpeed * float(height / 2 - ypos);
+		} else if (!allowUpsideDown && verticalModifier > 0) {
+			verticalAngle = glm::pi<float>() / 2;
+		}
+
+		// This checks to see if the user is trying to make the camera go upside down by moving the camera down
+		// too far (vertical angle of -PI/2 in radians). This also allows the camera to go upside down as long as
+		// allowUpsideDownCamera is true.
+		if ((!allowUpsideDown && verticalModifier < 0 && verticalAngle + mouseSpeed * float(height / 2 - ypos) >= glm::pi<float>() / -2) || allowUpsideDown) {
+			verticalAngle += mouseSpeed * float(height / 2 - ypos);
+		} else if (!allowUpsideDown && verticalModifier < 0) {
+			verticalAngle = glm::pi<float>() / -2;
+		}
+
+		rotation.x = horizontalAngle;
+		rotation.y = verticalAngle;
+
+		float deltaTime = (float) timeManager->getTimeBetweenFramesInNanos();
+
+		if (movingUp) {
+			position += straightUp * deltaTime * currentSpeed;
+		}
+
+		if (movingDown) {
+			position -= straightUp * deltaTime * currentSpeed;
+		}
+
+		if (movingLeft) {
+			position -= right * deltaTime * currentSpeed;
+		}
+
+		if (movingRight) {
+			position += right * deltaTime * currentSpeed;
+		}
+
+		if (movingForward) {
+			position += cartesionalDirection * deltaTime * currentSpeed;
+		}
+
+		if (movingBackward) {
+			position -= cartesionalDirection * deltaTime * currentSpeed;
+		}
+	}
 }
 
 void Camera3D::setViewMatrix(glm::mat4 setViewMatrix) {
@@ -83,9 +238,9 @@ void Camera3D::calculateCartesionalDirection() {
 
 void Camera3D::calculateRightVector() {
 	right = glm::vec3(
-		sin(rotation.x - 3.14f / 2.0f),
+		sin(rotation.x - glm::pi<float>() / 2.0f),
 		0,
-		cos(rotation.x - 3.14f / 2.0f)
+		cos(rotation.x - glm::pi<float>() / 2.0f)
 	);
 }
 

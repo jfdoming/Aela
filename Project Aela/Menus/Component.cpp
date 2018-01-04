@@ -27,7 +27,7 @@ void Component::update() {
 	updateComponent();
 }
 
-void Component::render(Renderer& renderer) {
+void Component::render(GLRenderer& renderer) {
 	if (dirty) {
 		renderComponent(renderer);
 		dirty = false;
@@ -65,7 +65,7 @@ void Component::handleMouseReleased(Event* event) {
 }
 
 void Component::handleMouseMoved(Event* event) {
-	if (event->getType() != EventConstants::MOUSE_MOVED) {
+	if (event->getType() != EventConstants::MOUSE_MOTIONED) {
 		return;
 	}
 
@@ -77,6 +77,7 @@ void Component::handleMouseMoved(Event* event) {
 	if (contains) {
 		if (!hovered) {
 			hovered = true;
+			// dirty = true;
 
 			onMouseEntered(mEvent);
 			listeners.fire(EventConstants::MOUSE_ENTERED_COMPONENT, event);
@@ -84,6 +85,7 @@ void Component::handleMouseMoved(Event* event) {
 	} else {
 		if (hovered) {
 			hovered = false;
+			// dirty = true;
 
 			onMouseExited(mEvent);
 			listeners.fire(EventConstants::MOUSE_EXITED_COMPONENT, event);
@@ -104,9 +106,17 @@ void Component::addListener(int type, EventListener listener) {
 void Component::markDirty() {
 	dirty = true;
 
+	if (parent != nullptr) {
+		parent->markDirty();
+	}
+
 	if (dirtyCallback != nullptr) {
 		dirtyCallback();
 	}
+}
+
+void Aela::Component::setParent(Component* parent) {
+	this->parent = parent;
 }
 
 bool Component::isDirty() {

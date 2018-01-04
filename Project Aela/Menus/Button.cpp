@@ -6,10 +6,10 @@ Aela::Button::Button() : hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f
 	
 }
 
-Aela::Button::Button(Texture* texture) : ImageComponent(texture), hoverTint(0.7f, 0.7f, 0.7f, 1.0f), clickTint(0.5f, 0.5f, 0.5f, 1.0) {
+Aela::Button::Button(GLTexture* texture) : ImageComponent(texture), hoverTint(0.7f, 0.7f, 0.7f, 1.0f), clickTint(0.5f, 0.5f, 0.5f, 1.0) {
 }
 
-Aela::Button::Button(Texture* texture, Rect<int>* dimensions) : ImageComponent(texture, dimensions), hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
+Aela::Button::Button(GLTexture* texture, Rect<int>* dimensions) : ImageComponent(texture, dimensions), hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
 }
 
 Aela::Button::Button(ColourRGBA* hoverTint, ColourRGBA* clickTint) {
@@ -30,7 +30,7 @@ void Aela::Button::updateComponent() {
 	}
 }
 
-void Aela::Button::renderComponent(Renderer& renderer) {
+void Aela::Button::renderComponent(GLRenderer& renderer) {
 	ImageComponent::renderComponent(renderer);
 	if (text != nullptr) {
 		text->renderWithTint(renderer, &tint);

@@ -27,30 +27,16 @@ void Scene::update() {
 	}
 }
 
-void Scene::render(Renderer& renderer) {
+void Scene::render(GLRenderer& renderer) {
 	renderer.startRenderingFrame();
 	if (map != nullptr) {
 		renderer.bindLights(map->getLights());
 		renderer.startRendering3D();
 
-		for (auto& model : *map->getModels()) {
-			renderer.renderModelEntityShadows(&model.second);
-		}
-
-		renderer.sendBoundLightDataToShader();
-
-		for (auto& model : *map->getModels()) {
-			renderer.renderModelEntity(&model.second);
-		}
-
-		renderer.renderSkybox(&(*map->getSkyboxes())[activeSkybox]);
+		renderer.renderMap(map, activeSkybox);
 
 		for (ParticleEmitter* emitter : particleEmitters) {
 			renderer.renderParticles(emitter);
-		}
-
-		for (auto billboard : *map->getBillboards()) {
-			renderer.renderBillboard(&billboard.second);
 		}
 
 		renderer.endRendering3D();
@@ -63,11 +49,11 @@ void Scene::render(Renderer& renderer) {
 	renderer.endRenderingFrame();
 }
 
-void Scene::enableMenu(Rect<unsigned int>* renderDimensions, Renderer& renderer) {
+void Scene::enableMenu(Rect<unsigned int>* renderDimensions, GLRenderer& renderer) {
 	menu.init((Rect<int>*) renderDimensions, renderer);
 }
 
-void Scene::enableMenu(Rect<unsigned int>* renderDimensions, Renderer& renderer, int x, int y) {
+void Scene::enableMenu(Rect<unsigned int>* renderDimensions, GLRenderer& renderer, int x, int y) {
 	menu.init((Rect<int>*) renderDimensions, renderer, x, y);
 }
 

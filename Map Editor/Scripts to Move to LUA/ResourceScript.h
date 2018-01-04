@@ -1,22 +1,27 @@
 // The contents of this file will be moved to LUA once we can get LUA to work!
 #pragma once
 #include "Resource Management\ResourceManager.h"
-#include "3D\Materials\MaterialLoader.h"
+#include "3D\Materials\GLMaterialLoader.h"
 #include "3D\Models\OBJLoader.h"
-#include "3D\Skybox\SkyboxLoader.h"
+#include "3D\Skybox\GLSkyboxLoader.h"
 #include "3D\Maps\Map3DLoader.h"
 
 using namespace Aela;
 
-const unsigned int numberOfMaterialsAndModels = 7;
+const unsigned int numberOfMaterialsAndModels = 4;
 std::string materialsAndModelNames[] = {
 	"meme_mug",
-	"cat",
-	"house_1",
-	"jeep_1",
-	"lamp_post_1",
-	"sample_terrain_1",
-	"test scene for graphics"
+	"floor",
+	"corner_elevated",
+	"corner_depressed"
+};
+
+const unsigned int numberOfOtherMaterials = 4;
+std::string otherMaterialNames[] = {
+	"grass",
+	"grass_corner_depressed",
+	"grass_corner_elevated",
+	"water"
 };
 
 const unsigned int numberOfTextures = 5;
@@ -55,6 +60,10 @@ void loadMaterials(ResourceManager* resourceManager) {
 		resourceManager->addToGroup("res/materials/" + path + ".mtl", false);
 	}
 
+	for (std::string path : otherMaterialNames) {
+		resourceManager->addToGroup("res/materials/" + path + ".mtl", false);
+	}
+
 	if (resourceManager->loadGroup("materials") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"materials\"!" << std::endl;
 	}
@@ -75,7 +84,7 @@ void loadModels(ResourceManager* resourceManager) {
 }
 
 void loadTextures(ResourceManager* resourceManager) {
-	TextureLoader textureLoader;
+	GLTextureLoader textureLoader;
 	resourceManager->bindLoader(&textureLoader);
 	resourceManager->bindGroup("textures");
 
@@ -94,7 +103,7 @@ void loadTextures(ResourceManager* resourceManager) {
 
 void loadParticles(ResourceManager* resourceManager) {
 	// We may want to create a seperate particle loader later.
-	TextureLoader textureLoader;
+	GLTextureLoader textureLoader;
 	resourceManager->bindLoader(&textureLoader);
 	resourceManager->bindGroup("particles");
 
@@ -108,7 +117,7 @@ void loadParticles(ResourceManager* resourceManager) {
 }
 
 void loadSkyboxes(ResourceManager* resourceManager) {
-	SkyboxLoader skyboxLoader;
+	GLSkyboxLoader skyboxLoader;
 	resourceManager->bindLoader(&skyboxLoader);
 	resourceManager->bindGroup("skybox");
 
@@ -121,7 +130,7 @@ void loadSkyboxes(ResourceManager* resourceManager) {
 	}
 }
 
-void loadStartupMap(ResourceManager* resourceManager, Renderer& renderer) {
+void loadStartupMap(ResourceManager* resourceManager, GLRenderer& renderer) {
 	Map3DLoader mapLoader;
 	mapLoader.bindRenderer(&renderer);
 	resourceManager->bindLoader(&mapLoader);

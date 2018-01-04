@@ -31,6 +31,6 @@ namespace Aela {
 			TextFont* font;
 			ColourRGBA colour;
 			virtual void updateComponent();
-			virtual void renderComponent(Renderer& renderer);
+			virtual void renderComponent(GLRenderer& renderer);
 	};
 }

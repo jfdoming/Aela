@@ -1,4 +1,5 @@
 #include "Transformable2D.h"
+#include <iostream>
 
 void Transformable2D::setTint(ColourRGBA* tint) {
 	this->tint = *tint;

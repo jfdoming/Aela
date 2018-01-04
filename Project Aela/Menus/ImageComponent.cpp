@@ -12,28 +12,28 @@ using namespace Aela;
 Aela::ImageComponent::ImageComponent() {
 }
 
-Aela::ImageComponent::ImageComponent(Texture* texture) {
+Aela::ImageComponent::ImageComponent(GLTexture* texture) {
 	setTexture(texture);
 }
 
-Aela::ImageComponent::ImageComponent(Texture* texture, Rect<int>* dimensions) {
+Aela::ImageComponent::ImageComponent(GLTexture* texture, Rect<int>* dimensions) {
 	setTexture(texture);
 	this->dimensions = *dimensions;
 }
 
-Aela::ImageComponent::ImageComponent(Texture* texture, Rect<int>* dimensions, Rect<int>* cropping) {
+Aela::ImageComponent::ImageComponent(GLTexture* texture, Rect<int>* dimensions, Rect<int>* cropping) {
 	setTexture(texture);
 	this->dimensions = *dimensions;
 	this->cropping = *cropping;
 }
 
-Aela::ImageComponent::ImageComponent(Texture* texture, Rect<int>* dimensions, ColourRGBA* tint) {
+Aela::ImageComponent::ImageComponent(GLTexture* texture, Rect<int>* dimensions, ColourRGBA* tint) {
 	setTexture(texture);
 	this->dimensions = *dimensions;
 	this->tint = *tint;
 }
 
-Aela::ImageComponent::ImageComponent(Texture* texture, Rect<int>* dimensions, Rect<int>* cropping, ColourRGBA* tint) {
+Aela::ImageComponent::ImageComponent(GLTexture* texture, Rect<int>* dimensions, Rect<int>* cropping, ColourRGBA* tint) {
 	setTexture(texture);
 	this->dimensions = *dimensions;
 	this->cropping = *cropping;
@@ -49,13 +49,13 @@ void Aela::ImageComponent::updateComponent() {
 	}
 }
 
-void Aela::ImageComponent::renderComponent(Renderer& renderer) {
+void Aela::ImageComponent::renderComponent(GLRenderer& renderer) {
 	if (texture != nullptr) {
 		renderer.render2DImage(texture->getImage(), &dimensions, &cropping, &tint);
 	}
 }
 
-void Aela::ImageComponent::setTexture(Texture* texture) {
+void Aela::ImageComponent::setTexture(GLTexture* texture) {
 	this->texture = texture;
 	if (!croppingWasInitialised) {
 		cropping = *texture->getDimensions();
@@ -63,7 +63,7 @@ void Aela::ImageComponent::setTexture(Texture* texture) {
 	}
 }
 
-Texture* Aela::ImageComponent::getTexture() {
+GLTexture* Aela::ImageComponent::getTexture() {
 	return texture;
 }
 

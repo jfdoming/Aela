@@ -2,7 +2,7 @@
  * Name: Model Shader
  * Author: Ekkon Games - Robert Ciborowski
  * Date: October 2016
- * Description: Project Aela's modelMatrix vertex shader.
+ * Description: Project Aela's modelMatrices[gl_InstanceID] vertex shader.
 */
 
 #version 430 core
@@ -21,28 +21,29 @@ out vec3 cameraSpaceEyeDirection;
 out vec3 normal;
 
 // These are values that stay constant for the whole mesh.
-uniform mat4 modelViewProjectionMatrix;
 uniform mat4 viewMatrix;
-uniform mat4 modelMatrix;
-uniform mat4 rotationMatrix;
+uniform mat4 modelMatrices[100];
+uniform mat4 rotationMatrices[100];
+uniform mat4 projectionMatrix;
 
 void main(){
+	mat4 modelViewMatrix = viewMatrix * modelMatrices[gl_InstanceID];
 
 	// This is the output position transformed by the model, view and projection matrices.
-	gl_Position = modelViewProjectionMatrix * vec4(vertexPosition, 1);
+	gl_Position = projectionMatrix * modelViewMatrix * vec4(vertexPosition, 1);
 	
 	modelViewProjectionPosition = vertexPosition;
 	
-	normal = vec3(rotationMatrix * vec4(vertexNormal, 1));
+	normal = vec3(rotationMatrices[gl_InstanceID] * vec4(vertexNormal, 1));
 	
 	// This is the position of the vertex in the world space.
-	worldSpacePosition = vec3(modelMatrix * vec4(vertexPosition, 1.0));
+	worldSpacePosition = vec3(modelMatrices[gl_InstanceID] * vec4(vertexPosition, 1.0));
 	
 	// This is a vector that goes from the vertex to the camera.
-	cameraSpaceEyeDirection = vec3(0,0,0) - (viewMatrix * modelMatrix * vec4(vertexPosition,1)).xyz;
+	cameraSpaceEyeDirection = vec3(0,0,0) - (modelViewMatrix * vec4(vertexPosition,1)).xyz;
 	
 	// This calculates the normal of the vertex.
-	cameraSpaceNormal = (viewMatrix * modelMatrix * vec4(vertexNormal,0)).xyz;
+	cameraSpaceNormal = (modelViewMatrix * vec4(vertexNormal,0)).xyz;
 	
 	UV = vertexUV;
 }

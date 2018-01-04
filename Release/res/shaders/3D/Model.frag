@@ -22,7 +22,7 @@ layout(location = 0) out vec4 colour;
 
 // These are values that are hard-coded into the shader.
 const int MAX_LIGHT_AMOUNT = 5;
-float distanceToLightModifier = 0.1;
+float distanceToLightModifier = 0.05;
 bool PCF = true;
 float PI  = 3.14159265358979323846;
 float far = 100.0;
@@ -67,13 +67,13 @@ float shadowCalculation(vec3 positionInLightSpace, int whichLight, float bias) {
 	if (currentDepth > far) {
 		return 0;
 	}
-    // float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+
 	float shadow = 0;
 	
 	// This undergoes the PCF process, if enabled.
 	if (PCF) {
 		// float PCFRadius = (1.0 + length(cameraPosition - worldSpacePosition)) / 500.0;
-		float PCFRadius = 0.05;
+		float PCFRadius = 0.03;
 		for (int i = 0; i < PCFDirections.length(); i++) {
 			float closestDepth = texture(shadowMaps[whichLight], fragToLight + PCFDirections[i] * PCFRadius).r;
 			closestDepth *= far * shadowScalingFactor;
@@ -94,7 +94,8 @@ float shadowCalculation(vec3 positionInLightSpace, int whichLight, float bias) {
 
 void main(){
 	// This calculates several colours.
-	vec3 MaterialDiffuseColor = texture(textureSampler, UV).rgb;
+	vec4 UVSample = texture(textureSampler, UV).rgba;
+	vec3 MaterialDiffuseColor = UVSample.rgb;
 	vec3 MaterialAmbientColor = vec3(0.15, 0.15, 0.15) * MaterialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(0.3, 0.3, 0.3);
 	vec3 diffuseColours[MAX_LIGHT_AMOUNT];
@@ -113,7 +114,7 @@ void main(){
 		float cosTheta = clamp(dot(n, l), 0, 1);
 		
 		float bias = 0.005 * tan(acos(cosTheta));
-		bias = clamp(bias, 0,0.01);
+		bias = clamp(bias, 0.0, 0.01);
 		
 		float shadow = shadowCalculation(worldSpacePosition, i, bias);
 		visibility -= shadow;
@@ -131,8 +132,7 @@ void main(){
 	clamp(finalDiffuseColour, 0.0, 1.0);
 	clamp(visibility, 0, 1);
 	
-	colourAsVec3 = 
-		MaterialAmbientColor + visibility * finalDiffuseColour;
+	colourAsVec3 = MaterialAmbientColor + visibility * finalDiffuseColour;
 	// colour = noise(vec4(colourAsVec3, 1), UV);
-	colour = vec4(colourAsVec3, 1);
+	colour = vec4(colourAsVec3, UVSample.a);
 }

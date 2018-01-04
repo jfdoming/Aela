@@ -2,7 +2,7 @@
 * Name: Project Aela's Skybox Class
 * Author: Robert Ciborowski
 * Date: June 2017
-* Description: A class used by Aela's Renderer to store properties of a skybox.
+* Description: A class used by Aela's GLRenderer to store properties of a skybox.
 */
 
 #pragma once
@@ -24,11 +24,11 @@ namespace Aela {
 	public:
 		Skybox(std::string src);
 
-		GLuint* getTexture();
+		unsigned int* getTexture();
 		float* getVertices();
 
 	private:
-		GLuint texture;
+		unsigned int texture;
 		float vertices;
 	};
 }

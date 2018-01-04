@@ -16,7 +16,7 @@ class RectComponent : public Component {
 		virtual ~RectComponent();
 
 		virtual void updateComponent();
-		virtual void renderComponent(Renderer& renderer);
+		virtual void renderComponent(GLRenderer& renderer);
 
 		// These are the getters and setters.
 		void setColour(ColourRGBA* colour);

@@ -19,7 +19,7 @@ class PlanarParticleEmitter : public ParticleEmitter {
 
 		// These are the functions that are overwritten from the ParticleEmitter class.
 		void setupDimensions(Rect<GLfloat>* dimensions);
-		void setupParticles(std::vector<Texture*>* textures, float particleWidth, float particleHeight, unsigned int amount);
+		void setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight, unsigned int amount);
 		void update();
 
 		// These are getters and setters.
@@ -33,5 +33,5 @@ class PlanarParticleEmitter : public ParticleEmitter {
 		// This class requires a pointer to the camera so that it can properly sort particles.
 		Camera3D* camera;
 
-		void setupParticlePositioning(unsigned int whichParticle, unsigned int numberOfParticles);
+		void setupParticlePositioning(unsigned long long whichParticle, unsigned long long numberOfParticles);
 };

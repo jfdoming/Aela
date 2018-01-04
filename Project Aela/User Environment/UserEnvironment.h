@@ -6,7 +6,7 @@
 */
 
 #pragma once
-#include "../Renderer/Renderer.h"
+#include "../Renderer/GLRenderer.h"
 
 namespace Aela {
 	class UserEnvironment {
@@ -15,12 +15,12 @@ namespace Aela {
 
 			}
 
-			UserEnvironment(Renderer* renderer) {
+			UserEnvironment(GLRenderer* renderer) {
 				generateInfo(renderer);
 			}
 
 			// This generates the info on the user's machine.
-			void generateInfo(Renderer* renderer);
+			void generateInfo(GLRenderer* renderer);
 
 			// These are getters and setters.
 			std::vector<std::string>* getAudioDeviceNames();

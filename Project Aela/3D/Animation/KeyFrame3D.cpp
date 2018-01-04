@@ -11,20 +11,32 @@ KeyFrameType KeyFrame3D::getType() {
 	return KeyFrameType::THREE_DIMENSIONAL;
 }
 
+void KeyFrame3D::start() {
+	if (object != nullptr) {
+		originalPosition = *object->getPosition();
+		originalRotation = *object->getRotation();
+		originalScaling = *object->getScaling();
+	}
+	started = true;
+}
+
 void KeyFrame3D::setObject(Transformable3D* object) {
 	this->object = object;
+	position = *object->getPosition();
+	rotation = *object->getRotation();
+	scaling = *object->getScaling();
 }
 
 Transformable3D* KeyFrame3D::getObject() {
 	return object;
 }
 
-void KeyFrame3D::setTranslation(glm::vec3* translation) {
-	this->translation = *translation;
+void KeyFrame3D::setTranslation(glm::vec3* position) {
+	this->position = *position;
 }
 
-glm::vec3* KeyFrame3D::getTranslation() {
-	return &translation;
+glm::vec3* KeyFrame3D::getPosition() {
+	return &position;
 }
 
 void KeyFrame3D::setRotation(glm::vec3* rotation) {
@@ -81,4 +93,16 @@ void KeyFrame3D::setScaling(glm::vec3* scaling) {
 
 glm::vec3* KeyFrame3D::getScaling() {
 	return &scaling;
+}
+
+glm::vec3* KeyFrame3D::getOriginalPosition() {
+	return &originalPosition;
+}
+
+glm::vec3* KeyFrame3D::getOriginalRotation() {
+	return &originalRotation;
+}
+
+glm::vec3* KeyFrame3D::getOriginalScaling() {
+	return &originalScaling;
 }

@@ -21,7 +21,7 @@ int SceneManager::init(EventHandler& eventHandler) {
 	//eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(SceneManager::onEvent, this));
 	eventHandler.addListener(EventConstants::MOUSE_PRESSED, bindListener(SceneManager::handleMousePressed, this));
 	eventHandler.addListener(EventConstants::MOUSE_RELEASED, bindListener(SceneManager::handleMouseReleased, this));
-	eventHandler.addListener(EventConstants::MOUSE_MOVED, bindListener(SceneManager::handleMouseMoved, this));
+	eventHandler.addListener(EventConstants::MOUSE_MOTIONED, bindListener(SceneManager::handleMouseMoved, this));
 
 	return 0;
 }
@@ -40,7 +40,7 @@ void Aela::SceneManager::update() {
 	}
 }
 
-void Aela::SceneManager::render(Renderer& renderer) {
+void Aela::SceneManager::render(GLRenderer& renderer) {
 	// render the current scene
 	if (currentScene != nullptr) {
 		currentScene->render(renderer);

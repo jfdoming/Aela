@@ -12,7 +12,7 @@
 #include "../Events/EventConstants.h"
 #include "../Events/EventListenerList.h"
 #include "../Events/EventListener.h"
-#include "../2D/Simple 2D Framebuffer/Simple2DFramebuffer.h"
+#include "../2D/Simple 2D Framebuffer/Simple2DGLFramebuffer.h"
 #include "../Utilities\Rect\Rect.h"
 
 namespace Aela {
@@ -21,18 +21,21 @@ namespace Aela {
 			Menu();
 			virtual ~Menu();
 
-			void init(Rect<int>* renderDimensions, Renderer& renderer);
-			void init(Rect<int>* renderDimensions, Renderer& renderer, int x, int y);
+			void init(Rect<int>* renderDimensions, GLRenderer& renderer);
+			void init(Rect<int>* renderDimensions, GLRenderer& renderer, int x, int y);
 
-			virtual void render(Renderer& renderer);
+			virtual void render(GLRenderer& renderer);
 
 			void show();
 			void hide();
 
 			bool isInitialized();
 			bool isVisible();
-		private:
+
+		protected:
 			bool initialized = false, visible = false;
-			Simple2DFramebuffer buffer;
+
+		private:
+			Simple2DGLFramebuffer buffer;
 	};
 }

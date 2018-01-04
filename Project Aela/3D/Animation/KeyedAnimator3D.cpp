@@ -23,52 +23,52 @@ void KeyedAnimator::onEvent(Event* event) {
 		switch (keyEvent->getType()) {
 		case EventConstants::KEY_PRESSED:
 			if (keyEvent->getKeycode() == SDLK_w) {
-				forward = true;
+				movingForward = true;
 			}
 
 			if (keyEvent->getKeycode() == SDLK_s) {
-				backward = true;
+				movingBackward = true;
 			}
 
 			if (keyEvent->getKeycode() == SDLK_d) {
-				right = true;
+				movingRight = true;
 			}
 
 			if (keyEvent->getKeycode() == SDLK_a) {
-				left = true;
+				movingLeft = true;
 			}
 
 			if (keyEvent->getKeycode() == SDLK_SPACE) {
-				up = true;
+				movingUp = true;
 			}
 
 			if (keyEvent->getKeycode() == SDLK_LCTRL) {
-				down = true;
+				movingDown = true;
 			}
 			break;
 		case EventConstants::KEY_RELEASED:
 			if (keyEvent->getKeycode() == SDLK_w) {
-				forward = false;
+				movingForward = false;
 			}
 
 			if (keyEvent->getKeycode() == SDLK_s) {
-				backward = false;
+				movingBackward = false;
 			}
 
 			if (keyEvent->getKeycode() == SDLK_d) {
-				right = false;
+				movingRight = false;
 			}
 
 			if (keyEvent->getKeycode() == SDLK_a) {
-				left = false;
+				movingLeft = false;
 			}
 
 			if (keyEvent->getKeycode() == SDLK_SPACE) {
-				up = false;
+				movingUp = false;
 			}
 
 			if (keyEvent->getKeycode() == SDLK_LCTRL) {
-				down = false;
+				movingDown = false;
 			}
 			break;
 		}
@@ -76,29 +76,33 @@ void KeyedAnimator::onEvent(Event* event) {
 }
 
 void KeyedAnimator::update() {
-	long long deltaTime = timeManager->getTimeBetweenFrames();
-	for (auto pair : transformables) {
-		Transformable3D* transformable = pair.second;
-		float amount = currentSpeed * deltaTime;
+	if (timeManager != nullptr) {
+		long long deltaTime = timeManager->getTimeBetweenFramesInNanos();
+		for (auto pair : transformables) {
+			Transformable3D* transformable = pair.second;
+			float amount = currentSpeed * deltaTime;
 
-		if (forward) {
-			*transformable->getPosition() += glm::vec3(0, 0, amount);
+			if (movingForward) {
+				*transformable->getPosition() += glm::vec3(0, 0, amount);
+			}
+			if (movingBackward) {
+				*transformable->getPosition() -= glm::vec3(0, 0, amount);
+			}
+			if (movingRight) {
+				*transformable->getPosition() -= glm::vec3(amount, 0, 0);
+			}
+			if (movingLeft) {
+				*transformable->getPosition() += glm::vec3(amount, 0, 0);
+			}
+			if (movingUp) {
+				*transformable->getPosition() += glm::vec3(0, amount, 0);
+			}
+			if (movingDown) {
+				*transformable->getPosition() -= glm::vec3(0, amount, 0);
+			}
 		}
-		if (backward) {
-			*transformable->getPosition() -= glm::vec3(0, 0, amount);
-		}
-		if (right) {
-			*transformable->getPosition() -= glm::vec3(amount, 0, 0);
-		}
-		if (left) {
-			*transformable->getPosition() += glm::vec3(amount, 0, 0);
-		}
-		if (up) {
-			*transformable->getPosition() += glm::vec3(0, amount, 0);
-		}
-		if (down) {
-			*transformable->getPosition() -= glm::vec3(0, amount, 0);
-		}
+	} else {
+		// The keyed animator must not have been setup properly.
 	}
 }
 
@@ -126,7 +130,7 @@ bool KeyedAnimator::addTransformable(int key, Transformable3D* transformable) {
 	return false;
 }
 
-int KeyedAnimator::addTransformable(Transformable3D* transformable) {
+unsigned long long KeyedAnimator::addTransformable(Transformable3D* transformable) {
 	transformables[transformables.size()] = transformable;
 	return transformables.size();
 }

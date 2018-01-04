@@ -2,7 +2,7 @@
 * Name: ModelEntity
 * Author: Robert Ciborowski
 * Date: 06/08/2017
-* Description: A class used by Aela's Renderer to store properties of a 3D entity.
+* Description: A class used by Aela's GLRenderer to store properties of a 3D entity.
 *              Note: This class used to be known as "Model" but was changed.
 */
 

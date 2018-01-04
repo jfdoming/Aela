@@ -5,7 +5,7 @@
 * Description: A class used to keep track of gameplay-related properties.
 */
 
-#include "stdafx.h"
+
 #include "GameplayManager.h"
 
 #define EKKON_INTRO_SCENE 1
@@ -22,15 +22,15 @@ void GameplayManager::setup() {
 		}
 
 		// Note: this function copies, so now we should get a pointer to the player entity.
-		int id = currentMap->addModel(&playerEntity);
-		player.storeEntityIDInMap(id);
-		ModelEntity* mapPlayerEntity = currentMap->getModel(id);
+		currentMap->addModel(0, &playerEntity);
+		player.storeEntityIDInMap(0);
+		ModelEntity* mapPlayerEntity = currentMap->getModel(0);
 		player.setEntity(mapPlayerEntity);
-		player.getEntity()->getPosition()->y = -15;
+		player.getEntity()->getPosition()->y = 0;
 		player.getEntity()->generateBoundingBox();
 
 		camera->setPosition(0, 10, -10);
-		camera->setRotation(0, glm::pi<float>() / -4, 0);
+		camera->setRotation(0, glm::pi<float>() / -6, 0);
 		engine->getWindow()->hideCursor();
 		camera->setInUse(true);
 	}
@@ -93,12 +93,12 @@ void GameplayManager::updatePlayerMovements() {
 	}
 	glm::vec3 newRotation = *player.getEntity()->getRotation();
 	if (rotationVector.y > newRotation.y) {
-		newRotation.y += player.getRotationSpeed() * timeManager->getTimeBetweenFrames();
+		newRotation.y += player.getRotationSpeed() * timeManager->getTimeBetweenFramesInNanos();
 		if (rotationVector.y < newRotation.y) {
 			newRotation.y = rotationVector.y;
 		}
 	} else if (rotationVector.y < newRotation.y) {
-		newRotation.y -= player.getRotationSpeed() * timeManager->getTimeBetweenFrames();
+		newRotation.y -= player.getRotationSpeed() * timeManager->getTimeBetweenFramesInNanos();
 		if (rotationVector.y > newRotation.y) {
 			newRotation.y = rotationVector.y;
 		}
@@ -112,34 +112,35 @@ void GameplayManager::updatePlayerMovements() {
 	BoundingBox3D originalBox = *player.getEntity()->getBoundingBox();
 	BoundingBox3D* playerBox = player.getEntity()->getBoundingBox();
 	if (movingLeft) {
-		playerBox->getPosition()->x += player.getWalkingSpeed() * timeManager->getTimeBetweenFrames();
+		playerBox->getPosition()->x += player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
 	}
 	if (movingRight) {
-		playerBox->getPosition()->x -= player.getWalkingSpeed() * timeManager->getTimeBetweenFrames();
+		playerBox->getPosition()->x -= player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
 	}
 	if (movingUp) {
-		playerBox->getPosition()->z += player.getWalkingSpeed() * timeManager->getTimeBetweenFrames();
+		playerBox->getPosition()->z += player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
 	}
 	if (movingDown) {
-		playerBox->getPosition()->z -= player.getWalkingSpeed() * timeManager->getTimeBetweenFrames();
+		playerBox->getPosition()->z -= player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
 	}
 	player.getEntity()->getBoundingBox()->setPosition(*playerBox->getPosition());
 	player.getEntity()->getBoundingBox()->generateVertices();
 
 	// This literally just checks to see if the player's bounding box is inside of another model's bounding box. If the player
 	// is moving fast enough, they could move past another model's bounding box.
-	if (!physicsManager->collidingInMap(player.getEntityIDInMap(), currentMap)) {
+	// Actually, for now, forget collision.
+	// if (!physicsManager->collidingInMap(player.getEntityIDInMap(), currentMap)) {
 		// There was not a collision! Move the player!
 		player.getEntity()->setPosition(*playerBox->getPosition());
-	} else {
+	/*} else {
 		// There was a collision! Reset the player's bounding box to what it was before!
 		player.getEntity()->getBoundingBox()->setPosition(*originalBox.getPosition());
 		player.getEntity()->getBoundingBox()->setPosition(*originalBox.getPosition());
 		player.getEntity()->getBoundingBox()->generateVertices();
-	}
+	}*/
 	camera->getPosition()->x = player.getEntity()->getPosition()->x;
-	camera->getPosition()->y = player.getEntity()->getPosition()->y + 10;
-	camera->getPosition()->z = player.getEntity()->getPosition()->z - 10;
+	camera->getPosition()->y = player.getEntity()->getPosition()->y + 8.6603f;
+	camera->getPosition()->z = player.getEntity()->getPosition()->z - 15;
 }
 
 void GameplayManager::onEvent(Event* event) {
@@ -188,8 +189,8 @@ Player* GameplayManager::getPlayer() {
 	return &player;
 }
 
-NPCManager* GameplayManager::getNPCManager() {
-	return &npcManager;
+CharacterManager* GameplayManager::getNPCManager() {
+	return &characterManager;
 }
 
 void GameplayManager::setCurrentMap(Map3D* map) {

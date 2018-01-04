@@ -18,7 +18,7 @@
 #include <vector>
 
 #include "../../Resource Management/Resource.h"
-#include "../../2D/Texture/Texture.h"
+#include "../../2D/Texture/GLTexture.h"
 
 namespace Aela {
 	class Material : public Resource {

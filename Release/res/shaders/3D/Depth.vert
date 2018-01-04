@@ -11,9 +11,9 @@
 layout(location = 0) in vec3 vertexPosition;
 
 // This is the only uniform. The depth vertex shader does not need that much information.
-uniform mat4 modelMatrix;
+uniform mat4 modelMatrices[100];
 
 void main(){
-	gl_Position = modelMatrix * vec4(vertexPosition, 1);
+	gl_Position = modelMatrices[gl_InstanceID] * vec4(vertexPosition, 1);
 }
 

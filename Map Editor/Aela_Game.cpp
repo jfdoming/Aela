@@ -35,7 +35,7 @@ void AelaGame::loadResources() {
 	loadTextures(resourceManager);
 	loadParticles(resourceManager);
 	loadSkyboxes(resourceManager);
-	loadStartupMap(resourceManager, engine->getRenderer());
+	loadStartupMap(resourceManager, *engine->getRenderer());
 }
 
 void AelaGame::loadScenes() {
@@ -72,17 +72,20 @@ void AelaGame::addEntityBeingPlaced(EntityType type) {
 		case EntityType::MODEL:
 			entityBeingPlaced = &modelEntity;
 			entityTypeText->setText("Entity: Model");
-			idOfEntityInMap = mapBeingEdited->addModel(&modelEntity);
+			idOfEntityInMap = mapBeingEdited->getModels()->size();
+			mapBeingEdited->addModel(idOfEntityInMap, &modelEntity);
 			break;
 		case EntityType::LIGHT:
 			entityBeingPlaced = &lightEntity;
 			entityTypeText->setText("Entity: Light");
-			idOfEntityInMap = mapBeingEdited->addLight(&lightEntity);
+			idOfEntityInMap = mapBeingEdited->getLights()->size();
+			mapBeingEdited->addLight(idOfEntityInMap, &lightEntity);
 			break;
 		case EntityType::BILLBOARD:
 			entityBeingPlaced = &billboardEntity;
 			entityTypeText->setText("Entity: Billboard");
-			idOfEntityInMap = mapBeingEdited->addBillboard(&billboardEntity);
+			idOfEntityInMap = mapBeingEdited->getBillboards()->size();
+			mapBeingEdited->addBillboard(idOfEntityInMap, &billboardEntity);
 			break;
 	}
 }
@@ -103,8 +106,8 @@ void AelaGame::switchModelResource(unsigned int resource) {
 
 // This obtains a new resource for the billboard that is being placed into the map.
 void AelaGame::switchBillboardResource(unsigned int resource) {
-	Texture* texture;
-	bool success = resourceManager->obtain<Texture>("res/textures/" + billboardNames[currentBillboardResource] + ".dds", texture);
+	GLTexture* texture;
+	bool success = resourceManager->obtain<GLTexture>("res/textures/" + billboardNames[currentBillboardResource] + ".dds", texture);
 	if (!success) {
 		AelaErrorHandling::windowError("The billboard resource was not found!");
 		return;
@@ -125,7 +128,7 @@ void AelaGame::placeLight() {
 	(*mapBeingEdited->getLights())[mapBeingEdited->getLights()->size()] = lightEntity;
 	lightEntity.useDefaultValues();
 	lightEntity.setupForNewShadowMap();
-	engine->getRenderer().generateShadowMap(&lightEntity);
+	engine->getRenderer()->generateShadowMap(&lightEntity);
 }
 
 void AelaGame::placeBillboard() {
@@ -135,8 +138,8 @@ void AelaGame::placeBillboard() {
 
 void AelaGame::setup() {
 	// Certain renderer settings will be changeable in the options menu.
-	engine->getRenderer().activateFeature(RendererFeature::MSAA_2D_X2);
-	engine->getRenderer().activateFeature(RendererFeature::MSAA_3D_X4);
+	engine->getRenderer()->activateFeature(RendererFeature::MSAA_2D_X2);
+	engine->getRenderer()->activateFeature(RendererFeature::MSAA_3D_X4);
 
 	// This loads scripts.
 	loadResources();
@@ -144,17 +147,18 @@ void AelaGame::setup() {
 
 	engine->getEventHandler()->addListener(EventConstants::KEY_RELEASED, bindListener(AelaGame::onEvent, this));
 	engine->getEventHandler()->addListener(EventConstants::KEY_PRESSED, bindListener(AelaGame::onEvent, this));
-	engine->getEventHandler()->addListener(EventConstants::MOUSE_WHEEL, this);
-	engine->getEventHandler()->addListener(EventConstants::MOUSE_PRESSED, this);
+	engine->getEventHandler()->addListener(EventConstants::MOUSE_WHEEL, bindListener(AelaGame::onEvent, this));
+	engine->getEventHandler()->addListener(EventConstants::MOUSE_PRESSED, bindListener(AelaGame::onEvent, this));
 
 	// Note: the default entity that is placed is a ModelEntity.
 	entityBeingPlaced = &modelEntity;
 
 	// This sets up the entities that are being placed.
-	idOfEntityInMap = mapBeingEdited->addModel(&modelEntity);
+	idOfEntityInMap = 0;
+	mapBeingEdited->addModel(0, &modelEntity);
 	switchModelResource(currentModelResource);
 	switchBillboardResource(currentBillboardResource);
-	engine->getRenderer().generateShadowMap(&lightEntity);
+	engine->getRenderer()->generateShadowMap(&lightEntity);
 }
 
 void AelaGame::update() {
@@ -328,7 +332,8 @@ void AelaGame::onEvent(Event* event) {
 				case SDLK_ESCAPE:
 					sceneManager->setCurrentScene(PAUSE_SCENE);
 					engine->getWindow()->showCursor();
-					engine->getRenderer().getCamera()->setInUse(false);
+					engine->getRenderer()->getCamera()->setInUse(false);
+					std::cout << "ESCAPE!\n";
 					break;
 			}
 		} else if (event->getType() == EventConstants::MOUSE_WHEEL) {
@@ -361,20 +366,20 @@ void AelaGame::onEvent(Event* event) {
 				case SDLK_ESCAPE:
 					sceneManager->setCurrentScene(EDITOR_SCENE);
 					engine->getWindow()->hideCursor();
-					engine->getRenderer().getCamera()->setInUse(true);
+					engine->getRenderer()->getCamera()->setInUse(true);
 					break;
 			}
 		}
 	}
 }
 
-void AelaGame::performActionOnSceneSwitch(int sceneID) {
+void AelaGame::switchScene(int sceneID) {
 	switch (sceneID) {
 		case EDITOR_SCENE:
 			engine->getWindow()->hideCursor();
 			camera->setInUse(true);
 			camera->setForceCursorToMiddle(true);
-			camera->setUseControls(true);
+			camera->useControls(true);
 			engine->getRenderer()->getCamera()->setRotation(0, 0, 0);
 			break;
 	}

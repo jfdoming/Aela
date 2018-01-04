@@ -37,18 +37,18 @@ class KeyedAnimator {
 		void setWindow(Window* window);
 		Window* getWindow();
 		bool addTransformable(int key, Transformable3D* transformable);
-		int addTransformable(Transformable3D* transformable);
+		unsigned long long addTransformable(Transformable3D* transformable);
 		bool removeTransformable(int key);
 
 	private:
 		// These are the objects from Project Aela that the class uses.
 		TimeManager* timeManager;
 		Window* window;
-		std::unordered_map<int, Transformable3D*> transformables;
+		std::unordered_map<unsigned long long, Transformable3D*> transformables;
 
 		// Speed: 0.000000001f is 1 unit per ns.
 		float speed = 0.00000003f, superSpeed = 0.00000012f, currentSpeed = 0.0f, mouseSpeed;
 
 		// These store movements.
-		bool forward, backward, left, right, up, down;
+		bool movingForward, movingBackward, movingLeft, movingRight, movingUp, movingDown;
 };

@@ -6,7 +6,7 @@
 */
 
 #include "Map3DLoader.h"
-
+#include "../../Utilities/strut.h"
 #include <glm/gtc/constants.hpp>
 #include "../../Resource Management/ResourcePaths.h"
 
@@ -31,17 +31,17 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 	// This actually reads the file.
 	std::string line;
 	EntityType entityType = EntityType::GENERIC;
-	int entityID;
+	unsigned long long entityID;
 
 	while (std::getline(in, line)) {
 		while (line.length() > 0) {
 			char character = line.at(0);
-			unsigned int charactersToErase = 1;
+			unsigned long long charactersToErase = 1;
 
 			if (character == '<') {
 				std::string tagID = "";
 
-				unsigned int j = line.find(' ');
+				long long j = line.find(' ');
 				if (j != std::string::npos) {
 					tagID += line.substr(1, j - 1);
 				}
@@ -49,20 +49,25 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 
 				if (tagID == "Model") {
 					entityType = EntityType::MODEL;
-					entityID = map->addModel(&ModelEntity());
+					entityID = map->getModels()->size();
+					map->addModelWithoutGeneratingData(entityID, &ModelEntity());
 				} else if (tagID == "Light") {
 					entityType = EntityType::LIGHT;
-					entityID = map->addLight(&LightEntity());
+					entityID = map->getLights()->size();
+					map->addLight(entityID, &LightEntity());
 					renderer->generateShadowMap(&map->getLights()->at(map->getLights()->size() - 1));
 				} else if(tagID == "Billboard") {
 					entityType = EntityType::BILLBOARD;
-					entityID = map->addBillboard(&BillboardEntity());
+					entityID = map->getBillboards()->size();
+					map->addBillboard(entityID, &BillboardEntity());
 				} else if (tagID == "Skybox") {
 					entityType = EntityType::SKYBOX;
-					entityID = map->addSkybox(&SkyboxEntity());
+					entityID = map->getSkyboxes()->size();
+					map->addSkybox(entityID, &SkyboxEntity());
 				}
 			} else if (character == '>') {
 				if (entityType == EntityType::MODEL) {
+					map->generateAdditionalModelData(entityID, false);
 					map->getModel(entityID)->generateBoundingBox();
 				}
 				entityType = EntityType::GENERIC;
@@ -72,13 +77,13 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 			} else if (character != ' ' && entityType != EntityType::GENERIC) {
 				std::string propertyType = "";
 
-				unsigned int j = line.find('=');
+				unsigned long long j = line.find('=');
 				if (j != std::string::npos) {
 					propertyType += line.substr(0, j);
 				}
 
 				j = line.find('"');
-				unsigned int k = line.find('"', j + 1);
+				unsigned long long k = line.find('"', j + 1);
 
 				if (j != std::string::npos && k != std::string::npos) {
 					if (propertyType == "src") {
@@ -101,7 +106,7 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 							if (entityType == EntityType::MODEL) {
 								map->getModel(entityID)->setModel((Model*) res);
 							} else if (entityType == EntityType::BILLBOARD) {
-								map->getBillboard(entityID)->setTexture((Texture*) res);
+								map->getBillboard(entityID)->setTexture((GLTexture*) res);
 							} else if (entityType == EntityType::SKYBOX) {
 								map->getSkybox(entityID)->setSkybox((Skybox*) res);
 							}
@@ -164,6 +169,13 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", src + " has invalid syntax regarding scaling.");
 							return false;
 						}
+					} else if (propertyType == "useRotation" && entityType == EntityType::BILLBOARD) {
+						// Note: billboards use their rotation values by default. If they aren't,
+						// they always face the camera.
+						std::string value = line.substr(j + 1, k - j - 1);
+						if (value == "false") {
+							map->getBillboard(entityID)->useSpecifiedRotation(false);
+						}
 					}
 				}
 				charactersToErase += k;
@@ -176,38 +188,6 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 	return true;
 }
 
-void Aela::Map3DLoader::bindRenderer(Renderer* renderer) {
+void Aela::Map3DLoader::bindRenderer(GLRenderer* renderer) {
 	this->renderer = renderer;
-}
-
-void Aela::Map3DLoader::setVec3UsingString(std::string* value, glm::vec3* vec3) {
-	std::vector<std::string> values;
-
-	for (unsigned int l = 0; l < value->size(); l++) {
-		if (value->at(l) == ',') {
-			values.push_back(value->substr(0, l));
-			value->erase(0, l + 1);
-			l = -1;
-		} else if (l == value->size() - 1) {
-			values.push_back(value->substr(0, l + 1));
-			break;
-		}
-	}
-
-	if (values.size() > 2) {
-		float floatValues[3];
-
-		for (unsigned int i = 0; i < 3; i++) {
-			if (values.at(i) == "PI") {
-				floatValues[i] = glm::pi<float>();
-			} else if (values.at(i) == "2PI") {
-				// Note: Setting a rotational value of a Transformabe3D to "2PI" should just set it to zero.
-				floatValues[i] = glm::pi<float>() * 2;
-			} else {
-				floatValues[i] = std::stof(values.at(i));
-			}
-		}
-
-		*vec3 = glm::vec3(floatValues[0], floatValues[1], floatValues[2]);
-	}
 }

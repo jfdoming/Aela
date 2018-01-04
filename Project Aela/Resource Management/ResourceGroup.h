@@ -12,7 +12,7 @@
 #include "stdafx.h"
 #include "ResourceQuery.h"
 
-#include "../2D/Texture/Texture.h"
+#include "../2D/Texture/GLTexture.h"
 #include "../3D/Skybox/Skybox.h"
 #include "../Audio/AudioClip.h"
 #include "../3D/Models/Model.h"

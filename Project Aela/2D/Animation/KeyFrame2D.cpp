@@ -6,6 +6,15 @@
 */
 
 #include "KeyFrame2D.h"
+#include <iostream>
+
+void KeyFrame2D::start() {
+	if (object != nullptr) {
+		originalTint = *object->getTint();
+		std::cout << originalTint.getA() << " " << object << " is the original\n";
+	}
+	started = true;
+}
 
 KeyFrameType KeyFrame2D::getType() {
 	return KeyFrameType::TWO_DIMENSIONAL;
@@ -25,4 +34,8 @@ void KeyFrame2D::setTint(ColourRGBA* tint) {
 
 ColourRGBA* KeyFrame2D::getTint() {
 	return &tint;
+}
+
+ColourRGBA* KeyFrame2D::getOriginalTint() {
+	return &originalTint;
 }

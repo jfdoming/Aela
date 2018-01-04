@@ -25,17 +25,18 @@ void Label::setup() {
 void Label::updateComponent() {
 }
 
-void Label::renderComponent(Renderer& renderer) {
+void Label::renderComponent(GLRenderer& renderer) {
 	renderer.renderText(text, font, &dimensions, &colour);
 }
 
-void Label::renderWithTint(Renderer& renderer, ColourRGBA* tint) {
+void Label::renderWithTint(GLRenderer& renderer, ColourRGBA* tint) {
 	ColourRGBA newColour(colour.getR() * tint->getR(), colour.getG() * tint->getG(), colour.getB() * tint->getB(), colour.getA() * tint->getA());
 	renderer.renderText(text, font, &dimensions, &newColour);
 }
 
 void Label::setText(std::string text) {
 	this->text = text;
+	markDirty();
 }
 
 std::string Label::getText() {

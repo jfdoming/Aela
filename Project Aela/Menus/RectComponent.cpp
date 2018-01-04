@@ -16,7 +16,7 @@ RectComponent::~RectComponent() {
 void RectComponent::updateComponent() {
 }
 
-void RectComponent::renderComponent(Renderer& renderer) {
+void RectComponent::renderComponent(GLRenderer& renderer) {
 	renderer.renderRectangle(&dimensions, &colour);
 }
 
