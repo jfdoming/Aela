@@ -2,7 +2,7 @@
 
 #include "../Events/EventConstants.h"
 
-Aela::Button::Button() : hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
+Aela::Button::Button() : hoverTint(0.0f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
 	
 }
 
@@ -28,6 +28,8 @@ void Aela::Button::updateComponent() {
 	} else {
 		tint.setValues(1, 1, 1, 1);
 	}
+
+	// TODO figure out why wrong tint is displayed
 }
 
 void Aela::Button::renderComponent(GLRenderer& renderer) {
@@ -45,8 +47,6 @@ void Button::onMousePressed(MouseEvent* event) {
 		clickStarted = true;
 		active = true;
 		markDirty();
-
-		event->consume();
 	}
 }
 
@@ -62,8 +62,6 @@ void Button::onMouseReleased(MouseEvent* event) {
 		onClick();
 		active = false;
 		markDirty();
-
-		event->consume();
 	}
 
 	clickStarted = false;
@@ -75,11 +73,13 @@ void Button::onMouseEntered(MouseEvent* event) {
 	}
 
 	markDirty();
+	std::cout << "enter";
 }
 
 void Button::onMouseExited(MouseEvent* event) {
 	markDirty();
 	active = false;
+	std::cout << "exit";
 }
 
 void Aela::Button::setupOnClick(std::function<void()> function) {

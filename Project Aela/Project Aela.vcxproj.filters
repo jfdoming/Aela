@@ -52,8 +52,6 @@
     <ClCompile Include="Menus\Menu.cpp" />
     <ClCompile Include="Menus\RectComponent.cpp" />
     <ClCompile Include="Menus\TextInput.cpp" />
-    <ClCompile Include="Old Garbage\shader.cpp" />
-    <ClCompile Include="Old Garbage\texture.cpp" />
     <ClCompile Include="Framerate Calculator\FramerateCalculator.cpp" />
     <ClCompile Include="Resource Management\ResourceGroup.cpp" />
     <ClCompile Include="Resource Management\ResourceLoader.cpp" />
@@ -146,8 +144,6 @@
     <ClInclude Include="Menus\RectComponent.h" />
     <ClInclude Include="Menus\stdafx.h" />
     <ClInclude Include="Menus\TextInput.h" />
-    <ClInclude Include="Old Garbage\shader.hpp" />
-    <ClInclude Include="Old Garbage\texture.hpp" />
     <ClInclude Include="Framerate Calculator\FramerateCalculator.h" />
     <ClInclude Include="Resource Management\ResourceGroup.h" />
     <ClInclude Include="Resource Management\ResourceMap.h" />
