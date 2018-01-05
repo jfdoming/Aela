@@ -105,8 +105,8 @@ namespace Aela {
 			const unsigned int DEPTH_TEXTURE_WIDTH = 2048, DEPTH_TEXTURE_HEIGHT = 2048;
 
 			// This stores the limit to the number of instances that may occur, based on potential hardware limitations.
-			const unsigned long long SHADOW_INSTANCE_LIMIT = 100;
-			const unsigned long long MODEL_INSTANCE_LIMIT = 100;
+			const size_t SHADOW_INSTANCE_LIMIT = 100;
+			const size_t MODEL_INSTANCE_LIMIT = 100;
 
 			// These are some setup related functions.
 			void setupShaders();

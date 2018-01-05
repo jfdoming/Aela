@@ -87,7 +87,7 @@ void Game::AelaGame::setup() {
 	playerCharacter.setLocation(&Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 1)));
 	playerCharacter.setTextureNames("character_right", "character_forward", "character_left", "character_backward");
 	playerCharacter.setName("player");
-	unsigned long long playerID;
+	size_t playerID;
 	if (!characterManager->addCharacter(&playerCharacter, &playerID)) {
 		// Is this even possible to reach?!
 		AelaErrorHandling::windowError("Aela Game", (std::string) "There was a problem setting up the player. This error "
@@ -233,7 +233,7 @@ void Game::AelaGame::animateCamera(glm::vec3 translation) {
 	KeyFrame3D frame;
 	frame.setObject(camera);
 	frame.setTranslation(&cameraTrans);
-	track.addKeyFrame((unsigned long long) (1000000.0f / player.getCharacter()->getWalkingSpeed()), &frame);
+	track.addKeyFrame((size_t) (1000000.0f / player.getCharacter()->getWalkingSpeed()), &frame);
 	animator->addAnimationTrack3D(&track);
 }
 

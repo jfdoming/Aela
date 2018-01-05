@@ -20,7 +20,7 @@ void PlanarParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, fl
 void PlanarParticleEmitter::update() {
 	// Note: the particle positioning is relative to the emitter. The rotation, position and scaling of the emitter is looked at by the renderer,
 	// which renders the particles while taking these transformations into account.
-	for (unsigned long long i = 0; i < particles.size(); i++) {
+	for (size_t i = 0; i < particles.size(); i++) {
 		Particle* particle = &particles.at(i);
 		if (particle->getProperty(Transformable3DProperty::Y_POSITION) >= particle->getLifetime()) {
 			setupParticlePositioning(i, particles.size());
@@ -38,12 +38,12 @@ void PlanarParticleEmitter::setCamera(Camera3D* camera) {
 	this->camera = camera;
 }
 
-void PlanarParticleEmitter::setupParticlePositioning(unsigned long long whichParticle, unsigned long long numberOfParticles) {
+void PlanarParticleEmitter::setupParticlePositioning(size_t whichParticle, size_t numberOfParticles) {
 	// This chooses the position of the particle, relative to the emitter.
 	srand((unsigned int) (timeManager->getCurrentTimeInNanos() + whichParticle));
 	float particleZ = dimensions.getHeight() - (dimensions.getHeight() / numberOfParticles) * whichParticle;
 	particles[whichParticle].setPosition((rand() % 100) / 100.0f * dimensions.getWidth(), pathOffset * (rand() % 100) / 100.0f, particleZ);
-	for (unsigned long long i = 0; i < particles.size(); i++) {
+	for (size_t i = 0; i < particles.size(); i++) {
 		if (particles[i].getPosition()->z >= particles[whichParticle].getPosition()->z) {
 			particles.insert(particles.begin() + i, particles[whichParticle]);
 			particles.erase(particles.begin() + whichParticle + 1);

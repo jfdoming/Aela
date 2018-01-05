@@ -38,7 +38,7 @@ namespace GameScripts {
 		testCharacter.setLocation(&Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 6)));
 		testCharacter.setTextureNames("character_right", "character_forward", "character_left", "character_backward");
 		testCharacter.setName("Meowth");
-		unsigned long long playerID;
+		size_t playerID;
 		if (!characterManager->addCharacter(&testCharacter, &playerID)) {
 			AelaErrorHandling::windowError("Aela Game", (std::string) "There was a problem setting up Meowth.");
 		}
@@ -47,7 +47,7 @@ namespace GameScripts {
 		testCharacter2.setLocation(&Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 7)));
 		testCharacter2.setTextureNames("character_right", "character_forward", "character_left", "character_backward");
 		testCharacter2.setName("Meowth Clone");
-		unsigned long long playerID2;
+		size_t playerID2;
 		if (!characterManager->addCharacter(&testCharacter2, &playerID2)) {
 			AelaErrorHandling::windowError("Aela Game", (std::string) "There was a problem setting up Meowth.");
 		}

@@ -52,13 +52,13 @@ void Basic3DGLShadowRenderer::startRenderingShadows(GLuint depthProgramID) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
 }
 
-void Basic3DGLShadowRenderer::renderInstancedShadows(Map3D* map, std::vector<long long>* entities, unsigned long long start,
-	unsigned long long end, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID,
+void Basic3DGLShadowRenderer::renderInstancedShadows(Map3D* map, std::vector<long long>* entities, size_t start,
+	size_t end, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID,
 	std::unordered_map<long long, LightEntity>* lights, GLuint lightPositionsID) {
 	if (entities != nullptr && entities->size() > 0) {
 		std::vector<glm::mat4> modelMatrices;
 
-		for (unsigned long long i = start; i < end; i++) {
+		for (size_t i = start; i < end; i++) {
 			auto entity = *map->getModel(entities->at(i));
 
 			// This is positioning/rotation of the subModel.

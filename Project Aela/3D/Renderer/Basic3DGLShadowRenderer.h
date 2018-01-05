@@ -21,7 +21,7 @@ class Basic3DGLShadowRenderer {
 		}
 
 		void startRenderingShadows(GLuint depthProgramID);
-		void renderInstancedShadows(Map3D* map, std::vector<long long>* entities, unsigned long long start, unsigned long long end,
+		void renderInstancedShadows(Map3D* map, std::vector<long long>* entities, size_t start, size_t end,
 			GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::unordered_map<long long, LightEntity>* lights, GLuint lightPositionsID);
 		void endRenderingShadows();
 

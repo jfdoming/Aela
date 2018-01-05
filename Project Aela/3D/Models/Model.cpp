@@ -32,18 +32,18 @@ void Aela::Model::setSubModels(std::vector<SubModel>* subModels) {
 	}
 }
 
-unsigned long long Aela::Model::getNumberOfVertices() {
+size_t Aela::Model::getNumberOfVertices() {
 	return numberOfVertices;
 }
 
-unsigned long long Aela::Model::getNumberOfUVs() {
+size_t Aela::Model::getNumberOfUVs() {
 	return numberOfUVs;
 }
 
-unsigned long long Aela::Model::getNumberOfNormals() {
+size_t Aela::Model::getNumberOfNormals() {
 	return numberOfNormals;
 }
 
-unsigned long long Aela::Model::getNumberOfIndices() {
+size_t Aela::Model::getNumberOfIndices() {
 	return numberOfIndices;
 }

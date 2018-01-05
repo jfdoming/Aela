@@ -33,5 +33,5 @@ class PlanarParticleEmitter : public ParticleEmitter {
 		// This class requires a pointer to the camera so that it can properly sort particles.
 		Camera3D* camera;
 
-		void setupParticlePositioning(unsigned long long whichParticle, unsigned long long numberOfParticles);
+		void setupParticlePositioning(size_t whichParticle, size_t numberOfParticles);
 };

@@ -130,7 +130,7 @@ bool KeyedAnimator::addTransformable(int key, Transformable3D* transformable) {
 	return false;
 }
 
-unsigned long long KeyedAnimator::addTransformable(Transformable3D* transformable) {
+size_t KeyedAnimator::addTransformable(Transformable3D* transformable) {
 	transformables[transformables.size()] = transformable;
 	return transformables.size();
 }

@@ -31,17 +31,17 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 	// This actually reads the file.
 	std::string line;
 	EntityType entityType = EntityType::GENERIC;
-	unsigned long long entityID;
+	size_t entityID;
 
 	while (std::getline(in, line)) {
 		while (line.length() > 0) {
 			char character = line.at(0);
-			unsigned long long charactersToErase = 1;
+			size_t charactersToErase = 1;
 
 			if (character == '<') {
 				std::string tagID = "";
 
-				long long j = line.find(' ');
+				size_t j = line.find(' ');
 				if (j != std::string::npos) {
 					tagID += line.substr(1, j - 1);
 				}
@@ -77,13 +77,13 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 			} else if (character != ' ' && entityType != EntityType::GENERIC) {
 				std::string propertyType = "";
 
-				unsigned long long j = line.find('=');
+				size_t j = line.find('=');
 				if (j != std::string::npos) {
 					propertyType += line.substr(0, j);
 				}
 
 				j = line.find('"');
-				unsigned long long k = line.find('"', j + 1);
+				size_t k = line.find('"', j + 1);
 
 				if (j != std::string::npos && k != std::string::npos) {
 					if (propertyType == "src") {

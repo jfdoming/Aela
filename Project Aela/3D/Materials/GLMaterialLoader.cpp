@@ -65,7 +65,7 @@ bool Aela::MaterialLoader::load(ResourceMap& resources, std::string src) {
 
 				// This retrieves the folder path.
 				std::string path = "/";
-				for (unsigned long long i = src.length() - 1; i >= 0; i--) {
+				for (size_t i = src.length() - 1; i >= 0; i--) {
 					if (src.at(i) == '/') {
 						path = src.substr(0, i + 1);
 						break;

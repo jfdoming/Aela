@@ -18,7 +18,7 @@
 namespace Game {
 	// The following represents a map of characters, in which characters are organized by map, chunk and position in 
 	// their chunk.
-	typedef std::unordered_map<unsigned long long, std::unordered_map<glm::ivec2, std::unordered_map<glm::ivec3, unsigned long long,
+	typedef std::unordered_map<size_t, std::unordered_map<glm::ivec2, std::unordered_map<glm::ivec3, size_t,
 		IVec3HashMapFunctions, IVec3HashMapFunctions>, IVec2HashMapFunctions, IVec2HashMapFunctions>> CharacterMap;
 
 	class CharacterManager {
@@ -32,22 +32,22 @@ namespace Game {
 			void generateCharacterModels(ResourceManager* resourceManager);
 
 			// These are adding and getting character functions.
-			bool addCharacter(Character* character, unsigned long long* id);
-			bool removeCharacterByID(unsigned long long id);
-			Character* getCharacterByID(unsigned long long id);
+			bool addCharacter(Character* character, size_t* id);
+			bool removeCharacterByID(size_t id);
+			Character* getCharacterByID(size_t id);
 			Character* getCharacterByName(std::string name);
 			Character* getCharacterByLocation(Location* location);
-			std::unordered_map<glm::ivec3, unsigned long long, IVec3HashMapFunctions, IVec3HashMapFunctions>*
-				getCharactersInChunk(unsigned long long world, glm::ivec2 chunk);
+			std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFunctions>*
+				getCharactersInChunk(size_t world, glm::ivec2 chunk);
 
 			// These are movement-related functions.
 			void turn(Character* character, TileDirection direction);
-			void turn(unsigned long long id, TileDirection direction);
+			void turn(size_t id, TileDirection direction);
 			void turn(std::string name, TileDirection direction);
 			void move(Character* character, TileDirection direction, std::string scriptOnCompletion);
-			void move(unsigned long long id, TileDirection direction, std::string scriptOnCompletion);
+			void move(size_t id, TileDirection direction, std::string scriptOnCompletion);
 			void move(std::string name, TileDirection direction, std::string scriptOnCompletion);
-			void stopMoving(unsigned long long id);
+			void stopMoving(size_t id);
 			void stopMoving(std::string name);
 
 			// I don't know what else to call these...
@@ -60,7 +60,7 @@ namespace Game {
 
 			// These maps store characters based on their other properties so that the characters may be accessed by
 			// a specific property quickly.
-			std::unordered_map<std::string, unsigned long long> charactersByName;
+			std::unordered_map<std::string, size_t> charactersByName;
 			CharacterMap charactersByLocation;
 
 			ResourceManager* resourceManager;

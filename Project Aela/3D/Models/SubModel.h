@@ -28,10 +28,10 @@ namespace Aela {
 			void setNormals(std::vector<glm::vec3>* normals);
 			std::vector<unsigned short>* getIndices();
 			void setIndices(std::vector<unsigned short>* indices);
-			unsigned long long getVertexSize();
-			unsigned long long getUVSize();
-			unsigned long long getNormalSize();
-			unsigned long long getIndexSize();
+			size_t getVertexSize();
+			size_t getUVSize();
+			size_t getNormalSize();
+			size_t getIndexSize();
 			Material* getMaterial();
 			void setMaterial(Material* material);
 

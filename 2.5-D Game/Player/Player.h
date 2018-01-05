@@ -19,8 +19,8 @@ namespace Game {
 			}
 
 			// These are getters and setters.
-			void setCharacterID(unsigned long long id);
-			unsigned long long getCharacterID();
+			void setCharacterID(size_t id);
+			size_t getCharacterID();
 			Character* getCharacter();
 			TileDirection getDirectionFacing();
 
@@ -35,7 +35,7 @@ namespace Game {
 
 		private:
 			// This stores the Character ID of the player, which is assigned by the Character Manager.
-			unsigned long long id;
+			size_t id;
 
 			WorldManager* worldManager;
 			CharacterManager* characterManager;

@@ -8,10 +8,10 @@
 #include "stdafx.h"
 #include "NPCManager.h"
 
-unsigned long long CharacterManager::addCharacter(Character* npc) {
+size_t CharacterManager::addCharacter(Character* npc) {
 	return 0;
 }
 
-unsigned long long CharacterManager::removeCharacter(unsigned long long index) {
+size_t CharacterManager::removeCharacter(size_t index) {
 	return characters.erase(index);
 }

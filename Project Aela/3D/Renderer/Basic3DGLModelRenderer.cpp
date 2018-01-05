@@ -58,7 +58,7 @@ void Basic3DGLModelRenderer::sendLightDataToShader(std::unordered_map<long long,
 
 			// If the number of lights is less than the max light amount, the first light's shadow map is sent to fill in the remaining spots in the
 			// shader's shadow map array. Not doing so causes the shader to crash.
-			for (unsigned long long i = lights->size(); i < MAX_LIGHT_AMOUNT; i++) {
+			for (size_t i = lights->size(); i < MAX_LIGHT_AMOUNT; i++) {
 				glActiveTexture((GLenum) (GL_TEXTURE1 + i));
 				glBindTexture(GL_TEXTURE_CUBE_MAP, *lights->begin()->second.getShadowMapTexture());
 				glUniform1i((GLint) (shadowMapID + i), (GLint) (1 + i));
@@ -121,14 +121,14 @@ void Basic3DGLModelRenderer::startRenderingModelEntities(GLuint modelProgramID, 
 	glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, &projectionMatrix[0][0]);
 }
 
-void Basic3DGLModelRenderer::renderInstancedModelEntities(Map3D* map, std::vector<long long>* entities, unsigned long long start,
-	unsigned long long end, GLuint modelProgramID, GLuint frameBuffer,
+void Basic3DGLModelRenderer::renderInstancedModelEntities(Map3D* map, std::vector<long long>* entities, size_t start,
+	size_t end, GLuint modelProgramID, GLuint frameBuffer,
 	GLuint modelMatrixID, GLuint rotationMatrixID, GLuint modelTextureID) {
 	if (entities != nullptr && entities->size() > 0) {
 		Model& model = *map->getModel(entities->at(start))->getModel();
 		std::vector<glm::mat4> modelMatrices, rotationMatrices;
 
-		for (unsigned long long i = start; i < end; i++) {
+		for (size_t i = start; i < end; i++) {
 			auto entity = *map->getModel(entities->at(i));
 
 			// This is positioning/rotation of the subModel.

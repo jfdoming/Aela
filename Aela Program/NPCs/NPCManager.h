@@ -17,8 +17,8 @@ class CharacterManager {
 
 		}
 
-		unsigned long long addCharacter(Character* npc), removeCharacter(unsigned long long index);
+		size_t addCharacter(Character* npc), removeCharacter(size_t index);
 
 	private:
-		std::map<unsigned long long, Character> characters;
+		std::map<size_t, Character> characters;
 };

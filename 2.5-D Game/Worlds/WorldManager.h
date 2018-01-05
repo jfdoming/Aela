@@ -42,13 +42,13 @@ namespace Game {
 
 			TileAtlas* getTileAtlas();
 			CharacterManager* getCharacterManager();
-			unsigned long long addWorld(World* world);
-			World* getWorld(unsigned long long id);
-			bool setCurrentWorld(unsigned long long id);
-			unsigned long long getCurrentWorld();
+			size_t addWorld(World* world);
+			World* getWorld(size_t id);
+			bool setCurrentWorld(size_t id);
+			size_t getCurrentWorld();
 			void setChunkRenderDistances(glm::vec3 chunkRenderDistances);
 			bool moveCharacterIfPossible(Character* character, TileDirection direction);
-			bool moveCharacterIfPossible(unsigned long long id, TileDirection direction);
+			bool moveCharacterIfPossible(size_t id, TileDirection direction);
 			bool moveCharacterIfPossible(std::string name, TileDirection direction);
 			void addWalkedOnScript(std::string script, Location* location);
 			void addPromptedScript(std::string script, Location* location);
@@ -59,7 +59,7 @@ namespace Game {
 			GLRenderer* renderer;
 
 			std::vector<World> worlds;
-			unsigned long long currentWorld;
+			size_t currentWorld;
 
 			// These are some handles to game-related objects.
 			CharacterManager characterManager;

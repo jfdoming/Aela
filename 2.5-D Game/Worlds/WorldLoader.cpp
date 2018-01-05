@@ -27,12 +27,12 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 		while (std::getline(in, line)) {
 			while (line.length() > 0) {
 				char character = line.at(0);
-				unsigned long long charactersToErase = 1;
+				size_t charactersToErase = 1;
 
 				if (character == '<') {
 					currentTag = "";
 
-					unsigned long long j = line.find(' ');
+					size_t j = line.find(' ');
 					if (j != std::string::npos) {
 						currentTag += line.substr(1, j - 1);
 					} else {
@@ -69,13 +69,13 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 				} else if (character != ' ' && character != '	' && currentTag != "") {
 					std::string propertyType = "";
 
-					unsigned long long j = line.find('=');
+					size_t j = line.find('=');
 					if (j != std::string::npos) {
 						propertyType += line.substr(0, j);
 					}
 
 					j = line.find('"');
-					unsigned long long k = line.find('"', j + 1);
+					size_t k = line.find('"', j + 1);
 
 					if (j != std::string::npos && k != std::string::npos) {
 						if (propertyType == "position" && (currentTag == "Chunk" || currentTag == "chunk")) {

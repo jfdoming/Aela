@@ -7,11 +7,11 @@
 
 #include "Player.h"
 
-void Game::Player::setCharacterID(unsigned long long id) {
+void Game::Player::setCharacterID(size_t id) {
 	this->id = id;
 }
 
-unsigned long long Game::Player::getCharacterID() {
+size_t Game::Player::getCharacterID() {
 	return id;
 }
 

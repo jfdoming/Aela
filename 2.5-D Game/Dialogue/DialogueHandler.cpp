@@ -28,7 +28,7 @@ void Game::DialogueHandler::update() {
 }
 
 void Game::DialogueHandler::showDialogue(std::string text, std::string scriptToRunOnceComplete) {
-	if ((signed long long) text.size() > MAX_CHARACTERS_PER_LINE) {
+	if (text.size() > MAX_CHARACTERS_PER_LINE) {
 		size_t position = text.substr(0, MAX_CHARACTERS_PER_LINE).find_last_of(' ');
 		if (position >= MAX_CHARACTERS_PER_LINE || position == std::string::npos) {
 			line1OfText = text.substr(0, MAX_CHARACTERS_PER_LINE);

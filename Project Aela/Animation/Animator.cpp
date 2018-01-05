@@ -13,8 +13,8 @@
 // but its easier to read what is going on when everything is layed out for you. Besides, those functions would be
 // called once anyways.
 void Animator::update() {
-	unsigned long long timePassed = timeManager->getTimeBetweenFramesInNanos();
-	unsigned long long which3DTrack = 0;
+	long long timePassed = timeManager->getTimeBetweenFramesInNanos();
+	size_t which3DTrack = 0;
 	for (AnimationTrack3D& track : tracks3D) {
 		track.updatePositionInTrack(timePassed);
 
@@ -137,7 +137,7 @@ void Animator::update() {
 
 	// This regains the time for accuracy.
 	timePassed = timeManager->getTimeBetweenFramesInNanos();
-	unsigned long long which2DTrack = 0;
+	size_t which2DTrack = 0;
 	for (AnimationTrack2D& track : tracks2D) {
 		track.updatePositionInTrack(timePassed);
 

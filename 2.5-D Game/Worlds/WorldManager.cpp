@@ -48,19 +48,19 @@ Game::CharacterManager* Game::WorldManager::getCharacterManager() {
 	return &characterManager;
 }
 
-unsigned long long Game::WorldManager::addWorld(World* world) {
+size_t Game::WorldManager::addWorld(World* world) {
 	worlds.push_back(*world);
 	return worlds.size() - 1;
 }
 
-Game::World* Game::WorldManager::getWorld(unsigned long long id) {
+Game::World* Game::WorldManager::getWorld(size_t id) {
 	if (id < worlds.size()) {
 		return &worlds[id];
 	}
 	return nullptr;
 }
 
-bool Game::WorldManager::setCurrentWorld(unsigned long long id) {
+bool Game::WorldManager::setCurrentWorld(size_t id) {
 	if (id < worlds.size()) {
 		currentWorld = id;
 		return true;
@@ -68,7 +68,7 @@ bool Game::WorldManager::setCurrentWorld(unsigned long long id) {
 	return false;
 }
 
-unsigned long long Game::WorldManager::getCurrentWorld() {
+size_t Game::WorldManager::getCurrentWorld() {
 	return currentWorld;
 }
 
@@ -126,7 +126,7 @@ bool Game::WorldManager::moveCharacterIfPossible(Character* character, TileDirec
 	return true;
 }
 
-bool Game::WorldManager::moveCharacterIfPossible(unsigned long long id, TileDirection direction) {
+bool Game::WorldManager::moveCharacterIfPossible(size_t id, TileDirection direction) {
 	return moveCharacterIfPossible(characterManager.getCharacterByID(id), direction);
 }
 
@@ -164,7 +164,7 @@ void Game::WorldManager::rebuildMap() {
 
 					// Note that characters are represented by models.
 					ModelEntity modelEntity;
-					unsigned long long entityInMap;
+					size_t entityInMap;
 					glm::ivec3 tileOfChunk = character->getLocation()->getTile();
 
 					// The position of the character on the map. The distance the character is translated up from its
@@ -181,7 +181,7 @@ void Game::WorldManager::rebuildMap() {
 				}
 			}
 
-			unsigned long long counter = 0;
+			size_t counter = 0;
 			for (auto tilePair : *chunk->getTiles()) {
 				Tile* tile = chunk->getTile(tilePair.first);
 
@@ -189,7 +189,7 @@ void Game::WorldManager::rebuildMap() {
 				if (tile != nullptr && tile->getType() != 0) {
 					// Note that tiles are represented by models.
 					ModelEntity modelEntity;
-					unsigned long long entityInMap;
+					size_t entityInMap;
 					glm::vec3 tilePositionOnMap;
 					std::string textureName;
 

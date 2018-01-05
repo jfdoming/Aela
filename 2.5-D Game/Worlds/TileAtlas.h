@@ -20,11 +20,11 @@ namespace Game {
 			TileAtlas() {}
 			~TileAtlas() {}
 
-			unsigned long long getNumberOfTiles();
+			size_t getNumberOfTiles();
 			void clearAllTiles();
-			TileType* getTileType(unsigned long long id);
+			TileType* getTileType(size_t id);
 			void addTile(TileType& type, Model* model);
-			Model* getTileModel(unsigned long long id);
+			Model* getTileModel(size_t id);
 
 		private:
 			std::vector<TileType> tileTypes;

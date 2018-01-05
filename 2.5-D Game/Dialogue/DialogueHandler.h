@@ -35,13 +35,13 @@ namespace Game {
 			std::shared_ptr<Label> label1, label2;
 
 			// This is the max amount of characters that the handler will display per row of dialogue.
-			const long long MAX_CHARACTERS_PER_LINE = 46;
+			const size_t MAX_CHARACTERS_PER_LINE = 46;
 
 			// These are the lines that are to be displayed.
 			std::string line1OfText = "", line2OfText = "";
 
 			// This is the position (unit = characters) that the dialogue scrolling/appearing is at.
-			long long positionInDialogue = 0;
+			size_t positionInDialogue = 0;
 			
 			// These store variables related to text scrolling/appearing and time.
 			long long timeSinceNewCharacter;

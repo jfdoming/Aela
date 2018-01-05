@@ -21,7 +21,7 @@ class Basic3DGLModelRenderer {
 		}
 
 		void startRenderingModelEntities(GLuint modelProgramID, GLuint frameBuffer, GLuint viewMatrixID, GLuint projectionMatrixID);
-		void renderInstancedModelEntities(Map3D* map, std::vector<long long>* entities, unsigned long long start, unsigned long long end,
+		void renderInstancedModelEntities(Map3D* map, std::vector<long long>* entities, size_t start, size_t end,
 			GLuint modelProgramID, GLuint frameBuffer, GLuint modelMatrixID, GLuint rotationMatrixID, GLuint modelTextureID);
 		void endRenderingModelEntities();
 

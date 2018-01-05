@@ -9,14 +9,14 @@
 
 using namespace Aela;
 
-Game::TileType* Game::TileAtlas::getTileType(unsigned long long id) {
+Game::TileType* Game::TileAtlas::getTileType(size_t id) {
 	if (id < tileTypes.size()) {
 		return &tileTypes[id];
 	}
 	return nullptr;
 }
 
-unsigned long long Game::TileAtlas::getNumberOfTiles() {
+size_t Game::TileAtlas::getNumberOfTiles() {
 	return tileTypes.size();
 }
 
@@ -30,6 +30,6 @@ void Game::TileAtlas::addTile(TileType& type, Model* model) {
 	tileModels.push_back(model);
 }
 
-Model* Game::TileAtlas::getTileModel(unsigned long long id) {
+Model* Game::TileAtlas::getTileModel(size_t id) {
 	return tileModels.at(id);
 }

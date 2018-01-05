@@ -51,7 +51,7 @@ void Game::CharacterManager::generateCharacterModels(ResourceManager* resourceMa
 	}
 }
 
-bool Game::CharacterManager::addCharacter(Character* character, unsigned long long* id) {
+bool Game::CharacterManager::addCharacter(Character* character, size_t* id) {
 	if (getCharacterByName(character->getName()) != nullptr || getCharacterByLocation(character->getLocation()) != nullptr) {
 		std::cout << getCharacterByName(character->getName()) << " " << getCharacterByLocation(character->getLocation()) << "\n";
 		return false;
@@ -64,7 +64,7 @@ bool Game::CharacterManager::addCharacter(Character* character, unsigned long lo
 	return true;
 }
 
-bool Game::CharacterManager::removeCharacterByID(unsigned long long id) {
+bool Game::CharacterManager::removeCharacterByID(size_t id) {
 	if (getCharacterByID(id) == nullptr) {
 		return false;
 	}
@@ -93,7 +93,7 @@ bool Game::CharacterManager::removeCharacterByID(unsigned long long id) {
 	return true;
 }
 
-Game::Character* Game::CharacterManager::getCharacterByID(unsigned long long id) {
+Game::Character* Game::CharacterManager::getCharacterByID(size_t id) {
 	if (id < characters.size()) {
 		return &characters.at(id);
 	} else {
@@ -125,8 +125,8 @@ Game::Character* Game::CharacterManager::getCharacterByLocation(Location* locati
 	return &characters[iter3->second];
 }
 
-std::unordered_map<glm::ivec3, unsigned long long, IVec3HashMapFunctions, IVec3HashMapFunctions>*
-	Game::CharacterManager::getCharactersInChunk(unsigned long long world, glm::ivec2 chunk) {
+std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFunctions>*
+	Game::CharacterManager::getCharactersInChunk(size_t world, glm::ivec2 chunk) {
 	auto iter1 = charactersByLocation.find(world);
 	if (iter1 == charactersByLocation.end()) {
 		return nullptr;
@@ -149,7 +149,7 @@ void Game::CharacterManager::turn(Character* character, TileDirection direction)
 	}
 }
 
-void Game::CharacterManager::turn(unsigned long long id, TileDirection direction) {
+void Game::CharacterManager::turn(size_t id, TileDirection direction) {
 	if (id < characters.size()) {
 		Character* character = &characters[id];
 		turn(character, direction);
@@ -221,7 +221,7 @@ void Game::CharacterManager::move(Character* character, TileDirection direction,
 	turn(character, direction);
 }
 
-void Game::CharacterManager::move(unsigned long long id, TileDirection direction, std::string scriptOnCompletion) {
+void Game::CharacterManager::move(size_t id, TileDirection direction, std::string scriptOnCompletion) {
 	if (id < characters.size()) {
 		Character* character = &characters[id];
 		move(character, direction, scriptOnCompletion);
@@ -238,7 +238,7 @@ void Game::CharacterManager::move(std::string name, TileDirection direction, std
 	move(character, direction, scriptOnCompletion);
 }
 
-void Game::CharacterManager::stopMoving(unsigned long long id) {
+void Game::CharacterManager::stopMoving(size_t id) {
 	if (id < characters.size()) {
 		Character* character = &characters[id];
 		character->moving = false;
@@ -273,7 +273,7 @@ void Game::CharacterManager::animateCharacterMovement(Character* character, glm:
 	glm::vec3 characterTranslation = *character->getEntity()->getPosition() + translation;
 	frame.setTranslation(&characterTranslation);
 	scriptManager->bindScriptToFrame(scriptOnCompletion, &frame);
-	track.addKeyFrame((unsigned long long) (1000000.0f / character->getWalkingSpeed()), &frame);
+	track.addKeyFrame((size_t) (1000000.0f / character->getWalkingSpeed()), &frame);
 	animator->addAnimationTrack3D(&track);
 }
 

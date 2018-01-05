@@ -167,7 +167,7 @@ namespace Game {
 		// engine->getSceneManager()->setCurrentScene(WORLD_GAMEPLAY_SCENE);
 		// game->switchScene(WORLD_GAMEPLAY_SCENE);
 
-		// You might want to get rid of this animation and go straight to the gameplay (for debugging purposes).
+		// I set this animation to go by really quickly in order to save debugging time.
 		Animator* animator = engine->getAnimator();
 		AnimationTrack2D track;
 		for (int i = 0; i < 4; i++) {

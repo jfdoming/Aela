@@ -192,8 +192,8 @@ void Aela::Basic3DGLRenderer::renderShadows(Map3D* map) {
 
 	shadowRenderer.startRenderingShadows(depthProgramID);
 	for (auto& pair : *map->getResourceGroupedModelsWithoutTransparency()) {
-		for (unsigned long long start = 0; start < pair.second.size(); start += SHADOW_INSTANCE_LIMIT) {
-			unsigned long long end = start + SHADOW_INSTANCE_LIMIT;
+		for (size_t start = 0; start < pair.second.size(); start += SHADOW_INSTANCE_LIMIT) {
+			size_t end = start + SHADOW_INSTANCE_LIMIT;
 			if (end > pair.second.size()) {
 				end = pair.second.size();
 			}
@@ -215,8 +215,8 @@ void Aela::Basic3DGLRenderer::renderModelEntities(Map3D* map, bool multisampling
 	}
 
 	for (auto& pair : *map->getResourceGroupedModelsWithoutTransparency()) {
-		for (unsigned long long start = 0; start < pair.second.size(); start += MODEL_INSTANCE_LIMIT) {
-			unsigned long long end = start + MODEL_INSTANCE_LIMIT;
+		for (size_t start = 0; start < pair.second.size(); start += MODEL_INSTANCE_LIMIT) {
+			size_t end = start + MODEL_INSTANCE_LIMIT;
 			if (end > pair.second.size()) {
 				end = pair.second.size();
 			}
@@ -231,8 +231,8 @@ void Aela::Basic3DGLRenderer::renderModelEntities(Map3D* map, bool multisampling
 	}
 
 	for (auto& pair : *map->getResourceGroupedModelsWithTransparency()) {
-		for (unsigned long long start = 0; start < pair.second.size(); start += MODEL_INSTANCE_LIMIT) {
-			unsigned long long end = start + MODEL_INSTANCE_LIMIT;
+		for (size_t start = 0; start < pair.second.size(); start += MODEL_INSTANCE_LIMIT) {
+			size_t end = start + MODEL_INSTANCE_LIMIT;
 			if (end > pair.second.size()) {
 				end = pair.second.size();
 			}
@@ -345,7 +345,7 @@ void Aela::Basic3DGLRenderer::renderParticles(ParticleEmitter* particleEmitter, 
 				multisampling);
 		}
 	} else {
-		for (unsigned long long i = particleEmitter->getParticles()->size() - 1; i > 0; i--) {
+		for (size_t i = particleEmitter->getParticles()->size() - 1; i > 0; i--) {
 			renderParticle(particleEmitter->getParticles()->at(i), particleEmitter->getPosition(), particleEmitter->getRotation(),
 				particleEmitter->getScaling(), multisampling);
 		}
