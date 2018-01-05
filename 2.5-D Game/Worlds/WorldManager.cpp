@@ -127,6 +127,19 @@ void Game::WorldManager::addPromptedScript(std::string script, Location* locatio
 	worlds[location->getWorld()].getChunk(location->getChunk())->getTile(location->getTile())->setPromptedScript(script);
 }
 
+void Game::WorldManager::runPromptedScriptOfTile(Location* location) {
+	unsigned int world = location->getWorld();
+	if (world < worlds.size()) {
+		Chunk* chunk = worlds[world].getChunk(location->getChunk());
+		if (chunk != nullptr) {
+			Tile* tile = worlds[world].getChunk(location->getChunk())->getTile(location->getTile());
+			if (tile != nullptr) {
+				scriptManager->runScript(*tile->getPromptedScriptID());
+			}
+		}
+	}
+}
+
 void Game::WorldManager::processCharacterMovements(Character* character, TileDirection& direction) {
 	std::cout << "Start...\n";
 	Location location = *character->getLocation();
@@ -353,4 +366,7 @@ void Game::WorldManager::rebuildMap() {
 			}
 		}
 	}
+
+	// The animator must be updated in order to make sure that entity transformations are correct.
+	animator->update();
 }

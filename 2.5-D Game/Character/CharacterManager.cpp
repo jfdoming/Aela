@@ -148,7 +148,7 @@ void Game::CharacterManager::turn(Character* character, TileDirection direction)
 	if (resourceManager->obtain<Model>("char_" + character->getTextureName(character->getDirectionFacing()) + "_model", model)) {
 		character->setModel(model);
 		character->getEntity()->setModel(model);
-		// mapNeedsToBeRebuilt = true;
+		mapNeedsToBeRebuilt = true;
 	}
 }
 

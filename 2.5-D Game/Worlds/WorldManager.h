@@ -56,6 +56,8 @@ namespace Game {
 			void addWalkedOnScript(std::string script, Location* location);
 			void addPromptedScript(std::string script, Location* location);
 
+			void runPromptedScriptOfTile(Location* location);
+
 		private:
 			// These are some Aela objects.
 			ResourceManager* resourceManager;

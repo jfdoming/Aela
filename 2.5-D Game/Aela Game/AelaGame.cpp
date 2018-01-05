@@ -122,8 +122,6 @@ void Game::AelaGame::update() {
 			if (movingBackward) {
 				player.moveIfPossible(TileDirection::BACKWARD);
 			}
-		} else {
-			std::cout << "Player is moving.\n";
 		}
 
 		worldManager.update();
@@ -219,6 +217,26 @@ void Game::AelaGame::onEvent(Event* event) {
 					}
 					pressingBackward = false;
 					movingBackward = false;
+					break;
+				case SDLK_RETURN:
+					Location* playerLocation = player.getCharacter()->getLocation();
+					glm::vec3 tile = playerLocation->getTile();
+					switch (player.getDirectionFacing()) {
+						case TileDirection::RIGHT:
+							tile += glm::ivec3(-1, 0, 0);
+							break;
+						case TileDirection::FORWARD:
+							tile += glm::ivec3(0, 0, 1);
+							break;
+						case TileDirection::LEFT:
+							tile += glm::ivec3(1, 0, 0);
+							break;
+						case TileDirection::BACKWARD:
+							tile += glm::ivec3(0, 0, -1);
+							break;
+					}
+					Location location(playerLocation->getWorld(), playerLocation->getChunk(), tile);
+					worldManager.runPromptedScriptOfTile(&location);
 					break;
 			}
 		}

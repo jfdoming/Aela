@@ -70,9 +70,9 @@ namespace GameScripts {
 	// This adds all gameplay scripts to the ScriptManager and also binds tile-related scripts to their tiles.
 	void addScriptsToGameWorld() {
 		scriptManager->addScript("test_game_script", std::bind(&testGameScript));
-		worldManager->addWalkedOnScript("test_game_script", &Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 1)));
+		worldManager->addWalkedOnScript("test_game_script", &Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
 		scriptManager->addScript("test_game_script_2", std::bind(&testGameScript2));
-		worldManager->addWalkedOnScript("test_game_script_2", &Location(0, glm::ivec2(0, 0), glm::ivec3(2, 0, 1)));
+		worldManager->addPromptedScript("test_game_script_2", &Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 7)));
 		scriptManager->addScript("test_game_script_3", std::bind(&testGameScript3));
 		worldManager->addWalkedOnScript("test_game_script_3", &Location(0, glm::ivec2(0, 0), glm::ivec3(3, 0, 1)));
 		scriptManager->addScript("setup_characters", std::bind(&setupCharacters));
