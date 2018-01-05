@@ -9,7 +9,8 @@
 #include <unordered_map>
 #include "World.h"
 #include "../Character/CharacterManager.h"
-#include "3D\Maps\Map3D.h"
+#include "../Dialogue/DialogueHandler.h"
+#include "3D/Maps/Map3D.h"
 #include "TileAtlas.h"
 #include "Resource Management/ResourceManager.h"
 #include "../Scripts/ScriptManager.h"
@@ -32,7 +33,8 @@ namespace Game {
 				currentWorld = 0;
 			}
 
-			bool setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator, ScriptManager* scriptManager, Character* player);
+			bool setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator,
+				ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player);
 			void update();
 
 			// This creates/recreates the Aela::Map3D that is used by the game.
@@ -54,7 +56,6 @@ namespace Game {
 		private:
 			// These are some Aela objects.
 			ResourceManager* resourceManager;
-			ScriptManager* scriptManager;
 			GLRenderer* renderer;
 
 			std::vector<World> worlds;
@@ -62,6 +63,8 @@ namespace Game {
 
 			// These are some handles to game-related objects.
 			CharacterManager characterManager;
+			ScriptManager* scriptManager;
+			DialogueHandler* dialogueHandler;
 			Character* player;
 			TileAtlas tileAtlas;
 

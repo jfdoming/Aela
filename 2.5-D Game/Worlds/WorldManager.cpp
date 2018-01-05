@@ -11,11 +11,12 @@
 #include "../Scripts/Scripts to Move to LUA/SceneScript.h"
 #include <glm/gtc/constants.hpp>
 
-bool Game::WorldManager::setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator, ScriptManager* scriptManager, Character* player) {
+bool Game::WorldManager::setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator,
+	ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player) {
 	this->resourceManager = resourceManager;
 	this->renderer = renderer;
 	this->scriptManager = scriptManager;
-	this->characterManager = characterManager;
+	this->dialogueHandler = dialogueHandler;
 	this->player = player;
 
 	bool success = resourceManager->obtain<Map3D>(mapFileLocation, map);
@@ -26,7 +27,7 @@ bool Game::WorldManager::setup(ResourceManager* resourceManager, GLRenderer* ren
 		return false;
 	}
 
-	characterManager.setup(resourceManager, animator);
+	characterManager.setup(resourceManager, animator, scriptManager);
 	rebuildMap();
 	return true;
 }
@@ -118,12 +119,10 @@ bool Game::WorldManager::moveCharacterIfPossible(Character* character, TileDirec
 		characterManager.turn(character, direction);
 		return false;
 	}
-	characterManager.move(character, direction);
+	dialogueHandler->closeDialog();
+	std::string script = *tile->getWalkedOnScriptID();
+	characterManager.move(character, direction, script);
 	unsigned int x = tile->getType();
-	std::string scriptName = *tile->getWalkedOnScriptID();
-	if (scriptName != "") {
-		scriptManager->runScript(scriptName);
-	}
 	return true;
 }
 

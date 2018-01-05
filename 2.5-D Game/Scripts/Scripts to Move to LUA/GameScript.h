@@ -17,10 +17,19 @@ namespace GameScripts {
 	WorldManager* worldManager;
 	CharacterManager* characterManager;
 	ScriptManager* scriptManager;
+	DialogueHandler* dialogueHandler;
 	Engine* engine;
 
 	void testGameScript() {
-		std::cout << "Test!\n";
+		dialogueHandler->showDialogue("Yo!", "");
+	}
+
+	void testGameScript2() {
+		dialogueHandler->showDialogue("Hello! This is some dialogue that should continue onto the second line!", "");
+	}
+
+	void hideDialogue() {
+		dialogueHandler->closeDialog();
 	}
 
 	// This sets up the characters if the world.
@@ -48,7 +57,10 @@ namespace GameScripts {
 	void addScriptsToGameWorld() {
 		scriptManager->addScript("test_game_script", std::bind(&testGameScript));
 		worldManager->addWalkedOnScript("test_game_script", &Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
+		scriptManager->addScript("test_game_script_2", std::bind(&testGameScript2));
+		worldManager->addWalkedOnScript("test_game_script_2", &Location(0, glm::ivec2(0, 0), glm::ivec3(2, 0, 1)));
 		scriptManager->addScript("setup_characters", std::bind(&setupCharacters));
+		scriptManager->addScript("hide_dialogue", std::bind(&hideDialogue));
 	}
 
 	// This sets up necessary items for gameplay scripts.
@@ -57,8 +69,8 @@ namespace GameScripts {
 		worldManager = game->getWorldManager();
 		characterManager = worldManager->getCharacterManager();
 		scriptManager = game->getScriptManager();
+		dialogueHandler = game->getDialogueHandler();
 		engine = engineToUse;
-
 		addScriptsToGameWorld();
 	}
 

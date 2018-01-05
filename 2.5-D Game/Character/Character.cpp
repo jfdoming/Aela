@@ -79,8 +79,8 @@ bool Game::Character::isMoving() {
 	return moving;
 }
 
-void Game::Character::addTranslation(glm::vec3 translation) {
-	translations.push_back(translation);
+void Game::Character::addTranslation(glm::vec3 translation, std::string scriptOnceComplete) {
+	translations.push_back(std::pair<glm::vec3, std::string>(translation, scriptOnceComplete));
 }
 
 void Game::Character::removeNextTranslation() {
@@ -89,7 +89,7 @@ void Game::Character::removeNextTranslation() {
 	}
 }
 
-glm::vec3* Game::Character::getNextTranslation() {
+std::pair<glm::vec3, std::string>* Game::Character::getNextTranslation() {
 	if (translations.size() == 0) {
 		return nullptr;
 	}

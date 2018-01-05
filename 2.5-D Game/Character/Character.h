@@ -40,9 +40,9 @@ namespace Game {
 			ModelEntity* getEntity();
 			void setEntity(ModelEntity* entity);
 			bool isMoving();
-			void addTranslation(glm::vec3 translation);
+			void addTranslation(glm::vec3 translation, std::string scriptOnceComplete);
 			void removeNextTranslation();
-			glm::vec3* getNextTranslation();
+			std::pair<glm::vec3, std::string>* getNextTranslation();
 
 		private:
 			Location location;
@@ -61,7 +61,7 @@ namespace Game {
 			std::unordered_map<TileDirection, std::string> textureNames;
 
 			// This stores the translations that the animator should use next to animate the character.
-			std::vector<glm::vec3> translations;
+			std::vector<std::pair<glm::vec3, std::string>> translations;
 
 			// These represent several speeds, in units/millisecond.
 			float walkingSpeed, runningSpeed;

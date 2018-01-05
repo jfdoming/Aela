@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include "Utilities/glmut.h"
 #include "../Character/Character.h"
+#include "../Scripts/ScriptManager.h"
 #include "../Worlds/World.h"
 #include "Resource Management/ResourceManager.h"
 #include "Animation/Animator.h"
@@ -24,7 +25,7 @@ namespace Game {
 		public:
 			CharacterManager() {}
 
-			void setup(ResourceManager* resourceManager, Animator* animator);
+			void setup(ResourceManager* resourceManager, Animator* animator, ScriptManager* scriptManager);
 			void update();
 
 			// After all characters have been added, this will generate their models.
@@ -43,9 +44,9 @@ namespace Game {
 			void turn(Character* character, TileDirection direction);
 			void turn(unsigned long long id, TileDirection direction);
 			void turn(std::string name, TileDirection direction);
-			void move(Character* character, TileDirection direction);
-			void move(unsigned long long id, TileDirection direction);
-			void move(std::string name, TileDirection direction);
+			void move(Character* character, TileDirection direction, std::string scriptOnCompletion);
+			void move(unsigned long long id, TileDirection direction, std::string scriptOnCompletion);
+			void move(std::string name, TileDirection direction, std::string scriptOnCompletion);
 			void stopMoving(unsigned long long id);
 			void stopMoving(std::string name);
 
@@ -64,10 +65,11 @@ namespace Game {
 
 			ResourceManager* resourceManager;
 			Animator* animator;
+			ScriptManager* scriptManager;
 
 			// Used to tell the WorldManager if the Map3D needs to be cleaned and rebuilt.
 			bool mapNeedsToBeRebuilt = false;
 
-			void animateCharacterMovement(Character* character, glm::vec3 translation);
+			void animateCharacterMovement(Character* character, glm::vec3 translation, std::string scriptOnCompletion);
 	};
 }

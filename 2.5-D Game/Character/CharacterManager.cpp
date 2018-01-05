@@ -12,24 +12,24 @@
 
 using namespace Game;
 
-void Game::CharacterManager::setup(ResourceManager* resourceManager, Animator* animator) {
+void Game::CharacterManager::setup(ResourceManager* resourceManager, Animator* animator, ScriptManager* scriptManager) {
 	this->resourceManager = resourceManager;
 	this->animator = animator;
-	std::cout << characters[0].getModel()->getSubModels()->size() << " is the model (setup).\n";
+	this->scriptManager = scriptManager;
 }
 
 void Game::CharacterManager::update() {
 	for (Character& character : characters) {
 		if (!character.isMoving()) {
-			glm::vec3* translation = character.getNextTranslation();
+			std::pair<glm::vec3, std::string>* translation = character.getNextTranslation();
 			if (translation != nullptr) {
-				animateCharacterMovement(&character, *translation);
+				animateCharacterMovement(&character, translation->first, translation->second);
 				character.removeNextTranslation();
 			}
 		} else if (!animator->trackWithTagExists(character.getName() + "_movement")) {
-			glm::vec3* translation = character.getNextTranslation();
+			std::pair<glm::vec3, std::string>* translation = character.getNextTranslation();
 			if (translation != nullptr) {
-				animateCharacterMovement(&character, *translation);
+				animateCharacterMovement(&character, translation->first, translation->second);
 				character.removeNextTranslation();
 			} else {
 				character.moving = false;
@@ -166,7 +166,7 @@ void Game::CharacterManager::turn(std::string name, TileDirection direction) {
 	turn(character, direction);
 }
 
-void Game::CharacterManager::move(Character* character, TileDirection direction) {
+void Game::CharacterManager::move(Character* character, TileDirection direction, std::string scriptOnCompletion) {
 	character->moving = true;
 	Location* location = character->getLocation();
 	charactersByLocation[location->getWorld()][location->getChunk()].erase(location->getTile());
@@ -217,25 +217,25 @@ void Game::CharacterManager::move(Character* character, TileDirection direction)
 	location->setChunk(chunkCoord);
 	location->setTile(tileCoord);
 	charactersByLocation[location->getWorld()][location->getChunk()][location->getTile()] = charactersByName[character->getName()];
-	character->addTranslation(translationForAnimation);
+	character->addTranslation(translationForAnimation, scriptOnCompletion);
 	turn(character, direction);
 }
 
-void Game::CharacterManager::move(unsigned long long id, TileDirection direction) {
+void Game::CharacterManager::move(unsigned long long id, TileDirection direction, std::string scriptOnCompletion) {
 	if (id < characters.size()) {
 		Character* character = &characters[id];
-		move(character, direction);
+		move(character, direction, scriptOnCompletion);
 	}
 }
 
-void Game::CharacterManager::move(std::string name, TileDirection direction) {
+void Game::CharacterManager::move(std::string name, TileDirection direction, std::string scriptOnCompletion) {
 	auto iter = charactersByName.find(name);
 	if (iter == charactersByName.end()) {
 		return;
 	}
 
 	Character* character = &characters[iter->second];
-	move(character, direction);
+	move(character, direction, scriptOnCompletion);
 }
 
 void Game::CharacterManager::stopMoving(unsigned long long id) {
@@ -263,7 +263,8 @@ void Game::CharacterManager::mapWasRebuilt() {
 	mapNeedsToBeRebuilt = false;
 }
 
-void Game::CharacterManager::animateCharacterMovement(Character* character, glm::vec3 translation) {
+void Game::CharacterManager::animateCharacterMovement(Character* character, glm::vec3 translation,
+	std::string scriptOnCompletion) {
 	character->getEntity()->setPosition(*character->getEntity()->getPosition() - translation);
 	AnimationTrack3D track;
 	track.setTag(character->getName() + "_movement");
@@ -271,6 +272,7 @@ void Game::CharacterManager::animateCharacterMovement(Character* character, glm:
 	frame.setObject(character->getEntity());
 	glm::vec3 characterTranslation = *character->getEntity()->getPosition() + translation;
 	frame.setTranslation(&characterTranslation);
+	scriptManager->bindScriptToFrame(scriptOnCompletion, &frame);
 	track.addKeyFrame((unsigned long long) (1000000.0f / character->getWalkingSpeed()), &frame);
 	animator->addAnimationTrack3D(&track);
 }

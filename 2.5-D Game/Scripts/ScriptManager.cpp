@@ -33,3 +33,12 @@ bool Game::ScriptManager::runScript(std::string name) {
 	iter->second();
 	return true;
 }
+
+bool Game::ScriptManager::bindScriptToFrame(std::string name, KeyFrame* keyFrame) {
+	auto iter = scripts.find(name);
+	if (iter == scripts.end()) {
+		return false;
+	}
+	keyFrame->setEndingAction(iter->second);
+	return true;
+}

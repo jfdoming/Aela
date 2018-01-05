@@ -12,7 +12,6 @@ using namespace Aela;
 
 void SubMenu::render(GLRenderer& renderer) {
 	if (visible && initialized && isDirty()) {
-		std::cout << "Rendering a submenu.\n";
 		Container::render(renderer);
 	}
 }

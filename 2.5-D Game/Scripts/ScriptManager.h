@@ -9,6 +9,7 @@
 #include <string>
 #include <unordered_map>
 #include <functional>
+#include "Animation/KeyFrame.h"
 
 namespace Game {
 	class ScriptManager {
@@ -23,6 +24,9 @@ namespace Game {
 			bool addScript(std::string name, std::function<void()> script, bool replaceExistingScript);
 
 			bool runScript(std::string name);
+
+			// This causes a script to run at as the ending action of a keyframe.
+			bool bindScriptToFrame(std::string name, KeyFrame* keyFrame);
 
 		private:
 			std::unordered_map<std::string, std::function<void()>> scripts;

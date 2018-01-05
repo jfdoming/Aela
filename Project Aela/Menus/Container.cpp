@@ -51,9 +51,8 @@ void Container::updateComponent() {
 void Container::renderComponent(GLRenderer& renderer) {
 	for (auto child : children) {
 		// If a container is dirty and must be rendered, then it's children must also
-		// become dirty. Yes, there is a way for this to not have to occur, but I don't
-		// want to modify Julian's stuff too much (I'd rather add a line of code or two
-		// to make things work and tell him where to focus his efforts at afterwards).
+		// become dirty. Yes, there may be a way for this to not have to occur, but I don't
+		// want to modify Julian's stuff too much. Ask me for more details. -Robert
 		child->markDirty();
 		child->render(renderer);
 	}

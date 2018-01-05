@@ -12,6 +12,7 @@
 #include "../Character/CharacterManager.h"
 #include "../Scripts/ScriptManager.h"
 #include "../Player/Player.h"
+#include "../Dialogue/DialogueHandler.h"
 
 #define PI 3.14159265359
 #define THIRD_PI 1.0471975512
@@ -49,6 +50,7 @@ namespace Game {
 
 			WorldManager* getWorldManager();
 			ScriptManager* getScriptManager();
+			DialogueHandler* getDialogueHandler();
 		private:
 			// These are Aela Engine objects.
 			Engine* engine;
@@ -71,6 +73,7 @@ namespace Game {
 			CharacterManager* characterManager;
 			Player player;
 			ScriptManager scriptManager;
+			DialogueHandler dialogueHandler;
 
 			// These store the states of keys and are related to player movement.
 			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false;

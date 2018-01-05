@@ -27,8 +27,8 @@ bool Game::Player::moveIfPossible(TileDirection direction) {
 	return worldManager->moveCharacterIfPossible(characterManager->getCharacterByID(id), direction);
 }
 
-void Game::Player::move(TileDirection direction) {
-	characterManager->move(characterManager->getCharacterByID(id), direction);
+void Game::Player::move(TileDirection direction, std::string scriptOnCompletion) {
+	characterManager->move(characterManager->getCharacterByID(id), direction, scriptOnCompletion);
 }
 
 void Game::Player::stopMoving() {

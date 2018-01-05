@@ -14,6 +14,7 @@
 #include "Menus/ImageComponent.h"
 #include "Menus/Button.h"
 #include "../Aela Game/AelaGame.h"
+#include "Menus/SubMenu.h"
 
 #define EKKON_INTRO_SCENE 1
 #define MAIN_MENU_SCENE 2
@@ -28,14 +29,17 @@ namespace Game {
 		// This creates some objects for later.
 		ResourceManager* resourceManager = engine->getResourceManager();
 		FontManager* fontManager = engine->getFontManager();
+		GLRenderer* renderer = engine->getRenderer();
+		DialogueHandler* dialogueHandler = game->getDialogueHandler();
 		TextFont* xeroxLarge = fontManager->obtainTextFont("../../res/fonts/xerox.ttf", 35);
-		TextFont* xerox = fontManager->obtainTextFont("../../res/fonts/xerox.ttf", 18);
+		TextFont* xerox = fontManager->obtainTextFont("../../res/fonts/xerox.ttf", 22);
 		if (xeroxLarge == nullptr || xerox == nullptr) {
 			AelaErrorHandling::windowError("A critical font (xerox.ttf) could not be loaded, aborting!");
 			return;
 		}
 		ColourRGBA VSBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
 		ColourRGBA almostWhite(0.9f, 0.9f, 0.9f, 1.0f);
+		ColourRGBA almostBlack(0.1f, 0.1f, 0.1f, 1.0f);
 		Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getWindowDimensions());
 
 		// The following blocks of code set up the Ekkon intro scene.
@@ -51,23 +55,117 @@ namespace Game {
 		ekkonScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
 		ekkonScene->getMenu()->add(ekkonImage);
 
+		// This sets up text.
+		auto titleText = std::make_shared<Label>("Pokemon Meitnerium", xeroxLarge, &almostWhite);
+		titleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() / 1.5f));
+		auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xerox, &almostWhite);
+		ekkonGamesText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), ((int) (windowDimensions.getHeight() * 0.95)));
+		auto startGameButtonText = std::make_shared<Label>("Start a New Game", xerox, &almostWhite);
+		int spacing = startGameButtonText->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
+		auto continueGameButtonText = std::make_shared<Label>("Continue Game", xerox, &almostWhite);
+		auto optionsButtonText = std::make_shared<Label>("Options", xerox, &almostWhite);
+		auto exitButtonText = std::make_shared<Label>("Exit", xerox, &almostWhite);
+
+		// This sets up actions for the main menu buttons.
+		auto startNewGameAction = [game](Engine* engine) {
+			engine->getSceneManager()->setCurrentScene(WORLD_GAMEPLAY_SCENE);
+			game->switchScene(WORLD_GAMEPLAY_SCENE);
+		};
+
+		auto continueGameAction = [game](Engine* engine) {
+			engine->getSceneManager()->setCurrentScene(WORLD_GAMEPLAY_SCENE);
+			game->switchScene(WORLD_GAMEPLAY_SCENE);
+		};
+
+		auto optionsAction = [game](Engine* engine) {AelaErrorHandling::windowWarning("There are no options!");};
+		auto exitAction = [](Engine* engine) {engine->getWindow()->quit();};
+
+		// This sets up some textureless buttons. Note: setText() uses information about the button's dimensions. In order to setup text for
+		// a button, make sure that you set the button's position before hand.
+		auto startGameButton = std::make_shared<Button>();
+		startGameButton->setDimensions(startGameButtonText->getDimensions());
+		startGameButton->setupOnClick(std::bind(startNewGameAction, engine));
+		startGameButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06),
+			(int) (windowDimensions.getHeight() / 1.42f));
+		startGameButton->setText(startGameButtonText);
+
+		auto continueGameButton = std::make_shared<Button>();
+		continueGameButton->setDimensions(continueGameButtonText->getDimensions());
+		continueGameButton->setupOnClick(std::bind(continueGameAction, engine));
+		continueGameButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06),
+			(int) (windowDimensions.getHeight() / 1.42f + spacing));
+		continueGameButton->setText(continueGameButtonText);
+
+		auto optionsButton = std::make_shared<Button>();
+		optionsButton->setDimensions(optionsButtonText->getDimensions());
+		optionsButton->setupOnClick(std::bind(optionsAction, engine));
+		optionsButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06),
+			(int) (windowDimensions.getHeight() / 1.42f + spacing * 2));
+		optionsButton->setText(optionsButtonText);
+
+		auto exitButton = std::make_shared<Button>();
+		exitButton->setDimensions(exitButtonText->getDimensions());
+		exitButton->setupOnClick(std::bind(exitAction, engine));
+		exitButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06),
+			(int) (windowDimensions.getHeight() / 1.42f + spacing * 3));
+		exitButton->setText(exitButtonText);
+
+		// This sets up the main menu scene.
+		auto mainMenuScene = new Scene();
+		mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
+		mainMenuScene->getMenu()->add(titleText);
+		mainMenuScene->getMenu()->add(ekkonGamesText);
+		mainMenuScene->getMenu()->add(startGameButton);
+		mainMenuScene->getMenu()->add(continueGameButton);
+		mainMenuScene->getMenu()->add(optionsButton);
+		mainMenuScene->getMenu()->add(exitButton);
+
+		// This is the submenu for dialogue.
+		auto dialogueBoxSubMenu = std::make_shared<SubMenu>();
+		dialogueBoxSubMenu->init(&windowDimensions, *renderer);
+
+		auto dialgoueBoxImage = std::make_shared<ImageComponent>();
+		GLTexture* dialgoueBoxTexture;
+		success = resourceManager->obtain<GLTexture>("../../res/textures/dialogue_box.dds", dialgoueBoxTexture);
+		dialgoueBoxImage->setDimensions(&Rect<int>(0, windowDimensions.getHeight() * 3 / 4, windowDimensions.getWidth(),
+			windowDimensions.getHeight() / 4));
+		dialgoueBoxImage->setTexture(dialgoueBoxTexture);
+
+		auto dialogueTextOne = std::make_shared<Label>("Dialogue!", xeroxLarge, &almostBlack);
+		auto dialogueTextTwo = std::make_shared<Label>("Dialogue 2!", xeroxLarge, &almostBlack);
+		dialogueTextOne->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() * 0.85));
+		dialogueTextTwo->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() * 0.95));
+
+		dialogueBoxSubMenu->add(dialgoueBoxImage);
+		dialogueBoxSubMenu->add(dialogueTextOne);
+		dialogueBoxSubMenu->add(dialogueTextTwo);
+		
+		dialogueHandler->setDialogueSubMenu(dialogueBoxSubMenu);
+		dialogueHandler->setDialogueLabels(dialogueTextOne, dialogueTextTwo);
+
 		// This sets up the world gameplay scene, in which the player is given a top-down view of the world.
 		auto worldGameplayScene = new Scene();
+		worldGameplayScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
+		worldGameplayScene->getMenu()->add(dialogueBoxSubMenu);
 
 		Map3D* map;
 		success = engine->getResourceManager()->obtain<Map3D>("../../res/maps/map.txt", map);
 		if (success) {
+			mainMenuScene->setMap(map);
 			worldGameplayScene->setMap(map);
 		} else {
 			AelaErrorHandling::windowError("There was a problem loading map.txt!");
 		}
 
 		engine->getSceneManager()->registerScene(ekkonScene, EKKON_INTRO_SCENE);
+		engine->getSceneManager()->registerScene(mainMenuScene, MAIN_MENU_SCENE);
 		engine->getSceneManager()->registerScene(worldGameplayScene, WORLD_GAMEPLAY_SCENE);
-		engine->getSceneManager()->setCurrentScene(EKKON_INTRO_SCENE);
 		engine->getSceneManager()->setDisposingScenesOnDestroy(true);
 
+		engine->getSceneManager()->setCurrentScene(EKKON_INTRO_SCENE);
 		game->switchScene(EKKON_INTRO_SCENE);
+		// engine->getSceneManager()->setCurrentScene(WORLD_GAMEPLAY_SCENE);
+		// game->switchScene(WORLD_GAMEPLAY_SCENE);
 
 		// You might want to get rid of this animation and go straight to the gameplay (for debugging purposes).
 		Animator* animator = engine->getAnimator();
@@ -77,27 +175,27 @@ namespace Game {
 			frame.setObject(ekkonImage);
 			if (i == 3) {
 				auto action = [](Engine* engine, AelaGame* game) {
-					engine->getSceneManager()->setCurrentScene(WORLD_GAMEPLAY_SCENE);
-					game->switchScene(WORLD_GAMEPLAY_SCENE);
+					engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE);
+					game->switchScene(MAIN_MENU_SCENE);
 				};
 				frame.setEndingAction(std::bind(action, engine, game));
 			}
 			switch (i) {
 				case 0:
 					frame.setTint(&ColourRGBA(1, 1, 1, 0));
-					track.addKeyFrameUsingMillis(500, &frame);
+					track.addKeyFrameUsingMillis(50, &frame);
 					break;
 				case 1:
 					frame.setTint(&ColourRGBA(1, 1, 1, 1));
-					track.addKeyFrameUsingMillis(2000, &frame);
+					track.addKeyFrameUsingMillis(150, &frame);
 					break;
 				case 2:
 					frame.setTint(&ColourRGBA(1, 1, 1, 1));
-					track.addKeyFrameUsingMillis(2000, &frame);
+					track.addKeyFrameUsingMillis(100, &frame);
 					break;
 				case 3:
 					frame.setTint(&ColourRGBA(1, 1, 1, 0));
-					track.addKeyFrameUsingMillis(2000, &frame);
+					track.addKeyFrameUsingMillis(150, &frame);
 					break;
 			}
 		}

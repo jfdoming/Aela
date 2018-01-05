@@ -28,7 +28,7 @@ namespace Game {
 			bool moveIfPossible(TileDirection direction);
 
 			// If the player is in a non-collision mode, they can be forced to move. Note that this won't triggered tile events.
-			void move(TileDirection direction);
+			void move(TileDirection direction, std::string scriptOnCompletion);
 
 			void stopMoving();
 			bool isMoving();

@@ -22,6 +22,9 @@ void Menu::render(GLRenderer& renderer) {
 	renderer.bindSimple2DFramebuffer(&buffer);
 
 	if (visible && initialized && isDirty()) {
+		// If a menu needs to be rerendered, it might be because one of its children decided to become hidden. In that case,
+		// the entire buffer of the menu needs to be cleared, followed by the rerendering of all children onto the buffer.
+		renderer.clearSimple2DFramebuffer();
 		Container::render(renderer);
 	}
 

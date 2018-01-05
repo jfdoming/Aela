@@ -30,13 +30,23 @@ void Game::AelaGame::loadScenes() {
 
 void Game::AelaGame::switchScene(int sceneID) {
 	switch (sceneID) {
+		case MAIN_MENU_SCENE:
+			// Some cool camera shot for the main menu:
+			camera->setInUse(true);
+			camera->setForceCursorToMiddle(false);
+			camera->useControls(false);
+			camera->setPosition(4.57369f, 0.124887f, -3.30828f);
+			camera->setRotation(2.685f, 0.244202f, 0);
+			break;
 		case WORLD_GAMEPLAY_SCENE:
 			// First person camera:
 			engine->getWindow()->hideCursor();
 			camera->setInUse(true);
-			camera->setForceCursorToMiddle(false);
+			camera->setForceCursorToMiddle(true);
 			camera->useControls(false);
-			engine->getRenderer()->getCamera()->setRotation(0, -angleBetweenPlayerAndCamera, 0);
+			camera->setPosition(*player.getCharacter()->getEntity()->getPosition() + glm::vec3(0, sin(angleBetweenPlayerAndCamera)
+				* distanceBetweenPlayerAndCamera, -cos(angleBetweenPlayerAndCamera) * distanceBetweenPlayerAndCamera));
+			camera->setRotation(0, -angleBetweenPlayerAndCamera, 0);
 			break;
 	}
 	currentScene = sceneID;
@@ -48,6 +58,10 @@ Game::WorldManager* Game::AelaGame::getWorldManager() {
 
 Game::ScriptManager* Game::AelaGame::getScriptManager() {
 	return &scriptManager;
+}
+
+Game::DialogueHandler* Game::AelaGame::getDialogueHandler() {
+	return &dialogueHandler;
 }
 
 void Game::AelaGame::setup() {
@@ -87,10 +101,10 @@ void Game::AelaGame::setup() {
 	characterManager->generateCharacterModels(resourceManager);
 
 	// Setup the world manager!
-	worldManager.setup(resourceManager, renderer, animator, &scriptManager, player.getCharacter());
+	worldManager.setup(resourceManager, renderer, animator, &scriptManager, &dialogueHandler, player.getCharacter());
 
-	camera->setPosition(*player.getCharacter()->getEntity()->getPosition() + glm::vec3(0, sin(angleBetweenPlayerAndCamera) * distanceBetweenPlayerAndCamera,
-		-cos(angleBetweenPlayerAndCamera) * distanceBetweenPlayerAndCamera));
+	// Setup the dialogue handler!
+	dialogueHandler.setup(timeManager, &scriptManager);
 }
 
 void Game::AelaGame::update() {
@@ -113,6 +127,7 @@ void Game::AelaGame::update() {
 		}
 
 		worldManager.update();
+		dialogueHandler.update();
 	}
 }
 
