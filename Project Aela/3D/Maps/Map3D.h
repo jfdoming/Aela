@@ -50,6 +50,7 @@ class Map3D : public Resource {
 		// Used by the MapLoader.
 		void addModelWithoutGeneratingData(long long id, ModelEntity* model);
 		void generateAdditionalModelData(long long whichModel, bool containsTransparency);
+		void removeAdditionalModelData(bool modelsAreTransparent);
 
 	private:
 		// These are the maps of entities in the world.

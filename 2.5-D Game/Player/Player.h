@@ -25,7 +25,8 @@ namespace Game {
 			TileDirection getDirectionFacing();
 
 			// During regular gameplay, the player can be moved if its possible to do so.
-			bool moveIfPossible(TileDirection direction);
+			void moveIfPossible(TileDirection direction);
+			void moveIfPossible(std::vector<TileDirection> directions);
 
 			// If the player is in a non-collision mode, they can be forced to move. Note that this won't triggered tile events.
 			void move(TileDirection direction, std::string scriptOnCompletion);

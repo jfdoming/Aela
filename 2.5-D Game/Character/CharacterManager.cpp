@@ -1,3 +1,4 @@
+
 /*
 * Class: Character Manager
 * Author: Robert Ciborowski
@@ -12,9 +13,11 @@
 
 using namespace Game;
 
-void Game::CharacterManager::setup(ResourceManager* resourceManager, Animator* animator, ScriptManager* scriptManager) {
+void Game::CharacterManager::setup(ResourceManager* resourceManager, Animator* animator, Camera3D* camera,
+	ScriptManager* scriptManager) {
 	this->resourceManager = resourceManager;
 	this->animator = animator;
+	this->camera = camera;
 	this->scriptManager = scriptManager;
 }
 
@@ -145,7 +148,7 @@ void Game::CharacterManager::turn(Character* character, TileDirection direction)
 	if (resourceManager->obtain<Model>("char_" + character->getTextureName(character->getDirectionFacing()) + "_model", model)) {
 		character->setModel(model);
 		character->getEntity()->setModel(model);
-		mapNeedsToBeRebuilt = true;
+		// mapNeedsToBeRebuilt = true;
 	}
 }
 
@@ -168,55 +171,21 @@ void Game::CharacterManager::turn(std::string name, TileDirection direction) {
 
 void Game::CharacterManager::move(Character* character, TileDirection direction, std::string scriptOnCompletion) {
 	character->moving = true;
-	Location* location = character->getLocation();
-	charactersByLocation[location->getWorld()][location->getChunk()].erase(location->getTile());
-	if (charactersByLocation[location->getWorld()][location->getChunk()].size() == 0) {
-		if (charactersByLocation[location->getWorld()].size() == 0) {
-			charactersByLocation.erase(location->getWorld());
-		} else {
-			charactersByLocation[location->getWorld()].erase(location->getChunk());
-		}
-	}
-	glm::ivec2 chunkCoord = location->getChunk();
-	glm::ivec3 tileCoord = location->getTile();
 	glm::vec3 translationForAnimation;
 	switch (direction) {
 		case TileDirection::RIGHT:
-			tileCoord += glm::ivec3(-1, 0, 0);
 			translationForAnimation = glm::vec3(-1, 0, 0);
 			break;
 		case TileDirection::FORWARD:
-			tileCoord += glm::ivec3(0, 0, 1);
 			translationForAnimation = glm::vec3(0, 0, 1);
 			break;
 		case TileDirection::LEFT:
-			tileCoord += glm::ivec3(1, 0, 0);
 			translationForAnimation = glm::vec3(1, 0, 0);
 			break;
 		case TileDirection::BACKWARD:
-			tileCoord += glm::ivec3(0, 0, -1);
 			translationForAnimation = glm::vec3(0, 0, -1);
 			break;
 	}
-	if (tileCoord.x < 0) {
-		tileCoord.x = CHUNK_WIDTH - 1;
-		chunkCoord.x--;
-	}
-	if (tileCoord.x == CHUNK_WIDTH) {
-		tileCoord.x = 0;
-		chunkCoord.x++;
-	}
-	if (tileCoord.z < 0) {
-		tileCoord.z = CHUNK_LENGTH - 1;
-		chunkCoord.y--;
-	}
-	if (tileCoord.z == CHUNK_LENGTH) {
-		tileCoord.z = 0;
-		chunkCoord.y++;
-	}
-	location->setChunk(chunkCoord);
-	location->setTile(tileCoord);
-	charactersByLocation[location->getWorld()][location->getChunk()][location->getTile()] = charactersByName[character->getName()];
 	character->addTranslation(translationForAnimation, scriptOnCompletion);
 	turn(character, direction);
 }
@@ -239,6 +208,7 @@ void Game::CharacterManager::move(std::string name, TileDirection direction, std
 }
 
 void Game::CharacterManager::stopMoving(size_t id) {
+	std::cout << "STOPPED!\n";
 	if (id < characters.size()) {
 		Character* character = &characters[id];
 		character->moving = false;
@@ -263,17 +233,68 @@ void Game::CharacterManager::mapWasRebuilt() {
 	mapNeedsToBeRebuilt = false;
 }
 
-void Game::CharacterManager::animateCharacterMovement(Character* character, glm::vec3 translation,
+void Game::CharacterManager::animateCharacterMovement(Character* character, glm::ivec3 translation,
 	std::string scriptOnCompletion) {
-	character->getEntity()->setPosition(*character->getEntity()->getPosition() - translation);
+	character->moving = true;
+	Location* location = character->getLocation();
+	charactersByLocation[location->getWorld()][location->getChunk()].erase(location->getTile());
+	if (charactersByLocation[location->getWorld()][location->getChunk()].size() == 0) {
+		if (charactersByLocation[location->getWorld()].size() == 0) {
+			charactersByLocation.erase(location->getWorld());
+		} else {
+			charactersByLocation[location->getWorld()].erase(location->getChunk());
+		}
+	}
+	glm::ivec2 chunkCoord = location->getChunk();
+	glm::ivec3 tileCoord = location->getTile();
+	glm::vec3 translationForAnimation = translation;;
+	tileCoord += translation;
+	if (tileCoord.x < 0) {
+		tileCoord.x = CHUNK_WIDTH - 1;
+		chunkCoord.x--;
+	}
+	if (tileCoord.x == CHUNK_WIDTH) {
+		tileCoord.x = 0;
+		chunkCoord.x++;
+	}
+	if (tileCoord.z < 0) {
+		tileCoord.z = CHUNK_LENGTH - 1;
+		chunkCoord.y--;
+	}
+	if (tileCoord.z == CHUNK_LENGTH) {
+		tileCoord.z = 0;
+		chunkCoord.y++;
+	}
+	location->setChunk(chunkCoord);
+	location->setTile(tileCoord);
+	charactersByLocation[location->getWorld()][location->getChunk()][location->getTile()] = charactersByName[character->getName()];
+
+	std::cout << "MOVE CHARACTER!\n";
+	if (character->getName() == PLAYER_NAME) {
+		std::cout << "MOVE CAMERA!\n";
+		animateCamera(translation, character->getWalkingSpeed());
+	}
+
+	// character->getEntity()->setPosition(*character->getEntity()->getPosition() - translationForAnimation);
 	AnimationTrack3D track;
 	track.setTag(character->getName() + "_movement");
 	KeyFrame3D frame;
 	frame.setObject(character->getEntity());
-	glm::vec3 characterTranslation = *character->getEntity()->getPosition() + translation;
+	glm::vec3 characterTranslation = *character->getEntity()->getPosition() + translationForAnimation;
 	frame.setTranslation(&characterTranslation);
 	scriptManager->bindScriptToFrame(scriptOnCompletion, &frame);
 	track.addKeyFrame((size_t) (1000000.0f / character->getWalkingSpeed()), &frame);
+	animator->addAnimationTrack3D(&track);
+}
+
+void Game::CharacterManager::animateCamera(glm::vec3 translation, float speed) {
+	glm::vec3 cameraTrans = *camera->getPosition() + translation;
+	AnimationTrack3D track;
+	track.setTag("camera_movement");
+	KeyFrame3D frame;
+	frame.setObject(camera);
+	frame.setTranslation(&cameraTrans);
+	track.addKeyFrame((size_t) (1000000.0f / speed), &frame);
 	animator->addAnimationTrack3D(&track);
 }
 

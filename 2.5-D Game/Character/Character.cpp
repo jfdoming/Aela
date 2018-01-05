@@ -8,6 +8,10 @@
 #include "Character.h"
 #include <iostream>
 
+void Game::Character::setup(Location* location) {
+	this->location = *location;
+}
+
 void Game::Character::setLocation(Location* location) {
 	this->location = *location;
 }
@@ -94,4 +98,11 @@ std::pair<glm::vec3, std::string>* Game::Character::getNextTranslation() {
 		return nullptr;
 	}
 	return &translations[0];
+}
+
+std::pair<glm::vec3, std::string>* Game::Character::getLastTranslation() {
+	if (translations.size() == 0) {
+		return nullptr;
+	}
+	return &translations[translations.size() - 1];
 }

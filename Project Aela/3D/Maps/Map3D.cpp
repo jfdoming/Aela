@@ -137,6 +137,14 @@ void Map3D::generateAdditionalModelData(long long whichModel, bool containsTrans
 	}
 }
 
+void Map3D::removeAdditionalModelData(bool modelsAreTransparent) {
+	if (modelsAreTransparent) {
+		resourceGroupedModelsWithTransparency.clear();
+	} else {
+		resourceGroupedModelsWithoutTransparency.clear();
+	}
+}
+
 
 void Map3D::addSkybox(long long id, SkyboxEntity* skybox) {
 	skyboxes[id] = *skybox;

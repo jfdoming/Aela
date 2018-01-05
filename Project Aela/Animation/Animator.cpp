@@ -18,6 +18,7 @@ void Animator::update() {
 	for (AnimationTrack3D& track : tracks3D) {
 		track.updatePositionInTrack(timePassed);
 
+		// This statement should not be triggered.
 		if (track.getKeyFrames()->size() == 0) {
 			continue;
 		}
@@ -66,7 +67,7 @@ void Animator::update() {
 				}
 			}
 
-			// This gets rid of the KeyFrame.
+			// This gets rid of the keyframe.
 			track.getKeyFrames()->erase(track.getKeyFrames()->begin());
 
 			if (track.getKeyFrames()->size() == 0) {
@@ -135,6 +136,14 @@ void Animator::update() {
 		which3DTrack++;
 	}
 
+	// This will purge any completed 3D tracks.
+	for (size_t i = 0; i < tracks3D.size(); i++) {
+		if (tracks3D[i].getKeyFrames()->size() == 0) {
+			tracks3D.erase(tracks3D.begin() + i);
+			i--;
+		}
+	}
+
 	// This regains the time for accuracy.
 	timePassed = timeManager->getTimeBetweenFramesInNanos();
 	size_t which2DTrack = 0;
@@ -174,11 +183,6 @@ void Animator::update() {
 
 			track.getKeyFrames()->erase(track.getKeyFrames()->begin());
 
-			if (track.getKeyFrames()->size() == 0) {
-				tracks2D.erase(tracks2D.begin() + which2DTrack);
-				continue;
-			}
-
 			track.resetPosition();
 			continue;
 		}
@@ -199,6 +203,14 @@ void Animator::update() {
 		}
 		which2DTrack++;
 	}
+
+	// This will purge any completed 2D tracks.
+	for (size_t i = 0; i < tracks2D.size(); i++) {
+		if (tracks2D[i].getKeyFrames()->size() == 0) {
+			tracks2D.erase(tracks2D.begin() + i);
+			i--;
+		}
+	}
 }
 
 void Animator::setTimeManager(TimeManager* timeManager) {
@@ -211,8 +223,13 @@ void Animator::addAnimationTrack3D(AnimationTrack3D* track) {
 	}
 }
 
-std::vector<AnimationTrack3D>* Animator::get3DKeyFrames() {
-	return &tracks3D;
+AnimationTrack3D* Animator::get3DTrack(std::string name) {
+	for (auto& track : tracks3D) {
+		if (track.getTag() == name) {
+			return &track;
+		}
+	}
+	return nullptr;
 }
 
 void Animator::addAnimationTrack2D(AnimationTrack2D* track) {
@@ -221,8 +238,13 @@ void Animator::addAnimationTrack2D(AnimationTrack2D* track) {
 	}
 }
 
-std::vector<AnimationTrack2D>* Animator::get2DKeyFrames() {
-	return &tracks2D;
+AnimationTrack2D* Animator::get2DTrack(std::string name) {
+	for (auto& track : tracks2D) {
+		if (track.getTag() == name) {
+			return &track;
+		}
+	}
+	return nullptr;
 }
 
 int Animator::delete3DTrackByTag(std::string tag) {

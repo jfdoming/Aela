@@ -84,9 +84,9 @@ void Game::AelaGame::setup() {
 
 	// Setup the player!
 	Character playerCharacter;
-	playerCharacter.setLocation(&Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 1)));
+	playerCharacter.setup(&Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 1)));
 	playerCharacter.setTextureNames("character_right", "character_forward", "character_left", "character_backward");
-	playerCharacter.setName("player");
+	playerCharacter.setName(PLAYER_NAME);
 	size_t playerID;
 	if (!characterManager->addCharacter(&playerCharacter, &playerID)) {
 		// Is this even possible to reach?!
@@ -101,7 +101,7 @@ void Game::AelaGame::setup() {
 	characterManager->generateCharacterModels(resourceManager);
 
 	// Setup the world manager!
-	worldManager.setup(resourceManager, renderer, animator, &scriptManager, &dialogueHandler, player.getCharacter());
+	worldManager.setup(resourceManager, renderer, animator, camera, &scriptManager, &dialogueHandler, player.getCharacter());
 
 	// Setup the dialogue handler!
 	dialogueHandler.setup(timeManager, &scriptManager);
@@ -110,20 +110,20 @@ void Game::AelaGame::setup() {
 void Game::AelaGame::update() {
 	if (currentScene == WORLD_GAMEPLAY_SCENE) {
 		if (!player.isMoving()) {
-			if (movingRight && player.moveIfPossible(TileDirection::RIGHT)) {
-				animateCamera(glm::vec3(-1, 0, 0));
+			if (movingRight) {
+				player.moveIfPossible(TileDirection::RIGHT);
 			}
-			if (movingForward && player.moveIfPossible(TileDirection::FORWARD)) {
-				animateCamera(glm::vec3(0, 0, 1));
+			if (movingForward) {
+				player.moveIfPossible(TileDirection::FORWARD);
 			}
-			if (movingLeft && player.moveIfPossible(TileDirection::LEFT)) {
-				animateCamera(glm::vec3(1, 0, 0));
+			if (movingLeft) {
+				player.moveIfPossible(TileDirection::LEFT);
 			}
-			if (movingBackward && player.moveIfPossible(TileDirection::BACKWARD)) {
-				animateCamera(glm::vec3(0, 0, -1));
+			if (movingBackward) {
+				player.moveIfPossible(TileDirection::BACKWARD);
 			}
-		} else if (!animator->trackWithTagExists("player_movement")) {
-			player.stopMoving();
+		} else {
+			std::cout << "Player is moving.\n";
 		}
 
 		worldManager.update();
@@ -223,18 +223,6 @@ void Game::AelaGame::onEvent(Event* event) {
 			}
 		}
 	}
-}
-
-void Game::AelaGame::animateCamera(glm::vec3 translation) {
-	glm::vec3 cameraTrans = *camera->getPosition() + translation;
-
-	AnimationTrack3D track;
-	track.setTag("camera_movement");
-	KeyFrame3D frame;
-	frame.setObject(camera);
-	frame.setTranslation(&cameraTrans);
-	track.addKeyFrame((size_t) (1000000.0f / player.getCharacter()->getWalkingSpeed()), &frame);
-	animator->addAnimationTrack3D(&track);
 }
 
 void Game::AelaGame::setupScripts() {

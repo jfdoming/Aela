@@ -33,7 +33,7 @@ namespace Game {
 				currentWorld = 0;
 			}
 
-			bool setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator,
+			bool setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator, Camera3D* camera,
 				ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player);
 			void update();
 
@@ -47,9 +47,12 @@ namespace Game {
 			bool setCurrentWorld(size_t id);
 			size_t getCurrentWorld();
 			void setChunkRenderDistances(glm::vec3 chunkRenderDistances);
-			bool moveCharacterIfPossible(Character* character, TileDirection direction);
-			bool moveCharacterIfPossible(size_t id, TileDirection direction);
-			bool moveCharacterIfPossible(std::string name, TileDirection direction);
+
+			void moveCharacterIfPossible(size_t id, TileDirection direction);
+			void moveCharacterIfPossible(std::string name, TileDirection direction);
+			void moveCharacterIfPossible(size_t id, std::vector<TileDirection> directions);
+			void moveCharacterIfPossible(std::string name, std::vector<TileDirection> directions);
+
 			void addWalkedOnScript(std::string script, Location* location);
 			void addPromptedScript(std::string script, Location* location);
 
@@ -57,6 +60,7 @@ namespace Game {
 			// These are some Aela objects.
 			ResourceManager* resourceManager;
 			GLRenderer* renderer;
+			Animator* animator;
 
 			std::vector<World> worlds;
 			size_t currentWorld;
@@ -76,7 +80,12 @@ namespace Game {
 			// system revolves around maps, and because this game is part-3D-part-2D, there must be a Map3D somewhere!
 			Map3D* map;
 
+			std::vector<std::pair<size_t, TileDirection>> characterMovementQueueByID;
+			std::vector<std::pair<std::string, TileDirection>> characterMovementQueueByName;
+
 			// This is the path to the Aela 3D Map.
 			const std::string mapFileLocation = "../../res/maps/map.txt";
+
+			void processCharacterMovements(Character* character, TileDirection& direction);
 	};
 }

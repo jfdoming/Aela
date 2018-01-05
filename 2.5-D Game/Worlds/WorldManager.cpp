@@ -11,10 +11,11 @@
 #include "../Scripts/Scripts to Move to LUA/SceneScript.h"
 #include <glm/gtc/constants.hpp>
 
-bool Game::WorldManager::setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator,
+bool Game::WorldManager::setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator, Camera3D* camera,
 	ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player) {
 	this->resourceManager = resourceManager;
 	this->renderer = renderer;
+	this->animator = animator;
 	this->scriptManager = scriptManager;
 	this->dialogueHandler = dialogueHandler;
 	this->player = player;
@@ -27,7 +28,7 @@ bool Game::WorldManager::setup(ResourceManager* resourceManager, GLRenderer* ren
 		return false;
 	}
 
-	characterManager.setup(resourceManager, animator, scriptManager);
+	characterManager.setup(resourceManager, animator, camera, scriptManager);
 	rebuildMap();
 	return true;
 }
@@ -38,6 +39,27 @@ void Game::WorldManager::update() {
 		characterManager.mapWasRebuilt();
 	}
 	characterManager.update();
+
+	for (size_t i = 0; i < characterMovementQueueByID.size(); i++) {
+		auto& pair = characterMovementQueueByID.at(i);
+		Character* character = characterManager.getCharacterByID(pair.first);
+		if (!character->isMoving()) {
+			processCharacterMovements(character, pair.second);
+			characterMovementQueueByID.erase(characterMovementQueueByID.begin() + i);
+			i--;
+		}
+	}
+
+
+	for (size_t i = 0; i < characterMovementQueueByName.size(); i++) {
+		auto& pair = characterMovementQueueByName.at(i);
+		Character* character = characterManager.getCharacterByName(pair.first);
+		if (!character->isMoving()) {
+			processCharacterMovements(character, pair.second);
+			characterMovementQueueByName.erase(characterMovementQueueByName.begin() + i);
+			i--;
+		}
+	}
 }
 
 Game::TileAtlas* Game::WorldManager::getTileAtlas() {
@@ -77,10 +99,40 @@ void Game::WorldManager::setChunkRenderDistances(glm::vec3 chunkRenderDistances)
 	rebuildMap();
 }
 
-bool Game::WorldManager::moveCharacterIfPossible(Character* character, TileDirection direction) {
+void Game::WorldManager::moveCharacterIfPossible(size_t id, TileDirection direction) {
+	characterMovementQueueByID.push_back(std::pair<size_t, TileDirection>(id, direction));
+}
+
+void Game::WorldManager::moveCharacterIfPossible(std::string name, TileDirection direction) {
+	characterMovementQueueByName.push_back(std::pair<std::string, TileDirection>(name, direction));
+}
+
+void Game::WorldManager::moveCharacterIfPossible(size_t id, std::vector<TileDirection> directions) {
+	for (auto direction : directions) {
+		characterMovementQueueByID.push_back(std::pair<size_t, TileDirection>(id, direction));
+	}
+}
+
+void Game::WorldManager::moveCharacterIfPossible(std::string name, std::vector<TileDirection> directions) {
+	for (auto direction : directions) {
+		characterMovementQueueByName.push_back(std::pair<std::string, TileDirection>(name, direction));
+	}
+}
+
+void Game::WorldManager::addWalkedOnScript(std::string script, Location* location) {
+	worlds[location->getWorld()].getChunk(location->getChunk())->getTile(location->getTile())->setWalkedOnScript(script);
+}
+
+void Game::WorldManager::addPromptedScript(std::string script, Location* location) {
+	worlds[location->getWorld()].getChunk(location->getChunk())->getTile(location->getTile())->setPromptedScript(script);
+}
+
+void Game::WorldManager::processCharacterMovements(Character* character, TileDirection& direction) {
+	std::cout << "Start...\n";
 	Location location = *character->getLocation();
 	glm::vec2 chunkCoord = location.getChunk();
 	glm::vec3 tileCoord = location.getTile();
+
 	switch (direction) {
 		case TileDirection::RIGHT:
 			tileCoord += glm::ivec3(-1, 0, 0);
@@ -116,30 +168,15 @@ bool Game::WorldManager::moveCharacterIfPossible(Character* character, TileDirec
 	Tile* tile = worlds[location.getWorld()].getChunk(location.getChunk())->getTile(location.getTile());
 	if (tile == nullptr || tileAtlas.getTileType(tile->getType())->isCollidable()
 		|| characterManager.getCharacterByLocation(&location) != nullptr) {
+		// If the movement is impossible, don't do it!
+		std::cout << "Could not move!\n";
 		characterManager.turn(character, direction);
-		return false;
+		return;
 	}
 	dialogueHandler->closeDialog();
 	std::string script = *tile->getWalkedOnScriptID();
 	characterManager.move(character, direction, script);
-	unsigned int x = tile->getType();
-	return true;
-}
-
-bool Game::WorldManager::moveCharacterIfPossible(size_t id, TileDirection direction) {
-	return moveCharacterIfPossible(characterManager.getCharacterByID(id), direction);
-}
-
-bool Game::WorldManager::moveCharacterIfPossible(std::string name, TileDirection direction) {
-	return moveCharacterIfPossible(characterManager.getCharacterByName(name), direction);
-}
-
-void Game::WorldManager::addWalkedOnScript(std::string script, Location* location) {
-	worlds[location->getWorld()].getChunk(location->getChunk())->getTile(location->getTile())->setWalkedOnScript(script);
-}
-
-void Game::WorldManager::addPromptedScript(std::string script, Location* location) {
-	worlds[location->getWorld()].getChunk(location->getChunk())->getTile(location->getTile())->setPromptedScript(script);
+	std::cout << "End...\n";
 }
 
 void Game::WorldManager::rebuildMap() {
@@ -177,7 +214,16 @@ void Game::WorldManager::rebuildMap() {
 					modelEntity.setModel(character->getModel());
 					entityInMap = map->getModels()->size();
 					map->addModelWithTransparency(entityInMap, &modelEntity);
-					character->setEntity(map->getModel(entityInMap));
+					ModelEntity* newEntity = map->getModel(entityInMap);
+					character->setEntity(newEntity);
+
+					// Make sure to update the character's aniamtion's ModelEntity pointer.
+					AnimationTrack3D* track = animator->get3DTrack(character->getName() + "_movement");
+					if (track != nullptr) {
+						for (auto& pair : *track->getKeyFrames()) {
+							pair.second.setObject(newEntity);
+						}
+					}
 				}
 			}
 

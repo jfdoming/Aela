@@ -35,6 +35,9 @@ void Game::DialogueHandler::showDialogue(std::string text, std::string scriptToR
 			position = MAX_CHARACTERS_PER_LINE;
 		} else {
 			line1OfText = text.substr(0, position);
+			if (text.at(position) == ' ') {
+				text.erase(text.begin() + position);
+			}
 		}
 		if (text.size() > MAX_CHARACTERS_PER_LINE * 2) {
 			line2OfText = text.substr(position, MAX_CHARACTERS_PER_LINE * 2);

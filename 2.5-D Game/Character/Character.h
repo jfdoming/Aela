@@ -15,12 +15,15 @@ using namespace Aela;
 namespace Game {
 	class Character {
 		friend class CharacterManager;
+		friend class WorldManager;
 		public:
 			Character() {
 				walkingSpeed = 0.004f;
 				runningSpeed = 0.008f;
 				directionFacing = TileDirection::BACKWARD;
 			}
+
+			void setup(Location* location);
 
 			// These are getters, setters and adders.
 			void setLocation(Location* location);
@@ -40,9 +43,7 @@ namespace Game {
 			ModelEntity* getEntity();
 			void setEntity(ModelEntity* entity);
 			bool isMoving();
-			void addTranslation(glm::vec3 translation, std::string scriptOnceComplete);
-			void removeNextTranslation();
-			std::pair<glm::vec3, std::string>* getNextTranslation();
+
 
 		private:
 			Location location;
@@ -68,5 +69,11 @@ namespace Game {
 
 			// These store the states of player movement.
 			bool moving = false;
+
+			// To be accessed by this class's friends.
+			void addTranslation(glm::vec3 translation, std::string scriptOnceComplete);
+			void removeNextTranslation();
+			std::pair<glm::vec3, std::string>* getNextTranslation();
+			std::pair<glm::vec3, std::string>* getLastTranslation();
 	};
 }

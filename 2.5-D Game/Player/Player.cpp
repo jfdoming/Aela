@@ -23,8 +23,13 @@ Game::TileDirection Game::Player::getDirectionFacing() {
 	return characterManager->getCharacterByID(id)->getDirectionFacing();
 }
 
-bool Game::Player::moveIfPossible(TileDirection direction) {
-	return worldManager->moveCharacterIfPossible(characterManager->getCharacterByID(id), direction);
+void Game::Player::moveIfPossible(TileDirection direction) {
+	std::cout << "Movement start.\n";
+	worldManager->moveCharacterIfPossible(id, direction);
+}
+
+void Game::Player::moveIfPossible(std::vector<TileDirection> directions) {
+	worldManager->moveCharacterIfPossible(id, directions);
 }
 
 void Game::Player::move(TileDirection direction, std::string scriptOnCompletion) {

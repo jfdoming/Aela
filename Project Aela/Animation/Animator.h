@@ -29,9 +29,9 @@ class Animator {
 		// These are getters and setters.
 		void setTimeManager(TimeManager* timeManager);
 		void addAnimationTrack3D(AnimationTrack3D* track);
-		std::vector<AnimationTrack3D>* get3DKeyFrames();
+		AnimationTrack3D* get3DTrack(std::string name);
 		void addAnimationTrack2D(AnimationTrack2D* track);
-		std::vector<AnimationTrack2D>* get2DKeyFrames();
+		AnimationTrack2D* get2DTrack(std::string name);
 		int delete3DTrackByTag(std::string tag), delete2DListsByTag(std::string tag), deleteListsByTag(std::string tag);
 		bool trackWithTagExists(std::string tag);
 		long long tracksWithTag(std::string tag);

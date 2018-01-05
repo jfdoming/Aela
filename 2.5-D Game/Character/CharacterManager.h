@@ -14,6 +14,9 @@
 #include "Resource Management/ResourceManager.h"
 #include "Animation/Animator.h"
 #include "3D/Animation/AnimationTrack3D.h"
+#include "3D/Camera/Camera3D.h"
+
+#define PLAYER_NAME "player"
 
 namespace Game {
 	// The following represents a map of characters, in which characters are organized by map, chunk and position in 
@@ -25,7 +28,7 @@ namespace Game {
 		public:
 			CharacterManager() {}
 
-			void setup(ResourceManager* resourceManager, Animator* animator, ScriptManager* scriptManager);
+			void setup(ResourceManager* resourceManager, Animator* animator, Camera3D* camera, ScriptManager* scriptManager);
 			void update();
 
 			// After all characters have been added, this will generate their models.
@@ -65,11 +68,13 @@ namespace Game {
 
 			ResourceManager* resourceManager;
 			Animator* animator;
+			Camera3D* camera;
 			ScriptManager* scriptManager;
 
 			// Used to tell the WorldManager if the Map3D needs to be cleaned and rebuilt.
 			bool mapNeedsToBeRebuilt = false;
 
-			void animateCharacterMovement(Character* character, glm::vec3 translation, std::string scriptOnCompletion);
+			void animateCharacterMovement(Character* character, glm::ivec3 translation, std::string scriptOnCompletion);
+			void animateCamera(glm::vec3 translation, float speed);
 	};
 }

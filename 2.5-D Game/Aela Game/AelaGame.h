@@ -85,7 +85,5 @@ namespace Game {
 			void setupScripts();
 			void loadResources();
 			void loadScenes();
-
-			void animateCamera(glm::vec3 translation);
 	};
 }
