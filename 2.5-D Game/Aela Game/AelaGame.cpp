@@ -77,8 +77,7 @@ void Game::AelaGame::setup() {
 	engine->getRendererReference().activateFeature(RendererFeature::MSAA_2D_X4);
 	engine->getRendererReference().activateFeature(RendererFeature::MSAA_3D_X4);
 
-	eventHandler->addListener(EventConstants::KEY_RELEASED, bindListener(AelaGame::onEvent, this));
-	eventHandler->addListener(EventConstants::KEY_PRESSED, bindListener(AelaGame::onEvent, this));
+	
 
 	characterManager = worldManager.getCharacterManager();
 
@@ -104,7 +103,10 @@ void Game::AelaGame::setup() {
 	worldManager.setup(resourceManager, renderer, animator, camera, &scriptManager, &dialogueHandler, player.getCharacter());
 
 	// Setup the dialogue handler!
-	dialogueHandler.setup(timeManager, &scriptManager);
+	dialogueHandler.setup(timeManager, eventHandler, &scriptManager);
+
+	eventHandler->addListener(EventConstants::KEY_RELEASED, bindListener(AelaGame::onEvent, this));
+	eventHandler->addListener(EventConstants::KEY_PRESSED, bindListener(AelaGame::onEvent, this));
 }
 
 void Game::AelaGame::update() {
@@ -131,113 +133,115 @@ void Game::AelaGame::update() {
 
 void Game::AelaGame::onEvent(Event* event) {
 	if (sceneManager->getCurrentSceneId() == WORLD_GAMEPLAY_SCENE) {
-		if (event->getType() == EventConstants::KEY_PRESSED) {
-			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
-			switch (keyEvent->getKeycode()) {
-				case SDLK_d:
-					pressingRight = true;
-					movingRight = true;
-					movingForward = false;
-					movingLeft = false;
-					movingBackward = false;
-					break;
-				case SDLK_w:
-					pressingForward = true;
-					movingRight = false;
-					movingForward = true;
-					movingLeft = false;
-					movingBackward = false;
-					break;
-				case SDLK_a:
-					pressingLeft = true;
-					movingRight = false;
-					movingForward = false;
-					movingLeft = true;
-					movingBackward = false;
-					break;
-				case SDLK_s:
-					pressingBackward = true;
-					movingRight = false;
-					movingForward = false;
-					movingLeft = false;
-					movingBackward = true;
-					break;
-			}
-		} else if (event->getType() == EventConstants::KEY_RELEASED) {
-			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
-			switch (keyEvent->getKeycode()) {
-				case SDLK_d:
-					if (movingRight) {
-						if (pressingForward) {
-							movingForward = true;
-						} else if (pressingBackward) {
-							movingBackward = true;
-						} else if (pressingLeft) {
-							movingLeft = true;
+		if (!dialogueHandler.dialogueIsBeingShown()) {
+			if (event->getType() == EventConstants::KEY_PRESSED) {
+				KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+				switch (keyEvent->getKeycode()) {
+					case SDLK_d:
+						pressingRight = true;
+						movingRight = true;
+						movingForward = false;
+						movingLeft = false;
+						movingBackward = false;
+						break;
+					case SDLK_w:
+						pressingForward = true;
+						movingRight = false;
+						movingForward = true;
+						movingLeft = false;
+						movingBackward = false;
+						break;
+					case SDLK_a:
+						pressingLeft = true;
+						movingRight = false;
+						movingForward = false;
+						movingLeft = true;
+						movingBackward = false;
+						break;
+					case SDLK_s:
+						pressingBackward = true;
+						movingRight = false;
+						movingForward = false;
+						movingLeft = false;
+						movingBackward = true;
+						break;
+				}
+			} else if (event->getType() == EventConstants::KEY_RELEASED) {
+				KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+				switch (keyEvent->getKeycode()) {
+					case SDLK_d:
+						if (movingRight) {
+							if (pressingForward) {
+								movingForward = true;
+							} else if (pressingBackward) {
+								movingBackward = true;
+							} else if (pressingLeft) {
+								movingLeft = true;
+							}
 						}
-					}
-					pressingRight = false;
-					movingRight = false;
-					break;
-				case SDLK_w:
-					if (movingForward) {
-						if (pressingLeft) {
-							movingLeft = true;
-						} else if (pressingRight) {
-							movingRight = true;
-						} else if (pressingBackward) {
-							movingBackward = true;
+						pressingRight = false;
+						movingRight = false;
+						break;
+					case SDLK_w:
+						if (movingForward) {
+							if (pressingLeft) {
+								movingLeft = true;
+							} else if (pressingRight) {
+								movingRight = true;
+							} else if (pressingBackward) {
+								movingBackward = true;
+							}
 						}
-					}
-					pressingForward = false;
-					movingForward = false;
-					break;
-				case SDLK_a:
-					if (movingLeft) {
-						if (pressingBackward) {
-							movingBackward = true;
-						} else if (pressingForward) {
-							movingForward = true;
-						} else if (pressingRight) {
-							movingRight = true;
+						pressingForward = false;
+						movingForward = false;
+						break;
+					case SDLK_a:
+						if (movingLeft) {
+							if (pressingBackward) {
+								movingBackward = true;
+							} else if (pressingForward) {
+								movingForward = true;
+							} else if (pressingRight) {
+								movingRight = true;
+							}
 						}
-					}
-					pressingLeft = false;
-					movingLeft = false;
-					break;
-				case SDLK_s:
-					if (movingBackward) {
-						if (pressingRight) {
-							movingRight = true;
-						} else if (pressingLeft) {
-							movingLeft = true;
-						} else if (pressingForward) {
-							movingForward = true;
+						pressingLeft = false;
+						movingLeft = false;
+						break;
+					case SDLK_s:
+						if (movingBackward) {
+							if (pressingRight) {
+								movingRight = true;
+							} else if (pressingLeft) {
+								movingLeft = true;
+							} else if (pressingForward) {
+								movingForward = true;
+							}
 						}
-					}
-					pressingBackward = false;
-					movingBackward = false;
-					break;
-				case SDLK_RETURN:
-					Location* playerLocation = player.getCharacter()->getLocation();
-					glm::vec3 tile = playerLocation->getTile();
-					switch (player.getDirectionFacing()) {
-						case TileDirection::RIGHT:
-							tile += glm::ivec3(-1, 0, 0);
-							break;
-						case TileDirection::FORWARD:
-							tile += glm::ivec3(0, 0, 1);
-							break;
-						case TileDirection::LEFT:
-							tile += glm::ivec3(1, 0, 0);
-							break;
-						case TileDirection::BACKWARD:
-							tile += glm::ivec3(0, 0, -1);
-							break;
-					}
-					Location location(playerLocation->getWorld(), playerLocation->getChunk(), tile);
-					worldManager.runPromptedScriptOfTile(&location);
-					break;
+						pressingBackward = false;
+						movingBackward = false;
+						break;
+					case SDLK_RETURN:
+						Location* playerLocation = player.getCharacter()->getLocation();
+						glm::vec3 tile = playerLocation->getTile();
+						switch (player.getDirectionFacing()) {
+							case TileDirection::RIGHT:
+								tile += glm::ivec3(-1, 0, 0);
+								break;
+							case TileDirection::FORWARD:
+								tile += glm::ivec3(0, 0, 1);
+								break;
+							case TileDirection::LEFT:
+								tile += glm::ivec3(1, 0, 0);
+								break;
+							case TileDirection::BACKWARD:
+								tile += glm::ivec3(0, 0, -1);
+								break;
+						}
+						Location location(playerLocation->getWorld(), playerLocation->getChunk(), tile);
+						worldManager.runPromptedScriptOfTile(&location);
+						break;
+				}
 			}
 		}
 	}

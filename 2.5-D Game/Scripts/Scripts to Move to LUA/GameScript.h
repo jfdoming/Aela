@@ -34,12 +34,18 @@ namespace GameScripts {
 	}
 
 	void testGameScript2() {
-		dialogueHandler->showDialogue("Hello! This is some dialogue that should continue onto the second line!", "");
+		dialogueHandler->showDialogue("Hello! This is some dialogue that should continue onto the second line!",
+			"hide_dialogue");
 	}
 
 	void testGameScript3() {
 		std::vector<TileDirection> movements(4, TileDirection::LEFT);
 		worldManager->moveCharacterIfPossible(PLAYER_NAME, movements);
+	}
+
+	void testGameScript4() {
+		dialogueHandler->showOptions(&DialogueOption("Hi!", "hide_dialogue"), &DialogueOption("Hiya!", "hide_dialogue"),
+			&DialogueOption("Cze??!", "hide_dialogue"));
 	}
 
 	void hideDialogue() {
@@ -75,6 +81,8 @@ namespace GameScripts {
 		worldManager->addPromptedScript("test_game_script_2", &Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 7)));
 		scriptManager->addScript("test_game_script_3", std::bind(&testGameScript3));
 		worldManager->addWalkedOnScript("test_game_script_3", &Location(0, glm::ivec2(0, 0), glm::ivec3(3, 0, 1)));
+		scriptManager->addScript("test_game_script_4", std::bind(&testGameScript4));
+		worldManager->addWalkedOnScript("test_game_script_4", &Location(0, glm::ivec2(0, 0), glm::ivec3(4, 0, 1)));
 		scriptManager->addScript("setup_characters", std::bind(&setupCharacters));
 		scriptManager->addScript("hide_dialogue", std::bind(&hideDialogue));
 	}

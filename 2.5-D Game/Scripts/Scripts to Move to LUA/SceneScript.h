@@ -133,15 +133,21 @@ namespace Game {
 
 		auto dialogueTextOne = std::make_shared<Label>("Dialogue!", xeroxLarge, &almostBlack);
 		auto dialogueTextTwo = std::make_shared<Label>("Dialogue 2!", xeroxLarge, &almostBlack);
+		auto dialogueTextThree = std::make_shared<Label>("Dialogue 3!", xeroxLarge, &almostBlack);
+		auto dialogueTextFour = std::make_shared<Label>("Dialogue 4!", xeroxLarge, &almostBlack);
 		dialogueTextOne->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() * 0.85));
 		dialogueTextTwo->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() * 0.95));
+		dialogueTextThree->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.5), (int) (windowDimensions.getHeight() * 0.85));
+		dialogueTextFour->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.5), (int) (windowDimensions.getHeight() * 0.95));
 
 		dialogueBoxSubMenu->add(dialgoueBoxImage);
 		dialogueBoxSubMenu->add(dialogueTextOne);
 		dialogueBoxSubMenu->add(dialogueTextTwo);
+		dialogueBoxSubMenu->add(dialogueTextThree);
+		dialogueBoxSubMenu->add(dialogueTextFour);
 		
 		dialogueHandler->setDialogueSubMenu(dialogueBoxSubMenu);
-		dialogueHandler->setDialogueLabels(dialogueTextOne, dialogueTextTwo);
+		dialogueHandler->setDialogueLabels(dialogueTextOne, dialogueTextTwo, dialogueTextThree, dialogueTextFour);
 
 		// This sets up the world gameplay scene, in which the player is given a top-down view of the world.
 		auto worldGameplayScene = new Scene();

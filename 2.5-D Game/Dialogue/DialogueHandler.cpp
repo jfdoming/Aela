@@ -7,13 +7,15 @@
 
 #include "DialogueHandler.h"
 
-void Game::DialogueHandler::setup(TimeManager* timeManager, ScriptManager* scriptManager) {
+void Game::DialogueHandler::setup(TimeManager* timeManager, EventHandler* eventHandler, ScriptManager* scriptManager) {
 	this->timeManager = timeManager;
 	this->scriptManager = scriptManager;
+	eventHandler->addListener(EventConstants::KEY_RELEASED, bindListener(DialogueHandler::onEvent, this));
+	eventHandler->addListener(EventConstants::KEY_PRESSED, bindListener(DialogueHandler::onEvent, this));
 }
 
 void Game::DialogueHandler::update() {
-	if (positionInDialogue < MAX_CHARACTERS_PER_LINE * 2
+	if (state == DialogueState::MESSAGE && positionInDialogue < MAX_CHARACTERS_PER_LINE * 2
 		&& timeManager->getCurrentTimeInNanos() >= timeSinceNewCharacter + timeBetweenCharacterReveals) {
 		positionInDialogue++;
 		timeSinceNewCharacter = timeManager->getCurrentTimeInNanos();
@@ -27,7 +29,91 @@ void Game::DialogueHandler::update() {
 	}
 }
 
+void Game::DialogueHandler::onEvent(Event* event) {
+	if (event->getType() == EventConstants::KEY_RELEASED) {
+		KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+		switch (keyEvent->getKeycode()) {
+			case SDLK_RETURN:
+				if (state == DialogueState::MESSAGE) {
+					if (positionInDialogue > 1 && positionInDialogue < MAX_CHARACTERS_PER_LINE * 2) {
+						// Note that the dialogue must have scrolled past the first character in order for this to trigger. Otherwise,
+						// this could trigger right after the dialogue's initiation by AelaGame after a RETURN release.
+						positionInDialogue = MAX_CHARACTERS_PER_LINE * 2 - 1;
+					} else if (positionInDialogue == MAX_CHARACTERS_PER_LINE * 2) {
+						closeDialog();
+						scriptManager->runScript(scriptOnDialogueEnd);
+					}
+				} else if (state == DialogueState::OPTIONS) {
+					closeDialog();
+					scriptManager->runScript(options[currentOption].getActionOnSelection());
+				}
+				break;
+			case SDLK_d:
+				if (state == DialogueState::OPTIONS) {
+					size_t oldOption = currentOption;
+					currentOption += 2;
+					if (currentOption > 3) {
+						currentOption -= 4;
+					}
+					if (currentOption < numberOfCurrentOptions) {
+						setupOptions();
+					} else {
+						currentOption = oldOption;
+					}
+				}
+				return;
+			case SDLK_w:
+				if (state == DialogueState::OPTIONS) {
+					size_t oldOption = currentOption;
+					if (currentOption % 2 == 0) {
+						currentOption++;
+					} else {
+						currentOption--;
+					}
+					if (currentOption < numberOfCurrentOptions) {
+						setupOptions();
+					} else {
+						currentOption = oldOption;
+					}
+				}
+				return;
+			case SDLK_a:
+				if (state == DialogueState::OPTIONS) {
+					size_t oldOption = currentOption;
+					currentOption -= 2;
+					if (currentOption < 0) {
+						currentOption += 4;
+					}
+					if (currentOption < numberOfCurrentOptions) {
+						setupOptions();
+					} else {
+						currentOption = oldOption;
+					}
+				}
+				return;
+			case SDLK_s:
+				if (state == DialogueState::OPTIONS) {
+					size_t oldOption = currentOption;
+					if (currentOption % 2 == 0) {
+						currentOption++;
+					} else {
+						currentOption--;
+					}
+					if (currentOption < numberOfCurrentOptions) {
+						setupOptions();
+					} else {
+						currentOption = oldOption;
+					}
+				}
+				return;
+		}
+	}
+}
+
 void Game::DialogueHandler::showDialogue(std::string text, std::string scriptToRunOnceComplete) {
+	scriptOnDialogueEnd = scriptToRunOnceComplete;
+	state = DialogueState::MESSAGE;
+
 	if (text.size() > MAX_CHARACTERS_PER_LINE) {
 		size_t position = text.substr(0, MAX_CHARACTERS_PER_LINE).find_last_of(' ');
 		if (position >= MAX_CHARACTERS_PER_LINE || position == std::string::npos) {
@@ -53,12 +139,41 @@ void Game::DialogueHandler::showDialogue(std::string text, std::string scriptToR
 	timeSinceNewCharacter = timeManager->getCurrentTimeInNanos();
 	label1->setText(line1OfText.substr(0, 1));
 	label2->setText("");
+	label3->setText("");
+	label4->setText("");
 	dialogueSubMenu->show();
 }
 
-void Game::DialogueHandler::showOptions(DialogueOption option1, DialogueOption option2) {}
+void Game::DialogueHandler::showOptions(DialogueOption* option1, DialogueOption* option2) {
+	options.clear();
+	options.push_back(*option1);
+	options.push_back(*option2);
+	numberOfCurrentOptions = 2;
+	currentOption = 0;
+	setupOptions();
+}
 
-void Game::DialogueHandler::showOptions(DialogueOption option1, DialogueOption option2, DialogueOption option3, DialogueOption option4) {}
+void Game::DialogueHandler::showOptions(DialogueOption* option1, DialogueOption* option2, DialogueOption* option3) {
+	options.clear();
+	options.push_back(*option1);
+	options.push_back(*option2);
+	options.push_back(*option3);
+	numberOfCurrentOptions = 3;
+	currentOption = 0;
+	setupOptions();
+}
+
+void Game::DialogueHandler::showOptions(DialogueOption* option1, DialogueOption* option2, DialogueOption* option3,
+	DialogueOption* option4) {
+	options.clear();
+	options.push_back(*option1);
+	options.push_back(*option2);
+	options.push_back(*option3);
+	options.push_back(*option4);
+	numberOfCurrentOptions = 4;
+	currentOption = 0;
+	setupOptions();
+}
 
 void Game::DialogueHandler::closeDialog() {
 	// Note that if the submenu changes visibility, it has to be rerendered. If it is already hidden,
@@ -67,15 +182,54 @@ void Game::DialogueHandler::closeDialog() {
 		dialogueSubMenu->hide();
 		positionInDialogue = MAX_CHARACTERS_PER_LINE * 2;
 	}
+	state = DialogueState::HIDDEN;
 }
 
 void Game::DialogueHandler::setDialogueSubMenu(std::shared_ptr<SubMenu> dialogueSubMenu) {
 	this->dialogueSubMenu = dialogueSubMenu;
 }
 
-void Game::DialogueHandler::setDialogueLabels(std::shared_ptr<Label> label1, std::shared_ptr<Label> label2) {
+void Game::DialogueHandler::setDialogueLabels(std::shared_ptr<Label> label1, std::shared_ptr<Label> label2,
+	std::shared_ptr<Label> label3, std::shared_ptr<Label> label4) {
 	this->label1 = label1;
 	this->label2 = label2;
+	this->label3 = label3;
+	this->label4 = label4;
 }
 
-void Game::DialogueHandler::showOptions(DialogueOption option1, DialogueOption option2, DialogueOption option3) {}
+bool Game::DialogueHandler::dialogueIsBeingShown() {
+	return state != DialogueState::HIDDEN;
+}
+
+void Game::DialogueHandler::setupOptions() {
+	if (currentOption == 0) {
+		label1->setText("> " + options[0].getText());
+	} else {
+		label1->setText(options[0].getText());
+	}
+	if (currentOption == 1) {
+		label2->setText("> " + options[1].getText());
+	} else {
+		label2->setText(options[1].getText());
+	}
+	if (numberOfCurrentOptions > 2) {
+		if (currentOption == 2) {
+			label3->setText("> " + options[2].getText());
+		} else {
+			label3->setText(options[2].getText());
+		}
+	} else {
+		label3->setText("");
+	}
+	if (numberOfCurrentOptions > 3) {
+		if (currentOption == 0) {
+			label4->setText("> " + options[3].getText());
+		} else {
+			label4->setText(options[3].getText());
+		}
+	} else {
+		label4->setText("");
+	}
+	dialogueSubMenu->show();
+	state = DialogueState::OPTIONS;
+}
