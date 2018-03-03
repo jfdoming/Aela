@@ -71,6 +71,10 @@ void Transformable3D::getScaling(float* setX, float* setY, float* setZ) {
 	*setZ = scaling.z;
 }
 
+long long Transformable3D::getTimePassedAfterAnimationEnd() {
+	return timePassedAfterAnimationEnd;
+}
+
 std::string Transformable3D::getPropertiesAsString(int numberOfTrailingZeroes) {
 	std::string s = "";
 	s += "Position: " + toStringWithATrailingZero(position.x) + " " + toStringWithATrailingZero(position.y)

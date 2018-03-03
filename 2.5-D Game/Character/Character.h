@@ -43,6 +43,9 @@ namespace Game {
 			ModelEntity* getEntity();
 			void setEntity(ModelEntity* entity);
 			bool isMoving();
+			void animationHasEnded();
+			
+			virtual void onTrackEnd(std::string trackID);
 
 
 		private:
@@ -69,6 +72,12 @@ namespace Game {
 
 			// These store the states of player movement.
 			bool moving = false;
+
+			// This stores at to whether the animation had ended during the current tick/frame. This is used
+			// to smoothen out character animation.
+			bool animationHadJustEnded = false;
+
+			long long timePassedAfterAnimationEnd = 0;
 
 			// To be accessed by this class's friends.
 			void addTranslation(glm::vec3 translation, std::string scriptOnceComplete);

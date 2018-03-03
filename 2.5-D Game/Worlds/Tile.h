@@ -17,10 +17,12 @@ namespace Game {
 		public:
 			Tile() {
 				type = 0;
+				entity = nullptr;
 			}
 
-			Tile(int height, unsigned int type) {
+			Tile(unsigned int type) {
 				this->type = type;
+				entity = nullptr;
 			}
 
 			// Note: if the IDs of the scripts are stored as nothing (""), then these functions
@@ -28,8 +30,8 @@ namespace Game {
 			// could be long (since there could be thousands of scripts).
 			std::string* getWalkedOnScriptID(), *getPromptedScriptID();
 
-			unsigned int getType();
-			void setType(unsigned int type);
+			size_t getType();
+			void setType(size_t type);
 			ModelEntity* getEntity();
 			void setEntity(ModelEntity* entity);
 			void setWalkedOnScript(std::string name);
@@ -43,7 +45,7 @@ namespace Game {
 
 			// The texture used to represent the tile, which comes from one of the images that contain
 			// several textures.
-			unsigned int type;
+			size_t type;
 
 			ModelEntity* entity;
 	};

@@ -22,90 +22,102 @@ void Game::DialogueHandler::update() {
 		if (positionInDialogue < MAX_CHARACTERS_PER_LINE) {
 			label1->setText(line1OfText.substr(0, positionInDialogue));
 			label2->setText("");
+			if (positionInDialogue == MAX_CHARACTERS_PER_LINE - 1 && line2OfText == "") {
+				// To indidcate that the one-liner is completely shown.
+				positionInDialogue = MAX_CHARACTERS_PER_LINE * 2;
+			}
 		} else {
 			label1->setText(line1OfText.substr(0, MAX_CHARACTERS_PER_LINE));
 			label2->setText(line2OfText.substr(0, positionInDialogue - MAX_CHARACTERS_PER_LINE));
 		}
 	}
+
+	if (timeManager->getCurrentTimeInNanos() > timeAtLastOptionSelect + timeBetweenOptionSelects) {
+		if (pressingUp) {
+			pressUpAction();
+		}
+
+		if (pressingDown) {
+			pressDownAction();
+		}
+
+		if (pressingLeft) {
+			pressLeftAction();
+		}
+
+		if (pressingRight) {
+			pressRightAction();
+		}
+	}
 }
 
 void Game::DialogueHandler::onEvent(Event* event) {
-	if (event->getType() == EventConstants::KEY_RELEASED) {
+	if (event->getType() == EventConstants::KEY_PRESSED) {
 		KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
 		switch (keyEvent->getKeycode()) {
 			case SDLK_RETURN:
-				if (state == DialogueState::MESSAGE) {
-					if (positionInDialogue > 1 && positionInDialogue < MAX_CHARACTERS_PER_LINE * 2) {
-						// Note that the dialogue must have scrolled past the first character in order for this to trigger. Otherwise,
-						// this could trigger right after the dialogue's initiation by AelaGame after a RETURN release.
-						positionInDialogue = MAX_CHARACTERS_PER_LINE * 2 - 1;
-					} else if (positionInDialogue == MAX_CHARACTERS_PER_LINE * 2) {
+				if (!pressingReturn) {
+					if (state == DialogueState::MESSAGE) {
+						if (positionInDialogue > 1 && positionInDialogue < MAX_CHARACTERS_PER_LINE * 2) {
+							// Note that the dialogue must have scrolled past the first character in order for this to trigger. Otherwise,
+							// this could trigger right after the dialogue's initiation by AelaGame after a RETURN release.
+							positionInDialogue = MAX_CHARACTERS_PER_LINE * 2 - 1;
+						} else if (positionInDialogue == MAX_CHARACTERS_PER_LINE * 2) {
+							closeDialog();
+							scriptManager->runScript(scriptOnDialogueEnd);
+							justFinishedDialogue = true;
+						}
+					} else if (state == DialogueState::OPTIONS) {
 						closeDialog();
-						scriptManager->runScript(scriptOnDialogueEnd);
+						scriptManager->runScript(options[currentOption].getActionOnSelection());
 					}
-				} else if (state == DialogueState::OPTIONS) {
-					closeDialog();
-					scriptManager->runScript(options[currentOption].getActionOnSelection());
+					pressingReturn = true;
 				}
 				break;
-			case SDLK_d:
-				if (state == DialogueState::OPTIONS) {
-					size_t oldOption = currentOption;
-					currentOption += 2;
-					if (currentOption > 3) {
-						currentOption -= 4;
-					}
-					if (currentOption < numberOfCurrentOptions) {
-						setupOptions();
-					} else {
-						currentOption = oldOption;
-					}
-				}
-				return;
 			case SDLK_w:
-				if (state == DialogueState::OPTIONS) {
-					size_t oldOption = currentOption;
-					if (currentOption % 2 == 0) {
-						currentOption++;
-					} else {
-						currentOption--;
-					}
-					if (currentOption < numberOfCurrentOptions) {
-						setupOptions();
-					} else {
-						currentOption = oldOption;
-					}
-				}
-				return;
-			case SDLK_a:
-				if (state == DialogueState::OPTIONS) {
-					size_t oldOption = currentOption;
-					currentOption -= 2;
-					if (currentOption < 0) {
-						currentOption += 4;
-					}
-					if (currentOption < numberOfCurrentOptions) {
-						setupOptions();
-					} else {
-						currentOption = oldOption;
-					}
+				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
+					pressUpAction();
+					pressingUp = true;
 				}
 				return;
 			case SDLK_s:
-				if (state == DialogueState::OPTIONS) {
-					size_t oldOption = currentOption;
-					if (currentOption % 2 == 0) {
-						currentOption++;
-					} else {
-						currentOption--;
-					}
-					if (currentOption < numberOfCurrentOptions) {
-						setupOptions();
-					} else {
-						currentOption = oldOption;
-					}
+				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
+					pressDownAction();
+					pressingDown = true;
 				}
 				return;
+			case SDLK_a:
+				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
+					pressLeftAction();
+					pressingLeft = true;
+				}
+				return;
+			case SDLK_d:
+				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
+					pressRightAction();
+					pressingRight = true;
+				}
+				return;
+		}
+	} else if (event->getType() == EventConstants::KEY_RELEASED) {
+		KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+		switch (keyEvent->getKeycode()) {
+			case SDLK_RETURN:
+				pressingReturn = false;
+				justFinishedDialogue = false;
+				break;
+			case SDLK_w:
+				pressingUp = false;
+				break;
+			case SDLK_s:
+				pressingDown = false;
+				break;
+			case SDLK_a:
+				pressingLeft = false;
+				break;
+			case SDLK_d:
+				pressingRight = false;
+				break;
 		}
 	}
 }
@@ -201,6 +213,10 @@ bool Game::DialogueHandler::dialogueIsBeingShown() {
 	return state != DialogueState::HIDDEN;
 }
 
+bool Game::DialogueHandler::hadJustFinishedDialogue() {
+	return justFinishedDialogue;
+}
+
 void Game::DialogueHandler::setupOptions() {
 	if (currentOption == 0) {
 		label1->setText("> " + options[0].getText());
@@ -232,4 +248,62 @@ void Game::DialogueHandler::setupOptions() {
 	}
 	dialogueSubMenu->show();
 	state = DialogueState::OPTIONS;
+}
+
+void Game::DialogueHandler::pressUpAction() {
+	size_t oldOption = currentOption;
+	if (currentOption % 2 == 0) {
+		currentOption++;
+	} else {
+		currentOption--;
+	}
+	if (currentOption < numberOfCurrentOptions) {
+		setupOptions();
+	} else {
+		currentOption = oldOption;
+	}
+	timeAtLastOptionSelect = timeManager->getCurrentTimeInNanos();
+}
+
+void Game::DialogueHandler::pressDownAction() {
+	size_t oldOption = currentOption;
+	if (currentOption % 2 == 0) {
+		currentOption++;
+	} else {
+		currentOption--;
+	}
+	if (currentOption < numberOfCurrentOptions) {
+		setupOptions();
+	} else {
+		currentOption = oldOption;
+	}
+	timeAtLastOptionSelect = timeManager->getCurrentTimeInNanos();
+}
+
+void Game::DialogueHandler::pressLeftAction() {
+	size_t oldOption = currentOption;
+	currentOption -= 2;
+	if (currentOption < 0) {
+		currentOption += 4;
+	}
+	if (currentOption < numberOfCurrentOptions) {
+		setupOptions();
+	} else {
+		currentOption = oldOption;
+	}
+	timeAtLastOptionSelect = timeManager->getCurrentTimeInNanos();
+}
+
+void Game::DialogueHandler::pressRightAction() {
+	size_t oldOption = currentOption;
+	currentOption += 2;
+	if (currentOption > 3) {
+		currentOption -= 4;
+	}
+	if (currentOption < numberOfCurrentOptions) {
+		setupOptions();
+	} else {
+		currentOption = oldOption;
+	}
+	timeAtLastOptionSelect = timeManager->getCurrentTimeInNanos();
 }

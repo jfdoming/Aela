@@ -14,11 +14,14 @@
 // called once anyways.
 void Animator::update() {
 	long long timePassed = timeManager->getTimeBetweenFramesInNanos();
-	size_t which3DTrack = 0;
-	for (AnimationTrack3D& track : tracks3D) {
+	
+	for (size_t which3DTrack = 0; which3DTrack < tracks3D.size(); which3DTrack++) {
+		AnimationTrack3D& track = tracks3D[which3DTrack];
 		track.updatePositionInTrack(timePassed);
 
-		// This statement should not be triggered.
+		// std::cout << "Updating track: " << track.getTag() << "\n";
+
+		// This statement should not be triggered. However, it used to...
 		if (track.getKeyFrames()->size() == 0) {
 			continue;
 		}
@@ -32,12 +35,11 @@ void Animator::update() {
 			keyFrame.start();
 		}
 
+		long long endTime = firstFramePair.first;
+		long long timeSinceKeyFrameStart = track.getPositionInTrack() + 1;
+
 		// Check if this keyframe should have ended by now. If it has, perform the actions necessary.
 		if (firstFramePair.first <= track.getPositionInTrack()) {
-			if (keyFrame.getEndingAction() != nullptr) {
-				keyFrame.getEndingAction()();
-			}
-
 			if (object != nullptr) {
 				// This finds the final scaling of the model.
 				if (keyFrame.isUsingScaling()) {
@@ -54,8 +56,11 @@ void Animator::update() {
 
 				// This finds the final position and rotation values and applies them.
 				if (keyFrame.isUsingTranslation()) {
+					glm::vec3 finalTranslation = *keyFrame.getPosition();
+					glm::vec3* originalPosition = keyFrame.getOriginalPosition();
 					object->setPosition(*keyFrame.getPosition() + glm::vec3(pointRotationMatrix
 						* glm::vec4(*keyFrame.getPointRotation()->getPoint() * glm::vec3(-1), 0)) + *keyFrame.getPointRotation()->getPoint());
+					object->timePassedAfterAnimationEnd = track.getPositionInTrack() - firstFramePair.first;
 				}
 
 				if (keyFrame.isUsingPointRotation() && keyFrame.isUsingRotation()) {
@@ -67,6 +72,10 @@ void Animator::update() {
 				}
 			}
 
+			if (keyFrame.getEndingAction() != nullptr) {
+				keyFrame.getEndingAction()();
+			}
+
 			// This gets rid of the keyframe.
 			track.getKeyFrames()->erase(track.getKeyFrames()->begin());
 
@@ -75,15 +84,15 @@ void Animator::update() {
 				continue;
 			}
 
+			// long long difference = track.getPositionInTrack() - firstFramePair.first;
 			track.resetPosition();
+			// track.updatePositionInTrack(difference);
 			continue;
 		}
 
 		// This occurs if the keyframe has not ended yet, and must update the object its linked to accordingly.
 		if (object != nullptr) {
 			// This figures out a bunch of transformational values and finds the final scaling value to use.
-			long long endTime = firstFramePair.first;
-			long long timeSinceKeyFrameStart = track.getPositionInTrack() + 1;
 			glm::vec3* originalPosition = keyFrame.getOriginalPosition();
 			glm::vec3* originalRotation = keyFrame.getOriginalRotation();
 			glm::vec3* originalScaling = keyFrame.getOriginalScaling();
@@ -133,10 +142,11 @@ void Animator::update() {
 				object->setRotation(*pointRotationRotation * glm::vec3((float) timeSinceKeyFrameStart / endTime));
 			}
 		}
-		which3DTrack++;
+		// which3DTrack++;
 	}
 
-	// This will purge any completed 3D tracks.
+	// This will purge any completed 3D tracks. Having this code shouldn't be necessary as completed track get erased above, but
+	// doing this along with the erasing code from above this fixed some random bug at some point...
 	for (size_t i = 0; i < tracks3D.size(); i++) {
 		if (tracks3D[i].getKeyFrames()->size() == 0) {
 			tracks3D.erase(tracks3D.begin() + i);
@@ -146,8 +156,8 @@ void Animator::update() {
 
 	// This regains the time for accuracy.
 	timePassed = timeManager->getTimeBetweenFramesInNanos();
-	size_t which2DTrack = 0;
-	for (AnimationTrack2D& track : tracks2D) {
+	for (size_t which2DTrack = 0; which2DTrack < tracks2D.size(); which2DTrack++) {
+		AnimationTrack2D& track = tracks2D[which2DTrack];
 		track.updatePositionInTrack(timePassed);
 
 		if (track.getKeyFrames()->size() == 0) {
@@ -165,25 +175,31 @@ void Animator::update() {
 
 		// Check if this keyframe should have ended by now. If it has, perform the actions necessary.
 		if (firstFramePair.first <= track.getPositionInTrack()) {
+			if (object != nullptr) {
+				std::shared_ptr<Transformable2D> object = keyFrame.getObject();
+
+				if (object != nullptr) {
+					object->setTint(keyFrame.getTint());
+					object->setDimensions(keyFrame.getDimensions());
+				}
+			}
+
 			if (keyFrame.getEndingAction() != nullptr) {
 				keyFrame.getEndingAction()();
 			}
 
-			if (object != nullptr) {
-				std::shared_ptr<Transformable2D> object = keyFrame.getObject();
-
-				if (keyFrame.getEndingAction() != nullptr) {
-					keyFrame.getEndingAction()();
-				}
-
-				if (object != nullptr) {
-					object->setTint(keyFrame.getTint());
-				}
-			}
-
 			track.getKeyFrames()->erase(track.getKeyFrames()->begin());
 
+			if (track.getKeyFrames()->size() == 0) {
+				tracks2D.erase(tracks2D.begin() + which2DTrack);
+				continue;
+			}
+
+			// Here is where I stopped. This should happen but it breaks since track.getPositionInTrack() can be a huge number.
+			// long long difference = track.getPositionInTrack() - firstFramePair.first;
+			// std::cout << difference << " " << track.getPositionInTrack() << " " << firstFramePair.first << " is the diff.\n";
 			track.resetPosition();
+			// track.updatePositionInTrack(difference);
 			continue;
 		}
 
@@ -200,8 +216,16 @@ void Animator::update() {
 				(float) ((finalTint->getB() - originalTint->getB()) / endTime) * timeSinceKeyFrameStart + originalTint->getB(),
 				(float) ((finalTint->getA() - originalTint->getA()) / endTime) * timeSinceKeyFrameStart + originalTint->getA());
 			object->setTint(&newTint);
+
+			Rect<int>* originalDimensions = keyFrame.getOriginalDimensions();
+			Rect<int>* finalDimensions = keyFrame.getDimensions();
+			Rect<int> newDimensions((int) ((float) (finalDimensions->getX() - originalDimensions->getX()) / endTime * timeSinceKeyFrameStart + originalDimensions->getX()),
+				(int) ((float) (finalDimensions->getY() - originalDimensions->getY()) / endTime * timeSinceKeyFrameStart + originalDimensions->getY()),
+				(int) ((float) (finalDimensions->getWidth() - originalDimensions->getWidth()) / endTime * timeSinceKeyFrameStart + originalDimensions->getWidth()),
+				(int) ((float) (finalDimensions->getHeight() - originalDimensions->getHeight()) / endTime * timeSinceKeyFrameStart + originalDimensions->getHeight()));
+			object->setDimensions(&newDimensions);
 		}
-		which2DTrack++;
+		// which2DTrack++;
 	}
 
 	// This will purge any completed 2D tracks.

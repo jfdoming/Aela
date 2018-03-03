@@ -83,6 +83,17 @@ bool Game::Character::isMoving() {
 	return moving;
 }
 
+void Game::Character::animationHasEnded() {
+	moving = false;
+	animationHadJustEnded = true;
+	timePassedAfterAnimationEnd = entity->getTimePassedAfterAnimationEnd();
+	std::cout << "Animation has ended.\n";
+}
+
+void Game::Character::onTrackEnd(std::string trackID) {
+	
+}
+
 void Game::Character::addTranslation(glm::vec3 translation, std::string scriptOnceComplete) {
 	translations.push_back(std::pair<glm::vec3, std::string>(translation, scriptOnceComplete));
 }

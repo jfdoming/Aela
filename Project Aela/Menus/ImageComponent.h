@@ -11,7 +11,7 @@
 #include "../2D/Transformable/Transformable2D.h"
 
 namespace Aela {
-	class ImageComponent : public Component, public Transformable2D {
+	class ImageComponent : public Component {
 		public:
 			ImageComponent();
 			ImageComponent(GLTexture* texture);

@@ -1,14 +1,14 @@
-<Tile material="grass" collision="false" type="floor">
-<Tile material="water" collision="true" type="floor">
-<Tile material="grass" collision="true" type="ramp_right">
-<Tile material="grass_corner_depressed" collision="true" type="ramp_up_right_depressed">
-<Tile material="grass_corner_elevated" collision="true" type="ramp_up_right_elevated">
-<Tile material="grass" collision="true" type="ramp_up">
-<Tile material="grass_corner_depressed" collision="true" type="ramp_up_left_depressed">
-<Tile material="grass_corner_elevated" collision="true" type="ramp_up_left_elevated">
-<Tile material="grass" collision="true" type="ramp_left">
-<Tile material="grass_corner_depressed" collision="true" type="ramp_down_left_depressed">
-<Tile material="grass_corner_elevated" collision="true" type="ramp_down_left_elevated">
-<Tile material="grass" collision="true" type="ramp_down">
-<Tile material="grass_corner_depressed" collision="true" type="ramp_down_right_depressed">
-<Tile material="grass_corner_elevated" collision="true" type="ramp_down_right_elevated">
+<Tile name="grass" material="grass" collision="false" type="floor">
+<Tile name="water" material="water" collision="true" type="floor">
+<Tile name="grass" material="grass" collision="true" type="ramp_right">
+<Tile name="grass" material="grass_corner_depressed" collision="true" type="ramp_up_right_depressed">
+<Tile name="grass" material="grass_corner_elevated" collision="true" type="ramp_up_right_elevated">
+<Tile name="grass" material="grass" collision="true" type="ramp_up">
+<Tile name="grass" material="grass_corner_depressed" collision="true" type="ramp_up_left_depressed">
+<Tile name="grass" material="grass_corner_elevated" collision="true" type="ramp_up_left_elevated">
+<Tile name="grass" material="grass" collision="true" type="ramp_left">
+<Tile name="grass" material="grass_corner_depressed" collision="true" type="ramp_down_left_depressed">
+<Tile name="grass" material="grass_corner_elevated" collision="true" type="ramp_down_left_elevated">
+<Tile name="grass" material="grass" collision="true" type="ramp_down">
+<Tile name="grass" material="grass_corner_depressed" collision="true" type="ramp_down_right_depressed">
+<Tile name="grass" material="grass_corner_elevated" collision="true" type="ramp_down_right_elevated">

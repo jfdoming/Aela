@@ -74,7 +74,8 @@ bool Aela::MaterialLoader::load(ResourceMap& resources, std::string src) {
 				
 				std::string textureName = path + fileName;
 				GLTexture* texture;
-				if (GLTextureLoader::loadTexture(texture, textureName)) {
+				if (GLTextureLoader::load(resources, textureName)) {
+					resources.get(textureName, texture);
 					material->setTexture(texture);
 				}
 			} else {

@@ -11,9 +11,10 @@
 #include "../Events/Event.h"
 #include "../Events/EventHandler.h"
 #include "../Events/EventListenerList.h"
+#include "../2D/Transformable/Transformable2D.h"
 
 namespace Aela {
-	class Component {
+	class Component : public Transformable2D {
 		friend class Container;
 
 		public:
@@ -21,10 +22,6 @@ namespace Aela {
 			Component(int x, int y);
 			Component(int x, int y, int width, int height);
 			virtual ~Component();
-
-			// These are getters and setters.
-			void setDimensions(Rect<int>* dimensions);
-			Rect<int>* getDimensions();
 
 			virtual void update();
 			virtual void render(GLRenderer& renderer);
@@ -50,9 +47,6 @@ namespace Aela {
 			
 			// if this is true, mouse events will be propagated regardless of whether this component contains that event
 			bool alwaysTriggerMouseEvents = false;
-
-			// This stores the component's dimensions.
-			Rect<int> dimensions;
 
 			// If this is marked as dirty, here is a parent that must also be marked as dirty.
 			Component* parent = nullptr;

@@ -21,11 +21,13 @@ namespace Game {
 		public:
 			TileType() {
 				collidable = false;
+				name = "tile";
 			}
 
-			TileType(bool collidable, TileBehaviour behaviour) {
+			TileType(bool collidable, TileBehaviour behaviour, std::string name) {
 				this->collidable = collidable;
 				this->behaviour = behaviour;
+				this->name = name;
 			}
 
 			bool isCollidable() {
@@ -36,8 +38,13 @@ namespace Game {
 				return behaviour;
 			}
 
+			std::string getName() {
+				return name;
+			}
+
 		private:
 			bool collidable;
 			TileBehaviour behaviour;
+			std::string name;
 	};
 }

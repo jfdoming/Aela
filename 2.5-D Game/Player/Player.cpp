@@ -23,8 +23,15 @@ Game::TileDirection Game::Player::getDirectionFacing() {
 	return characterManager->getCharacterByID(id)->getDirectionFacing();
 }
 
+Game::TileInventory* Game::Player::getTileInventory() {
+	return &tileInventory;
+}
+
+void Game::Player::turn(TileDirection direction) {
+	characterManager->turn(id, direction);
+}
+
 void Game::Player::moveIfPossible(TileDirection direction) {
-	std::cout << "Movement start.\n";
 	worldManager->moveCharacterIfPossible(id, direction);
 }
 

@@ -14,7 +14,8 @@
 
 class KeyFrame2D : public KeyFrame {
 	public:
-		KeyFrame2D() : tint(1, 1, 1, 1) {}
+		KeyFrame2D() : tint(1, 1, 1, 1), dimensions(0, 0, 0, 0) {
+		}
 
 		virtual void start();
 
@@ -24,8 +25,12 @@ class KeyFrame2D : public KeyFrame {
 		void setTint(ColourRGBA* tint);
 		ColourRGBA* getTint();
 		ColourRGBA* getOriginalTint();
+		void setDimensions(Rect<int>* dimensions);
+		Rect<int>* getDimensions();
+		Rect<int>* getOriginalDimensions();
 
 	private:
 		std::shared_ptr<Transformable2D> object = nullptr;
 		ColourRGBA tint, originalTint;
+		Rect<int> dimensions, originalDimensions;
 };

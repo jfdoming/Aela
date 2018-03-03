@@ -9,6 +9,7 @@
 #include <unordered_map>	
 #include "../Character/Character.h"
 #include "../Worlds/WorldManager.h"
+#include "../Worlds/TileInventory.h"
 
 namespace Game {
 	class Player {
@@ -23,8 +24,11 @@ namespace Game {
 			size_t getCharacterID();
 			Character* getCharacter();
 			TileDirection getDirectionFacing();
+			TileInventory* getTileInventory();
 
-			// During regular gameplay, the player can be moved if its possible to do so.
+			// During regular gameplay, the player can be moved if its possible to do so. These functions are here so that the code in AelaGame
+			// is a little cleaner.
+			void turn(TileDirection direction);
 			void moveIfPossible(TileDirection direction);
 			void moveIfPossible(std::vector<TileDirection> directions);
 
@@ -40,5 +44,6 @@ namespace Game {
 
 			WorldManager* worldManager;
 			CharacterManager* characterManager;
+			TileInventory tileInventory;
 	};
 }

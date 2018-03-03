@@ -8,17 +8,16 @@
 #pragma once
 #include <vector>
 #include <utility>
+#include <functional>
+#include <iostream>
 
 template <class T> class AnimationTrack {
+	friend class Animator;
 	public:
 		AnimationTrack() {}
 
 		void updatePositionInTrack(long long timeToAdd) {
 			positionInTrack += timeToAdd;
-		}
-
-		void resetPosition() {
-			positionInTrack = 0;
 		}
 
 		long long getPositionInTrack() {
@@ -47,7 +46,7 @@ template <class T> class AnimationTrack {
 		}
 
 		bool addKeyFrameUsingSeconds(long long timeInSeconds, T* keyFrame) {
-			return addKeyFrame(timeInMillis * 1000000000, keyFrame);
+			return addKeyFrame(timeInSeconds * 1000000000, keyFrame);
 		}
 
 		std::vector<std::pair<long long, T>>* getKeyFrames() {
@@ -71,6 +70,12 @@ template <class T> class AnimationTrack {
 
 		// This is used in order to let the Animator perform actions upon this list. For example, if something tells the Animator
 		// to delete all tracks with the tag "camera_animation" in order to get rid of all camera animations and this list has that
-		// exact tag, then this list will be deleted.
-		std::string tag = "list";
+		// exact tag, then this list will be deleted. This is also used by a track observer to see which track is calling its
+		// on-state-change functions.
+		std::string tag = "";
+
+	private:
+		void resetPosition() {
+			positionInTrack = 0;
+		}
 };

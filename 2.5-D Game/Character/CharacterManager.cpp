@@ -13,7 +13,7 @@
 
 using namespace Game;
 
-void Game::CharacterManager::setup(ResourceManager* resourceManager, Animator* animator, Camera3D* camera,
+void Game::CharacterManager::setup(ResourceManager* resourceManager, Animator* animator, Camera3D* camera, TimeManager* timeManager,
 	ScriptManager* scriptManager) {
 	this->resourceManager = resourceManager;
 	this->animator = animator;
@@ -36,6 +36,7 @@ void Game::CharacterManager::update() {
 				character.removeNextTranslation();
 			} else {
 				character.moving = false;
+				character.animationHadJustEnded = false;
 			}
 		}
 	}
@@ -142,6 +143,11 @@ std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFuncti
 }
 
 void Game::CharacterManager::turn(Character* character, TileDirection direction) {
+	if (character->directionFacing != direction) {
+		character->timePassedAfterAnimationEnd = 0;
+		character->animationHadJustEnded = false;
+	}
+
 	character->directionFacing = direction;
 
 	Model* model;
@@ -208,7 +214,6 @@ void Game::CharacterManager::move(std::string name, TileDirection direction, std
 }
 
 void Game::CharacterManager::stopMoving(size_t id) {
-	std::cout << "STOPPED!\n";
 	if (id < characters.size()) {
 		Character* character = &characters[id];
 		character->moving = false;
@@ -247,8 +252,9 @@ void Game::CharacterManager::animateCharacterMovement(Character* character, glm:
 	}
 	glm::ivec2 chunkCoord = location->getChunk();
 	glm::ivec3 tileCoord = location->getTile();
-	glm::vec3 translationForAnimation = translation;;
+	glm::vec3 translationForAnimation = translation;
 	tileCoord += translation;
+
 	if (tileCoord.x < 0) {
 		tileCoord.x = CHUNK_WIDTH - 1;
 		chunkCoord.x--;
@@ -265,17 +271,24 @@ void Game::CharacterManager::animateCharacterMovement(Character* character, glm:
 		tileCoord.z = 0;
 		chunkCoord.y++;
 	}
+
 	location->setChunk(chunkCoord);
 	location->setTile(tileCoord);
 	charactersByLocation[location->getWorld()][location->getChunk()][location->getTile()] = charactersByName[character->getName()];
 
-	std::cout << "MOVE CHARACTER!\n";
-	if (character->getName() == PLAYER_NAME) {
-		std::cout << "MOVE CAMERA!\n";
-		animateCamera(translation, character->getWalkingSpeed());
+	long long timeToAdvanceTrackBy;
+
+	if (character->animationHadJustEnded) {
+		timeToAdvanceTrackBy = character->timePassedAfterAnimationEnd;
+	} else {
+		timeToAdvanceTrackBy = 0;
 	}
 
-	// character->getEntity()->setPosition(*character->getEntity()->getPosition() - translationForAnimation);
+	if (character->getName() == PLAYER_NAME) {
+		// std::cout << "Starting a character animation.\n";
+		animateCamera(translation, character->getWalkingSpeed(), timeToAdvanceTrackBy);
+	}
+
 	AnimationTrack3D track;
 	track.setTag(character->getName() + "_movement");
 	KeyFrame3D frame;
@@ -283,11 +296,20 @@ void Game::CharacterManager::animateCharacterMovement(Character* character, glm:
 	glm::vec3 characterTranslation = *character->getEntity()->getPosition() + translationForAnimation;
 	frame.setTranslation(&characterTranslation);
 	scriptManager->bindScriptToFrame(scriptOnCompletion, &frame);
+	auto action = [character]() {
+		character->animationHasEnded();
+	};
+
+	frame.setEndingAction(std::bind(action));
+
 	track.addKeyFrame((size_t) (1000000.0f / character->getWalkingSpeed()), &frame);
+	frame.start();
+	// track.updatePositionInTrack(timeToAdvanceTrackBy);
+	// std::cout << timeToAdvanceTrackBy << " - " << track.getPositionInTrack() << " is the time.\n";
 	animator->addAnimationTrack3D(&track);
 }
 
-void Game::CharacterManager::animateCamera(glm::vec3 translation, float speed) {
+void Game::CharacterManager::animateCamera(glm::vec3 translation, float speed, long long timeToAdvanceTrackBy) {
 	glm::vec3 cameraTrans = *camera->getPosition() + translation;
 	AnimationTrack3D track;
 	track.setTag("camera_movement");
@@ -295,6 +317,8 @@ void Game::CharacterManager::animateCamera(glm::vec3 translation, float speed) {
 	frame.setObject(camera);
 	frame.setTranslation(&cameraTrans);
 	track.addKeyFrame((size_t) (1000000.0f / speed), &frame);
+	frame.start();
+	// track.updatePositionInTrack(timeToAdvanceTrackBy);
 	animator->addAnimationTrack3D(&track);
 }
 

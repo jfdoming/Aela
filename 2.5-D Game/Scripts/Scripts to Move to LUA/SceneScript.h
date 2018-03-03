@@ -149,10 +149,37 @@ namespace Game {
 		dialogueHandler->setDialogueSubMenu(dialogueBoxSubMenu);
 		dialogueHandler->setDialogueLabels(dialogueTextOne, dialogueTextTwo, dialogueTextThree, dialogueTextFour);
 
+		// This sets up the submenu that shows the player's tile inventory. The second submenu only contains the
+		// box that signifies which tile is selected, which is done so that the selection box is always above
+		// the tiles.
+		auto tileInventorySubMenu = std::make_shared<SubMenu>(), tileInventorySubMenu2 = std::make_shared<SubMenu>();
+		tileInventorySubMenu->init(&Rect<int>(0, 0, windowDimensions.getWidth(), windowDimensions.getHeight() / 3), *renderer);
+		tileInventorySubMenu2->init(&Rect<int>(0, 0, windowDimensions.getWidth(), windowDimensions.getHeight() / 3), *renderer);
+
+		auto tileInventoryTextOne = std::make_shared<Label>("<current tile>", xerox, &almostWhite);
+		tileInventoryTextOne->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), (int) (windowDimensions.getHeight() / 5));
+
+		auto tileInventoryBox = std::make_shared<ImageComponent>();
+		GLTexture* tileInventoryBoxTexture;
+		success = resourceManager->obtain<GLTexture>("../../res/textures/selector_box.dds", tileInventoryBoxTexture);
+		int imageWidthAndHeight = windowDimensions.getHeight() / 8;
+		tileInventoryBox->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.98 - imageWidthAndHeight - imageWidthAndHeight * 0.1),
+			(int) (windowDimensions.getHeight() * 0.15 - imageWidthAndHeight - imageWidthAndHeight * 0.1),
+			(int) (imageWidthAndHeight * 1.2), (int) (imageWidthAndHeight * 1.2)));
+		tileInventoryBox->setTexture(tileInventoryBoxTexture);
+
+		tileInventorySubMenu->add(tileInventoryTextOne);
+		tileInventorySubMenu2->add(tileInventoryBox);
+		tileInventorySubMenu->show();
+		tileInventorySubMenu2->show();
+		game->setTileInventoryMenuItems(tileInventorySubMenu, tileInventoryTextOne, tileInventoryBox);
+
 		// This sets up the world gameplay scene, in which the player is given a top-down view of the world.
 		auto worldGameplayScene = new Scene();
 		worldGameplayScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
 		worldGameplayScene->getMenu()->add(dialogueBoxSubMenu);
+		worldGameplayScene->getMenu()->add(tileInventorySubMenu);
+		worldGameplayScene->getMenu()->add(tileInventorySubMenu2);
 
 		Map3D* map;
 		success = engine->getResourceManager()->obtain<Map3D>("../../res/maps/map.txt", map);
@@ -189,19 +216,23 @@ namespace Game {
 			switch (i) {
 				case 0:
 					frame.setTint(&ColourRGBA(1, 1, 1, 0));
-					track.addKeyFrameUsingMillis(50, &frame);
+					frame.setDimensions(&windowDimensions);
+					track.addKeyFrameUsingMillis(500, &frame);
 					break;
 				case 1:
 					frame.setTint(&ColourRGBA(1, 1, 1, 1));
-					track.addKeyFrameUsingMillis(150, &frame);
+					frame.setDimensions(&windowDimensions);
+					track.addKeyFrameUsingMillis(1500, &frame);
 					break;
 				case 2:
 					frame.setTint(&ColourRGBA(1, 1, 1, 1));
-					track.addKeyFrameUsingMillis(100, &frame);
+					frame.setDimensions(&windowDimensions);
+					track.addKeyFrameUsingMillis(1000, &frame);
 					break;
 				case 3:
 					frame.setTint(&ColourRGBA(1, 1, 1, 0));
-					track.addKeyFrameUsingMillis(150, &frame);
+					frame.setDimensions(&windowDimensions);
+					track.addKeyFrameUsingMillis(1500, &frame);
 					break;
 			}
 		}

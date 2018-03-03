@@ -2,7 +2,7 @@
 * Class: Transformable3D
 * Author: Robert Ciborowski
 * Date: November 2016
-* Description: A class used to store the properties of a light.
+* Description: A class used to store the properties of a 3D object.
 *              Note: The position of the point used when rotating a Transformable3D using
 *              PointRotation3D is relative to the Transformable3D (as opposed to being relative
 *              to (0, 0, 0) in worldspace).
@@ -11,6 +11,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <string>
+#include "../../Transformable/Transformable.h"
 #include "../../Utilities/Transformations/PointRotation3D.h"
 
 // This enum is used in an Camera3D function to change a single property.
@@ -20,7 +21,8 @@ enum class Transformable3DProperty {
 	X_SCALING, Y_SCALING, Z_SCALING
 };
 
-class Transformable3D {
+class Transformable3D : public Transformable {
+	friend class Animator;
 	public:
 		Transformable3D() {
 
@@ -40,6 +42,8 @@ class Transformable3D {
 		void setScaling(float setX, float setY, float setZ), setScaling(glm::vec3 setScaling);
 		glm::vec3* getScaling();
 		void getScaling(float* setX, float* setY, float* setZ);
+
+		long long getTimePassedAfterAnimationEnd();
 
 		// This returns a string with all of the properties of the transformable.
 		std::string getPropertiesAsString(int numberOfTrailingZeroes);
@@ -62,4 +66,6 @@ class Transformable3D {
 		glm::vec3 position = glm::vec3(0);
 		glm::vec3 rotation = glm::vec3(0);
 		glm::vec3 scaling = glm::vec3(1);
+
+		long long timePassedAfterAnimationEnd;
 };

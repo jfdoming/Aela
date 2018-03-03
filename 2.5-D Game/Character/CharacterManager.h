@@ -28,7 +28,8 @@ namespace Game {
 		public:
 			CharacterManager() {}
 
-			void setup(ResourceManager* resourceManager, Animator* animator, Camera3D* camera, ScriptManager* scriptManager);
+			void setup(ResourceManager* resourceManager, Animator* animator, Camera3D* camera, TimeManager* timeManager,
+				ScriptManager* scriptManager);
 			void update();
 
 			// After all characters have been added, this will generate their models.
@@ -75,6 +76,6 @@ namespace Game {
 			bool mapNeedsToBeRebuilt = false;
 
 			void animateCharacterMovement(Character* character, glm::ivec3 translation, std::string scriptOnCompletion);
-			void animateCamera(glm::vec3 translation, float speed);
+			void animateCamera(glm::vec3 translation, float speed, long long timeToAdvanceTrackBy);
 	};
 }

@@ -15,11 +15,11 @@ std::string* Game::Tile::getPromptedScriptID() {
 	return &promptedScriptID;
 }
 
-unsigned int Game::Tile::getType() {
+size_t Game::Tile::getType() {
 	return type;
 }
 
-void Game::Tile::setType(unsigned int type) {
+void Game::Tile::setType(size_t type) {
 	this->type = type;
 }
 

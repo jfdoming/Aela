@@ -13,6 +13,7 @@
 #include "../Scripts/ScriptManager.h"
 #include "../Player/Player.h"
 #include "../Dialogue/DialogueHandler.h"
+#include "Menus/ImageComponent.h"
 
 #define PI 3.14159265359
 #define THIRD_PI 1.0471975512
@@ -51,6 +52,9 @@ namespace Game {
 			WorldManager* getWorldManager();
 			ScriptManager* getScriptManager();
 			DialogueHandler* getDialogueHandler();
+
+			void setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
+				std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage);
 		private:
 			// These are Aela Engine objects.
 			Engine* engine;
@@ -75,15 +79,33 @@ namespace Game {
 			ScriptManager scriptManager;
 			DialogueHandler dialogueHandler;
 
-			// These store the states of keys and are related to player movement.
+			std::shared_ptr<SubMenu> tileInventorySubMenu;
+			std::shared_ptr<Label> tileInventoryLabel;
+			std::shared_ptr<ImageComponent> tileInventoryBoxImage;
+			std::vector<std::shared_ptr<ImageComponent>> tileInventoryImages;
+
+			// These store the states of keys.
 			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false;
 			bool pressingRight = false, pressingForward = false, pressingLeft = false, pressingBackward = false;
+			bool pressingTileSelectUp = false, pressingTileSelectDown = false, pressingTileSwitch = false;
+			long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 200000000;
+			bool pressingReturn = false;
 
 			float distanceBetweenPlayerAndCamera = 6.0f, angleBetweenPlayerAndCamera = (float) THIRD_PI;
 			int currentScene = 0;
 
+			long long timeAtLastPlayerTurn = 0;
+			const long long TIME_BETWEEN_PLAYER_TURNS = 80000000;
+			const long long TIME_FOR_SELECTOR_TO_MOVE = 80;
+
 			void setupScripts();
 			void loadResources();
 			void loadScenes();
+
+			// These relate to the tile inventory menu.
+			void refreshTileInventorySubMenu();
+			void animateSelectorBox();
+
+			void tileSelectUpAction(), tileSelectDownAction();
 	};
 }

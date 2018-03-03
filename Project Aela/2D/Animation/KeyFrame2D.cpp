@@ -11,7 +11,7 @@
 void KeyFrame2D::start() {
 	if (object != nullptr) {
 		originalTint = *object->getTint();
-		std::cout << originalTint.getA() << " " << object << " is the original\n";
+		originalDimensions = *object->getDimensions();
 	}
 	started = true;
 }
@@ -38,4 +38,16 @@ ColourRGBA* KeyFrame2D::getTint() {
 
 ColourRGBA* KeyFrame2D::getOriginalTint() {
 	return &originalTint;
+}
+
+void KeyFrame2D::setDimensions(Rect<int>* dimensions) {
+	this->dimensions = *dimensions;
+}
+
+Rect<int>* KeyFrame2D::getDimensions() {
+	return &dimensions;
+}
+
+Rect<int>* KeyFrame2D::getOriginalDimensions() {
+	return &originalDimensions;
 }

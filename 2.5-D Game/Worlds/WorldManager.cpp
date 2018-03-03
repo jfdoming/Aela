@@ -12,7 +12,7 @@
 #include <glm/gtc/constants.hpp>
 
 bool Game::WorldManager::setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator, Camera3D* camera,
-	ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player) {
+	TimeManager* timeManager, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player) {
 	this->resourceManager = resourceManager;
 	this->renderer = renderer;
 	this->animator = animator;
@@ -28,17 +28,17 @@ bool Game::WorldManager::setup(ResourceManager* resourceManager, GLRenderer* ren
 		return false;
 	}
 
-	characterManager.setup(resourceManager, animator, camera, scriptManager);
+	characterManager.setup(resourceManager, animator, camera, timeManager, scriptManager);
 	rebuildMap();
 	return true;
 }
 
 void Game::WorldManager::update() {
-	if (characterManager.doesMapNeedToBeRebuilt()) {
+	if (mapNeedsToBeRebuilt || characterManager.doesMapNeedToBeRebuilt()) {
 		rebuildMap();
+		mapNeedsToBeRebuilt = false;
 		characterManager.mapWasRebuilt();
 	}
-	characterManager.update();
 
 	for (size_t i = 0; i < characterMovementQueueByID.size(); i++) {
 		auto& pair = characterMovementQueueByID.at(i);
@@ -60,6 +60,12 @@ void Game::WorldManager::update() {
 			i--;
 		}
 	}
+
+	characterManager.update();
+}
+
+void Game::WorldManager::rebuildMapWhenPossible() {
+	mapNeedsToBeRebuilt = true;
 }
 
 Game::TileAtlas* Game::WorldManager::getTileAtlas() {
@@ -97,6 +103,39 @@ size_t Game::WorldManager::getCurrentWorld() {
 void Game::WorldManager::setChunkRenderDistances(glm::vec3 chunkRenderDistances) {
 	this->chunkRenderDistances = chunkRenderDistances;
 	rebuildMap();
+}
+
+void Game::WorldManager::getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::vec2& chunk, TileDirection direction) {
+	switch (direction) {
+		case TileDirection::RIGHT:
+			tile += glm::ivec3(-1, 0, 0);
+			if (tile.x == -1) {
+				tile.x = CHUNK_WIDTH - 1;
+				chunk.x--;
+			}
+			break;
+		case TileDirection::FORWARD:
+			tile += glm::ivec3(0, 0, 1);
+			if (tile.z == CHUNK_LENGTH) {
+				tile.z = 0;
+				chunk.y++;
+			}
+			break;
+		case TileDirection::LEFT:
+			tile += glm::ivec3(1, 0, 0);
+			if (tile.x == CHUNK_WIDTH) {
+				tile.x = 0;
+				chunk.x++;
+			}
+			break;
+		case TileDirection::BACKWARD:
+			tile += glm::ivec3(0, 0, -1);
+			if (tile.z == -1) {
+				tile.z = CHUNK_LENGTH;
+				chunk.y--;
+			}
+			break;
+	}
 }
 
 void Game::WorldManager::moveCharacterIfPossible(size_t id, TileDirection direction) {
@@ -141,7 +180,10 @@ void Game::WorldManager::runPromptedScriptOfTile(Location* location) {
 }
 
 void Game::WorldManager::processCharacterMovements(Character* character, TileDirection& direction) {
-	std::cout << "Start...\n";
+	if (direction != character->getDirectionFacing()) {
+		characterManager.turn(character, direction);
+		return;
+	}
 	Location location = *character->getLocation();
 	glm::vec2 chunkCoord = location.getChunk();
 	glm::vec3 tileCoord = location.getTile();
@@ -178,18 +220,20 @@ void Game::WorldManager::processCharacterMovements(Character* character, TileDir
 	}
 	location.setChunk(chunkCoord);
 	location.setTile(tileCoord);
-	Tile* tile = worlds[location.getWorld()].getChunk(location.getChunk())->getTile(location.getTile());
-	if (tile == nullptr || tileAtlas.getTileType(tile->getType())->isCollidable()
-		|| characterManager.getCharacterByLocation(&location) != nullptr) {
-		// If the movement is impossible, don't do it!
-		std::cout << "Could not move!\n";
-		characterManager.turn(character, direction);
-		return;
+	if (location.getWorld() < worlds.size()) {
+		Chunk* chunk = worlds[location.getWorld()].getChunk(location.getChunk());
+		if (chunk != nullptr) {
+			Tile* tile = worlds[location.getWorld()].getChunk(location.getChunk())->getTile(location.getTile());
+			if (tile == nullptr || tileAtlas.getTileType(tile->getType())->isCollidable()
+				|| characterManager.getCharacterByLocation(&location) != nullptr) {
+				// If the movement is impossible, don't do it!
+				characterManager.turn(character, direction);
+				return;
+			}
+			std::string script = *tile->getWalkedOnScriptID();
+			characterManager.move(character, direction, script);
+		}
 	}
-	dialogueHandler->closeDialog();
-	std::string script = *tile->getWalkedOnScriptID();
-	characterManager.move(character, direction, script);
-	std::cout << "End...\n";
 }
 
 void Game::WorldManager::rebuildMap() {

@@ -32,7 +32,7 @@ std::string otherMaterialNames[] = {
 	"water"
 };
 
-const unsigned int numberOfTextures = 10;
+const unsigned int numberOfTextures = 11;
 std::string textureNames[] = {
 	"map_editor_main_background",
 	"map_editor_top_bar",
@@ -43,7 +43,8 @@ std::string textureNames[] = {
 	"character_forward",
 	"character_left",
 	"character_backward",
-	"dialogue_box"
+	"dialogue_box",
+	"selector_box"
 };
 
 const unsigned int numberOfBillboards = 1;

@@ -20,36 +20,57 @@ namespace GameScripts {
 	DialogueHandler* dialogueHandler;
 	Engine* engine;
 
+	void hideDialogue() {
+		dialogueHandler->closeDialog();
+	}
+
 	void testGameScript() {
-		dialogueHandler->showDialogue("Yo!", "");
-		std::vector<TileDirection> movements(30, TileDirection::RIGHT);
-		/*worldManager->moveCharacterIfPossible("Meowth", movements);
-		worldManager->moveCharacterIfPossible("Meowth Clone", movements);*/
-		for (int i = 0; i < 30; i++) {
-			worldManager->moveCharacterIfPossible("Meowth", TileDirection::RIGHT);
-		}
-		for (int i = 0; i < 30; i++) {
-			worldManager->moveCharacterIfPossible("Meowth Clone", TileDirection::RIGHT);
-		}
+		dialogueHandler->showDialogue("Yo! This dialogue will automatically continue onto the second line!", "test_game_script_2");
 	}
 
 	void testGameScript2() {
-		dialogueHandler->showDialogue("Hello! This is some dialogue that should continue onto the second line!",
-			"hide_dialogue");
+		dialogueHandler->showDialogue("Well, it's now time to leave.",
+			"test_game_script_3");
 	}
 
 	void testGameScript3() {
-		std::vector<TileDirection> movements(4, TileDirection::LEFT);
-		worldManager->moveCharacterIfPossible(PLAYER_NAME, movements);
+		// You can do one of the following. Like this:
+		std::vector<TileDirection> movements(30, TileDirection::RIGHT);
+		/*worldManager->moveCharacterIfPossible("Meowth", movements);
+		worldManager->moveCharacterIfPossible("Meowth Clone", movements);*/
+
+		// Or this:
+		for (int i = 0; i < 30; i++) {
+			worldManager->moveCharacterIfPossible("Meowth", TileDirection::RIGHT);
+		}
+
+		hideDialogue();
 	}
 
 	void testGameScript4() {
-		dialogueHandler->showOptions(&DialogueOption("Hi!", "hide_dialogue"), &DialogueOption("Hiya!", "hide_dialogue"),
-			&DialogueOption("Cze??!", "hide_dialogue"));
+		dialogueHandler->showDialogue("Get away from me! You filthy monster, you!", "test_game_script_5");
 	}
 
-	void hideDialogue() {
-		dialogueHandler->closeDialog();
+	void testGameScript5() {
+		dialogueHandler->showOptions(&DialogueOption("No!", "hide_dialogue"), &DialogueOption("You go away!", "test_game_script_6"),
+			&DialogueOption("Fine.", "test_game_script_7"));
+	}
+
+	void testGameScript6() {
+		for (int i = 0; i < 30; i++) {
+			worldManager->moveCharacterIfPossible("Meowth Clone", TileDirection::RIGHT);
+		}
+		hideDialogue();
+	}
+
+	void testGameScript7() {
+		std::vector<TileDirection> movements(4, TileDirection::LEFT);
+		worldManager->moveCharacterIfPossible(PLAYER_NAME, movements);
+		hideDialogue();
+	}
+
+	void testGameScript8() {
+		dialogueHandler->showDialogue("You found the secret tile!", "hide_dialogue");
 	}
 
 	// This sets up the characters if the world.
@@ -69,20 +90,23 @@ namespace GameScripts {
 		testCharacter2.setName("Meowth Clone");
 		size_t playerID2;
 		if (!characterManager->addCharacter(&testCharacter2, &playerID2)) {
-			AelaErrorHandling::windowError("Aela Game", (std::string) "There was a problem setting up Meowth.");
+			AelaErrorHandling::windowError("Aela Game", (std::string) "There was a problem setting up Meowth Clone.");
 		}
 	}
 
 	// This adds all gameplay scripts to the ScriptManager and also binds tile-related scripts to their tiles.
 	void addScriptsToGameWorld() {
 		scriptManager->addScript("test_game_script", std::bind(&testGameScript));
-		worldManager->addWalkedOnScript("test_game_script", &Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
+		worldManager->addPromptedScript("test_game_script", &Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 7)));
 		scriptManager->addScript("test_game_script_2", std::bind(&testGameScript2));
-		worldManager->addPromptedScript("test_game_script_2", &Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 7)));
 		scriptManager->addScript("test_game_script_3", std::bind(&testGameScript3));
-		worldManager->addWalkedOnScript("test_game_script_3", &Location(0, glm::ivec2(0, 0), glm::ivec3(3, 0, 1)));
 		scriptManager->addScript("test_game_script_4", std::bind(&testGameScript4));
-		worldManager->addWalkedOnScript("test_game_script_4", &Location(0, glm::ivec2(0, 0), glm::ivec3(4, 0, 1)));
+		worldManager->addPromptedScript("test_game_script_4", &Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 8)));
+		scriptManager->addScript("test_game_script_5", std::bind(&testGameScript5));
+		scriptManager->addScript("test_game_script_6", std::bind(&testGameScript6));
+		scriptManager->addScript("test_game_script_7", std::bind(&testGameScript7));
+		scriptManager->addScript("test_game_script_8", std::bind(&testGameScript8));
+		worldManager->addWalkedOnScript("test_game_script_8", &Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
 		scriptManager->addScript("setup_characters", std::bind(&setupCharacters));
 		scriptManager->addScript("hide_dialogue", std::bind(&hideDialogue));
 	}

@@ -68,7 +68,8 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 			} else if (character == '>') {
 				if (entityType == EntityType::MODEL) {
 					map->generateAdditionalModelData(entityID, false);
-					map->getModel(entityID)->generateBoundingBox();
+					// Bounding boxes are currently unnecessary.
+					// map->getModel(entityID)->generateBoundingBox();
 				}
 				entityType = EntityType::GENERIC;
 			} else if (character == '/' && line.at(1) == '/') {

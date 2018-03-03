@@ -7,20 +7,15 @@ using namespace Aela;
 Component::Component() {
 }
 
-Component::Component(int x, int y) : dimensions(x, y, 0, 0) {}
+Component::Component(int x, int y) {
+	dimensions = Rect<int>(x, y, 0, 0);
+}
 
-Component::Component(int x, int y, int width, int height) : dimensions(x, y, width, height) {}
+Component::Component(int x, int y, int width, int height){
+	dimensions = Rect<int>(x, y, width, height);
+}
 
 Component::~Component() {
-}
-
-void Component::setDimensions(Rect<int>* dimensions) {
-	this->dimensions = *dimensions;
-}
-
-
-Rect<int>* Component::getDimensions() {
-	return &dimensions;
 }
 
 void Component::update() {

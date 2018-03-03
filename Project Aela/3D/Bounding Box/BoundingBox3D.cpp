@@ -34,7 +34,9 @@ void BoundingBox3D::generateVertices() {
 		} else {
 			pos.z = position.z - depth / 2.0f;
 		}
+		std::cout << vertices.size() << " ";
 		vertices.push_back(pos);
+		std::cout << vertices.size() << " ";
 	}
 
 	// This does matrix calculations on the vertices. It's not done yet.

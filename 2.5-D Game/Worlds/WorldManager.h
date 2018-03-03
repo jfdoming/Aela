@@ -34,11 +34,10 @@ namespace Game {
 			}
 
 			bool setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator, Camera3D* camera,
-				ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player);
+				TimeManager* timeManager, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player);
 			void update();
 
-			// This creates/recreates the Aela::Map3D that is used by the game.
-			void rebuildMap();
+			void rebuildMapWhenPossible();
 
 			TileAtlas* getTileAtlas();
 			CharacterManager* getCharacterManager();
@@ -47,6 +46,7 @@ namespace Game {
 			bool setCurrentWorld(size_t id);
 			size_t getCurrentWorld();
 			void setChunkRenderDistances(glm::vec3 chunkRenderDistances);
+			void getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::vec2& chunk, TileDirection direction);
 
 			void moveCharacterIfPossible(size_t id, TileDirection direction);
 			void moveCharacterIfPossible(std::string name, TileDirection direction);
@@ -82,11 +82,16 @@ namespace Game {
 			// system revolves around maps, and because this game is part-3D-part-2D, there must be a Map3D somewhere!
 			Map3D* map;
 
+			bool mapNeedsToBeRebuilt;
+
 			std::vector<std::pair<size_t, TileDirection>> characterMovementQueueByID;
 			std::vector<std::pair<std::string, TileDirection>> characterMovementQueueByName;
 
 			// This is the path to the Aela 3D Map.
 			const std::string mapFileLocation = "../../res/maps/map.txt";
+
+			// This creates/recreates the Aela::Map3D that is used by the game.
+			void rebuildMap();
 
 			void processCharacterMovements(Character* character, TileDirection& direction);
 	};

@@ -21,7 +21,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 
 	// Clear all tiles and set tile 0 as the blank tile.
 	atlas.clearAllTiles();
-	atlas.addTile(TileType(true, TileBehaviour::FLOOR), nullptr);
+	atlas.addTile(TileType(true, TileBehaviour::FLOOR, "blank"), nullptr);
 
 	std::ifstream in;
 	in.open(path);
@@ -31,6 +31,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 		Material* material = nullptr;
 		bool collidable = false;
 		TileBehaviour behaviour;
+		std::string name = "tile";
 		TileLoader tileLoader;
 		tileLoader.setResourceManager(resourceManager);
 		resourceManager->bindLoader(&tileLoader);
@@ -94,7 +95,8 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 
 					// Add the model to the model list so that it can be referenced easily without spamming the resource
 					// manager.
-					atlas.addTile(TileType(collidable, behaviour), model);
+					atlas.addTile(TileType(collidable, behaviour, name), model);
+					name = "tile";
 				} else if (character == '/' && line.at(1) == '/') {
 					// This is a comment. Stay calm and move to the next line.
 					break;
@@ -158,6 +160,8 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 							} else {
 								behaviour = TileBehaviour::FLOOR;
 							}
+						} else if ((propertyType == "name" || propertyType == "Name") && (currentTag == "Tile" || currentTag == "tile")) {
+							name = line.substr(j + 1, k - j - 1);
 						}
 					}
 					charactersToErase += k;

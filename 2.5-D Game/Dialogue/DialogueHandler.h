@@ -38,6 +38,7 @@ namespace Game {
 				std::shared_ptr<Label> label3, std::shared_ptr<Label> label4);
 
 			bool dialogueIsBeingShown();
+			bool hadJustFinishedDialogue();
 		private:
 			TimeManager* timeManager;
 			ScriptManager* scriptManager;
@@ -45,6 +46,13 @@ namespace Game {
 			std::shared_ptr<Label> label1, label2, label3, label4;
 
 			DialogueState state = DialogueState::HIDDEN;
+
+			// This handles the states of keys.
+			bool pressingRight = false, pressingUp = false, pressingLeft = false, pressingDown = false;
+			long long timeAtLastOptionSelect = 0, timeBetweenOptionSelects = 200000000;
+			bool pressingReturn = false;
+
+			bool justFinishedDialogue = false;
 
 			// This is the max amount of characters that the handler will display per row of dialogue.
 			const size_t MAX_CHARACTERS_PER_LINE = 46;
@@ -67,5 +75,6 @@ namespace Game {
 			long long timeBetweenCharacterReveals = 10000000;
 
 			void setupOptions();
+			void pressUpAction(), pressDownAction(), pressLeftAction(), pressRightAction();
 	};
 }
