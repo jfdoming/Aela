@@ -22,8 +22,8 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// This creates some objects for later.
 	FontManager* fontManager = engine->getFontManager();
 	GLRenderer* renderer = engine->getRenderer();
-	TextFont* xeroxLarge = fontManager->obtainTextFont("res/fonts/xerox.ttf", 35);
-	TextFont* xerox = fontManager->obtainTextFont("res/fonts/xerox.ttf", 18);
+	TextFont* xeroxLarge = fontManager->obtainTextFont("../../res/fonts/xerox.ttf", 35);
+	TextFont* xerox = fontManager->obtainTextFont("../../res/fonts/xerox.ttf", 18);
 	if (xeroxLarge == nullptr || xerox == nullptr) {
 		AelaErrorHandling::windowError("A critical font (xerox.ttf) could not be loaded, aborting!");
 		return;
@@ -36,7 +36,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// This sets up an image.
 	auto mainMenuImage = std::make_shared<ImageComponent>();
 	GLTexture* mainMenuTexture;
-	bool success = engine->getResourceManager()->obtain<GLTexture>("res/textures/map_editor_main_background.dds", mainMenuTexture);
+	bool success = engine->getResourceManager()->obtain<GLTexture>("../../res/textures/map_editor_main_background.dds", mainMenuTexture);
 	mainMenuImage->setDimensions(&windowDimensions);
 	mainMenuImage->setCropping(mainMenuTexture->getDimensions());
 	mainMenuImage->setTexture(mainMenuTexture);
@@ -106,7 +106,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// This sets up the top bar image.
 	auto topBarImage = std::make_shared<ImageComponent>();
 	GLTexture* topBarTexture;
-	success = engine->getResourceManager()->obtain<GLTexture>("res/textures/map_editor_top_bar.dds", topBarTexture);
+	success = engine->getResourceManager()->obtain<GLTexture>("../../res/textures/map_editor_top_bar.dds", topBarTexture);
 	topBarImage->setDimensions(&Rect<int>(0, 0, windowDimensions.getWidth(), windowDimensions.getHeight() / 18));
 	topBarImage->setCropping(topBarTexture->getDimensions());
 	topBarImage->setTexture(topBarTexture);
@@ -180,8 +180,8 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	// This gets textures for the pause menu buttons.
 	GLTexture* simpleButtonTexture;
 	GLTexture* simpleButtonTextureLight;
-	success = engine->getResourceManager()->obtain<GLTexture>("res/textures/simple_button.dds", simpleButtonTexture);
-	success = engine->getResourceManager()->obtain<GLTexture>("res/textures/simple_button_light.dds", simpleButtonTextureLight);
+	success = engine->getResourceManager()->obtain<GLTexture>("../../res/textures/simple_button.dds", simpleButtonTexture);
+	success = engine->getResourceManager()->obtain<GLTexture>("../../res/textures/simple_button_light.dds", simpleButtonTextureLight);
 
 	auto entitySubMenu = std::make_shared<SubMenu>(), skyboxSubMenu = std::make_shared<SubMenu>(),
 		exportSubMenu = std::make_shared<SubMenu>(), optionsSubMenu = std::make_shared<SubMenu>();
@@ -245,11 +245,11 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	};
 
 	auto exportRegularMapAction = [game](Engine* engine) {
-		game->exportMap("res/maps/map.txt", false);
+		game->exportMap("../../res/maps/map.txt", false);
 	};
 
 	auto exportReadableMapAction = [game](Engine* engine) {
-		game->exportMap("res/maps/map.txt", true);
+		game->exportMap("../../res/maps/map.txt", true);
 	};
 
 	auto goToOptionsAction = [game, entityToolButton, skyboxesButton, exportButton, optionsButton,
@@ -357,13 +357,13 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This loads a map.
 	Map3D* map;
-	success = engine->getResourceManager()->obtain<Map3D>("res/maps/map.txt", map);
+	success = engine->getResourceManager()->obtain<Map3D>("../../res/maps/map.txt", map);
 	if (success) {
 		mapCreationScene->setMap(map);
 		pauseScene->setMap(map);
 		game->setMapBeingEdited(map);
 	} else {
-		AelaErrorHandling::consoleWindowError("Scene Script", "res/maps/map.txt wasn't loaded properly or something.");
+		AelaErrorHandling::consoleWindowError("Scene Script", "../../res/maps/map.txt wasn't loaded properly or something.");
 	}
 
 	// This registers all scenes with the scene manager.

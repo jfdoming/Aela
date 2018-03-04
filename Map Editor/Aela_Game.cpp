@@ -93,7 +93,7 @@ void AelaGame::addEntityBeingPlaced(EntityType type) {
 // This obtains a new resource for the model that is being placed into the map.
 void AelaGame::switchModelResource(unsigned int resource) {
 	Model* model;
-	bool success = resourceManager->obtain<Model>("res/models/" + materialsAndModelNames[currentModelResource] + ".obj", model);
+	bool success = resourceManager->obtain<Model>("../../res/models/" + materialsAndModelNames[currentModelResource] + ".obj", model);
 	if (!success) {
 		AelaErrorHandling::windowError("The model resource was not found!");
 		return;
@@ -107,7 +107,7 @@ void AelaGame::switchModelResource(unsigned int resource) {
 // This obtains a new resource for the billboard that is being placed into the map.
 void AelaGame::switchBillboardResource(unsigned int resource) {
 	GLTexture* texture;
-	bool success = resourceManager->obtain<GLTexture>("res/textures/" + billboardNames[currentBillboardResource] + ".dds", texture);
+	bool success = resourceManager->obtain<GLTexture>("../../res/textures/" + billboardNames[currentBillboardResource] + ".dds", texture);
 	if (!success) {
 		AelaErrorHandling::windowError("The billboard resource was not found!");
 		return;

@@ -35,7 +35,7 @@ std::string textureNames[] = {
 
 const unsigned int numberOfBillboards = 2;
 std::string billboardNames[] = {
-	"character",
+	"character_backward",
 	"ekkon"
 };
 
@@ -57,11 +57,11 @@ void loadMaterials(ResourceManager* resourceManager) {
 	resourceManager->bindGroup("materials");
 
 	for (std::string path : materialsAndModelNames) {
-		resourceManager->addToGroup("res/materials/" + path + ".mtl", false);
+		resourceManager->addToGroup("../../res/materials/" + path + ".mtl", false);
 	}
 
 	for (std::string path : otherMaterialNames) {
-		resourceManager->addToGroup("res/materials/" + path + ".mtl", false);
+		resourceManager->addToGroup("../../res/materials/" + path + ".mtl", false);
 	}
 
 	if (resourceManager->loadGroup("materials") != Aela::ResourceManager::Status::OK) {
@@ -75,7 +75,7 @@ void loadModels(ResourceManager* resourceManager) {
 	resourceManager->bindGroup("models");
 
 	for (std::string path : materialsAndModelNames) {
-		resourceManager->addToGroup("res/models/" + path + ".obj", false);
+		resourceManager->addToGroup("../../res/models/" + path + ".obj", false);
 	}
 
 	if (resourceManager->loadGroup("models") != Aela::ResourceManager::Status::OK) {
@@ -89,11 +89,11 @@ void loadTextures(ResourceManager* resourceManager) {
 	resourceManager->bindGroup("textures");
 
 	for (std::string path : textureNames) {
-		resourceManager->addToGroup("res/textures/" + path + ".dds", false);
+		resourceManager->addToGroup("../../res/textures/" + path + ".dds", false);
 	}
 
 	for (std::string path : billboardNames) {
-		resourceManager->addToGroup("res/textures/" + path + ".dds", false);
+		resourceManager->addToGroup("../../res/textures/" + path + ".dds", false);
 	}
 
 	if (resourceManager->loadGroup("textures") != Aela::ResourceManager::Status::OK) {
@@ -108,7 +108,7 @@ void loadParticles(ResourceManager* resourceManager) {
 	resourceManager->bindGroup("particles");
 
 	for (std::string path : particleNames) {
-		resourceManager->addToGroup("res/particles/" + path + ".dds", false);
+		resourceManager->addToGroup("../../res/particles/" + path + ".dds", false);
 	}
 
 	if (resourceManager->loadGroup("particles") != Aela::ResourceManager::Status::OK) {
@@ -122,7 +122,7 @@ void loadSkyboxes(ResourceManager* resourceManager) {
 	resourceManager->bindGroup("skybox");
 
 	for (std::string path : skyboxNames) {
-		resourceManager->addToGroup("res/skyboxes/" + path, false);
+		resourceManager->addToGroup("../../res/skyboxes/" + path, false);
 	}
 
 	if (resourceManager->loadGroup("skybox") != Aela::ResourceManager::Status::OK) {
@@ -135,7 +135,7 @@ void loadStartupMap(ResourceManager* resourceManager, GLRenderer& renderer) {
 	mapLoader.bindRenderer(&renderer);
 	resourceManager->bindLoader(&mapLoader);
 	resourceManager->bindGroup("maps");
-	resourceManager->addToGroup("res/maps/map.txt", false);
+	resourceManager->addToGroup("../../res/maps/map.txt", false);
 	if (resourceManager->loadGroup("maps") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"maps\"!" << std::endl;
 	}
