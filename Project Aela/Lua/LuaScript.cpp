@@ -3,19 +3,19 @@
 
 using namespace luabridge;
 
-LuaScript::LuaScript() {
+Aela::LuaScript::LuaScript() {
 
 }
 
-LuaScript::~LuaScript() {
+Aela::LuaScript::~LuaScript() {
 	if (L) lua_close(L);
 }
 
-void LuaScript::initLua(lua_State *_L) {
+void Aela::LuaScript::initLua(lua_State *_L) {
 	L = _L;
 }
 
-int LuaScript::loadScript(std::string src) {
+int Aela::LuaScript::loadScript(std::string src) {
 	const char * str = src.c_str();
 
 	if (luaL_dofile(L, src.c_str())) {
@@ -26,7 +26,7 @@ int LuaScript::loadScript(std::string src) {
 	return 0;
 }
 
-int LuaScript::callFunction(std::string name) {
+int Aela::LuaScript::callFunction(std::string name) {
 	LuaRef func = getGlobal(L, name.c_str());
 
 	if (func.isNil()) {

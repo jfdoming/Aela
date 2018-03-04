@@ -7,7 +7,7 @@
 
 #include "DialogueHandler.h"
 
-void Game::DialogueHandler::setup(TimeManager* timeManager, EventHandler* eventHandler, ScriptManager* scriptManager) {
+void Game::DialogueHandler::setup(Time* timeManager, EventHandler* eventHandler, ScriptManager* scriptManager) {
 	this->timeManager = timeManager;
 	this->scriptManager = scriptManager;
 	eventHandler->addListener(EventConstants::KEY_RELEASED, bindListener(DialogueHandler::onEvent, this));

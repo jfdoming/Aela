@@ -10,6 +10,8 @@
 #include "../../Events/KeyEvent.h"
 #include "../../Events/EventConstants.h"
 
+using namespace Aela;
+
 void KeyedAnimator::onEvent(Event* event) {
 	KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
 
@@ -106,11 +108,11 @@ void KeyedAnimator::update() {
 	}
 }
 
-void KeyedAnimator::setTimeManager(TimeManager* timeManager) {
+void KeyedAnimator::setTime(Time* timeManager) {
 	this->timeManager = timeManager;
 }
 
-TimeManager* KeyedAnimator::getTimeManager() {
+Time* KeyedAnimator::getTime() {
 	return timeManager;
 }
 

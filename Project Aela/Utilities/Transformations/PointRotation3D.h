@@ -9,23 +9,25 @@
 
 #include <glm/glm.hpp>
 
-class PointRotation3D {
-	public:
-		PointRotation3D() {
+namespace Aela {
+	class PointRotation3D {
+		public:
+			PointRotation3D() {
 
-		}
+			}
 
-		PointRotation3D(glm::vec3* rotation, glm::vec3* point) {
-			this->rotation = *rotation;
-			this->point = *point;
-		}
+			PointRotation3D(glm::vec3* rotation, glm::vec3* point) {
+				this->rotation = *rotation;
+				this->point = *point;
+			}
 
-		glm::vec3* getRotation();
-		void setRotation(glm::vec3* rotation);
-		glm::vec3* getPoint();
-		void setPoint(glm::vec3* point);
+			glm::vec3* getRotation();
+			void setRotation(glm::vec3* rotation);
+			glm::vec3* getPoint();
+			void setPoint(glm::vec3* point);
 
-	private:
-		glm::vec3 rotation;
-		glm::vec3 point;
-};
+		private:
+			glm::vec3 rotation;
+			glm::vec3 point;
+	};
+}

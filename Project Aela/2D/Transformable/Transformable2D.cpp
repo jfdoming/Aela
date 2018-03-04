@@ -1,6 +1,8 @@
 #include "Transformable2D.h"
 #include <iostream>
 
+using namespace Aela;
+
 void Transformable2D::setTint(ColourRGBA* tint) {
 	this->tint = *tint;
 	modified = true;

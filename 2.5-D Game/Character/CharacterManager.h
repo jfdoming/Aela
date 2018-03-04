@@ -28,7 +28,7 @@ namespace Game {
 		public:
 			CharacterManager() {}
 
-			void setup(ResourceManager* resourceManager, Animator* animator, Camera3D* camera, TimeManager* timeManager,
+			void setup(ResourceManager* resourceManager, Animator* animator, Camera3D* camera, Time* timeManager,
 				ScriptManager* scriptManager);
 			void update();
 

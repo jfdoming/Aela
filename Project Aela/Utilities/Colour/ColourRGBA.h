@@ -8,67 +8,69 @@
 #pragma once
 #include <glm/glm.hpp>
 
-class ColourRGBA {
-	public:
-		ColourRGBA() {
+namespace Aela {
+	class ColourRGBA {
+		public:
+			ColourRGBA() {
 
-		}
+			}
 
-		ColourRGBA(glm::vec4* colour) {
-			setValues(colour->r, colour->g, colour->b, colour->a);
-		}
+			ColourRGBA(glm::vec4* colour) {
+				setValues(colour->r, colour->g, colour->b, colour->a);
+			}
 
-		ColourRGBA(float r, float g, float b, float a) {
-			setValues(r, g, b, a);
-		}
+			ColourRGBA(float r, float g, float b, float a) {
+				setValues(r, g, b, a);
+			}
 
-		ColourRGBA(float value) {
-			setValues(value, value, value, value);
-		}
+			ColourRGBA(float value) {
+				setValues(value, value, value, value);
+			}
 
-		void setR(float r) {
-			this->r = r;
-		}
+			void setR(float r) {
+				this->r = r;
+			}
 
-		void setG(float g) {
-			this->g = g;
-		}
+			void setG(float g) {
+				this->g = g;
+			}
 
-		void setB(float b) {
-			this->b = b;
-		}
+			void setB(float b) {
+				this->b = b;
+			}
 
-		void setA(float a) {
-			this->a = a;
-		}
+			void setA(float a) {
+				this->a = a;
+			}
 
-		void setValues(float r, float g, float b, float a) {
-			this->r = r;
-			this->g = g;
-			this->b = b;
-			this->a = a;
-		}
+			void setValues(float r, float g, float b, float a) {
+				this->r = r;
+				this->g = g;
+				this->b = b;
+				this->a = a;
+			}
 
-		float getR() {
-			return r;
-		}
- 
-		float getG() {
-			return g;
-		}
+			float getR() {
+				return r;
+			}
 
-		float getB() {
-			return b;
-		}
+			float getG() {
+				return g;
+			}
 
-		float getA() {
-			return a;
-		}
+			float getB() {
+				return b;
+			}
 
-		glm::vec4 getVec4() {
-			return glm::vec4(r, g, b, a);
-		}
+			float getA() {
+				return a;
+			}
 
-	private:
-		float r, g, b, a;
-};
+			glm::vec4 getVec4() {
+				return glm::vec4(r, g, b, a);
+			}
+
+		private:
+			float r, g, b, a;
+	};
+}

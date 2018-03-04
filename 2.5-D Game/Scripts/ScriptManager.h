@@ -11,6 +11,8 @@
 #include <functional>
 #include "Animation/KeyFrame.h"
 
+using namespace Aela;
+
 namespace Game {
 	class ScriptManager {
 		public:

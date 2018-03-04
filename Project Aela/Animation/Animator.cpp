@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
+using namespace Aela;
+
 // This updates 3D objects based on keyframes given to the Animator. I could split this function to smaller functions
 // but its easier to read what is going on when everything is layed out for you. Besides, those functions would be
 // called once anyways.
@@ -31,8 +33,6 @@ void Animator::update() {
 
 		long long endTime = firstFramePair.first;
 		long long timeSinceKeyFrameStart = track.getPositionInTrack() + 1;
-
-		std::cout << firstFramePair.first << " vs " << track.getPositionInTrack() << "\n";
 
 		// Check if this keyframe should have ended by now. If it has, perform the actions necessary.
 		if (firstFramePair.first <= track.getPositionInTrack()) {
@@ -82,9 +82,7 @@ void Animator::update() {
 				continue;
 			}
 
-			// long long difference = track.getPositionInTrack() - firstFramePair.first;
 			track.resetPosition();
-			// track.updatePositionInTrack(difference);
 			continue;
 		}
 
@@ -127,12 +125,8 @@ void Animator::update() {
 			if (keyFrame.isUsingTranslation() && keyFrame.isUsingPointRotation()) {
 				object->setPosition(*originalPosition + newPosition + glm::vec3(pointRotationMatrix
 					* glm::vec4(*keyFrame.getPointRotation()->getPoint() * glm::vec3(-1), 0)) + *keyFrame.getPointRotation()->getPoint());
-				glm::vec3 pos = *originalPosition + newPosition;
-				std::cout << track.getTag() << " pos: " << pos.x << ", " << pos.y << ", " << pos.z << "\n";
 			} else if (keyFrame.isUsingTranslation()) {
 				object->setPosition(*originalPosition + newPosition);
-				glm::vec3 pos = *originalPosition + newPosition;
-				std::cout << track.getTag() << " pos: " << pos.x << ", " << pos.y << ", " << pos.z << "\n";
 			}
 
 			// This finds the final rotation values and applies them.
@@ -144,7 +138,6 @@ void Animator::update() {
 				object->setRotation(*pointRotationRotation * glm::vec3((float) timeSinceKeyFrameStart / endTime));
 			}
 		}
-		// which3DTrack++;
 	}
 
 	// This regains the time for accuracy.
@@ -192,11 +185,7 @@ void Animator::update() {
 				continue;
 			}
 
-			// Here is where I stopped. This should happen but it breaks since track.getPositionInTrack() can be a huge number.
-			// long long difference = track.getPositionInTrack() - firstFramePair.first;
-			// std::cout << difference << " " << track.getPositionInTrack() << " " << firstFramePair.first << " is the diff.\n";
 			track.resetPosition();
-			// track.updatePositionInTrack(difference);
 			continue;
 		}
 
@@ -222,11 +211,10 @@ void Animator::update() {
 				(int) ((float) (finalDimensions->getHeight() - originalDimensions->getHeight()) / endTime * timeSinceKeyFrameStart + originalDimensions->getHeight()));
 			object->setDimensions(&newDimensions);
 		}
-		// which2DTrack++;
 	}
 }
 
-void Animator::setTimeManager(TimeManager* timeManager) {
+void Animator::setTime(Time* timeManager) {
 	this->timeManager = timeManager;
 }
 

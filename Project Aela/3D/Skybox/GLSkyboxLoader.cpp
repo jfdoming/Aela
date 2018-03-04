@@ -9,7 +9,6 @@
 
 using namespace Aela;
 
-
 const std::string GLSkyboxLoader::paths[] = {
 	"/right.dds",
 	"/left.dds",

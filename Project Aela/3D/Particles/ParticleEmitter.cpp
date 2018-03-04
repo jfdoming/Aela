@@ -11,6 +11,8 @@
 #include <algorithm>
 #include <functional>
 
+using namespace Aela;
+
 void ParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float particleWidthScaling, float particleHeightScaling, unsigned int amount) {
 	for (unsigned int i = 0; i < amount; i++) {
 		Particle particle;
@@ -28,11 +30,11 @@ std::vector<Particle>* ParticleEmitter::getParticles() {
 	return &particles;
 }
 
-void ParticleEmitter::setTimeManager(TimeManager* timeManager) {
+void ParticleEmitter::setTime(Time* timeManager) {
 	this->timeManager = timeManager;
 }
 
-TimeManager* ParticleEmitter::getTimeManager() {
+Time* ParticleEmitter::getTime() {
 	return timeManager;
 }
 

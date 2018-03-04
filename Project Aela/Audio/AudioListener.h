@@ -10,15 +10,17 @@
 #include <alc.h>
 #include <glm/glm.hpp>
 
-class AudioListener {
-	public:
-		AudioListener();
-		~AudioListener();
+namespace Aela {
+	class AudioListener {
+		public:
+			AudioListener();
+			~AudioListener();
 
-		bool setPosition(ALfloat x, ALfloat y, ALfloat z);
-		bool setVelocity(ALfloat x, ALfloat y, ALfloat z);
-		bool setOrientation(ALfloat x, ALfloat y, ALfloat z);
+			bool setPosition(ALfloat x, ALfloat y, ALfloat z);
+			bool setVelocity(ALfloat x, ALfloat y, ALfloat z);
+			bool setOrientation(ALfloat x, ALfloat y, ALfloat z);
 
-	private:
-		ALfloat orientation[6];
-};
+		private:
+			ALfloat orientation[6];
+	};
+}

@@ -11,48 +11,49 @@
 #include "Texture.h"
 #include "GLImage.h"
 
-class GLTexture : public Texture {
-	public:
-		GLTexture(std::string src, unsigned int& texId) : Texture(src, texId) {
-			image.setTexture(texId);
-		}
+namespace Aela {
+	class GLTexture : public Texture {
+		public:
+			GLTexture(std::string src, unsigned int& texId) : Texture(src, texId) {
+				image.setTexture(texId);
+			}
 
-		virtual ~GLTexture(){
-		}
+			virtual ~GLTexture() {}
 
-		// These are some getters and setters.
-		void setDimensions(Rect<int>* dimensions) {
-			image.setDimensions(dimensions);
-		}
+			// These are some getters and setters.
+			void setDimensions(Rect<int>* dimensions) {
+				image.setDimensions(dimensions);
+			}
 
-		void setDimensions(int x, int y, int width, int height) {
-			image.setDimensions(x, y, width, height);
-		}
+			void setDimensions(int x, int y, int width, int height) {
+				image.setDimensions(x, y, width, height);
+			}
 
-		void setTexture(unsigned int texture) {
-			image.setTexture(texture);
-		}
+			void setTexture(unsigned int texture) {
+				image.setTexture(texture);
+			}
 
-		Rect<int>* getDimensions() {
-			return image.getDimensions();
-		}
+			Rect<int>* getDimensions() {
+				return image.getDimensions();
+			}
 
-		Image* getImage() {
-			return &image;
-		}
+			Image* getImage() {
+				return &image;
+			}
 
-		unsigned int* getTexture() {
-			return image.getTexture();
-		}
+			unsigned int* getTexture() {
+				return image.getTexture();
+			}
 
-		// This function returns if the object was initialised properly. If it is not
-		// initialised then rendering propblems will occur. Note that a GLTexture is still
-		// initialised if the output (dimensions on the screen) has a width and/or height
-		// of zero.
-		bool isInitialised() {
-			return image.isInitialised();
-		}
+			// This function returns if the object was initialised properly. If it is not
+			// initialised then rendering propblems will occur. Note that a GLTexture is still
+			// initialised if the output (dimensions on the screen) has a width and/or height
+			// of zero.
+			bool isInitialised() {
+				return image.isInitialised();
+			}
 
-	private:
-		GLImage image;
-};
+		private:
+			GLImage image;
+	};
+}

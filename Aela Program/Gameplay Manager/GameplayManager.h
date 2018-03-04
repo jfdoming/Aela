@@ -17,7 +17,7 @@ class GameplayManager {
 		GameplayManager(Engine* engine) : engine(engine) {
 			window = engine->getWindow();
 			eventHandler = engine->getEventHandler();
-			timeManager = engine->getTimeManager();
+			timeManager = engine->getTime();
 			luaManager = engine->getLuaManager();
 			sceneManager = engine->getSceneManager();
 			resourceManager = engine->getResourceManager();
@@ -46,7 +46,7 @@ class GameplayManager {
 		Engine* engine;
 		Window* window;
 		EventHandler* eventHandler;
-		TimeManager* timeManager;
+		Time* timeManager;
 		LuaManager* luaManager;
 		SceneManager* sceneManager;
 		ResourceManager* resourceManager;

@@ -8,24 +8,26 @@
 #pragma once
 #include "PathSegment.h"
 
-class PathSegment2D : PathSegment {
-	public:
-		PathSegment2D() {
+namespace Aela {
+	class PathSegment2D : PathSegment {
+		public:
+			PathSegment2D() {
 
-		}
+			}
 
-		PathSegment2D(double magnitude, double direction, double speed) : PathSegment(magnitude, speed) {
-			this->direction = direction;
-		}
+			PathSegment2D(double magnitude, double direction, double speed) : PathSegment(magnitude, speed) {
+				this->direction = direction;
+			}
 
-		void setDirection(double direction) {
-			this->direction = direction;
-		}
+			void setDirection(double direction) {
+				this->direction = direction;
+			}
 
-		double getDirection() {
-			return direction;
-		}
+			double getDirection() {
+				return direction;
+			}
 
-	private:
-		double direction = 0;
-};
+		private:
+			double direction = 0;
+	};
+}

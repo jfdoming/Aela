@@ -8,26 +8,28 @@
 #pragma once
 #include "../Texture/Image.h"
 
-class Simple2DFramebuffer {
-	public:
-		Simple2DFramebuffer() {
+namespace Aela {
+	class Simple2DFramebuffer {
+		public:
+			Simple2DFramebuffer() {
 
-		}
+			}
 
-		~Simple2DFramebuffer() {
+			~Simple2DFramebuffer() {
 
-		}
+			}
 
-		unsigned int* getFramebuffer();
-		void setFramebuffer(unsigned int* framebuffer);
-		unsigned int* getMultisampledFramebuffer();
-		void setMultisampledFramebuffer(unsigned int* framebuffer);
-		virtual Image* getFramebufferImage() = 0;
-		virtual Image* getMultisampledFramebufferImage() = 0;
-		unsigned int getMultisampling();
-		void setMultisampling(unsigned int multisampling);
+			unsigned int* getFramebuffer();
+			void setFramebuffer(unsigned int* framebuffer);
+			unsigned int* getMultisampledFramebuffer();
+			void setMultisampledFramebuffer(unsigned int* framebuffer);
+			virtual Image* getFramebufferImage() = 0;
+			virtual Image* getMultisampledFramebufferImage() = 0;
+			unsigned int getMultisampling();
+			void setMultisampling(unsigned int multisampling);
 
-	protected:
-		unsigned int framebuffer, multisampledFramebuffer;
-		unsigned int multisampling = 0;
-};
+		protected:
+			unsigned int framebuffer, multisampledFramebuffer;
+			unsigned int multisampling = 0;
+	};
+}

@@ -9,6 +9,8 @@
 
 #include <glm/gtc/constants.hpp>
 
+using namespace Aela;
+
 void PlanarParticleEmitter::setupDimensions(Rect<GLfloat>* dimensions) {
 	this->dimensions = *dimensions;
 }

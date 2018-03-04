@@ -3,16 +3,16 @@
 
 using namespace luabridge;
 
-LuaManager::LuaManager() {
+Aela::LuaManager::LuaManager() {
 	L = luaL_newstate();
 
 	if (L) luaL_openlibs(L);
 }
 
-LuaManager::~LuaManager() {
+Aela::LuaManager::~LuaManager() {
 
 }
 
-lua_State* LuaManager::getLuaState() {
+lua_State* Aela::LuaManager::getLuaState() {
 	return L;
 }

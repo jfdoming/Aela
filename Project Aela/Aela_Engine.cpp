@@ -113,7 +113,7 @@ int Aela::Engine::setupRenderer() {
 	// This passes the window and time manager to the renderer and control manager.
 	// Please note that the window must be set before calling setup functions.
 	renderer.setWindow(&window);
-	renderer.setTimeManager(&timeManager);
+	renderer.setTime(&timeManager);
 	renderer.setFontManager(&fontManager);
 	renderer.setup3D();
 	renderer.setup2D();
@@ -159,8 +159,8 @@ int Aela::Engine::setupAudioPlayer() {
 }
 
 int Aela::Engine::setupAnimation() {
-	animator.setTimeManager(&timeManager);
-	keyedAnimator.setTimeManager(&timeManager);
+	animator.setTime(&timeManager);
+	keyedAnimator.setTime(&timeManager);
 	keyedAnimator.setWindow(&window);
 	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
 	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
@@ -212,7 +212,7 @@ EventHandler* Engine::getEventHandler() {
 	return &eventHandler;
 }
 
-TimeManager* Engine::getTimeManager() {
+Time* Engine::getTime() {
 	return &timeManager;
 }
 

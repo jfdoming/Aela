@@ -15,31 +15,33 @@
 #include <iostream>
 #include <glm/glm.hpp>
 
-class BoundingBox3D : public Transformable3D {
-	public:
-		BoundingBox3D() {
+namespace Aela {
+	class BoundingBox3D : public Transformable3D {
+		public:
+			BoundingBox3D() {
 
-		}
+			}
 
-		BoundingBox3D(float x, float y, float z, float width, float height, float depth) {
-			position = glm::vec3(x, y, z);
-			this->width = width;
-			this->height = height;
-			this->depth = depth;
-		}
+			BoundingBox3D(float x, float y, float z, float width, float height, float depth) {
+				position = glm::vec3(x, y, z);
+				this->width = width;
+				this->height = height;
+				this->depth = depth;
+			}
 
-		void generateVertices();
-		bool verticesWereGenerated();
+			void generateVertices();
+			bool verticesWereGenerated();
 
-		// These are getters and setters.
-		glm::vec3 getVertex(int id);
-		std::string getVerticesAsString();
+			// These are getters and setters.
+			glm::vec3 getVertex(int id);
+			std::string getVerticesAsString();
 
-		void setWidth(float width), setHeight(float height), setDpeth(float depth);
-		float getWidth(), getHeight(), getDepth();
-		void setValues(float x, float y, float z, float width, float height, float depth);
+			void setWidth(float width), setHeight(float height), setDpeth(float depth);
+			float getWidth(), getHeight(), getDepth();
+			void setValues(float x, float y, float z, float width, float height, float depth);
 
-	private:
-		std::vector<glm::vec3> vertices;
-		float width = 0, height = 0, depth = 0;
-};
+		private:
+			std::vector<glm::vec3> vertices;
+			float width = 0, height = 0, depth = 0;
+	};
+}

@@ -14,9 +14,9 @@ void Renderer::setWindow(Window* window) {
 	camera.setWindow(window);
 }
 
-void Renderer::setTimeManager(TimeManager* timeManager) {
+void Renderer::setTime(Time* timeManager) {
 	this->timeManager = timeManager;
-	camera.setTimeManager(timeManager);
+	camera.setTime(timeManager);
 }
 
 void Renderer::setFOV(float value) {
@@ -35,7 +35,7 @@ Window* Renderer::getWindow() {
 	return window;
 }
 
-TimeManager* Renderer::getTimeManager() {
+Time* Renderer::getTime() {
 	return timeManager;
 }
 

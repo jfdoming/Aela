@@ -8,20 +8,22 @@
 #pragma once
 #include <chrono>
 
-class FramerateCalculator {
-	public:
-		FramerateCalculator() {
+namespace Aela {
+	class FramerateCalculator {
+		public:
+			FramerateCalculator() {
 
-		}
+			}
 
-		void calculate(long long currentTimeInNanos, long long timeBetweenFrames);
+			void calculate(long long currentTimeInNanos, long long timeBetweenFrames);
 
-		// These are getters and setters.
-		double getTrueFPS(), getSmoothedFPS(), getFPSSmoothingAmount();
-		void setFPSSmoothing(double fpsSmoothingAmount), setTimeBetweenFrameChecks(long long timeBetweenFrameChecks);
+			// These are getters and setters.
+			double getTrueFPS(), getSmoothedFPS(), getFPSSmoothingAmount();
+			void setFPSSmoothing(double fpsSmoothingAmount), setTimeBetweenFrameChecks(long long timeBetweenFrameChecks);
 
-	private:
-		double trueFPS = -1, smoothedFPS = -1, fpsSmoothingAmount = 0.9f;
-		long long timeBetweenFrameChecks = 250;
-		long long timeOfLastFrameCheck = 0;
-};
+		private:
+			double trueFPS = -1, smoothedFPS = -1, fpsSmoothingAmount = 0.9f;
+			long long timeBetweenFrameChecks = 250;
+			long long timeOfLastFrameCheck = 0;
+	};
+}

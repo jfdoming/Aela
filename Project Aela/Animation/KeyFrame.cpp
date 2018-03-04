@@ -7,6 +7,8 @@
 
 #include "KeyFrame.h"
 
+using namespace Aela;
+
 void KeyFrame::start() {
 	started = true;
 }

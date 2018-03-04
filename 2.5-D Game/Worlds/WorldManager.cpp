@@ -12,7 +12,7 @@
 #include <glm/gtc/constants.hpp>
 
 bool Game::WorldManager::setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator, Camera3D* camera,
-	TimeManager* timeManager, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player) {
+	Time* timeManager, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player) {
 	this->resourceManager = resourceManager;
 	this->renderer = renderer;
 	this->animator = animator;

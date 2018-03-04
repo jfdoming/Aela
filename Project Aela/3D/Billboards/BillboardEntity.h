@@ -13,44 +13,44 @@
 #include <string>
 #include <glm/glm.hpp>
 
-using namespace Aela;
+namespace Aela {
+	class BillboardEntity : public Transformable3D, public Entity {
+		public:
+			BillboardEntity() {
 
-class BillboardEntity : public Transformable3D, public Entity {
-	public:
-		BillboardEntity() {
+			}
 
-		}
+			BillboardEntity(Texture* texture) {
+				this->texture = texture;
+			}
 
-		BillboardEntity(Texture* texture) {
-			this->texture = texture;
-		}
+			BillboardEntity(glm::vec3 setPosition, Texture* setTexture) {
+				position = setPosition;
+				texture = setTexture;
+			}
 
-		BillboardEntity(glm::vec3 setPosition, Texture* setTexture) {
-			position = setPosition;
-			texture = setTexture;
-		}
+			void setTexture(Texture* setTexture) {
+				texture = setTexture;
+			}
 
-		void setTexture(Texture* setTexture) {
-			texture = setTexture;
-		}
+			Texture* getTexture() {
+				return texture;
+			}
 
-		Texture* getTexture() {
-			return texture;
-		}
+			EntityType getEntityType() {
+				return EntityType::BILLBOARD;
+			}
 
-		EntityType getEntityType() {
-			return EntityType::BILLBOARD;
-		}
+			void useSpecifiedRotation(bool use) {
+				useRotation = use;
+			}
 
-		void useSpecifiedRotation(bool use) {
-			useRotation = use;
-		}
+			bool usingSpecifiedRotation() {
+				return useRotation;
+			}
 
-		bool usingSpecifiedRotation() {
-			return useRotation;
-		}
-
-	private:
-		Texture* texture;
-		bool useRotation = true;
-};
+		private:
+			Texture* texture;
+			bool useRotation = true;
+	};
+}

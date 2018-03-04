@@ -10,33 +10,35 @@
 #include "../../Utilities/Colour/ColourRGBA.h"
 #include "../../Utilities/Rect/Rect.h"
 
-// This enum is used in an Camera3D function to change a single property.
-enum class Transformable2DProperty {
-	TINT_R, TINT_G, TINT_B, TINT_A, RECT_X, RECT_Y, RECT_WIDTH, RECT_HEIGHT
-};
+namespace Aela {
+	// This enum is used in an Camera3D function to change a single property.
+	enum class Transformable2DProperty {
+		TINT_R, TINT_G, TINT_B, TINT_A, RECT_X, RECT_Y, RECT_WIDTH, RECT_HEIGHT
+	};
 
-class Transformable2D : public Transformable {
-	friend class Animator;
-	public:
-		Transformable2D() : tint(1, 1, 1, 1), dimensions(0, 0, 0, 0) {
-			
-		}
+	class Transformable2D : public Transformable {
+		friend class Animator;
+		public:
+			Transformable2D() : tint(1, 1, 1, 1), dimensions(0, 0, 0, 0) {
 
-		void setTint(ColourRGBA* tint);
-		ColourRGBA* getTint();
-		void setDimensions(Rect<int>* dimensions);
-		Rect<int>* getDimensions();
+			}
 
-		// These are functions used for changing any single property.
-		void setProperty(Transformable2DProperty property, float value);
-		float getProperty(Transformable2DProperty property);
+			void setTint(ColourRGBA* tint);
+			ColourRGBA* getTint();
+			void setDimensions(Rect<int>* dimensions);
+			Rect<int>* getDimensions();
 
-		bool wasTransformed();
+			// These are functions used for changing any single property.
+			void setProperty(Transformable2DProperty property, float value);
+			float getProperty(Transformable2DProperty property);
 
-	protected:
-		ColourRGBA tint;
-		Rect<int> dimensions;
+			bool wasTransformed();
 
-	private:
-		bool modified = false;
-};
+		protected:
+			ColourRGBA tint;
+			Rect<int> dimensions;
+
+		private:
+			bool modified = false;
+	};
+}

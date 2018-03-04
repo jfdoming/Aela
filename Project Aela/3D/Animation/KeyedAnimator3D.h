@@ -11,44 +11,44 @@
 #include <vector>
 #include <unordered_map>
 
-#include "../../Time Manager/TimeManager.h"
+#include "../../Time/Time.h"
 #include "../../Window/Window.h"
 #include "../../Events/EventConstants.h"
 #include "../../Events/KeyEvent.h"
 #include "../Transformable/Transformable3D.h"
 
-using namespace Aela;
+namespace Aela {
+	class KeyedAnimator {
+		public:
+			KeyedAnimator() {
 
-class KeyedAnimator {
-	public:
-		KeyedAnimator() {
+			}
 
-		}
+			// This is triggered on an event.
+			void onEvent(Event* event);
 
-		// This is triggered on an event.
-		void onEvent(Event* event);
+			// This should be called in some srt of animation thread or something.
+			void update();
 
-		// This should be called in some srt of animation thread or something.
-		void update();
+			// These are getters and setters.
+			void setTime(Time* timeManager);
+			Time* getTime();
+			void setWindow(Window* window);
+			Window* getWindow();
+			bool addTransformable(int key, Transformable3D* transformable);
+			size_t addTransformable(Transformable3D* transformable);
+			bool removeTransformable(int key);
 
-		// These are getters and setters.
-		void setTimeManager(TimeManager* timeManager);
-		TimeManager* getTimeManager();
-		void setWindow(Window* window);
-		Window* getWindow();
-		bool addTransformable(int key, Transformable3D* transformable);
-		size_t addTransformable(Transformable3D* transformable);
-		bool removeTransformable(int key);
+		private:
+			// These are the objects from Project Aela that the class uses.
+			Time* timeManager;
+			Window* window;
+			std::unordered_map<size_t, Transformable3D*> transformables;
 
-	private:
-		// These are the objects from Project Aela that the class uses.
-		TimeManager* timeManager;
-		Window* window;
-		std::unordered_map<size_t, Transformable3D*> transformables;
+			// Speed: 0.000000001f is 1 unit per ns.
+			float speed = 0.00000003f, superSpeed = 0.00000012f, currentSpeed = 0.0f, mouseSpeed;
 
-		// Speed: 0.000000001f is 1 unit per ns.
-		float speed = 0.00000003f, superSpeed = 0.00000012f, currentSpeed = 0.0f, mouseSpeed;
-
-		// These store movements.
-		bool movingForward, movingBackward, movingLeft, movingRight, movingUp, movingDown;
-};
+			// These store movements.
+			bool movingForward, movingBackward, movingLeft, movingRight, movingUp, movingDown;
+	};
+}

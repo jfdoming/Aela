@@ -9,18 +9,20 @@
 
 #include "../Billboards/BillboardEntity.h"
 
-class Particle : public BillboardEntity {
-	public:
-		Particle() {
+namespace Aela {
+	class Particle : public BillboardEntity {
+		public:
+			Particle() {
 
-		}
+			}
 
-		float getSpeed();
-		void setSpeed(float baseSpeed);
-		unsigned int getLifetime();
-		void setLifetime(unsigned int baseLifetime);
+			float getSpeed();
+			void setSpeed(float baseSpeed);
+			unsigned int getLifetime();
+			void setLifetime(unsigned int baseLifetime);
 
-	private:
-		float baseSpeed = 0.000000001f;
-		unsigned int baseLifetime = 1000;
-};
+		private:
+			float baseSpeed = 0.000000001f;
+			unsigned int baseLifetime = 1000;
+	};
+}

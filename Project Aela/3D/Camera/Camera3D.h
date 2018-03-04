@@ -12,85 +12,87 @@
 #include "../../Events/EventListener.h"
 #include "../../Events/KeyEvent.h"
 #include "../../Events/EventConstants.h"
-#include "../../Time Manager/TimeManager.h"
+#include "../../Time/Time.h"
 #include "../../Window/Window.h"
 
 using namespace Aela;
 
-class Camera3D : public Transformable3D, public EventListener {
-	public:
-		Camera3D() {
-			fieldOfView = 45.0f;
-			speed = 0.000000015f;
-			superSpeed = 0.000000045f;
-			currentSpeed = speed;
-			mouseSpeed = 0.015f;
-		}
+namespace Aela {
+	class Camera3D : public Transformable3D, public EventListener {
+		public:
+			Camera3D() {
+				fieldOfView = 45.0f;
+				speed = 0.000000015f;
+				superSpeed = 0.000000045f;
+				currentSpeed = speed;
+				mouseSpeed = 0.015f;
+			}
 
-		// This is triggered on an event.
-		void onEvent(Event* event);
+			// This is triggered on an event.
+			void onEvent(Event* event);
 
-		void update();
+			void update();
 
-		// These are getters and setters.
-		void setViewMatrix(glm::mat4 setViewMatrix);
-		void setProjectionMatrix(glm::mat4 setProjectionMatrix);
-		glm::mat4 getViewMatrix(), getProjectionMatrix();
-		void setFieldOfView(float setFieldOfView);
-		float getFieldOfView();
-		void setInUse(bool inUse);
-		bool isInUse();
-		void useControls(bool useControls);
-		bool isUsingKeyboardControls();
-		void setForceCursorToMiddle(bool forceCursorToMiddle);
-		bool isForcingCursorToMiddle();
-		void setTimeManager(TimeManager* timeManager);
-		void setWindow(Window* window);
+			// These are getters and setters.
+			void setViewMatrix(glm::mat4 setViewMatrix);
+			void setProjectionMatrix(glm::mat4 setProjectionMatrix);
+			glm::mat4 getViewMatrix(), getProjectionMatrix();
+			void setFieldOfView(float setFieldOfView);
+			float getFieldOfView();
+			void setInUse(bool inUse);
+			bool isInUse();
+			void useControls(bool useControls);
+			bool isUsingKeyboardControls();
+			void setForceCursorToMiddle(bool forceCursorToMiddle);
+			bool isForcingCursorToMiddle();
+			void setTime(Time* timeManager);
+			void setWindow(Window* window);
 
-		// These functions allow the camera to rotate and look at a point that is on its plane.
-		void focusAtPointOnPlane(glm::vec3 point, glm::vec3 offset);
-		void focusAtPointOnPlane(glm::vec3 point);
-		void focusAtPointOnPlane(float x, float y, float z);
+			// These functions allow the camera to rotate and look at a point that is on its plane.
+			void focusAtPointOnPlane(glm::vec3 point, glm::vec3 offset);
+			void focusAtPointOnPlane(glm::vec3 point);
+			void focusAtPointOnPlane(float x, float y, float z);
 
-		// These functions are mainly used by the renderer to update the camera.
-		void calculateCartesionalDirection(), calculateRightVector(), calculateUpVector();
-		glm::vec3* getCartesionalDirection(), *getRightVector(), *getUpVector();
-		glm::vec3 getPointInFrontOfCamera(float distanceFromCamera);
+			// These functions are mainly used by the renderer to update the camera.
+			void calculateCartesionalDirection(), calculateRightVector(), calculateUpVector();
+			glm::vec3* getCartesionalDirection(), *getRightVector(), *getUpVector();
+			glm::vec3 getPointInFrontOfCamera(float distanceFromCamera);
 
-	private:
-		TimeManager* timeManager;
-		Window* window;
+		private:
+			Time* timeManager;
+			Window* window;
 
-		// These are the camera's matrices.
-		glm::mat4 viewMatrix, projectionMatrix;
+			// These are the camera's matrices.
+			glm::mat4 viewMatrix, projectionMatrix;
 
-		// These are used during camera updating.
-		glm::vec3 cartesionalDirection, right, up;
+			// These are used during camera updating.
+			glm::vec3 cartesionalDirection, right, up;
 
-		float fieldOfView;
+			float fieldOfView;
 
-		// This tells the camera whether the user is in control of the camera.
-		bool inUse = false;
+			// This tells the camera whether the user is in control of the camera.
+			bool inUse = false;
 
-		// This tells the camera whether it is responsible for updating camera translation. Keep in mind that the animators
-		// can also be responsible for transforming the camera and not only the renderer.
-		bool usingControls = true;
+			// This tells the camera whether it is responsible for updating camera translation. Keep in mind that the animators
+			// can also be responsible for transforming the camera and not only the renderer.
+			bool usingControls = true;
 
-		// This keeps track of whether the camera should be allowed to be upside down.
-		bool allowUpsideDown = false;
+			// This keeps track of whether the camera should be allowed to be upside down.
+			bool allowUpsideDown = false;
 
-		// This tells the camera to keep the cursor in the middle of the window when it updates its camera.
-		bool forceCursorToMiddle = true;
+			// This tells the camera to keep the cursor in the middle of the window when it updates its camera.
+			bool forceCursorToMiddle = true;
 
-		// These store movements.
-		bool movingForward = false, movingBackward = false, movingLeft = false, movingRight = false, movingUp = false, movingDown = false;
+			// These store movements.
+			bool movingForward = false, movingBackward = false, movingLeft = false, movingRight = false, movingUp = false, movingDown = false;
 
-		// Mouse speed: the radians of rotation per pixel of mouse movement 
-		float mouseSpeed;
+			// Mouse speed: the radians of rotation per pixel of mouse movement 
+			float mouseSpeed;
 
-		// Speed: 0.000000001f is 1 unit per ns.
-		float speed, superSpeed, currentSpeed;
+			// Speed: 0.000000001f is 1 unit per ns.
+			float speed, superSpeed, currentSpeed;
 
-		// This is used when computing controls.
-		const glm::vec3 straightUp = glm::vec3(0, 0.5, 0);
-};
+			// This is used when computing controls.
+			const glm::vec3 straightUp = glm::vec3(0, 0.5, 0);
+	};
+}

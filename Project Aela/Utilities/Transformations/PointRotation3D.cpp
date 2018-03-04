@@ -7,6 +7,8 @@
 
 #include "PointRotation3D.h"
 
+using namespace Aela;
+
 glm::vec3* PointRotation3D::getRotation() {
 	return &rotation;
 }

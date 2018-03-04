@@ -7,6 +7,8 @@
 
 #include "PhysicsManager.h"
 
+using namespace Aela;
+
 // Have fun: https://math.stackexchange.com/questions/1472049/check-if-a-point-is-inside-a-rectangular-shaped-area-3d
 bool Physics::isInside(glm::vec3 point, BoundingBox3D* box) {
 	/*glm::vec3 u = vertices[0] - vertices[1], v = vertices[0] - vertices[3], w = vertices[0] - vertices[4];

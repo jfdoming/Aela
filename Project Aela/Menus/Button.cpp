@@ -1,5 +1,4 @@
 #include "Button.h"
-
 #include "../Events/EventConstants.h"
 
 Aela::Button::Button() : hoverTint(0.0f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {

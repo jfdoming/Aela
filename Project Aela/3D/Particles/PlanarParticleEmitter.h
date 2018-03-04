@@ -11,27 +11,29 @@
 #include "../../Utilities/Rect/Rect.h"
 #include "../Camera/Camera3D.h"
 
-class PlanarParticleEmitter : public ParticleEmitter {
-	public:
-		PlanarParticleEmitter() {
+namespace Aela {
+	class PlanarParticleEmitter : public ParticleEmitter {
+		public:
+			PlanarParticleEmitter() {
 
-		}
+			}
 
-		// These are the functions that are overwritten from the ParticleEmitter class.
-		void setupDimensions(Rect<GLfloat>* dimensions);
-		void setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight, unsigned int amount);
-		void update();
+			// These are the functions that are overwritten from the ParticleEmitter class.
+			void setupDimensions(Rect<GLfloat>* dimensions);
+			void setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight, unsigned int amount);
+			void update();
 
-		// These are getters and setters.
-		Camera3D* getCamera();
-		void setCamera(Camera3D* camera);
+			// These are getters and setters.
+			Camera3D* getCamera();
+			void setCamera(Camera3D* camera);
 
-	private:
-		// This stores the dimensions of the plane.
-		Rect<GLfloat> dimensions;
+		private:
+			// This stores the dimensions of the plane.
+			Rect<GLfloat> dimensions;
 
-		// This class requires a pointer to the camera so that it can properly sort particles.
-		Camera3D* camera;
+			// This class requires a pointer to the camera so that it can properly sort particles.
+			Camera3D* camera;
 
-		void setupParticlePositioning(size_t whichParticle, size_t numberOfParticles);
-};
+			void setupParticlePositioning(size_t whichParticle, size_t numberOfParticles);
+	};
+}

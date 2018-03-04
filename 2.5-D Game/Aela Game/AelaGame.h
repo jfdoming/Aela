@@ -27,7 +27,7 @@ namespace Game {
 				window = engine->getWindow();
 				renderer = engine->getRenderer();
 				eventHandler = engine->getEventHandler();
-				timeManager = engine->getTimeManager();
+				timeManager = engine->getTime();
 				sceneManager = engine->getSceneManager();
 				resourceManager = engine->getResourceManager();
 				audioPlayer = engine->getAudioPlayer();
@@ -61,7 +61,7 @@ namespace Game {
 			Window* window;
 			GLRenderer* renderer;
 			EventHandler* eventHandler;
-			TimeManager* timeManager;
+			Time* timeManager;
 			SceneManager* sceneManager;
 			ResourceManager* resourceManager;
 			AudioPlayer* audioPlayer;

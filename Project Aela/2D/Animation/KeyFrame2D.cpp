@@ -8,6 +8,8 @@
 #include "KeyFrame2D.h"
 #include <iostream>
 
+using namespace Aela;
+
 void KeyFrame2D::start() {
 	if (object != nullptr) {
 		originalTint = *object->getTint();

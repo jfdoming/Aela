@@ -14,6 +14,8 @@
 
 // GLuint loadBMP_custom(const char* imagepath);
 
+using namespace Aela;
+
 GLuint loadDDSToGLuint(std::string filePath);
 GLTexture loadDDSToTexture(std::string filePath);
 void loadDDSToCubemapSide(GLuint* cubeMap, int side, std::string filePath);

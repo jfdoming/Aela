@@ -13,6 +13,8 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <iostream>
 
+using namespace Aela;
+
 void BoundingBox3D::generateVertices() {
 	vertices.clear();
 

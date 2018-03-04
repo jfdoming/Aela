@@ -9,7 +9,7 @@
 #include "../../Old Garbage/texture.hpp"
 #include "../../Error Handler/ErrorHandler.h"
 #include "../../Old Garbage/shader.hpp"
-#include "../../Time Manager/TimeManager.h"
+#include "../../Time/Time.h"
 #include <freetype/ftglyph.h>
 #include <iostream>
 

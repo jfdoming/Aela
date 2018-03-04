@@ -8,27 +8,29 @@
 #pragma once
 #include <functional>
 
-enum class KeyFrameType {
-	GENERIC, TWO_DIMENSIONAL, THREE_DIMENSIONAL
-};
+namespace Aela {
+	enum class KeyFrameType {
+		GENERIC, TWO_DIMENSIONAL, THREE_DIMENSIONAL
+	};
 
-class KeyFrame {
-	public:
-		KeyFrame() {}
+	class KeyFrame {
+		public:
+			KeyFrame() {}
 
-		virtual KeyFrameType getType() {
-			return KeyFrameType::GENERIC;
-		}
+			virtual KeyFrameType getType() {
+				return KeyFrameType::GENERIC;
+			}
 
-		virtual void start();
-		bool hasBeenStarted();
+			virtual void start();
+			bool hasBeenStarted();
 
-		void setEndingAction(std::function<void()> endingAction);
-		std::function<void()> getEndingAction();
+			void setEndingAction(std::function<void()> endingAction);
+			std::function<void()> getEndingAction();
 
-	protected:
-		// A keyframe can run an std::function after its life has been completed.
-		std::function<void()> endingAction = nullptr;
+		protected:
+			// A keyframe can run an std::function after its life has been completed.
+			std::function<void()> endingAction = nullptr;
 
-		bool started = false;
-};
+			bool started = false;
+	};
+}

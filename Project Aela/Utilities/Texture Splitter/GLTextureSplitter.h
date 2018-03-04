@@ -2,7 +2,7 @@
 * Class: OpenGL Texture Splitter
 * Author: Robert Ciborowski
 * Date: 03/12/2017
-* Description: A utility class generates multiple new textures by splitting an existing one.
+* Description: A utility class which generates multiple new textures by splitting an existing one.
 */
 
 #pragma once

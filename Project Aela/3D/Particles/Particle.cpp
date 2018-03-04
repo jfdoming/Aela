@@ -7,6 +7,8 @@
 
 #include "Particle.h"
 
+using namespace Aela;
+
 float Particle::getSpeed() {
 	return baseSpeed;
 }

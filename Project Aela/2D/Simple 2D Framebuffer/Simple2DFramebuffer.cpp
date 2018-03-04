@@ -7,6 +7,8 @@
 
 #include "Simple2DFramebuffer.h"
 
+using namespace Aela;
+
 unsigned int* Simple2DFramebuffer::getFramebuffer() {
 	return &framebuffer;
 }

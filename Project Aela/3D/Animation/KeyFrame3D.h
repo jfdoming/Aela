@@ -14,41 +14,43 @@
 #include "../Transformable/Transformable3D.h"
 #include "../../Utilities/Transformations/PointRotation3D.h"
 
-class KeyFrame3D : public KeyFrame {
-	public:
-		KeyFrame3D() {
+namespace Aela {
+	class KeyFrame3D : public KeyFrame {
+		public:
+			KeyFrame3D() {
 
-		}
+			}
 
-		KeyFrameType getType();
-		virtual void start();
+			KeyFrameType getType();
+			virtual void start();
 
-		// These are getters and setters.
-		void setObject(Transformable3D* object), setTranslation(glm::vec3* position), setRotation(glm::vec3* rotation),
-			setPointRotation(PointRotation3D* pointRotation), setScaling(glm::vec3* scaling);
-		Transformable3D* getObject();
-		glm::vec3* getPosition(), *getRotation(), *getScaling(), *getOriginalPosition(), *getOriginalRotation(), *getOriginalScaling();
-		PointRotation3D* getPointRotation(), *getOriginalPointRotation();
-		void setUseTranslation(bool use), setUseRotation(bool use), setUsePointRotation(bool use), setUseScaling(bool use);
-		bool isUsingTranslation(), isUsingRotation(), isUsingPointRotation(), isUsingScaling();
+			// These are getters and setters.
+			void setObject(Transformable3D* object), setTranslation(glm::vec3* position), setRotation(glm::vec3* rotation),
+				setPointRotation(PointRotation3D* pointRotation), setScaling(glm::vec3* scaling);
+			Transformable3D* getObject();
+			glm::vec3* getPosition(), *getRotation(), *getScaling(), *getOriginalPosition(), *getOriginalRotation(), *getOriginalScaling();
+			PointRotation3D* getPointRotation(), *getOriginalPointRotation();
+			void setUseTranslation(bool use), setUseRotation(bool use), setUsePointRotation(bool use), setUseScaling(bool use);
+			bool isUsingTranslation(), isUsingRotation(), isUsingPointRotation(), isUsingScaling();
 
-	private:
-		// When using 3D transformations on a Transformable3D, make sure that you set object to a value first! Also,
-		// if you do not need to use one of the transformations (such as if you do not need to modify the rotation of
-		// the object), just don't set that transformation to a value and it will not have an effect on the object due
-		// to the way it is auto-initialised.
+		private:
+			// When using 3D transformations on a Transformable3D, make sure that you set object to a value first! Also,
+			// if you do not need to use one of the transformations (such as if you do not need to modify the rotation of
+			// the object), just don't set that transformation to a value and it will not have an effect on the object due
+			// to the way it is auto-initialised.
 
-		// The object is NOT a shared ptr like in a 2D keyframe since menu objects are meant to be allocated to the heap and
-		// shared while 3D transformables are meant to be stored inside of a map.
-		Transformable3D* object = nullptr;
-		glm::vec3 position, originalPosition;
-		glm::vec3 rotation, originalRotation;
-		PointRotation3D pointRotation, originalPointRotation;
-		glm::vec3 scaling = glm::vec3(1), originalScaling;
+			// The object is NOT a shared ptr like in a 2D keyframe since menu objects are meant to be allocated to the heap and
+			// shared while 3D transformables are meant to be stored inside of a map.
+			Transformable3D* object = nullptr;
+			glm::vec3 position, originalPosition;
+			glm::vec3 rotation, originalRotation;
+			PointRotation3D pointRotation, originalPointRotation;
+			glm::vec3 scaling = glm::vec3(1), originalScaling;
 
-		// These are booleans which specify whether a property of the object should be modified. Even if not modifying one of these
-		// properties in a key frame, it's usually okay to leave it as being used since the animator will just force that value to
-		// stay the same throughout the keyframe. Setting one of these values to false is only necessary if something else, such as a
-		// KeyedAnimator, needs to modify that value.
-		bool useTranslation = true, useRotation = true, usePointRotation = true, useScaling = true;
-};
+			// These are booleans which specify whether a property of the object should be modified. Even if not modifying one of these
+			// properties in a key frame, it's usually okay to leave it as being used since the animator will just force that value to
+			// stay the same throughout the keyframe. Setting one of these values to false is only necessary if something else, such as a
+			// KeyedAnimator, needs to modify that value.
+			bool useTranslation = true, useRotation = true, usePointRotation = true, useScaling = true;
+	};
+}

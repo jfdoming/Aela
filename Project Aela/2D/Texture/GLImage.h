@@ -13,25 +13,27 @@
 #include <GL/glew.h>
 #include "Image.h"
 
-class GLImage : public Image {
-	public:
-		GLImage() {
-			dimensions.setValues(0, 0, 0, 0);
-		}
+namespace Aela {
+	class GLImage : public Image {
+		public:
+			GLImage() {
+				dimensions.setValues(0, 0, 0, 0);
+			}
 
-		virtual ~GLImage() {
-			deleteImage();
-		}
-
-		void setTexture(unsigned int texture) {
-			if (texture != 0) {
+			virtual ~GLImage() {
 				deleteImage();
 			}
-			this->texture = texture;
-		}
 
-	private:
-		void deleteImage() {
-			glDeleteTextures(1, &texture);
-		}
-};
+			void setTexture(unsigned int texture) {
+				if (texture != 0) {
+					deleteImage();
+				}
+				this->texture = texture;
+			}
+
+		private:
+			void deleteImage() {
+				glDeleteTextures(1, &texture);
+			}
+	};
+}

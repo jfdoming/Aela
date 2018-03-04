@@ -10,15 +10,17 @@
 #include "../../2D/Texture/GLImage.h"
 #include "Simple2DFramebuffer.h"
 
-class Simple2DGLFramebuffer : public Simple2DFramebuffer {
-	public:
-		Simple2DGLFramebuffer() {
+namespace Aela {
+	class Simple2DGLFramebuffer : public Simple2DFramebuffer {
+		public:
+			Simple2DGLFramebuffer() {
 
-		}
+			}
 
-		Image* getFramebufferImage();
-		Image* getMultisampledFramebufferImage();
+			Image* getFramebufferImage();
+			Image* getMultisampledFramebufferImage();
 
-	private:
-		GLImage framebufferTexture, multisampledFramebufferTexture;
-};
+		private:
+			GLImage framebufferTexture, multisampledFramebufferTexture;
+	};
+}

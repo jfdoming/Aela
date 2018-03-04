@@ -11,12 +11,14 @@
 #include "../../Animation/AnimationTrack.h"
 #include "KeyFrame2D.h"
 
-class AnimationTrack2D : public AnimationTrack<KeyFrame2D> {
-	public:
-		AnimationTrack2D() {
+namespace Aela {
+	class AnimationTrack2D : public AnimationTrack<KeyFrame2D> {
+		public:
+			AnimationTrack2D() {
 
-		}
+			}
 
 
-	private:
-};
+		private:
+	};
+}

@@ -35,6 +35,4 @@ bool Aela::GLTextureSplitter::split(GLTexture* texture, unsigned int newTextureW
 			}
 		}
 	}
-
-
 }

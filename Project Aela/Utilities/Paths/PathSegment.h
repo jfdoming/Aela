@@ -7,34 +7,36 @@
 
 #pragma once
 
-class PathSegment {
-	public:
-		PathSegment() {
+namespace Aela {
+	class PathSegment {
+		public:
+			PathSegment() {
 
-		}
+			}
 
-		PathSegment(double magnitude, double speed) {
-			this->magnitude = magnitude;
-			this->speed = speed;
-		}
+			PathSegment(double magnitude, double speed) {
+				this->magnitude = magnitude;
+				this->speed = speed;
+			}
 
-		void setMagnitude(double magnitude) {
-			this->magnitude = magnitude;
-		}
-		
-		
-		void setSpeed(double speed) {
-			this->speed = speed;
-		}
+			void setMagnitude(double magnitude) {
+				this->magnitude = magnitude;
+			}
 
-		double getMagnitude() {
-			return magnitude;
-		}
-		
-		double getSpeed() {
-			return speed;
-		}
 
-	protected:
-		double magnitude = 0, speed = 0;
-};
+			void setSpeed(double speed) {
+				this->speed = speed;
+			}
+
+			double getMagnitude() {
+				return magnitude;
+			}
+
+			double getSpeed() {
+				return speed;
+			}
+
+		protected:
+			double magnitude = 0, speed = 0;
+	};
+}

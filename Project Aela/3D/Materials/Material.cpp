@@ -7,6 +7,8 @@
 
 #include "Material.h"
 
+using namespace Aela;
+
 Texture* Aela::Material::getTexture() {
 	return texture;
 }

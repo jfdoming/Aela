@@ -1,5 +1,5 @@
 /*
-* Class: Time Manager
+* Class: Time
 * Author: Robert Ciborowski
 * Date: November 2016
 * Description: A header-only class for time management.
@@ -13,9 +13,9 @@ using steady_clock = std::chrono::steady_clock;
 using time_point = std::chrono::time_point<steady_clock>;
 
 namespace Aela {
-	class TimeManager {
+	class Time {
 		public:
-			TimeManager() {
+			Time() {
 				updateTime();
 			}
 

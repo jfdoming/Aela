@@ -7,3 +7,5 @@
 
 #pragma once
 #include "PointParticleEmitter.h"
+
+using namespace Aela;

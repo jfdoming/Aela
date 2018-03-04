@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include "../Window/Window.h"
 #include "../3D/Camera/Camera3D.h"
-#include "../Time Manager/TimeManager.h"
+#include "../Time/Time.h"
 #include "../Events/Event.h"
 #include <time.h>
 
@@ -42,7 +42,7 @@ namespace Aela {
 
 		// These are setters and getters of the control manager.
 		void setWindow(Window* setWindow);
-		void setTimeManager(TimeManager* setTime);
+		void setTime(Time* setTime);
 		void setCameraUpsideDownAllowance(bool allowUpsdideDown);
 		void setProperty(ControlManagerProperty property, float value);
 		void updateKeystate(const Uint8* _keystate);
@@ -56,7 +56,7 @@ namespace Aela {
 
 		private:
 		// These are pointers to other Aela classes.
-		TimeManager* timeManager;
+		Time* timeManager;
 		Window* window;
 		const Uint8* keystate;
 

@@ -16,6 +16,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
+using namespace Aela;
+
 void Transformable3D::setPosition(float setX, float setY, float setZ) {
 	position = glm::vec3(setX, setY, setZ);
 }

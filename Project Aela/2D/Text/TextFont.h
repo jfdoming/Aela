@@ -10,23 +10,25 @@
 #include <ft2build.h>
 #include <freetype/freetype.h>
 
-class TextFont {
-	public:
-		TextFont() {
+namespace Aela {
+	class TextFont {
+		public:
+			TextFont() {
 
-		}
+			}
 
-		TextFont(FT_Face* face) {
-			this->face = *face;
-		}
+			TextFont(FT_Face* face) {
+				this->face = *face;
+			}
 
-		// These are the getters and setters.
-		void setFace(FT_Face* face);
-		FT_Face* getFace();
-		void setSize(unsigned int size);
-		unsigned int getSize();
+			// These are the getters and setters.
+			void setFace(FT_Face* face);
+			FT_Face* getFace();
+			void setSize(unsigned int size);
+			unsigned int getSize();
 
-	private:
-		FT_Face face;
-		unsigned int size = 0;
-};
+		private:
+			FT_Face face;
+			unsigned int size = 0;
+	};
+}

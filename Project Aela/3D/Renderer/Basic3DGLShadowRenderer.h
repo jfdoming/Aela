@@ -12,35 +12,35 @@
 
 #include <map>
 
-using namespace Aela;
+namespace Aela {
+	class Basic3DGLShadowRenderer {
+		public:
+			Basic3DGLShadowRenderer() {
 
-class Basic3DGLShadowRenderer {
-	public:
-		Basic3DGLShadowRenderer() {
+			}
 
-		}
+			void startRenderingShadows(GLuint depthProgramID);
+			void renderInstancedShadows(Map3D* map, std::vector<long long>* entities, size_t start, size_t end,
+				GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::unordered_map<long long, LightEntity>* lights, GLuint lightPositionsID);
+			void endRenderingShadows();
 
-		void startRenderingShadows(GLuint depthProgramID);
-		void renderInstancedShadows(Map3D* map, std::vector<long long>* entities, size_t start, size_t end,
-			GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::unordered_map<long long, LightEntity>* lights, GLuint lightPositionsID);
-		void endRenderingShadows();
+			// This adds a model's shadow to the shadow map.
+			void renderUninstancedShadow(ModelEntity* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<LightEntity>* lights, GLuint lightPositionsID);
 
-		// This adds a model's shadow to the shadow map.
-		void renderUninstancedShadow(ModelEntity* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<LightEntity>* lights, GLuint lightPositionsID);
+			// This clears all shadow maps of lights.
+			void clearShadowMaps(std::unordered_map<long long, LightEntity>* lights);
 
-		// This clears all shadow maps of lights.
-		void clearShadowMaps(std::unordered_map<long long, LightEntity>* lights);
+			// These are getters and setters.
+			unsigned int getDepthTextureWidth();
+			unsigned int getDepthTextureHeight();
 
-		// These are getters and setters.
-		unsigned int getDepthTextureWidth();
-		unsigned int getDepthTextureHeight();
+			// This is for debugging.
+			void renderTestCube();
 
-		// This is for debugging.
-		void renderTestCube();
+		private:
+			const unsigned int DEPTH_TEXTURE_WIDTH = 2048, DEPTH_TEXTURE_HEIGHT = 2048;
+			const unsigned int MAX_LIGHT_AMOUNT = 5;
 
-	private:
-		const unsigned int DEPTH_TEXTURE_WIDTH = 2048, DEPTH_TEXTURE_HEIGHT = 2048;
-		const unsigned int MAX_LIGHT_AMOUNT = 5;
-
-		GLuint vertexBuffer, elementBuffer;
-};
+			GLuint vertexBuffer, elementBuffer;
+	};
+}

@@ -10,7 +10,7 @@
 // These are headers that are part of Project Aela.
 #include "Window/Window.h"
 #include "Error Handler/ErrorHandler.h"
-#include "Time Manager/TimeManager.h"
+#include "Time/Time.h"
 #include "2D/Text/FontManager.h"
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
@@ -61,7 +61,7 @@ namespace Aela {
 			GLRenderer& getRendererReference();
 			GLRenderer* getRenderer();
 			EventHandler* getEventHandler();
-			TimeManager* getTimeManager();
+			Time* getTime();
 			FontManager* getFontManager();
 			LuaManager* getLuaManager();
 			SceneManager* getSceneManager();
@@ -79,7 +79,7 @@ namespace Aela {
 			Window window;
 			GLRenderer renderer;
 			EventHandler eventHandler;
-			TimeManager timeManager;
+			Time timeManager;
 			FontManager fontManager;
 			LuaManager luaManager;
 			SceneManager sceneManager;

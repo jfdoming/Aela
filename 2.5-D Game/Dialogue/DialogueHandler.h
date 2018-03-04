@@ -7,7 +7,7 @@
 
 #pragma once
 #include "../Scripts/ScriptManager.h"
-#include "Time Manager\TimeManager.h"
+#include "Time\Time.h"
 #include "Menus/SubMenu.h"
 #include "Menus/Label.h"
 #include "DialogueOption.h"
@@ -21,7 +21,7 @@ namespace Game {
 		public:
 			DialogueHandler() {}
 
-			void setup(TimeManager* timeManager, EventHandler* eventHandler, ScriptManager* scriptManager);
+			void setup(Time* timeManager, EventHandler* eventHandler, ScriptManager* scriptManager);
 			void update();
 
 			// This is triggered on an event.
@@ -40,7 +40,7 @@ namespace Game {
 			bool dialogueIsBeingShown();
 			bool hadJustFinishedDialogue();
 		private:
-			TimeManager* timeManager;
+			Time* timeManager;
 			ScriptManager* scriptManager;
 			std::shared_ptr<SubMenu> dialogueSubMenu;
 			std::shared_ptr<Label> label1, label2, label3, label4;

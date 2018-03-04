@@ -56,19 +56,19 @@ int main(int argc, char *args[]) {
 
 	// This is temporary and is here for framerate.
 	FramerateCalculator calc;
-	int lastRemainder = engine.getTimeManager()->getCurrentTimeInMillis() % 1000;
+	int lastRemainder = engine.getTime()->getCurrentTimeInMillis() % 1000;
 
 	do {
 		engine.update();
 		game.update();
 		engine.render();
 
-		if (engine.getTimeManager()->getCurrentTimeInMillis() % 1000 < lastRemainder || engine.getTimeManager()->getTimeBetweenFramesInMillis() >= 1000) {
-			calc.calculate(engine.getTimeManager()->getCurrentTimeInNanos(), engine.getTimeManager()->getTimeBetweenFramesInNanos());
+		if (engine.getTime()->getCurrentTimeInMillis() % 1000 < lastRemainder || engine.getTime()->getTimeBetweenFramesInMillis() >= 1000) {
+			calc.calculate(engine.getTime()->getCurrentTimeInNanos(), engine.getTime()->getTimeBetweenFramesInNanos());
 			std::cout << calc.getSmoothedFPS() << " FPS\n";
 		}
 
-		lastRemainder = engine.getTimeManager()->getCurrentTimeInMillis() % 1000;
+		lastRemainder = engine.getTime()->getCurrentTimeInMillis() % 1000;
 	} while (!engine.shouldExit());
 
 	game.cleanup();

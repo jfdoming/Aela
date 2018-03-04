@@ -10,18 +10,20 @@
 #include "Component.h"
 #include "../Utilities/Rect/Rect.h"
 
-class RectComponent : public Component {
-	public:
-		RectComponent();
-		virtual ~RectComponent();
+namespace Aela {
+	class RectComponent : public Component {
+		public:
+			RectComponent();
+			virtual ~RectComponent();
 
-		virtual void updateComponent();
-		virtual void renderComponent(GLRenderer& renderer);
+			virtual void updateComponent();
+			virtual void renderComponent(GLRenderer& renderer);
 
-		// These are the getters and setters.
-		void setColour(ColourRGBA* colour);
-		ColourRGBA* getColour();
+			// These are the getters and setters.
+			void setColour(ColourRGBA* colour);
+			ColourRGBA* getColour();
 
-	private:
-		ColourRGBA colour;
-};
+		private:
+			ColourRGBA colour;
+	};
+}

@@ -6,13 +6,9 @@
 */
 
 #include "ControlManager.h"
-
-// This includes GLM.
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
 using namespace Aela;
-
 #include "../Error Handler/ErrorHandler.h"
 #include <iostream>
 
@@ -24,7 +20,7 @@ void ControlManager::setWindow(Window* setWindow) {
 	window = setWindow;
 }
 
-void ControlManager::setTimeManager(TimeManager* setTime) {
+void ControlManager::setTime(Time* setTime) {
 	timeManager = setTime;
 }
 

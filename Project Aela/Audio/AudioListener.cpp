@@ -1,5 +1,7 @@
 #include "AudioListener.h"
 
+using namespace Aela;
+
 AudioListener::AudioListener() {
 }
 

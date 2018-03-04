@@ -99,9 +99,9 @@ void GLRenderer::setWindow(Window* window) {
 	this->window = window;
 }
 
-void GLRenderer::setTimeManager(TimeManager* timeManager) {
+void GLRenderer::setTime(Time* timeManager) {
 	this->timeManager = timeManager;
-	camera.setTimeManager(timeManager);
+	camera.setTime(timeManager);
 }
 
 void GLRenderer::setFontManager(FontManager* fontManager) {
@@ -469,7 +469,7 @@ Window* GLRenderer::getWindow() {
 	return window;
 }
 
-TimeManager* GLRenderer::getTimeManager() {
+Time* GLRenderer::getTime() {
 	return timeManager;
 }
 

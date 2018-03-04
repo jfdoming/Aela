@@ -155,9 +155,7 @@
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneManager.h" />
     <ClInclude Include="Scenes\stdafx.h" />
-    <ClInclude Include="Time Manager\TimeManager.h" />
     <ClInclude Include="User Environment\UserEnvironment.h" />
-    <ClInclude Include="Utilities\AelaEngineFunctor.h" />
     <ClInclude Include="Utilities\Colour\ColourRGB.h" />
     <ClInclude Include="Utilities\Colour\ColourRGBA.h" />
     <ClInclude Include="Utilities\Rect\Cuboid.h" />
@@ -212,5 +210,6 @@
     <ClInclude Include="Old Garbage\shader.hpp" />
     <ClInclude Include="Old Garbage\texture.hpp" />
     <ClInclude Include="Transformable\Transformable.h" />
+    <ClInclude Include="Time\Time.h" />
   </ItemGroup>
 </Project>

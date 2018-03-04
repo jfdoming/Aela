@@ -7,6 +7,8 @@
 
 #include "FramerateCalculator.h"
 
+using namespace Aela;
+
 void FramerateCalculator::calculate(long long currentTimeInNanos, long long timeBetweenFrames) {
 	// This does some simple math for framerate calculating.
 	if ((currentTimeInNanos - timeOfLastFrameCheck) >= timeBetweenFrameChecks) {

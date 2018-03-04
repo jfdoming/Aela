@@ -7,6 +7,8 @@
 
 #include "KeyFrame3D.h"
 
+using namespace Aela;
+
 KeyFrameType KeyFrame3D::getType() {
 	return KeyFrameType::THREE_DIMENSIONAL;
 }
@@ -53,6 +55,10 @@ void KeyFrame3D::setPointRotation(PointRotation3D* pointRotation) {
 
 PointRotation3D* KeyFrame3D::getPointRotation() {
 	return &pointRotation;
+}
+
+PointRotation3D* Aela::KeyFrame3D::getOriginalPointRotation() {
+	return &originalPointRotation;
 }
 
 void KeyFrame3D::setUseTranslation(bool use) {

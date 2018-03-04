@@ -10,42 +10,44 @@
 #pragma once
 #include "../../Utilities/Rect/Rect.h"
 
-class Image {
-	public:
-		Image() {
-			dimensions.setValues(0, 0, 0, 0);
+namespace Aela {
+	class Image {
+		public:
+			Image() {
+				dimensions.setValues(0, 0, 0, 0);
+			}
+
+			virtual ~Image() {
+				// Remember to delete texture in your subclass's destructor!
+			}
+
+			// These are some getters and setters.
+			void setDimensions(Rect<int>* dimensions) {
+				this->dimensions = *dimensions;
+			}
+
+			void setDimensions(int x, int y, int width, int height) {
+				dimensions.setValues(x, y, width, height);
+			}
+
+			Rect<int>* getDimensions() {
+				return &dimensions;
+			}
+
+			unsigned int* getTexture() {
+				return &texture;
+			}
+
+			// This function returns if the object was initialised properly. If it is not
+			// initialised then rendering propblems will occur. Note that a GLTexture is still
+			// initialised if the output (dimensions on the screen) has a width and/or height
+			// of zero.
+			bool isInitialised() {
+				return (dimensions.getWidth() > 0 && dimensions.getHeight() > 0 && texture != 0);
 		}
 
-		virtual ~Image() {
-			// Remember to delete texture in your subclass's destructor!
-		}
-
-		// These are some getters and setters.
-		void setDimensions(Rect<int>* dimensions) {
-			this->dimensions = *dimensions;
-		}
-
-		void setDimensions(int x, int y, int width, int height) {
-			dimensions.setValues(x, y, width, height);
-		}
-
-		Rect<int>* getDimensions() {
-			return &dimensions;
-		}
-
-		unsigned int* getTexture() {
-			return &texture;
-		}
-
-		// This function returns if the object was initialised properly. If it is not
-		// initialised then rendering propblems will occur. Note that a GLTexture is still
-		// initialised if the output (dimensions on the screen) has a width and/or height
-		// of zero.
-		bool isInitialised() {
-			return (dimensions.getWidth() > 0 && dimensions.getHeight() > 0 && texture != 0);
-		}
-
-	protected:
-		Rect<int> dimensions;
-		unsigned int texture = 0;
-};
+		protected:
+			Rect<int> dimensions;
+			unsigned int texture = 0;
+	};
+}

@@ -12,25 +12,26 @@
 #include "../../Animation/KeyFrame.h"
 #include "../Transformable/Transformable2D.h"
 
-class KeyFrame2D : public KeyFrame {
-	public:
-		KeyFrame2D() : tint(1, 1, 1, 1), dimensions(0, 0, 0, 0) {
-		}
+namespace Aela {
+	class KeyFrame2D : public KeyFrame {
+		public:
+			KeyFrame2D() : tint(1, 1, 1, 1), dimensions(0, 0, 0, 0) {}
 
-		virtual void start();
+			virtual void start();
 
-		KeyFrameType getType();
-		void setObject(std::shared_ptr<Transformable2D> object);
-		std::shared_ptr<Transformable2D> getObject();
-		void setTint(ColourRGBA* tint);
-		ColourRGBA* getTint();
-		ColourRGBA* getOriginalTint();
-		void setDimensions(Rect<int>* dimensions);
-		Rect<int>* getDimensions();
-		Rect<int>* getOriginalDimensions();
+			KeyFrameType getType();
+			void setObject(std::shared_ptr<Transformable2D> object);
+			std::shared_ptr<Transformable2D> getObject();
+			void setTint(ColourRGBA* tint);
+			ColourRGBA* getTint();
+			ColourRGBA* getOriginalTint();
+			void setDimensions(Rect<int>* dimensions);
+			Rect<int>* getDimensions();
+			Rect<int>* getOriginalDimensions();
 
-	private:
-		std::shared_ptr<Transformable2D> object = nullptr;
-		ColourRGBA tint, originalTint;
-		Rect<int> dimensions, originalDimensions;
-};
+		private:
+			std::shared_ptr<Transformable2D> object = nullptr;
+			ColourRGBA tint, originalTint;
+			Rect<int> dimensions, originalDimensions;
+	};
+}

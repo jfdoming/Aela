@@ -7,6 +7,8 @@
 
 #include "LightEntity.h"
 
+using namespace Aela;
+
 void LightEntity::useDefaultValues() {
 	position = glm::vec3(0, 0, 0);
 	rotation = glm::vec3(0, 0, 0);

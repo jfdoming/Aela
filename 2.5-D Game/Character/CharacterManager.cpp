@@ -13,7 +13,7 @@
 
 using namespace Game;
 
-void Game::CharacterManager::setup(ResourceManager* resourceManager, Animator* animator, Camera3D* camera, TimeManager* timeManager,
+void Game::CharacterManager::setup(ResourceManager* resourceManager, Animator* animator, Camera3D* camera, Time* timeManager,
 	ScriptManager* scriptManager) {
 	this->resourceManager = resourceManager;
 	this->animator = animator;

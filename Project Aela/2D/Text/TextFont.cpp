@@ -7,6 +7,8 @@
 
 #include "TextFont.h"
 
+using namespace Aela;
+
 FT_Face* TextFont::getFace() {
 	return &face;
 }

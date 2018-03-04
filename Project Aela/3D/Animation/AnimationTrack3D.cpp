@@ -7,3 +7,5 @@
 
 
 #include "AnimationTrack3D.h"
+
+using namespace Aela;

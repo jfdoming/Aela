@@ -7,6 +7,8 @@
 
 #include "Simple2DGLFramebuffer.h"
 
+using namespace Aela;
+
 Image* Simple2DGLFramebuffer::getFramebufferImage() {
 	return &framebufferTexture;
 }

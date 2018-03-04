@@ -87,7 +87,6 @@ void Game::Character::animationHasEnded() {
 	moving = false;
 	animationHadJustEnded = true;
 	timePassedAfterAnimationEnd = entity->getTimePassedAfterAnimationEnd();
-	std::cout << "Animation has ended.\n";
 }
 
 void Game::Character::onTrackEnd(std::string trackID) {

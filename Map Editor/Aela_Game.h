@@ -17,7 +17,7 @@ class AelaGame {
 			window = engine->getWindow();
 			renderer = engine->getRenderer();
 			eventHandler = engine->getEventHandler();
-			timeManager = engine->getTimeManager();
+			timeManager = engine->getTime();
 			luaManager = engine->getLuaManager();
 			sceneManager = engine->getSceneManager();
 			resourceManager = engine->getResourceManager();
@@ -54,7 +54,7 @@ class AelaGame {
 		Window* window;
 		GLRenderer* renderer;
 		EventHandler* eventHandler;
-		TimeManager* timeManager;
+		Time* timeManager;
 		LuaManager* luaManager;
 		SceneManager* sceneManager;
 		ResourceManager* resourceManager;

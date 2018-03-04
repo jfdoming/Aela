@@ -7,11 +7,13 @@
 
 #pragma once
 
-class Transformable {
-	public:
-		Transformable() {}
+namespace Aela {
+	class Transformable {
+		public:
+			Transformable() {}
 
-		// There used to be things in this class...
+			// There used to be things in this class...
 
-	private:
-};
+		private:
+	};
+}

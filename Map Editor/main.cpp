@@ -64,7 +64,7 @@ int main(int argc, char *args[]) {
 		game.update();
 		engine.render();
 		if (counter >= 100) {
-			fpsCalculator.calculate(engine.getTimeManager()->getCurrentTimeInNanos(), engine.getTimeManager()->getTimeBetweenFramesInNanos());
+			fpsCalculator.calculate(engine.getTime()->getCurrentTimeInNanos(), engine.getTime()->getTimeBetweenFramesInNanos());
 			std::cout << fpsCalculator.getSmoothedFPS() << " FPS\n";
 			counter = 0;
 		}

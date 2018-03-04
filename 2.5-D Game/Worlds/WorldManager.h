@@ -34,7 +34,7 @@ namespace Game {
 			}
 
 			bool setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator, Camera3D* camera,
-				TimeManager* timeManager, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player);
+				Time* timeManager, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player);
 			void update();
 
 			void rebuildMapWhenPossible();

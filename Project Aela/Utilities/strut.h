@@ -1,6 +1,6 @@
 /*
 * Name: String Utilities
-* Author: Julian Dominguez-Schatz
+* Author: Julian Dominguez-Schatz, Robert Ciborowski
 * Date: August 2017
 * Description: A file used for performing operations on strings.
 */

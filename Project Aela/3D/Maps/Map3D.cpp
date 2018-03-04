@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
+using namespace Aela;
+
 SkyboxEntity* Map3D::getSkybox(long long id) {
 	return &skyboxes[id];
 }

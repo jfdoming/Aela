@@ -51,7 +51,7 @@ bool Camera3D::isForcingCursorToMiddle() {
 	return forceCursorToMiddle;
 }
 
-void Camera3D::setTimeManager(TimeManager* timeManager) {
+void Camera3D::setTime(Time* timeManager) {
 	this->timeManager = timeManager;
 }
 
