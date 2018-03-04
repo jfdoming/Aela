@@ -88,7 +88,7 @@ namespace Game {
 			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false;
 			bool pressingRight = false, pressingForward = false, pressingLeft = false, pressingBackward = false;
 			bool pressingTileSelectUp = false, pressingTileSelectDown = false, pressingTileSwitch = false;
-			long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 200000000;
+			long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 190000000;
 			bool pressingReturn = false;
 
 			float distanceBetweenPlayerAndCamera = 6.0f, angleBetweenPlayerAndCamera = (float) THIRD_PI;

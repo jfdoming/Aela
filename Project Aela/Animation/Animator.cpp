@@ -14,17 +14,11 @@
 // called once anyways.
 void Animator::update() {
 	long long timePassed = timeManager->getTimeBetweenFramesInNanos();
-	
-	for (size_t which3DTrack = 0; which3DTrack < tracks3D.size(); which3DTrack++) {
+
+	size_t track3DSize = tracks3D.size();
+	for (size_t which3DTrack = 0; which3DTrack < track3DSize; which3DTrack++) {
 		AnimationTrack3D& track = tracks3D[which3DTrack];
 		track.updatePositionInTrack(timePassed);
-
-		// std::cout << "Updating track: " << track.getTag() << "\n";
-
-		// This statement should not be triggered. However, it used to...
-		if (track.getKeyFrames()->size() == 0) {
-			continue;
-		}
 
 		auto& firstFramePair = track.getKeyFrames()->at(0);
 
@@ -37,6 +31,8 @@ void Animator::update() {
 
 		long long endTime = firstFramePair.first;
 		long long timeSinceKeyFrameStart = track.getPositionInTrack() + 1;
+
+		std::cout << firstFramePair.first << " vs " << track.getPositionInTrack() << "\n";
 
 		// Check if this keyframe should have ended by now. If it has, perform the actions necessary.
 		if (firstFramePair.first <= track.getPositionInTrack()) {
@@ -81,6 +77,8 @@ void Animator::update() {
 
 			if (track.getKeyFrames()->size() == 0) {
 				tracks3D.erase(tracks3D.begin() + which3DTrack);
+				which3DTrack--;
+				track3DSize--;
 				continue;
 			}
 
@@ -129,8 +127,12 @@ void Animator::update() {
 			if (keyFrame.isUsingTranslation() && keyFrame.isUsingPointRotation()) {
 				object->setPosition(*originalPosition + newPosition + glm::vec3(pointRotationMatrix
 					* glm::vec4(*keyFrame.getPointRotation()->getPoint() * glm::vec3(-1), 0)) + *keyFrame.getPointRotation()->getPoint());
+				glm::vec3 pos = *originalPosition + newPosition;
+				std::cout << track.getTag() << " pos: " << pos.x << ", " << pos.y << ", " << pos.z << "\n";
 			} else if (keyFrame.isUsingTranslation()) {
 				object->setPosition(*originalPosition + newPosition);
+				glm::vec3 pos = *originalPosition + newPosition;
+				std::cout << track.getTag() << " pos: " << pos.x << ", " << pos.y << ", " << pos.z << "\n";
 			}
 
 			// This finds the final rotation values and applies them.
@@ -145,18 +147,11 @@ void Animator::update() {
 		// which3DTrack++;
 	}
 
-	// This will purge any completed 3D tracks. Having this code shouldn't be necessary as completed track get erased above, but
-	// doing this along with the erasing code from above this fixed some random bug at some point...
-	for (size_t i = 0; i < tracks3D.size(); i++) {
-		if (tracks3D[i].getKeyFrames()->size() == 0) {
-			tracks3D.erase(tracks3D.begin() + i);
-			i--;
-		}
-	}
-
 	// This regains the time for accuracy.
 	timePassed = timeManager->getTimeBetweenFramesInNanos();
-	for (size_t which2DTrack = 0; which2DTrack < tracks2D.size(); which2DTrack++) {
+
+	size_t track2DSize = tracks2D.size();
+	for (size_t which2DTrack = 0; which2DTrack < track2DSize; which2DTrack++) {
 		AnimationTrack2D& track = tracks2D[which2DTrack];
 		track.updatePositionInTrack(timePassed);
 
@@ -192,6 +187,8 @@ void Animator::update() {
 
 			if (track.getKeyFrames()->size() == 0) {
 				tracks2D.erase(tracks2D.begin() + which2DTrack);
+				which2DTrack--;
+				track2DSize--;
 				continue;
 			}
 
@@ -226,14 +223,6 @@ void Animator::update() {
 			object->setDimensions(&newDimensions);
 		}
 		// which2DTrack++;
-	}
-
-	// This will purge any completed 2D tracks.
-	for (size_t i = 0; i < tracks2D.size(); i++) {
-		if (tracks2D[i].getKeyFrames()->size() == 0) {
-			tracks2D.erase(tracks2D.begin() + i);
-			i--;
-		}
 	}
 }
 

@@ -321,4 +321,3 @@ void Game::CharacterManager::animateCamera(glm::vec3 translation, float speed, l
 	// track.updatePositionInTrack(timeToAdvanceTrackBy);
 	animator->addAnimationTrack3D(&track);
 }
-
