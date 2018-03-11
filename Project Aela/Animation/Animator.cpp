@@ -140,9 +140,6 @@ void Animator::update() {
 		}
 	}
 
-	// This regains the time for accuracy.
-	timePassed = timeManager->getTimeBetweenFramesInNanos();
-
 	size_t track2DSize = tracks2D.size();
 	for (size_t which2DTrack = 0; which2DTrack < track2DSize; which2DTrack++) {
 		AnimationTrack2D& track = tracks2D[which2DTrack];
@@ -164,12 +161,8 @@ void Animator::update() {
 		// Check if this keyframe should have ended by now. If it has, perform the actions necessary.
 		if (firstFramePair.first <= track.getPositionInTrack()) {
 			if (object != nullptr) {
-				std::shared_ptr<Transformable2D> object = keyFrame.getObject();
-
-				if (object != nullptr) {
-					object->setTint(keyFrame.getTint());
-					object->setDimensions(keyFrame.getDimensions());
-				}
+				object->setTint(keyFrame.getTint());
+				object->setDimensions(keyFrame.getDimensions());
 			}
 
 			if (keyFrame.getEndingAction() != nullptr) {
@@ -212,6 +205,90 @@ void Animator::update() {
 			object->setDimensions(&newDimensions);
 		}
 	}
+
+	size_t trackMaterialSize = tracksMaterial.size();
+	for (size_t whichMaterialTrack = 0; whichMaterialTrack < trackMaterialSize; whichMaterialTrack++) {
+		AnimationTrackMaterial& track = tracksMaterial[whichMaterialTrack];
+		track.updatePositionInTrack(timePassed);
+
+		if (track.getKeyFrames()->size() == 0) {
+			continue;
+		}
+
+		auto& firstFramePair = track.getKeyFrames()->at(0);
+
+		KeyFrameMaterial& keyFrame = firstFramePair.second;
+		Material* material = keyFrame.getMaterial();
+
+		if (!keyFrame.hasBeenStarted()) {
+			keyFrame.start();
+		}
+
+		// Check if this keyframe should have ended by now. If it has, perform the actions necessary.
+		if (firstFramePair.first <= track.getPositionInTrack()) {
+			if (material != nullptr) {
+				material->setTexture(keyFrame.getTexture());
+			}
+
+			if (keyFrame.getEndingAction() != nullptr) {
+				keyFrame.getEndingAction()();
+			}
+
+			track.getKeyFrames()->erase(track.getKeyFrames()->begin());
+
+			if (track.getKeyFrames()->size() == 0) {
+				tracksMaterial.erase(tracksMaterial.begin() + whichMaterialTrack);
+				whichMaterialTrack--;
+				trackMaterialSize--;
+				continue;
+			}
+
+			track.resetPosition();
+			continue;
+		}
+	}
+
+	size_t trackModelSize = tracksModel.size();
+	for (size_t whichModelTrack = 0; whichModelTrack < trackModelSize; whichModelTrack++) {
+		AnimationTrackModel& track = tracksModel[whichModelTrack];
+		track.updatePositionInTrack(timePassed);
+
+		if (track.getKeyFrames()->size() == 0) {
+			continue;
+		}
+
+		auto& firstFramePair = track.getKeyFrames()->at(0);
+
+		KeyFrameModel& keyFrame = firstFramePair.second;
+		ModelEntity* modelEntity = keyFrame.getModelEntity();
+
+		if (!keyFrame.hasBeenStarted()) {
+			keyFrame.start();
+		}
+
+		// Check if this keyframe should have ended by now. If it has, perform the actions necessary.
+		if (firstFramePair.first <= track.getPositionInTrack()) {
+			if (modelEntity != nullptr) {
+				modelEntity->setModel(keyFrame.getModel());
+			}
+
+			if (keyFrame.getEndingAction() != nullptr) {
+				keyFrame.getEndingAction()();
+			}
+
+			track.getKeyFrames()->erase(track.getKeyFrames()->begin());
+
+			if (track.getKeyFrames()->size() == 0) {
+				tracksModel.erase(tracksModel.begin() + whichModelTrack);
+				whichModelTrack--;
+				trackModelSize--;
+				continue;
+			}
+
+			track.resetPosition();
+			continue;
+		}
+	}
 }
 
 void Animator::setTime(Time* timeManager) {
@@ -248,7 +325,37 @@ AnimationTrack2D* Animator::get2DTrack(std::string name) {
 	return nullptr;
 }
 
-int Animator::delete3DTrackByTag(std::string tag) {
+void Aela::Animator::addAnimationTrackMaterial(AnimationTrackMaterial* track) {
+	if (track->getKeyFrames()->size() != 0) {
+		tracksMaterial.push_back(*track);
+	}
+}
+
+AnimationTrackMaterial* Aela::Animator::getMaterialTrack(std::string name) {
+	for (auto& track : tracksMaterial) {
+		if (track.getTag() == name) {
+			return &track;
+		}
+	}
+	return nullptr;
+}
+
+void Aela::Animator::addAnimationTrackModel(AnimationTrackModel* track) {
+	if (track->getKeyFrames()->size() != 0) {
+		tracksModel.push_back(*track);
+	}
+}
+
+AnimationTrackModel* Aela::Animator::getModelTrack(std::string name) {
+	for (auto& track : tracksModel) {
+		if (track.getTag() == name) {
+			return &track;
+		}
+	}
+	return nullptr;
+}
+
+int Animator::delete3DTracksByTag(std::string tag) {
 	int counter = 0;
 	for (unsigned int i = 0; i < tracks3D.size(); i++) {
 		if (tracks3D[i].getTag() == tag) {
@@ -261,7 +368,33 @@ int Animator::delete3DTrackByTag(std::string tag) {
 	return counter;
 }
 
-int Animator::delete2DListsByTag(std::string tag) {
+int Aela::Animator::deleteModelTracksByTag(std::string tag) {
+	int counter = 0;
+	for (unsigned int i = 0; i < tracksModel.size(); i++) {
+		if (tracksModel[i].getTag() == tag) {
+			counter++;
+			if (i != 0) {
+				tracksModel.erase(tracksModel.begin() + i);
+			}
+		}
+	}
+	return counter;
+}
+
+int Aela::Animator::deleteMaterialTracksByTag(std::string tag) {
+	int counter = 0;
+	for (unsigned int i = 0; i < tracksMaterial.size(); i++) {
+		if (tracksMaterial[i].getTag() == tag) {
+			counter++;
+			if (i != 0) {
+				tracksMaterial.erase(tracksMaterial.begin() + i);
+			}
+		}
+	}
+	return counter;
+}
+
+int Animator::delete2DTracksByTag(std::string tag) {
 	int counter = 0;
 	for (unsigned int i = 0; i < tracks2D.size(); i++) {
 		if (tracks2D[i].getTag() == tag) {
@@ -274,10 +407,12 @@ int Animator::delete2DListsByTag(std::string tag) {
 	return counter;
 }
 
-int Animator::deleteListsByTag(std::string tag) {
+int Animator::deleteTracksByTag(std::string tag) {
 	int counter = 0;
-	counter += delete3DTrackByTag(tag);
-	counter += delete2DListsByTag(tag);
+	counter += delete3DTracksByTag(tag);
+	counter += delete2DTracksByTag(tag);
+	counter += deleteMaterialTracksByTag(tag);
+	counter += deleteModelTracksByTag(tag);
 	return counter;
 }
 
@@ -289,6 +424,18 @@ bool Animator::trackWithTagExists(std::string tag) {
 	}
 
 	for (auto& track : tracks2D) {
+		if (track.getTag() == tag) {
+			return true;
+		}
+	}
+
+	for (auto& track : tracksMaterial) {
+		if (track.getTag() == tag) {
+			return true;
+		}
+	}
+
+	for (auto& track : tracksModel) {
 		if (track.getTag() == tag) {
 			return true;
 		}
@@ -306,6 +453,18 @@ long long Animator::tracksWithTag(std::string tag) {
 	}
 
 	for (auto& track : tracks2D) {
+		if (track.getTag() == tag) {
+			counter++;
+		}
+	}
+
+	for (auto& track : tracksMaterial) {
+		if (track.getTag() == tag) {
+			counter++;
+		}
+	}
+
+	for (auto& track : tracksModel) {
 		if (track.getTag() == tag) {
 			counter++;
 		}

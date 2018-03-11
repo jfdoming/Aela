@@ -107,5 +107,7 @@ namespace Game {
 			void animateSelectorBox();
 
 			void tileSelectUpAction(), tileSelectDownAction();
+
+			void changePlayerAnimationToRunning();
 	};
 }

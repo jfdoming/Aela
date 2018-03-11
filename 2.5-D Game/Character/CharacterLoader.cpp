@@ -6,7 +6,8 @@
 */
 
 #include "CharacterLoader.h"
-#include "Resource Management\ResourcePaths.h"
+#include "Resource Management/ResourcePaths.h"
+#include "../../Project Aela/Utilities/enumut.h"
 
 using namespace Aela;
 
@@ -14,7 +15,7 @@ bool Game::CharacterLoader::load(ResourceMap& resources, std::string src) {
 	// This gets the template model.
 	Model* templateModel;
 	if (!resourceManager->obtain<Model>(src, templateModel)) {
-		AelaErrorHandling::windowError("Character Loader", "Could not get the following character model template: "
+		AelaErrorHandling::windowError("Character Loader", "Could not get the following character baseModel template: "
 			+ src + ".");
 		return false;
 	}
@@ -23,30 +24,37 @@ bool Game::CharacterLoader::load(ResourceMap& resources, std::string src) {
 		// This tries to find a model. If it is not found, it creates one.
 		Model* model;
 		TileDirection directions[] = {TileDirection::RIGHT, TileDirection::FORWARD, TileDirection::LEFT, TileDirection::BACKWARD};
+		int directionAsInteger = enumToInteger(character.getDirectionFacing());
 
 		for (unsigned int i = 0; i < 4; i++) {
-			if (!resourceManager->obtain<Model>("char_" + character.getTextureName(directions[i]) + "_model", model)) {
-				model = new Model("char_" + character.getTextureName(directions[i]) + "_model");
-				model->setSubModels(templateModel->getSubModels());
+			for (unsigned int j = 0; j < 3; j++) {
+				if (!resourceManager->obtain<Model>(
+					"ch_" + character.getTextureName() + "_" + std::to_string(i) + "_" + std::to_string(j) + "_mo", model)) {
+					model = new Model("ch_" + character.getTextureName() + "_" + std::to_string(i) + "_" + std::to_string(j) + "_mo");
+					model->setSubModels(templateModel->getSubModels());
 
-				// This generates a new material.
-				Material* material = new Material("char_" + character.getTextureName(directions[i]) + "_material");
-				Texture* texture;
-				if (!resourceManager->obtain<Texture>(DEFAULT_TEXTURE_PATH + character.getTextureName(directions[i]) + ".dds", texture)) {
-					AelaErrorHandling::consoleWindowError("Character Loader", "There was a problem obtaining the texture "
-						+ (std::string) DEFAULT_TEXTURE_PATH + character.getTextureName(directions[i]) + ".dds" + ", as requested by the character "
-						+ character.getName() + " with an ID of " + std::to_string(charactersLoaded) + ".");
-				}
-				material->setTexture(texture);
-				resources.put("char_" + character.getTextureName(directions[i]) + "_material", material);
+					// This generates a new material.
+					Material* material = new Material("ch_" + character.getTextureName() + "_" + std::to_string(i) + "_" + std::to_string(j) + "_ma");
+					Texture* texture;
+					if (!resourceManager->obtain<Texture>(DEFAULT_TEXTURE_PATH + character.getTextureName() + "_" + std::to_string(i) + "_" + std::to_string(j) + ".dds", texture)) {
+						AelaErrorHandling::consoleWindowError("Character Loader", "There was a problem obtaining the texture "
+							+ (std::string) DEFAULT_TEXTURE_PATH + character.getTextureName() + "_" + std::to_string(i) + "_" + std::to_string(j) + ".dds"
+							+ ", as requested by the character " + character.getName() + " with an ID of "
+							+ std::to_string(charactersLoaded) + ".");
+					}
+					material->setTexture(texture);
+					resources.put("ch_" + character.getTextureName() + "_" + std::to_string(i) + "_" + std::to_string(j) + "_ma", material);
 
-				for (auto& subModel : *model->getSubModels()) {
-					subModel.setMaterial(material);
+					for (auto& subModel : *model->getSubModels()) {
+						subModel.setMaterial(material);
+					}
+					resources.put("ch_" + character.getTextureName() + "_" + std::to_string(i) + "_" + std::to_string(j) + "_mo", model);
 				}
-				resources.put("char_" + character.getTextureName(directions[i]) + "_model", model);
+				if (i == directionAsInteger && j == 0) {
+					character.setModel(model);
+				}
 			}
 		}
-		character.setModel(model);
 		charactersLoaded++;
 	}
 	return true;

@@ -27,6 +27,7 @@
 #include "Events/MouseEvent.h"
 #include "Audio/AudioPlayer.h"
 #include "Animation/Animator.h"
+#include "Animation/AnimationLooper.h"
 #include "3D/Animation/KeyedAnimator3D.h"
 #include "3D/Particles/PlanarParticleEmitter.h"
 #include "Menus/Label.h"
@@ -68,6 +69,7 @@ namespace Aela {
 			ResourceManager* getResourceManager();
 			AudioPlayer* getAudioPlayer();
 			Animator* getAnimator();
+			AnimationLooper* getAnimationLooper();
 			UserEnvironment* getUserEnvironment();
 			KeyedAnimator* getKeyedAnimator();
 			FramerateCalculator* getFramerateCalculator();
@@ -86,6 +88,7 @@ namespace Aela {
 			ResourceManager resourceManager;
 			AudioPlayer audioPlayer;
 			Animator animator;
+			AnimationLooper animationLooper;
 			UserEnvironment userEnvironment;
 			KeyedAnimator keyedAnimator;
 			FramerateCalculator framerateCalculator;

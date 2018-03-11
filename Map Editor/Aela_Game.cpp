@@ -10,6 +10,7 @@
 #include "Scripts to Move to LUA/ResourceScript.h"
 #include "Scripts to Move to LUA/SceneScript.h"
 #include "Utilities/strut.h"
+#include "../Project Aela/Resource Management/ResourcePaths.h"
 
 using namespace Aela;
 
@@ -95,7 +96,7 @@ void AelaGame::switchModelResource(unsigned int resource) {
 	Model* model;
 	bool success = resourceManager->obtain<Model>("../../res/models/" + materialsAndModelNames[currentModelResource] + ".obj", model);
 	if (!success) {
-		AelaErrorHandling::windowError("The model resource was not found!");
+		AelaErrorHandling::windowError("The baseModel resource was not found!");
 		return;
 	}
 	modelEntity.setModel(model);

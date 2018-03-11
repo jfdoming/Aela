@@ -20,12 +20,12 @@ Game::Location* Game::Character::getLocation() {
 	return &location;
 }
 
-void Game::Character::setModel(Model* entity) {
-	this->model = entity;
+void Game::Character::setModel(Model* model) {
+	baseModel = model;
 }
 
 Model* Game::Character::getModel() {
-	return model;
+	return baseModel;
 }
 
 void Game::Character::setName(std::string name) {
@@ -44,27 +44,36 @@ float Game::Character::getWalkingSpeed() {
 	return walkingSpeed;
 }
 
-void Game::Character::setTextureName(TileDirection direction, std::string name) {
-	textureNames[direction] = name;
+void Game::Character::setRunningSpeed(float runningSpeed) {
+	this->runningSpeed = runningSpeed;
 }
 
-void Game::Character::setTextureNames(std::unordered_map<TileDirection, std::string>* textureNames) {
-	this->textureNames = *textureNames;
+float Game::Character::getRunningSpeed() {
+	return runningSpeed;
 }
 
-void Game::Character::setTextureNames(std::string right, std::string forward, std::string left, std::string backward) {
-	textureNames[TileDirection::RIGHT] = right;
-	textureNames[TileDirection::FORWARD] = forward;
-	textureNames[TileDirection::LEFT] = left;
-	textureNames[TileDirection::BACKWARD] = backward;
+float Game::Character::getCurrentSpeed() {
+	if (running) {
+		return runningSpeed;
+	} else {
+		return walkingSpeed;
+	}
 }
 
-std::string Game::Character::getTextureName(TileDirection direction) {
-	return textureNames[direction];
+void Game::Character::setRunning(bool running) {
+	this->running = running;
 }
 
-std::unordered_map<Game::TileDirection, std::string>* Game::Character::getTextureNames() {
-	return &textureNames;
+bool Game::Character::getRunning() {
+	return running;
+}
+
+void Game::Character::setTextureName(std::string textureName) {
+	this->textureName = textureName;
+}
+
+std::string Game::Character::getTextureName() {
+	return textureName;
 }
 
 Game::TileDirection Game::Character::getDirectionFacing() {
@@ -79,6 +88,18 @@ void Game::Character::setEntity(ModelEntity* entity) {
 	this->entity = entity;
 }
 
+Game::CharacterStep Game::Character::getCurrentStep() {
+	return currentStep;
+}
+
+void Game::Character::switchStep() {
+	if (currentStep == CharacterStep::LEFT) {
+		currentStep = CharacterStep::RIGHT;
+	} else {
+		currentStep = CharacterStep::LEFT;
+	}
+}
+
 bool Game::Character::isMoving() {
 	return moving;
 }
@@ -87,6 +108,10 @@ void Game::Character::animationHasEnded() {
 	moving = false;
 	animationHadJustEnded = true;
 	timePassedAfterAnimationEnd = entity->getTimePassedAfterAnimationEnd();
+}
+
+bool Game::Character::animationHasJustEnded() {
+	return animationHadJustEnded;
 }
 
 void Game::Character::onTrackEnd(std::string trackID) {

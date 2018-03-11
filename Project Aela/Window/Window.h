@@ -21,23 +21,6 @@ namespace Aela {
 	};
 
 	class Window {
-		private:
-			// These are typical window properties.
-			int windowWidth, windowHeight;
-			std::string windowName;
-			bool resizable = false, visibility = false, borderless = false, maximized = false, taskbarVisibility = false, hasFocus = false, shouldQuit = false;
-
-			// This is the SDL_Window used by this class.
-			SDL_Window* window;
-
-			// These are the enumerators for the window flags.
-			std::vector<WindowFlag> flags;
-
-			// This is used to bind SDL with OpenGL.
-			SDL_GLContext openGLContext;
-
-			Rect<unsigned int> windowDimensions;
-
 		public:
 			// These are the constructors.
 			Window() {
@@ -52,6 +35,7 @@ namespace Aela {
 			void getWindowPosition(int* xPositionVariable, int* yPositionVariable);
 			bool makeWindowOpenGLContext();
 			void updateBuffer();
+			void setWindowDimensions(int width, int height);
 			void getCursorPositionInWindow(int* x, int* y);
 			void getCursorPositionGlobally(int* x, int* y);
 			void setCursorPositionInWindow(int x, int y);
@@ -65,5 +49,22 @@ namespace Aela {
 
 			void showCursor();
 			static void hideCursor();
+
+	private:
+		// These are typical window properties.
+		int width, height;
+		std::string windowName;
+		bool resizable = false, visibility = false, borderless = false, maximized = false, taskbarVisibility = false, hasFocus = false, shouldQuit = false;
+
+		// This is the SDL_Window used by this class.
+		SDL_Window* window;
+
+		// These are the enumerators for the window flags.
+		std::vector<WindowFlag> flags;
+
+		// This is used to bind SDL with OpenGL.
+		SDL_GLContext openGLContext;
+
+		Rect<unsigned int> windowDimensions;
 	};
 }

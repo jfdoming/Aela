@@ -6,16 +6,17 @@
 */
 
 #include "WorldManager.h"
-#include "3D\Maps\Map3DLoader.h"
+#include "3D/Maps/Map3DLoader.h"
 // I'm including this because it contains some useful defines.
 #include "../Scripts/Scripts to Move to LUA/SceneScript.h"
+#include "../../Project Aela/Resource Management/ResourcePaths.h"
 #include <glm/gtc/constants.hpp>
 
-bool Game::WorldManager::setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator, Camera3D* camera,
-	Time* timeManager, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player) {
-	this->resourceManager = resourceManager;
-	this->renderer = renderer;
-	this->animator = animator;
+bool Game::WorldManager::setup(Engine* engine, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player) {
+	this->resourceManager = engine->getResourceManager();
+	this->renderer = engine->getRenderer();
+	this->animator = engine->getAnimator();
+	this->animationLooper = engine->getAnimationLooper();
 	this->scriptManager = scriptManager;
 	this->dialogueHandler = dialogueHandler;
 	this->player = player;
@@ -28,9 +29,39 @@ bool Game::WorldManager::setup(ResourceManager* resourceManager, GLRenderer* ren
 		return false;
 	}
 
-	characterManager.setup(resourceManager, animator, camera, timeManager, scriptManager);
+	characterManager.setup(engine, scriptManager);
 	rebuildMap();
+	setupAnimationLoopingForTiles();
+	
 	return true;
+}
+
+void Game::WorldManager::setupAnimationLoopingForTiles() {
+	// The following code is an example for a simple water animation!
+	AnimationTrackMaterial track;
+	KeyFrameMaterial frame0, frame1;
+	Texture* texture0 = nullptr, *texture1 = nullptr;
+	Material* material0 = nullptr;
+	
+	if (!resourceManager->obtain<Texture>(DEFAULT_MATERIAL_PATH + (std::string) "water_0.dds", texture0)
+		|| !resourceManager->obtain<Texture>(DEFAULT_MATERIAL_PATH + (std::string) "water_1.dds", texture1)) {
+		return;
+	}
+
+	if (!resourceManager->obtain<Material>("water_0", material0)) {
+		std::cout << DEFAULT_MATERIAL_PATH + (std::string) "water_0.mtl failed.\n";
+		return;
+	}
+
+	frame0.setTexture(texture0);
+	frame1.setTexture(texture1);
+	frame0.setMaterial(material0);
+	frame1.setMaterial(material0);
+
+	track.addKeyFrameUsingSeconds(1, &frame0);
+	track.addKeyFrameUsingSeconds(1, &frame1);
+	
+	animationLooper->loopAnimation(&track);
 }
 
 void Game::WorldManager::update() {
@@ -261,7 +292,7 @@ void Game::WorldManager::rebuildMap() {
 					size_t entityInMap;
 					glm::ivec3 tileOfChunk = character->getLocation()->getTile();
 
-					// The position of the character on the map. The distance the character is translated up from its
+					// The position of the character on the map. The distance the character is character->getModeltranslated up from its
 					// tileCoord is sin(PI/6) * 0.5 + 0.05;
 					glm::vec3 characterPositionOnMap((float) (chunkPositionOnMap.x + tileOfChunk.x),
 						(float) (tileOfChunk.y + 0.3f), (float) (chunkPositionOnMap.y + tileOfChunk.z));
@@ -274,11 +305,18 @@ void Game::WorldManager::rebuildMap() {
 					ModelEntity* newEntity = map->getModel(entityInMap);
 					character->setEntity(newEntity);
 
-					// Make sure to update the character's aniamtion's ModelEntity pointer.
-					AnimationTrack3D* track = animator->get3DTrack(character->getName() + "_movement");
-					if (track != nullptr) {
-						for (auto& pair : *track->getKeyFrames()) {
+					// Make sure to update the character's animation's ModelEntity pointer.
+					AnimationTrack3D* track3D = animator->get3DTrack(character->getName() + "_mv");
+					if (track3D != nullptr) {
+						for (auto& pair : *track3D->getKeyFrames()) {
 							pair.second.setObject(newEntity);
+						}
+					}
+
+					AnimationTrackModel* trackModel = animator->getModelTrack(character->getName() + "_st");
+					if (trackModel != nullptr) {
+						for (auto& pair : *trackModel->getKeyFrames()) {
+							pair.second.setModelEntity(newEntity);
 						}
 					}
 				}

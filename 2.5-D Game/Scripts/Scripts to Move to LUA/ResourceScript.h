@@ -24,25 +24,34 @@ std::string materialsAndModelNames[] = {
 	"corner_depressed"
 };
 
-const unsigned int numberOfOtherMaterials = 4;
+const unsigned int numberOfOtherMaterials = 5;
 std::string otherMaterialNames[] = {
 	"grass",
 	"grass_corner_depressed",
 	"grass_corner_elevated",
-	"water"
+	"water_0",
+	"water_1"
 };
 
-const unsigned int numberOfTextures = 11;
+const unsigned int numberOfTextures = 19;
 std::string textureNames[] = {
 	"map_editor_main_background",
 	"map_editor_top_bar",
 	"simple_button",
 	"simple_button_light",
 	"arrow",
-	"character_right",
-	"character_forward",
-	"character_left",
-	"character_backward",
+	"character_0_0",
+	"character_0_1",
+	"character_0_2",
+	"character_1_0",
+	"character_1_1",
+	"character_1_2",
+	"character_2_0",
+	"character_2_1",
+	"character_2_2",
+	"character_3_0",
+	"character_3_1",
+	"character_3_2",
 	"dialogue_box",
 	"selector_box"
 };
@@ -70,12 +79,18 @@ namespace Game {
 		resourceManager->bindLoader(&materialLoader);
 		resourceManager->bindGroup("materials");
 
+		std::string somePath;
+
 		for (std::string path : materialsAndModelNames) {
 			resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + path + ".mtl", false);
 		}
 
 		for (std::string path : otherMaterialNames) {
 			resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + path + ".mtl", false);
+			std::cout << DEFAULT_MATERIAL_PATH + path + ".mtl" << " is a thing\n";
+			if (path == "water_0") {
+				somePath = DEFAULT_MATERIAL_PATH + path + ".mtl";
+			}
 		}
 
 		if (resourceManager->loadGroup("materials") != Aela::ResourceManager::Status::OK) {

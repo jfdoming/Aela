@@ -33,8 +33,7 @@ namespace Game {
 				currentWorld = 0;
 			}
 
-			bool setup(ResourceManager* resourceManager, GLRenderer* renderer, Animator* animator, Camera3D* camera,
-				Time* timeManager, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player);
+			bool setup(Engine* engine, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player);
 			void update();
 
 			void rebuildMapWhenPossible();
@@ -63,6 +62,7 @@ namespace Game {
 			ResourceManager* resourceManager;
 			GLRenderer* renderer;
 			Animator* animator;
+			AnimationLooper* animationLooper;
 
 			std::vector<World> worlds;
 			size_t currentWorld;
@@ -92,6 +92,8 @@ namespace Game {
 
 			// This creates/recreates the Aela::Map3D that is used by the game.
 			void rebuildMap();
+
+			void setupAnimationLoopingForTiles();
 
 			void processCharacterMovements(Character* character, TileDirection& direction);
 	};

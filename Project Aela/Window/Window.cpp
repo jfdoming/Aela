@@ -37,8 +37,8 @@ void Window::addProperty(WindowFlag flag) {
 bool Window::createWindow(int setWidth, int setHeight, int setXPosition, int setYPosition, std::string setName) {
 	// This sets general object properties.
 	windowName = setName.c_str();
-	windowWidth = setWidth;
-	windowHeight = setHeight;
+	width = setWidth;
+	height = setHeight;
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -71,22 +71,22 @@ bool Window::createWindow(int setWidth, int setHeight, int setXPosition, int set
 	}
 
 	// This creates and sets up the SDL window.
-	window = SDL_CreateWindow(windowName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, windowWidth, windowHeight, resizableFlag | shownFlag | borderlessFlag | minimizedFlag | openGLFlag);
+	window = SDL_CreateWindow(windowName.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, resizableFlag | shownFlag | borderlessFlag | minimizedFlag | openGLFlag);
 	if (window == NULL) {
 		return false;
 	}
-	SDL_SetWindowSize(window, windowWidth, windowHeight);
+	SDL_SetWindowSize(window, width, height);
 	SDL_SetWindowPosition(window, setXPosition, setYPosition);
 	return true;
 }
 
 void Window::getWindowDimensions(int* widthVariable, int* heightVariable) {
-	*widthVariable = windowWidth;
-	*heightVariable = windowHeight;
+	*widthVariable = width;
+	*heightVariable = height;
 }
 
 Rect<unsigned int>* Window::getWindowDimensions() {
-	windowDimensions.setValues(0, 0, windowWidth, windowHeight);
+	windowDimensions.setValues(0, 0, width, height);
 	return &windowDimensions;
 }
 
@@ -104,6 +104,12 @@ bool Window::makeWindowOpenGLContext() {
 
 void Window::updateBuffer() {
 	SDL_GL_SwapWindow(window);
+}
+
+void Aela::Window::setWindowDimensions(int width, int height) {
+	SDL_SetWindowSize(window, width, height);
+	width = width;
+	height = height;
 }
 
 void Window::getCursorPositionInWindow(int* x, int* y) {

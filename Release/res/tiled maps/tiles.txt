@@ -1,5 +1,5 @@
 <Tile name="grass" material="grass" collision="false" type="floor">
-<Tile name="water" material="water" collision="true" type="floor">
+<Tile name="water_0" material="water_0" collision="true" type="floor">
 <Tile name="grass" material="grass" collision="true" type="ramp_right">
 <Tile name="grass" material="grass_corner_depressed" collision="true" type="ramp_up_right_depressed">
 <Tile name="grass" material="grass_corner_elevated" collision="true" type="ramp_up_right_elevated">
@@ -12,3 +12,4 @@
 <Tile name="grass" material="grass" collision="true" type="ramp_down">
 <Tile name="grass" material="grass_corner_depressed" collision="true" type="ramp_down_right_depressed">
 <Tile name="grass" material="grass_corner_elevated" collision="true" type="ramp_down_right_elevated">
+<Tile name="water_1" material="water_1" collision="true" type="floor">

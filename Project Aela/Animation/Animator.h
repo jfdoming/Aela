@@ -13,6 +13,8 @@
 #include <vector>
 #include "../2D/Animation/AnimationTrack2D.h"
 #include "../3D/Animation/AnimationTrack3D.h"
+#include "../3D/Animation/AnimationTrackMaterial.h"
+#include "../3D/Animation/AnimationTrackModel.h"
 #include "../Time/Time.h"
 
 namespace Aela {
@@ -31,7 +33,13 @@ namespace Aela {
 			AnimationTrack3D* get3DTrack(std::string name);
 			void addAnimationTrack2D(AnimationTrack2D* track);
 			AnimationTrack2D* get2DTrack(std::string name);
-			int delete3DTrackByTag(std::string tag), delete2DListsByTag(std::string tag), deleteListsByTag(std::string tag);
+			void addAnimationTrackMaterial(AnimationTrackMaterial* track);
+			AnimationTrackMaterial* getMaterialTrack(std::string name);
+			void addAnimationTrackModel(AnimationTrackModel* track);
+			AnimationTrackModel* getModelTrack(std::string name);
+			int delete3DTracksByTag(std::string tag), delete2DTracksByTag(std::string tag),
+				deleteMaterialTracksByTag(std::string tag), deleteModelTracksByTag(std::string tag),
+				deleteTracksByTag(std::string tag);
 			bool trackWithTagExists(std::string tag);
 			long long tracksWithTag(std::string tag);
 
@@ -42,6 +50,8 @@ namespace Aela {
 			// These are basically the "tracks" in which the lists of keyframes are layed out. Note that 3D animation
 			// uses a seperate track from 2D animation.
 			std::vector<AnimationTrack3D> tracks3D;
+			std::vector<AnimationTrackMaterial> tracksMaterial;
+			std::vector<AnimationTrackModel> tracksModel;
 			std::vector<AnimationTrack2D> tracks2D;
 	};
 }

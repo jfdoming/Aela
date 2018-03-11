@@ -62,6 +62,6 @@ void Aela::ModelEntity::generateBoundingBox() {
 		boundingBox.setValues(position.x - ((greatestX - smallestX) / 2 - greatestX), position.y - ((greatestY - smallestY) / 2 - greatestY), position.z - ((greatestZ - smallestZ) / 2 - greatestZ), greatestX - smallestX, greatestY - smallestY, greatestZ - smallestZ);
 		boundingBox.generateVertices();
 	} else {
-		AelaErrorHandling::consoleWindowError("ModelEntity", "Something tried to generate an entity's bounding box without loading its model first!");
+		AelaErrorHandling::consoleWindowError("ModelEntity", "Something tried to generate an entity's bounding box without loading its baseModel first!");
 	}
 }

@@ -46,7 +46,7 @@ void Game::AelaGame::setup() {
 	// Setup the player!
 	Character playerCharacter;
 	playerCharacter.setup(&Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 1)));
-	playerCharacter.setTextureNames("character_right", "character_forward", "character_left", "character_backward");
+	playerCharacter.setTextureName("character");
 	playerCharacter.setName(PLAYER_NAME);
 	size_t playerID;
 	if (!characterManager->addCharacter(&playerCharacter, &playerID)) {
@@ -68,7 +68,7 @@ void Game::AelaGame::setup() {
 	characterManager->generateCharacterModels(resourceManager);
 
 	// Setup the world manager!
-	worldManager.setup(resourceManager, renderer, animator, camera, timeManager, &scriptManager, &dialogueHandler, player.getCharacter());
+	worldManager.setup(engine, &scriptManager, &dialogueHandler, player.getCharacter());
 
 	// Setup the dialogue handler!
 	dialogueHandler.setup(timeManager, eventHandler, &scriptManager);
@@ -85,7 +85,8 @@ void Game::AelaGame::update() {
 
 		if (!player.isMoving() && !dialogueHandler.dialogueIsBeingShown()) {
 			if (movingRight) {
-				if (player.getDirectionFacing() != TileDirection::RIGHT) {
+				std::cout << (player.getDirectionFacing() != TileDirection::RIGHT) << " " << !player.getCharacter()->animationHasJustEnded() << "\n";
+				if (player.getDirectionFacing() != TileDirection::RIGHT && !player.getCharacter()->animationHasJustEnded()) {
 					player.turn(TileDirection::RIGHT);
 					timeAtLastPlayerTurn = timeManager->getCurrentTimeInNanos();
 				} else if (timeManager->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
@@ -94,7 +95,7 @@ void Game::AelaGame::update() {
 				}
 			}
 			if (movingForward) {
-				if (player.getDirectionFacing() != TileDirection::FORWARD) {
+				if (player.getDirectionFacing() != TileDirection::FORWARD && !player.getCharacter()->animationHasJustEnded()) {
 					player.turn(TileDirection::FORWARD);
 					timeAtLastPlayerTurn = timeManager->getCurrentTimeInNanos();
 				} else if (timeManager->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
@@ -102,7 +103,7 @@ void Game::AelaGame::update() {
 				}
 			}
 			if (movingLeft) {
-				if (player.getDirectionFacing() != TileDirection::LEFT) {
+				if (player.getDirectionFacing() != TileDirection::LEFT && !player.getCharacter()->animationHasJustEnded()) {
 					player.turn(TileDirection::LEFT);
 					timeAtLastPlayerTurn = timeManager->getCurrentTimeInNanos();
 				} else if (timeManager->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
@@ -110,7 +111,7 @@ void Game::AelaGame::update() {
 				}
 			}
 			if (movingBackward) {
-				if (player.getDirectionFacing() != TileDirection::BACKWARD) {
+				if (player.getDirectionFacing() != TileDirection::BACKWARD && !player.getCharacter()->animationHasJustEnded()) {
 					player.turn(TileDirection::BACKWARD);
 					timeAtLastPlayerTurn = timeManager->getCurrentTimeInNanos();
 				} else if (timeManager->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
@@ -215,6 +216,12 @@ void Game::AelaGame::onEvent(Event* event) {
 							pressingReturn = true;
 						}
 						break;
+					case SDLK_LSHIFT:
+						if (!player.getCharacter()->getRunning()) {
+							player.getCharacter()->setRunning(true);
+							changePlayerAnimationToRunning();
+						}
+						break;
 				}
 			}
 		}
@@ -286,6 +293,10 @@ void Game::AelaGame::onEvent(Event* event) {
 					break;
 				case SDLK_RETURN:
 					pressingReturn = false;
+					engine->getWindow()->setWindowDimensions(100, 100);
+					break;
+				case SDLK_LSHIFT:
+					player.getCharacter()->setRunning(false);
 					break;
 			}
 		}
@@ -382,6 +393,29 @@ void Game::AelaGame::tileSelectDownAction() {
 	}
 	refreshTileInventorySubMenu();
 	timeAtLastTileSelect = timeManager->getCurrentTimeInNanos();
+}
+
+void Game::AelaGame::changePlayerAnimationToRunning() {
+	AnimationTrack3D* playerTrack = animator->get3DTrack(player.getCharacter()->getName() + "_mv");
+	if (playerTrack == nullptr) {
+		return;
+	}
+
+	double originalTimeOfAnimation = 1000000.0f / player.getCharacter()->getWalkingSpeed();
+	double percentLeft = (originalTimeOfAnimation - playerTrack->getPositionInTrack()) / originalTimeOfAnimation;
+	long long newAnimationTime = ((long long) (1000000.0f / player.getCharacter()->getRunningSpeed())) * percentLeft
+		+ playerTrack->getPositionInTrack();
+
+	std::vector<std::pair<long long, KeyFrame3D>>* playerFrames = playerTrack->getKeyFrames();
+	playerFrames->at(playerFrames->size() - 1).first = newAnimationTime;
+
+	AnimationTrack3D* cameraTrack = animator->get3DTrack("camera_mv");
+	if (cameraTrack == nullptr) {
+		return;
+	}
+
+	std::vector<std::pair<long long, KeyFrame3D>>* cameraFrames = cameraTrack->getKeyFrames();
+	cameraFrames->at(cameraFrames->size() - 1).first = newAnimationTime;
 }
 
 void Game::AelaGame::switchScene(int sceneID) {

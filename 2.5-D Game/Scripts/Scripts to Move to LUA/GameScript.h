@@ -77,7 +77,7 @@ namespace GameScripts {
 	void setupCharacters() {
 		Character testCharacter;
 		testCharacter.setup(&Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 7)));
-		testCharacter.setTextureNames("character_right", "character_forward", "character_left", "character_backward");
+		testCharacter.setTextureName("character");
 		testCharacter.setName("Meowth");
 		size_t playerID;
 		if (!characterManager->addCharacter(&testCharacter, &playerID)) {
@@ -86,7 +86,7 @@ namespace GameScripts {
 
 		Character testCharacter2;
 		testCharacter2.setup(&Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 8)));
-		testCharacter2.setTextureNames("character_right", "character_forward", "character_left", "character_backward");
+		testCharacter2.setTextureName("character");
 		testCharacter2.setName("Meowth Clone");
 		size_t playerID2;
 		if (!characterManager->addCharacter(&testCharacter2, &playerID2)) {

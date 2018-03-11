@@ -15,12 +15,7 @@ namespace Aela {
 	class AnimationTrack3D : public AnimationTrack<KeyFrame3D> {
 		public:
 			AnimationTrack3D() {
-
+				// Nothing is here anymore!
 			}
-
-		private:
-			// The object is NOT a shared ptr like in a 2D keyframe since menu objects are meant to be allocated to the heap and
-			// shared while 3D transformables are meant to be stored inside of a map.
-			Transformable3D* object = nullptr;
 	};
 }

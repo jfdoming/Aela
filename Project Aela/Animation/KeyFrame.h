@@ -10,7 +10,7 @@
 
 namespace Aela {
 	enum class KeyFrameType {
-		GENERIC, TWO_DIMENSIONAL, THREE_DIMENSIONAL
+		GENERIC, TWO_DIMENSIONAL, THREE_DIMENSIONAL, MATERIAL, MODEL
 	};
 
 	class KeyFrame {

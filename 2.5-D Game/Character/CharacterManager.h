@@ -7,12 +7,14 @@
 
 #pragma once
 #include <unordered_map>
+#include "../../Project Aela/Aela_Engine.h"
 #include "Utilities/glmut.h"
 #include "../Character/Character.h"
 #include "../Scripts/ScriptManager.h"
 #include "../Worlds/World.h"
 #include "Resource Management/ResourceManager.h"
 #include "Animation/Animator.h"
+#include "Animation/AnimationLooper.h"
 #include "3D/Animation/AnimationTrack3D.h"
 #include "3D/Camera/Camera3D.h"
 
@@ -28,8 +30,7 @@ namespace Game {
 		public:
 			CharacterManager() {}
 
-			void setup(ResourceManager* resourceManager, Animator* animator, Camera3D* camera, Time* timeManager,
-				ScriptManager* scriptManager);
+			void setup(Engine* engine, ScriptManager* scriptManager);
 			void update();
 
 			// After all characters have been added, this will generate their models.
@@ -51,6 +52,9 @@ namespace Game {
 			void move(Character* character, TileDirection direction, std::string scriptOnCompletion);
 			void move(size_t id, TileDirection direction, std::string scriptOnCompletion);
 			void move(std::string name, TileDirection direction, std::string scriptOnCompletion);
+			void teleport(Character* character, Location* location);
+			void teleport(size_t id, Location* location);
+			void teleport(std::string name, Location* location);
 			void stopMoving(size_t id);
 			void stopMoving(std::string name);
 
@@ -69,6 +73,7 @@ namespace Game {
 
 			ResourceManager* resourceManager;
 			Animator* animator;
+			AnimationLooper* animationLooper;
 			Camera3D* camera;
 			ScriptManager* scriptManager;
 

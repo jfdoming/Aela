@@ -61,6 +61,7 @@ int Aela::Engine::runningLoop() {
 		// This updates events. It must be done first.
 		eventHandler.updateSDLEvents();
 		timeManager.updateTime();
+		animationLooper.update();
 		animator.update();
 		
 		// This updates and renders the current scene.
@@ -160,6 +161,7 @@ int Aela::Engine::setupAudioPlayer() {
 
 int Aela::Engine::setupAnimation() {
 	animator.setTime(&timeManager);
+	animationLooper.setAnimator(&animator);
 	keyedAnimator.setTime(&timeManager);
 	keyedAnimator.setWindow(&window);
 	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
@@ -184,6 +186,7 @@ void Engine::update() {
 
 	timeManager.updateTime();
 	sceneManager.update();
+	animationLooper.update();
 	animator.update();
 	keyedAnimator.update();
 }
@@ -238,6 +241,10 @@ AudioPlayer* Engine::getAudioPlayer() {
 
 Animator* Engine::getAnimator() {
 	return &animator;
+}
+
+AnimationLooper* Aela::Engine::getAnimationLooper() {
+	return &animationLooper;
 }
 
 UserEnvironment* Engine::getUserEnvironment() {

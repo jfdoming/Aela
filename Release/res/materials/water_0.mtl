@@ -1,4 +1,4 @@
-newmtl water
+newmtl water_0
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
 Kd 0.640000 0.640000 0.640000
@@ -7,4 +7,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd water.dds
+map_Kd water_0.dds
