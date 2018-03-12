@@ -92,8 +92,12 @@ ResourceManager::Status ResourceManager::unloadGroup(std::string name) {
 	return Status::OK;
 }
 
+void ResourceManager::setResourceRoot(std::string resourceRoot) {
+	this->resourceRoot = resourceRoot;
+}
+
 void ResourceManager::addToGroup(std::string src, bool crucial) {
-	ResourceQuery query(src, crucial, boundLoader);
+	ResourceQuery query(resourceRoot + src, crucial, boundLoader);
 	addToGroup(query);
 }
 
@@ -102,7 +106,7 @@ void ResourceManager::addToGroup(ResourceQuery& query) {
 }
 
 ResourceManager::Status ResourceManager::load(std::string src, bool crucial, ResourceLoader& loader) {
-	ResourceQuery query(src, crucial, &loader);
+	ResourceQuery query(resourceRoot + src, crucial, &loader);
 	return load(query);
 }
 
@@ -128,7 +132,7 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 void ResourceManager::unload(std::string src) {
 	Resource* res;
 
-	if (resources.get(src, res) && res != nullptr) {
+	if (resources.get(resourceRoot + src, res) && res != nullptr) {
 		delete res;
 	}
 }
