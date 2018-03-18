@@ -70,7 +70,7 @@ namespace Aela {
 			// These are some Project Aela objects that the 3D renderer uses.
 			Window* window = nullptr;
 
-			// These are used by the renderer so that "window->getWindowDimensions()->getWidth()"
+			// These are used by the renderer so that "window->getDimensions()->getWidth()"
 			// (and "...getHeight()") does not have to called all the time.
 			int windowWidth = 0, windowHeight = 0;
 	};

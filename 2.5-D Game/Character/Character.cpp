@@ -105,7 +105,9 @@ bool Game::Character::isMoving() {
 }
 
 void Game::Character::animationHasEnded() {
-	moving = false;
+	// Moving gets sets to false by the character manager! It does this since it performs some actions
+	// when the character is done moving!
+	// moving = false;
 	animationHadJustEnded = true;
 	timePassedAfterAnimationEnd = entity->getTimePassedAfterAnimationEnd();
 }

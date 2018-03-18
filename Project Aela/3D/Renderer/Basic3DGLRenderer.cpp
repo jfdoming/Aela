@@ -59,6 +59,7 @@ void Basic3DGLRenderer::getIDs() {
 void Basic3DGLRenderer::setupFrameBuffers(unsigned int multisampling) {
 	// This generates the colour framebuffer.
 	glGenFramebuffers(1, &colourFrameBuffer);
+	std::cout << "Good 3.\n";
 	glBindFramebuffer(GL_FRAMEBUFFER, colourFrameBuffer);
 
 	glGenTextures(1, colourFrameBufferTexture.getTexture());
@@ -115,6 +116,24 @@ void Basic3DGLRenderer::setupFrameBuffers(unsigned int multisampling) {
 	}
 }
 
+void Aela::Basic3DGLRenderer::rebuildFrameBuffers(bool multisampling) {
+	std::cout << "About to delete: " << colourFrameBuffer << "\n";
+	glDeleteFramebuffers(1, &colourFrameBuffer);
+	std::cout << "Deleted.\n";
+	glDeleteTextures(1, colourFrameBufferTexture.getTexture());
+	glDeleteRenderbuffers(1, &depthRenderBuffer);
+	std::cout << "Good.\n";
+
+	if (multisampling > 0) {
+		glDeleteBuffers(1, &multisampledColourFrameBuffer);
+		glDeleteTextures(1, multisampledColourFrameBufferTexture.getTexture());
+	}
+	std::cout << "Good 2.\n";
+
+
+	setupFrameBuffers(multisampling);
+}
+
 // This generates a light's depth frame buffer.
 void Basic3DGLRenderer::generateShadowMap(LightEntity* light) {
 	GLuint* buffer = light->getShadowMapBuffer();
@@ -156,7 +175,7 @@ void Basic3DGLRenderer::generateShadowMap(LightEntity* light) {
 
 void Basic3DGLRenderer::setWindow(Window* setWindow) {
 	window = setWindow;
-	window->getWindowDimensions(&windowWidth, &windowHeight);
+	window->getDimensions(&windowWidth, &windowHeight);
 }
 
 void Basic3DGLRenderer::setCamera(Camera3D* setCamera) {

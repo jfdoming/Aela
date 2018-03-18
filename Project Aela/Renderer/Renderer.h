@@ -34,6 +34,7 @@
 #include "../3D/Models/ModelEntity.h"
 #include "../3D/Skybox/SkyboxEntity.h"
 #include "../Events/EventListener.h"
+#include "../Events/EventHandler.h"
 #include "../Events/KeyEvent.h"
 
 // These are some enums used by the Renderer.
@@ -67,10 +68,13 @@ namespace Aela {
 
 			virtual RenderingAPI getRenderingAPI() = 0;
 
+			void onEvent(Event* event);
+
 			// These functions bind the Renderer with other Aela classes. They must be called
 			// before rendering.
 			void setWindow(Window* window);
 			void setTime(Time* timeManager);
+			void setEventHandler(EventHandler* eventHandler);
 
 			virtual void renderMap(Map3D* map, unsigned int skybox) = 0;
 
@@ -108,10 +112,6 @@ namespace Aela {
 			// This sets the field of view of the bounded camera.
 			void setFOV(float value);
 
-			// TEMPORARY?
-			void increaseFOV();
-			void decreaseFOV();
-
 			// These are some getters.
 			Window* getWindow();
 			Time* getTime();
@@ -122,9 +122,13 @@ namespace Aela {
 			Camera3D camera;
 			Time* timeManager = nullptr;
 			Window* window = nullptr;
+			EventHandler* eventHandler;
 
 			// These specify the features that the renderer is allowed to use during rendering.
 			bool useShadows = false, useBillboards = false, useSkybox = false;
 			unsigned int multisampling3D = 0, multisampling2D = 0;
+			bool resolutionWasChangedFlag = false;
+
+			virtual void resetResolution() = 0;
 	};
 };

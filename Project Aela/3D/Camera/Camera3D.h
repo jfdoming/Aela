@@ -21,7 +21,7 @@ namespace Aela {
 	class Camera3D : public Transformable3D, public EventListener {
 		public:
 			Camera3D() {
-				fieldOfView = 45.0f;
+				fieldOfView = 1.0f;
 				speed = 0.000000015f;
 				superSpeed = 0.000000045f;
 				currentSpeed = speed;

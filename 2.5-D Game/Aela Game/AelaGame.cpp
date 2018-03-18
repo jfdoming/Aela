@@ -62,7 +62,8 @@ void Game::AelaGame::setup() {
 
 	GameScripts::runStartingScripts();
 
-	refreshTileInventorySubMenu();
+	tileInventoryDisplay.setGameObjects(&player, &worldManager);
+	tileInventoryDisplay.refreshSubMenu();
 
 	// Tell the character manager that we've added all of our characters!
 	characterManager->generateCharacterModels(resourceManager);
@@ -200,7 +201,7 @@ void Game::AelaGame::onEvent(Event* event) {
 								break;
 							}
 							player.getTileInventory()->switchCurrentTile(tilePtr);
-							refreshTileInventorySubMenu();
+							tileInventoryDisplay.refreshSubMenu();
 							worldManager.rebuildMapWhenPossible();
 							pressingTileSwitch = true;
 						}
@@ -285,15 +286,16 @@ void Game::AelaGame::onEvent(Event* event) {
 				case SDLK_BACKSLASH:
 					pressingTileSwitch = false;
 					break;
-				case SDLK_UP:
+				case SDLK_UP: {
 					pressingTileSelectUp = false;
 					break;
-				case SDLK_DOWN:
+				}
+				case SDLK_DOWN: {
 					pressingTileSelectDown = false;
 					break;
+				}
 				case SDLK_RETURN:
 					pressingReturn = false;
-					engine->getWindow()->setWindowDimensions(100, 100);
 					break;
 				case SDLK_LSHIFT:
 					player.getCharacter()->setRunning(false);
@@ -315,83 +317,21 @@ void Game::AelaGame::setupScripts() {
 	scriptManager.addScript("load scenes", std::bind(&setupScenes, engine, this));
 }
 
-void Game::AelaGame::refreshTileInventorySubMenu() {
-	int width = window->getWindowDimensions()->getWidth(), height = window->getWindowDimensions()->getHeight();
-	int imageWidthAndHeight = height / 8;
-	int currentTile = player.getTileInventory()->getCurrentTileIndex();
-
-	tileInventoryLabel->setText(worldManager.getTileAtlas()->getTileType(player.getTileInventory()->getCurrentTile()->getType())->getName());
-
-	for (size_t i = 0; i < player.getTileInventory()->getNumberOfTiles(); i++) {
-		Tile* tile = player.getTileInventory()->getTile(i);
-
-		if (tileInventoryImages.size() == i) {
-			auto image = std::make_shared<ImageComponent>();
-			GLTexture* texture;
-
-			// Until Aela is designed better (which I don't have the time to do), we must do this to get a GLTexture* (as opposed to getting
-			// a Texture* via tile->...->getTexture()). We have to get it from the tile atlas since 
-			if (tile->getEntity() == nullptr) {
-				resourceManager->obtain<GLTexture>(DEFAULT_MATERIAL_PATH + (std::string) "grass.dds", texture);
-			} else if (!resourceManager->obtain<GLTexture>(worldManager.getTileAtlas()->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
-				break;
-			}
-
-			image->setDimensions(&Rect<int>((int) (width * 0.98 - (i * imageWidthAndHeight) - imageWidthAndHeight),
-				(int) (height * 0.15 - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
-			image->setTexture(texture);
-			tileInventoryImages.push_back(image);
-			tileInventorySubMenu->add(image);
-		} else {
-			GLTexture* texture;
-
-			// Until Aela is designed better (which I don't have the time to do), we must do this to get a GLTexture* (as opposed to getting
-			// a Texture* via tile->...->getTexture()).
-			if (tile->getEntity() == nullptr) {
-				resourceManager->obtain<GLTexture>(DEFAULT_MATERIAL_PATH + (std::string) "grass.dds", texture);
-			} else {
-				if (!resourceManager->obtain<GLTexture>(worldManager.getTileAtlas()->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
-					break;
-				}
-			}
-
-			tileInventoryImages[i]->setDimensions(&Rect<int>((int) (width * 0.98 - (i * imageWidthAndHeight) - imageWidthAndHeight),
-				(int) (height * 0.15 - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
-			tileInventoryImages[i]->setTexture(texture);
-		}
-	}
-}
-
-void Game::AelaGame::animateSelectorBox() {
-	AnimationTrack2D track;
-	track.setTag("selector_box_movement");
-	KeyFrame2D frame;
-	frame.setObject(tileInventoryBoxImage);
-	Rect<int> dimensions = *tileInventoryBoxImage->getDimensions();
-	int imageWidthAndHeight = window->getWindowDimensions()->getHeight() / 8;
-	dimensions.setX((int) (window->getWindowDimensions()->getWidth() * 0.98
-		- (player.getTileInventory()->getCurrentTileIndex() * imageWidthAndHeight)
-		- imageWidthAndHeight - imageWidthAndHeight * 0.1));
-	frame.setDimensions(&dimensions);
-	track.addKeyFrameUsingMillis((size_t) (TIME_FOR_SELECTOR_TO_MOVE), &frame);
-	animator->addAnimationTrack2D(&track);
-}
-
 void Game::AelaGame::tileSelectUpAction() {
 	if (animator->get2DTrack("selector_box_movement") == nullptr) {
 		player.getTileInventory()->increaseCurrentTileIfPossible();
-		animateSelectorBox();
+		tileInventoryDisplay.animateSelectorBox();
 	}
-	refreshTileInventorySubMenu();
+	tileInventoryDisplay.refreshSubMenu();
 	timeAtLastTileSelect = timeManager->getCurrentTimeInNanos();
 }
 
 void Game::AelaGame::tileSelectDownAction() {
 	if (animator->get2DTrack("selector_box_movement") == nullptr) {
 		player.getTileInventory()->decreaseCurrentTileIfPossible();
-		animateSelectorBox();
+		tileInventoryDisplay.animateSelectorBox();
 	}
-	refreshTileInventorySubMenu();
+	tileInventoryDisplay.refreshSubMenu();
 	timeAtLastTileSelect = timeManager->getCurrentTimeInNanos();
 }
 
@@ -456,9 +396,7 @@ Game::DialogueHandler* Game::AelaGame::getDialogueHandler() {
 
 void Game::AelaGame::setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
 	std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage) {
-	this->tileInventorySubMenu = tileInventorySubMenu;
-	this->tileInventoryLabel = tileInventoryLabel;
-	this->tileInventoryBoxImage = tileInventoryBoxImage;
+	tileInventoryDisplay.setMenuItems(tileInventorySubMenu, tileInventoryLabel, tileInventoryBoxImage);
 }
 
 void Game::AelaGame::cleanup() {

@@ -72,6 +72,9 @@ namespace Aela {
 			// Although this function is called in setup(), it should also be called to change the MSAA amount.
 			void setupFrameBuffers(unsigned int multisampling);
 
+			// This will recreate all framebuffers.
+			void rebuildFrameBuffers(bool multisampling);
+
 		private:
 			// These are the smaller renderers that the Basic3DGLRenderer uses.
 			Basic3DGLShadowRenderer shadowRenderer;
@@ -97,7 +100,7 @@ namespace Aela {
 			// This stores the lights to render.
 			std::unordered_map<long long, LightEntity>* lights;
 
-			// These are used by the renderer so that "window->getWindowDimensions()->getWidth()"
+			// These are used by the renderer so that "window->getDimensions()->getWidth()"
 			// (and "...getHeight()") does not have to called all the time.
 			int windowWidth, windowHeight;
 

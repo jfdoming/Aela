@@ -16,7 +16,10 @@ namespace Aela {
 			void start();
 			void stop();
 
+			void fireEvent(Event* event);
+
 			void updateSDLEvents();
+			void updateWindowEvents();
 			void addListener(int type, EventListener listener);
 
 			void bindWindow(Window* window);

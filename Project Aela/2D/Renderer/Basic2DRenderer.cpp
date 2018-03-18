@@ -11,7 +11,7 @@ using namespace Aela;
 
 void Basic2DRenderer::setWindow(Window* setWindow) {
 	window = setWindow;
-	window->getWindowDimensions(&windowWidth, &windowHeight);
+	window->getDimensions(&windowWidth, &windowHeight);
 }
 
 Window* Basic2DRenderer::getWindow() {

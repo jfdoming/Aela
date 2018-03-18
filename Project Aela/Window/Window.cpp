@@ -39,6 +39,7 @@ bool Window::createWindow(int setWidth, int setHeight, int setXPosition, int set
 	windowName = setName.c_str();
 	width = setWidth;
 	height = setHeight;
+	dimensions.setValues(0, 0, width, height);
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -80,17 +81,16 @@ bool Window::createWindow(int setWidth, int setHeight, int setXPosition, int set
 	return true;
 }
 
-void Window::getWindowDimensions(int* widthVariable, int* heightVariable) {
+void Window::getDimensions(int* widthVariable, int* heightVariable) {
 	*widthVariable = width;
 	*heightVariable = height;
 }
 
-Rect<unsigned int>* Window::getWindowDimensions() {
-	windowDimensions.setValues(0, 0, width, height);
-	return &windowDimensions;
+Rect<unsigned int>* Window::getDimensions() {
+	return &dimensions;
 }
 
-void Window::getWindowPosition(int* xPositionVariable, int* yPositionVariable) {
+void Window::getPosition(int* xPositionVariable, int* yPositionVariable) {
 	SDL_GetWindowPosition(window, xPositionVariable, yPositionVariable);
 }
 
@@ -106,10 +106,12 @@ void Window::updateBuffer() {
 	SDL_GL_SwapWindow(window);
 }
 
-void Aela::Window::setWindowDimensions(int width, int height) {
+void Aela::Window::setDimensions(int width, int height) {
 	SDL_SetWindowSize(window, width, height);
 	width = width;
 	height = height;
+	dimensions.setValues(0, 0, width, height);
+	recentlyResized = true;
 }
 
 void Window::getCursorPositionInWindow(int* x, int* y) {
@@ -130,6 +132,19 @@ void Window::setCursorPositionGlobally(int x, int y) {
 
 void Window::setFocus(bool focus) {
 	hasFocus = focus;
+}
+
+void Aela::Window::setFullscreen(bool fullscreen) {
+	if (fullscreen) {
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+	} else {
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+	}
+	this->fullscreen = fullscreen;
+}
+
+bool Aela::Window::isFullscreen() {
+	return fullscreen;
 }
 
 void Aela::Window::show() {
@@ -158,4 +173,12 @@ void Window::hideCursor() {
 
 bool Window::isFocused() {
 	return hasFocus;
+}
+
+bool Aela::Window::wasResized() {
+	if (recentlyResized) {
+		recentlyResized = false;
+		return true;
+	}
+	return false;
 }

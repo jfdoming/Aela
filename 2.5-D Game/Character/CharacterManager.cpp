@@ -33,15 +33,12 @@ void Game::CharacterManager::update() {
 			}
 		} else if (!animator->trackWithTagExists(character.getName() + "_mv")) {
 			std::pair<glm::vec3, std::string>* translation = character.getNextTranslation();
-			std::cout << "Something is happening.!\n";
 			if (translation != nullptr) {
 				animateCharacterMovement(&character, translation->first, translation->second);
 				character.removeNextTranslation();
-				std::cout << "Not nullptr!\n";
 			} else {
 				character.moving = false;
 				character.animationHadJustEnded = false;
-				std::cout << "DONE!\n";
 			}
 		}
 	}

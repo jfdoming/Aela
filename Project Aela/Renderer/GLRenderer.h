@@ -123,10 +123,6 @@ namespace Aela {
 			// This sets the field of view of the bounded camera.
 			void setFOV(float value);
 
-			// TEMPORARY?
-			void increaseFOV();
-			void decreaseFOV();
-
 			// These are some getters.
 			std::string getInformation(GLRendererInformation infoToGet);
 			Window* getWindow();
@@ -149,16 +145,16 @@ namespace Aela {
 
 			// These are the post process shaders.
 			GLuint effects3DShader, effects2DShader;
+			// These specify the features that the renderer is allowed to use during rendering.
+			bool useShadows = false, useBillboards = false, useSkybox = false;
+			unsigned int multisampling3D = 0, multisampling2D = 0;
+
 
 			// These are some setup functions used internally by the GLRenderer.
 			void setup3DRendering();
 			void setup2DRendering();
 			void setupMainFrameBuffer();
 			bool setupGLEW();
-
-			// These specify the features that the renderer is allowed to use during rendering.
-			bool useShadows = false, useBillboards = false, useSkybox = false;
-			unsigned int multisampling3D = 0, multisampling2D = 0;
 
 			// This function is used internally to check the framebuffer that is currently
 			// being applied to OpenGL.
@@ -169,5 +165,7 @@ namespace Aela {
 
 			// This stores the window's state.
 			bool windowFocus = false;
+
+			virtual void resetResolution();
 	};
 };

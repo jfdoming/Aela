@@ -131,7 +131,7 @@ void Camera3D::update() {
 
 		// This moves the cursor back to the middle of the window.
 		int width, height;
-		window->getWindowDimensions(&width, &height);
+		window->getDimensions(&width, &height);
 
 		if (forceCursorToMiddle) {
 			window->setCursorPositionInWindow(width / 2, height / 2);

@@ -12,8 +12,8 @@ void EventConstants::expose(LuaManager& mgr) {
 		.addStaticData("MOUSE_MOTIONED", const_cast<int*>(&EventConstants::MOUSE_MOTIONED), false)
 		.addStaticData("MOUSE_ENTERED", const_cast<int*>(&EventConstants::MOUSE_ENTERED), false)
 		.addStaticData("MOUSE_EXITED", const_cast<int*>(&EventConstants::MOUSE_EXITED), false)
-
 		.addStaticData("MOUSE_ENTERED_COMPONENT", const_cast<int*>(&EventConstants::MOUSE_ENTERED_COMPONENT), false)
 		.addStaticData("MOUSE_EXITED_COMPONENT", const_cast<int*>(&EventConstants::MOUSE_EXITED_COMPONENT), false)
+		.addStaticData("WINDOW_RESIZE", const_cast<int*>(&EventConstants::WINDOW_RESIZE), false)
 		.endClass();
 }

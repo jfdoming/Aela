@@ -6,13 +6,18 @@
 */
 
 #pragma once
+#include <vector>
+#include "ItemType.h"
 
 namespace Game {
 	class ItemAtlas {
 		public:
 			ItemAtlas() {}
 
+			size_t addItemType(ItemType* type);
+			ItemType* getItemType(size_t id);
+
 		private:
-			std::vector<
+			std::vector<ItemType> types;
 	};
 }

@@ -25,7 +25,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	}
 	ColourRGBA VSBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
 	ColourRGBA almostWhite(0.9f, 0.9f, 0.9f, 1.0f);
-	Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getWindowDimensions());
+	Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getDimensions());
 
 	// The following blocks of code set up the Ekkon intro scene.
 	auto ekkonImage = std::make_shared<ImageComponent>();
@@ -37,7 +37,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This sets up the ekkon scene.
 	auto ekkonScene = new Scene();
-	ekkonScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
+	ekkonScene->enableMenu(engine->getWindow()->getDimensions(), engine->getRendererReference());
 	ekkonScene->getMenu()->add(ekkonImage);
 
 	// The following blocks of code set up the main menu scene.
@@ -54,7 +54,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This sets up actions for the main menu buttons.
 	auto continueGameAction = [game](Engine* engine) {
-		Rect<unsigned int>* dimensions = engine->getWindow()->getWindowDimensions();
+		Rect<unsigned int>* dimensions = engine->getWindow()->getDimensions();
 		engine->getWindow()->setCursorPositionInWindow(dimensions->getWidth() / 2, dimensions->getHeight() / 2);
 		engine->getSceneManager()->setCurrentScene(GAMEPLAY_SCENE);
 		game->switchScene(GAMEPLAY_SCENE);
@@ -98,7 +98,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This sets up the title screen scene.
 	Scene* mainMenuScene = new Scene();
-	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
+	mainMenuScene->enableMenu(engine->getWindow()->getDimensions(), engine->getRendererReference());
 	mainMenuScene->getMenu()->add(titleText);
 	mainMenuScene->getMenu()->add(ekkonGamesText);
 	mainMenuScene->getMenu()->add(continueGameButton);
@@ -115,7 +115,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	particleEmitter->setupParticles(&particleTextures, 0.6f, 0.6f, 25);
 
 	Scene* gameplayScene = new Scene();
-	gameplayScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
+	gameplayScene->enableMenu(engine->getWindow()->getDimensions(), engine->getRendererReference());
 	gameplayScene->putParticleEmitter(particleEmitter);
 
 	Map3D* map;

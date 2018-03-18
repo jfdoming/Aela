@@ -13,7 +13,7 @@
 #include "../Scripts/ScriptManager.h"
 #include "../Player/Player.h"
 #include "../Dialogue/DialogueHandler.h"
-#include "Menus/ImageComponent.h"
+#include "../Worlds/TileInventoryDisplay.h"
 
 #define PI 3.14159265359
 #define THIRD_PI 1.0471975512
@@ -23,7 +23,7 @@ using namespace Aela;
 namespace Game {
 	class AelaGame {
 		public:
-			AelaGame(Engine* engine) : engine(engine), player(&worldManager) {
+			AelaGame(Engine* engine) : engine(engine), player(&worldManager), tileInventoryDisplay(engine) {
 				window = engine->getWindow();
 				renderer = engine->getRenderer();
 				eventHandler = engine->getEventHandler();
@@ -55,6 +55,7 @@ namespace Game {
 
 			void setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
 				std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage);
+
 		private:
 			// These are Aela Engine objects.
 			Engine* engine;
@@ -79,10 +80,8 @@ namespace Game {
 			ScriptManager scriptManager;
 			DialogueHandler dialogueHandler;
 
-			std::shared_ptr<SubMenu> tileInventorySubMenu;
-			std::shared_ptr<Label> tileInventoryLabel;
-			std::shared_ptr<ImageComponent> tileInventoryBoxImage;
-			std::vector<std::shared_ptr<ImageComponent>> tileInventoryImages;
+			// These are display-related objects.
+			TileInventoryDisplay tileInventoryDisplay;
 
 			// These store the states of keys.
 			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false;
@@ -96,15 +95,10 @@ namespace Game {
 
 			long long timeAtLastPlayerTurn = 0;
 			const long long TIME_BETWEEN_PLAYER_TURNS = 80000000;
-			const long long TIME_FOR_SELECTOR_TO_MOVE = 80;
 
 			void setupScripts();
 			void loadResources();
 			void loadScenes();
-
-			// These relate to the tile inventory menu.
-			void refreshTileInventorySubMenu();
-			void animateSelectorBox();
 
 			void tileSelectUpAction(), tileSelectDownAction();
 
