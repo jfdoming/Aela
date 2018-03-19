@@ -7,10 +7,12 @@
 
 #include "WorldManager.h"
 #include "3D/Maps/Map3DLoader.h"
+#include "../../Project Aela/Resource Management/ResourcePaths.h"
+#include "../Resources/ResourceInfo.h"
+#include <glm/gtc/constants.hpp>
+
 // I'm including this because it contains some useful defines.
 #include "../Scripts/Scripts to Move to LUA/SceneScript.h"
-#include "../../Project Aela/Resource Management/ResourcePaths.h"
-#include <glm/gtc/constants.hpp>
 
 bool Game::WorldManager::setup(Engine* engine, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player) {
 	this->resourceManager = engine->getResourceManager();
@@ -43,12 +45,14 @@ void Game::WorldManager::setupAnimationLoopingForTiles() {
 	Texture* texture0 = nullptr, *texture1 = nullptr;
 	Material* material0 = nullptr;
 	
-	if (!resourceManager->obtain<Texture>(DEFAULT_MATERIAL_PATH + (std::string) "water_0.dds", texture0)
-		|| !resourceManager->obtain<Texture>(DEFAULT_MATERIAL_PATH + (std::string) "water_1.dds", texture1)) {
+	if (!resourceManager->obtain<Texture>((std::string) RESOURCE_ROOT + DEFAULT_MATERIAL_PATH + (std::string) "water_0.dds", texture0)
+		|| !resourceManager->obtain<Texture>((std::string) RESOURCE_ROOT + DEFAULT_MATERIAL_PATH + (std::string) "water_1.dds", texture1)) {
+		AelaErrorHandling::consoleWindowError("World Manager", "Could not load some textures for some tile animations.");
 		return;
 	}
 
 	if (!resourceManager->obtain<Material>("water_0", material0)) {
+		AelaErrorHandling::consoleWindowError("World Manager", "Could not load some materials for some tile animations.");
 		std::cout << DEFAULT_MATERIAL_PATH + (std::string) "water_0.mtl failed.\n";
 		return;
 	}
@@ -304,6 +308,7 @@ void Game::WorldManager::rebuildMap() {
 					map->addModelWithTransparency(entityInMap, &modelEntity);
 					ModelEntity* newEntity = map->getModel(entityInMap);
 					character->setEntity(newEntity);
+					std::cout << "Entity: " << character->getName() << "\n";
 
 					// Make sure to update the character's animation's ModelEntity pointer.
 					AnimationTrack3D* track3D = animator->get3DTrack(character->getName() + "_mv");

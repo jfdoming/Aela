@@ -3,6 +3,12 @@
 * Author: Robert Ciborowski
 * Date: 07/08/2017
 * Description: A class used to manage characters.
+*
+*              Why do you need to manage characters? Well, a lot of their behaviour can be done by them.
+*              However, there are some things that should not be done by them since it would require each
+*              individual character to have their own pointer to things like Aela objects, etc. This would
+*              be a waste of memory. In addition, a CharacterManager gives its WorldManager the ability to
+*              get a character based on a given criteria, such as a coordinate.
 */
 
 #pragma once

@@ -124,7 +124,7 @@ void Aela::Basic3DGLRenderer::rebuildFrameBuffers(bool multisampling) {
 	glDeleteRenderbuffers(1, &depthRenderBuffer);
 	std::cout << "Good.\n";
 
-	if (multisampling > 0) {
+	if (multisampling) {
 		glDeleteBuffers(1, &multisampledColourFrameBuffer);
 		glDeleteTextures(1, multisampledColourFrameBufferTexture.getTexture());
 	}

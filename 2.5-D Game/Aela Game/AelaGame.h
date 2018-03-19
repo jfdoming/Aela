@@ -23,21 +23,7 @@ using namespace Aela;
 namespace Game {
 	class AelaGame {
 		public:
-			AelaGame(Engine* engine) : engine(engine), player(&worldManager), tileInventoryDisplay(engine) {
-				window = engine->getWindow();
-				renderer = engine->getRenderer();
-				eventHandler = engine->getEventHandler();
-				timeManager = engine->getTime();
-				sceneManager = engine->getSceneManager();
-				resourceManager = engine->getResourceManager();
-				audioPlayer = engine->getAudioPlayer();
-				animator = engine->getAnimator();
-				userEnvironment = engine->getUserEnvironment();
-				framerateCalculator = engine->getFramerateCalculator();
-				camera = engine->getRendererReference().getCamera();
-				// luaManager = engine->getLuaManager();
-				// animator = engine->getAnimator();
-			}
+			AelaGame(Engine* engine);
 
 			void setup();
 			void update();
@@ -77,6 +63,7 @@ namespace Game {
 			WorldManager worldManager;
 			CharacterManager* characterManager;
 			Player player;
+			Character* playerCharacter;
 			ScriptManager scriptManager;
 			DialogueHandler dialogueHandler;
 

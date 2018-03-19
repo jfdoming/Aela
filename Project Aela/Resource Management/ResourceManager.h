@@ -68,12 +68,17 @@ namespace Aela {
 			*/
 			void unload(std::string src);
 
+			void setResourceRoot(std::string resourceRoot);
+			std::string getResourceRoot();
+
 			// error handling
 			std::string getNewCrucialInvalidResourceKey();
 			std::vector<std::string>& getNewInvalidResourceKeys();
 		private:
 			std::unordered_map<std::string, ResourceGroup> groups;
 			ResourceMap resources;
+
+			std::string resourceRoot = "../../";
 
 			std::vector<std::string> invalidResourceKeys;
 			std::string crucialInvalidResourceKey = "";

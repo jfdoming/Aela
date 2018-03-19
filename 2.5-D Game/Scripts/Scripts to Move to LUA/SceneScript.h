@@ -208,10 +208,10 @@ namespace Game {
 			frame.setObject(ekkonImage);
 			if (i == 3) {
 				auto action = [](Engine* engine, AelaGame* game) {
-					engine->getSceneManager()->setCurrentScene(WORLD_GAMEPLAY_SCENE);
-					game->switchScene(WORLD_GAMEPLAY_SCENE);
-					/*engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE);
-					game->switchScene(MAIN_MENU_SCENE);*/
+					/*engine->getSceneManager()->setCurrentScene(WORLD_GAMEPLAY_SCENE);
+					game->switchScene(WORLD_GAMEPLAY_SCENE);*/
+					engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE);
+					game->switchScene(MAIN_MENU_SCENE);
 				};
 				frame.setEndingAction(std::bind(action, engine, game));
 			}

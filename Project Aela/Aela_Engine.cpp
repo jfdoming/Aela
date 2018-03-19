@@ -149,6 +149,7 @@ int Aela::Engine::setupEventHandler() {
 	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(Camera3D::onEvent, renderer.getCamera()));
 	eventHandler.addListener(EventConstants::WINDOW_RESIZE, bindListener(Renderer::onEvent, &renderer));
 	renderer.setEventHandler(&eventHandler);
+	eventHandler.start();
 	return 0;
 }
 

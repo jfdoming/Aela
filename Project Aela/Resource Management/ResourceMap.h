@@ -28,6 +28,7 @@ namespace Aela {
 			}
 
 			void put(std::string key, Resource* value);
+
 		private:
 			std::unordered_map<std::string, Resource*> resources;
 

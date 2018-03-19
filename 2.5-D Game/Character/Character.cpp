@@ -81,10 +81,12 @@ Game::TileDirection Game::Character::getDirectionFacing() {
 }
 
 Aela::ModelEntity* Game::Character::getEntity() {
+	std::cout << "Entity: " << entity << "\n";
 	return entity;
 }
 
 void Game::Character::setEntity(ModelEntity* entity) {
+	std::cout << "Setting entity.\n";
 	this->entity = entity;
 }
 
@@ -116,8 +118,38 @@ bool Game::Character::animationHasJustEnded() {
 	return animationHadJustEnded;
 }
 
-void Game::Character::onTrackEnd(std::string trackID) {
-	
+void Game::Character::turnSimple(TileDirection direction) {
+	if (directionFacing != direction) {
+		timePassedAfterAnimationEnd = 0;
+		animationHadJustEnded = false;
+	}
+
+	directionFacing = direction;
+}
+
+void Game::Character::moveSimple(TileDirection direction, std::string scriptOnCompletion) {
+	moving = true;
+	switchStep();
+	glm::vec3 translationForAnimation;
+	switch (direction) {
+		case TileDirection::RIGHT:
+			translationForAnimation = glm::vec3(-1, 0, 0);
+			break;
+		case TileDirection::FORWARD:
+			translationForAnimation = glm::vec3(0, 0, 1);
+			break;
+		case TileDirection::LEFT:
+			translationForAnimation = glm::vec3(1, 0, 0);
+			break;
+		case TileDirection::BACKWARD:
+			translationForAnimation = glm::vec3(0, 0, -1);
+			break;
+	}
+	addTranslation(translationForAnimation, scriptOnCompletion);
+}
+
+void Game::Character::stopMoving() {
+	moving = false;
 }
 
 void Game::Character::addTranslation(glm::vec3 translation, std::string scriptOnceComplete) {

@@ -20,23 +20,23 @@
 
 using namespace Aela;
 
-MaterialLoader::MaterialLoader() {
+GLMaterialLoader::GLMaterialLoader() {
 }
 
-MaterialLoader::~MaterialLoader() {
+GLMaterialLoader::~GLMaterialLoader() {
 }
 
-void MaterialLoader::expose(LuaManager& mgr) {
+void GLMaterialLoader::expose(LuaManager& mgr) {
 	// only expose part of the class to Lua
 	luabridge::getGlobalNamespace(mgr.getLuaState())
-		.beginClass<Aela::MaterialLoader>("MaterialLoader")
+		.beginClass<Aela::GLMaterialLoader>("GLMaterialLoader")
 		.endClass();
 
 	// Sorry Waseef, Julian had to comment this out in order to compile.
 	// mgr.exposeObject(this, "textureLoader");
 }
 
-bool Aela::MaterialLoader::load(ResourceMap& resources, std::string src) {
+bool Aela::GLMaterialLoader::load(ResourceMap& resources, std::string src) {
 	Material* material = nullptr;
 	std::string line;
 

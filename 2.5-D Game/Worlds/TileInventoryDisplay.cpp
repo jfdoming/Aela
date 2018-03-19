@@ -6,6 +6,7 @@
 */
 
 #include "TileInventoryDisplay.h"
+#include "../Resources/ResourceInfo.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
 
 Game::TileInventoryDisplay::TileInventoryDisplay() {}
@@ -22,6 +23,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 	tileInventoryLabel->setText(worldManager->getTileAtlas()->getTileType(player->getTileInventory()->getCurrentTile()->getType())->getName());
 
 	for (size_t i = 0; i < player->getTileInventory()->getNumberOfTiles(); i++) {
+		std::cout << "Tile Inventory Display: " << i << "\n";
 		Tile* tile = player->getTileInventory()->getTile(i);
 
 		if (tileInventoryImages.size() == i) {
@@ -31,7 +33,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 			// Until Aela is designed better (which I don't have the time to do), we must do this to get a GLTexture* (as opposed to getting
 			// a Texture* via tile->...->getTexture()). We have to get it from the tile atlas since 
 			if (tile->getEntity() == nullptr) {
-				resourceManager->obtain<GLTexture>(DEFAULT_MATERIAL_PATH + (std::string) "grass.dds", texture);
+				resourceManager->obtain<GLTexture>((std::string) RESOURCE_ROOT + DEFAULT_MATERIAL_PATH + "grass.dds", texture);
 			} else if (!resourceManager->obtain<GLTexture>(worldManager->getTileAtlas()->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
 				break;
 			}
@@ -47,7 +49,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 			// Until Aela is designed better (which I don't have the time to do), we must do this to get a GLTexture* (as opposed to getting
 			// a Texture* via tile->...->getTexture()).
 			if (tile->getEntity() == nullptr) {
-				resourceManager->obtain<GLTexture>(DEFAULT_MATERIAL_PATH + (std::string) "grass.dds", texture);
+				resourceManager->obtain<GLTexture>((std::string) RESOURCE_ROOT + DEFAULT_MATERIAL_PATH + (std::string) "grass.dds", texture);
 			} else {
 				if (!resourceManager->obtain<GLTexture>(worldManager->getTileAtlas()->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
 					break;

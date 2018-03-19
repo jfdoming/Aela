@@ -15,38 +15,14 @@ size_t Game::Player::getCharacterID() {
 	return id;
 }
 
-Game::Character* Game::Player::getCharacter() {
-	return characterManager->getCharacterByID(id);
-}
-
-Game::TileDirection Game::Player::getDirectionFacing() {
-	return characterManager->getCharacterByID(id)->getDirectionFacing();
-}
-
 Game::TileInventory* Game::Player::getTileInventory() {
 	return &tileInventory;
 }
 
-void Game::Player::turn(TileDirection direction) {
-	characterManager->turn(id, direction);
+void Game::Player::setCharacter(Character* character) {
+	this->character = character;
 }
 
-void Game::Player::moveIfPossible(TileDirection direction) {
-	worldManager->moveCharacterIfPossible(id, direction);
-}
-
-void Game::Player::moveIfPossible(std::vector<TileDirection> directions) {
-	worldManager->moveCharacterIfPossible(id, directions);
-}
-
-void Game::Player::move(TileDirection direction, std::string scriptOnCompletion) {
-	characterManager->move(characterManager->getCharacterByID(id), direction, scriptOnCompletion);
-}
-
-void Game::Player::stopMoving() {
-	characterManager->stopMoving(id);
-}
-
-bool Game::Player::isMoving() {
-	return characterManager->getCharacterByID(id)->isMoving();
+Game::Character* Game::Player::getCharacter() {
+	return character;
 }

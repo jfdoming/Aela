@@ -45,7 +45,7 @@ std::string skyboxNames[] = {
 };
 
 void loadMaterials(ResourceManager* resourceManager) {
-	MaterialLoader materialLoader;
+	GLMaterialLoader materialLoader;
 	resourceManager->bindLoader(&materialLoader);
 	resourceManager->bindGroup("materials");
 
@@ -120,7 +120,7 @@ void loadSkyboxes(ResourceManager* resourceManager) {
 }
 
 void loadStartupMap(ResourceManager* resourceManager, GLRenderer& renderer) {
-	Map3DLoader mapLoader;
+	Map3DLoader mapLoader(resourceManager->getResourceRoot());
 	mapLoader.bindRenderer(&renderer);
 	resourceManager->bindLoader(&mapLoader);
 	resourceManager->bindGroup("maps");
