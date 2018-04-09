@@ -36,6 +36,7 @@ void Label::renderWithTint(GLRenderer& renderer, ColourRGBA* tint) {
 
 void Label::setText(std::string text) {
 	this->text = text;
+	setup();
 	markDirty();
 }
 

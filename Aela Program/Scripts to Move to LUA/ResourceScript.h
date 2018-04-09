@@ -11,10 +11,8 @@ using namespace Aela;
 const unsigned int numberOfMaterialsAndModels = 5;
 std::string materialsAndModelNames[] = {
 	"meme_mug",
-	"jeep_1",
-	"grass_1",
-	"mansion_2",
-	"lamp_post_1"
+	"corner_elevated",
+	"floor"
 };
 
 const unsigned int numberOfTextures = 5;
@@ -28,7 +26,6 @@ std::string textureNames[] = {
 
 const unsigned int numberOfBillboards = 2;
 std::string billboardNames[] = {
-	"character",
 	"ekkon"
 };
 

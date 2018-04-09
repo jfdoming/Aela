@@ -212,5 +212,6 @@
     <ClInclude Include="3D\Animation\KeyFrameMaterial.h" />
     <ClInclude Include="3D\Animation\KeyFrameModel.h" />
     <ClInclude Include="Animation\AnimationLooper.h" />
+    <ClInclude Include="Utilities\enumut.h" />
   </ItemGroup>
 </Project>

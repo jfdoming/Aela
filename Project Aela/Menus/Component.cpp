@@ -20,12 +20,17 @@ Component::~Component() {
 
 void Component::update() {
 	updateComponent();
+
+	if (dirty) {
+		dirtyOnUpdate = true;
+	}
 }
 
 void Component::render(GLRenderer& renderer) {
-	if (dirty) {
+	if (dirtyOnUpdate) {
 		renderComponent(renderer);
 		dirty = false;
+		dirtyOnUpdate = false;
 	}
 }
 

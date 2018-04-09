@@ -2,7 +2,6 @@
 #include "../Events/EventConstants.h"
 
 Aela::Button::Button() : hoverTint(0.0f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0) {
-	
 }
 
 Aela::Button::Button(GLTexture* texture) : ImageComponent(texture), hoverTint(0.7f, 0.7f, 0.7f, 1.0f), clickTint(0.5f, 0.5f, 0.5f, 1.0) {
@@ -20,22 +19,32 @@ Aela::Button::~Button() {
 }
 
 void Aela::Button::updateComponent() {
-	if (active) {
-		tint = clickTint;
-	} else if (hovered) {
-		tint = hoverTint;
-	} else {
-		tint.setValues(1, 1, 1, 1);
+	if (isDirty()) {
+		if (active) {
+			tint = clickTint;
+		} else if (hovered) {
+			tint.set(hoverTint);
+		} else {
+			tint.set(1, 1, 1, 1);
+		}
 	}
+	
+	//std::cout << std::boolalpha << tint << ", ";
+	//if (tint == clickTint) {
+	//	std::cout << "tint is the click tint";
+	//} else if (tint == hoverTint) {
+	//	std::cout << "tint is the hover tint";
+	//} else {
+	//	std::cout << "tint is the normal tint";
+	//}
+	//std::cout << ", hovered: " << hovered << "\n";
 
 	// TODO figure out why wrong tint is displayed
 }
 
 void Aela::Button::renderComponent(GLRenderer& renderer) {
 	ImageComponent::renderComponent(renderer);
-	if (text != nullptr) {
-		text->renderWithTint(renderer, &tint);
-	}
+	textLabel.renderWithTint(renderer, &tint);
 }
 
 void Button::onMousePressed(MouseEvent* event) {
@@ -72,34 +81,37 @@ void Button::onMouseEntered(MouseEvent* event) {
 	}
 
 	markDirty();
-	std::cout << "enter";
 }
 
 void Button::onMouseExited(MouseEvent* event) {
 	markDirty();
 	active = false;
-	std::cout << "exit";
 }
 
 void Aela::Button::setupOnClick(std::function<void()> function) {
 	onClick = function;
 }
 
-void Aela::Button::setText(Label* text) {
-	setText(std::make_shared<Label>(*text));
-}
-
-void Aela::Button::setText(std::shared_ptr<Label> text) {
-	this->text = text;
-	Rect<int>* textDimensions = text->getDimensions();
+void Aela::Button::setText(std::string text) {
+	textLabel.setText(text);
+	Rect<int>* textDimensions = textLabel.getDimensions();
 	int width = textDimensions->getWidth();
 	int height = textDimensions->getHeight();
-	this->text->setDimensions(&Rect<int>(dimensions.getX() + dimensions.getWidth() / 2 - width / 2,
-		dimensions.getY() + dimensions.getHeight() / 2 + height / 2, dimensions.getWidth(), dimensions.getHeight()));
+	textDimensions->setXY(dimensions.getX() + dimensions.getWidth() / 2 - width / 2,
+		dimensions.getY() + dimensions.getHeight() / 2 + height / 2);
 }
 
+//void Aela::Button::setText(std::shared_ptr<Label> text) {
+//	this->text = text;
+//	Rect<int>* textDimensions = text->getDimensions();
+//	int width = textDimensions->getWidth();
+//	int height = textDimensions->getHeight();
+//	this->text->setDimensions(&Rect<int>(dimensions.getX() + dimensions.getWidth() / 2 - width / 2,
+//		dimensions.getY() + dimensions.getHeight() / 2 + height / 2, dimensions.getWidth(), dimensions.getHeight()));
+//}
+
 std::string Aela::Button::getText() {
-	return text->getText();
+	return textLabel.getText();
 }
 
 void Aela::Button::setHoverTint(ColourRGBA* hoverTint) {
