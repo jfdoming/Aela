@@ -96,6 +96,12 @@ void ResourceManager::setResourceRoot(std::string resourceRoot) {
 	this->resourceRoot = resourceRoot;
 }
 
+std::string Aela::ResourceManager::getResourceRoot() {
+	// This is actually necessary. If a program wants to load a file without using the ResourceManager
+	// (such as if the file isn't meant to be an actual resource), they can have access to the root.
+	return resourceRoot;
+}
+
 void ResourceManager::addToGroup(std::string src, bool crucial) {
 	ResourceQuery query(resourceRoot + src, crucial, boundLoader);
 	addToGroup(query);

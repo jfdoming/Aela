@@ -2,7 +2,7 @@
 * Class: Character
 * Author: Robert Ciborowski
 * Date: 07/08/2017
-* Description: A class used to represent an Character.
+* Description: A class used to represent a Character.
 */
 
 #pragma once
@@ -24,6 +24,10 @@ namespace Game {
 				// According to Platinum, it should be 0.0075, but that feels too fast.
 				runningSpeed = 0.0075f;
 				directionFacing = TileDirection::BACKWARD;
+			}
+
+			Character(std::string name) : Character() {
+				this->name = name;
 			}
 
 			void setup(Location* location);
@@ -50,11 +54,10 @@ namespace Game {
 			CharacterStep getCurrentStep();
 			void switchStep();
 			bool isMoving();
+
 			void animationHasEnded();
 			bool animationHasJustEnded();
-			
-			virtual void onTrackEnd(std::string trackID);
-
+			void stopMoving();
 
 		private:
 			Location location;
@@ -93,5 +96,8 @@ namespace Game {
 			void removeNextTranslation();
 			std::pair<glm::vec3, std::string>* getNextTranslation();
 			std::pair<glm::vec3, std::string>* getLastTranslation();
+
+			void turnSimple(TileDirection direction);
+			void moveSimple(TileDirection direction, std::string scriptOnCompletion);
 	};
 }

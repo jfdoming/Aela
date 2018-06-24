@@ -8,12 +8,13 @@
 #pragma once
 #include "WorldLoader.h"
 #include "Error Handler\ErrorHandler.h"
+#include "../Resources/ResourceInfo.h"
 #include <fstream>
 #include <iostream>
 
 bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 	std::ifstream in;
-	in.open(path);
+	in.open(RESOURCE_ROOT + path);
 
 	if (in.is_open()) {
 		std::string line;
@@ -64,7 +65,7 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 				} else if (character == '>') {
 					charactersToErase++;
 				} else if (character == '/' && line.at(1) == '/') {
-					// This is a comment. Stay calm and move to the next line.
+					// This is a comment. Stay calm and moveSimple to the next line.
 					break;
 				} else if (character != ' ' && character != '	' && currentTag != "") {
 					std::string propertyType = "";

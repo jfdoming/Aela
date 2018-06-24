@@ -30,7 +30,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	}
 	ColourRGBA VSBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
 	ColourRGBA almostWhite(0.9f, 0.9f, 0.9f, 1.0f);
-	Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getWindowDimensions());
+	Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getDimensions());
 
 	// The following blocks of code setup the main menu scene.
 	// This sets up an image.
@@ -58,7 +58,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	};
 	auto helpMapAction = [](Engine* engine) {
 		// Lol, this is temporary until I feel like creating a seperate scene for this garbage.
-		std::string controls = (std::string) "WASD - move camera\n"
+		std::string controls = (std::string) "WASD - moveSimple camera\n"
 			+ "\\ - change entity type being placed\n"
 			+ "Esc - open pause menu\n"
 			+ "Left/Right Arrows - change resource of entity\n"
@@ -94,7 +94,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This sets up the title screen scene.
 	auto mainMenuScene = new Scene();
-	mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
+	mainMenuScene->enableMenu(engine->getWindow()->getDimensions(), engine->getRendererReference());
 	mainMenuScene->getMenu()->add(mainMenuImage);
 	mainMenuScene->getMenu()->add(titleText);
 	mainMenuScene->getMenu()->add(ekkonGamesText);
@@ -127,7 +127,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This creates the map creation scene.
 	auto mapCreationScene = new Scene();
-	mapCreationScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
+	mapCreationScene->enableMenu(engine->getWindow()->getDimensions(), engine->getRendererReference());
 	mapCreationScene->getMenu()->add(topBarImage);
 	mapCreationScene->getMenu()->add(entityTypeText);
 	mapCreationScene->getMenu()->add(positionText);
@@ -188,7 +188,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This sets up the scenes for the pause menu.
 	Scene* pauseScene = new Scene();
-	pauseScene->enableMenu(engine->getWindow()->getWindowDimensions(), *engine->getRenderer());
+	pauseScene->enableMenu(engine->getWindow()->getDimensions(), *engine->getRenderer());
 
 	entitySubMenu->init(&windowDimensions, *renderer);
 	skyboxSubMenu->init(&windowDimensions, *renderer);

@@ -3,10 +3,12 @@
 * Author: Robert Ciborowski
 * Date: 02/01/2018
 * Description: A class used to represent the player and their properties.
+*              I wanted to make Player extend Character, but I can't due
+*              to the way that Characters must be stored in the CharacterManager.
 */
 
 #pragma once
-#include <unordered_map>	
+#include <unordered_map>
 #include "../Character/Character.h"
 #include "../Worlds/WorldManager.h"
 #include "../Worlds/TileInventory.h"
@@ -14,36 +16,22 @@
 namespace Game {
 	class Player {
 		public:
-			Player(WorldManager* worldManager) {
-				this->worldManager = worldManager;
-				this->characterManager = worldManager->getCharacterManager();
+			Player() {
 			}
 
 			// These are getters and setters.
 			void setCharacterID(size_t id);
 			size_t getCharacterID();
-			Character* getCharacter();
-			TileDirection getDirectionFacing();
 			TileInventory* getTileInventory();
-
-			// During regular gameplay, the player can be moved if its possible to do so. These functions are here so that the code in AelaGame
-			// is a little cleaner.
-			void turn(TileDirection direction);
-			void moveIfPossible(TileDirection direction);
-			void moveIfPossible(std::vector<TileDirection> directions);
-
-			// If the player is in a non-collision mode, they can be forced to move. Note that this won't triggered tile events.
-			void move(TileDirection direction, std::string scriptOnCompletion);
-
-			void stopMoving();
-			bool isMoving();
+			void setCharacter(Character* character);
+			Character* getCharacter();
 
 		private:
 			// This stores the Character ID of the player, which is assigned by the Character Manager.
 			size_t id;
 
-			WorldManager* worldManager;
-			CharacterManager* characterManager;
+			Character* character;
+
 			TileInventory tileInventory;
 	};
 }

@@ -6,8 +6,19 @@
 */
 
 #include "Renderer.h"
+#include "../Events/WindowResizeEvent.h"
 
 using namespace Aela;
+
+void Aela::Renderer::onEvent(Event* event) {
+	if (event->getType() == EventConstants::WINDOW_RESIZE) {
+		WindowResizeEvent* resizedEvent = static_cast<WindowResizeEvent*>(event);
+		if (resizedEvent->getWindow() == window) {
+			// Set this internal flag to true so that the resolution change can be handled later.
+			resolutionWasChangedFlag = true;
+		}
+	}
+}
 
 void Renderer::setWindow(Window* window) {
 	this->window = window;
@@ -19,16 +30,12 @@ void Renderer::setTime(Time* timeManager) {
 	camera.setTime(timeManager);
 }
 
+void Aela::Renderer::setEventHandler(EventHandler* eventHandler) {
+	this->eventHandler = eventHandler;
+}
+
 void Renderer::setFOV(float value) {
 	camera.setFieldOfView(value);
-}
-
-void Renderer::increaseFOV() {
-	camera.setFieldOfView(camera.getFieldOfView() + (0.002f) * timeManager->getTimeBetweenFramesInNanos());
-}
-
-void Renderer::decreaseFOV() {
-	camera.setFieldOfView(camera.getFieldOfView() - (0.002f) * timeManager->getTimeBetweenFramesInNanos());
 }
 
 Window* Renderer::getWindow() {

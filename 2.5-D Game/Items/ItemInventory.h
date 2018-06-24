@@ -6,10 +6,21 @@
 */
 
 #pragma once
+#include "ItemAtlas.h"
+#include "Item.h"
 
 namespace Game {
-	class ItemInventoy {
-	public:
-		ItemInventoy() {}
+	class ItemInventory {
+		public:
+			ItemInventory() {}
+
+			size_t addItem(Item* item);
+			Item* getItem(size_t id);
+			bool removeItem(size_t id);
+			ItemAtlas* getItemAtlas();
+
+		private:
+			ItemAtlas atlas;
+			std::vector<Item> items;
 	};
 }

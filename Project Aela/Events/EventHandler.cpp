@@ -1,11 +1,11 @@
 #include <iostream>
+#include <memory>
 
 #include "EventHandler.h"
 #include "EventConstants.h"
 #include "KeyEvent.h"
 #include "MouseEvent.h"
-
-#include <memory>
+#include "WindowResizeEvent.h"
 
 using namespace Aela;
 
@@ -22,6 +22,10 @@ void EventHandler::start() {
 
 void EventHandler::stop() {
 	dispatcher.stopBlocking();
+}
+
+void Aela::EventHandler::fireEvent(Event* event) {
+	dispatcher.fireEvent(event);
 }
 
 void EventHandler::updateSDLEvents() {
@@ -84,6 +88,14 @@ void EventHandler::updateSDLEvents() {
 											event.wheel.y));
 				break;
 		}
+	}
+}
+
+void Aela::EventHandler::updateWindowEvents() {
+	// Since Window cannot tell the handler to fire events inside of itself (cause Window and EventHandler
+	// would have to include on another), this exists. Someone change our event framework, please.
+	if (window->wasResized()) {
+		dispatcher.fireEvent(new WindowResizeEvent(window));
 	}
 }
 

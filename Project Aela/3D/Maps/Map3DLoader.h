@@ -15,7 +15,7 @@
 namespace Aela {
 	class Map3DLoader : public ResourceLoader {
 		public:
-			Map3DLoader();
+			Map3DLoader(std::string resourceRoot);
 			virtual ~Map3DLoader();
 
 			virtual bool load(ResourceMap& resources, std::string src);
@@ -24,5 +24,10 @@ namespace Aela {
 
 		private:
 			GLRenderer* renderer;
+
+			// Because a map refers to models, this loader needs to know what the resource root is.
+			// Maybe resource root should be part of ResourceLoader because of this. To be honest,
+			// adding a resource root seemed to make everything more complicated.
+			std::string resourceRoot;
 	};
 }

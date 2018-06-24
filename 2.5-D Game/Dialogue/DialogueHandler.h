@@ -7,7 +7,7 @@
 
 #pragma once
 #include "../Scripts/ScriptManager.h"
-#include "Time\Time.h"
+#include "Time/Time.h"
 #include "Menus/SubMenu.h"
 #include "Menus/Label.h"
 #include "DialogueOption.h"

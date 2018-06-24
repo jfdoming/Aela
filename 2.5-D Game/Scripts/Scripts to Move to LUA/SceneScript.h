@@ -40,7 +40,7 @@ namespace Game {
 		ColourRGBA VSBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
 		ColourRGBA almostWhite(0.9f, 0.9f, 0.9f, 1.0f);
 		ColourRGBA almostBlack(0.1f, 0.1f, 0.1f, 1.0f);
-		Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getWindowDimensions());
+		Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getDimensions());
 
 		// The following blocks of code set up the Ekkon intro scene.
 		auto ekkonImage = std::make_shared<ImageComponent>();
@@ -52,7 +52,7 @@ namespace Game {
 
 		// This sets up the ekkon scene.
 		auto ekkonScene = new Scene();
-		ekkonScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
+		ekkonScene->enableMenu(engine->getWindow()->getDimensions(), engine->getRendererReference());
 		ekkonScene->getMenu()->add(ekkonImage);
 
 		// This sets up text.
@@ -112,7 +112,7 @@ namespace Game {
 
 		// This sets up the main menu scene.
 		auto mainMenuScene = new Scene();
-		mainMenuScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
+		mainMenuScene->enableMenu(engine->getWindow()->getDimensions(), engine->getRendererReference());
 		mainMenuScene->getMenu()->add(titleText);
 		mainMenuScene->getMenu()->add(ekkonGamesText);
 		mainMenuScene->getMenu()->add(startGameButton);
@@ -176,7 +176,7 @@ namespace Game {
 
 		// This sets up the world gameplay scene, in which the player is given a top-down view of the world.
 		auto worldGameplayScene = new Scene();
-		worldGameplayScene->enableMenu(engine->getWindow()->getWindowDimensions(), engine->getRendererReference());
+		worldGameplayScene->enableMenu(engine->getWindow()->getDimensions(), engine->getRendererReference());
 		worldGameplayScene->getMenu()->add(dialogueBoxSubMenu);
 		worldGameplayScene->getMenu()->add(tileInventorySubMenu);
 		worldGameplayScene->getMenu()->add(tileInventorySubMenu2);
@@ -208,6 +208,8 @@ namespace Game {
 			frame.setObject(ekkonImage);
 			if (i == 3) {
 				auto action = [](Engine* engine, AelaGame* game) {
+					/*engine->getSceneManager()->setCurrentScene(WORLD_GAMEPLAY_SCENE);
+					game->switchScene(WORLD_GAMEPLAY_SCENE);*/
 					engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE);
 					game->switchScene(MAIN_MENU_SCENE);
 				};

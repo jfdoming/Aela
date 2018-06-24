@@ -12,7 +12,8 @@
 
 using namespace Aela;
 
-Aela::Map3DLoader::Map3DLoader() {
+Aela::Map3DLoader::Map3DLoader(std::string resourceRoot) {
+	this->resourceRoot = resourceRoot;
 }
 
 Aela::Map3DLoader::~Map3DLoader() {
@@ -73,7 +74,7 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 				}
 				entityType = EntityType::GENERIC;
 			} else if (character == '/' && line.at(1) == '/') {
-				// This is a comment. Stay calm and move to the next line.
+				// This is a comment. Stay calm and moveSimple to the next line.
 				break;
 			} else if (character != ' ' && entityType != EntityType::GENERIC) {
 				std::string propertyType = "";
@@ -93,13 +94,13 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						if (source.at(0) == '~') {
 							source = source.substr(1, source.size() - 1);
 							if (entityType == EntityType::MODEL) {
-								source = DEFAULT_MODEL_PATH + source;
+								source = resourceRoot + DEFAULT_MODEL_PATH + source;
 							}
 							if (entityType == EntityType::BILLBOARD) {
-								source = DEFAULT_TEXTURE_PATH + source;
+								source = resourceRoot + DEFAULT_TEXTURE_PATH + source;
 							}
 							if (entityType == EntityType::SKYBOX) {
-								source = DEFAULT_SKYBOX_PATH + source;
+								source = resourceRoot + DEFAULT_SKYBOX_PATH + source;
 							}
 						}
 						bool success = resources.get(source, res);
@@ -114,6 +115,7 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						} else {
 							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", "The resource " + line.substr(j + 1, k - j - 1) + "(\"" + source + "\") was requested by "
 							+ src + " and was not found.");
+							std::cout << source << " was the source.\n";
 							return false;
 						}
 					} else if (propertyType == "power" && entityType == EntityType::LIGHT) {

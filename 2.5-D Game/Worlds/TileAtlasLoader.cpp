@@ -8,6 +8,7 @@
 #include "TileAtlasLoader.h"
 #include "Error Handler\ErrorHandler.h"
 #include "Resource Management\ResourcePaths.h"
+#include "../Resources/ResourceInfo.h"
 #include "TileLoader.h"
 #include <fstream>
 
@@ -24,7 +25,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 	atlas.addTile(TileType(true, TileBehaviour::FLOOR, "blank"), nullptr);
 
 	std::ifstream in;
-	in.open(path);
+	in.open(RESOURCE_ROOT + path);
 	if (in.is_open()) {
 		std::string line;
 		std::string currentTag = "";
@@ -58,7 +59,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 					unsigned int currentTile = tileLoader.getTilesLoaded();
 					tileLoader.useMaterial(material);
 					resourceManager->bindGroup("tileGroup" + std::to_string(currentTile));
-					std::string templateTile = DEFAULT_MODEL_PATH;
+					std::string templateTile = (std::string) DEFAULT_MODEL_PATH;
 
 					if ((behaviour == TileBehaviour::FLOOR) || (behaviour == TileBehaviour::RAMP_RIGHT)
 						|| (behaviour == TileBehaviour::RAMP_UP) || (behaviour == TileBehaviour::RAMP_LEFT)
@@ -98,7 +99,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 					atlas.addTile(TileType(collidable, behaviour, name), model);
 					name = "tile";
 				} else if (character == '/' && line.at(1) == '/') {
-					// This is a comment. Stay calm and move to the next line.
+					// This is a comment. Stay calm and moveSimple to the next line.
 					break;
 				} else if (character != ' ' && currentTag != "") {
 					std::string propertyType = "";

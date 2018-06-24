@@ -37,7 +37,7 @@ void ControlManager::updateCameraTransforms(Camera3D* camera) {
 
 		// This moves the cursor back to the middle of the window.
 		int width, height;
-		window->getWindowDimensions(&width, &height);
+		window->getDimensions(&width, &height);
 		window->setCursorPositionInWindow(width / 2, height / 2);
 
 		// This gets the horizontal and vertical angles.

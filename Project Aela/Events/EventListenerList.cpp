@@ -1,4 +1,5 @@
 #include "EventListenerList.h"
+#include <iostream>
 
 using namespace Aela;
 

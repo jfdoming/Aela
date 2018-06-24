@@ -8,7 +8,8 @@
 
 #include "stdafx.h"
 #include "CharacterManager.h"
-#include "CharacterLoader.h"
+#include "CharacterModelGenerator.h"
+#include "../Resources/ResourceInfo.h"
 #include "Resource Management/ResourcePaths.h"
 #include "../../Project Aela/3D/Animation/AnimationTrackMaterial.h"
 #include "../../Project Aela/Utilities/enumut.h"
@@ -33,27 +34,27 @@ void Game::CharacterManager::update() {
 			}
 		} else if (!animator->trackWithTagExists(character.getName() + "_mv")) {
 			std::pair<glm::vec3, std::string>* translation = character.getNextTranslation();
-			std::cout << "Something is happening.!\n";
 			if (translation != nullptr) {
 				animateCharacterMovement(&character, translation->first, translation->second);
 				character.removeNextTranslation();
-				std::cout << "Not nullptr!\n";
 			} else {
 				character.moving = false;
 				character.animationHadJustEnded = false;
-				std::cout << "DONE!\n";
 			}
 		}
 	}
 }
 
 void Game::CharacterManager::generateCharacterModels(ResourceManager* resourceManager) {
-	CharacterLoader loader;
-	loader.setCharactersToLoad(&characters);
-	loader.setResourceManager(resourceManager);
-	resourceManager->bindLoader(&loader);
+	CharacterModelGenerator generator;
+	generator.setCharacters(&characters);
+	std::cout << characters[0].getName() << " is a name.\n";
+	generator.setTemplateModelSource((std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "floor.obj");
+	resourceManager->bindLoader(&generator);
 	resourceManager->bindGroup("characters");
-	resourceManager->addToGroup(DEFAULT_MODEL_PATH + (std::string) "floor.obj", false);
+
+	// We want to generate one set of models, so we'll tell the resource manager to run the generator once.
+	resourceManager->addToGroup("", false);
 
 	if (resourceManager->loadGroup("characters") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"characters\": " << resourceManager->getNewInvalidResourceKeys()[0] << "\n";
@@ -148,12 +149,7 @@ std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFuncti
 }
 
 void Game::CharacterManager::turn(Character* character, TileDirection direction) {
-	if (character->directionFacing != direction) {
-		character->timePassedAfterAnimationEnd = 0;
-		character->animationHadJustEnded = false;
-	}
-
-	character->directionFacing = direction;
+	character->turnSimple(direction);
 
 	Model* model;
 	if (resourceManager->obtain<Model>("ch_" + character->getTextureName() + "_" + std::to_string(enumToInteger(direction)) + "_0_mo", model)) {
@@ -181,24 +177,7 @@ void Game::CharacterManager::turn(std::string name, TileDirection direction) {
 }
 
 void Game::CharacterManager::move(Character* character, TileDirection direction, std::string scriptOnCompletion) {
-	character->moving = true;
-	character->switchStep();
-	glm::vec3 translationForAnimation;
-	switch (direction) {
-		case TileDirection::RIGHT:
-			translationForAnimation = glm::vec3(-1, 0, 0);
-			break;
-		case TileDirection::FORWARD:
-			translationForAnimation = glm::vec3(0, 0, 1);
-			break;
-		case TileDirection::LEFT:
-			translationForAnimation = glm::vec3(1, 0, 0);
-			break;
-		case TileDirection::BACKWARD:
-			translationForAnimation = glm::vec3(0, 0, -1);
-			break;
-	}
-	character->addTranslation(translationForAnimation, scriptOnCompletion);
+	character->moveSimple(direction, scriptOnCompletion);
 	turn(character, direction);
 }
 
@@ -244,7 +223,7 @@ void Game::CharacterManager::teleport(std::string name, Location* location) {
 void Game::CharacterManager::stopMoving(size_t id) {
 	if (id < characters.size()) {
 		Character* character = &characters[id];
-		character->moving = false;
+		character->stopMoving();
 	}
 }
 
@@ -255,7 +234,7 @@ void Game::CharacterManager::stopMoving(std::string name) {
 	}
 
 	Character& character = characters[iter->second];
-	character.moving = false;
+	character.stopMoving();
 }
 
 bool Game::CharacterManager::doesMapNeedToBeRebuilt() {

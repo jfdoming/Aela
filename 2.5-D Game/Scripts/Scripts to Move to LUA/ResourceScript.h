@@ -75,7 +75,7 @@ std::string skyboxNames[] = {
 
 namespace Game {
 	static void loadMaterials(ResourceManager* resourceManager) {
-		MaterialLoader materialLoader;
+		GLMaterialLoader materialLoader;
 		resourceManager->bindLoader(&materialLoader);
 		resourceManager->bindGroup("materials");
 
@@ -87,10 +87,6 @@ namespace Game {
 
 		for (std::string path : otherMaterialNames) {
 			resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + path + ".mtl", false);
-			std::cout << DEFAULT_MATERIAL_PATH + path + ".mtl" << " is a thing\n";
-			if (path == "water_0") {
-				somePath = DEFAULT_MATERIAL_PATH + path + ".mtl";
-			}
 		}
 
 		if (resourceManager->loadGroup("materials") != Aela::ResourceManager::Status::OK) {
@@ -150,6 +146,8 @@ namespace Game {
 		resourceManager->bindLoader(&skyboxLoader);
 		resourceManager->bindGroup("skybox");
 
+		std::cout << "Loading skyboxes.\n";
+
 		for (std::string path : skyboxNames) {
 			resourceManager->addToGroup(DEFAULT_SKYBOX_PATH + path, false);
 		}
@@ -160,11 +158,11 @@ namespace Game {
 	}
 
 	static void loadStartupMap(ResourceManager* resourceManager, GLRenderer* renderer) {
-		Map3DLoader mapLoader;
+		Map3DLoader mapLoader(resourceManager->getResourceRoot());
 		mapLoader.bindRenderer(renderer);
 		resourceManager->bindLoader(&mapLoader);
 		resourceManager->bindGroup("maps");
-		resourceManager->addToGroup("../../res/maps/map.txt", false);
+		resourceManager->addToGroup("res/maps/map.txt", false);
 		if (resourceManager->loadGroup("maps") != Aela::ResourceManager::Status::OK) {
 			std::cerr << "Failed to load a resource from group \"maps\"!" << std::endl;
 		}

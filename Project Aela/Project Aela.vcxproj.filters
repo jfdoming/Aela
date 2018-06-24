@@ -77,6 +77,11 @@
     <ClCompile Include="2D\Renderer\Basic2DGLRenderer.cpp" />
     <ClCompile Include="2D\Simple 2D Framebuffer\Simple2DGLFramebuffer.cpp" />
     <ClCompile Include="2D\Texture\GLTextureLoader.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="3D\Animation\KeyFrameMaterial.cpp" />
+    <ClCompile Include="3D\Animation\KeyFrameModel.cpp" />
+=======
+>>>>>>> 4ac589e246fcb7188ff70011155ed57aee3d824b
     <ClCompile Include="3D\Materials\GLMaterialLoader.cpp" />
     <ClCompile Include="3D\Particles\GLParticleLoader.cpp" />
     <ClCompile Include="3D\Renderer\Basic3DGLModelRenderer.cpp" />
@@ -86,11 +91,19 @@
     <ClCompile Include="3D\Skybox\GLSkyboxLoader.cpp" />
     <ClCompile Include="Menus\SubMenu.cpp" />
     <ClCompile Include="Old Garbage\shader.cpp" />
+<<<<<<< HEAD
+    <ClCompile Include="Old Garbage\texture.cpp" />
+    <ClCompile Include="Renderer\GLRenderer.cpp" />
+    <ClCompile Include="Transformable\Transformable.cpp" />
+    <ClCompile Include="Utilities\Texture Splitter\GLTextureSplitter.cpp" />
+    <ClCompile Include="Events\WindowResizeEvent.cpp" />
+=======
     <ClCompile Include="Renderer\GLRenderer.cpp" />
     <ClCompile Include="Transformable\Transformable.cpp" />
     <ClCompile Include="3D\Animation\KeyFrameMaterial.cpp" />
     <ClCompile Include="3D\Animation\KeyFrameModel.cpp" />
     <ClCompile Include="Animation\AnimationLooper.cpp" />
+>>>>>>> 4ac589e246fcb7188ff70011155ed57aee3d824b
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2D\Animation\KeyFrame2D.h" />
@@ -185,10 +198,20 @@
     <ClInclude Include="Old Garbage\shader.hpp" />
     <ClInclude Include="Transformable\Transformable.h" />
     <ClInclude Include="Time\Time.h" />
+<<<<<<< HEAD
+    <ClInclude Include="3D\Animation\AnimationTrackMaterial.h" />
+    <ClInclude Include="3D\Animation\KeyFrameMaterial.h" />
+    <ClInclude Include="Animation\AnimationLooper.h" />
+    <ClInclude Include="Utilities\enumut.h" />
+    <ClInclude Include="3D\Animation\AnimationTrackModel.h" />
+    <ClInclude Include="3D\Animation\KeyFrameModel.h" />
+    <ClCompile Include="Animation\AnimationLooper.cpp" />
+=======
     <ClInclude Include="2D\Text\TextManager.h" />
     <ClInclude Include="Utilities\AelaEngineFunctor.h" />
     <ClInclude Include="Utilities\Pool\Pool.h" />
     <ClInclude Include="Time Manager\TimeManager.h" />
+>>>>>>> 4ac589e246fcb7188ff70011155ed57aee3d824b
     <ClInclude Include="Utilities\glmut.h" />
     <ClInclude Include="2D\Animation\AnimationTrack2D.h" />
     <ClInclude Include="2D\Renderer\Basic2DGLRenderer.h" />
@@ -197,6 +220,10 @@
     <ClInclude Include="2D\Texture\GLTexture.h" />
     <ClInclude Include="2D\Texture\GLTextureLoader.h" />
     <ClInclude Include="3D\Animation\AnimationTrack3D.h" />
+<<<<<<< HEAD
+    <ClInclude Include="3D\Billboards\GLBillboardEntity.h" />
+=======
+>>>>>>> 4ac589e246fcb7188ff70011155ed57aee3d824b
     <ClInclude Include="3D\Materials\GLMaterialLoader.h" />
     <ClInclude Include="3D\Particles\GLParticleLoader.h" />
     <ClInclude Include="3D\Renderer\Basic3DGLModelRenderer.h" />
@@ -205,6 +232,16 @@
     <ClInclude Include="3D\Renderer\Basic3DGLSkyboxRenderer.h" />
     <ClInclude Include="3D\Skybox\GLSkyboxLoader.h" />
     <ClInclude Include="Animation\AnimationTrack.h" />
+<<<<<<< HEAD
+    <ClInclude Include="Events\Listener.h" />
+    <ClInclude Include="Menus\SubMenu.h" />
+    <ClInclude Include="Renderer\GLRenderer.h" />
+    <ClInclude Include="Utilities\Paths\PathSegment.h" />
+    <ClInclude Include="Utilities\Paths\PathSegment2D.h" />
+    <ClInclude Include="Utilities\Paths\PathSegment3D.h" />
+    <ClInclude Include="Utilities\Texture Splitter\GLTextureSplitter.h" />
+    <ClInclude Include="Events\WindowResizeEvent.h" />
+=======
     <ClInclude Include="Menus\SubMenu.h" />
     <ClInclude Include="Renderer\GLRenderer.h" />
     <ClInclude Include="3D\Animation\AnimationTrackMaterial.h" />
@@ -212,6 +249,6 @@
     <ClInclude Include="3D\Animation\KeyFrameMaterial.h" />
     <ClInclude Include="3D\Animation\KeyFrameModel.h" />
     <ClInclude Include="Animation\AnimationLooper.h" />
-    <ClInclude Include="Utilities\enumut.h" />
+>>>>>>> 4ac589e246fcb7188ff70011155ed57aee3d824b
   </ItemGroup>
 </Project>

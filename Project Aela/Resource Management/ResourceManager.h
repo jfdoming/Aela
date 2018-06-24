@@ -69,6 +69,7 @@ namespace Aela {
 			void unload(std::string src);
 
 			void setResourceRoot(std::string resourceRoot);
+			std::string getResourceRoot();
 
 			// error handling
 			std::string getNewCrucialInvalidResourceKey();

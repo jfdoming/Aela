@@ -7,8 +7,8 @@
 
 #pragma once
 
-#define DEFAULT_MODEL_PATH "../../res/models/"
-#define DEFAULT_MATERIAL_PATH "../../res/materials/"
-#define DEFAULT_SKYBOX_PATH "../../res/skyboxes/"
-#define DEFAULT_TEXTURE_PATH "../../res/textures/"
-#define DEFAULT_PARTICLE_PATH "../../res/particles/"
+#define DEFAULT_MODEL_PATH "res/models/"
+#define DEFAULT_MATERIAL_PATH "res/materials/"
+#define DEFAULT_SKYBOX_PATH "res/skyboxes/"
+#define DEFAULT_TEXTURE_PATH "res/textures/"
+#define DEFAULT_PARTICLE_PATH "res/particles/"
