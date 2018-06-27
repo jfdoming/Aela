@@ -44,7 +44,7 @@ Aela::ImageComponent::~ImageComponent() {
 }
 
 void Aela::ImageComponent::updateComponent() {
-	if (wasTransformed()) {
+	if (wasModified()) {
 		markDirty();
 	}
 }

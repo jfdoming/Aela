@@ -12,6 +12,8 @@
 #include "Resource Management\ResourceManager.h"
 #include "3D\Materials\Material.h"
 
+#define BLANK_TILE_TYPE 0
+
 using namespace Aela;
 
 namespace Game {

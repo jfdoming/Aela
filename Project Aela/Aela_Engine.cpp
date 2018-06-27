@@ -60,14 +60,14 @@ int Aela::Engine::runningLoop() {
 	do {
 		// This updates events. It must be done first.
 		eventHandler.updateSDLEvents();
-		timeManager.updateTime();
+		time.updateTime();
 		animationLooper.update();
 		animator.update();
 		
 		// This updates and renders the current scene.
 		/*Aela::Scene* currentScene = sceneManager.getCurrentScene();
 		if (currentScene != nullptr) {
-			currentScene->update();
+			currentScene->updateRegisteredEnemies();
 			currentScene->render(&renderer);
 		}*/
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
@@ -114,7 +114,7 @@ int Aela::Engine::setupRenderer() {
 	// This passes the window and time manager to the renderer and control manager.
 	// Please note that the window must be set before calling setup functions.
 	renderer.setWindow(&window);
-	renderer.setTime(&timeManager);
+	renderer.setTime(&time);
 	renderer.setFontManager(&fontManager);
 	renderer.setup3D();
 	renderer.setup2D();
@@ -162,9 +162,9 @@ int Aela::Engine::setupAudioPlayer() {
 }
 
 int Aela::Engine::setupAnimation() {
-	animator.setTime(&timeManager);
+	animator.setTime(&time);
 	animationLooper.setAnimator(&animator);
-	keyedAnimator.setTime(&timeManager);
+	keyedAnimator.setTime(&time);
 	keyedAnimator.setWindow(&window);
 	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
 	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
@@ -186,7 +186,7 @@ void Engine::update() {
 	// Note: Events should be updated first.
 	eventHandler.updateSDLEvents();
 
-	timeManager.updateTime();
+	time.updateTime();
 	sceneManager.update();
 	animationLooper.update();
 	animator.update();
@@ -218,7 +218,7 @@ EventHandler* Engine::getEventHandler() {
 }
 
 Time* Engine::getTime() {
-	return &timeManager;
+	return &time;
 }
 
 FontManager* Engine::getFontManager() {

@@ -5,6 +5,7 @@
 #include "3D\Models\OBJLoader.h"
 #include "3D\Skybox\GLSkyboxLoader.h"
 #include "3D\Maps\Map3DLoader.h"
+#include "../../Project Aela/Resource Management/ResourcePaths.h"
 
 using namespace Aela;
 
@@ -16,7 +17,6 @@ std::string materialsAndModelNames[] = {
 	"corner_depressed"
 };
 
-const unsigned int numberOfOtherMaterials = 4;
 std::string otherMaterialNames[] = {
 	"grass",
 	"grass_corner_depressed",
@@ -24,8 +24,7 @@ std::string otherMaterialNames[] = {
 	"water"
 };
 
-const unsigned int numberOfTextures = 5;
-std::string textureNames[] = {
+std::string ddsTextureNames[] = {
 	"map_editor_main_background",
 	"map_editor_top_bar",
 	"simple_button",
@@ -33,19 +32,16 @@ std::string textureNames[] = {
 	"arrow"
 };
 
-const unsigned int numberOfBillboards = 2;
+const unsigned int numberOfBillboards = 1;
 std::string billboardNames[] = {
-	"character_backward",
 	"ekkon"
 };
 
-const unsigned int numberOfParticles = 2;
 std::string particleNames[] = {
 	"particle_1",
 	"particle_2"
 };
 
-const unsigned int numberOfSkyboxes = 2;
 std::string skyboxNames[] = {
 	"skybox_1",
 	"skybox_2"
@@ -57,11 +53,11 @@ void loadMaterials(ResourceManager* resourceManager) {
 	resourceManager->bindGroup("materials");
 
 	for (std::string path : materialsAndModelNames) {
-		resourceManager->addToGroup("../../res/materials/" + path + ".mtl", false);
+		resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + path + ".mtl", false);
 	}
 
 	for (std::string path : otherMaterialNames) {
-		resourceManager->addToGroup("../../res/materials/" + path + ".mtl", false);
+		resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + path + ".mtl", false);
 	}
 
 	if (resourceManager->loadGroup("materials") != Aela::ResourceManager::Status::OK) {
@@ -75,7 +71,7 @@ void loadModels(ResourceManager* resourceManager) {
 	resourceManager->bindGroup("models");
 
 	for (std::string path : materialsAndModelNames) {
-		resourceManager->addToGroup("../../res/models/" + path + ".obj", false);
+		resourceManager->addToGroup(DEFAULT_MODEL_PATH + path + ".obj", false);
 	}
 
 	if (resourceManager->loadGroup("models") != Aela::ResourceManager::Status::OK) {
@@ -88,12 +84,12 @@ void loadTextures(ResourceManager* resourceManager) {
 	resourceManager->bindLoader(&textureLoader);
 	resourceManager->bindGroup("textures");
 
-	for (std::string path : textureNames) {
-		resourceManager->addToGroup("../../res/textures/" + path + ".dds", false);
+	for (std::string path : ddsTextureNames) {
+		resourceManager->addToGroup(DEFAULT_TEXTURE_PATH + path + ".dds", false);
 	}
 
 	for (std::string path : billboardNames) {
-		resourceManager->addToGroup("../../res/textures/" + path + ".dds", false);
+		resourceManager->addToGroup(DEFAULT_TEXTURE_PATH + path + ".dds", false);
 	}
 
 	if (resourceManager->loadGroup("textures") != Aela::ResourceManager::Status::OK) {
@@ -108,7 +104,7 @@ void loadParticles(ResourceManager* resourceManager) {
 	resourceManager->bindGroup("particles");
 
 	for (std::string path : particleNames) {
-		resourceManager->addToGroup("../../res/particles/" + path + ".dds", false);
+		resourceManager->addToGroup(DEFAULT_PARTICLE_PATH +  path + ".dds", false);
 	}
 
 	if (resourceManager->loadGroup("particles") != Aela::ResourceManager::Status::OK) {
@@ -122,7 +118,7 @@ void loadSkyboxes(ResourceManager* resourceManager) {
 	resourceManager->bindGroup("skybox");
 
 	for (std::string path : skyboxNames) {
-		resourceManager->addToGroup("../../res/skyboxes/" + path, false);
+		resourceManager->addToGroup(DEFAULT_SKYBOX_PATH + path, false);
 	}
 
 	if (resourceManager->loadGroup("skybox") != Aela::ResourceManager::Status::OK) {
@@ -135,7 +131,7 @@ void loadStartupMap(ResourceManager* resourceManager, GLRenderer& renderer) {
 	mapLoader.bindRenderer(&renderer);
 	resourceManager->bindLoader(&mapLoader);
 	resourceManager->bindGroup("maps");
-	resourceManager->addToGroup("../../res/maps/map.txt", false);
+	resourceManager->addToGroup("res/maps/map.txt", false);
 	if (resourceManager->loadGroup("maps") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"maps\"!" << std::endl;
 	}

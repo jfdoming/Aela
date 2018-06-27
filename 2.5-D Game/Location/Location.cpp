@@ -30,3 +30,7 @@ glm::ivec2 Game::Location::getChunk() {
 glm::ivec3 Game::Location::getTile() {
 	return tile;
 }
+
+glm::vec3 Game::Location::getWorldSpaceLocation() {
+	return glm::vec3(chunk.x * CHUNK_WIDTH + tile.x, tile.y, chunk.y * CHUNK_LENGTH + tile.z);
+}

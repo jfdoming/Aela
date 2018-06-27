@@ -8,7 +8,6 @@
 
 using namespace Aela;
 
-const unsigned int numberOfMaterialsAndModels = 5;
 std::string materialsAndModelNames[] = {
 	"meme_mug",
 	"jeep_1",
@@ -17,8 +16,7 @@ std::string materialsAndModelNames[] = {
 	"lamp_post_1"
 };
 
-const unsigned int numberOfTextures = 5;
-std::string textureNames[] = {
+std::string ddsTextureNames[] = {
 	"map_editor_main_background",
 	"map_editor_top_bar",
 	"simple_button",
@@ -26,19 +24,16 @@ std::string textureNames[] = {
 	"arrow",
 };
 
-const unsigned int numberOfBillboards = 2;
 std::string billboardNames[] = {
 	"character",
 	"ekkon"
 };
 
-const unsigned int numberOfParticles = 2;
 std::string particleNames[] = {
 	"particle_1",
 	"particle_2"
 };
 
-const unsigned int numberOfSkyboxes = 2;
 std::string skyboxNames[] = {
 	"skybox_1",
 	"skybox_2"
@@ -81,7 +76,7 @@ void loadTextures(ResourceManager* resourceManager) {
 		resourceManager->addToGroup("res/textures/" + path + ".dds", false);
 	}
 
-	for (std::string path : textureNames) {
+	for (std::string path : ddsTextureNames) {
 		resourceManager->addToGroup("res/textures/" + path + ".dds", false);
 	}
 

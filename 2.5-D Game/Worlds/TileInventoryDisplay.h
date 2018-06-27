@@ -2,7 +2,7 @@
 * Class: TileInventoryDisplay
 * Author: Robert Ciborowski
 * Date: 18/03/2018
-* Description: A class used to update the tile inventory display.
+* Description: A class used to updateRegisteredEnemies the tile inventory display.
 */
 
 #pragma once

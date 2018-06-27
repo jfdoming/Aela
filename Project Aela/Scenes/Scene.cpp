@@ -22,7 +22,15 @@ void Scene::update() {
 		menu.update();
 	}
 
-	for (ParticleEmitter* emitter : particleEmitters) {
+	for (size_t i = 0; i < particleEmitters.size(); i++) {
+		ParticleEmitter* emitter = particleEmitters[i];
+		if (emitter->isExpired()) {
+			particleEmitters.erase(particleEmitters.begin() + i);
+			delete emitter;
+			i--;
+			std::cout << "Deleted some emitter.\n";
+			continue;
+		}
 		emitter->update();
 	}
 }

@@ -27,6 +27,10 @@ namespace Aela {
 				setValues(value, value, value);
 			}
 
+			ColourRGB(glm::vec3 value) {
+				setValues(value.x, value.y, value.z);
+			}
+
 			void setR(float r) {
 				this->r = r;
 			}
@@ -71,9 +75,15 @@ namespace Aela {
 
 			glm::vec3 getVec3() {
 				return glm::vec3(r, g, b);
-		}
+			}
+
+			glm::vec3* getVec3Ptr() {
+				vec = glm::vec3(r, g, b);
+				return &vec;
+			}
 
 		private:
 			float r, g, b;
+			glm::vec3 vec;
 	};
 }

@@ -32,3 +32,11 @@ unsigned int Simple2DFramebuffer::getMultisampling() {
 void Simple2DFramebuffer::setMultisampling(unsigned int multisampling) {
 	this->multisampling = multisampling;
 }
+
+void Aela::Simple2DFramebuffer::useRendererMultisamplingLevel(bool usingRendererMultisamplingLevel) {
+	this->usingRendererMultisamplingLevel = usingRendererMultisamplingLevel;
+}
+
+bool Aela::Simple2DFramebuffer::isUsingRendererMultsamplingLevel() {
+	return usingRendererMultisamplingLevel;
+}

@@ -25,7 +25,7 @@ namespace Aela {
 			void setColour(ColourRGBA* colour);
 			ColourRGBA* getColour();
 
-			virtual void renderWithTint(GLRenderer& renderer, ColourRGBA* tint);
+			virtual void renderWithDifferentTint(GLRenderer& renderer, ColourRGBA* tint);
 		protected:
 			std::string text;
 			TextFont* font;

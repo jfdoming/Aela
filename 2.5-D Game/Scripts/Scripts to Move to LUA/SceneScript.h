@@ -13,13 +13,16 @@
 #include "Menus/Label.h"
 #include "Menus/ImageComponent.h"
 #include "Menus/Button.h"
-#include "../Aela Game/AelaGame.h"
+#include "Menus/RectComponent.h"
 #include "Menus/SubMenu.h"
+#include "../Aela Game/AelaGame.h"
+#include "../../Resources/ResourceInfo.h"
 
 #define EKKON_INTRO_SCENE 1
 #define MAIN_MENU_SCENE 2
 #define WORLD_GAMEPLAY_SCENE 3
-#define BATTLE_GAMEPLAY_SCENE 4
+#define PAUSE_SCENE 4
+#define INVENTORY_SCENE 5
 
 using namespace Aela;
 
@@ -33,13 +36,20 @@ namespace Game {
 		DialogueHandler* dialogueHandler = game->getDialogueHandler();
 		TextFont* xeroxLarge = fontManager->obtainTextFont("../../res/fonts/xerox.ttf", 35);
 		TextFont* xerox = fontManager->obtainTextFont("../../res/fonts/xerox.ttf", 22);
+
 		if (xeroxLarge == nullptr || xerox == nullptr) {
 			AelaErrorHandling::windowError("A critical font (xerox.ttf) could not be loaded, aborting!");
 			return;
 		}
+
 		ColourRGBA VSBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
 		ColourRGBA almostWhite(0.9f, 0.9f, 0.9f, 1.0f);
 		ColourRGBA almostBlack(0.1f, 0.1f, 0.1f, 1.0f);
+
+		// These are tints for buttons.
+		ColourRGBA hoverTint(0.8f, 0.8f, 0.8f, 1.0f);
+		ColourRGBA clickTint(0.6f, 0.6f, 0.6f, 1.0f);
+
 		Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getDimensions());
 
 		// The following blocks of code set up the Ekkon intro scene.
@@ -159,20 +169,31 @@ namespace Game {
 		auto tileInventoryTextOne = std::make_shared<Label>("<current tile>", xerox, &almostWhite);
 		tileInventoryTextOne->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), (int) (windowDimensions.getHeight() / 5));
 
-		auto tileInventoryBox = std::make_shared<ImageComponent>();
+		auto tileSelectorBox = std::make_shared<ImageComponent>();
 		GLTexture* tileInventoryBoxTexture;
-		success = resourceManager->obtain<GLTexture>("../../res/textures/selector_box.dds", tileInventoryBoxTexture);
-		int imageWidthAndHeight = windowDimensions.getHeight() / 8;
-		tileInventoryBox->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.98 - imageWidthAndHeight - imageWidthAndHeight * 0.1),
-			(int) (windowDimensions.getHeight() * 0.15 - imageWidthAndHeight - imageWidthAndHeight * 0.1),
-			(int) (imageWidthAndHeight * 1.2), (int) (imageWidthAndHeight * 1.2)));
-		tileInventoryBox->setTexture(tileInventoryBoxTexture);
+		success = resourceManager->obtain<GLTexture>("../../res/textures/selector_box.png", tileInventoryBoxTexture);
+		int tileSelectorWidthAndHeight = windowDimensions.getHeight() / 8;
+		tileSelectorBox->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.98 - tileSelectorWidthAndHeight - tileSelectorWidthAndHeight * 0.1),
+			(int) (windowDimensions.getHeight() * 0.15 - tileSelectorWidthAndHeight - tileSelectorWidthAndHeight * 0.1),
+			(int) (tileSelectorWidthAndHeight * 1.2), (int) (tileSelectorWidthAndHeight * 1.2)));
+		tileSelectorBox->setTexture(tileInventoryBoxTexture);
 
 		tileInventorySubMenu->add(tileInventoryTextOne);
-		tileInventorySubMenu2->add(tileInventoryBox);
+		tileInventorySubMenu2->add(tileSelectorBox);
 		tileInventorySubMenu->show();
 		tileInventorySubMenu2->show();
-		game->setTileInventoryMenuItems(tileInventorySubMenu, tileInventoryTextOne, tileInventoryBox);
+		game->setTileInventoryMenuItems(tileInventorySubMenu, tileInventoryTextOne, tileSelectorBox);
+
+		auto deathBackgroundRect = std::make_shared<RectComponent>();
+		deathBackgroundRect->setDimensions(&windowDimensions);
+		deathBackgroundRect->setColour(&ColourRGBA(0.15f, 0.15f, 0.15f, 0.95f));
+		deathBackgroundRect->setTint(&ColourRGBA(1, 1, 1, 0));
+
+		auto deathText = std::make_shared<Label>("You died.", xerox, &almostWhite);
+		deathText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.30), (int)(windowDimensions.getHeight() * 0.30));
+		deathText->setTint(&ColourRGBA(1, 1, 1, 0));
+
+		game->getWorldManager()->getCharacterTracker()->setGameplayMenuItems(deathBackgroundRect, deathText);
 
 		// This sets up the world gameplay scene, in which the player is given a top-down view of the world.
 		auto worldGameplayScene = new Scene();
@@ -180,12 +201,122 @@ namespace Game {
 		worldGameplayScene->getMenu()->add(dialogueBoxSubMenu);
 		worldGameplayScene->getMenu()->add(tileInventorySubMenu);
 		worldGameplayScene->getMenu()->add(tileInventorySubMenu2);
+		worldGameplayScene->getMenu()->add(deathBackgroundRect);
+		worldGameplayScene->getMenu()->add(deathText);
+
+		// This sets up the scenes for the pause menu.
+		Scene* pauseScene = new Scene();
+		pauseScene->enableMenu(engine->getWindow()->getDimensions(), *engine->getRenderer());
+
+		// The following blocks of code setup the pause menu scene.
+		auto tintRect = std::make_shared<RectComponent>();
+		tintRect->setDimensions(&windowDimensions);
+		tintRect->setColour(&ColourRGBA(0.4f, 0.4f, 0.4f, 0.35f));
+
+		// This sets up a rectangle that the pause menu scene will use.
+		auto pauseBackgroundRect = std::make_shared<RectComponent>();
+		pauseBackgroundRect->setDimensions(&Rect<int>((int)(windowDimensions.getWidth() * 0.3125), (int)(windowDimensions.getHeight() * 0.1111),
+			(int)(windowDimensions.getWidth() * 0.5625), (int)(windowDimensions.getHeight() * 0.7777)));
+		pauseBackgroundRect->setColour(&ColourRGBA(0.2f, 0.2f, 0.2f, 0.95f));
+
+		// This is the box that says "Pause Menu".
+		auto pauseMenuTextRect = std::make_shared<RectComponent>();
+		pauseMenuTextRect->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.1111),
+			(int)(windowDimensions.getWidth() * 0.1875), (int)(windowDimensions.getHeight() * 0.1111)));
+		pauseMenuTextRect->setColour(&ColourRGBA(0.2f, 0.2f, 0.2f, 0.95f));
+
+		auto pauseMenuTitleText = std::make_shared<Label>("Pause Menu", xerox, &almostWhite);
+		pauseMenuTitleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.15), (int) (windowDimensions.getHeight() * 0.18));
+
+		// This sets up text for buttons in the pause menu's sidebar.
+		auto pauseMenuGameButtonText = std::make_shared<Label>("Game", xerox, &almostWhite);
+		auto pauseMenuOptionsButtonText = std::make_shared<Label>("Options", xerox, &almostWhite);
+
+		// This creates sidebar buttons for the pause menu.
+		auto pauseMenuGameButton = std::make_shared<Button>(&hoverTint, &clickTint);
+		auto pauseMenuOptionsButton = std::make_shared<Button>(&hoverTint, &clickTint);
+
+		// This gets textures for the pause menu buttons.
+		GLTexture* simpleButtonTexture;
+		GLTexture* simpleButtonTextureLight;
+		success = engine->getResourceManager()->obtain<GLTexture>((std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + "simple_button.dds", simpleButtonTexture);
+		success = engine->getResourceManager()->obtain<GLTexture>((std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + "simple_button_light.dds", simpleButtonTextureLight);
+
+		auto pauseMenuGameSubMenu = std::make_shared<SubMenu>();
+		pauseMenuGameSubMenu->init(&windowDimensions, *renderer);
+		auto pauseMenuOptionsSubMenu = std::make_shared<SubMenu>();
+		pauseMenuOptionsSubMenu->init(&windowDimensions, *renderer);
+
+		auto goToGameSubMenu = [game](Engine* engine) {
+
+		};
+
+		auto goToOptionsSubMenu = [game](Engine* engine) {
+			
+		};
+
+		pauseMenuGameButton->setTexture(simpleButtonTextureLight);
+		pauseMenuGameButton->setDimensions(&Rect<int>((int)(windowDimensions.getWidth() * 0.125), (int)(windowDimensions.getHeight() * 0.2222),
+			(int)(windowDimensions.getWidth() * 0.1875), (int)(windowDimensions.getHeight() * 0.1111)));
+		pauseMenuGameButton->setupOnClick(std::bind(goToGameSubMenu, engine));
+		pauseMenuGameButton->setText(pauseMenuGameButtonText);
+
+		pauseMenuOptionsButton->setTexture(simpleButtonTextureLight);
+		pauseMenuOptionsButton->setDimensions(&Rect<int>((int)(windowDimensions.getWidth() * 0.125), (int)(windowDimensions.getHeight() * 0.3333),
+			(int)(windowDimensions.getWidth() * 0.1875), (int)(windowDimensions.getHeight() * 0.1111)));
+		pauseMenuOptionsButton->setupOnClick(std::bind(goToOptionsSubMenu, engine));
+		pauseMenuOptionsButton->setText(pauseMenuOptionsButtonText);
+
+		pauseMenuGameSubMenu->show();
+
+		pauseScene->getMenu()->add(tintRect);
+		pauseScene->getMenu()->add(pauseBackgroundRect);
+		pauseScene->getMenu()->add(pauseMenuGameButton);
+		pauseScene->getMenu()->add(pauseMenuGameSubMenu);
+		pauseScene->getMenu()->add(pauseMenuOptionsButton);
+		pauseScene->getMenu()->add(pauseMenuOptionsSubMenu);
+		pauseScene->getMenu()->add(pauseMenuTextRect);
+		pauseScene->getMenu()->add(pauseMenuTitleText);
+
+		// This sets up the inventory scene.
+		Scene* inventoryScene = new Scene();
+		inventoryScene->enableMenu(engine->getWindow()->getDimensions(), *engine->getRenderer());
+
+		// This sets up a rectangle that the inventory scene will use.
+		auto inventoryBackgroundRect = std::make_shared<RectComponent>();
+		inventoryBackgroundRect->setDimensions(&Rect<int>((int)(windowDimensions.getWidth() * 0.3125), (int)(windowDimensions.getHeight() * 0.33333),
+			(int)(windowDimensions.getWidth() * 0.375), (int)(windowDimensions.getHeight() * 0.22222)));
+		inventoryBackgroundRect->setColour(&ColourRGBA(0.15f, 0.15f, 0.15f, 0.95f));
+
+		// This sets up text for the inentory scene.
+		auto inventoryTitleText = std::make_shared<Label>("Inventory", xerox, &almostWhite);
+		inventoryTitleText->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.33), (int)(windowDimensions.getHeight() * 0.38));
+
+		auto inventorySlotA = std::make_shared<ImageComponent>();
+		GLTexture* inventorySlotTexture;
+		success = resourceManager->obtain<GLTexture>("../../res/textures/inventory_slot.png", inventorySlotTexture);
+		inventorySlotA->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.37), (int) (windowDimensions.getHeight() * 0.4),
+			(int) (windowDimensions.getWidth() * 0.1), (int) (windowDimensions.getWidth() * 0.1)));
+		inventorySlotA->setTexture(inventorySlotTexture);
+
+		auto inventorySlotB = std::make_shared<ImageComponent>();
+		inventorySlotB->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.53), (int) (windowDimensions.getHeight() * 0.4),
+			(int) (windowDimensions.getWidth() * 0.1), (int) (windowDimensions.getWidth() * 0.1)));
+		inventorySlotB->setTexture(inventorySlotTexture);
+
+		inventoryScene->getMenu()->add(tintRect);
+		inventoryScene->getMenu()->add(inventoryBackgroundRect);
+		inventoryScene->getMenu()->add(inventoryTitleText);
+		inventoryScene->getMenu()->add(inventorySlotA);
+		inventoryScene->getMenu()->add(inventorySlotB);
 
 		Map3D* map;
 		success = engine->getResourceManager()->obtain<Map3D>("../../res/maps/map.txt", map);
 		if (success) {
 			mainMenuScene->setMap(map);
 			worldGameplayScene->setMap(map);
+			pauseScene->setMap(map);
+			inventoryScene->setMap(map);
 		} else {
 			AelaErrorHandling::windowError("There was a problem loading map.txt!");
 		}
@@ -193,9 +324,12 @@ namespace Game {
 		engine->getSceneManager()->registerScene(ekkonScene, EKKON_INTRO_SCENE);
 		engine->getSceneManager()->registerScene(mainMenuScene, MAIN_MENU_SCENE);
 		engine->getSceneManager()->registerScene(worldGameplayScene, WORLD_GAMEPLAY_SCENE);
+		engine->getSceneManager()->registerScene(pauseScene, PAUSE_SCENE);
+		engine->getSceneManager()->registerScene(inventoryScene, INVENTORY_SCENE);
 		engine->getSceneManager()->setDisposingScenesOnDestroy(true);
 
 		engine->getSceneManager()->setCurrentScene(EKKON_INTRO_SCENE);
+		game->setGameplayScene(worldGameplayScene);
 		game->switchScene(EKKON_INTRO_SCENE);
 		// engine->getSceneManager()->setCurrentScene(WORLD_GAMEPLAY_SCENE);
 		// game->switchScene(WORLD_GAMEPLAY_SCENE);
@@ -218,23 +352,19 @@ namespace Game {
 			switch (i) {
 				case 0:
 					frame.setTint(&ColourRGBA(1, 1, 1, 0));
-					frame.setDimensions(&windowDimensions);
-					track.addKeyFrameUsingMillis(500, &frame);
+					track.addKeyFrameUsingMillis(50 /*500*/, &frame);
 					break;
 				case 1:
 					frame.setTint(&ColourRGBA(1, 1, 1, 1));
-					frame.setDimensions(&windowDimensions);
-					track.addKeyFrameUsingMillis(1500, &frame);
+					track.addKeyFrameUsingMillis(150 /*1500*/, &frame);
 					break;
 				case 2:
 					frame.setTint(&ColourRGBA(1, 1, 1, 1));
-					frame.setDimensions(&windowDimensions);
-					track.addKeyFrameUsingMillis(1000, &frame);
+					track.addKeyFrameUsingMillis(100 /*1000*/, &frame);
 					break;
 				case 3:
 					frame.setTint(&ColourRGBA(1, 1, 1, 0));
-					frame.setDimensions(&windowDimensions);
-					track.addKeyFrameUsingMillis(1500, &frame);
+					track.addKeyFrameUsingMillis(150 /*1500*/, &frame);
 					break;
 			}
 		}

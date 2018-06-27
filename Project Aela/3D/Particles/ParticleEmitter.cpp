@@ -13,6 +13,15 @@
 
 using namespace Aela;
 
+Aela::ParticleEmitter::ParticleEmitter(Time* time) {
+	this->time = time;
+	startTime = time->getCurrentTimeInNanos();
+}
+
+Aela::ParticleEmitter::~ParticleEmitter() {
+	end();
+}
+
 void ParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float particleWidthScaling, float particleHeightScaling, unsigned int amount) {
 	for (unsigned int i = 0; i < amount; i++) {
 		Particle particle;
@@ -20,7 +29,7 @@ void ParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float pa
 		particle.setProperty(Transformable3DProperty::X_SCALING, particleWidthScaling);
 		particle.setProperty(Transformable3DProperty::Y_SCALING, particleHeightScaling);
 		particle.setSpeed(baseSpeed + (speedOffset * (rand() % 100) / 100));
-		particle.setLifetime((unsigned int) (baseLifetime + (lifetimeOffset * (rand() % 100) / 100)));
+		particle.setDistance((unsigned int) (baseDistance + (distanceOffset * (rand() % 100) / 100)));
 		particles.push_back(particle);
 		setupParticlePositioning(i, amount);
 	}
@@ -30,20 +39,14 @@ std::vector<Particle>* ParticleEmitter::getParticles() {
 	return &particles;
 }
 
-void ParticleEmitter::setTime(Time* timeManager) {
-	this->timeManager = timeManager;
-}
-
-Time* ParticleEmitter::getTime() {
-	return timeManager;
-}
-
-void ParticleEmitter::setStats(float baseSpeed, float baseLifetime, float speedOffset, float lifetimeOffset, float pathOffset) {
+void ParticleEmitter::setStats(float baseSpeed, float baseDistance, float speedOffset, float distanceOffset,
+	float pathOffset, long long lifeTime) {
 	this->baseSpeed = baseSpeed;
-	this->baseLifetime = baseLifetime;
+	this->baseDistance = baseDistance;
 	this->speedOffset = speedOffset;
-	this->lifetimeOffset = lifetimeOffset;
+	this->distanceOffset = distanceOffset;
 	this->pathOffset = pathOffset;
+	this->lifeTime = lifeTime;
 }
 
 float ParticleEmitter::getBaseSpeed() {
@@ -54,12 +57,12 @@ void ParticleEmitter::setBaseSpeed(float baseSpeed) {
 	this->baseSpeed = baseSpeed;
 }
 
-float ParticleEmitter::getBaseLifetime() {
-	return baseLifetime;
+float ParticleEmitter::getBaseDistance() {
+	return baseDistance;
 }
 
-void ParticleEmitter::setBaseLifetime(float baseLifetime) {
-	this->baseLifetime = baseLifetime;
+void ParticleEmitter::setBaseDistance(float baseDistance) {
+	this->baseDistance = baseDistance;
 }
 
 float ParticleEmitter::getSpeedOffset() {
@@ -70,12 +73,12 @@ void ParticleEmitter::setSpeedOffset(float speedOffset) {
 	this->speedOffset = speedOffset;
 }
 
-float ParticleEmitter::getLifetimeOffset() {
-	return lifetimeOffset;
+float ParticleEmitter::getDistanceOffset() {
+	return distanceOffset;
 }
 
-void ParticleEmitter::setLifetimeOffset(float lifetimeOffset) {
-	this->lifetimeOffset = lifetimeOffset;
+void ParticleEmitter::setDistanceOffset(float distanceOffset) {
+	this->distanceOffset = distanceOffset;
 }
 
 float ParticleEmitter::getPathOffset() {
@@ -86,7 +89,29 @@ void ParticleEmitter::setPathOffset(float pathOffset) {
 	this->pathOffset = pathOffset;
 }
 
+long long Aela::ParticleEmitter::getLifeTime() {
+	return lifeTime;
+}
+
+void Aela::ParticleEmitter::setLifeTime(long long lifeTime) {
+	this->lifeTime = lifeTime;
+}
+
+bool Aela::ParticleEmitter::isExpired() {
+	return time->getCurrentTimeInNanos() >= startTime + lifeTime;
+}
+
 // The implementation of this function is to be done by the sub class. The function is meant to reset the particle's position once it has completed
 // its life. This creates the effect of spawning in a new particle, even though its actually just resetting the particle in the pool.
 void ParticleEmitter::setupParticlePositioning(unsigned int whichParticle, unsigned int numberOfParticles) {
+}
+
+void ParticleEmitter::setActionOnEnd(std::function<void()> onEnd) {
+	this->onEnd = onEnd;
+}
+
+void ParticleEmitter::end() {
+	if (onEnd != NULL) {
+		onEnd();
+	}
 }

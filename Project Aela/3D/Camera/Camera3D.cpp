@@ -51,8 +51,8 @@ bool Camera3D::isForcingCursorToMiddle() {
 	return forceCursorToMiddle;
 }
 
-void Camera3D::setTime(Time* timeManager) {
-	this->timeManager = timeManager;
+void Camera3D::setTime(Time* time) {
+	this->time = time;
 }
 
 void Camera3D::setWindow(Window* window) {
@@ -176,7 +176,7 @@ void Camera3D::update() {
 		rotation.x = horizontalAngle;
 		rotation.y = verticalAngle;
 
-		float deltaTime = (float) timeManager->getTimeBetweenFramesInNanos();
+		float deltaTime = (float) time->getTimeBetweenFramesInNanos();
 
 		if (movingUp) {
 			position += straightUp * deltaTime * currentSpeed;

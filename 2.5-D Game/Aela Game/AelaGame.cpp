@@ -12,6 +12,9 @@
 #include "../Scripts/Scripts to Move to LUA/SceneScript.h"
 #include "../Scripts/Scripts to Move to LUA/MapScript.h"
 #include "../Resources/ResourceInfo.h"
+#include "../Utilities/MathConstants.h"
+#include "../Particles/TileSwitchParticleEmitter.h"
+#include "../Utilities/GameConstants.h"
 
 using namespace Aela;
 
@@ -20,7 +23,7 @@ Game::AelaGame::AelaGame(Engine* engine) : engine(engine), tileInventoryDisplay(
 	window = engine->getWindow();
 	renderer = engine->getRenderer();
 	eventHandler = engine->getEventHandler();
-	timeManager = engine->getTime();
+	time = engine->getTime();
 	sceneManager = engine->getSceneManager();
 	resourceManager = engine->getResourceManager();
 	audioPlayer = engine->getAudioPlayer();
@@ -35,12 +38,15 @@ Game::AelaGame::AelaGame(Engine* engine) : engine(engine), tileInventoryDisplay(
 	// However, if ResourceManager's RESOURCE_ROOT changes in Project Aela, then this will keep
 	// the game from breaking.
 	resourceManager->setResourceRoot(RESOURCE_ROOT);
+
+	cameraMode = CameraMode::PLAYER_LOCKED;
 }
 
 void Game::AelaGame::loadResources() {
 	scriptManager.runScript("load materials");
 	scriptManager.runScript("load models");
 	scriptManager.runScript("load textures");
+	scriptManager.runScript("load sprite sheets");
 	scriptManager.runScript("load particles");
 	scriptManager.runScript("load skyboxes");
 	scriptManager.runScript("load startup map");
@@ -64,19 +70,25 @@ void Game::AelaGame::setup() {
 	engine->getRendererReference().activateFeature(RendererFeature::MSAA_2D_X4);
 	engine->getRendererReference().activateFeature(RendererFeature::MSAA_3D_X4);
 
-	characterManager = worldManager.getCharacterManager();
+	characterTracker = worldManager.getCharacterTracker();
 
 	// Setup the player!
-	Character temporaryPlayerCharacter;
-	temporaryPlayerCharacter.setup(&Location(0, glm::ivec2(0, 0), glm::ivec3(15, 0, 1)));
-	temporaryPlayerCharacter.setTextureName("character");
-	temporaryPlayerCharacter.setName(PLAYER_NAME);
+	playerCharacter = new Character();
+	playerCharacter->setup(&Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
+	playerCharacter->setTextureName("character");
+	playerCharacter->setName(PLAYER_NAME);
+	playerCharacter->setMaxHealth(100);
+	playerCharacter->setHealth(100);
 	size_t playerID;
-	if (!characterManager->addCharacter(&temporaryPlayerCharacter, &playerID)) {
+	if (!characterTracker->trackCharacter(playerCharacter, &playerID)) {
 		// Is this even possible to reach?!
 		AelaErrorHandling::windowError("Aela Game", (std::string) "There was a problem setting up the player. This error "
 			+ "is supposed to be impossible to reach.");
 	}
+	characterTracker->setPlayer(playerID);
+
+	enemyRegistrar.setPlayer(&player);
+	enemyRegistrar.setAelaObjects(engine);
 
 	for (int i = 0; i < 3; i++) {
 		player.getTileInventory()->addTile(&Tile(1));
@@ -88,72 +100,75 @@ void Game::AelaGame::setup() {
 	tileInventoryDisplay.refreshSubMenu();
 
 	// Tell the character manager that we've added all of our characters!
-	characterManager->generateCharacterModels(resourceManager);
+	characterTracker->generateCharacterModels(resourceManager);
 
 	// Setup the world manager!
 	worldManager.setup(engine, &scriptManager, &dialogueHandler, playerCharacter);
+	map = worldManager.getMap3D();
 
 	// Setup the dialogue handler!
-	dialogueHandler.setup(timeManager, eventHandler, &scriptManager);
+	dialogueHandler.setup(time, eventHandler, &scriptManager);
 
 	eventHandler->addListener(EventConstants::KEY_RELEASED, bindListener(AelaGame::onEvent, this));
 	eventHandler->addListener(EventConstants::KEY_PRESSED, bindListener(AelaGame::onEvent, this));
 
-	playerCharacter = characterManager->getCharacterByID(playerID);
 	player.setCharacter(playerCharacter);
 	player.setCharacterID(playerID);
 }
 
 void Game::AelaGame::update() {
-	// std::cout << "-------------Updating Aela Game-------------\n";
-	// std::cout << player.isMoving() << " " << movingRight << " is isMoving & movingRight.\n";
 	if (currentScene == WORLD_GAMEPLAY_SCENE) {
 		glm::vec3 tile = playerCharacter->getLocation()->getTile();
 
-		if (!playerCharacter->isMoving() && !dialogueHandler.dialogueIsBeingShown()) {
-			if (movingRight) {
-				std::cout << (playerCharacter->getDirectionFacing() != TileDirection::RIGHT) << " " << !playerCharacter->animationHasJustEnded() << "\n";
-				if (playerCharacter->getDirectionFacing() != TileDirection::RIGHT && !playerCharacter->animationHasJustEnded()) {
-					characterManager->turn(playerCharacter, TileDirection::RIGHT);
-					timeAtLastPlayerTurn = timeManager->getCurrentTimeInNanos();
-				} else if (timeManager->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
-					// std::cout << "Moving if possible.\n";
-					worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::RIGHT);
+		if (!characterTracker->isPlayerDead()) {
+			/*float tint = playerCharacter->getHealth() / 100.0f;
+			renderer->set3DTint(&ColourRGBA(1, tint, tint, 1));*/
+
+			if (!playerCharacter->isMoving() && !dialogueHandler.dialogueIsBeingShown() && cameraMode == CameraMode::PLAYER_LOCKED
+				&& !playerCharacter->isFrozen()) {
+				if (movingRight) {
+					if (playerCharacter->getDirectionFacing() != TileDirection::RIGHT && !playerCharacter->animationHasJustEnded()) {
+						characterTracker->turnTrackedCharacter(playerCharacter, TileDirection::RIGHT);
+						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
+					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
+						worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::RIGHT);
+					}
 				}
-			}
-			if (movingForward) {
-				if (playerCharacter->getDirectionFacing() != TileDirection::FORWARD && !playerCharacter->animationHasJustEnded()) {
-					characterManager->turn(playerCharacter, TileDirection::FORWARD);
-					timeAtLastPlayerTurn = timeManager->getCurrentTimeInNanos();
-				} else if (timeManager->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
-					worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::FORWARD);
+				if (movingForward) {
+					if (playerCharacter->getDirectionFacing() != TileDirection::FORWARD && !playerCharacter->animationHasJustEnded()) {
+						characterTracker->turnTrackedCharacter(playerCharacter, TileDirection::FORWARD);
+						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
+					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
+						worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::FORWARD);
+					}
 				}
-			}
-			if (movingLeft) {
-				if (playerCharacter->getDirectionFacing() != TileDirection::LEFT && !playerCharacter->animationHasJustEnded()) {
-					characterManager->turn(playerCharacter, TileDirection::LEFT);
-					timeAtLastPlayerTurn = timeManager->getCurrentTimeInNanos();
-				} else if (timeManager->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
-					worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::LEFT);
+				if (movingLeft) {
+					if (playerCharacter->getDirectionFacing() != TileDirection::LEFT && !playerCharacter->animationHasJustEnded()) {
+						characterTracker->turnTrackedCharacter(playerCharacter, TileDirection::LEFT);
+						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
+					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
+						worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::LEFT);
+					}
 				}
-			}
-			if (movingBackward) {
-				if (playerCharacter->getDirectionFacing() != TileDirection::BACKWARD && !playerCharacter->animationHasJustEnded()) {
-					characterManager->turn(playerCharacter, TileDirection::BACKWARD);
-					timeAtLastPlayerTurn = timeManager->getCurrentTimeInNanos();
-				} else if (timeManager->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
-					worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::BACKWARD);
+				if (movingBackward) {
+					if (playerCharacter->getDirectionFacing() != TileDirection::BACKWARD && !playerCharacter->animationHasJustEnded()) {
+						characterTracker->turnTrackedCharacter(playerCharacter, TileDirection::BACKWARD);
+						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
+					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
+						worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::BACKWARD);
+					}
 				}
-			}
-			if (pressingTileSelectUp && timeManager->getCurrentTimeInNanos() > timeAtLastTileSelect + timeBetweenTileSelects) {
-				tileSelectUpAction();
-			}
-			if (pressingTileSelectDown && timeManager->getCurrentTimeInNanos() > timeAtLastTileSelect + timeBetweenTileSelects) {
-				tileSelectDownAction();
+				if (pressingTileSelectLeft && time->getCurrentTimeInNanos() > timeAtLastTileSelect + timeBetweenTileSelects) {
+					tileSelectUpAction();
+				}
+				if (pressingTileSelectRight && time->getCurrentTimeInNanos() > timeAtLastTileSelect + timeBetweenTileSelects) {
+					tileSelectDownAction();
+				}
 			}
 		}
 
 		worldManager.update();
+		enemyRegistrar.updateRegisteredEnemies();
 		dialogueHandler.update();
 	}
 }
@@ -165,70 +180,9 @@ void Game::AelaGame::onEvent(Event* event) {
 			if (event->getType() == EventConstants::KEY_PRESSED) {
 				KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
 				switch (keyEvent->getKeycode()) {
-					case SDLK_d:
-						pressingRight = true;
-						movingRight = true;
-						movingForward = false;
-						movingLeft = false;
-						movingBackward = false;
-						break;
-					case SDLK_w:
-						pressingForward = true;
-						movingRight = false;
-						movingForward = true;
-						movingLeft = false;
-						movingBackward = false;
-						break;
-					case SDLK_a:
-						pressingLeft = true;
-						movingRight = false;
-						movingForward = false;
-						movingLeft = true;
-						movingBackward = false;
-						break;
-					case SDLK_s:
-						pressingBackward = true;
-						movingRight = false;
-						movingForward = false;
-						movingLeft = false;
-						movingBackward = true;
-						break;
-					case SDLK_UP:
-						if (pressingTileSelectUp || pressingTileSelectDown) {
-							break;
-						}
-						tileSelectUpAction();
-						pressingTileSelectUp = true;
-						break;
-					case SDLK_DOWN:
-						if (pressingTileSelectUp || pressingTileSelectDown) {
-							break;
-						}
-						tileSelectDownAction();
-						pressingTileSelectDown = true;
-						break;
 					case SDLK_BACKSLASH:
 						if (!pressingTileSwitch) {
-							Location* playerLocation = playerCharacter->getLocation();
-							glm::vec3 tile = playerLocation->getTile();
-							glm::vec2 chunk = playerLocation->getChunk();
-							worldManager.getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
-							Location location(playerLocation->getWorld(), chunk, tile);
-							World* worldPtr = worldManager.getWorld(playerLocation->getWorld());
-							if (worldPtr == nullptr) {
-								break;
-							}
-							Chunk* chunkPtr = worldPtr->getChunk(chunk);
-							if (chunkPtr == nullptr) {
-								break;
-							}
-							Tile* tilePtr = worldPtr->getChunk(chunk)->getTile(tile);
-							if (tilePtr == nullptr) {
-								break;
-							}
-							player.getTileInventory()->switchCurrentTile(tilePtr);
-							tileInventoryDisplay.refreshSubMenu();
-							worldManager.rebuildMapWhenPossible();
+							useTileSwitchGun();
 							pressingTileSwitch = true;
 						}
 						break;
@@ -243,90 +197,199 @@ void Game::AelaGame::onEvent(Event* event) {
 							pressingReturn = true;
 						}
 						break;
-					case SDLK_LSHIFT:
-						if (!playerCharacter->getRunning()) {
-							playerCharacter->setRunning(true);
-							changePlayerAnimationToRunning();
+					case SDLK_i:
+						if (!pressingInventoryButton) {
+							sceneManager->setCurrentScene(INVENTORY_SCENE);
+							switchScene(INVENTORY_SCENE);
+							pressingInventoryButton = true;
+							// animator->pause3DAnimations();
 						}
 						break;
 				}
 			}
 		}
-
-		// This processes key released events, no matter if the player is in dialogue or not.
-		if (event->getType() == EventConstants::KEY_RELEASED) {
+	} else if (currentScene == PAUSE_SCENE) {
+		if (event->getType() == EventConstants::KEY_PRESSED) {
 			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
 			switch (keyEvent->getKeycode()) {
+			case SDLK_ESCAPE:
+				if (!pressingPauseButton) {
+					sceneManager->setCurrentScene(sceneBeforePause);
+					switchScene(sceneBeforePause);
+					pressingPauseButton = true;
+					animator->unpause3DAnimations();
+				}
+				break;
+			}
+		}
+	} else if (currentScene == INVENTORY_SCENE) {
+		if (event->getType() == EventConstants::KEY_PRESSED) {
+			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+			switch (keyEvent->getKeycode()) {
+			case SDLK_i:
+				if (!pressingInventoryButton) {
+					sceneManager->setCurrentScene(WORLD_GAMEPLAY_SCENE);
+					switchScene(WORLD_GAMEPLAY_SCENE);
+					pressingInventoryButton = true;
+					// animator->unpause3DAnimations();
+				}
+				break;
+			}
+		}
+	}
+
+	// This occurs for any scene.
+	if (event->getType() == EventConstants::KEY_PRESSED) {
+		KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+		if (!dialogueHandler.dialogueIsBeingShown()) {
+			switch (keyEvent->getKeycode()) {
 				case SDLK_d:
-					if (movingRight) {
-						if (pressingForward) {
-							movingForward = true;
-						} else if (pressingBackward) {
-							movingBackward = true;
-						} else if (pressingLeft) {
-							movingLeft = true;
-						}
-					}
-					pressingRight = false;
-					movingRight = false;
-					break;
-				case SDLK_w:
-					if (movingForward) {
-						if (pressingLeft) {
-							movingLeft = true;
-						} else if (pressingRight) {
-							movingRight = true;
-						} else if (pressingBackward) {
-							movingBackward = true;
-						}
-					}
-					pressingForward = false;
+					pressingRight = true;
+					movingRight = true;
 					movingForward = false;
-					break;
-				case SDLK_a:
-					if (movingLeft) {
-						if (pressingBackward) {
-							movingBackward = true;
-						} else if (pressingForward) {
-							movingForward = true;
-						} else if (pressingRight) {
-							movingRight = true;
-						}
-					}
-					pressingLeft = false;
 					movingLeft = false;
-					break;
-				case SDLK_s:
-					if (movingBackward) {
-						if (pressingRight) {
-							movingRight = true;
-						} else if (pressingLeft) {
-							movingLeft = true;
-						} else if (pressingForward) {
-							movingForward = true;
-						}
-					}
-					pressingBackward = false;
 					movingBackward = false;
 					break;
-				case SDLK_BACKSLASH:
-					pressingTileSwitch = false;
+				case SDLK_w:
+					pressingForward = true;
+					movingRight = false;
+					movingForward = true;
+					movingLeft = false;
+					movingBackward = false;
 					break;
-				case SDLK_UP: {
-					pressingTileSelectUp = false;
+				case SDLK_a:
+					pressingLeft = true;
+					movingRight = false;
+					movingForward = false;
+					movingLeft = true;
+					movingBackward = false;
 					break;
-				}
-				case SDLK_DOWN: {
-					pressingTileSelectDown = false;
+				case SDLK_s:
+					pressingBackward = true;
+					movingRight = false;
+					movingForward = false;
+					movingLeft = false;
+					movingBackward = true;
 					break;
-				}
-				case SDLK_RETURN:
-					pressingReturn = false;
+				case SDLK_UP:
+					if (characterTracker->isPlayerDead() || pressingTileSelectLeft || pressingTileSelectRight) {
+						break;
+					}
+					tileSelectUpAction();
+					pressingTileSelectLeft = true;
+					break;
+				case SDLK_DOWN:
+					if (characterTracker->isPlayerDead() || pressingTileSelectLeft || pressingTileSelectRight) {
+						break;
+					}
+					tileSelectDownAction();
+					pressingTileSelectRight = true;
 					break;
 				case SDLK_LSHIFT:
-					playerCharacter->setRunning(false);
+					if (!playerCharacter->getRunning()) {
+						playerCharacter->setRunning(true);
+						changePlayerAnimationToRunning();
+					}
+					break;
+				case SDLK_ESCAPE:
+					if (!pressingPauseButton && (currentScene == WORLD_GAMEPLAY_SCENE || currentScene == INVENTORY_SCENE)) {
+						sceneBeforePause = currentScene;
+						sceneManager->setCurrentScene(PAUSE_SCENE);
+						switchScene(PAUSE_SCENE);
+						pressingPauseButton = true;
+						animator->pause3DAnimations();
+					}
 					break;
 			}
+		}
+	}
+
+	if (event->getType() == EventConstants::KEY_RELEASED) {
+		KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+		switch (keyEvent->getKeycode()) {
+			case SDLK_d:
+				if (movingRight) {
+					if (pressingForward) {
+						movingForward = true;
+					} else if (pressingBackward) {
+						movingBackward = true;
+					} else if (pressingLeft) {
+						movingLeft = true;
+					}
+				}
+				pressingRight = false;
+				movingRight = false;
+				break;
+			case SDLK_w:
+				if (movingForward) {
+					if (pressingLeft) {
+						movingLeft = true;
+					} else if (pressingRight) {
+						movingRight = true;
+					} else if (pressingBackward) {
+						movingBackward = true;
+					}
+				}
+				pressingForward = false;
+				movingForward = false;
+				break;
+			case SDLK_a:
+				if (movingLeft) {
+					if (pressingBackward) {
+						movingBackward = true;
+					} else if (pressingForward) {
+						movingForward = true;
+					} else if (pressingRight) {
+						movingRight = true;
+					}
+				}
+				pressingLeft = false;
+				movingLeft = false;
+				break;
+			case SDLK_s:
+				if (movingBackward) {
+					if (pressingRight) {
+						movingRight = true;
+					} else if (pressingLeft) {
+						movingLeft = true;
+					} else if (pressingForward) {
+						movingForward = true;
+					}
+				}
+				pressingBackward = false;
+				movingBackward = false;
+				break;
+			case SDLK_BACKSLASH:
+				pressingTileSwitch = false;
+				break;
+			case SDLK_UP: {
+				pressingTileSelectLeft = false;
+				break;
+			}
+			case SDLK_DOWN: {
+				pressingTileSelectRight = false;
+				break;
+			}
+			case SDLK_RETURN:
+				pressingReturn = false;
+				break;
+			case SDLK_LSHIFT:
+				playerCharacter->setRunning(false);
+				break;
+			case SDLK_ESCAPE:
+				pressingPauseButton = false;
+				break;
+			case SDLK_i:
+				pressingInventoryButton = false;
+				break;
+			case SDLK_0:
+				// This is here for debugging!
+				if (cameraMode == CameraMode::PLAYER_LOCKED) {
+					switchCameraMode(CameraMode::INDEPENDENT);
+				} else {
+					switchCameraMode(CameraMode::PLAYER_LOCKED);
+				}
+				break;
 		}
 	}
 }
@@ -336,6 +399,7 @@ void Game::AelaGame::setupScripts() {
 	scriptManager.addScript("load materials", std::bind(&loadMaterials, resourceManager));
 	scriptManager.addScript("load models", std::bind(&loadModels, resourceManager));
 	scriptManager.addScript("load textures", std::bind(&loadTextures, resourceManager));
+	scriptManager.addScript("load sprite sheets", std::bind(&loadSpriteSheets, resourceManager));
 	scriptManager.addScript("load particles", std::bind(&loadParticles, resourceManager));
 	scriptManager.addScript("load skyboxes", std::bind(&loadSkyboxes, resourceManager));
 	scriptManager.addScript("load tiled maps", std::bind(&loadTiledMaps, resourceManager, &worldManager));
@@ -349,7 +413,7 @@ void Game::AelaGame::tileSelectUpAction() {
 		tileInventoryDisplay.animateSelectorBox();
 	}
 	tileInventoryDisplay.refreshSubMenu();
-	timeAtLastTileSelect = timeManager->getCurrentTimeInNanos();
+	timeAtLastTileSelect = time->getCurrentTimeInNanos();
 }
 
 void Game::AelaGame::tileSelectDownAction() {
@@ -358,7 +422,7 @@ void Game::AelaGame::tileSelectDownAction() {
 		tileInventoryDisplay.animateSelectorBox();
 	}
 	tileInventoryDisplay.refreshSubMenu();
-	timeAtLastTileSelect = timeManager->getCurrentTimeInNanos();
+	timeAtLastTileSelect = time->getCurrentTimeInNanos();
 }
 
 void Game::AelaGame::changePlayerAnimationToRunning() {
@@ -384,6 +448,67 @@ void Game::AelaGame::changePlayerAnimationToRunning() {
 	cameraFrames->at(cameraFrames->size() - 1).first = newAnimationTime;
 }
 
+void Game::AelaGame::addTileSwitchParticleEmitter(Location* location, GLTexture* texture) {
+	glm::vec3 worldSpacePosition = location->getWorldSpaceLocation();
+	TileSwitchParticleEmitter* particleEmitter = new TileSwitchParticleEmitter(time);
+	particleEmitter->setBaseDistance(worldSpacePosition.y + 10);
+	particleEmitter->setBaseSpeed(0.00000002f);
+	particleEmitter->setPathOffset(worldSpacePosition.y);
+	particleEmitter->setLifeTime(500000000);
+	particleEmitter->setupDimensions(&Rect<float>(worldSpacePosition.x, worldSpacePosition.z, 1, 1));
+	
+	std::vector<GLTexture*> textures;
+	textures.push_back(texture);
+
+	particleEmitter->setupParticles(&textures, 1, 1, 1);
+	gameplayScene->putParticleEmitter(particleEmitter);
+}
+
+void Game::AelaGame::switchCameraMode(CameraMode cameraMode) {
+	this->cameraMode = cameraMode;
+
+	switch (cameraMode) {
+		case CameraMode::PLAYER_LOCKED:
+			camera->useControls(false);
+			break;
+		case CameraMode::INDEPENDENT:
+			camera->useControls(true);
+			break;
+	}
+}
+
+bool Game::AelaGame::useTileSwitchGun() {
+	Location* playerLocation = playerCharacter->getLocation();
+	glm::vec3 tile = playerLocation->getTile();
+	glm::vec2 chunk = playerLocation->getChunk();
+	worldManager.getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
+	Location location(playerLocation->getWorld(), chunk, tile);
+	World* worldPtr = worldManager.getWorld(playerLocation->getWorld());
+	if (worldPtr == nullptr) {
+		return false;
+	}
+	Chunk* chunkPtr = worldPtr->getChunk(chunk);
+	if (chunkPtr == nullptr) {
+		return false;
+	}
+	Tile* tilePtr = worldPtr->getChunk(chunk)->getTile(tile);
+	if (tilePtr == nullptr) {
+		return false;
+	}
+	if (worldManager.getTileAtlas()->getTileType(tilePtr->getType())->getBehaviour() != TileBehaviour::FLOOR
+		|| tilePtr->getType() == 0/* || tilePtr->getType() == player.getTileInventory()->getCurrentTile()->getType()*/) {
+		return false;
+	}
+
+	GLTexture* texture = static_cast<GLTexture*>(tilePtr->getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
+	worldManager.runTileSwitchScriptOfTile(&location);
+	addTileSwitchParticleEmitter(&location, texture);
+	player.getTileInventory()->switchCurrentTile(tilePtr);
+	tileInventoryDisplay.refreshSubMenu();
+	worldManager.rebuildMapWhenPossible();
+	return true;
+}
+
 void Game::AelaGame::switchScene(int sceneID) {
 	switch (sceneID) {
 		case MAIN_MENU_SCENE:
@@ -401,16 +526,26 @@ void Game::AelaGame::switchScene(int sceneID) {
 			camera->setForceCursorToMiddle(true);
 			camera->useControls(false);
 
-			camera->setPosition(*playerCharacter->getEntity()->getPosition() + glm::vec3(0, sin(angleBetweenPlayerAndCamera)
-				* distanceBetweenPlayerAndCamera, -cos(angleBetweenPlayerAndCamera) * distanceBetweenPlayerAndCamera));
-			camera->setRotation(0, -angleBetweenPlayerAndCamera, 0);
+			camera->setPosition(*playerCharacter->getEntity()->getPosition() + glm::vec3(0, sin(PLAYER_CAMERA_ANGLE)
+				* PLAYER_CAMERA_DISTANCE, -cos(PLAYER_CAMERA_ANGLE) * PLAYER_CAMERA_DISTANCE));
+			camera->setRotation(0, -PLAYER_CAMERA_ANGLE, 0);
+			break;
+		case INVENTORY_SCENE:
+			engine->getWindow()->hideCursor();
+			break;
+		case PAUSE_SCENE:
+			engine->getWindow()->showCursor();
 			break;
 	}
-	currentScene = sceneID;
+	currentScene = sceneID; 
 }
 
 Game::WorldManager* Game::AelaGame::getWorldManager() {
 	return &worldManager;
+}
+
+Game::EnemyRegistrar* Game::AelaGame::getEnemyRegistrar() {
+	return &enemyRegistrar;
 }
 
 Game::ScriptManager* Game::AelaGame::getScriptManager() {
@@ -424,6 +559,12 @@ Game::DialogueHandler* Game::AelaGame::getDialogueHandler() {
 void Game::AelaGame::setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
 	std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage) {
 	tileInventoryDisplay.setMenuItems(tileInventorySubMenu, tileInventoryLabel, tileInventoryBoxImage);
+}
+
+void Game::AelaGame::setGameplayScene(Scene* gameplayScene) {
+	this->gameplayScene = gameplayScene;
+	worldManager.setGameplayScene(gameplayScene);
+	enemyRegistrar.setGameplayScene(gameplayScene);
 }
 
 void Game::AelaGame::cleanup() {

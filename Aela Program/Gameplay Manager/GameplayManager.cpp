@@ -93,12 +93,12 @@ void GameplayManager::updatePlayerMovements() {
 	}
 	glm::vec3 newRotation = *player.getEntity()->getRotation();
 	if (rotationVector.y > newRotation.y) {
-		newRotation.y += player.getRotationSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		newRotation.y += player.getRotationSpeed() * time->getTimeBetweenFramesInNanos();
 		if (rotationVector.y < newRotation.y) {
 			newRotation.y = rotationVector.y;
 		}
 	} else if (rotationVector.y < newRotation.y) {
-		newRotation.y -= player.getRotationSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		newRotation.y -= player.getRotationSpeed() * time->getTimeBetweenFramesInNanos();
 		if (rotationVector.y > newRotation.y) {
 			newRotation.y = rotationVector.y;
 		}
@@ -112,16 +112,16 @@ void GameplayManager::updatePlayerMovements() {
 	BoundingBox3D originalBox = *player.getEntity()->getBoundingBox();
 	BoundingBox3D* playerBox = player.getEntity()->getBoundingBox();
 	if (movingLeft) {
-		playerBox->getPosition()->x += player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		playerBox->getPosition()->x += player.getWalkingSpeed() * time->getTimeBetweenFramesInNanos();
 	}
 	if (movingRight) {
-		playerBox->getPosition()->x -= player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		playerBox->getPosition()->x -= player.getWalkingSpeed() * time->getTimeBetweenFramesInNanos();
 	}
 	if (movingUp) {
-		playerBox->getPosition()->z += player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		playerBox->getPosition()->z += player.getWalkingSpeed() * time->getTimeBetweenFramesInNanos();
 	}
 	if (movingDown) {
-		playerBox->getPosition()->z -= player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		playerBox->getPosition()->z -= player.getWalkingSpeed() * time->getTimeBetweenFramesInNanos();
 	}
 	player.getEntity()->getBoundingBox()->setPosition(*playerBox->getPosition());
 	player.getEntity()->getBoundingBox()->generateVertices();
@@ -189,8 +189,8 @@ Player* GameplayManager::getPlayer() {
 	return &player;
 }
 
-CharacterManager* GameplayManager::getNPCManager() {
-	return &characterManager;
+CharacterTracker* GameplayManager::getNPCManager() {
+	return &characterTracker;
 }
 
 void GameplayManager::setCurrentMap(Map3D* map) {

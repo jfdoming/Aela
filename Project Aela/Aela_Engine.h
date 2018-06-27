@@ -81,7 +81,7 @@ namespace Aela {
 			Window window;
 			GLRenderer renderer;
 			EventHandler eventHandler;
-			Time timeManager;
+			Time time;
 			FontManager fontManager;
 			LuaManager luaManager;
 			SceneManager sceneManager;

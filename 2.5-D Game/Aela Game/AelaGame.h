@@ -9,14 +9,13 @@
 
 #include "Aela_Engine.h"
 #include "../Worlds/WorldManager.h"
-#include "../Character/CharacterManager.h"
+#include "../Character/CharacterTracker.h"
+#include "../Enemies/EnemyRegistrar.h"
 #include "../Scripts/ScriptManager.h"
 #include "../Player/Player.h"
 #include "../Dialogue/DialogueHandler.h"
 #include "../Worlds/TileInventoryDisplay.h"
-
-#define PI 3.14159265359
-#define THIRD_PI 1.0471975512
+#include "../Camera Mode/CameraMode.h"
 
 using namespace Aela;
 
@@ -36,11 +35,14 @@ namespace Game {
 			void switchScene(int sceneID);
 
 			WorldManager* getWorldManager();
+			EnemyRegistrar* getEnemyRegistrar();
 			ScriptManager* getScriptManager();
 			DialogueHandler* getDialogueHandler();
 
 			void setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
 				std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage);
+
+			void setGameplayScene(Scene* gameplayScene);
 
 		private:
 			// These are Aela Engine objects.
@@ -48,7 +50,7 @@ namespace Game {
 			Window* window;
 			GLRenderer* renderer;
 			EventHandler* eventHandler;
-			Time* timeManager;
+			Time* time;
 			SceneManager* sceneManager;
 			ResourceManager* resourceManager;
 			AudioPlayer* audioPlayer;
@@ -56,12 +58,14 @@ namespace Game {
 			UserEnvironment* userEnvironment;
 			FramerateCalculator* framerateCalculator;
 			Camera3D* camera;
+			Map3D* map;
 			// LuaManager* luaManager;
 			// Animator* animator;
 
 			// These are game-related objects.
 			WorldManager worldManager;
-			CharacterManager* characterManager;
+			CharacterTracker* characterTracker;
+			EnemyRegistrar enemyRegistrar;
 			Player player;
 			Character* playerCharacter;
 			ScriptManager scriptManager;
@@ -70,18 +74,23 @@ namespace Game {
 			// These are display-related objects.
 			TileInventoryDisplay tileInventoryDisplay;
 
+			Scene* gameplayScene;
+
 			// These store the states of keys.
 			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false;
 			bool pressingRight = false, pressingForward = false, pressingLeft = false, pressingBackward = false;
-			bool pressingTileSelectUp = false, pressingTileSelectDown = false, pressingTileSwitch = false;
+			bool pressingTileSelectLeft = false, pressingTileSelectRight = false, pressingTileSwitch = false;
+			bool pressingPauseButton = false, pressingInventoryButton = false;
 			long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 190000000;
 			bool pressingReturn = false;
 
-			float distanceBetweenPlayerAndCamera = 6.0f, angleBetweenPlayerAndCamera = (float) THIRD_PI;
 			int currentScene = 0;
+			int sceneBeforePause = 0;
 
 			long long timeAtLastPlayerTurn = 0;
 			const long long TIME_BETWEEN_PLAYER_TURNS = 80000000;
+
+			CameraMode cameraMode;
 
 			void setupScripts();
 			void loadResources();
@@ -90,5 +99,11 @@ namespace Game {
 			void tileSelectUpAction(), tileSelectDownAction();
 
 			void changePlayerAnimationToRunning();
+
+			void addTileSwitchParticleEmitter(Location* location, GLTexture* texture);
+
+			void switchCameraMode(CameraMode cameraMode);
+
+			bool useTileSwitchGun();
 	};
 }

@@ -45,9 +45,9 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 					charactersToErase += j;
 
 					if (currentTag == "Chunk" || currentTag == "chunk") {
-						for (unsigned int y = 0; y < CHUNK_LENGTH; y++) {
+						for (unsigned int z = 0; z < CHUNK_LENGTH; z++) {
 							for (unsigned int x = 0; x < CHUNK_WIDTH; x++) {
-								tiles[glm::ivec3(x, y, height)] = Tile();
+								tiles[glm::ivec3(x, height, z)] = Tile();
 							}
 						}
 					} else if (currentTag == "/Chunk" || currentTag == "/chunk") {

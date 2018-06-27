@@ -29,14 +29,17 @@ namespace Game {
 			virtual bool load(ResourceMap& resources, std::string src);
 
 			// Before loading, these need to be called.
-			void setCharacters(std::vector<Character>* characters);
+			void setCharacters(std::unordered_map<size_t, Character*>* characters);
 			void setTemplateModelSource(std::string templateModelSource);
 			unsigned int getNumberOfCharactersLoaded();
+			void setSpriteSheetX(unsigned int xOfSpriteSheet);
+			void setSpriteSheetY(unsigned int xOfSpriteSheet);
 
 		private:
 			ResourceManager* resourceManager;
-			std::vector<Character>* characters;
+			std::unordered_map<size_t, Character*>* characters;
 			unsigned int charactersLoaded = 0;
 			std::string templateModelSource;
+			unsigned int xOfSpriteSheet = 0, yOfSpriteSheet = 0;
 	};
 }

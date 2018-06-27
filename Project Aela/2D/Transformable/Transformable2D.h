@@ -19,7 +19,7 @@ namespace Aela {
 	class Transformable2D : public Transformable {
 		friend class Animator;
 		public:
-			Transformable2D() : tint(1, 1, 1, 1), dimensions(0, 0, 0, 0) {
+			Transformable2D() : tint(1), dimensions(0, 0, 0, 0) {
 
 			}
 
@@ -32,7 +32,7 @@ namespace Aela {
 			void setProperty(Transformable2DProperty property, float value);
 			float getProperty(Transformable2DProperty property);
 
-			bool wasTransformed();
+			bool wasModified();
 
 		protected:
 			ColourRGBA tint;

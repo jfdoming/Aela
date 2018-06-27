@@ -14,26 +14,19 @@
 namespace Aela {
 	class PlanarParticleEmitter : public ParticleEmitter {
 		public:
-			PlanarParticleEmitter() {
-
-			}
+			PlanarParticleEmitter(Time* time);
+			virtual ~PlanarParticleEmitter();
 
 			// These are the functions that are overwritten from the ParticleEmitter class.
-			void setupDimensions(Rect<GLfloat>* dimensions);
-			void setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight, unsigned int amount);
-			void update();
+			virtual void setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight, unsigned int amount);
+			virtual void update();
 
-			// These are getters and setters.
-			Camera3D* getCamera();
-			void setCamera(Camera3D* camera);
+			void setupDimensions(Rect<GLfloat>* dimensions);
 
 		private:
 			// This stores the dimensions of the plane.
 			Rect<GLfloat> dimensions;
 
-			// This class requires a pointer to the camera so that it can properly sort particles.
-			Camera3D* camera;
-
-			void setupParticlePositioning(size_t whichParticle, size_t numberOfParticles);
+			virtual void setupParticlePositioning(size_t whichParticle, size_t numberOfParticles);
 	};
 }

@@ -17,10 +17,10 @@ void Particle::setSpeed(float baseSpeed) {
 	this->baseSpeed = baseSpeed;
 }
 
-unsigned int Particle::getLifetime() {
-	return baseLifetime;
+unsigned int Particle::getDistance() {
+	return baseDistance;
 }
 
-void Particle::setLifetime(unsigned int baseLifetime) {
-	this->baseLifetime = baseLifetime;
+void Particle::setDistance(unsigned int baseDistance) {
+	this->baseDistance = baseDistance;
 }

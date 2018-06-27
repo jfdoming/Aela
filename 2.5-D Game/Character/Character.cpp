@@ -2,11 +2,27 @@
 * Class: Character
 * Author: Robert Ciborowski
 * Date: 07/08/2017
-* Description: A class used to represent an Character.
+* Description: A class used to represent an character.
 */
 
 #include "Character.h"
 #include <iostream>
+
+using namespace Game;
+
+Game::Character::Character() {
+	// According to Platinum, it should be 0.00375.
+	walkingSpeed = 0.00375f;
+	// According to Platinum, it should be 0.0075, but that feels too fast.
+	runningSpeed = 0.0075f;
+	directionFacing = TileDirection::BACKWARD;
+	health = 1;
+	maxHealth = 1;
+}
+
+Game::Character::Character(std::string name) : Character() {
+	this->name = name;
+}
 
 void Game::Character::setup(Location* location) {
 	this->location = *location;
@@ -18,6 +34,10 @@ void Game::Character::setLocation(Location* location) {
 
 Game::Location* Game::Character::getLocation() {
 	return &location;
+}
+
+Location* Game::Character::getLocationBeforeAnimation() {
+	return &locationBeforeAnimation;
 }
 
 void Game::Character::setModel(Model* model) {
@@ -81,12 +101,10 @@ Game::TileDirection Game::Character::getDirectionFacing() {
 }
 
 Aela::ModelEntity* Game::Character::getEntity() {
-	std::cout << "Entity: " << entity << "\n";
 	return entity;
 }
 
 void Game::Character::setEntity(ModelEntity* entity) {
-	std::cout << "Setting entity.\n";
 	this->entity = entity;
 }
 
@@ -109,7 +127,9 @@ bool Game::Character::isMoving() {
 void Game::Character::animationHasEnded() {
 	// Moving gets sets to false by the character manager! It does this since it performs some actions
 	// when the character is done moving!
-	// moving = false;
+	std::cout << "Character is done moving.\n";
+	moving = false;
+	locationBeforeAnimation = location;
 	animationHadJustEnded = true;
 	timePassedAfterAnimationEnd = entity->getTimePassedAfterAnimationEnd();
 }
@@ -127,33 +147,94 @@ void Game::Character::turnSimple(TileDirection direction) {
 	directionFacing = direction;
 }
 
-void Game::Character::moveSimple(TileDirection direction, std::string scriptOnCompletion) {
+void Game::Character::moveSimple(Movement* movement, std::string scriptOnCompletion) {
 	moving = true;
 	switchStep();
-	glm::vec3 translationForAnimation;
-	switch (direction) {
-		case TileDirection::RIGHT:
-			translationForAnimation = glm::vec3(-1, 0, 0);
-			break;
-		case TileDirection::FORWARD:
-			translationForAnimation = glm::vec3(0, 0, 1);
-			break;
-		case TileDirection::LEFT:
-			translationForAnimation = glm::vec3(1, 0, 0);
-			break;
-		case TileDirection::BACKWARD:
-			translationForAnimation = glm::vec3(0, 0, -1);
-			break;
-	}
-	addTranslation(translationForAnimation, scriptOnCompletion);
+
+	addTranslation(movement, scriptOnCompletion);
 }
 
 void Game::Character::stopMoving() {
 	moving = false;
 }
 
-void Game::Character::addTranslation(glm::vec3 translation, std::string scriptOnceComplete) {
-	translations.push_back(std::pair<glm::vec3, std::string>(translation, scriptOnceComplete));
+void Game::Character::setHealth(int health) {
+	this->health = health;
+	if (health > maxHealth) {
+		health = maxHealth;
+	}
+	if (health < 0) {
+		health = 0;
+	}
+}
+
+int Game::Character::getHealth() {
+	return health;
+}
+
+void Game::Character::increaseHealth(int amount) {
+	health += amount;
+	if (health > maxHealth) {
+		health = maxHealth;
+	}
+}
+
+void Game::Character::decreaseHealth(int amount) {
+	health -= amount;
+	if (health < 0) {
+		health = 0;
+	}
+}
+
+void Game::Character::setMaxHealth(int maxHealth) {
+	this->maxHealth = maxHealth;
+	if (maxHealth < 1) {
+		maxHealth = 1;
+	}
+	if (health > maxHealth) {
+		health = maxHealth;
+	}
+}
+
+int Game::Character::getMaxHealth() {
+	return maxHealth;
+}
+
+void Game::Character::increaseMaxHealth(int amount) {
+	maxHealth += amount;
+}
+
+void Game::Character::decreaseMaxHealth(int amount) {
+	maxHealth -= amount;
+	if (maxHealth < 1) {
+		maxHealth = 1;
+	}
+	if (health > maxHealth) {
+		health = maxHealth;
+	}
+}
+
+void Game::Character::setVisibility(bool visible) {
+	this->visible = visible;
+	entity->setVisibility(visible);
+}
+
+bool Game::Character::isVisible() {
+	return visible;
+}
+
+void Game::Character::allowNewMovements(bool newMovementsAreAllowed) {
+	this->newMovementsAreAllowed = newMovementsAreAllowed;
+}
+
+bool Game::Character::isFrozen() {
+	return newMovementsAreAllowed;
+}
+
+void Game::Character::update() {}
+
+void Game::Character::addTranslation(Movement* movement, std::string scriptOnceComplete) {
+	translations.push_back(std::pair<Movement, std::string>(*movement, scriptOnceComplete));
 }
 
 void Game::Character::removeNextTranslation() {
@@ -162,14 +243,14 @@ void Game::Character::removeNextTranslation() {
 	}
 }
 
-std::pair<glm::vec3, std::string>* Game::Character::getNextTranslation() {
+std::pair<Movement, std::string>* Game::Character::getNextTranslation() {
 	if (translations.size() == 0) {
 		return nullptr;
 	}
 	return &translations[0];
 }
 
-std::pair<glm::vec3, std::string>* Game::Character::getLastTranslation() {
+std::pair<Movement, std::string>* Game::Character::getLastTranslation() {
 	if (translations.size() == 0) {
 		return nullptr;
 	}

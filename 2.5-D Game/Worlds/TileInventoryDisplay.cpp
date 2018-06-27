@@ -2,7 +2,7 @@
 * Class: TileInventoryDisplay
 * Author: Robert Ciborowski
 * Date: 18/03/2018
-* Description: A class used to update the tile inventory display.
+* Description: A class used to updateRegisteredEnemies the tile inventory display.
 */
 
 #include "TileInventoryDisplay.h"
@@ -23,7 +23,6 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 	tileInventoryLabel->setText(worldManager->getTileAtlas()->getTileType(player->getTileInventory()->getCurrentTile()->getType())->getName());
 
 	for (size_t i = 0; i < player->getTileInventory()->getNumberOfTiles(); i++) {
-		std::cout << "Tile Inventory Display: " << i << "\n";
 		Tile* tile = player->getTileInventory()->getTile(i);
 
 		if (tileInventoryImages.size() == i) {
@@ -40,6 +39,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 
 			image->setDimensions(&Rect<int>((int) (width * 0.98 - (i * imageWidthAndHeight) - imageWidthAndHeight),
 				(int) (height * 0.15 - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
+			image->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
 			image->setTexture(texture);
 			tileInventoryImages.push_back(image);
 			tileInventorySubMenu->add(image);
@@ -58,6 +58,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 
 			tileInventoryImages[i]->setDimensions(&Rect<int>((int) (width * 0.98 - (i * imageWidthAndHeight) - imageWidthAndHeight),
 				(int) (height * 0.15 - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
+			tileInventoryImages[i]->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
 			tileInventoryImages[i]->setTexture(texture);
 		}
 	}

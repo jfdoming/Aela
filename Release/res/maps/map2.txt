@@ -1,5 +1,5 @@
 <Skybox src="~skybox_1">
-<Light power"1" position="0,15,0" scaling="1.0,1.0,1.0">
+<Light power"1" position="0,15,0" scaling="1.0,1.0,1.0" colour="0.5,0.5,1.0">
 <Billboard src="~ekkon.dds" useRotation="true" position="0,0,0" rotation="0,0,0.78" scaling="1,1,1">
 <Model position="3.0,0.0,0.0" src="~corner_elevated.obj">
 <Model position="4.0,0.0,0.0" src="~corner_elevated.obj">

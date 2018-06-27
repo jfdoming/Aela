@@ -14,6 +14,7 @@ ColourRGBA* Transformable2D::getTint() {
 
 void Transformable2D::setDimensions(Rect<int>* dimensions) {
 	this->dimensions = *dimensions;
+	modified = true;
 }
 
 Rect<int>* Transformable2D::getDimensions() {
@@ -45,6 +46,6 @@ float Transformable2D::getProperty(Transformable2DProperty property) {
 	return 0.0f;
 }
 
-bool Transformable2D::wasTransformed() {
+bool Transformable2D::wasModified() {
 	return modified;
 }

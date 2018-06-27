@@ -2,7 +2,7 @@
 * Class: Character
 * Author: Robert Ciborowski
 * Date: 07/08/2017
-* Description: A class used to represent a Character.
+* Description: A class used to represent a character.
 */
 
 #pragma once
@@ -10,31 +10,24 @@
 #include "../Location/Location.h"
 #include "3D/Models/ModelEntity.h"
 #include "CharacterStep.h"
+#include "../Movement/Movement.h"
 
 using namespace Aela;
 
 namespace Game {
 	class Character {
-		friend class CharacterManager;
+		friend class CharacterTracker;
 		friend class WorldManager;
 		public:
-			Character() {
-				// According to Platinum, it should be 0.00375.
-				walkingSpeed = 0.00375f;
-				// According to Platinum, it should be 0.0075, but that feels too fast.
-				runningSpeed = 0.0075f;
-				directionFacing = TileDirection::BACKWARD;
-			}
-
-			Character(std::string name) : Character() {
-				this->name = name;
-			}
+			Character();
+			Character(std::string name);
 
 			void setup(Location* location);
 
 			// These are getters, setters and adders.
 			void setLocation(Location* location);
 			Location* getLocation();
+			Location* getLocationBeforeAnimation();
 			void setModel(Model* model);
 			Model* getModel();
 			void setName(std::string name);
@@ -59,13 +52,32 @@ namespace Game {
 			bool animationHasJustEnded();
 			void stopMoving();
 
-		private:
+			void setHealth(int health);
+			int getHealth();
+			void increaseHealth(int amount);
+			void decreaseHealth(int amount);
+			void setMaxHealth(int maxHealth);
+			int getMaxHealth();
+			void increaseMaxHealth(int amount);
+			void decreaseMaxHealth(int amount);
+			void setVisibility(bool visible);
+			bool isVisible();
+			void allowNewMovements(bool newMovementsAreAllowed);
+			bool isFrozen();
+
+		protected:
 			Location location;
+			Location locationBeforeAnimation;
 			TileDirection directionFacing;
 
 			// Each character should have a unique name.
 			std::string name;
 
+			int health, maxHealth;
+
+			virtual void update();
+
+		private:
 			// Unlike tiles, characters are unique and get their own models.
 			Model* baseModel = nullptr;
 			ModelEntity* entity = nullptr;
@@ -73,7 +85,7 @@ namespace Game {
 			std::string textureName;
 
 			// This stores the translations that the animator should use next to animate the character.
-			std::vector<std::pair<glm::vec3, std::string>> translations;
+			std::vector<std::pair<Movement, std::string>> translations;
 
 			// These represent several speeds, in units/millisecond.
 			float walkingSpeed, runningSpeed;
@@ -91,13 +103,16 @@ namespace Game {
 
 			long long timePassedAfterAnimationEnd = 0;
 
+			bool visible = true;
+			bool newMovementsAreAllowed = false;
+
 			// To be accessed by this class's friends.
-			void addTranslation(glm::vec3 translation, std::string scriptOnceComplete);
+			void addTranslation(Movement* movement, std::string scriptOnceComplete);
 			void removeNextTranslation();
-			std::pair<glm::vec3, std::string>* getNextTranslation();
-			std::pair<glm::vec3, std::string>* getLastTranslation();
+			std::pair<Movement, std::string>* getNextTranslation();
+			std::pair<Movement, std::string>* getLastTranslation();
 
 			void turnSimple(TileDirection direction);
-			void moveSimple(TileDirection direction, std::string scriptOnCompletion);
+			void moveSimple(Movement* movement, std::string scriptOnCompletion);
 	};
 }

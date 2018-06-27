@@ -10,6 +10,7 @@
 #include "Resource Management\ResourcePaths.h"
 #include "../Resources/ResourceInfo.h"
 #include "TileLoader.h"
+#include "../Resources/GenericMaterialLoader.h"
 #include <fstream>
 
 using namespace Aela;
@@ -30,6 +31,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 		std::string line;
 		std::string currentTag = "";
 		Material* material = nullptr;
+		Texture* texture = nullptr;
 		bool collidable = false;
 		TileBehaviour behaviour;
 		std::string name = "tile";
@@ -58,6 +60,8 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 					// This basically just clones a template tile's model and then saves it.
 					unsigned int currentTile = tileLoader.getTilesLoaded();
 					tileLoader.useMaterial(material);
+					resourceManager->bindLoader(&tileLoader);
+
 					resourceManager->bindGroup("tileGroup" + std::to_string(currentTile));
 					std::string templateTile = (std::string) DEFAULT_MODEL_PATH;
 
@@ -77,6 +81,20 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 						|| (behaviour == TileBehaviour::RAMP_DOWN_LEFT_ELEVATED)
 						|| (behaviour == TileBehaviour::RAMP_DOWN_RIGHT_ELEVATED)) {
 						templateTile += "corner_elevated.obj";
+					}
+					if (behaviour == TileBehaviour::BOX) {
+						templateTile += "box.obj";
+					}
+					if ((behaviour == TileBehaviour::WALL_RIGHT)
+						|| (behaviour == TileBehaviour::WALL_FRONT)
+						|| (behaviour == TileBehaviour::WALL_LEFT)) {
+						templateTile += "wall.obj";
+					}
+					if ((behaviour == TileBehaviour::WALL_CORNER_UP_RIGHT)
+						|| (behaviour == TileBehaviour::WALL_CORNER_UP_LEFT)
+						|| (behaviour == TileBehaviour::WALL_CORNER_DOWN_LEFT)
+						|| (behaviour == TileBehaviour::WALL_CORNER_DOWN_RIGHT)) {
+						templateTile += "wall_corner.obj";
 					}
 
 					resourceManager->addToGroup(templateTile, false);
@@ -127,6 +145,8 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 							// Note: collidable is set to false by default.
 							if (value == "true") {
 								collidable = true;
+							} else {
+								collidable = false;
 							}
 						} else if ((propertyType == "type" || propertyType == "Type") && (currentTag == "Tile" || currentTag == "tile")) {
 							std::string value = line.substr(j + 1, k - j - 1);
@@ -158,11 +178,55 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 								behaviour = TileBehaviour::RAMP_DOWN_RIGHT_DEPRESSED;
 							} else if (value == "ramp_down_right_elevated") {
 								behaviour = TileBehaviour::RAMP_DOWN_RIGHT_ELEVATED;
+							} else if (value == "box") {
+								behaviour = TileBehaviour::BOX;
+							} else if (value == "wall_right") {
+								behaviour = TileBehaviour::WALL_RIGHT;
+							} else if (value == "wall_front") {
+								behaviour = TileBehaviour::WALL_FRONT;
+							} else if (value == "wall_left") {
+								behaviour = TileBehaviour::WALL_LEFT;
+							} else if (value == "wall_corner_up_right") {
+								behaviour = TileBehaviour::WALL_CORNER_UP_RIGHT;
+							} else if (value == "wall_corner_up_left") {
+								behaviour = TileBehaviour::WALL_CORNER_UP_LEFT;
+							} else if (value == "wall_corner_down_left") {
+								behaviour = TileBehaviour::WALL_CORNER_DOWN_LEFT;
+							} else if (value == "wall_corner_down_right") {
+								behaviour = TileBehaviour::WALL_CORNER_DOWN_RIGHT;
 							} else {
 								behaviour = TileBehaviour::FLOOR;
 							}
 						} else if ((propertyType == "name" || propertyType == "Name") && (currentTag == "Tile" || currentTag == "tile")) {
 							name = line.substr(j + 1, k - j - 1);
+						} else if ((propertyType == "texture" || propertyType == "Texture") && (currentTag == "Tile" || currentTag == "tile")) {
+							std::string value = line.substr(j + 1, k - j - 1);
+							GenericMaterialLoader materialLoader;
+							resourceManager->bindLoader(&materialLoader);
+							resourceManager->bindGroup("material_" + name);
+							resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + name + ".mtl", false);
+
+							std::string path = (std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + value;
+							bool success = resourceManager->obtain<Texture>(path, texture);
+							if (!success) {
+								AelaErrorHandling::consoleWindowError("Tile Atlas", path + " was requested by "
+									+ path + " and was not found.");
+								return false;
+							}
+							materialLoader.setDefaultTexture(texture);
+
+							if (resourceManager->loadGroup("material_" + name) != Aela::ResourceManager::Status::OK) {
+								std::cerr << "Failed to load a resource from group \"material_" + name + "\": " << resourceManager->getNewInvalidResourceKeys()[0] << "\n";
+								return false;
+							}
+
+							path = (std::string) RESOURCE_ROOT + DEFAULT_MATERIAL_PATH + name + ".mtl";
+							success = resourceManager->obtain<Material>(path, material);
+							if (!success) {
+								AelaErrorHandling::consoleWindowError("Tile Atlas", path + " was requested by "
+									+ path + " and was not found.");
+								return false;
+							}
 						}
 					}
 					charactersToErase += k;

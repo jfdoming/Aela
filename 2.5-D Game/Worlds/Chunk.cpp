@@ -36,7 +36,7 @@ Game::TileMap* Game::Chunk::getTiles() {
 void Game::Chunk::generateBlankTiles(int height) {
 	for (unsigned int y = 0; y < CHUNK_LENGTH; y++) {
 		for (unsigned int x = 0; x < CHUNK_WIDTH; x++) {
-			tiles[glm::ivec3(x, y, height)] = Tile();
+			tiles[glm::ivec3(x, height, y)] = Tile();
 		}
 	}
 }

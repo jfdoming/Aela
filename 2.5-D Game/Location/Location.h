@@ -7,10 +7,15 @@
 
 #pragma once
 #include <glm/glm.hpp>
+#include "../Worlds/Chunk.h"
 
 namespace Game {
 	enum class TileDirection {
 		RIGHT, FORWARD, LEFT, BACKWARD
+	};
+
+	enum class ElevationDirection {
+		UP, NONE, DOWN
 	};
 
 	class Location {
@@ -33,6 +38,7 @@ namespace Game {
 			unsigned int getWorld();
 			glm::ivec2 getChunk();
 			glm::ivec3 getTile();
+			glm::vec3 getWorldSpaceLocation();
 
 		private:
 			unsigned int world;

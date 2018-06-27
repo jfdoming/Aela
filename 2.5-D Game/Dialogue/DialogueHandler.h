@@ -21,7 +21,7 @@ namespace Game {
 		public:
 			DialogueHandler() {}
 
-			void setup(Time* timeManager, EventHandler* eventHandler, ScriptManager* scriptManager);
+			void setup(Time* time, EventHandler* eventHandler, ScriptManager* scriptManager);
 			void update();
 
 			// This is triggered on an event.
@@ -40,7 +40,7 @@ namespace Game {
 			bool dialogueIsBeingShown();
 			bool hadJustFinishedDialogue();
 		private:
-			Time* timeManager;
+			Time* time;
 			ScriptManager* scriptManager;
 			std::shared_ptr<SubMenu> dialogueSubMenu;
 			std::shared_ptr<Label> label1, label2, label3, label4;

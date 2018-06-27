@@ -31,7 +31,7 @@ namespace Aela {
 			void update();
 
 			// These are getters and setters.
-			void setTime(Time* timeManager);
+			void setTime(Time* time);
 			Time* getTime();
 			void setWindow(Window* window);
 			Window* getWindow();
@@ -41,7 +41,7 @@ namespace Aela {
 
 		private:
 			// These are the objects from Project Aela that the class uses.
-			Time* timeManager;
+			Time* time;
 			Window* window;
 			std::unordered_map<size_t, Transformable3D*> transformables;
 

@@ -7,8 +7,8 @@
 
 #include "DialogueHandler.h"
 
-void Game::DialogueHandler::setup(Time* timeManager, EventHandler* eventHandler, ScriptManager* scriptManager) {
-	this->timeManager = timeManager;
+void Game::DialogueHandler::setup(Time* time, EventHandler* eventHandler, ScriptManager* scriptManager) {
+	this->time = time;
 	this->scriptManager = scriptManager;
 	eventHandler->addListener(EventConstants::KEY_RELEASED, bindListener(DialogueHandler::onEvent, this));
 	eventHandler->addListener(EventConstants::KEY_PRESSED, bindListener(DialogueHandler::onEvent, this));
@@ -16,9 +16,9 @@ void Game::DialogueHandler::setup(Time* timeManager, EventHandler* eventHandler,
 
 void Game::DialogueHandler::update() {
 	if (state == DialogueState::MESSAGE && positionInDialogue < MAX_CHARACTERS_PER_LINE * 2
-		&& timeManager->getCurrentTimeInNanos() >= timeSinceNewCharacter + timeBetweenCharacterReveals) {
+		&& time->getCurrentTimeInNanos() >= timeSinceNewCharacter + timeBetweenCharacterReveals) {
 		positionInDialogue++;
-		timeSinceNewCharacter = timeManager->getCurrentTimeInNanos();
+		timeSinceNewCharacter = time->getCurrentTimeInNanos();
 		if (positionInDialogue < MAX_CHARACTERS_PER_LINE) {
 			label1->setText(line1OfText.substr(0, positionInDialogue));
 			label2->setText("");
@@ -32,7 +32,7 @@ void Game::DialogueHandler::update() {
 		}
 	}
 
-	if (timeManager->getCurrentTimeInNanos() > timeAtLastOptionSelect + timeBetweenOptionSelects) {
+	if (time->getCurrentTimeInNanos() > timeAtLastOptionSelect + timeBetweenOptionSelects) {
 		if (pressingUp) {
 			pressUpAction();
 		}
@@ -148,7 +148,7 @@ void Game::DialogueHandler::showDialogue(std::string text, std::string scriptToR
 	}
 
 	positionInDialogue = 1;
-	timeSinceNewCharacter = timeManager->getCurrentTimeInNanos();
+	timeSinceNewCharacter = time->getCurrentTimeInNanos();
 	label1->setText(line1OfText.substr(0, 1));
 	label2->setText("");
 	label3->setText("");
@@ -262,7 +262,7 @@ void Game::DialogueHandler::pressUpAction() {
 	} else {
 		currentOption = oldOption;
 	}
-	timeAtLastOptionSelect = timeManager->getCurrentTimeInNanos();
+	timeAtLastOptionSelect = time->getCurrentTimeInNanos();
 }
 
 void Game::DialogueHandler::pressDownAction() {
@@ -277,7 +277,7 @@ void Game::DialogueHandler::pressDownAction() {
 	} else {
 		currentOption = oldOption;
 	}
-	timeAtLastOptionSelect = timeManager->getCurrentTimeInNanos();
+	timeAtLastOptionSelect = time->getCurrentTimeInNanos();
 }
 
 void Game::DialogueHandler::pressLeftAction() {
@@ -291,7 +291,7 @@ void Game::DialogueHandler::pressLeftAction() {
 	} else {
 		currentOption = oldOption;
 	}
-	timeAtLastOptionSelect = timeManager->getCurrentTimeInNanos();
+	timeAtLastOptionSelect = time->getCurrentTimeInNanos();
 }
 
 void Game::DialogueHandler::pressRightAction() {
@@ -305,5 +305,5 @@ void Game::DialogueHandler::pressRightAction() {
 	} else {
 		currentOption = oldOption;
 	}
-	timeAtLastOptionSelect = timeManager->getCurrentTimeInNanos();
+	timeAtLastOptionSelect = time->getCurrentTimeInNanos();
 }

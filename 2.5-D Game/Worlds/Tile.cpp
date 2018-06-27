@@ -15,6 +15,10 @@ std::string* Game::Tile::getPromptedScriptID() {
 	return &promptedScriptID;
 }
 
+std::string* Game::Tile::getSwitchScript() {
+	return &switchScriptID;
+}
+
 size_t Game::Tile::getType() {
 	return type;
 }
@@ -37,4 +41,8 @@ void Game::Tile::setWalkedOnScript(std::string name) {
 
 void Game::Tile::setPromptedScript(std::string name) {
 	promptedScriptID = name;
+}
+
+void Game::Tile::setSwitchScript(std::string name) {
+	switchScriptID = name;
 }

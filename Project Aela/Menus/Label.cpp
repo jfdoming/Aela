@@ -26,12 +26,11 @@ void Label::updateComponent() {
 }
 
 void Label::renderComponent(GLRenderer& renderer) {
-	renderer.renderText(text, font, &dimensions, &colour);
+	renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint.getVec4()));
 }
 
-void Label::renderWithTint(GLRenderer& renderer, ColourRGBA* tint) {
-	ColourRGBA newColour(colour.getR() * tint->getR(), colour.getG() * tint->getG(), colour.getB() * tint->getB(), colour.getA() * tint->getA());
-	renderer.renderText(text, font, &dimensions, &newColour);
+void Label::renderWithDifferentTint(GLRenderer& renderer, ColourRGBA* tint) {
+	renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint->getVec4()));
 }
 
 void Label::setText(std::string text) {

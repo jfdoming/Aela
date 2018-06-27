@@ -20,6 +20,10 @@ Component::~Component() {
 
 void Component::update() {
 	updateComponent();
+
+	if (wasModified()) {
+		markDirty();
+	}
 }
 
 void Component::render(GLRenderer& renderer) {

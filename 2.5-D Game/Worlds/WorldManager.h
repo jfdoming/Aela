@@ -8,28 +8,26 @@
 #pragma once
 #include <unordered_map>
 #include "World.h"
-#include "../Character/CharacterManager.h"
+#include "MapRebuilder.h"
+#include "../Character/CharacterTracker.h"
 #include "../Dialogue/DialogueHandler.h"
 #include "3D/Maps/Map3D.h"
 #include "TileAtlas.h"
 #include "Resource Management/ResourceManager.h"
 #include "../Scripts/ScriptManager.h"
 #include "Renderer/GLRenderer.h"
+#include "../Teleporter/Teleporter.h"
 
-#define PI 3.14159265359
-#define HALF_PI 1.57079632679
-#define THREE_HALVES_PI 4.71238898038
-#define THREE_QUARTERS_PI 2.35619449019
-#define QUARTER_PI 0.78539816339
-#define SIXTH_PI 0.52359877559
-#define ELEVEN_SIXTHS_PI 5.75958653158
-#define ROOT_OF_TWO 1.41421356237
 
 namespace Game {
+	// The following represents a map of teleporters, in which the teleporters are organized by map, chunk and position in 
+	// their chunk.
+	typedef std::unordered_map<size_t, std::unordered_map<glm::ivec2, std::unordered_map<glm::ivec3, Teleporter,
+		IVec3HashMapFunctions, IVec3HashMapFunctions>, IVec2HashMapFunctions, IVec2HashMapFunctions>> TeleporterMap;
+
 	class WorldManager {
 		public:
 			WorldManager() {
-				chunkRenderDistances = glm::vec3(1, 1, 1);
 				currentWorld = 0;
 			}
 
@@ -39,12 +37,15 @@ namespace Game {
 			void rebuildMapWhenPossible();
 
 			TileAtlas* getTileAtlas();
-			CharacterManager* getCharacterManager();
+			CharacterTracker* getCharacterTracker();
 			size_t addWorld(World* world);
 			World* getWorld(size_t id);
+			Map3D* getMap3D();
 			bool setCurrentWorld(size_t id);
 			size_t getCurrentWorld();
+			Teleporter* getTeleporter(Location* location);
 			void setChunkRenderDistances(glm::vec3 chunkRenderDistances);
+			void setGameplayScene(Scene* gameplayScene);
 			void getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::vec2& chunk, TileDirection direction);
 
 			void moveCharacterIfPossible(size_t id, TileDirection direction);
@@ -54,8 +55,11 @@ namespace Game {
 
 			void addWalkedOnScript(std::string script, Location* location);
 			void addPromptedScript(std::string script, Location* location);
+			void addTileSwitchScript(std::string script, Location* location);
+			void addTeleporter(Teleporter* teleporter, Location* location);
 
 			void runPromptedScriptOfTile(Location* location);
+			void runTileSwitchScriptOfTile(Location* location);
 
 		private:
 			// These are some Aela objects.
@@ -68,15 +72,12 @@ namespace Game {
 			size_t currentWorld;
 
 			// These are some handles to game-related objects.
-			CharacterManager characterManager;
+			CharacterTracker characterTracker;
 			ScriptManager* scriptManager;
 			DialogueHandler* dialogueHandler;
 			Character* player;
 			TileAtlas tileAtlas;
-
-			// This stores the render distances of the chunks (x = width, y = length, z = depth if looking down at the
-			// ground from a bird's eye view).
-			glm::ivec3 chunkRenderDistances;
+			MapRebuilder mapRebuilder;
 
 			// This is a handle to an Aela 3D map. The chunks of a world are loaded into this map. Because Aela's 3D
 			// system revolves around maps, and because this game is part-3D-part-2D, there must be a Map3D somewhere!
@@ -84,6 +85,9 @@ namespace Game {
 
 			bool mapNeedsToBeRebuilt;
 
+			TeleporterMap teleporters;
+
+			// These can't actually be std::queues.
 			std::vector<std::pair<size_t, TileDirection>> characterMovementQueueByID;
 			std::vector<std::pair<std::string, TileDirection>> characterMovementQueueByName;
 
@@ -95,6 +99,6 @@ namespace Game {
 
 			void setupAnimationLoopingForTiles();
 
-			void processCharacterMovements(Character* character, TileDirection& direction);
+			void processCharacterMovement(Character* character, TileDirection& direction);
 	};
 }

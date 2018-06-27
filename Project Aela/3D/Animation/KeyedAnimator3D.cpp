@@ -78,8 +78,8 @@ void KeyedAnimator::onEvent(Event* event) {
 }
 
 void KeyedAnimator::update() {
-	if (timeManager != nullptr) {
-		long long deltaTime = timeManager->getTimeBetweenFramesInNanos();
+	if (time != nullptr) {
+		long long deltaTime = time->getTimeBetweenFramesInNanos();
 		for (auto pair : transformables) {
 			Transformable3D* transformable = pair.second;
 			float amount = currentSpeed * deltaTime;
@@ -108,12 +108,12 @@ void KeyedAnimator::update() {
 	}
 }
 
-void KeyedAnimator::setTime(Time* timeManager) {
-	this->timeManager = timeManager;
+void KeyedAnimator::setTime(Time* time) {
+	this->time = time;
 }
 
 Time* KeyedAnimator::getTime() {
-	return timeManager;
+	return time;
 }
 
 void KeyedAnimator::setWindow(Window* window) {

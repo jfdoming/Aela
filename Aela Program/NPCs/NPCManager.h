@@ -1,5 +1,5 @@
 /*
-* Class: Character Manager
+* Class: Character Tracker
 * Author: Robert Ciborowski
 * Date: 07/08/2017
 * Description: A class used to manage NPCs.
@@ -11,9 +11,9 @@
 
 #include "../NPCs/NPC.h"
 
-class CharacterManager {
+class CharacterTracker {
 	public:
-		CharacterManager() {
+		CharacterTracker() {
 
 		}
 

@@ -34,7 +34,7 @@ void Aela::Button::updateComponent() {
 void Aela::Button::renderComponent(GLRenderer& renderer) {
 	ImageComponent::renderComponent(renderer);
 	if (text != nullptr) {
-		text->renderWithTint(renderer, &tint);
+		text->renderWithDifferentTint(renderer, &tint);
 	}
 }
 

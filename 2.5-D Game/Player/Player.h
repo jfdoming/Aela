@@ -4,7 +4,7 @@
 * Date: 02/01/2018
 * Description: A class used to represent the player and their properties.
 *              I wanted to make Player extend Character, but I can't due
-*              to the way that Characters must be stored in the CharacterManager.
+*              to the way that Characters must be stored in the CharacterTracker.
 */
 
 #pragma once
@@ -27,9 +27,8 @@ namespace Game {
 			Character* getCharacter();
 
 		private:
-			// This stores the Character ID of the player, which is assigned by the Character Manager.
+			// This stores the Character ID of the player, which is assigned by the Character Tracker.
 			size_t id;
-
 			Character* character;
 
 			TileInventory tileInventory;
