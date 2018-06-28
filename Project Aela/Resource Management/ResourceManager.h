@@ -60,7 +60,7 @@ namespace Aela {
 			Status load(ResourceQuery& query);
 
 			template <class T> bool obtain(std::string src, T*& result) {
-				return resources.get(src, result);
+				return resources.get(resourceRoot + src, result);
 			}
 
 			/*

@@ -17,7 +17,7 @@ namespace Aela {
 	class GLImage : public Image {
 		public:
 			GLImage() {
-				dimensions.setValues(0, 0, 0, 0);
+				dimensions = Rect<int>(0, 0, 0, 0);
 			}
 
 			virtual ~GLImage() {

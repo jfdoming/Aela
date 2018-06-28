@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include "Component.h"
 #include "ImageComponent.h"
 #include "Label.h"
 
@@ -26,11 +25,15 @@ namespace Aela {
 
 			// These are getters and setters.
 			void setupOnClick(std::function<void()> function);
-			void setText(Label* text);
-			void setText(std::shared_ptr<Label> text);
+			void setText(std::string text);
 			std::string getText();
 			void setHoverTint(ColourRGBA* hoverTint);
 			void setClickTint(ColourRGBA* clickTint);
+			void setTextFont(TextFont* font);
+			void setTextColour(ColourRGBA* colour);
+			void setDimensions(Rect<int>* dimensions);
+			void setPosition(int x, int y);
+			void setWidthAndHeight(int width, int height);
 
 			virtual void updateComponent();
 			virtual void renderComponent(GLRenderer& renderer);
@@ -40,13 +43,19 @@ namespace Aela {
 			virtual void onMouseEntered(MouseEvent* event);
 			virtual void onMouseExited(MouseEvent* event);
 
+			// This changes the button's width and height to match that of the text.
+			void wrapAroundText();
+
 		private:
 			bool clickStarted = false, active = false;
 
 			std::function<void()> onClick;
-			std::shared_ptr<Label> text = nullptr;
 
 			// These are the tints used by the button. Keep in mind that a tint is a multiplier.
 			ColourRGBA hoverTint, clickTint;
+
+			Label textLabel;
+
+			void setupLabelDimensions();
 	};
 }

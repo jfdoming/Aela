@@ -7,6 +7,7 @@
 
 #pragma once
 #include <glm/glm.hpp>
+#include <ostream>
 
 namespace Aela {
 	class ColourRGBA {
@@ -15,20 +16,28 @@ namespace Aela {
 
 			}
 
+			bool ColourRGBA::operator==(const ColourRGBA& other) {
+				return r == other.r && b == other.b && g == other.g && a == other.a;
+			}
+			
+			bool ColourRGBA::operator!=(const ColourRGBA& other) {
+				return !(*this == other);
+			}
+
 			ColourRGBA(glm::vec4* colour) {
-				setValues(colour->r, colour->g, colour->b, colour->a);
+				set(colour->r, colour->g, colour->b, colour->a);
 			}
 
 			ColourRGBA(float r, float g, float b, float a) {
-				setValues(r, g, b, a);
+				set(r, g, b, a);
 			}
 
 			ColourRGBA(float value) {
-				setValues(value, value, value, value);
+				set(value, value, value, value);
 			}
 
-			ColourRGBA(glm::vec4 value) {
-				setValues(value.x, value.y, value.z, value.a);
+			ColourRGBA(glm::vec4 vec4) {
+				set(vec4.r, vec4.g, vec4.b, vec4.a);
 			}
 
 			void setR(float r) {
@@ -47,11 +56,18 @@ namespace Aela {
 				this->a = a;
 			}
 
-			void setValues(float r, float g, float b, float a) {
+			void set(float r, float g, float b, float a) {
 				this->r = r;
 				this->g = g;
 				this->b = b;
 				this->a = a;
+			}
+
+			void set(ColourRGBA& other) {
+				this->r = other.r;
+				this->g = other.g;
+				this->b = other.b;
+				this->a = other.a;
 			}
 
 			float getR() {
@@ -72,6 +88,10 @@ namespace Aela {
 
 			glm::vec4 getVec4() {
 				return glm::vec4(r, g, b, a);
+			}
+
+			inline friend std::ostream& operator<<(std::ostream &os, ColourRGBA const& me) {
+				return (os << "ColourRGBA(" << me.r << ", " << me.g << ", " << me.b << ", " << me.a << ")");
 			}
 
 		private:

@@ -16,19 +16,23 @@ namespace Aela {
 			}
 
 			ColourRGB(glm::vec3* colour) {
-				setValues(colour->r, colour->g, colour->b);
+				set(colour->r, colour->g, colour->b);
 			}
 
 			ColourRGB(float r, float g, float b) {
-				setValues(r, g, b);
+				set(r, g, b);
 			}
 
 			ColourRGB(float value) {
-				setValues(value, value, value);
+				set(value, value, value);
 			}
 
-			ColourRGB(glm::vec3 value) {
-				setValues(value.x, value.y, value.z);
+			bool ColourRGB::operator==(const ColourRGB& other) {
+				return r == other.r && b == other.b && g == other.g;
+			}
+
+			bool ColourRGB::operator!=(const ColourRGB& other) {
+				return !(*this == other);
 			}
 
 			void setR(float r) {
@@ -43,10 +47,16 @@ namespace Aela {
 				this->b = b;
 			}
 
-			void setValues(float r, float g, float b) {
+			void set(float r, float g, float b) {
 				this->r = r;
 				this->g = g;
 				this->b = b;
+			}
+
+			void set(ColourRGB& other) {
+				this->r = other.r;
+				this->g = other.g;
+				this->b = other.b;
 			}
 
 			float getR() {
@@ -80,6 +90,10 @@ namespace Aela {
 			glm::vec3* getVec3Ptr() {
 				vec = glm::vec3(r, g, b);
 				return &vec;
+			}
+
+			inline friend std::ostream& operator<<(std::ostream &os, ColourRGB const& me) {
+				return (os << "ColourRGB(" << me.r << ", " << me.g << ", " << me.b << ")");
 			}
 
 		private:

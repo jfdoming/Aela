@@ -10,10 +10,8 @@ using namespace Aela;
 
 std::string materialsAndModelNames[] = {
 	"meme_mug",
-	"jeep_1",
-	"grass_1",
-	"mansion_2",
-	"lamp_post_1"
+	"corner_elevated",
+	"floor"
 };
 
 std::string ddsTextureNames[] = {
@@ -25,7 +23,6 @@ std::string ddsTextureNames[] = {
 };
 
 std::string billboardNames[] = {
-	"character",
 	"ekkon"
 };
 

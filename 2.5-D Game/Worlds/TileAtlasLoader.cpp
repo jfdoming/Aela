@@ -8,14 +8,13 @@
 #include "TileAtlasLoader.h"
 #include "Error Handler\ErrorHandler.h"
 #include "Resource Management\ResourcePaths.h"
-#include "../Resources/ResourceInfo.h"
 #include "TileLoader.h"
 #include "../Resources/GenericMaterialLoader.h"
 #include <fstream>
 
 using namespace Aela;
 
-bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
+bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path, TileAtlas& atlas) {
 	if (resourceManager == nullptr) {
 		AelaErrorHandling::windowError("Tile Atlas", "The Resource Manager of the Tile Atlas must be set before loading tiles!");
 		return false;
@@ -26,7 +25,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 	atlas.addTile(TileType(true, TileBehaviour::FLOOR, "blank"), nullptr);
 
 	std::ifstream in;
-	in.open(RESOURCE_ROOT + path);
+	in.open(resourceRoot + path);
 	if (in.is_open()) {
 		std::string line;
 		std::string currentTag = "";
@@ -61,6 +60,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 					unsigned int currentTile = tileLoader.getTilesLoaded();
 					tileLoader.useMaterial(material);
 					resourceManager->bindLoader(&tileLoader);
+					std::cout << resourceManager->getResourceRoot() << " is the root\n";
 
 					resourceManager->bindGroup("tileGroup" + std::to_string(currentTile));
 					std::string templateTile = (std::string) DEFAULT_MODEL_PATH;
@@ -105,7 +105,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 					}
 
 					Model* model;
-					if (!resourceManager->obtain<Model>("tile" + currentTile, model)) {
+					if (!resourceManager->obtain<Model>("tile" + std::to_string(currentTile), model)) {
 						// Is it even possible to reach this?!
 						AelaErrorHandling::windowError("Tile Atlas Loader", "Tile loading went horribly wrong with tile "
 							+ std::to_string(currentTile) + "!");
@@ -133,9 +133,9 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 					if (j != std::string::npos && k != std::string::npos) {
 						if ((propertyType == "material" || propertyType == "Material") && (currentTag == "Tile" || currentTag == "tile")) {
 							std::string source = line.substr(j + 1, k - j - 1);
-							bool success = resourceManager->obtain<Material>(source, material);
+							bool success = resourceManager->obtain<Material>(DEFAULT_MATERIAL_PATH + source, material);
 							if (!success) {
-								AelaErrorHandling::consoleWindowError("Tile Atlas", source + " was requested by "
+								AelaErrorHandling::consoleWindowError("Tile Atlas Loader", source + " was requested by "
 									+ path + " and was not found.");
 								return false;
 							}
@@ -203,27 +203,27 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 							std::string value = line.substr(j + 1, k - j - 1);
 							GenericMaterialLoader materialLoader;
 							resourceManager->bindLoader(&materialLoader);
-							resourceManager->bindGroup("material_" + name);
-							resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + name + ".mtl", false);
+							resourceManager->bindGroup("material/" + value);
+							resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + value + "_mtl", false);
 
-							std::string path = (std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + value;
-							bool success = resourceManager->obtain<Texture>(path, texture);
+							std::string path2 = (std::string) DEFAULT_TEXTURE_PATH + value;
+							bool success = resourceManager->obtain<Texture>(path2, texture);
 							if (!success) {
-								AelaErrorHandling::consoleWindowError("Tile Atlas", path + " was requested by "
+								AelaErrorHandling::consoleWindowError("Tile Atlas Loader", path2 + " was requested by "
 									+ path + " and was not found.");
 								return false;
 							}
 							materialLoader.setDefaultTexture(texture);
 
-							if (resourceManager->loadGroup("material_" + name) != Aela::ResourceManager::Status::OK) {
-								std::cerr << "Failed to load a resource from group \"material_" + name + "\": " << resourceManager->getNewInvalidResourceKeys()[0] << "\n";
+							if (resourceManager->loadGroup("material/" + value) != Aela::ResourceManager::Status::OK) {
+								std::cerr << "Failed to load a resource from group \"material/" + name + "\": " << resourceManager->getNewInvalidResourceKeys()[0] << "\n";
 								return false;
 							}
 
-							path = (std::string) RESOURCE_ROOT + DEFAULT_MATERIAL_PATH + name + ".mtl";
-							success = resourceManager->obtain<Material>(path, material);
+							path2 = DEFAULT_MATERIAL_PATH + value + "_mtl";
+							success = resourceManager->obtain<Material>(path2, material);
 							if (!success) {
-								AelaErrorHandling::consoleWindowError("Tile Atlas", path + " was requested by "
+								AelaErrorHandling::consoleWindowError("Tile Atlas Loader", path2 + " was requested by "
 									+ path + " and was not found.");
 								return false;
 							}
@@ -235,9 +235,11 @@ bool Game::TileAtlasLoader::loadAtlas(std::string path, TileAtlas& atlas) {
 			}
 		}
 	} else {
-		AelaErrorHandling::consoleWindowError("Tile Atlas", "The file " + path + " was not found.");
+		AelaErrorHandling::consoleWindowError("Tile Atlas Loader", "The file " + path + " was not found.");
 		return false;
 	}
+
+	std::cout << "DONE ATLAS!";
 	return true;
 }
 

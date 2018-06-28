@@ -25,7 +25,7 @@ namespace Aela {
 
 			void setTint(ColourRGBA* tint);
 			ColourRGBA* getTint();
-			void setDimensions(Rect<int>* dimensions);
+			virtual void setDimensions(Rect<int>* dimensions);
 			Rect<int>* getDimensions();
 
 			// These are functions used for changing any single property.
@@ -33,6 +33,7 @@ namespace Aela {
 			float getProperty(Transformable2DProperty property);
 
 			bool wasModified();
+			void resetModificationStatus();
 
 		protected:
 			ColourRGBA tint;

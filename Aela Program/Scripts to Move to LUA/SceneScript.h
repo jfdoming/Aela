@@ -101,8 +101,8 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	mainMenuScene->getMenu()->add(titleText);
 	mainMenuScene->getMenu()->add(ekkonGamesText);
 	mainMenuScene->getMenu()->add(continueGameButton);
-	mainMenuScene->getMenu()->add(optionsButton);
-	mainMenuScene->getMenu()->add(exitButton);
+	//mainMenuScene->getMenu()->add(optionsButton);
+	//mainMenuScene->getMenu()->add(exitButton);
 	mainMenuScene->putParticleEmitter(particleEmitter);
 
 	std::vector<GLTexture*> particleTextures;
@@ -130,7 +130,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	engine->getSceneManager()->registerScene(ekkonScene, EKKON_INTRO_SCENE);
 	engine->getSceneManager()->registerScene(mainMenuScene, MAIN_MENU_SCENE);
 	engine->getSceneManager()->registerScene(gameplayScene, GAMEPLAY_SCENE);
-	engine->getSceneManager()->setCurrentScene(EKKON_INTRO_SCENE);
+	engine->getSceneManager()->setCurrentScene(MAIN_MENU_SCENE);
 	engine->getSceneManager()->setDisposingScenesOnDestroy(true);
 
 

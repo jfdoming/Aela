@@ -36,7 +36,6 @@ namespace Game {
 			void setSpriteSheetY(unsigned int xOfSpriteSheet);
 
 		private:
-			ResourceManager* resourceManager;
 			std::unordered_map<size_t, Character*>* characters;
 			unsigned int charactersLoaded = 0;
 			std::string templateModelSource;

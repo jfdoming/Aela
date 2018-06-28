@@ -49,3 +49,7 @@ float Transformable2D::getProperty(Transformable2DProperty property) {
 bool Transformable2D::wasModified() {
 	return modified;
 }
+
+void Aela::Transformable2D::resetModificationStatus() {
+	modified = false;
+}

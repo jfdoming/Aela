@@ -13,12 +13,16 @@
 #include "../Events/EventListenerList.h"
 #include "../2D/Transformable/Transformable2D.h"
 
+#include <atomic>
+
 namespace Aela {
 	class Component : public Transformable2D {
 		friend class Container;
 
 		public:
 			Component();
+			//Component(const Component& origin) : dirty(true) {
+			//}
 			Component(int x, int y);
 			Component(int x, int y, int width, int height);
 			virtual ~Component();
@@ -58,7 +62,8 @@ namespace Aela {
 			bool isDirty();
 		private:
 			// whether this component needs to be repainted
-			bool dirty = true;
+			std::atomic_bool dirty{true};
+			bool dirtyOnUpdate = false;
 
 			// called when this component is marked as dirty
 			std::function<void()> dirtyCallback = nullptr;

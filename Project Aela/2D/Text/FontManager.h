@@ -34,7 +34,7 @@ namespace Aela {
 
 			// These are some functions that are made for interacting with the
 			// list of text fonts.
-			TextFont* obtainTextFont(std::string name, unsigned int size);
+			TextFont* obtainTextFont(std::string resourceRoot, std::string name, unsigned int size);
 
 			static Rect<int> dimensionsOfText(TextFont* font, std::string text);
 

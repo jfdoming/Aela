@@ -8,7 +8,6 @@
 #include "WorldManager.h"
 #include "3D/Maps/Map3DLoader.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
-#include "../Resources/ResourceInfo.h"
 #include <glm/gtc/constants.hpp>
 
 // I'm including this because it contains some useful defines.
@@ -51,13 +50,13 @@ void Game::WorldManager::setupAnimationLoopingForTiles() {
 	Texture* texture0 = nullptr, *texture1 = nullptr;
 	Material* material0 = nullptr, *material1 = nullptr;
 
-	if (!resourceManager->obtain<Texture>((std::string) RESOURCE_ROOT + DEFAULT_MATERIAL_PATH + (std::string) "water_0.dds", texture0)
-		|| !resourceManager->obtain<Texture>((std::string) RESOURCE_ROOT + DEFAULT_MATERIAL_PATH + (std::string) "water_1.dds", texture1)) {
+	if (!resourceManager->obtain<Texture>((std::string) DEFAULT_MATERIAL_PATH + (std::string) "water_0.dds", texture0)
+		|| !resourceManager->obtain<Texture>((std::string) DEFAULT_MATERIAL_PATH + (std::string) "water_1.dds", texture1)) {
 		AelaErrorHandling::consoleWindowError("World Manager", "Could not load some textures for some tile animations.");
 		return;
 	}
 
-	if (!resourceManager->obtain<Material>("water_0", material0)) {
+	if (!resourceManager->obtain<Material>((std::string) DEFAULT_MATERIAL_PATH + "water_0.mtl/water_0", material0)) {
 		AelaErrorHandling::consoleWindowError("World Manager", "Could not load some materials for some tile animations.");
 		std::cout << DEFAULT_MATERIAL_PATH + (std::string) "water_0.mtl failed.\n";
 		return;

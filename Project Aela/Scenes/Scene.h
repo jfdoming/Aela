@@ -13,6 +13,8 @@
 
 namespace Aela {
 	class Scene {
+		friend class SceneManager;
+
 		public:
 			Scene();
 			~Scene();
@@ -34,10 +36,6 @@ namespace Aela {
 			unsigned int getActiveSkybox();
 
 			void putParticleEmitter(ParticleEmitter* emitter);
-
-			void handleMousePressed(Event* event);
-			void handleMouseReleased(Event* event);
-			void handleMouseMoved(Event* event);
 		private:
 			Map3D* map = nullptr;
 			std::vector<ParticleEmitter*> particleEmitters;
@@ -46,5 +44,9 @@ namespace Aela {
 			unsigned int activeSkybox = 0;
 
 			Menu menu;
+
+			void handleMousePressed(Event* event);
+			void handleMouseReleased(Event* event);
+			void handleMouseMoved(Event* event);
 	};
 }

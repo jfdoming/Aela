@@ -11,10 +11,10 @@
 #include "../Scripts/Scripts to Move to LUA/ResourceScript.h"
 #include "../Scripts/Scripts to Move to LUA/SceneScript.h"
 #include "../Scripts/Scripts to Move to LUA/MapScript.h"
-#include "../Resources/ResourceInfo.h"
 #include "../Utilities/MathConstants.h"
 #include "../Particles/TileSwitchParticleEmitter.h"
 #include "../Utilities/GameConstants.h"
+#include "../Resources/ResourceInfo.h"
 
 using namespace Aela;
 
@@ -426,7 +426,7 @@ void Game::AelaGame::tileSelectDownAction() {
 }
 
 void Game::AelaGame::changePlayerAnimationToRunning() {
-	AnimationTrack3D* playerTrack = animator->get3DTrack(playerCharacter->getName() + "_mv");
+	AnimationTrack3D* playerTrack = animator->get3DTrack(playerCharacter->getName() + "/mv");
 	if (playerTrack == nullptr) {
 		return;
 	}

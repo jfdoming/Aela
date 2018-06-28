@@ -19,7 +19,7 @@ namespace Game {
 		TileAtlasLoader atlasLoader;
 		atlasLoader.setResourceManager(resourceManager);
 		std::cout << "About to load tiled atlas.\n";
-		atlasLoader.loadAtlas("res/tiled maps/tiles.txt", *atlas);
+		atlasLoader.loadAtlas((std::string) RESOURCE_ROOT, "res/tiled maps/tiles.txt", *atlas);
 
 		World world;
 		WorldLoader worldLoader;

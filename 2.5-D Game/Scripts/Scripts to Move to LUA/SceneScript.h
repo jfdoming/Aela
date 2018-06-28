@@ -34,15 +34,16 @@ namespace Game {
 		FontManager* fontManager = engine->getFontManager();
 		GLRenderer* renderer = engine->getRenderer();
 		DialogueHandler* dialogueHandler = game->getDialogueHandler();
-		TextFont* xeroxLarge = fontManager->obtainTextFont("../../res/fonts/xerox.ttf", 35);
-		TextFont* xerox = fontManager->obtainTextFont("../../res/fonts/xerox.ttf", 22);
+		TextFont* xeroxLarge = fontManager->obtainTextFont((std::string) RESOURCE_ROOT, "res/fonts/xerox.ttf", 35);
+		TextFont* xerox = fontManager->obtainTextFont((std::string) RESOURCE_ROOT, "res/fonts/xerox.ttf", 22);
 
 		if (xeroxLarge == nullptr || xerox == nullptr) {
 			AelaErrorHandling::windowError("A critical font (xerox.ttf) could not be loaded, aborting!");
 			return;
 		}
 
-		ColourRGBA VSBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
+		// These are some fun colours.
+		ColourRGBA darkerBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
 		ColourRGBA almostWhite(0.9f, 0.9f, 0.9f, 1.0f);
 		ColourRGBA almostBlack(0.1f, 0.1f, 0.1f, 1.0f);
 
@@ -50,15 +51,27 @@ namespace Game {
 		ColourRGBA hoverTint(0.8f, 0.8f, 0.8f, 1.0f);
 		ColourRGBA clickTint(0.6f, 0.6f, 0.6f, 1.0f);
 
+		// These are some pointers that we won't have to recreate over and over.
+		ColourRGBA* darkerBluePtr = &darkerBlue;
+		ColourRGBA* almostWhitePtr = &almostWhite;
+		ColourRGBA* almostBlackPtr = &almostBlack;
+		ColourRGBA* hoverTintPtr = &hoverTint;
+		ColourRGBA* clickTintPtr = &clickTint;
+
 		Rect<int> windowDimensions = *((Rect<signed int>*) engine->getWindow()->getDimensions());
 
 		// The following blocks of code set up the Ekkon intro scene.
 		auto ekkonImage = std::make_shared<ImageComponent>();
 		GLTexture* ekkonTexture;
-		bool success = resourceManager->obtain<GLTexture>("../../res/textures/ekkon.dds", ekkonTexture);
-		ekkonImage->setDimensions(&windowDimensions);
-		ekkonImage->setTexture(ekkonTexture);
-		ekkonImage->setTint(&ColourRGBA(1, 1, 1, 0));
+		bool success = resourceManager->obtain<GLTexture>("res/textures/ekkon.dds", ekkonTexture);
+		std::cout << ekkonTexture << " is ekkonTexture\n";
+		if (success) {
+			ekkonImage->setDimensions(&windowDimensions);
+			ekkonImage->setTexture(ekkonTexture);
+			ekkonImage->setTint(&ColourRGBA(1, 1, 1, 0));
+		} else {
+			AelaErrorHandling::consoleWindowError("Missing texture: ../../res/textures/ekkon.dds");
+		}
 
 		// This sets up the ekkon scene.
 		auto ekkonScene = new Scene();
@@ -70,11 +83,6 @@ namespace Game {
 		titleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() / 1.5f));
 		auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xerox, &almostWhite);
 		ekkonGamesText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), ((int) (windowDimensions.getHeight() * 0.95)));
-		auto startGameButtonText = std::make_shared<Label>("Start a New Game", xerox, &almostWhite);
-		int spacing = startGameButtonText->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
-		auto continueGameButtonText = std::make_shared<Label>("Continue Game", xerox, &almostWhite);
-		auto optionsButtonText = std::make_shared<Label>("Options", xerox, &almostWhite);
-		auto exitButtonText = std::make_shared<Label>("Exit", xerox, &almostWhite);
 
 		// This sets up actions for the main menu buttons.
 		auto startNewGameAction = [game](Engine* engine) {
@@ -93,32 +101,43 @@ namespace Game {
 		// This sets up some textureless buttons. Note: setText() uses information about the button's dimensions. In order to setup text for
 		// a button, make sure that you set the button's position before hand.
 		auto startGameButton = std::make_shared<Button>();
-		startGameButton->setDimensions(startGameButtonText->getDimensions());
 		startGameButton->setupOnClick(std::bind(startNewGameAction, engine));
-		startGameButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06),
+		startGameButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 			(int) (windowDimensions.getHeight() / 1.42f));
-		startGameButton->setText(startGameButtonText);
+		std::cout << windowDimensions.getHeight() / 1.42f << " is the y positioning!\n";
+		startGameButton->setText("Start a New Game");
+		startGameButton->setTextFont(xerox);
+		startGameButton->setTextColour(almostWhitePtr);
+		startGameButton->wrapAroundText();
+
+		int spacing = startGameButton->getDimensions()->getHeight() + windowDimensions.getHeight() / 25;
 
 		auto continueGameButton = std::make_shared<Button>();
-		continueGameButton->setDimensions(continueGameButtonText->getDimensions());
 		continueGameButton->setupOnClick(std::bind(continueGameAction, engine));
-		continueGameButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06),
+		continueGameButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 			(int) (windowDimensions.getHeight() / 1.42f + spacing));
-		continueGameButton->setText(continueGameButtonText);
+		continueGameButton->setText("Continue Game");
+		continueGameButton->setTextFont(xerox);
+		continueGameButton->setTextColour(almostWhitePtr);
+		continueGameButton->wrapAroundText();
 
 		auto optionsButton = std::make_shared<Button>();
-		optionsButton->setDimensions(optionsButtonText->getDimensions());
 		optionsButton->setupOnClick(std::bind(optionsAction, engine));
-		optionsButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06),
+		optionsButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 			(int) (windowDimensions.getHeight() / 1.42f + spacing * 2));
-		optionsButton->setText(optionsButtonText);
+		optionsButton->setText("Options");
+		optionsButton->setTextFont(xerox);
+		optionsButton->setTextColour(almostWhitePtr);
+		optionsButton->wrapAroundText();
 
 		auto exitButton = std::make_shared<Button>();
-		exitButton->setDimensions(exitButtonText->getDimensions());
 		exitButton->setupOnClick(std::bind(exitAction, engine));
-		exitButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06),
+		exitButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 			(int) (windowDimensions.getHeight() / 1.42f + spacing * 3));
-		exitButton->setText(exitButtonText);
+		exitButton->setText("Exit");
+		exitButton->setTextFont(xerox);
+		exitButton->setTextColour(almostWhitePtr);
+		exitButton->wrapAroundText();
 
 		// This sets up the main menu scene.
 		auto mainMenuScene = new Scene();
@@ -136,7 +155,7 @@ namespace Game {
 
 		auto dialgoueBoxImage = std::make_shared<ImageComponent>();
 		GLTexture* dialgoueBoxTexture;
-		success = resourceManager->obtain<GLTexture>("../../res/textures/dialogue_box.dds", dialgoueBoxTexture);
+		success = resourceManager->obtain<GLTexture>("res/textures/dialogue_box.dds", dialgoueBoxTexture);
 		dialgoueBoxImage->setDimensions(&Rect<int>(0, windowDimensions.getHeight() * 3 / 4, windowDimensions.getWidth(),
 			windowDimensions.getHeight() / 4));
 		dialgoueBoxImage->setTexture(dialgoueBoxTexture);
@@ -171,7 +190,7 @@ namespace Game {
 
 		auto tileSelectorBox = std::make_shared<ImageComponent>();
 		GLTexture* tileInventoryBoxTexture;
-		success = resourceManager->obtain<GLTexture>("../../res/textures/selector_box.png", tileInventoryBoxTexture);
+		success = resourceManager->obtain<GLTexture>("res/textures/selector_box.png", tileInventoryBoxTexture);
 		int tileSelectorWidthAndHeight = windowDimensions.getHeight() / 8;
 		tileSelectorBox->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.98 - tileSelectorWidthAndHeight - tileSelectorWidthAndHeight * 0.1),
 			(int) (windowDimensions.getHeight() * 0.15 - tileSelectorWidthAndHeight - tileSelectorWidthAndHeight * 0.1),
@@ -228,10 +247,6 @@ namespace Game {
 		auto pauseMenuTitleText = std::make_shared<Label>("Pause Menu", xerox, &almostWhite);
 		pauseMenuTitleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.15), (int) (windowDimensions.getHeight() * 0.18));
 
-		// This sets up text for buttons in the pause menu's sidebar.
-		auto pauseMenuGameButtonText = std::make_shared<Label>("Game", xerox, &almostWhite);
-		auto pauseMenuOptionsButtonText = std::make_shared<Label>("Options", xerox, &almostWhite);
-
 		// This creates sidebar buttons for the pause menu.
 		auto pauseMenuGameButton = std::make_shared<Button>(&hoverTint, &clickTint);
 		auto pauseMenuOptionsButton = std::make_shared<Button>(&hoverTint, &clickTint);
@@ -239,8 +254,8 @@ namespace Game {
 		// This gets textures for the pause menu buttons.
 		GLTexture* simpleButtonTexture;
 		GLTexture* simpleButtonTextureLight;
-		success = engine->getResourceManager()->obtain<GLTexture>((std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + "simple_button.dds", simpleButtonTexture);
-		success = engine->getResourceManager()->obtain<GLTexture>((std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + "simple_button_light.dds", simpleButtonTextureLight);
+		success = engine->getResourceManager()->obtain<GLTexture>((std::string) DEFAULT_TEXTURE_PATH + "simple_button.dds", simpleButtonTexture);
+		success = engine->getResourceManager()->obtain<GLTexture>((std::string) DEFAULT_TEXTURE_PATH + "simple_button_light.dds", simpleButtonTextureLight);
 
 		auto pauseMenuGameSubMenu = std::make_shared<SubMenu>();
 		pauseMenuGameSubMenu->init(&windowDimensions, *renderer);
@@ -259,13 +274,18 @@ namespace Game {
 		pauseMenuGameButton->setDimensions(&Rect<int>((int)(windowDimensions.getWidth() * 0.125), (int)(windowDimensions.getHeight() * 0.2222),
 			(int)(windowDimensions.getWidth() * 0.1875), (int)(windowDimensions.getHeight() * 0.1111)));
 		pauseMenuGameButton->setupOnClick(std::bind(goToGameSubMenu, engine));
-		pauseMenuGameButton->setText(pauseMenuGameButtonText);
+		pauseMenuGameButton->setText("Game");
+		pauseMenuGameButton->setTextFont(xerox);
+		pauseMenuGameButton->setTextColour(almostWhitePtr);
 
 		pauseMenuOptionsButton->setTexture(simpleButtonTextureLight);
 		pauseMenuOptionsButton->setDimensions(&Rect<int>((int)(windowDimensions.getWidth() * 0.125), (int)(windowDimensions.getHeight() * 0.3333),
 			(int)(windowDimensions.getWidth() * 0.1875), (int)(windowDimensions.getHeight() * 0.1111)));
 		pauseMenuOptionsButton->setupOnClick(std::bind(goToOptionsSubMenu, engine));
-		pauseMenuOptionsButton->setText(pauseMenuOptionsButtonText);
+		pauseMenuOptionsButton->setText("Options");
+		pauseMenuOptionsButton->setTextFont(xerox);
+		pauseMenuOptionsButton->setTextColour(almostWhitePtr);
+		pauseMenuOptionsButton->wrapAroundText();
 
 		pauseMenuGameSubMenu->show();
 
@@ -294,7 +314,7 @@ namespace Game {
 
 		auto inventorySlotA = std::make_shared<ImageComponent>();
 		GLTexture* inventorySlotTexture;
-		success = resourceManager->obtain<GLTexture>("../../res/textures/inventory_slot.png", inventorySlotTexture);
+		success = resourceManager->obtain<GLTexture>("res/textures/inventory_slot.png", inventorySlotTexture);
 		inventorySlotA->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.37), (int) (windowDimensions.getHeight() * 0.4),
 			(int) (windowDimensions.getWidth() * 0.1), (int) (windowDimensions.getWidth() * 0.1)));
 		inventorySlotA->setTexture(inventorySlotTexture);
@@ -311,7 +331,7 @@ namespace Game {
 		inventoryScene->getMenu()->add(inventorySlotB);
 
 		Map3D* map;
-		success = engine->getResourceManager()->obtain<Map3D>("../../res/maps/map.txt", map);
+		success = engine->getResourceManager()->obtain<Map3D>("res/maps/map.txt", map);
 		if (success) {
 			mainMenuScene->setMap(map);
 			worldGameplayScene->setMap(map);

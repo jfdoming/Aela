@@ -92,7 +92,7 @@ namespace Game {
 			std::vector<std::pair<std::string, TileDirection>> characterMovementQueueByName;
 
 			// This is the path to the Aela 3D Map.
-			const std::string mapFileLocation = "../../res/maps/map.txt";
+			const std::string mapFileLocation = "res/maps/map.txt";
 
 			// This creates/recreates the Aela::Map3D that is used by the game.
 			void rebuildMap();

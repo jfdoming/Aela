@@ -113,7 +113,7 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 								map->getSkybox(entityID)->setSkybox((Skybox*) res);
 							}
 						} else {
-							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", line.substr(j + 1, k - j - 1) + " was requested by "
+							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", "The resource " + line.substr(j + 1, k - j - 1) + "(\"" + source + "\") was requested by "
 							+ src + " and was not found.");
 							std::cout << source << " was the source.\n";
 							return false;
