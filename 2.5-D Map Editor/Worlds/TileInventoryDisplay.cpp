@@ -29,6 +29,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 			if (tile->getEntity() == nullptr) {
 				resourceManager->obtain<GLTexture>((std::string) DEFAULT_TEXTURE_PATH + "black.png", texture);
 			} else {
+				// We need to disable resource root because getSrc() returns the src with the resource root.
 				resourceManager->useResourceRoot(false);
 				if (!resourceManager->obtain<GLTexture>(worldManager->getTileAtlas()->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
 					resourceManager->useResourceRoot(true);

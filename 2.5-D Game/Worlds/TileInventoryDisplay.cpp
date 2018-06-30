@@ -28,11 +28,10 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 			auto image = std::make_shared<ImageComponent>();
 			GLTexture* texture = nullptr;
 
-			// Until Aela is designed better (which I don't have the time to do), we must do this to get a GLTexture* (as opposed to getting
-			// a Texture* via tile->...->getTexture()). We have to get it from the tile atlas since 
 			if (tile->getEntity() == nullptr) {
 				resourceManager->obtain<GLTexture>((std::string) DEFAULT_MATERIAL_PATH + "grass.dds", texture);
 			} else {
+				// We need to disable resource root because getSrc() returns the src with the resource root.
 				resourceManager->useResourceRoot(false);
 				if (!resourceManager->obtain<GLTexture>(worldManager->getTileAtlas()->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
 					resourceManager->useResourceRoot(true);
