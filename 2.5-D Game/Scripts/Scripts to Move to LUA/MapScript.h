@@ -18,14 +18,11 @@ namespace Game {
 		TileAtlas* atlas = worldManager->getTileAtlas();
 		TileAtlasLoader atlasLoader;
 		atlasLoader.setResourceManager(resourceManager);
-		std::cout << "About to load tiled atlas.\n";
 		atlasLoader.loadAtlas((std::string) RESOURCE_ROOT, "res/tiled maps/tiles.txt", *atlas);
 
 		World world;
 		WorldLoader worldLoader;
-		std::cout << "About to load the test tiled maps.\n";
 		worldLoader.loadWorld("res/tiled maps/test_map.txt", world);
-		std::cout << "Finished.\n";
 		worldManager->addWorld(&world);
 	}
 };

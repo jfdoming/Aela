@@ -64,7 +64,6 @@ namespace Game {
 		auto ekkonImage = std::make_shared<ImageComponent>();
 		GLTexture* ekkonTexture;
 		bool success = resourceManager->obtain<GLTexture>("res/textures/ekkon.dds", ekkonTexture);
-		std::cout << ekkonTexture << " is ekkonTexture\n";
 		if (success) {
 			ekkonImage->setDimensions(&windowDimensions);
 			ekkonImage->setTexture(ekkonTexture);
@@ -104,7 +103,6 @@ namespace Game {
 		startGameButton->setupOnClick(std::bind(startNewGameAction, engine));
 		startGameButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 			(int) (windowDimensions.getHeight() / 1.42f));
-		std::cout << windowDimensions.getHeight() / 1.42f << " is the y positioning!\n";
 		startGameButton->setText("Start a New Game");
 		startGameButton->setTextFont(xerox);
 		startGameButton->setTextColour(almostWhitePtr);

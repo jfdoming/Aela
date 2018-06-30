@@ -14,7 +14,7 @@ namespace Game {
 		public:
 			TileAtlasLoader() {}
 
-			bool loadAtlas(std::string path, TileAtlas& atlas);
+			bool loadAtlas(std::string resourceRoot, std::string path, TileAtlas& atlas);
 			void setResourceManager(Aela::ResourceManager* resourceManager);
 
 		private:

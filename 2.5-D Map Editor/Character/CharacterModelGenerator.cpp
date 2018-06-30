@@ -7,8 +7,8 @@
 
 #include "CharacterModelGenerator.h"
 #include "Resource Management/ResourcePaths.h"
-#include "../../Project Aela/Utilities/enumut.h"
 #include "../Resources/ResourceInfo.h"
+#include "../../Project Aela/Utilities/enumut.h"
 
 using namespace Aela;
 
@@ -31,34 +31,33 @@ bool Game::CharacterModelGenerator::load(ResourceMap& resources, std::string src
 
 		// The following will generate new Models and Materials for the character. This is done so that every
 		// character gets their own model and material.
-		if (!resources.get<Model>(
-			"ch_" + character->getTextureName() + "_" + std::to_string(yOfSpriteSheet) + "_"
-			+ std::to_string(xOfSpriteSheet) + "_mo", model)) {
-			model = new Model("ch_" + character->getTextureName() + "_" + std::to_string(yOfSpriteSheet) + "_"
-				+ std::to_string(xOfSpriteSheet) + "_mo");
+		if (!resources.get<Model>((std::string) RESOURCE_ROOT + "ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet)
+			+ "/" + std::to_string(yOfSpriteSheet) + "/mo", model)) {
+			model = new Model("ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet) + "/"
+				+ std::to_string(yOfSpriteSheet) + "/mo");
 			model->setSubModels(templateModel->getSubModels());
 
 			// This generates a new material.
-			Material* material = new Material("ch_" + character->getTextureName() + "_" + std::to_string(yOfSpriteSheet)
-				+ "_" + std::to_string(xOfSpriteSheet) + "_ma");
+			Material* material = new Material("ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet)
+				+ "/" + std::to_string(yOfSpriteSheet) + "/ma");
 			Texture* texture;
 			if (!resources.get<Texture>((std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + character->getTextureName()
-				+ "_" + std::to_string(yOfSpriteSheet) + "_" + std::to_string(xOfSpriteSheet) + ".png", texture)) {
+				+ "/" + std::to_string(xOfSpriteSheet) + "/" + std::to_string(yOfSpriteSheet) + ".png", texture)) {
 				AelaErrorHandling::consoleWindowError("Character Loader", "There was a problem obtaining the texture "
-					+ (std::string) DEFAULT_TEXTURE_PATH + character->getTextureName() + "_" + std::to_string(yOfSpriteSheet)
-					+ "_" + std::to_string(xOfSpriteSheet) + ".png"
+					+ (std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet)
+					+ "/" + std::to_string(yOfSpriteSheet) + ".png"
 					+ ", as requested by the character " + character->getName() + " with an ID of "
 					+ std::to_string(charactersLoaded) + ".");
 			}
 			material->setTexture(texture);
-			resources.put("ch_" + character->getTextureName() + "_" + std::to_string(yOfSpriteSheet) + "_"
-				+ std::to_string(xOfSpriteSheet) + "_ma", material);
+			resources.put((std::string) RESOURCE_ROOT + "ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet) + "/"
+				+ std::to_string(yOfSpriteSheet) + "/ma", material);
 
 			for (auto& subModel : *model->getSubModels()) {
 				subModel.setMaterial(material);
 			}
-			resources.put("ch_" + character->getTextureName() + "_" + std::to_string(yOfSpriteSheet) + "_"
-				+ std::to_string(xOfSpriteSheet) + "_mo", model);
+			resources.put((std::string) RESOURCE_ROOT + "ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet) + "/"
+				+ std::to_string(yOfSpriteSheet) + "/mo", model);
 		}
 		if (yOfSpriteSheet == directionAsInteger && xOfSpriteSheet == 0) {
 			character->setModel(model);

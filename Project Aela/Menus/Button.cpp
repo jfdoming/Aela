@@ -55,8 +55,6 @@ void Aela::Button::updateComponent() {
 void Aela::Button::renderComponent(GLRenderer& renderer) {
 	ImageComponent::renderComponent(renderer);
 
-	std::cout << dimensions.getWidth() << " is a width.\n";
-
 	textLabel.renderWithDifferentTint(renderer, &tint);
 }
 

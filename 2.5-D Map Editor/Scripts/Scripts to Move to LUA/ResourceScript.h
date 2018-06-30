@@ -176,8 +176,6 @@ namespace Game {
 		resourceManager->bindLoader(&skyboxLoader);
 		resourceManager->bindGroup("skybox");
 
-		std::cout << "Loading skyboxes.\n";
-
 		for (std::string path : skyboxNames) {
 			resourceManager->addToGroup(DEFAULT_SKYBOX_PATH + path, false);
 		}

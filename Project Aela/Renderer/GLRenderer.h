@@ -123,6 +123,9 @@ namespace Aela {
 			// This sets the field of view of the bounded camera.
 			void setFOV(float value);
 
+			void scissor(int x, int y, size_t width, size_t height);
+			void resetScissor();
+
 			// These are some getters.
 			std::string getInformation(GLRendererInformation infoToGet);
 			Window* getWindow();

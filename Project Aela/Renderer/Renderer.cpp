@@ -54,6 +54,10 @@ void Aela::Renderer::clear3DTint() {
 	tint3D = ColourRGBA(0, 0, 0, 0);
 }
 
+void Aela::Renderer::scissor(int x, int y, size_t width, size_t height) {}
+
+void Aela::Renderer::resetScissor() {}
+
 Window* Renderer::getWindow() {
 	return window;
 }

@@ -10,7 +10,6 @@
 using namespace Aela;
 
 bool Game::TileLoader::load(ResourceMap& resources, std::string src) {
-	std::cout << src << " is the src!!!\n";
 	// This gets the template model.
 	Model* templateModel;
 	size_t offset = resourceManager->getResourceRoot().size();
@@ -27,7 +26,6 @@ bool Game::TileLoader::load(ResourceMap& resources, std::string src) {
 	}
 
 	resources.put(resourceManager->getResourceRoot() + "tile" + tilesLoadedString, model);
-	std::cout << resourceManager->getResourceRoot() + "tile" + tilesLoadedString + " was loaded.\n";
 	tilesLoaded++;
 	return true;
 }

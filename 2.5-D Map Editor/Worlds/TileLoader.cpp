@@ -12,18 +12,21 @@ using namespace Aela;
 bool Game::TileLoader::load(ResourceMap& resources, std::string src) {
 	// This gets the template model.
 	Model* templateModel;
-	if (!resourceManager->obtain<Model>(src, templateModel)) {
+	size_t offset = resourceManager->getResourceRoot().size();
+	if (!resourceManager->obtain<Model>(src.substr(offset, src.size() - offset), templateModel)) {
 		return false;
 	}
-	
+
 	// This sets up the new model.
-	Model* model = new Model("tile" + std::to_string(tilesLoaded));
+	std::string tilesLoadedString = std::to_string(tilesLoaded);
+	Model* model = new Model("tile" + tilesLoadedString);
 	model->setSubModels(templateModel->getSubModels());
 	for (auto& subModel : *model->getSubModels()) {
 		subModel.setMaterial(materialToUse);
 	}
 
-	resources.put("tile" + tilesLoaded, model);
+	resources.put(resourceManager->getResourceRoot() + "tile" + tilesLoadedString, model);
+	std::cout << resourceManager->getResourceRoot() + "tile" + tilesLoadedString << "\n";
 	tilesLoaded++;
 	return true;
 }

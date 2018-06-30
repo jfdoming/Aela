@@ -60,7 +60,11 @@ namespace Aela {
 			Status load(ResourceQuery& query);
 
 			template <class T> bool obtain(std::string src, T*& result) {
-				return resources.get(resourceRoot + src, result);
+				if (resourceRootEnabled) {
+					return resources.get(resourceRoot + src, result);
+				} else {
+					return resources.get(src, result);
+				}
 			}
 
 			/*
@@ -71,14 +75,18 @@ namespace Aela {
 			void setResourceRoot(std::string resourceRoot);
 			std::string getResourceRoot();
 
+			void useResourceRoot(bool resourceRootEnabled);
+
 			// error handling
 			std::string getNewCrucialInvalidResourceKey();
 			std::vector<std::string>& getNewInvalidResourceKeys();
+
 		private:
 			std::unordered_map<std::string, ResourceGroup> groups;
 			ResourceMap resources;
 
 			std::string resourceRoot = "../../";
+			bool resourceRootEnabled = true;
 
 			std::vector<std::string> invalidResourceKeys;
 			std::string crucialInvalidResourceKey = "";

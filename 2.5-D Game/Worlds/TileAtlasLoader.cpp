@@ -60,7 +60,6 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 					unsigned int currentTile = tileLoader.getTilesLoaded();
 					tileLoader.useMaterial(material);
 					resourceManager->bindLoader(&tileLoader);
-					std::cout << resourceManager->getResourceRoot() << " is the root\n";
 
 					resourceManager->bindGroup("tileGroup" + std::to_string(currentTile));
 					std::string templateTile = (std::string) DEFAULT_MODEL_PATH;
@@ -239,7 +238,6 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 		return false;
 	}
 
-	std::cout << "DONE ATLAS!";
 	return true;
 }
 

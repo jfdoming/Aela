@@ -96,8 +96,8 @@ void Game::Turret::addBulletEffects(Scene* gameplayScene, ResourceManager* resou
 	std::cout << "Getting\n";
 	std::vector<GLTexture*> textures;
 	GLTexture* texture;
-	if (!resourceManager->obtain<GLTexture>((std::string) RESOURCE_ROOT + "res/particles/laser.dds", texture)) {
-		AelaErrorHandling::consoleWindowError("Could not obtain " + (std::string) RESOURCE_ROOT + "res/particles/laser.dds");
+	if (!resourceManager->obtain<GLTexture>((std::string) "res/particles/laser.dds", texture)) {
+		AelaErrorHandling::consoleWindowError("Could not obtain " + (std::string) "res/particles/laser.dds");
 		return;
 	}
 	textures.push_back(texture);

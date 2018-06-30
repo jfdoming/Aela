@@ -24,15 +24,17 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 		for (size_t i = 0; i < NUMBER_OF_SLOTS; i++) {
 			Tile* tile = player->getTileInventory()->getTile(i);
 			auto image = std::make_shared<ImageComponent>();
-			GLTexture* texture;
+			GLTexture* texture = nullptr;
 
-			
-			// Until Aela is designed better (which I don't have the time to do), we must do this to get a GLTexture* (as opposed to getting
-			// a Texture* via tile->...->getTexture()). We have to get it from the tile atlas since 
 			if (tile->getEntity() == nullptr) {
-				resourceManager->obtain<GLTexture>((std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + "black.png", texture);
-			} else if (!resourceManager->obtain<GLTexture>(worldManager->getTileAtlas()->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
-				break;
+				resourceManager->obtain<GLTexture>((std::string) DEFAULT_TEXTURE_PATH + "black.png", texture);
+			} else {
+				resourceManager->useResourceRoot(false);
+				if (!resourceManager->obtain<GLTexture>(worldManager->getTileAtlas()->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
+					resourceManager->useResourceRoot(true);
+					break;
+				}
+				resourceManager->useResourceRoot(true);
 			}
 
 			image->setDimensions(&Rect<int>((int) (width * 0.98 - (i * imageWidthAndHeight) - imageWidthAndHeight),
@@ -53,11 +55,14 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 	
 	for (size_t i = 0; i < NUMBER_OF_SLOTS; i++) {
 		int whichTile = currentTile + i - 1;
+
+		std::cout << player->getTileInventory()->getNumberOfTiles() << " is the num.\n";
+
 		if (whichTile >= player->getTileInventory()->getNumberOfTiles() || whichTile < 0) {
 			
 			GLTexture* texture;
 
-			resourceManager->obtain<GLTexture>((std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + "black.png", texture);
+			resourceManager->obtain<GLTexture>((std::string) DEFAULT_TEXTURE_PATH + "black.png", texture);
 
 			tileInventoryImages[i]->setDimensions(&Rect<int>((int) (width * 0.98 - (i * imageWidthAndHeight) - imageWidthAndHeight),
 				(int) (height * 0.15 - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
@@ -70,7 +75,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 			// Until Aela is designed better (which I don't have the time to do), we must do this to get a GLTexture* (as opposed to getting
 			// a Texture* via tile->...->getTexture()).
 			if (tile->getEntity() == nullptr) {
-				resourceManager->obtain<GLTexture>((std::string) RESOURCE_ROOT + DEFAULT_MATERIAL_PATH + (std::string) "grass.dds", texture);
+				resourceManager->obtain<GLTexture>((std::string) DEFAULT_MATERIAL_PATH + (std::string) "grass.dds", texture);
 			} else {
 				if (!resourceManager->obtain<GLTexture>(worldManager->getTileAtlas()->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
 					break;

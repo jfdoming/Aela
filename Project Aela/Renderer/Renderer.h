@@ -114,6 +114,10 @@ namespace Aela {
 			void set3DTint(ColourRGBA* tint3D);
 			void clear3DTint();
 
+			// This allows for only a certain portion of a framebuffer to be rendered to.
+			virtual void scissor(int x, int y, size_t width, size_t height);
+			virtual void resetScissor();
+
 			// These are some getters.
 			Window* getWindow();
 			Time* getTime();

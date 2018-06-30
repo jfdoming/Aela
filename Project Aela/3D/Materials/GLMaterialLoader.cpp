@@ -53,7 +53,6 @@ bool Aela::GLMaterialLoader::load(ResourceMap& resources, std::string src) {
 				material = new Material(src);
 				std::string name = line.substr(MATERIAL_NAME_START_POSITION, line.size() - MATERIAL_NAME_START_POSITION);
 				resources.put(src + "/" + name, material);
-				std::cout << "name: " << src + "/" + name << "\n";
 			} else if (line.find("map_Kd ") != std::string::npos || line.find("map_Ka ") != std::string::npos) {
 				if (material == nullptr) {
 					// Error! The file did not specify a material name before setting the texture!

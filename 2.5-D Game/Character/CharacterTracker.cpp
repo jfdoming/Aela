@@ -214,7 +214,7 @@ void Game::CharacterTracker::turnTrackedCharacter(Character* character, TileDire
 	character->turnSimple(direction);
 
 	Model* model;
-	if (resourceManager->obtain<Model>("ch/" + character->getTextureName() + "/" + std::to_string(enumToInteger(direction)) + "/0/mo", model)) {
+	if (resourceManager->obtain<Model>("ch/" + character->getTextureName() + "/0/" + std::to_string(enumToInteger(direction)) + "/mo", model)) {
 		character->setModel(model);
 		character->getEntity()->setModel(model);
 		mapNeedsToBeRebuilt = true;
@@ -398,8 +398,8 @@ void Game::CharacterTracker::processCharacterMovement(Character* character, Move
 
 	std::string direction = std::to_string(enumToInteger(character->getDirectionFacing()));
 	Model* model1 = nullptr, *model2 = nullptr;
-	if (!resourceManager->obtain<Model>("ch/" + character->getTextureName() + "/" + direction + "/" + step + "/mo", model1)
-		|| !resourceManager->obtain<Model>("ch/" + character->getTextureName() + "/" + direction + "/0/mo", model2)) {
+	if (!resourceManager->obtain<Model>("ch/" + character->getTextureName() + "/" + step + "/" + direction + "/mo", model1)
+		|| !resourceManager->obtain<Model>("ch/" + character->getTextureName() + "/0/" + direction + "/mo", model2)) {
 		return;
 	}
 

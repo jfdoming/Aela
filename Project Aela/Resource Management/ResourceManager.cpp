@@ -103,8 +103,13 @@ std::string Aela::ResourceManager::getResourceRoot() {
 }
 
 void ResourceManager::addToGroup(std::string src, bool crucial) {
-	ResourceQuery query(resourceRoot + src, crucial, boundLoader);
-	addToGroup(query);
+	if (resourceRootEnabled) {
+		ResourceQuery query(resourceRoot + src, crucial, boundLoader);
+		addToGroup(query);
+	} else {
+		ResourceQuery query(src, crucial, boundLoader);
+		addToGroup(query);
+	}
 }
 
 void ResourceManager::addToGroup(ResourceQuery& query) {
@@ -112,8 +117,13 @@ void ResourceManager::addToGroup(ResourceQuery& query) {
 }
 
 ResourceManager::Status ResourceManager::load(std::string src, bool crucial, ResourceLoader& loader) {
-	ResourceQuery query(resourceRoot + src, crucial, &loader);
-	return load(query);
+	if (resourceRootEnabled) {
+		ResourceQuery query(resourceRoot + src, crucial, &loader);
+		return load(query);
+	} else {
+		ResourceQuery query(src, crucial, &loader);
+		return load(query);
+	}
 }
 
 ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
@@ -138,9 +148,15 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 void ResourceManager::unload(std::string src) {
 	Resource* res;
 
-	if (resources.get(resourceRoot + src, res) && res != nullptr) {
+	if (resourceRootEnabled && resources.get(resourceRoot + src, res) && res != nullptr) {
+		delete res;
+	} else if (resources.get(src, res) && res != nullptr) {
 		delete res;
 	}
+}
+
+void Aela::ResourceManager::useResourceRoot(bool resourceRootEnabled) {
+	this->resourceRootEnabled = resourceRootEnabled;
 }
 
 std::string Aela::ResourceManager::getNewCrucialInvalidResourceKey() {

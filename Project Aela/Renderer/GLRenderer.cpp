@@ -411,6 +411,15 @@ void Aela::GLRenderer::setFOV(float value) {
 	camera.setFieldOfView(value);
 }
 
+void Aela::GLRenderer::scissor(int x, int y, size_t width, size_t height) {
+	glEnable(GL_SCISSOR_TEST);
+	glScissor(x, y, width, height);
+}
+
+void Aela::GLRenderer::resetScissor() {
+	glDisable(GL_SCISSOR_TEST);
+}
+
 void Aela::GLRenderer::updateCameraMatrices() {
 	if (window->isFocused() && camera.isInUse()) {
 		int width, height;

@@ -112,9 +112,8 @@ bool Aela::GLSpriteSheetLoader::loadPNGSpriteSheet(ResourceMap& resources, std::
 			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glGenerateMipmap(GL_TEXTURE_2D);
 
-			std::string resourceID = src.substr(0, src.size() - 4) + "/" + std::to_string(y) + "/" + std::to_string(x)
+			std::string resourceID = src.substr(0, src.size() - 4) + "/" + std::to_string(x) + "/" + std::to_string(y)
 				+ src.substr(src.size() - 4, 4);
-			std::cout << "Resource ID: " << resourceID << "\n";
 			GLTexture* texture = new GLTexture(resourceID, id);
 			texture->setDimensions(0, 0, spriteWidth, spriteHeight);
 			resources.put(resourceID, texture);
