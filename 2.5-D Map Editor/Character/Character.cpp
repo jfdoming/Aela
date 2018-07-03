@@ -127,7 +127,6 @@ bool Game::Character::isMoving() {
 void Game::Character::animationHasEnded() {
 	// Moving gets sets to false by the character manager! It does this since it performs some actions
 	// when the character is done moving!
-	std::cout << "Character is done moving.\n";
 	moving = false;
 	locationBeforeAnimation = location;
 	animationHadJustEnded = true;

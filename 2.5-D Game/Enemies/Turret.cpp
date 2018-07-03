@@ -43,18 +43,18 @@ bool Game::Turret::isInLineOfSight(Location* location) {
 		return false;
 	}
 
-	if (location->getTile().x == this->location.getTile().x && this->location.getChunk().x == location->getChunk().x) {
-		int differenceInZ = this->location.getChunk().y * CHUNK_LENGTH + this->location.getTile().z
-			- location->getChunk().y * CHUNK_LENGTH - location->getTile().z;
+	if (location->getTileGroup().x == this->location.getTileGroup().x && this->location.getChunk().x == location->getChunk().x) {
+		int differenceInZ = this->location.getChunk().y * CHUNK_LENGTH + this->location.getTileGroup().z
+			- location->getChunk().y * CHUNK_LENGTH - location->getTileGroup().z;
 		if ((differenceInZ > 0 && detectionAngles[TileDirection::BACKWARD] && differenceInZ <= detectionRange) || (differenceInZ < 0 &&
 			detectionAngles[TileDirection::FORWARD] && differenceInZ >= -detectionRange)) {
 			return true;
 		}
 	}
 
-	if (location->getTile().z == this->location.getTile().z && this->location.getChunk().y == location->getChunk().y) {
-		int differenceInX = this->location.getChunk().x * CHUNK_WIDTH + this->location.getTile().x
-			- location->getChunk().x * CHUNK_WIDTH - location->getTile().x;
+	if (location->getTileGroup().z == this->location.getTileGroup().z && this->location.getChunk().y == location->getChunk().y) {
+		int differenceInX = this->location.getChunk().x * CHUNK_WIDTH + this->location.getTileGroup().x
+			- location->getChunk().x * CHUNK_WIDTH - location->getTileGroup().x;
 		if ((differenceInX > 0 && detectionAngles[TileDirection::LEFT] && differenceInX <= detectionRange) || (differenceInX < 0 &&
 			detectionAngles[TileDirection::RIGHT] && differenceInX >= -detectionRange)) {
 			return true;

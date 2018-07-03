@@ -130,7 +130,7 @@ bool Game::CharacterTracker::trackCharacter(Character* character, size_t* id) {
 	Location* location = character->getLocation();
 	characters[nextCharacterID] = character;
 	charactersByName[character->getName()] = nextCharacterID;
-	charactersByLocation[location->getWorld()][location->getChunk()][location->getTile()] = nextCharacterID;
+	charactersByLocation[location->getWorld()][location->getChunk()][location->getTileGroup()] = nextCharacterID;
 	*id = nextCharacterID;
 	nextCharacterID++;
 	return true;
@@ -143,7 +143,7 @@ bool Game::CharacterTracker::deleteCharacterByID(size_t id) {
 	Character* character = characters[id];
 	Location* location = character->getLocation();
 	charactersByName.erase(character->getName());
-	charactersByLocation[location->getWorld()][location->getChunk()].erase(location->getTile());
+	charactersByLocation[location->getWorld()][location->getChunk()].erase(location->getTileGroup());
 	characters.erase(id);
 
 	for (auto& pair : charactersByName) {
@@ -190,7 +190,7 @@ Game::Character* Game::CharacterTracker::getCharacterByLocation(Location* locati
 	if (iter2 == iter1->second.end()) {
 		return nullptr;
 	}
-	auto iter3 = iter2->second.find(location->getTile());
+	auto iter3 = iter2->second.find(location->getTileGroup());
 	if (iter3 == iter2->second.end()) {
 		return nullptr;
 	}
@@ -313,10 +313,10 @@ void Game::CharacterTracker::setGameplayMenuItems(std::shared_ptr<RectComponent>
 void Game::CharacterTracker::processCharacterMovement(Character* character, Movement* movement, std::string scriptOnCompletion) {
 	character->moving = true;
 	Location oldLocation = *character->getLocation();
-	charactersByLocation[oldLocation.getWorld()][oldLocation.getChunk()].erase(oldLocation.getTile());
+	charactersByLocation[oldLocation.getWorld()][oldLocation.getChunk()].erase(oldLocation.getTileGroup());
 
 	Location* newLocation = movement->getDestination();
-	charactersByLocation[newLocation->getWorld()][newLocation->getChunk()][newLocation->getTile()] = charactersByName[character->getName()];
+	charactersByLocation[newLocation->getWorld()][newLocation->getChunk()][newLocation->getTileGroup()] = charactersByName[character->getName()];
 	character->setLocation(newLocation);
 
 	if (movement->isATeleportation()) {
@@ -489,7 +489,7 @@ void Game::CharacterTracker::animatePlayerDeathScreen() {
 void Game::CharacterTracker::resetCameraPosition() {
 	Character* character = characters[playerID];
 	glm::vec3 entityPosition = *character->getEntity()->getPosition();
-	glm::vec3 basePosition(entityPosition.x, character->getLocation()->getTile().y, entityPosition.z);
+	glm::vec3 basePosition(entityPosition.x, character->getLocation()->getTileGroup().y, entityPosition.z);
 	camera->setPosition(basePosition + glm::vec3(0, sin(PLAYER_CAMERA_ANGLE)
 		* PLAYER_CAMERA_DISTANCE, -cos(PLAYER_CAMERA_ANGLE) * PLAYER_CAMERA_DISTANCE));
 	camera->setRotation(0, -PLAYER_CAMERA_ANGLE, 0);

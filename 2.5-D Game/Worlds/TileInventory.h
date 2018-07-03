@@ -17,8 +17,8 @@ namespace Game {
 
 			}
 
-			Tile* switchTile(Tile* tile, size_t whichTile);
-			Tile* switchCurrentTile(Tile* tile);
+			Tile* switchTile(TileGroup* tileGroup, TileAtlas* atlas, size_t whichTile);
+			Tile* switchCurrentTile(TileGroup* tileGroup, TileAtlas* atlas);
 			void replaceTile(Tile* tile, size_t whichTile);
 			int addTile(Tile* tile);
 			size_t getNumberOfTiles();

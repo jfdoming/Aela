@@ -10,7 +10,7 @@ void Game::MapRebuilder::rebuildMap(World* world, size_t currentWorldID, Charact
 	map->removeAllModels();
 
 	Location* playerLocation = playerCharacter->getLocation();
-	glm::ivec3 playerTile = playerLocation->getTile();
+	glm::ivec3 playerTile = playerLocation->getTileGroup();
 	glm::ivec2 playerChunk = playerLocation->getChunk();
 	for (double z = playerChunk.y - chunkRenderDistances.z; z <= playerChunk.y + chunkRenderDistances.z; z++) {
 		for (double x = playerChunk.x - chunkRenderDistances.x; x <= playerChunk.x + chunkRenderDistances.x; x++) {
@@ -32,7 +32,7 @@ void Game::MapRebuilder::rebuildMap(World* world, size_t currentWorldID, Charact
 					// Note that characters are represented by models.
 					ModelEntity modelEntity;
 					size_t entityInMap;
-					glm::ivec3 tileOfChunk = character->getLocation()->getTile();
+					glm::ivec3 tileOfChunk = character->getLocation()->getTileGroup();
 
 					// The position of the character on the map. The distance the character is character->getModeltranslated up from its
 					// tileCoord is sin(PI/6) * 0.5 + 0.05;
@@ -67,92 +67,105 @@ void Game::MapRebuilder::rebuildMap(World* world, size_t currentWorldID, Charact
 
 			if (chunk != nullptr) {
 				size_t counter = 0;
-				for (auto tilePair : *chunk->getTiles()) {
-					Tile* tile = chunk->getTile(tilePair.first);
+				for (auto tileGroupPair : *chunk->getTileGroups()) {
+					TileGroup* tileGroup = chunk->getTileGroup(tileGroupPair.first);
+					
+					if (tileGroup != nullptr) {
+						for (auto tilePair : *tileGroup->getTiles()) {
+							Tile& tile = tilePair.second;
 
-					// Note: a tileCoord type of zero signifies a blank space.
-					if (tile != nullptr && tile->getType() != 0) {
-						// Note that tiles are represented by models.
-						ModelEntity modelEntity;
-						size_t entityInMap;
-						glm::vec3 tilePositionOnMap;
-						std::string textureName;
+							// Note: a tile type of zero signifies a blank space.
+							if (tile.getType() != 0) {
+								// Note that tiles are represented by models.
+								ModelEntity modelEntity;
+								size_t entityInMap;
+								glm::vec3 tilePositionOnMap;
+								std::string textureName;
 
-						tilePositionOnMap.x = (float)(chunkPositionOnMap.x + tilePair.first.x);
-						tilePositionOnMap.y = (float)tilePair.first.y;
-						tilePositionOnMap.z = (float)(chunkPositionOnMap.y + tilePair.first.z);
+								tilePositionOnMap.x = (float) (chunkPositionOnMap.x + tileGroupPair.first.x);
+								tilePositionOnMap.y = (float) tileGroupPair.first.y;
+								tilePositionOnMap.z = (float) (chunkPositionOnMap.y + tileGroupPair.first.z);
 
-						switch (tileAtlas->getTileType(tile->getType())->getBehaviour()) {
-							case TileBehaviour::FLOOR:
-								break;
-							case TileBehaviour::RAMP_RIGHT:
-								tilePositionOnMap.y += 0.5f;
-								modelEntity.setRotation((float) -QUARTER_PI, (float) THREE_HALVES_PI, 0);
-								modelEntity.setScaling((float) ROOT_OF_TWO, (float) ROOT_OF_TWO, 1);
-								break;
-							case TileBehaviour::RAMP_UP:
-								tilePositionOnMap.y += 0.5f;
-								modelEntity.setRotation((float) -QUARTER_PI, 0, 0);
-								modelEntity.setScaling(1, (float) ROOT_OF_TWO, (float) ROOT_OF_TWO);
-								break;
-							case TileBehaviour::RAMP_LEFT:
-								tilePositionOnMap.y += 0.5f;
-								modelEntity.setRotation((float) -QUARTER_PI, (float) HALF_PI, 0);
-								modelEntity.setScaling((float) ROOT_OF_TWO, (float) ROOT_OF_TWO, 1);
-								break;
-							case TileBehaviour::RAMP_DOWN:
-								tilePositionOnMap.y += 0.5f;
-								modelEntity.setRotation((float) -QUARTER_PI, (float) PI, 0);
-								modelEntity.setScaling(1, (float) ROOT_OF_TWO, (float) ROOT_OF_TWO);
-								break;
-							case TileBehaviour::RAMP_UP_RIGHT_DEPRESSED:
-								modelEntity.setRotation(0, 0, 0);
-								modelEntity.setScaling(1, 1, 1);
-								break;
-							case TileBehaviour::RAMP_UP_LEFT_DEPRESSED:
-								modelEntity.setRotation(0, (float) HALF_PI, 0);
-								break;
-							case TileBehaviour::RAMP_DOWN_LEFT_DEPRESSED:
-								modelEntity.setRotation(0, (float) PI, 0);
-								break;
-							case TileBehaviour::RAMP_DOWN_RIGHT_DEPRESSED:
-								modelEntity.setRotation(0, (float) THREE_HALVES_PI, 0);
-								break;
-							case TileBehaviour::RAMP_UP_RIGHT_ELEVATED:
-								modelEntity.setRotation(0, 0, 0);
-								break;
-							case TileBehaviour::RAMP_UP_LEFT_ELEVATED:
-								modelEntity.setRotation(0, (float) HALF_PI, 0);
-								break;
-							case TileBehaviour::RAMP_DOWN_LEFT_ELEVATED:
-								modelEntity.setRotation(0, (float) PI, 0);
-								break;
-							case TileBehaviour::RAMP_DOWN_RIGHT_ELEVATED:
-								modelEntity.setRotation(0, (float) THREE_HALVES_PI, 0);
-								break;
-							case TileBehaviour::BOX:
-								break;
-							case TileBehaviour::WALL_RIGHT:
-								modelEntity.setRotation(0, (float) -HALF_PI, 0);
-								break;
-							case TileBehaviour::WALL_FRONT:
-								modelEntity.setRotation(0, (float) 0, 0);
-								break;
-							case TileBehaviour::WALL_LEFT:
-								modelEntity.setRotation(0, (float) HALF_PI, 0);
-								break;
-							default:
-								// This type is unknown.
-								continue;
+								switch (tileAtlas->getTileType(tile.getType())->getBehaviour()) {
+									case TileBehaviour::FLOOR:
+										// tilePositionOnMap.y += 1;
+										break;
+									case TileBehaviour::LIQUID_FLOOR:
+										tilePositionOnMap.y -= 0.2f;
+										break;
+									case TileBehaviour::RAMP_RIGHT:
+										tilePositionOnMap.y += 0.5f;
+										modelEntity.setRotation((float) -QUARTER_PI, (float) THREE_HALVES_PI, 0);
+										modelEntity.setScaling((float) ROOT_OF_TWO, (float) ROOT_OF_TWO, 1);
+										break;
+									case TileBehaviour::RAMP_UP:
+										tilePositionOnMap.y += 0.5f;
+										modelEntity.setRotation((float) -QUARTER_PI, 0, 0);
+										modelEntity.setScaling(1, (float) ROOT_OF_TWO, (float) ROOT_OF_TWO);
+										break;
+									case TileBehaviour::RAMP_LEFT:
+										tilePositionOnMap.y += 0.5f;
+										modelEntity.setRotation((float) -QUARTER_PI, (float) HALF_PI, 0);
+										modelEntity.setScaling((float) ROOT_OF_TWO, (float) ROOT_OF_TWO, 1);
+										break;
+									case TileBehaviour::RAMP_DOWN:
+										tilePositionOnMap.y += 0.5f;
+										modelEntity.setRotation((float) -QUARTER_PI, (float) PI, 0);
+										modelEntity.setScaling(1, (float) ROOT_OF_TWO, (float) ROOT_OF_TWO);
+										break;
+									case TileBehaviour::RAMP_UP_RIGHT_DEPRESSED:
+										modelEntity.setRotation(0, 0, 0);
+										modelEntity.setScaling(1, 1, 1);
+										break;
+									case TileBehaviour::RAMP_UP_LEFT_DEPRESSED:
+										modelEntity.setRotation(0, (float) HALF_PI, 0);
+										break;
+									case TileBehaviour::RAMP_DOWN_LEFT_DEPRESSED:
+										modelEntity.setRotation(0, (float) PI, 0);
+										break;
+									case TileBehaviour::RAMP_DOWN_RIGHT_DEPRESSED:
+										modelEntity.setRotation(0, (float) THREE_HALVES_PI, 0);
+										break;
+									case TileBehaviour::RAMP_UP_RIGHT_ELEVATED:
+										modelEntity.setRotation(0, 0, 0);
+										break;
+									case TileBehaviour::RAMP_UP_LEFT_ELEVATED:
+										modelEntity.setRotation(0, (float) HALF_PI, 0);
+										break;
+									case TileBehaviour::RAMP_DOWN_LEFT_ELEVATED:
+										modelEntity.setRotation(0, (float) PI, 0);
+										break;
+									case TileBehaviour::RAMP_DOWN_RIGHT_ELEVATED:
+										modelEntity.setRotation(0, (float) THREE_HALVES_PI, 0);
+										break;
+									case TileBehaviour::BOX:
+										break;
+									case TileBehaviour::WALL_RIGHT:
+										tilePositionOnMap.x++;
+										modelEntity.setRotation(0, (float) -HALF_PI, 0);
+										break;
+									case TileBehaviour::WALL_FRONT:
+										tilePositionOnMap.z--;
+										modelEntity.setRotation(0, (float) 0, 0);
+										break;
+									case TileBehaviour::WALL_LEFT:
+										tilePositionOnMap.x--;
+										modelEntity.setRotation(0, (float) HALF_PI, 0);
+										break;
+									default:
+										// This type is unknown.
+										continue;
+								}
+
+								modelEntity.setPosition(tilePositionOnMap);
+								modelEntity.setModel(tileAtlas->getTileModel(tile.getType()));
+								entityInMap = map->getModels()->size();
+								map->addModel(entityInMap, &modelEntity);
+								tile.setEntity(map->getModel(entityInMap));
+								map->addModel(entityInMap, &modelEntity);
+								tile.setEntity(map->getModel(entityInMap));
+							}
 						}
-
-						modelEntity.setPosition(tilePositionOnMap);
-						modelEntity.setModel(tileAtlas->getTileModel(tile->getType()));
-						entityInMap = map->getModels()->size();
-						map->addModel(entityInMap, &modelEntity);
-						tile->setEntity(map->getModel(entityInMap));
-						map->addModel(entityInMap, &modelEntity);
-						tile->setEntity(map->getModel(entityInMap));
 					}
 				}
 			}

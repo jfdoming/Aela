@@ -22,7 +22,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 
 	// Clear all tiles and set tile 0 as the blank tile.
 	atlas.clearAllTiles();
-	atlas.addTile(TileType(true, TileBehaviour::FLOOR, "blank"), nullptr);
+	atlas.addTile(TileType(false, TileBehaviour::BLANK, "blank"), nullptr);
 
 	std::ifstream in;
 	in.open(resourceRoot + path);
@@ -64,35 +64,38 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 					resourceManager->bindGroup("tileGroup" + std::to_string(currentTile));
 					std::string templateTile = (std::string) DEFAULT_MODEL_PATH;
 
-					if ((behaviour == TileBehaviour::FLOOR) || (behaviour == TileBehaviour::RAMP_RIGHT)
-						|| (behaviour == TileBehaviour::RAMP_UP) || (behaviour == TileBehaviour::RAMP_LEFT)
-						|| (behaviour == TileBehaviour::RAMP_DOWN)) {
+					if (behaviour == TileBehaviour::FLOOR
+						|| behaviour == TileBehaviour::RAMP_RIGHT
+						|| behaviour == TileBehaviour::RAMP_UP
+						|| behaviour == TileBehaviour::RAMP_LEFT
+						|| behaviour == TileBehaviour::RAMP_DOWN
+						|| behaviour == TileBehaviour::LIQUID_FLOOR) {
 						templateTile += "floor.obj";
 					}
-					if ((behaviour == TileBehaviour::RAMP_UP_RIGHT_DEPRESSED)
-						|| (behaviour == TileBehaviour::RAMP_UP_LEFT_DEPRESSED)
-						|| (behaviour == TileBehaviour::RAMP_DOWN_LEFT_DEPRESSED)
-						|| (behaviour == TileBehaviour::RAMP_DOWN_RIGHT_DEPRESSED)) {
+					if (behaviour == TileBehaviour::RAMP_UP_RIGHT_DEPRESSED
+						|| behaviour == TileBehaviour::RAMP_UP_LEFT_DEPRESSED
+						|| behaviour == TileBehaviour::RAMP_DOWN_LEFT_DEPRESSED
+						|| behaviour == TileBehaviour::RAMP_DOWN_RIGHT_DEPRESSED) {
 						templateTile += "corner_depressed.obj";
 					}
-					if ((behaviour == TileBehaviour::RAMP_UP_RIGHT_ELEVATED)
-						|| (behaviour == TileBehaviour::RAMP_UP_LEFT_ELEVATED)
-						|| (behaviour == TileBehaviour::RAMP_DOWN_LEFT_ELEVATED)
-						|| (behaviour == TileBehaviour::RAMP_DOWN_RIGHT_ELEVATED)) {
+					if (behaviour == TileBehaviour::RAMP_UP_RIGHT_ELEVATED
+						|| behaviour == TileBehaviour::RAMP_UP_LEFT_ELEVATED
+						|| behaviour == TileBehaviour::RAMP_DOWN_LEFT_ELEVATED
+						|| behaviour == TileBehaviour::RAMP_DOWN_RIGHT_ELEVATED) {
 						templateTile += "corner_elevated.obj";
 					}
 					if (behaviour == TileBehaviour::BOX) {
 						templateTile += "box.obj";
 					}
-					if ((behaviour == TileBehaviour::WALL_RIGHT)
-						|| (behaviour == TileBehaviour::WALL_FRONT)
-						|| (behaviour == TileBehaviour::WALL_LEFT)) {
+					if (behaviour == TileBehaviour::WALL_RIGHT
+						|| behaviour == TileBehaviour::WALL_FRONT
+						|| behaviour == TileBehaviour::WALL_LEFT) {
 						templateTile += "wall.obj";
 					}
-					if ((behaviour == TileBehaviour::WALL_CORNER_UP_RIGHT)
-						|| (behaviour == TileBehaviour::WALL_CORNER_UP_LEFT)
-						|| (behaviour == TileBehaviour::WALL_CORNER_DOWN_LEFT)
-						|| (behaviour == TileBehaviour::WALL_CORNER_DOWN_RIGHT)) {
+					if (behaviour == TileBehaviour::WALL_CORNER_UP_RIGHT
+						|| behaviour == TileBehaviour::WALL_CORNER_UP_LEFT
+						|| behaviour == TileBehaviour::WALL_CORNER_DOWN_LEFT
+						|| behaviour == TileBehaviour::WALL_CORNER_DOWN_RIGHT) {
 						templateTile += "wall_corner.obj";
 					}
 
@@ -153,6 +156,8 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 							// Note: collidable is set to false by default.
 							if (value == "floor") {
 								behaviour = TileBehaviour::FLOOR;
+							} else if (value == "liquid_floor") {
+								behaviour = TileBehaviour::LIQUID_FLOOR;
 							} else if (value == "ramp_right") {
 								behaviour = TileBehaviour::RAMP_RIGHT;
 							} else if (value == "ramp_up_right_depressed") {

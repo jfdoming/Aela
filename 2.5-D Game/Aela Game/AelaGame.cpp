@@ -49,7 +49,7 @@ void Game::AelaGame::loadResources() {
 	scriptManager.runScript("load sprite sheets");
 	scriptManager.runScript("load particles");
 	scriptManager.runScript("load skyboxes");
-	scriptManager.runScript("load startup map");
+	scriptManager.runScript("load maps");
 	scriptManager.runScript("load tiled maps");
 }
 
@@ -74,7 +74,7 @@ void Game::AelaGame::setup() {
 
 	// Setup the player!
 	playerCharacter = new Character();
-	playerCharacter->setup(&Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
+	playerCharacter->setup(&Location(0, glm::ivec2(0, 0), glm::ivec3(14, 0, 6)));
 	playerCharacter->setTextureName("character");
 	playerCharacter->setName(PLAYER_NAME);
 	playerCharacter->setMaxHealth(100);
@@ -104,7 +104,10 @@ void Game::AelaGame::setup() {
 
 	// Setup the world manager!
 	worldManager.setup(engine, &scriptManager, &dialogueHandler, playerCharacter);
+	worldManager.setCurrentWorld(0);
 	map = worldManager.getMap3D();
+	gameplayScene->setMap(map);
+	pauseScene->setMap(map);
 
 	// Setup the dialogue handler!
 	dialogueHandler.setup(time, eventHandler, &scriptManager);
@@ -118,7 +121,7 @@ void Game::AelaGame::setup() {
 
 void Game::AelaGame::update() {
 	if (currentScene == WORLD_GAMEPLAY_SCENE) {
-		glm::vec3 tile = playerCharacter->getLocation()->getTile();
+		glm::vec3 tile = playerCharacter->getLocation()->getTileGroup();
 
 		if (!characterTracker->isPlayerDead()) {
 			/*float tint = playerCharacter->getHealth() / 100.0f;
@@ -189,7 +192,7 @@ void Game::AelaGame::onEvent(Event* event) {
 					case SDLK_RETURN:
 						if (!pressingReturn && !dialogueHandler.hadJustFinishedDialogue()) {
 							Location* playerLocation = playerCharacter->getLocation();
-							glm::vec3 tile = playerLocation->getTile();
+							glm::vec3 tile = playerLocation->getTileGroup();
 							glm::vec2 chunk = playerLocation->getChunk();
 							worldManager.getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
 							Location location(playerLocation->getWorld(), chunk, tile);
@@ -402,8 +405,8 @@ void Game::AelaGame::setupScripts() {
 	scriptManager.addScript("load sprite sheets", std::bind(&loadSpriteSheets, resourceManager));
 	scriptManager.addScript("load particles", std::bind(&loadParticles, resourceManager));
 	scriptManager.addScript("load skyboxes", std::bind(&loadSkyboxes, resourceManager));
-	scriptManager.addScript("load tiled maps", std::bind(&loadTiledMaps, resourceManager, &worldManager));
-	scriptManager.addScript("load startup map", std::bind(&loadStartupMap, resourceManager, renderer));
+	scriptManager.addScript("load tiled maps", std::bind(&loadTiledMaps, engine, &worldManager));
+	scriptManager.addScript("load maps", std::bind(&loadMaps, resourceManager, renderer));
 	scriptManager.addScript("load scenes", std::bind(&setupScenes, engine, this));
 }
 
@@ -479,7 +482,7 @@ void Game::AelaGame::switchCameraMode(CameraMode cameraMode) {
 
 bool Game::AelaGame::useTileSwitchGun() {
 	Location* playerLocation = playerCharacter->getLocation();
-	glm::vec3 tile = playerLocation->getTile();
+	glm::vec3 tile = playerLocation->getTileGroup();
 	glm::vec2 chunk = playerLocation->getChunk();
 	worldManager.getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
 	Location location(playerLocation->getWorld(), chunk, tile);
@@ -491,19 +494,19 @@ bool Game::AelaGame::useTileSwitchGun() {
 	if (chunkPtr == nullptr) {
 		return false;
 	}
-	Tile* tilePtr = worldPtr->getChunk(chunk)->getTile(tile);
-	if (tilePtr == nullptr) {
+	TileGroup* tileGroupPtr = worldPtr->getChunk(chunk)->getTileGroup(tile);
+	if (tileGroupPtr == nullptr) {
 		return false;
 	}
-	if (worldManager.getTileAtlas()->getTileType(tilePtr->getType())->getBehaviour() != TileBehaviour::FLOOR
-		|| tilePtr->getType() == 0/* || tilePtr->getType() == player.getTileInventory()->getCurrentTile()->getType()*/) {
-		return false;
-	}
+	//if (worldManager.getTileAtlas()->getTileType(tilePtr->getType())->getBehaviour() != TileBehaviour::FLOOR
+	//	|| tilePtr->getType() == 0/* || tilePtr->getType() == player.getTileInventory()->getCurrentTile()->getType()*/) {
+	//	return false;
+	//}
 
-	GLTexture* texture = static_cast<GLTexture*>(tilePtr->getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
+	Tile switchedOutTile = *player.getTileInventory()->switchCurrentTile(tileGroupPtr, worldManager.getTileAtlas());
+	GLTexture* texture = static_cast<GLTexture*>(switchedOutTile.getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
 	worldManager.runTileSwitchScriptOfTile(&location);
 	addTileSwitchParticleEmitter(&location, texture);
-	player.getTileInventory()->switchCurrentTile(tilePtr);
 	tileInventoryDisplay.refreshSubMenu();
 	worldManager.rebuildMapWhenPossible();
 	return true;
@@ -565,6 +568,10 @@ void Game::AelaGame::setGameplayScene(Scene* gameplayScene) {
 	this->gameplayScene = gameplayScene;
 	worldManager.setGameplayScene(gameplayScene);
 	enemyRegistrar.setGameplayScene(gameplayScene);
+}
+
+void Game::AelaGame::setPauseScene(Scene* pauseScene) {
+	this->pauseScene = pauseScene;
 }
 
 void Game::AelaGame::cleanup() {

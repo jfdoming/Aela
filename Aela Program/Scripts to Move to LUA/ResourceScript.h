@@ -111,7 +111,7 @@ void loadSkyboxes(ResourceManager* resourceManager) {
 	}
 }
 
-void loadStartupMap(ResourceManager* resourceManager, GLRenderer& renderer) {
+void loadMaps(ResourceManager* resourceManager, GLRenderer& renderer) {
 	Map3DLoader mapLoader(resourceManager->getResourceRoot());
 	mapLoader.bindRenderer(&renderer);
 	resourceManager->bindLoader(&mapLoader);

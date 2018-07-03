@@ -19,7 +19,7 @@ namespace Game {
 
 			Tile* getTile(Tile* tile, size_t whichTile);
 			Tile* getCurrentTile(Tile* tile);
-			void replaceTile(Tile* tile);
+			void placeTile(TileGroup* tileGroup);
 			int addTile(Tile* tile);
 			size_t getNumberOfTiles();
 			size_t getCurrentTileIndex();

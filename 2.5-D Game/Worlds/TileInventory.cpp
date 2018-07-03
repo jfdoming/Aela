@@ -9,15 +9,26 @@
 
 using namespace Game;
 
-Tile* Game::TileInventory::switchTile(Tile* tile, size_t whichTile) {
-	Tile returnTile = tiles[whichTile];
-	tiles[whichTile] = *tile;
-	*tile = returnTile;
-	return &returnTile;
+Tile* Game::TileInventory::switchTile(TileGroup* tileGroup, TileAtlas* atlas, size_t whichTile) {
+	Tile* floorTilePtr = tileGroup->getFloorTile(atlas);
+
+	if (floorTilePtr != nullptr) {
+		std::cout << floorTilePtr->getEntity() << " is the entity.\n";
+		std::cout << floorTilePtr->getType() << " is the type.\n";
+		tileGroup->removeTile(floorTilePtr->getType());
+		Tile floorTile = *floorTilePtr;
+		tileGroup->addTile(&tiles[whichTile]);
+		tiles[whichTile] = floorTile;
+		std::cout << floorTile.getEntity() << " is the entity.\n";
+		std::cout << floorTile.getType() << " is the type.\n";
+		std::cout << floorTile.getEntity()->getModel() << " is the model.\n";
+		return &tiles[whichTile];
+	}
+	return nullptr;
 }
 
-Tile* Game::TileInventory::switchCurrentTile(Tile* tile) {
-	return switchTile(tile, currentTile);
+Tile* Game::TileInventory::switchCurrentTile(TileGroup* tileGroup, TileAtlas* atlas) {
+	return switchTile(tileGroup, atlas, currentTile);
 }
 
 void Game::TileInventory::replaceTile(Tile* tile, size_t whichTile) {

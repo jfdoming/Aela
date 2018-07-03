@@ -63,7 +63,7 @@ std::string pngTextureNames[] = {
 std::string spriteSheetNames[] = {
 	"character",
 	"turret",
-	"tile"
+	"tiles"
 };
 
 std::string billboardNames[] = {
@@ -78,7 +78,14 @@ std::string particleNames[] = {
 
 std::string skyboxNames[] = {
 	"skybox_1",
-	"skybox_2"
+	"skybox_2",
+	"black"
+};
+
+std::string mapNames[] = {
+	"title_screen",
+	"interiors",
+	"stage_1"
 };
 
 namespace Game {
@@ -185,12 +192,16 @@ namespace Game {
 		}
 	}
 
-	static void loadStartupMap(ResourceManager* resourceManager, GLRenderer* renderer) {
+	static void loadMaps(ResourceManager* resourceManager, GLRenderer* renderer) {
 		Map3DLoader mapLoader(resourceManager->getResourceRoot());
 		mapLoader.bindRenderer(renderer);
 		resourceManager->bindLoader(&mapLoader);
 		resourceManager->bindGroup("maps");
-		resourceManager->addToGroup("res/maps/map.txt", false);
+
+		for (std::string path : mapNames) {
+			resourceManager->addToGroup(DEFAULT_MAP_PATH + path + ".txt", false);
+		}
+
 		if (resourceManager->loadGroup("maps") != Aela::ResourceManager::Status::OK) {
 			std::cerr << "Failed to load a resource from group \"maps\"!" << std::endl;
 		}

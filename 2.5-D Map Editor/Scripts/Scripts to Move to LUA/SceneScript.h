@@ -347,14 +347,14 @@ namespace Game {
 		inventoryScene->getMenu()->add(inventorySlotB);
 
 		Map3D* map;
-		success = engine->getResourceManager()->obtain<Map3D>("res/maps/map.txt", map);
+		success = engine->getResourceManager()->obtain<Map3D>("res/maps/title_screen.txt", map);
 		if (success) {
 			mainMenuScene->setMap(map);
 			worldGameplayScene->setMap(map);
 			pauseScene->setMap(map);
 			inventoryScene->setMap(map);
 		} else {
-			AelaErrorHandling::windowError("There was a problem loading map.txt!");
+			AelaErrorHandling::windowError("There was a problem loading title_screen.txt!");
 		}
 
 		engine->getSceneManager()->registerScene(ekkonScene, EKKON_INTRO_SCENE);
@@ -366,6 +366,7 @@ namespace Game {
 
 		engine->getSceneManager()->setCurrentScene(EKKON_INTRO_SCENE);
 		game->setGameplayScene(worldGameplayScene);
+		game->setPauseScene(pauseScene);
 		game->switchScene(EKKON_INTRO_SCENE);
 		// engine->getSceneManager()->setCurrentScene(WORLD_GAMEPLAY_SCENE);
 		// game->switchScene(WORLD_GAMEPLAY_SCENE);

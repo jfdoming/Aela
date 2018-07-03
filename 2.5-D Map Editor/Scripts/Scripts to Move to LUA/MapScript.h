@@ -14,7 +14,8 @@
 #include "../../Worlds/TileAtlasLoader.h"
 
 namespace Game {
-	static void loadTiledMaps(ResourceManager* resourceManager, WorldManager* worldManager) {
+	static void loadTiledMaps(Engine* engine, WorldManager* worldManager) {
+		ResourceManager* resourceManager = engine->getResourceManager();
 		TileAtlas* atlas = worldManager->getTileAtlas();
 		TileAtlasLoader atlasLoader;
 		atlasLoader.setResourceManager(resourceManager);
@@ -23,8 +24,10 @@ namespace Game {
 
 		World world;
 		WorldLoader worldLoader;
+		worldLoader.setWorldManager(worldManager);
+		worldLoader.setEngine(engine);
 		std::cout << "About to load the test tiled maps.\n";
-		worldLoader.loadWorld("res/tiled maps/test_map.txt", world);
+		worldLoader.loadWorld("res/tiled maps/stage_1.txt", world);
 		std::cout << "Finished.\n";
 		worldManager->addWorld(&world);
 	}

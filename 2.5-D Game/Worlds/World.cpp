@@ -26,3 +26,11 @@ Game::Chunk* Game::World::getChunk(glm::ivec2 position) {
 Game::ChunkMap* Game::World::getChunks() {
 	return &chunks;
 }
+
+void Game::World::setMap3D(Map3D* map3D) {
+	this->map3D = map3D;
+}
+
+Map3D* Game::World::getMap3D() {
+	return map3D;
+}

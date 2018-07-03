@@ -3,6 +3,7 @@
 * Author: Robert Ciborowski
 * Date: 05/03/2018
 * Description: A file used for performing operations on enums.
+               If you told me that enumut is a silly-sounding name, I'd agree with you.
 */
 
 #pragma once

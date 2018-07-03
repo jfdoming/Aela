@@ -27,7 +27,7 @@ glm::ivec2 Game::Location::getChunk() {
 	return chunk;
 }
 
-glm::ivec3 Game::Location::getTile() {
+glm::ivec3 Game::Location::getTileGroup() {
 	return tile;
 }
 

@@ -27,7 +27,7 @@ const float MAX_DISTANCE_MODIFIER_RESULT = 1.5;
 
 // This modifies the minimum brightness as the angle changes. It larger this value is
 // the less the light decays as you go further away from it.
-const float COS_THETA_MINIMUM = 0;
+const float COS_THETA_MINIMUM = 0.4;
 const float COS_THETA_MAXIMUM = 0.8;
 
 float distanceToLightModifier = 0.065; // 0.05
@@ -127,7 +127,7 @@ void main(){
 		bias = clamp(bias, 0.0, 0.01);
 		
 		float shadow = shadowCalculation(worldSpacePosition, i, bias);
-		visibility -= shadow;
+		// visibility -= shadow;
 		
 		float distanceBetweenLightAndFragment = distance(worldSpacePosition, openGLSucksAtPositions[i]);
 		float distanceModifier = clamp(((1 / distanceBetweenLightAndFragment) / distanceToLightModifier), 0, MAX_DISTANCE_MODIFIER_RESULT);

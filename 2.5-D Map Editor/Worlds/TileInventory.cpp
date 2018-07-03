@@ -17,10 +17,8 @@ Tile* Game::TileInventory::getCurrentTile(Tile* tile) {
 	return &tiles[currentTile];
 }
 
-void Game::TileInventory::replaceTile(Tile* tile) {
-	size_t type = tiles[currentTile].getType();
-	tile->setType(type);
-	std::cout << type << " is the type.\n";
+void Game::TileInventory::placeTile(TileGroup* tileGroup) {
+	tileGroup->addTile(&tiles[currentTile]);
 }
 
 int Game::TileInventory::addTile(Tile* tile) {

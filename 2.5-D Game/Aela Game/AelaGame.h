@@ -43,6 +43,7 @@ namespace Game {
 				std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage);
 
 			void setGameplayScene(Scene* gameplayScene);
+			void setPauseScene(Scene* pauseScene);
 
 		private:
 			// These are Aela Engine objects.
@@ -74,7 +75,7 @@ namespace Game {
 			// These are display-related objects.
 			TileInventoryDisplay tileInventoryDisplay;
 
-			Scene* gameplayScene;
+			Scene* gameplayScene, *pauseScene;
 
 			// These store the states of keys.
 			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false;

@@ -57,10 +57,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 	for (size_t i = 0; i < NUMBER_OF_SLOTS; i++) {
 		int whichTile = currentTile + i - 1;
 
-		std::cout << player->getTileInventory()->getNumberOfTiles() << " is the num.\n";
-
 		if (whichTile >= player->getTileInventory()->getNumberOfTiles() || whichTile < 0) {
-			
 			GLTexture* texture;
 
 			resourceManager->obtain<GLTexture>((std::string) DEFAULT_TEXTURE_PATH + "black.png", texture);

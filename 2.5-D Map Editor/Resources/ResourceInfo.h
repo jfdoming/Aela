@@ -12,3 +12,4 @@
 // not have access to the ResourceManager, so it must be able to know the resource root in some other
 // way.
 #define RESOURCE_ROOT "../../"
+#define TILED_MAP_LOCATION "res/tiled maps/"

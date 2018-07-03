@@ -9,27 +9,30 @@
 #include <glm/glm.hpp>
 #include <unordered_map>
 #include "Tile.h"
-#include "Utilities\glmut.h"
+#include "TileGroup.h"
+#include "../../Project Aela/Utilities/glmut.h"
 
 namespace Game {
 	const unsigned int CHUNK_WIDTH = 16, CHUNK_LENGTH = 16;
-	typedef std::unordered_map<glm::ivec3, Tile, Vec3HashMapFunctions, Vec3HashMapFunctions> TileMap;
+
+	// The following represents a map of TileGroups.
+	typedef std::unordered_map<glm::ivec3, TileGroup, IVec3HashMapFunctions, IVec3HashMapFunctions> TileGroupMap;
 
 	class Chunk {
 		public:
 			Chunk() {}
 
-			Chunk(TileMap* tiles) {
+			Chunk(TileGroupMap* tiles) {
 				this->tiles = *tiles;
 			}
 
 			void addTile(glm::ivec3 coordinate, Tile* tile);
-			void setTiles(TileMap* tiles);
-			Tile* getTile(glm::ivec3 position);
-			TileMap* getTiles();
+			void setTiles(TileGroupMap* tiles);
+			TileGroup* getTileGroup(glm::ivec3 position);
+			TileGroupMap* getTileGroups();
 			void generateBlankTiles(int height);
 
 		private:
-			TileMap tiles;
+			TileGroupMap tiles;
 	};
 }

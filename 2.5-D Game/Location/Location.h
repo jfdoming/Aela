@@ -37,7 +37,7 @@ namespace Game {
 			void setTile(glm::ivec3 tile);
 			unsigned int getWorld();
 			glm::ivec2 getChunk();
-			glm::ivec3 getTile();
+			glm::ivec3 getTileGroup();
 			glm::vec3 getWorldSpaceLocation();
 
 		private:

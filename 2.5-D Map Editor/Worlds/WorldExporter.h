@@ -14,5 +14,8 @@ namespace Game {
 			WorldExporter();
 
 			bool exportWorld(std::string path, World* world);
+
+		private:
+			void abbreviate(std::string& src, std::string defaultPath);
 	};
 }

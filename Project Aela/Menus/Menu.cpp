@@ -25,7 +25,8 @@ void Menu::render(GLRenderer& renderer) {
 		// If a menu needs to be rerendered, it might be because one of its children decided to become hidden. In that case,
 		// the entire buffer of the menu needs to be cleared, followed by the rerendering of all children onto the buffer.
 		// TODO check if there is some way to clear a certain part of the buffer
-		// renderer.clearSimple2DFramebuffer();
+		//      Now sure how old this TODO is, but can't you just use scissoring?
+		renderer.clearSimple2DFramebuffer();
 		Container::render(renderer);
 	}
 

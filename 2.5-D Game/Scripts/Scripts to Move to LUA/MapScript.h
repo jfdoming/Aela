@@ -1,5 +1,5 @@
 /*
-* Name: Map Script
+* Name: World Script
 * Author: Robert Ciborowski
 * Date: 27/12/2017
 * Description: A file which contains tile map scripts.
@@ -12,17 +12,22 @@
 #include "../../Worlds/WorldLoader.h"
 #include "../../Worlds/TileAtlas.h"
 #include "../../Worlds/TileAtlasLoader.h"
+#include "../../Resources/ResourceInfo.h"
 
 namespace Game {
-	static void loadTiledMaps(ResourceManager* resourceManager, WorldManager* worldManager) {
+	static void loadTiledMaps(Engine* engine, WorldManager* worldManager) {
+		ResourceManager* resourceManager = engine->getResourceManager();
 		TileAtlas* atlas = worldManager->getTileAtlas();
 		TileAtlasLoader atlasLoader;
 		atlasLoader.setResourceManager(resourceManager);
-		atlasLoader.loadAtlas((std::string) RESOURCE_ROOT, "res/tiled maps/tiles.txt", *atlas);
+		std::cout << "About to load tiled atlas.\n";
+		atlasLoader.loadAtlas(RESOURCE_ROOT, "res/tiled maps/tiles.txt", *atlas);
 
 		World world;
 		WorldLoader worldLoader;
-		worldLoader.loadWorld("res/tiled maps/test_map.txt", world);
+		worldLoader.setWorldManager(worldManager);
+		worldLoader.setEngine(engine);
+		worldLoader.loadWorld("res/tiled maps/stage_1.txt", world);
 		worldManager->addWorld(&world);
 	}
 };
