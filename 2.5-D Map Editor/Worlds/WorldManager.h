@@ -105,7 +105,6 @@ namespace Game {
 
 			// This is the path to the Aela 3D World.
 			const std::string DEFAULT_MAP_SRC = "res/maps/map.txt";
-			const std::string EXPORTED_MAP_SRC = "res/tiled maps/stage_1.txt";
 
 			// This creates/recreates the Aela::Map3D that is used by the game.
 			void rebuildMap();

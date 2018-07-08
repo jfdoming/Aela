@@ -51,6 +51,8 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
+	engine.setUseStopwatch(true);
+
 	Game::AelaGame game(&engine);
 	game.setup();
 
@@ -60,12 +62,17 @@ int main(int argc, char *args[]) {
 
 	do {
 		engine.update();
+		engine.getStopwatch()->startRecording("Game Update");
 		game.update();
+		engine.getStopwatch()->stopRecording("Game Update");
 		engine.render();
 
 		if (engine.getTime()->getCurrentTimeInMillis() % 1000 < lastRemainder || engine.getTime()->getTimeBetweenFramesInMillis() >= 1000) {
 			calc.calculate(engine.getTime()->getCurrentTimeInNanos(), engine.getTime()->getTimeBetweenFramesInNanos());
-			std::cout << calc.getSmoothedFPS() << " FPS\n";
+			std::cout << "True FPS: " << calc.getTrueFPS() << "\n";
+			std::cout << "Smoothed FPS: " << calc.getSmoothedFPS() << "\n";
+			engine.getStopwatch()->outputTimesIntoConsole();
+			engine.getStopwatch()->reset();
 		}
 
 		lastRemainder = engine.getTime()->getCurrentTimeInMillis() % 1000;

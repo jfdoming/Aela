@@ -6,6 +6,9 @@
 */
 
 #include "Player.h"
+#include "../Character/Character.h"
+#include "../Worlds/WorldManager.h"
+#include "../Worlds/TileInventory.h"
 
 void Game::Player::setCharacterID(size_t id) {
 	this->id = id;

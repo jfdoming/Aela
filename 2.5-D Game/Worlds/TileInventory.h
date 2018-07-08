@@ -2,11 +2,11 @@
 * Class: TileInventory
 * Author: Robert Ciborowski
 * Date: 24/02/2018
-* Description: A class used to manage tiles owned by the player.
+* Description: A class used to manage tiles owned by the player->
 */
 
 #pragma once
-#include "TileAtlas.h"
+#include "../Game Object Provider/GameObjectProvider.h"
 #include "Tile.h"
 #include "../Location/Location.h"
 
@@ -17,8 +17,8 @@ namespace Game {
 
 			}
 
-			Tile* switchTile(TileGroup* tileGroup, TileAtlas* atlas, size_t whichTile);
-			Tile* switchCurrentTile(TileGroup* tileGroup, TileAtlas* atlas);
+			Tile* switchTile(TileGroup* tileGroup, size_t whichTile);
+			Tile* switchCurrentTile(TileGroup* tileGroup);
 			void replaceTile(Tile* tile, size_t whichTile);
 			int addTile(Tile* tile);
 			size_t getNumberOfTiles();
@@ -30,7 +30,6 @@ namespace Game {
 			void decreaseCurrentTileIfPossible();
 
 		private:
-			TileAtlas* tileAtlas;
 			std::vector<Tile> tiles;
 			size_t currentTile = 0;
 		};

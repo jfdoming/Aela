@@ -7,11 +7,22 @@
 
 #include "TileInventoryDisplay.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
+#include "../../Project Aela/Window/Window.h"
+#include "../../Project Aela/Animation/Animator.h"
+#include "../../Project Aela/Resource Management/ResourceManager.h"
 
-Game::TileInventoryDisplay::TileInventoryDisplay() {}
+#include "../Player/Player.h"
+#include "../Worlds/WorldManager.h"
 
-Game::TileInventoryDisplay::TileInventoryDisplay(Engine* engine) {
-	setAelaObjects(engine->getWindow(), engine->getResourceManager(), engine->getAnimator());
+Game::TileInventoryDisplay::TileInventoryDisplay() {
+	window = GameObjectProvider::getWindow();
+	resourceManager = GameObjectProvider::getResourceManager();
+	animator = GameObjectProvider::getAnimator();
+}
+
+void Game::TileInventoryDisplay::setup() {
+	player = GameObjectProvider::getPlayer();
+	worldManager = GameObjectProvider::getWorldManager();
 }
 
 void Game::TileInventoryDisplay::refreshSubMenu() {
@@ -19,7 +30,9 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 	int imageWidthAndHeight = height / 8;
 	int currentTile = player->getTileInventory()->getCurrentTileIndex();
 
-	tileInventoryLabel->setText(worldManager->getTileAtlas()->getTileType(player->getTileInventory()->getCurrentTile()->getType())->getName());
+	TileAtlas* tileAtlas = GameObjectProvider::getTileAtlas();
+
+	tileInventoryLabel->setText(tileAtlas->getTileType(player->getTileInventory()->getCurrentTile()->getType())->getName());
 
 	for (size_t i = 0; i < player->getTileInventory()->getNumberOfTiles(); i++) {
 		Tile* tile = player->getTileInventory()->getTile(i);
@@ -33,7 +46,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 			} else {
 				// We need to disable resource root because getSrc() returns the src with the resource root.
 				resourceManager->useResourceRoot(false);
-				if (!resourceManager->obtain<GLTexture>(worldManager->getTileAtlas()->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
+				if (!resourceManager->obtain<GLTexture>(tileAtlas->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
 					resourceManager->useResourceRoot(true);
 					break;
 				}
@@ -54,7 +67,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 			if (tile->getEntity() == nullptr) {
 				resourceManager->obtain<GLTexture>((std::string) DEFAULT_MATERIAL_PATH + (std::string) "grass.dds", texture);
 			} else {
-				if (!resourceManager->obtain<GLTexture>(worldManager->getTileAtlas()->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
+				if (!resourceManager->obtain<GLTexture>(tileAtlas->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
 					break;
 				}
 			}
@@ -87,15 +100,4 @@ void Game::TileInventoryDisplay::setMenuItems(std::shared_ptr<SubMenu> tileInven
 	this->tileInventorySubMenu = tileInventorySubMenu;
 	this->tileInventoryLabel = tileInventoryLabel;
 	this->tileInventoryBoxImage = tileInventoryBoxImage;
-}
-
-void Game::TileInventoryDisplay::setAelaObjects(Window* window, ResourceManager* resourceManager, Animator* animator) {
-	this->window = window;
-	this->resourceManager = resourceManager;
-	this->animator = animator;
-}
-
-void Game::TileInventoryDisplay::setGameObjects(Player* player, WorldManager* worldManager) {
-	this->player = player;
-	this->worldManager = worldManager;
 }

@@ -2,33 +2,31 @@
 * Class: TileInventory
 * Author: Robert Ciborowski
 * Date: 24/02/2018
-* Description: A class used to manage tiles owned by the player.
+* Description: A class used to manage tiles owned by the player->
 */
 
 #include "TileInventory.h"
+#include "TileAtlas.h"
+#include "../Game Object Provider/GameObjectProvider.h"
 
 using namespace Game;
 
-Tile* Game::TileInventory::switchTile(TileGroup* tileGroup, TileAtlas* atlas, size_t whichTile) {
-	Tile* floorTilePtr = tileGroup->getFloorTile(atlas);
+Tile* Game::TileInventory::switchTile(TileGroup* tileGroup, size_t whichTile) {
+	Tile* floorTilePtr = tileGroup->getSwitchableFloorTile(GameObjectProvider::getTileAtlas());
+	std::cout << floorTilePtr << " is floortile\n";
 
 	if (floorTilePtr != nullptr) {
-		std::cout << floorTilePtr->getEntity() << " is the entity.\n";
-		std::cout << floorTilePtr->getType() << " is the type.\n";
-		tileGroup->removeTile(floorTilePtr->getType());
 		Tile floorTile = *floorTilePtr;
+		tileGroup->removeTile(floorTilePtr->getType());
 		tileGroup->addTile(&tiles[whichTile]);
 		tiles[whichTile] = floorTile;
-		std::cout << floorTile.getEntity() << " is the entity.\n";
-		std::cout << floorTile.getType() << " is the type.\n";
-		std::cout << floorTile.getEntity()->getModel() << " is the model.\n";
 		return &tiles[whichTile];
 	}
 	return nullptr;
 }
 
-Tile* Game::TileInventory::switchCurrentTile(TileGroup* tileGroup, TileAtlas* atlas) {
-	return switchTile(tileGroup, atlas, currentTile);
+Tile* Game::TileInventory::switchCurrentTile(TileGroup* tileGroup) {
+	return switchTile(tileGroup, currentTile);
 }
 
 void Game::TileInventory::replaceTile(Tile* tile, size_t whichTile) {

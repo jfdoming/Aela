@@ -72,6 +72,9 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 						|| behaviour == TileBehaviour::LIQUID_FLOOR) {
 						templateTile += "floor.obj";
 					}
+					if (behaviour == TileBehaviour::BOXED_FLOOR) {
+						templateTile += "boxed_floor.obj";
+					}
 					if (behaviour == TileBehaviour::RAMP_UP_RIGHT_DEPRESSED
 						|| behaviour == TileBehaviour::RAMP_UP_LEFT_DEPRESSED
 						|| behaviour == TileBehaviour::RAMP_DOWN_LEFT_DEPRESSED
@@ -156,6 +159,8 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 							// Note: collidable is set to false by default.
 							if (value == "floor") {
 								behaviour = TileBehaviour::FLOOR;
+							} else if (value == "boxed_floor") {
+								behaviour = TileBehaviour::BOXED_FLOOR;
 							} else if (value == "liquid_floor") {
 								behaviour = TileBehaviour::LIQUID_FLOOR;
 							} else if (value == "ramp_right") {

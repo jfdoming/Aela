@@ -7,60 +7,26 @@
 */
 
 #pragma once
-#include "../../Aela Game/AelaGame.h"
+#include "../../Game Object Provider/GameObjectProvider.h"
 
-
-namespace GameScripts {
+namespace Scripts {
 	using namespace Game;
 
-	AelaGame* game;
-	WorldManager* worldManager;
-	CharacterTracker* characterTracker;
-	EnemyRegistrar* enemyRegistrar;
-	ScriptManager* scriptManager;
-	DialogueHandler* dialogueHandler;
-	Engine* engine;
+	void hideDialogue();
 
-	void hideDialogue() {
-		dialogueHandler->closeDialog();
-	}
+	// This sets up the characters of the world.
+	void setupCharacters();
 
-	// This sets up the characters if the world.
-	void setupCharacters() {
-		
-	}
+	void setupTeleporters();
 
-	void setupTeleporters() {
-		
-	}
-
-	void openDoor1_1_1() {
-		// worldManager->getWorld(worldManager->getCurrentWorld())->getChunks()->at()
-	}
+	void startNewGame();
 
 	// This adds all gameplay scripts to the ScriptManager and also binds tile-related scripts to their tiles.
-	void addScriptsToGameWorld() {
-		scriptManager->addScript("setup_characters", std::bind(&setupCharacters));
-		scriptManager->addScript("setup_teleporters", std::bind(&setupTeleporters));
-		scriptManager->addScript("hide_dialogue", std::bind(&hideDialogue));
-		// scriptManager->addScript("")
-	}
+	void addScriptsToGameWorld();
 
 	// This sets up necessary items for gameplay scripts.
-	void setupGameScripts(AelaGame* gameToUse, Engine* engineToUse) {
-		game = gameToUse;
-		worldManager = game->getWorldManager();
-		characterTracker = worldManager->getCharacterTracker();
-		enemyRegistrar = game->getEnemyRegistrar();
-		scriptManager = game->getScriptManager();
-		dialogueHandler = game->getDialogueHandler();
-		engine = engineToUse;
-		addScriptsToGameWorld();
-	}
+	void setupScripts();
 
 	// This runs all setup scripts.
-	void runStartingScripts() {
-		scriptManager->runScript("setup_characters");
-		scriptManager->runScript("setup_teleporters");
-	}
+	void runStartingScripts();
 }

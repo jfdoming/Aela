@@ -1,8 +1,15 @@
 #include "MapRebuilder.h"
+#include "../Player/Player.h"
 #include "../Utilities/MathConstants.h"
 
 Game::MapRebuilder::MapRebuilder() {
 	chunkRenderDistances = glm::vec3(1, 1, 1);
+	animator = GameObjectProvider::getAnimator();
+}
+
+void Game::MapRebuilder::setup() {
+	tileAtlas = GameObjectProvider::getTileAtlas();
+	playerCharacter = GameObjectProvider::getPlayer()->getCharacter();
 }
 
 void Game::MapRebuilder::rebuildMap(World* world, size_t currentWorldID, CharacterTracker* characterTracker) {
@@ -90,6 +97,8 @@ void Game::MapRebuilder::rebuildMap(World* world, size_t currentWorldID, Charact
 									switch (tileAtlas->getTileType(tile.getType())->getBehaviour()) {
 										case TileBehaviour::FLOOR:
 											// tilePositionOnMap.y += 1;
+											break;
+										case TileBehaviour::BOXED_FLOOR:
 											break;
 										case TileBehaviour::LIQUID_FLOOR:
 											tilePositionOnMap.y -= 0.2f;

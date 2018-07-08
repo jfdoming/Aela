@@ -8,6 +8,13 @@
 
 #include "stdafx.h"
 #include "CharacterTracker.h"
+#include "../../Project Aela/Aela_Engine.h"
+#include "../Scripts/ScriptManager.h"
+#include "Resource Management/ResourceManager.h"
+#include "Animation/Animator.h"
+#include "Animation/AnimationLooper.h"
+#include "3D/Animation/AnimationTrack3D.h"
+#include "3D/Camera/Camera3D.h"
 #include "CharacterModelGenerator.h"
 #include "Resource Management/ResourcePaths.h"
 #include "../../Project Aela/3D/Animation/AnimationTrackMaterial.h"
@@ -19,7 +26,12 @@
 
 using namespace Game;
 
-Game::CharacterTracker::CharacterTracker() {}
+Game::CharacterTracker::CharacterTracker() {
+	animator = GameObjectProvider::getAnimator();
+	camera = GameObjectProvider::getCamera();
+	resourceManager = GameObjectProvider::getResourceManager();
+	time = GameObjectProvider::getTime();
+}
 
 Game::CharacterTracker::~CharacterTracker() {
 	for (auto pair : characters) {
@@ -27,13 +39,8 @@ Game::CharacterTracker::~CharacterTracker() {
 	}
 }
 
-void Game::CharacterTracker::setup(Engine* engine, ScriptManager* scriptManager) {
-	this->resourceManager = engine->getResourceManager();
-	this->animator = engine->getAnimator();
-	this->animationLooper = engine->getAnimationLooper();
-	this->camera = engine->getRenderer()->getCamera();
-	this->scriptManager = scriptManager;
-	this->time = engine->getTime();
+void Game::CharacterTracker::setup() {
+	scriptManager = GameObjectProvider::getScriptManager();
 }
 
 void Game::CharacterTracker::update() {
@@ -85,6 +92,10 @@ void Game::CharacterTracker::update() {
 		// The camera has not been taken over by the user using a cheat-code.
 		resetCameraPosition();
 	}
+}
+
+void Game::CharacterTracker::scenesWereSetUp() {
+	gameplayScene = GameObjectProvider::getGameplayScene();
 }
 
 void Game::CharacterTracker::generateCharacterModels(ResourceManager* resourceManager) {
@@ -262,27 +273,30 @@ void Game::CharacterTracker::moveTrackedCharacter(std::string name, Movement* mo
 	moveTrackedCharacter(character, movement, scriptOnCompletion);
 }
 
-void Game::CharacterTracker::teleportTrackedCharacter(Character* character, Location* location) {
-	character->setLocation(location);
-	mapNeedsToBeRebuilt = true;
+void Game::CharacterTracker::teleportTrackedCharacter(Character* character, Location* location, bool animation) {
+	Movement teleportation(location, &glm::vec3(), character->getDirectionFacing(), true);
+	if (!animation) {
+		teleportation.setAnimated(false);
+	}
+	moveTrackedCharacter(character, &teleportation, "");
 }
 
-void Game::CharacterTracker::teleportTrackedCharacter(size_t id, Location* location) {
+void Game::CharacterTracker::teleportTrackedCharacter(size_t id, Location* location, bool animation) {
 	Character* character = getCharacterByID(id);
 	if (character == nullptr) {
 		return;
 	}
-	teleportTrackedCharacter(character, location);
+	teleportTrackedCharacter(character, location, animation);
 }
 
-void Game::CharacterTracker::teleportTrackedCharacter(std::string name, Location* location) {
+void Game::CharacterTracker::teleportTrackedCharacter(std::string name, Location* location, bool animation) {
 	auto iter = charactersByName.find(name);
 	if (iter == charactersByName.end()) {
 		return;
 	}
 
 	Character* character = characters[iter->second];
-	teleportTrackedCharacter(character, location);
+	teleportTrackedCharacter(character, location, animation);
 }
 
 bool Game::CharacterTracker::doesMapNeedToBeRebuilt() {
@@ -301,10 +315,6 @@ bool Game::CharacterTracker::isPlayerDead() {
 	return playerIsDead;
 }
 
-void Game::CharacterTracker::setGameplayScene(Scene* gameplayScene) {
-	this->gameplayScene = gameplayScene;
-}
-
 void Game::CharacterTracker::setGameplayMenuItems(std::shared_ptr<RectComponent> deathRect, std::shared_ptr<Label> deathText) {
 	this->deathRect = deathRect;
 	this->deathText = deathText;
@@ -320,35 +330,39 @@ void Game::CharacterTracker::processCharacterMovement(Character* character, Move
 	character->setLocation(newLocation);
 
 	if (movement->isATeleportation()) {
-		character->allowNewMovements(true);
-		lockingCameraToPlayer = false;
+		if (movement->isAnimated()) {
+			character->allowNewMovements(true);
+			lockingCameraToPlayer = false;
 
-		CharacterTeleportParticleEmitter* particleEmitter = new CharacterTeleportParticleEmitter(time);
-		particleEmitter->setBaseDistance(oldLocation.getWorldSpaceLocation().y + 10);
-		particleEmitter->setBaseSpeed(0.00000001f);
-		particleEmitter->setPathOffset(oldLocation.getWorldSpaceLocation().y);
-		particleEmitter->setLifeTime(1500000000);
-		particleEmitter->setCharacter(character);
-		particleEmitter->setLocations(&oldLocation, newLocation);
-		particleEmitter->setSecondaryPathOffset(newLocation->getWorldSpaceLocation().y + 8);
+			CharacterTeleportParticleEmitter* particleEmitter = new CharacterTeleportParticleEmitter(time);
+			particleEmitter->setBaseDistance(oldLocation.getWorldSpaceLocation().y + 10);
+			particleEmitter->setBaseSpeed(0.00000001f);
+			particleEmitter->setPathOffset(oldLocation.getWorldSpaceLocation().y);
+			particleEmitter->setLifeTime(1500000000);
+			particleEmitter->setCharacter(character);
+			particleEmitter->setLocations(&oldLocation, newLocation);
+			particleEmitter->setSecondaryPathOffset(newLocation->getWorldSpaceLocation().y + 8);
 
-		std::vector<GLTexture*> textures;
-		GLTexture* texture = static_cast<GLTexture*>(characters[playerID]->getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
-		textures.push_back(texture);
+			std::vector<GLTexture*> textures;
+			GLTexture* texture = static_cast<GLTexture*>(characters[playerID]->getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
+			textures.push_back(texture);
 
-		auto halfLifeAction = [this, character]() {
+			auto halfLifeAction = [this, character]() {
+				mapNeedsToBeRebuilt = true;
+				lockingCameraToPlayer = true;
+			};
+
+			auto onEndAction = [this, character]() {
+				character->allowNewMovements(false);
+			};
+
+			particleEmitter->setActionOnHalfLife(halfLifeAction);
+			particleEmitter->setActionOnEnd(onEndAction);
+			particleEmitter->setupParticles(&textures, 1, 1, 1);
+			gameplayScene->putParticleEmitter(particleEmitter);
+		} else {
 			mapNeedsToBeRebuilt = true;
-			lockingCameraToPlayer = true;
-		};
-
-		auto onEndAction = [this, character]() {
-			character->allowNewMovements(false);
-		};
-
-		particleEmitter->setActionOnHalfLife(halfLifeAction);
-		particleEmitter->setActionOnEnd(onEndAction);
-		particleEmitter->setupParticles(&textures, 1, 1, 1);
-		gameplayScene->putParticleEmitter(particleEmitter);
+		}
 		return;
 	}
 

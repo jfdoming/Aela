@@ -6,6 +6,8 @@
 */
 
 #include "ItemInventoryDisplay.h"
+#include "../Player/Player.h"
+#include "../Worlds/WorldManager.h"
 
 Game::ItemInventoryDisplay::ItemInventoryDisplay() {
 }

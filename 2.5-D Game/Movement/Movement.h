@@ -17,11 +17,14 @@ namespace Game {
 			glm::vec3* getWorldspaceTranslation();
 			TileDirection getDirection();
 			bool isATeleportation();
+			void setAnimated(bool animated);
+			bool isAnimated();
 
 		private:
 			Location destination;
 			glm::vec3 worldSpaceTranslation;
 			TileDirection direction;
 			bool teleportation;
+			bool animated = true;
 	};
 }

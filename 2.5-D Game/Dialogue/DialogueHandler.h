@@ -6,8 +6,7 @@
 */
 
 #pragma once
-#include "../Scripts/ScriptManager.h"
-#include "Time/Time.h"
+#include "../Game Object Provider/GameObjectProvider.h"
 #include "Menus/SubMenu.h"
 #include "Menus/Label.h"
 #include "DialogueOption.h"
@@ -19,9 +18,9 @@ namespace Game {
 
 	class DialogueHandler {
 		public:
-			DialogueHandler() {}
+			DialogueHandler();
 
-			void setup(Time* time, EventHandler* eventHandler, ScriptManager* scriptManager);
+			void setup();
 			void update();
 
 			// This is triggered on an event.
@@ -40,8 +39,11 @@ namespace Game {
 			bool dialogueIsBeingShown();
 			bool hadJustFinishedDialogue();
 		private:
+			// These are obtained from GameObjectProvider.
+			EventHandler* eventHandler;
 			Time* time;
 			ScriptManager* scriptManager;
+
 			std::shared_ptr<SubMenu> dialogueSubMenu;
 			std::shared_ptr<Label> label1, label2, label3, label4;
 

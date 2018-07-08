@@ -95,6 +95,7 @@
     <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp" />
     <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="2D\Texture\GLSpriteSheetLoader.cpp" />
+    <ClCompile Include="Time\Stopwatch\Stopwatch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3D\Animation\AnimationTrackModel.h" />
@@ -222,5 +223,6 @@
     <ClInclude Include="Utilities\Transformations\PointRotation3D.h" />
     <ClInclude Include="Window\Window.h" />
     <ClInclude Include="2D\Texture\GLSpriteSheetLoader.h" />
+    <ClInclude Include="Time\Stopwatch\Stopwatch.h" />
   </ItemGroup>
 </Project>

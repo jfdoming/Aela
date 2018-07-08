@@ -24,7 +24,7 @@ namespace Aela {
 			virtual void onMouseReleased(MouseEvent* event);
 			virtual void onMouseMoved(MouseEvent* event);
 
-			virtual void markDirty();
+			void markDirty();
 
 		protected:
 			Container(int x, int y);

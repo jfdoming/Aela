@@ -23,6 +23,7 @@ using namespace Aela;
 std::string materialsAndModelNames[] = {
 	"meme_mug",
 	"floor",
+	"boxed_floor",
 	"corner_elevated",
 	"corner_depressed",
 	"box",

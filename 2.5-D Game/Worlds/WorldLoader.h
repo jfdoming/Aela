@@ -8,24 +8,16 @@
 #pragma once
 #include <string>
 #include "World.h"
-#include "WorldManager.h"
-#include "../../Project Aela/Aela_Engine.h"
+#include "../Game Object Provider/GameObjectProvider.h"
 
 namespace Game {
 	class WorldLoader {
 		public:
-		WorldLoader() {}
+			WorldLoader() {}
 
-		bool loadWorld(std::string path, World& world);
-
-		void setWorldManager(WorldManager* worldManager);
-		void setEngine(Engine* engine);
+			bool loadWorld(std::string path, World& world);
 
 		private:
-		WorldManager* worldManager;
-		ResourceManager* resourceManager;
-		GLRenderer* renderer;
-
-		bool generateTileTypes(TileGroupMap& tiles, std::stringstream& data, int height);
+			bool generateTileTypes(TileGroupMap& tiles, std::stringstream& data, int height);
 	};
 }

@@ -294,7 +294,7 @@ void Game::WorldManager::createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, u
 }
 
 bool Game::WorldManager::exportCurrentWorld() {
-	return worldExporter.exportWorld((std::string) RESOURCE_ROOT + EXPORTED_MAP_SRC, &worlds[currentWorld]);
+	return worldExporter.exportWorld((std::string) RESOURCE_ROOT + MAP_BEING_EDITED, &worlds[currentWorld]);
 }
 
 void Game::WorldManager::processCharacterMovement(Character* character, TileDirection& direction) {

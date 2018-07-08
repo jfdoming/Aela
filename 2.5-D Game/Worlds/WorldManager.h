@@ -6,18 +6,12 @@
 */
 
 #pragma once
-#include <unordered_map>
+#include "../Game Object Provider/GameObjectProvider.h"
 #include "World.h"
 #include "MapRebuilder.h"
-#include "../Character/CharacterTracker.h"
-#include "../Dialogue/DialogueHandler.h"
 #include "3D/Maps/Map3D.h"
-#include "TileAtlas.h"
-#include "Resource Management/ResourceManager.h"
-#include "../Scripts/ScriptManager.h"
-#include "Renderer/GLRenderer.h"
 #include "../Teleporter/Teleporter.h"
-
+#include <unordered_map>
 
 namespace Game {
 	// The following represents a map of teleporters, in which the teleporters are organized by map, chunk and position in 
@@ -27,17 +21,15 @@ namespace Game {
 
 	class WorldManager {
 		public:
-			WorldManager() {
-				currentWorld = 0;
-			}
+			WorldManager();
 
-			bool setup(Engine* engine, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player);
+			bool setup();
 			void update();
 
 			void rebuildMapWhenPossible();
 
-			TileAtlas* getTileAtlas();
-			CharacterTracker* getCharacterTracker();
+			/*TileAtlas* getTileAtlas();
+			CharacterTracker* getCharacterTracker();*/
 			size_t addWorld(World* world);
 			World* getWorld(size_t id);
 			Map3D* getMap3D();
@@ -62,21 +54,16 @@ namespace Game {
 			void runTileSwitchScriptOfTile(Location* location);
 
 		private:
-			// These are some Aela objects.
+			// These are obtained from GameObjectProvider.
 			ResourceManager* resourceManager;
-			GLRenderer* renderer;
-			Animator* animator;
 			AnimationLooper* animationLooper;
+			CharacterTracker* characterTracker;
+			ScriptManager* scriptManager;
+			TileAtlas* tileAtlas;
+			Character* playerCharacter;
 
 			std::vector<World> worlds;
 			size_t currentWorld;
-
-			// These are some handles to game-related objects.
-			CharacterTracker characterTracker;
-			ScriptManager* scriptManager;
-			DialogueHandler* dialogueHandler;
-			Character* player;
-			TileAtlas tileAtlas;
 			MapRebuilder mapRebuilder;
 
 			// This is a handle to an Aela 3D map. The chunks of a world are loaded into this map. Because Aela's 3D
@@ -94,7 +81,7 @@ namespace Game {
 			// This is the path to the Aela 3D Map.
 			const std::string DEFAULT_MAP_SRC = "res/maps/map.txt";
 
-			// This creates/recreates the Aela::Map3D that is used by the game.
+			// This creates/recreates the Aela::Map3D that is used by the game->
 			void rebuildMap();
 
 			void setupAnimationLoopingForTiles();

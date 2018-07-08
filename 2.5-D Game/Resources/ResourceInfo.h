@@ -2,7 +2,7 @@
 * Name: ResourceInfo
 * Author: Robert Ciborowski
 * Date: 18/03/2018
-* Description: Contains information about the resources that are specific to this game.
+* Description: Contains information about the resources that are specific to this game->
 */
 
 #pragma once

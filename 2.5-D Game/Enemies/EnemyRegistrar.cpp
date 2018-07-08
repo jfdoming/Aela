@@ -1,12 +1,26 @@
 #include "EnemyRegistrar.h"
+#include "../Player/Player.h"
 
-Game::EnemyRegistrar::EnemyRegistrar() {}
+using namespace Game;
+
+Game::EnemyRegistrar::EnemyRegistrar() {
+	time = GameObjectProvider::getTime();
+	resourceManager = GameObjectProvider::getResourceManager();
+}
+
+void Game::EnemyRegistrar::setup() {
+	player = GameObjectProvider::getPlayer();
+}
+
+void Game::EnemyRegistrar::scenesWereSetUp() {
+	gameplayScene = GameObjectProvider::getGameplayScene();
+}
 
 void Game::EnemyRegistrar::updateRegisteredEnemies() {
 	for (Turret* turret : turrets) {
 		turret->update(player->getCharacter(), time->getCurrentTimeInNanos());
 		if (turret->hasRecentlyAttacked()) {
-			turret->addBulletEffects(scene, resourceManager, time);
+			turret->addBulletEffects(gameplayScene, resourceManager, time);
 		}
 	}
 }
@@ -18,17 +32,4 @@ size_t Game::EnemyRegistrar::registerTurret(Turret* turret) {
 
 Game::Turret* Game::EnemyRegistrar::getTurret(size_t id) {
 	return turrets[id];
-}
-
-void Game::EnemyRegistrar::setAelaObjects(Engine* engine) {
-	this->time = engine->getTime();
-	this->resourceManager = engine->getResourceManager();
-}
-
-void Game::EnemyRegistrar::setPlayer(Player* player) {
-	this->player = player;
-}
-
-void Game::EnemyRegistrar::setGameplayScene(Scene* scene) {
-	this->scene = scene;
 }

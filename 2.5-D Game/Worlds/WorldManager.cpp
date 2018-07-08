@@ -6,32 +6,35 @@
 */
 
 #include "WorldManager.h"
+#include "../Character/CharacterTracker.h"
+#include "../Dialogue/DialogueHandler.h"
+#include "TileAtlas.h"
+#include "Resource Management/ResourceManager.h"
+#include "../Scripts/ScriptManager.h"
 #include "3D/Maps/Map3DLoader.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
+#include "../Player/Player.h"
 #include <glm/gtc/constants.hpp>
 #include <iostream>
 
 // I'm including this because it contains some useful defines.
 #include "../Scripts/Scripts to Move to LUA/SceneScript.h"
 
-bool Game::WorldManager::setup(Engine* engine, ScriptManager* scriptManager, DialogueHandler* dialogueHandler, Character* player) {
-	this->resourceManager = engine->getResourceManager();
-	this->renderer = engine->getRenderer();
-	this->animator = engine->getAnimator();
-	this->animationLooper = engine->getAnimationLooper();
-	this->scriptManager = scriptManager;
-	this->dialogueHandler = dialogueHandler;
-	this->player = player;
+Game::WorldManager::WorldManager() {
+	resourceManager = GameObjectProvider::getResourceManager();
+	animationLooper = GameObjectProvider::getAnimationLooper();
+	currentWorld = 0;
+}
 
-	characterTracker.setup(engine, scriptManager);
+bool Game::WorldManager::setup() {
+	characterTracker = GameObjectProvider::getCharacterTracker();
+	scriptManager = GameObjectProvider::getScriptManager();
+	tileAtlas = GameObjectProvider::getTileAtlas();
+	playerCharacter = GameObjectProvider::getPlayer()->getCharacter();
 
-	mapRebuilder.setAnimator(animator);
-	mapRebuilder.setTileAtlas(&tileAtlas);
+	mapRebuilder.setup();
 	mapRebuilder.bindMap(map);
-	mapRebuilder.setPlayerCharacter(player);
-
 	setupAnimationLoopingForTiles();
-
 	return true;
 }
 
@@ -77,15 +80,15 @@ void Game::WorldManager::setupAnimationLoopingForTiles() {
 }
 
 void Game::WorldManager::update() {
-	if (mapNeedsToBeRebuilt || characterTracker.doesMapNeedToBeRebuilt()) {
+	if (mapNeedsToBeRebuilt || characterTracker->doesMapNeedToBeRebuilt()) {
 		rebuildMap();
 		mapNeedsToBeRebuilt = false;
-		characterTracker.mapWasRebuilt();
+		characterTracker->mapWasRebuilt();
 	}
 
 	for (size_t i = 0; i < characterMovementQueueByID.size(); i++) {
 		auto& pair = characterMovementQueueByID.at(i);
-		Character* character = characterTracker.getCharacterByID(pair.first);
+		Character* character = characterTracker->getCharacterByID(pair.first);
 		if (character->isFrozen()) {
 			characterMovementQueueByID.erase(characterMovementQueueByID.begin() + i);
 			i--;
@@ -99,7 +102,7 @@ void Game::WorldManager::update() {
 
 	for (size_t i = 0; i < characterMovementQueueByName.size(); i++) {
 		auto& pair = characterMovementQueueByName.at(i);
-		Character* character = characterTracker.getCharacterByName(pair.first);
+		Character* character = characterTracker->getCharacterByName(pair.first);
 		if (character->isFrozen()) {
 			characterMovementQueueByID.erase(characterMovementQueueByID.begin() + i);
 			i--;
@@ -110,19 +113,11 @@ void Game::WorldManager::update() {
 		}
 	}
 
-	characterTracker.update();
+	characterTracker->update();
 }
 
 void Game::WorldManager::rebuildMapWhenPossible() {
 	mapNeedsToBeRebuilt = true;
-}
-
-Game::TileAtlas* Game::WorldManager::getTileAtlas() {
-	return &tileAtlas;
-}
-
-Game::CharacterTracker* Game::WorldManager::getCharacterTracker() {
-	return &characterTracker;
 }
 
 size_t Game::WorldManager::addWorld(World* world) {
@@ -143,7 +138,6 @@ Map3D* Game::WorldManager::getMap3D() {
 
 bool Game::WorldManager::setCurrentWorld(size_t id) {
 	if (id < worlds.size()) {
-		std::cout << "Yay, doing map stuff.\n";
 		currentWorld = id;
 		map = worlds[currentWorld].getMap3D();
 		mapRebuilder.bindMap(map);
@@ -176,10 +170,6 @@ Game::Teleporter* Game::WorldManager::getTeleporter(Location* location) {
 void Game::WorldManager::setChunkRenderDistances(glm::vec3 chunkRenderDistances) {
 	mapRebuilder.setChunkRenderingDistances(chunkRenderDistances);
 	rebuildMapWhenPossible();
-}
-
-void Game::WorldManager::setGameplayScene(Scene* gameplayScene) {
-	characterTracker.setGameplayScene(gameplayScene);
 }
 
 void Game::WorldManager::getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::vec2& chunk, TileDirection direction) {
@@ -280,7 +270,7 @@ void Game::WorldManager::runTileSwitchScriptOfTile(Location* location) {
 
 void Game::WorldManager::processCharacterMovement(Character* character, TileDirection& direction) {
 	if (direction != character->getDirectionFacing()) {
-		characterTracker.turnTrackedCharacter(character, direction);
+		characterTracker->turnTrackedCharacter(character, direction);
 		return;
 	}
 	Location location = *character->getLocation();
@@ -329,50 +319,32 @@ void Game::WorldManager::processCharacterMovement(Character* character, TileDire
 		Chunk* chunk = worlds[location.getWorld()].getChunk(location.getChunk());
 		if (chunk != nullptr) {
 			TileGroup* tileGroup = worlds[location.getWorld()].getChunk(location.getChunk())->getTileGroup(location.getTileGroup());
-			if (tileGroup == nullptr || tileGroup->isCollidable(&tileAtlas)) {
+			if (tileGroup == nullptr || tileGroup->isCollidable(tileAtlas)) {
 				// If the movement is impossible, don't do it!
-				characterTracker.turnTrackedCharacter(character, direction);
+				characterTracker->turnTrackedCharacter(character, direction);
 				return;
 			}
 
-			if (characterTracker.getCharacterByLocation(&location) != nullptr) {
+			if (characterTracker->getCharacterByLocation(&location) != nullptr) {
 				// If the movement is impossible, don't do it!
-				characterTracker.turnTrackedCharacter(character, direction);
+				characterTracker->turnTrackedCharacter(character, direction);
 				return;
 			}
-
-			//Location locationBelow(location.getWorld(), chunkCoord, tileCoord - glm::vec3(0, 1, 0));
-			//Tile* tileBelow = worlds[locationBelow.getWorld()].getChunk(locationBelow.getChunk())->getTileGroup(locationBelow.getTileGroup());
-
-			//if (tileBelow == nullptr) {
-			//	// If the movement is impossible, don't do it!
-			//	characterTracker.turnTrackedCharacter(character, direction);
-			//	std::cout << "C!\n";
-			//	return;
-			//}
-
-			//TileType* typeBelow = tileAtlas.getTileType(tileBelow->getType());
-			//if (typeBelow->isCollidable()) {
-			//	// If the movement is impossible, don't do it!
-			//	characterTracker.turnTrackedCharacter(character, direction);
-			//	std::cout << "D!\n";
-			//	return;
-			//}
 
 			std::string script = *tileGroup->getWalkedOnScriptID();
 			Movement movement(&location, &translation, direction, false);
-			characterTracker.moveTrackedCharacter(character, &movement, script);
+			characterTracker->moveTrackedCharacter(character, &movement, script);
 
 			Teleporter* teleporter = getTeleporter(&location);
 			if (teleporter != nullptr) {
 				character->allowNewMovements(true);
-				Movement teleportation(teleporter->getDestination(), &glm::vec3(), player->getDirectionFacing(), true);
-				characterTracker.moveTrackedCharacter(character, &teleportation, script);
+				Movement teleportation(teleporter->getDestination(), &glm::vec3(), playerCharacter->getDirectionFacing(), true);
+				characterTracker->moveTrackedCharacter(character, &teleportation, script);
 			}
 		}
 	}
 }
 
 void Game::WorldManager::rebuildMap() {
-	mapRebuilder.rebuildMap(&worlds[currentWorld], currentWorld, &characterTracker);
+	mapRebuilder.rebuildMap(&worlds[currentWorld], currentWorld, characterTracker);
 }

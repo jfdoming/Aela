@@ -183,22 +183,52 @@ int Aela::Engine::loadUserEnvironmentInformation() {
 
 // This method is meant to be run by another program that uses the Project Aela library. It starts Project Aela.
 void Engine::update() {
-	// Note: Events should be updated first.
-	eventHandler.updateSDLEvents();
+	if (useStopwatch) {
+		stopwatch.startRecording("Event Handler Updating");
+		// Note: Events should be updated first.
+		eventHandler.updateSDLEvents();
+		stopwatch.stopRecording("Event Handler Updating");
 
-	time.updateTime();
-	sceneManager.update();
-	animationLooper.update();
-	animator.update();
-	keyedAnimator.update();
+		stopwatch.startRecording("Time Updating");
+		time.updateTime();
+		stopwatch.stopRecording("Time Updating");
+
+		stopwatch.startRecording("Scene Manager Updating");
+		sceneManager.update();
+		stopwatch.stopRecording("Scene Manager Updating");
+
+		stopwatch.startRecording("Animation Updating");
+		animationLooper.update();
+		animator.update();
+		keyedAnimator.update();
+		stopwatch.stopRecording("Animation Updating");
+	} else {
+		// Note: Events should be updated first.
+		eventHandler.updateSDLEvents();
+		time.updateTime();
+		sceneManager.update();
+		animationLooper.update();
+		animator.update();
+		keyedAnimator.update();
+	}
 }
 
 void Engine::render() {
+	stopwatch.startRecording("Scene Manager Rendering");
 	sceneManager.render(renderer);
+	stopwatch.stopRecording("Scene Manager Rendering");
 }
 
 bool Engine::shouldExit() {
 	return window.quitCheck() || AelaErrorHandling::programCloseWasRequested();
+}
+
+void Aela::Engine::setUseStopwatch(bool useStopwatch) {
+	this->useStopwatch = useStopwatch;
+}
+
+bool Aela::Engine::isUsingStopwatch() {
+	return useStopwatch;
 }
 
 Window* Engine::getWindow() {
@@ -265,6 +295,10 @@ Map3DExporter* Aela::Engine::getMapExporter() {
 	return &mapExporter;
 }
 
-Physics* Aela::Engine::getPhysicsManager() {
-	return &physicsManager;
+Physics* Aela::Engine::getPhysics() {
+	return &physics;
+}
+
+Stopwatch* Aela::Engine::getStopwatch() {
+	return &stopwatch;
 }

@@ -7,11 +7,14 @@
 
 #pragma once
 #include "WorldLoader.h"
-#include "Error Handler\ErrorHandler.h"
+#include "Error Handler/ErrorHandler.h"
 #include "../Resources/ResourceInfo.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
+#include "WorldManager.h"
 #include <fstream>
 #include <iostream>
+
+using namespace Game;
 
 bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 	std::ifstream in;
@@ -94,9 +97,11 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 							Map3D* map;
 							std::string src = (std::string) DEFAULT_MAP_PATH + value + ".txt";
 
+							ResourceManager* resourceManager = GameObjectProvider::getResourceManager();
+
 							if (!resourceManager->obtain<Map3D>(src, map)) {
 								Map3DLoader mapLoader(resourceManager->getResourceRoot());
-								mapLoader.bindRenderer(renderer);
+								mapLoader.bindRenderer(GameObjectProvider::getRenderer());
 								resourceManager->bindLoader(&mapLoader);
 								resourceManager->bindGroup(value);
 								resourceManager->addToGroup(src, false);
@@ -124,15 +129,6 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 		return false;
 	}
 	return true;
-}
-
-void Game::WorldLoader::setWorldManager(WorldManager* worldManager) {
-	this->worldManager = worldManager;
-}
-
-void Game::WorldLoader::setEngine(Engine* engine) {
-	this->resourceManager = engine->getResourceManager();
-	this->renderer = engine->getRenderer();
 }
 
 bool Game::WorldLoader::generateTileTypes(TileGroupMap& tiles, std::stringstream& data, int height) {

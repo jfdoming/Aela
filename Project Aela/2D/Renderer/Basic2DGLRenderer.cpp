@@ -271,6 +271,7 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 	for (unsigned int i = 0; i < text.length(); i++) {
 		p = &((char) (text.at(i)));
 
+		std::cout << textFont->getFace() << " textToSimple2D\n";
 		// This loads the character.
 		if (FT_Load_Char(*(textFont->getFace()), *p, FT_LOAD_RENDER)) {
 			continue;

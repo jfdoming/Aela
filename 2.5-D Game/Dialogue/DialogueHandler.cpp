@@ -6,12 +6,19 @@
 */
 
 #include "DialogueHandler.h"
+#include "../Scripts/ScriptManager.h"
+#include "Time/Time.h"
 
-void Game::DialogueHandler::setup(Time* time, EventHandler* eventHandler, ScriptManager* scriptManager) {
-	this->time = time;
-	this->scriptManager = scriptManager;
+Game::DialogueHandler::DialogueHandler() {
+	eventHandler = GameObjectProvider::getEventHandler();
+	time = GameObjectProvider::getTime();
+
 	eventHandler->addListener(EventConstants::KEY_RELEASED, bindListener(DialogueHandler::onEvent, this));
 	eventHandler->addListener(EventConstants::KEY_PRESSED, bindListener(DialogueHandler::onEvent, this));
+}
+
+void Game::DialogueHandler::setup() {
+	scriptManager = GameObjectProvider::getScriptManager();
 }
 
 void Game::DialogueHandler::update() {

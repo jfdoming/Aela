@@ -7,27 +7,7 @@
 */
 
 #pragma once
-#include "Resource Management/ResourceManager.h"
-#include "../../Worlds/World.h"
-#include "../../Worlds/WorldLoader.h"
-#include "../../Worlds/TileAtlas.h"
-#include "../../Worlds/TileAtlasLoader.h"
-#include "../../Resources/ResourceInfo.h"
 
-namespace Game {
-	static void loadTiledMaps(Engine* engine, WorldManager* worldManager) {
-		ResourceManager* resourceManager = engine->getResourceManager();
-		TileAtlas* atlas = worldManager->getTileAtlas();
-		TileAtlasLoader atlasLoader;
-		atlasLoader.setResourceManager(resourceManager);
-		std::cout << "About to load tiled atlas.\n";
-		atlasLoader.loadAtlas(RESOURCE_ROOT, "res/tiled maps/tiles.txt", *atlas);
-
-		World world;
-		WorldLoader worldLoader;
-		worldLoader.setWorldManager(worldManager);
-		worldLoader.setEngine(engine);
-		worldLoader.loadWorld("res/tiled maps/stage_1.txt", world);
-		worldManager->addWorld(&world);
-	}
+namespace Scripts {
+	void loadTiledMaps();
 };

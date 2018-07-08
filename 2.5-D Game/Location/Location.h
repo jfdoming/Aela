@@ -2,7 +2,7 @@
 * Class: Location
 * Author : Robert Ciborowski
 * Date : 16/12/2017
-* Description: A class used to represent a location in the game.
+* Description: A class used to represent a location in the game->
 */
 
 #pragma once

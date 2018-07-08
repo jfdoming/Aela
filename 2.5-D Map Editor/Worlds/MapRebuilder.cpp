@@ -90,6 +90,8 @@ void Game::MapRebuilder::rebuildMap(World* world, size_t currentWorldID, Charact
 									case TileBehaviour::FLOOR:
 										// tilePositionOnMap.y += 1;
 										break;
+									case TileBehaviour::BOXED_FLOOR:
+										break;
 									case TileBehaviour::LIQUID_FLOOR:
 										tilePositionOnMap.y -= 0.2f;
 										break;

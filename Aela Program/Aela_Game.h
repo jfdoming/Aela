@@ -27,7 +27,7 @@ class AelaGame {
 			userEnvironment = engine->getUserEnvironment();
 			framerateCalculator = engine->getFramerateCalculator();
 			camera = engine->getRendererReference().getCamera();
-			physicsManager = engine->getPhysicsManager();
+			physics = engine->getPhysics();
 		}
 
 		void setup();
@@ -52,7 +52,7 @@ class AelaGame {
 		UserEnvironment* userEnvironment;
 		FramerateCalculator* framerateCalculator;
 		Camera3D* camera;
-		Physics* physicsManager;
+		Physics* physics;
 
 		// These are game-related objects.
 		GameplayManager gameplayManager;

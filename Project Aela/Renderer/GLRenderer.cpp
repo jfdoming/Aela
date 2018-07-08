@@ -398,6 +398,9 @@ int getTextWidth(std::string text, TextFont* font) {
 	char* p;
 	for (unsigned int i = 0; i < text.size(); i++) {
 		p = &((char)(text.at(i)));
+
+		std::cout << face << " getWidth\n";
+
 		// This loads the character.
 		if (FT_Load_Char(face, *p, FT_LOAD_RENDER)) {
 			continue;

@@ -36,7 +36,7 @@ Rect<int> FontManager::dimensionsOfText(TextFont* font, std::string text) {
 		p = &((char) (text.at(i)));
 		// This loads the character.
 
-		// std::cout << face << " is the face of dimsOfText.\n";
+		std::cout << face << " dimsOfText.\n";
 
 		if (FT_Load_Char(face, *p, FT_LOAD_RENDER)) {
 			continue;

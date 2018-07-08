@@ -1,4 +1,5 @@
 #include "TileGroup.h"
+#include "../../Project Aela/Utilities/enumut.h"
 
 using namespace Game;
 
@@ -57,11 +58,21 @@ void Game::TileGroup::setSwitchScript(std::string name) {
 }
 
 Tile* Game::TileGroup::getFloorTile(TileAtlas* tileAtlas) {
-	std::cout << tiles.size() << " is the size.\n";
 	for (auto& pair : tiles) {
-		std::cout << pair.second.getType() << " is the type.\n";
 		TileBehaviour behaviour = tileAtlas->getTileType(pair.second.getType())->getBehaviour();
-		if (behaviour == TileBehaviour::FLOOR || behaviour == TileBehaviour::LIQUID_FLOOR) {
+		if (behaviour == TileBehaviour::FLOOR || behaviour == TileBehaviour::LIQUID_FLOOR || behaviour == TileBehaviour::BOXED_FLOOR) {
+			return &pair.second;
+		}
+	}
+	return nullptr;
+}
+
+Tile* Game::TileGroup::getSwitchableFloorTile(TileAtlas* tileAtlas) {
+	for (auto& pair : tiles) {
+		std::cout << tileAtlas << " is tileatlas.\n";
+		TileBehaviour behaviour = tileAtlas->getTileType(pair.second.getType())->getBehaviour();
+		std::cout << enumToInteger(behaviour) << " is behaviour\n";
+		if (behaviour == TileBehaviour::LIQUID_FLOOR || behaviour == TileBehaviour::BOXED_FLOOR) {
 			return &pair.second;
 		}
 	}

@@ -8,25 +8,23 @@
 #pragma once
 
 #include "Aela_Engine.h"
-#include "../Worlds/WorldManager.h"
-#include "../Character/CharacterTracker.h"
-#include "../Enemies/EnemyRegistrar.h"
-#include "../Scripts/ScriptManager.h"
-#include "../Player/Player.h"
-#include "../Dialogue/DialogueHandler.h"
-#include "../Worlds/TileInventoryDisplay.h"
+#include "../Game Object Provider/GameObjectProvider.h"
 #include "../Camera Mode/CameraMode.h"
+#include "../Location/Location.h"
+#include "../../Project Aela/Scenes/Scene.h"
+#include "../../Project Aela/Menus/SubMenu.h"
+#include "../../Project Aela/Menus/ImageComponent.h"
 
 using namespace Aela;
 
 namespace Game {
 	class AelaGame {
 		public:
-			AelaGame(Engine* engine);
+			AelaGame();
+			~AelaGame();
 
 			void setup();
 			void update();
-			void cleanup();
 
 			// This is triggered on an event.
 			void onEvent(Event* event);
@@ -34,48 +32,35 @@ namespace Game {
 			// This should be run on a change of scenes. 
 			void switchScene(int sceneID);
 
-			WorldManager* getWorldManager();
-			EnemyRegistrar* getEnemyRegistrar();
-			ScriptManager* getScriptManager();
-			DialogueHandler* getDialogueHandler();
+			// These are called by scripts that run when title screen buttons are pressed.
+			void startNewGame();
+			void continueGame();
 
 			void setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
 				std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage);
 
-			void setGameplayScene(Scene* gameplayScene);
-			void setPauseScene(Scene* pauseScene);
-
 		private:
-			// These are Aela Engine objects.
+			// These are obtained from GameObjectProvider.
 			Engine* engine;
-			Window* window;
-			GLRenderer* renderer;
-			EventHandler* eventHandler;
-			Time* time;
-			SceneManager* sceneManager;
 			ResourceManager* resourceManager;
-			AudioPlayer* audioPlayer;
-			Animator* animator;
-			UserEnvironment* userEnvironment;
-			FramerateCalculator* framerateCalculator;
-			Camera3D* camera;
-			Map3D* map;
-			// LuaManager* luaManager;
-			// Animator* animator;
-
-			// These are game-related objects.
-			WorldManager worldManager;
+			ScriptManager* scriptManager;
+			Renderer* renderer;
 			CharacterTracker* characterTracker;
-			EnemyRegistrar enemyRegistrar;
-			Player player;
-			Character* playerCharacter;
-			ScriptManager scriptManager;
-			DialogueHandler dialogueHandler;
-
-			// These are display-related objects.
-			TileInventoryDisplay tileInventoryDisplay;
-
+			Player* player;
+			TileInventoryDisplay* tileInventoryDisplay;
+			WorldManager* worldManager;
 			Scene* gameplayScene, *pauseScene;
+			EventHandler* eventHandler;
+			DialogueHandler* dialogueHandler;
+			Time* time;
+			EnemyRegistrar* enemyRegistrar;
+			SceneManager* sceneManager;
+			Animator* animator;
+			Camera3D* camera;
+			
+
+			Character* playerCharacter;
+			Map3D* map;
 
 			// These store the states of keys.
 			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false;

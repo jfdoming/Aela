@@ -6,8 +6,8 @@
 */
 
 #pragma once
+#include "../Game Object Provider/GameObjectProvider.h"
 #include "Turret.h"
-#include "../Player/Player.h"
 
 namespace Game {
 	class EnemyRegistrar {
@@ -15,9 +15,8 @@ namespace Game {
 		public:
 			EnemyRegistrar();
 
-			void setAelaObjects(Engine* engine);
-			void setPlayer(Player* player);
-			void setGameplayScene(Scene* scene);
+			void setup();
+			void scenesWereSetUp();
 
 			void updateRegisteredEnemies();
 
@@ -25,11 +24,12 @@ namespace Game {
 			Turret* getTurret(size_t id);
 
 		private:
-			std::vector<Turret*> turrets;
-
+			// These are obtained from GameObjectProvider.
 			Player* player;
 			Time* time;
+			Scene* gameplayScene;
 			ResourceManager* resourceManager;
-			Scene* scene;
+
+			std::vector<Turret*> turrets;
 	};
 }

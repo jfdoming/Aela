@@ -27,7 +27,7 @@ namespace Game {
 		worldLoader.setWorldManager(worldManager);
 		worldLoader.setEngine(engine);
 		std::cout << "About to load the test tiled maps.\n";
-		worldLoader.loadWorld("res/tiled maps/stage_1.txt", world);
+		worldLoader.loadWorld(MAP_BEING_EDITED, world);
 		std::cout << "Finished.\n";
 		worldManager->addWorld(&world);
 	}

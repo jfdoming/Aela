@@ -16,21 +16,21 @@ namespace Game {
 
 	class World {
 		public:
-		World() {}
+			World() {}
 
-		World(ChunkMap* chunks) {
-			this->chunks = *chunks;
-		}
+			World(ChunkMap* chunks) {
+				this->chunks = *chunks;
+			}
 
-		void addChunk(glm::ivec2 coordinate, Chunk* chunk);
-		void setChunks(ChunkMap* chunks);
-		Chunk* getChunk(glm::ivec2 position);
-		ChunkMap* getChunks();
-		void setMap3D(Map3D* map3D);
-		Map3D* getMap3D();
+			void addChunk(glm::ivec2 coordinate, Chunk* chunk);
+			void setChunks(ChunkMap* chunks);
+			Chunk* getChunk(glm::ivec2 position);
+			ChunkMap* getChunks();
+			void setMap3D(Map3D* map3D);
+			Map3D* getMap3D();
 
 		private:
-		ChunkMap chunks;
-		Map3D* map3D;
+			ChunkMap chunks;
+			Map3D* map3D;
 	};
 }

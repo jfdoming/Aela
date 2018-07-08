@@ -26,7 +26,7 @@ class GameplayManager {
 			userEnvironment = engine->getUserEnvironment();
 			framerateCalculator = engine->getFramerateCalculator();
 			camera = engine->getRendererReference().getCamera();
-			physicsManager = engine->getPhysicsManager();
+			physics = engine->getPhysics();
 		}
 
 		void setup();
@@ -55,7 +55,7 @@ class GameplayManager {
 		UserEnvironment* userEnvironment;
 		FramerateCalculator* framerateCalculator;
 		Camera3D* camera;
-		Physics* physicsManager;
+		Physics* physics;
 
 		// These are game-related objects.
 		Player player;

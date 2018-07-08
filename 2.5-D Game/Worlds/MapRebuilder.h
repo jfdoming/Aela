@@ -17,6 +17,8 @@ namespace Game {
 		public:
 			MapRebuilder();
 
+			void setup();
+
 			void rebuildMap(World* world, size_t currentWorldID, CharacterTracker* characterTracker);
 
 			void bindMap(Map3D* map);

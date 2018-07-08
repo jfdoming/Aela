@@ -8,10 +8,9 @@
 */
 
 #pragma once
-#include <unordered_map>
-#include "../Character/Character.h"
-#include "../Worlds/WorldManager.h"
+#include "../Game Object Provider/GameObjectProvider.h"
 #include "../Worlds/TileInventory.h"
+#include <unordered_map>
 
 namespace Game {
 	class Player {

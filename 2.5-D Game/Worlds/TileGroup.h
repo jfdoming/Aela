@@ -25,6 +25,7 @@ namespace Game {
 			TileMap* getTiles();
 
 			Tile* getFloorTile(TileAtlas* tileAtlas);
+			Tile* getSwitchableFloorTile(TileAtlas* tileAtlas);
 			bool containsCollidableTile(TileAtlas* tileAtlas);
 			bool isCollidable(TileAtlas* tileAtlas);
 

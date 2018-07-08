@@ -24,3 +24,11 @@ TileDirection Game::Movement::getDirection() {
 bool Game::Movement::isATeleportation() {
 	return teleportation;
 }
+
+void Game::Movement::setAnimated(bool animated) {
+	this->animated = animated;
+}
+
+bool Game::Movement::isAnimated() {
+	return animated;
+}

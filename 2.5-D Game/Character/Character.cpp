@@ -24,10 +24,6 @@ Game::Character::Character(std::string name) : Character() {
 	this->name = name;
 }
 
-void Game::Character::setup(Location* location) {
-	this->location = *location;
-}
-
 void Game::Character::setLocation(Location* location) {
 	this->location = *location;
 }

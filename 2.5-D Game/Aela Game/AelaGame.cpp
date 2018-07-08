@@ -6,6 +6,13 @@
 */
 
 #include "AelaGame.h"
+#include "../Worlds/WorldManager.h"
+#include "../Character/CharacterTracker.h"
+#include "../Enemies/EnemyRegistrar.h"
+#include "../Scripts/ScriptManager.h"
+#include "../Player/Player.h"
+#include "../Dialogue/DialogueHandler.h"
+#include "../Worlds/TileInventoryDisplay.h"
 #include "Events/EventListener.h"
 #include "../Scripts/Scripts to Move to LUA/GameScript.h"
 #include "../Scripts/Scripts to Move to LUA/ResourceScript.h"
@@ -15,46 +22,76 @@
 #include "../Particles/TileSwitchParticleEmitter.h"
 #include "../Utilities/GameConstants.h"
 #include "../Resources/ResourceInfo.h"
+#include "../Scripts/Scripts to Move to LUA/ScriptObjects.h"
 
 using namespace Aela;
 
-Game::AelaGame::AelaGame(Engine* engine) : engine(engine), tileInventoryDisplay(engine) {
-	// This just sets properties.
-	window = engine->getWindow();
-	renderer = engine->getRenderer();
-	eventHandler = engine->getEventHandler();
-	time = engine->getTime();
-	sceneManager = engine->getSceneManager();
-	resourceManager = engine->getResourceManager();
-	audioPlayer = engine->getAudioPlayer();
-	animator = engine->getAnimator();
-	userEnvironment = engine->getUserEnvironment();
-	framerateCalculator = engine->getFramerateCalculator();
-	camera = engine->getRendererReference().getCamera();
-	// luaManager = engine->getLuaManager();
-	// animator = engine->getAnimator();
+Game::AelaGame::AelaGame() {
+	cameraMode = CameraMode::PLAYER_LOCKED;
+
+	worldManager = new WorldManager();
+	characterTracker = new CharacterTracker();
+	enemyRegistrar = new EnemyRegistrar();
+	player = new Player();
+	scriptManager = new ScriptManager();
+	dialogueHandler = new DialogueHandler();
+	tileInventoryDisplay = new TileInventoryDisplay();
+	TileAtlas* tileAtlas = new TileAtlas();
+
+	GameObjectProvider::setWorldManager(worldManager);
+	GameObjectProvider::setCharacterTracker(characterTracker);
+	GameObjectProvider::setEnemyRegistrar(enemyRegistrar);
+	GameObjectProvider::setPlayer(player);
+	GameObjectProvider::setScriptManager(scriptManager);
+	GameObjectProvider::setDialogueHandler(dialogueHandler);
+	GameObjectProvider::setTileInventoryDisplay(tileInventoryDisplay);
+	GameObjectProvider::setTileAtlas(tileAtlas);
+	GameObjectProvider::setGame(this);
+
+	engine = GameObjectProvider::getEngine();
+	resourceManager = GameObjectProvider::getResourceManager();
+	renderer = GameObjectProvider::getRenderer();
+	eventHandler = GameObjectProvider::getEventHandler();
+	time = GameObjectProvider::getTime();
+	sceneManager = GameObjectProvider::getSceneManager();
+	animator = GameObjectProvider::getAnimator();
+	camera = GameObjectProvider::getCamera();
 
 	// This isn't actually necessary since RESOURCE_ROOT is the default for the ResourceManager.
 	// However, if ResourceManager's RESOURCE_ROOT changes in Project Aela, then this will keep
 	// the game from breaking.
 	resourceManager->setResourceRoot(RESOURCE_ROOT);
 
-	cameraMode = CameraMode::PLAYER_LOCKED;
+	characterTracker->setup();
+	dialogueHandler->setup();
+	enemyRegistrar->setup();
+	tileInventoryDisplay->setup();
+}
+
+Game::AelaGame::~AelaGame() {
+	scriptManager->runScript("unload resources");
 }
 
 void Game::AelaGame::loadResources() {
-	scriptManager.runScript("load materials");
-	scriptManager.runScript("load models");
-	scriptManager.runScript("load textures");
-	scriptManager.runScript("load sprite sheets");
-	scriptManager.runScript("load particles");
-	scriptManager.runScript("load skyboxes");
-	scriptManager.runScript("load maps");
-	scriptManager.runScript("load tiled maps");
+	scriptManager->runScript("setup script objects");
+	scriptManager->runScript("load materials");
+	scriptManager->runScript("load models");
+	scriptManager->runScript("load textures");
+	scriptManager->runScript("load sprite sheets");
+	scriptManager->runScript("load particles");
+	scriptManager->runScript("load skyboxes");
+	scriptManager->runScript("load maps");
+	scriptManager->runScript("load tiled maps");
 }
 
 void Game::AelaGame::loadScenes() {
-	scriptManager.runScript("load scenes");
+	scriptManager->runScript("load scenes");
+
+	gameplayScene = GameObjectProvider::getGameplayScene();
+	pauseScene = GameObjectProvider::getPauseScene();
+
+	characterTracker->scenesWereSetUp();
+	enemyRegistrar->scenesWereSetUp();
 }
 
 void Game::AelaGame::setup() {
@@ -65,16 +102,15 @@ void Game::AelaGame::setup() {
 	loadScenes();
 
 	// Setup the scripts of the game!
-	GameScripts::setupGameScripts(this, engine);
+	Scripts::setupScripts();
 
-	engine->getRendererReference().activateFeature(RendererFeature::MSAA_2D_X4);
-	engine->getRendererReference().activateFeature(RendererFeature::MSAA_3D_X4);
+	renderer->activateFeature(RendererFeature::MSAA_2D_X4);
+	renderer->activateFeature(RendererFeature::MSAA_3D_X4);
 
-	characterTracker = worldManager.getCharacterTracker();
+	using namespace Game;
 
 	// Setup the player!
 	playerCharacter = new Character();
-	playerCharacter->setup(&Location(0, glm::ivec2(0, 0), glm::ivec3(14, 0, 6)));
 	playerCharacter->setTextureName("character");
 	playerCharacter->setName(PLAYER_NAME);
 	playerCharacter->setMaxHealth(100);
@@ -82,41 +118,34 @@ void Game::AelaGame::setup() {
 	size_t playerID;
 	if (!characterTracker->trackCharacter(playerCharacter, &playerID)) {
 		// Is this even possible to reach?!
-		AelaErrorHandling::windowError("Aela Game", (std::string) "There was a problem setting up the player. This error "
+		AelaErrorHandling::windowError("Aela Game", (std::string) "There was a problem setting up the player-> This error "
 			+ "is supposed to be impossible to reach.");
 	}
 	characterTracker->setPlayer(playerID);
 
-	enemyRegistrar.setPlayer(&player);
-	enemyRegistrar.setAelaObjects(engine);
-
 	for (int i = 0; i < 3; i++) {
-		player.getTileInventory()->addTile(&Tile(1));
+		player->getTileInventory()->addTile(&Tile(1));
 	}
 
-	GameScripts::runStartingScripts();
+	Scripts::runStartingScripts();
 
-	tileInventoryDisplay.setGameObjects(&player, &worldManager);
-	tileInventoryDisplay.refreshSubMenu();
+	tileInventoryDisplay->refreshSubMenu();
 
 	// Tell the character manager that we've added all of our characters!
 	characterTracker->generateCharacterModels(resourceManager);
 
+	player->setCharacter(playerCharacter);
+	player->setCharacterID(playerID);
+
 	// Setup the world manager!
-	worldManager.setup(engine, &scriptManager, &dialogueHandler, playerCharacter);
-	worldManager.setCurrentWorld(0);
-	map = worldManager.getMap3D();
+	worldManager->setup();
+	worldManager->setCurrentWorld(0);
+	map = worldManager->getMap3D();
 	gameplayScene->setMap(map);
 	pauseScene->setMap(map);
 
-	// Setup the dialogue handler!
-	dialogueHandler.setup(time, eventHandler, &scriptManager);
-
 	eventHandler->addListener(EventConstants::KEY_RELEASED, bindListener(AelaGame::onEvent, this));
 	eventHandler->addListener(EventConstants::KEY_PRESSED, bindListener(AelaGame::onEvent, this));
-
-	player.setCharacter(playerCharacter);
-	player.setCharacterID(playerID);
 }
 
 void Game::AelaGame::update() {
@@ -127,14 +156,14 @@ void Game::AelaGame::update() {
 			/*float tint = playerCharacter->getHealth() / 100.0f;
 			renderer->set3DTint(&ColourRGBA(1, tint, tint, 1));*/
 
-			if (!playerCharacter->isMoving() && !dialogueHandler.dialogueIsBeingShown() && cameraMode == CameraMode::PLAYER_LOCKED
+			if (!playerCharacter->isMoving() && !dialogueHandler->dialogueIsBeingShown() && cameraMode == CameraMode::PLAYER_LOCKED
 				&& !playerCharacter->isFrozen()) {
 				if (movingRight) {
 					if (playerCharacter->getDirectionFacing() != TileDirection::RIGHT && !playerCharacter->animationHasJustEnded()) {
 						characterTracker->turnTrackedCharacter(playerCharacter, TileDirection::RIGHT);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
 					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
-						worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::RIGHT);
+						worldManager->moveCharacterIfPossible(player->getCharacterID(), TileDirection::RIGHT);
 					}
 				}
 				if (movingForward) {
@@ -142,7 +171,7 @@ void Game::AelaGame::update() {
 						characterTracker->turnTrackedCharacter(playerCharacter, TileDirection::FORWARD);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
 					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
-						worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::FORWARD);
+						worldManager->moveCharacterIfPossible(player->getCharacterID(), TileDirection::FORWARD);
 					}
 				}
 				if (movingLeft) {
@@ -150,7 +179,7 @@ void Game::AelaGame::update() {
 						characterTracker->turnTrackedCharacter(playerCharacter, TileDirection::LEFT);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
 					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
-						worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::LEFT);
+						worldManager->moveCharacterIfPossible(player->getCharacterID(), TileDirection::LEFT);
 					}
 				}
 				if (movingBackward) {
@@ -158,7 +187,7 @@ void Game::AelaGame::update() {
 						characterTracker->turnTrackedCharacter(playerCharacter, TileDirection::BACKWARD);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
 					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
-						worldManager.moveCharacterIfPossible(player.getCharacterID(), TileDirection::BACKWARD);
+						worldManager->moveCharacterIfPossible(player->getCharacterID(), TileDirection::BACKWARD);
 					}
 				}
 				if (pressingTileSelectLeft && time->getCurrentTimeInNanos() > timeAtLastTileSelect + timeBetweenTileSelects) {
@@ -170,16 +199,16 @@ void Game::AelaGame::update() {
 			}
 		}
 
-		worldManager.update();
-		enemyRegistrar.updateRegisteredEnemies();
-		dialogueHandler.update();
+		worldManager->update();
+		enemyRegistrar->updateRegisteredEnemies();
+		dialogueHandler->update();
 	}
 }
 
 void Game::AelaGame::onEvent(Event* event) {
 	if (sceneManager->getCurrentSceneId() == WORLD_GAMEPLAY_SCENE) {
 		// This processes events if the player is not in dialogue.
-		if (!dialogueHandler.dialogueIsBeingShown()) {
+		if (!dialogueHandler->dialogueIsBeingShown()) {
 			if (event->getType() == EventConstants::KEY_PRESSED) {
 				KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
 				switch (keyEvent->getKeycode()) {
@@ -190,13 +219,13 @@ void Game::AelaGame::onEvent(Event* event) {
 						}
 						break;
 					case SDLK_RETURN:
-						if (!pressingReturn && !dialogueHandler.hadJustFinishedDialogue()) {
+						if (!pressingReturn && !dialogueHandler->hadJustFinishedDialogue()) {
 							Location* playerLocation = playerCharacter->getLocation();
 							glm::vec3 tile = playerLocation->getTileGroup();
 							glm::vec2 chunk = playerLocation->getChunk();
-							worldManager.getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
+							worldManager->getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
 							Location location(playerLocation->getWorld(), chunk, tile);
-							worldManager.runPromptedScriptOfTile(&location);
+							worldManager->runPromptedScriptOfTile(&location);
 							pressingReturn = true;
 						}
 						break;
@@ -244,7 +273,7 @@ void Game::AelaGame::onEvent(Event* event) {
 	// This occurs for any scene.
 	if (event->getType() == EventConstants::KEY_PRESSED) {
 		KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
-		if (!dialogueHandler.dialogueIsBeingShown()) {
+		if (!dialogueHandler->dialogueIsBeingShown()) {
 			switch (keyEvent->getKeycode()) {
 				case SDLK_d:
 					pressingRight = true;
@@ -393,38 +422,48 @@ void Game::AelaGame::onEvent(Event* event) {
 					switchCameraMode(CameraMode::PLAYER_LOCKED);
 				}
 				break;
+			case SDLK_1:
+				// This is here for debugging!
+				characterTracker->teleportTrackedCharacter(playerCharacter,
+					&Location(1, glm::ivec2(0, 0), glm::ivec3(12, 0, 12)), false);
+				worldManager->setCurrentWorld(1);
+				break;
 		}
 	}
 }
 
 void Game::AelaGame::setupScripts() {
+	using namespace Scripts;
+
 	// Add vital scripts here!
-	scriptManager.addScript("load materials", std::bind(&loadMaterials, resourceManager));
-	scriptManager.addScript("load models", std::bind(&loadModels, resourceManager));
-	scriptManager.addScript("load textures", std::bind(&loadTextures, resourceManager));
-	scriptManager.addScript("load sprite sheets", std::bind(&loadSpriteSheets, resourceManager));
-	scriptManager.addScript("load particles", std::bind(&loadParticles, resourceManager));
-	scriptManager.addScript("load skyboxes", std::bind(&loadSkyboxes, resourceManager));
-	scriptManager.addScript("load tiled maps", std::bind(&loadTiledMaps, engine, &worldManager));
-	scriptManager.addScript("load maps", std::bind(&loadMaps, resourceManager, renderer));
-	scriptManager.addScript("load scenes", std::bind(&setupScenes, engine, this));
+	scriptManager->addScript("setup script objects", std::bind(&setupScriptObjects));
+	scriptManager->addScript("load materials", std::bind(&loadMaterials));
+	scriptManager->addScript("load models", std::bind(&loadModels));
+	scriptManager->addScript("load textures", std::bind(&loadTextures));
+	scriptManager->addScript("load sprite sheets", std::bind(&loadSpriteSheets));
+	scriptManager->addScript("load particles", std::bind(&loadParticles));
+	scriptManager->addScript("load skyboxes", std::bind(&loadSkyboxes));
+	scriptManager->addScript("load tiled maps", std::bind(&loadTiledMaps));
+	scriptManager->addScript("load maps", std::bind(&loadMaps));
+	scriptManager->addScript("load scenes", std::bind(&setupScenes));
+	scriptManager->addScript("unload resources", std::bind(&unloadResources));
 }
 
 void Game::AelaGame::tileSelectUpAction() {
 	if (animator->get2DTrack("selector_box_movement") == nullptr) {
-		player.getTileInventory()->increaseCurrentTileIfPossible();
-		tileInventoryDisplay.animateSelectorBox();
+		player->getTileInventory()->increaseCurrentTileIfPossible();
+		tileInventoryDisplay->animateSelectorBox();
 	}
-	tileInventoryDisplay.refreshSubMenu();
+	tileInventoryDisplay->refreshSubMenu();
 	timeAtLastTileSelect = time->getCurrentTimeInNanos();
 }
 
 void Game::AelaGame::tileSelectDownAction() {
 	if (animator->get2DTrack("selector_box_movement") == nullptr) {
-		player.getTileInventory()->decreaseCurrentTileIfPossible();
-		tileInventoryDisplay.animateSelectorBox();
+		player->getTileInventory()->decreaseCurrentTileIfPossible();
+		tileInventoryDisplay->animateSelectorBox();
 	}
-	tileInventoryDisplay.refreshSubMenu();
+	tileInventoryDisplay->refreshSubMenu();
 	timeAtLastTileSelect = time->getCurrentTimeInNanos();
 }
 
@@ -484,9 +523,9 @@ bool Game::AelaGame::useTileSwitchGun() {
 	Location* playerLocation = playerCharacter->getLocation();
 	glm::vec3 tile = playerLocation->getTileGroup();
 	glm::vec2 chunk = playerLocation->getChunk();
-	worldManager.getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
+	worldManager->getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
 	Location location(playerLocation->getWorld(), chunk, tile);
-	World* worldPtr = worldManager.getWorld(playerLocation->getWorld());
+	World* worldPtr = worldManager->getWorld(playerLocation->getWorld());
 	if (worldPtr == nullptr) {
 		return false;
 	}
@@ -498,17 +537,20 @@ bool Game::AelaGame::useTileSwitchGun() {
 	if (tileGroupPtr == nullptr) {
 		return false;
 	}
-	//if (worldManager.getTileAtlas()->getTileType(tilePtr->getType())->getBehaviour() != TileBehaviour::FLOOR
-	//	|| tilePtr->getType() == 0/* || tilePtr->getType() == player.getTileInventory()->getCurrentTile()->getType()*/) {
+	//if (worldManager->getTileAtlas()->getTileType(tilePtr->getType())->getBehaviour() != TileBehaviour::FLOOR
+	//	|| tilePtr->getType() == 0/* || tilePtr->getType() == player->getTileInventory()->getCurrentTile()->getType()*/) {
 	//	return false;
 	//}
 
-	Tile switchedOutTile = *player.getTileInventory()->switchCurrentTile(tileGroupPtr, worldManager.getTileAtlas());
-	GLTexture* texture = static_cast<GLTexture*>(switchedOutTile.getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
-	worldManager.runTileSwitchScriptOfTile(&location);
-	addTileSwitchParticleEmitter(&location, texture);
-	tileInventoryDisplay.refreshSubMenu();
-	worldManager.rebuildMapWhenPossible();
+	Tile* switchedOutTile = player->getTileInventory()->switchCurrentTile(tileGroupPtr);
+
+	if (switchedOutTile != nullptr) {
+		GLTexture* texture = static_cast<GLTexture*>(switchedOutTile->getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
+		worldManager->runTileSwitchScriptOfTile(&location);
+		addTileSwitchParticleEmitter(&location, texture);
+		tileInventoryDisplay->refreshSubMenu();
+		worldManager->rebuildMapWhenPossible();
+	}
 	return true;
 }
 
@@ -543,37 +585,19 @@ void Game::AelaGame::switchScene(int sceneID) {
 	currentScene = sceneID; 
 }
 
-Game::WorldManager* Game::AelaGame::getWorldManager() {
-	return &worldManager;
+void Game::AelaGame::startNewGame() {
+	sceneManager->setCurrentScene(WORLD_GAMEPLAY_SCENE);
+	switchScene(WORLD_GAMEPLAY_SCENE);
+
+	scriptManager->runScript("start_new_game");
 }
 
-Game::EnemyRegistrar* Game::AelaGame::getEnemyRegistrar() {
-	return &enemyRegistrar;
-}
-
-Game::ScriptManager* Game::AelaGame::getScriptManager() {
-	return &scriptManager;
-}
-
-Game::DialogueHandler* Game::AelaGame::getDialogueHandler() {
-	return &dialogueHandler;
+void Game::AelaGame::continueGame() {
+	sceneManager->setCurrentScene(WORLD_GAMEPLAY_SCENE);
+	switchScene(WORLD_GAMEPLAY_SCENE);
 }
 
 void Game::AelaGame::setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
 	std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage) {
-	tileInventoryDisplay.setMenuItems(tileInventorySubMenu, tileInventoryLabel, tileInventoryBoxImage);
-}
-
-void Game::AelaGame::setGameplayScene(Scene* gameplayScene) {
-	this->gameplayScene = gameplayScene;
-	worldManager.setGameplayScene(gameplayScene);
-	enemyRegistrar.setGameplayScene(gameplayScene);
-}
-
-void Game::AelaGame::setPauseScene(Scene* pauseScene) {
-	this->pauseScene = pauseScene;
-}
-
-void Game::AelaGame::cleanup() {
-	unloadResources(resourceManager);
+	tileInventoryDisplay->setMenuItems(tileInventorySubMenu, tileInventoryLabel, tileInventoryBoxImage);
 }

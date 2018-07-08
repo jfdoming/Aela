@@ -6,6 +6,7 @@
 */
 
 #pragma once
+#include "../Game Object Provider/GameObjectProvider.h"
 #include "3D/Models/Model.h"
 #include "../Location/Location.h"
 #include "3D/Models/ModelEntity.h"
@@ -22,10 +23,7 @@ namespace Game {
 			Character();
 			Character(std::string name);
 
-			void setup(Location* location);
-
 			// These are getters, setters and adders.
-			void setLocation(Location* location);
 			Location* getLocation();
 			Location* getLocationBeforeAnimation();
 			void setModel(Model* model);
@@ -114,5 +112,7 @@ namespace Game {
 
 			void turnSimple(TileDirection direction);
 			void moveSimple(Movement* movement, std::string scriptOnCompletion);
+
+			void setLocation(Location* location);
 	};
 }

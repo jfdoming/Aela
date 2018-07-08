@@ -129,7 +129,7 @@ void GameplayManager::updatePlayerMovements() {
 	// This literally just checks to see if the player's bounding box is inside of another model's bounding box. If the player
 	// is moving fast enough, they could moveSimple past another model's bounding box.
 	// Actually, for now, forget collision.
-	// if (!physicsManager->collidingInMap(player.getEntityIDInMap(), currentMap)) {
+	// if (!physics->collidingInMap(player.getEntityIDInMap(), currentMap)) {
 		// There was not a collision! Move the player!
 		player.getEntity()->setPosition(*playerBox->getPosition());
 	/*} else {
