@@ -13,3 +13,4 @@
 // way.
 #define RESOURCE_ROOT "../../"
 #define TILED_MAP_LOCATION "res/tiled maps/"
+#define MAP_BEING_EDITED "res/tiled maps/interiors.txt"

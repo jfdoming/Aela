@@ -6,8 +6,8 @@
 #include "../Scripts/ScriptManager.h"
 #include "../Player/Player.h"
 #include "../Dialogue/DialogueHandler.h"
-#include "../Worlds/TileInventoryDisplay.h"
-#include "../Worlds/TileAtlas.h"
+#include "../Tiles/TileInventoryDisplay.h"
+#include "../Tiles/TileAtlas.h"
 #include "Events/EventListener.h"
 #include "../../Project Aela/Aela_Engine.h"
 
@@ -25,6 +25,7 @@ TileInventoryDisplay* GameObjectProvider::tileInventoryDisplay = nullptr;
 TileAtlas* GameObjectProvider::tileAtlas = nullptr;
 Scene* GameObjectProvider::gameplayScene = nullptr;
 Scene* GameObjectProvider::pauseScene = nullptr;
+WorldExporter* GameObjectProvider::worldExporter = nullptr;
 
 // These are pointers to scenes are should be set by a script that constructs the scenes.
 static Scene* gameplayScene, *pauseScene;
@@ -129,6 +130,10 @@ TileAtlas* GameObjectProvider::getTileAtlas() {
 	return tileAtlas;
 }
 
+WorldExporter* Game::GameObjectProvider::getWorldExporter() {
+	return worldExporter;
+}
+
 Scene* GameObjectProvider::getGameplayScene() {
 	return gameplayScene;
 }
@@ -170,6 +175,10 @@ void GameObjectProvider::setTileInventoryDisplay(TileInventoryDisplay* setTileIn
 
 void GameObjectProvider::setTileAtlas(TileAtlas* setTileAtlas) {
 	tileAtlas = setTileAtlas;
+}
+
+void Game::GameObjectProvider::setWorldExporter(WorldExporter* setWorldExporter) {
+	worldExporter = setWorldExporter;
 }
 
 void GameObjectProvider::setGameplayScene(Scene* setGameplayScene) {

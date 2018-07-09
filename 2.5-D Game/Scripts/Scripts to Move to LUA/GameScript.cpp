@@ -20,13 +20,21 @@ void Scripts::startNewGame() {
 	characterTracker->teleportTrackedCharacter(player->getCharacter(),
 		&Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 2)), false);
 	// worldManager->setCurrentWorld(0);
+
+	// This sets up the player's tile inventory for a new game.
+	for (int i = 0; i < 3; i++) {
+		player->getTileInventory()->addTile(&Tile(1));
+	}
 }
+
+void Scripts::continueGame() {}
 
 void Scripts::addScriptsToGameWorld() {
 	scriptManager->addScript("setup_characters", std::bind(&setupCharacters));
 	scriptManager->addScript("setup_teleporters", std::bind(&setupTeleporters));
 	scriptManager->addScript("hide_dialogue", std::bind(&hideDialogue));
 	scriptManager->addScript("start_new_game", std::bind(&startNewGame));
+	scriptManager->addScript("continue_game", std::bind(&continueGame));
 	// scriptManager->addScript("")
 }
 

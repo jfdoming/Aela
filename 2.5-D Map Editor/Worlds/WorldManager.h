@@ -67,7 +67,6 @@ namespace Game {
 			void createChunkInCurrentWorld(glm::ivec2 coordinate);
 			void createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, unsigned int layer);
 
-			// This shoudn't actually be in this class, but I'm lazy.
 			bool exportCurrentWorld();
 
 		private:

@@ -12,7 +12,7 @@
 #include "../Scripts/ScriptManager.h"
 #include "../Player/Player.h"
 #include "../Dialogue/DialogueHandler.h"
-#include "../Worlds/TileInventoryDisplay.h"
+#include "../Tiles/TileInventoryDisplay.h"
 #include "Events/EventListener.h"
 #include "../Scripts/Scripts to Move to LUA/GameScript.h"
 #include "../Scripts/Scripts to Move to LUA/ResourceScript.h"
@@ -123,10 +123,6 @@ void Game::AelaGame::setup() {
 	}
 	characterTracker->setPlayer(playerID);
 
-	for (int i = 0; i < 3; i++) {
-		player->getTileInventory()->addTile(&Tile(1));
-	}
-
 	Scripts::runStartingScripts();
 
 	tileInventoryDisplay->refreshSubMenu();
@@ -190,6 +186,18 @@ void Game::AelaGame::update() {
 						worldManager->moveCharacterIfPossible(player->getCharacterID(), TileDirection::BACKWARD);
 					}
 				}
+				if (gameMode == GameMode::MAP_EDITOR) {
+					if (movingUp) {
+						if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
+							worldManager->moveCharacterIfPossible(player->getCharacterID(), TileDirection::UP);
+						}
+					}
+					if (movingDown) {
+						if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn) {
+							worldManager->moveCharacterIfPossible(player->getCharacterID(), TileDirection::DOWN);
+						}
+					}
+				}
 				if (pressingTileSelectLeft && time->getCurrentTimeInNanos() > timeAtLastTileSelect + timeBetweenTileSelects) {
 					tileSelectUpAction();
 				}
@@ -237,6 +245,11 @@ void Game::AelaGame::onEvent(Event* event) {
 							// animator->pause3DAnimations();
 						}
 						break;
+					case SDLK_BACKSPACE:
+						if (gameMode == GameMode::MAP_EDITOR) {
+							clearTilesAtPlayerLocation();
+						}
+						break;
 				}
 			}
 		}
@@ -281,6 +294,8 @@ void Game::AelaGame::onEvent(Event* event) {
 					movingForward = false;
 					movingLeft = false;
 					movingBackward = false;
+					movingUp = false;
+					movingDown = false;
 					break;
 				case SDLK_w:
 					pressingForward = true;
@@ -288,6 +303,8 @@ void Game::AelaGame::onEvent(Event* event) {
 					movingForward = true;
 					movingLeft = false;
 					movingBackward = false;
+					movingUp = false;
+					movingDown = false;
 					break;
 				case SDLK_a:
 					pressingLeft = true;
@@ -295,6 +312,8 @@ void Game::AelaGame::onEvent(Event* event) {
 					movingForward = false;
 					movingLeft = true;
 					movingBackward = false;
+					movingUp = false;
+					movingDown = false;
 					break;
 				case SDLK_s:
 					pressingBackward = true;
@@ -302,21 +321,44 @@ void Game::AelaGame::onEvent(Event* event) {
 					movingForward = false;
 					movingLeft = false;
 					movingBackward = true;
+					movingUp = false;
+					movingDown = false;
 					break;
-				case SDLK_UP:
+				case SDLK_LEFT:
 					if (characterTracker->isPlayerDead() || pressingTileSelectLeft || pressingTileSelectRight) {
 						break;
 					}
 					tileSelectUpAction();
 					pressingTileSelectLeft = true;
 					break;
-				case SDLK_DOWN:
+				case SDLK_RIGHT:
 					if (characterTracker->isPlayerDead() || pressingTileSelectLeft || pressingTileSelectRight) {
 						break;
 					}
 					tileSelectDownAction();
 					pressingTileSelectRight = true;
 					break;
+				case SDLK_LCTRL:
+					if (gameMode == GameMode::MAP_EDITOR) {
+						movingUp = false;
+						movingDown = true;
+						movingRight = false;
+						movingForward = false;
+						movingLeft = false;
+						movingBackward = false;
+					}
+					break;
+				case SDLK_SPACE: {
+					if (gameMode == GameMode::MAP_EDITOR) {
+						movingUp = true;
+						movingDown = false;
+						movingRight = false;
+						movingForward = false;
+						movingLeft = false;
+						movingBackward = false;
+					}
+					break;
+				}
 				case SDLK_LSHIFT:
 					if (!playerCharacter->getRunning()) {
 						playerCharacter->setRunning(true);
@@ -391,14 +433,21 @@ void Game::AelaGame::onEvent(Event* event) {
 				pressingBackward = false;
 				movingBackward = false;
 				break;
+
 			case SDLK_BACKSLASH:
 				pressingTileSwitch = false;
 				break;
-			case SDLK_UP: {
+			case SDLK_LCTRL:
+				movingDown = false;
+				break;
+			case SDLK_SPACE:
+				movingUp = false;
+				break;
+			case SDLK_LEFT: {
 				pressingTileSelectLeft = false;
 				break;
 			}
-			case SDLK_DOWN: {
+			case SDLK_RIGHT: {
 				pressingTileSelectRight = false;
 				break;
 			}
@@ -447,6 +496,28 @@ void Game::AelaGame::setupScripts() {
 	scriptManager->addScript("load maps", std::bind(&loadMaps));
 	scriptManager->addScript("load scenes", std::bind(&setupScenes));
 	scriptManager->addScript("unload resources", std::bind(&unloadResources));
+}
+
+void Game::AelaGame::clearTilesAtPlayerLocation() {
+	Location* playerLocation = playerCharacter->getLocation();
+	glm::vec3 tile = playerLocation->getTileGroup();
+	glm::vec2 chunk = playerLocation->getChunk();
+	World* worldPtr = worldManager->getWorld(playerLocation->getWorld());
+	Chunk* chunkPtr = worldPtr->getChunk(chunk);
+
+	if (chunkPtr == nullptr) {
+		worldManager->createChunkInCurrentWorld(chunk);
+		chunkPtr = worldPtr->getChunk(chunk);
+	}
+
+	TileGroup* tileGroup = chunkPtr->getTileGroup(tile);
+	if (tileGroup == nullptr) {
+		worldManager->createLayerInCurrentWorld(chunk, (unsigned int) tile.y);
+		tileGroup = chunkPtr->getTileGroup(tile);
+	}
+
+	tileGroup->clear();
+	worldManager->rebuildMapWhenPossible();
 }
 
 void Game::AelaGame::tileSelectUpAction() {
@@ -523,35 +594,63 @@ bool Game::AelaGame::useTileSwitchGun() {
 	Location* playerLocation = playerCharacter->getLocation();
 	glm::vec3 tile = playerLocation->getTileGroup();
 	glm::vec2 chunk = playerLocation->getChunk();
-	worldManager->getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
-	Location location(playerLocation->getWorld(), chunk, tile);
-	World* worldPtr = worldManager->getWorld(playerLocation->getWorld());
-	if (worldPtr == nullptr) {
-		return false;
-	}
-	Chunk* chunkPtr = worldPtr->getChunk(chunk);
-	if (chunkPtr == nullptr) {
-		return false;
-	}
-	TileGroup* tileGroupPtr = worldPtr->getChunk(chunk)->getTileGroup(tile);
-	if (tileGroupPtr == nullptr) {
-		return false;
-	}
-	//if (worldManager->getTileAtlas()->getTileType(tilePtr->getType())->getBehaviour() != TileBehaviour::FLOOR
-	//	|| tilePtr->getType() == 0/* || tilePtr->getType() == player->getTileInventory()->getCurrentTile()->getType()*/) {
-	//	return false;
-	//}
 
-	Tile* switchedOutTile = player->getTileInventory()->switchCurrentTile(tileGroupPtr);
+	if (gameMode == GameMode::GAMEPLAY) {
+		worldManager->getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
+		Location location(playerLocation->getWorld(), chunk, tile);
+		World* worldPtr = worldManager->getWorld(playerLocation->getWorld());
 
-	if (switchedOutTile != nullptr) {
-		GLTexture* texture = static_cast<GLTexture*>(switchedOutTile->getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
-		worldManager->runTileSwitchScriptOfTile(&location);
-		addTileSwitchParticleEmitter(&location, texture);
+		if (worldPtr == nullptr) {
+			return false;
+		}
+		Chunk* chunkPtr = worldPtr->getChunk(chunk);
+		if (chunkPtr == nullptr) {
+			return false;
+		}
+		TileGroup* tileGroupPtr = worldPtr->getChunk(chunk)->getTileGroup(tile);
+		if (tileGroupPtr == nullptr) {
+			return false;
+		}
+		//if (worldManager->getTileAtlas()->getTileType(tilePtr->getType())->getBehaviour() != TileBehaviour::FLOOR
+		//	|| tilePtr->getType() == 0/* || tilePtr->getType() == player->getTileInventory()->getCurrentTile()->getType()*/) {
+		//	return false;
+		//}
+
+		Tile* switchedOutTile = player->getTileInventory()->switchCurrentTile(tileGroupPtr);
+
+		if (switchedOutTile != nullptr) {
+			GLTexture* texture = static_cast<GLTexture*>(switchedOutTile->getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
+			worldManager->runTileSwitchScriptOfTile(&location);
+			addTileSwitchParticleEmitter(&location, texture);
+			tileInventoryDisplay->refreshSubMenu();
+			worldManager->rebuildMapWhenPossible();
+		}
+		return true;
+	} else if (gameMode == GameMode::MAP_EDITOR) {
+		World* worldPtr = worldManager->getWorld(playerLocation->getWorld());
+		Chunk* chunkPtr = worldPtr->getChunk(chunk);
+
+		if (chunkPtr == nullptr) {
+			worldManager->createChunkInCurrentWorld(chunk);
+			chunkPtr = worldPtr->getChunk(chunk);
+		}
+
+		TileGroup* tileGroup = chunkPtr->getTileGroup(tile);
+		if (tileGroup == nullptr) {
+			worldManager->createLayerInCurrentWorld(chunk, (unsigned int) tile.y);
+			tileGroup = chunkPtr->getTileGroup(tile);
+		}
+
+		//if (worldManager.getTileAtlas()->getTileType(tilePtr->getType())->getBehaviour() != TileBehaviour::FLOOR
+		//	/*|| tilePtr->getType() == 0 || tilePtr->getType() == player.getTileInventory()->getCurrentTile()->getType()*/) {
+		//	return false;
+		//}
+
+		player->getTileInventory()->placeTile(tileGroup);
+		// player.getTileInventory()->switchCurrentTile(tilePtr);
 		tileInventoryDisplay->refreshSubMenu();
 		worldManager->rebuildMapWhenPossible();
 	}
-	return true;
 }
 
 void Game::AelaGame::switchScene(int sceneID) {
@@ -586,15 +685,37 @@ void Game::AelaGame::switchScene(int sceneID) {
 }
 
 void Game::AelaGame::startNewGame() {
+	gameMode = GameMode::GAMEPLAY;
+
 	sceneManager->setCurrentScene(WORLD_GAMEPLAY_SCENE);
 	switchScene(WORLD_GAMEPLAY_SCENE);
 
 	scriptManager->runScript("start_new_game");
+	tileInventoryDisplay->refreshSubMenu();
 }
 
 void Game::AelaGame::continueGame() {
+	gameMode = GameMode::GAMEPLAY;
+
 	sceneManager->setCurrentScene(WORLD_GAMEPLAY_SCENE);
 	switchScene(WORLD_GAMEPLAY_SCENE);
+
+	scriptManager->runScript("continue_game");
+	tileInventoryDisplay->refreshSubMenu();
+}
+
+void Game::AelaGame::editMap() {
+	gameMode = GameMode::MAP_EDITOR;
+
+	sceneManager->setCurrentScene(WORLD_GAMEPLAY_SCENE);
+	switchScene(WORLD_GAMEPLAY_SCENE);
+
+	player->setupTileInventoryForMapEditor();
+	tileInventoryDisplay->refreshSubMenu();
+}
+
+GameMode Game::AelaGame::getGameMode() {
+	return gameMode;
 }
 
 void Game::AelaGame::setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,

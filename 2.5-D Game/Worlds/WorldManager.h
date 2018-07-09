@@ -39,6 +39,8 @@ namespace Game {
 			void setChunkRenderDistances(glm::vec3 chunkRenderDistances);
 			void setGameplayScene(Scene* gameplayScene);
 			void getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::vec2& chunk, TileDirection direction);
+			void createChunkInCurrentWorld(glm::ivec2 coordinate);
+			void createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, unsigned int layer);
 
 			void moveCharacterIfPossible(size_t id, TileDirection direction);
 			void moveCharacterIfPossible(std::string name, TileDirection direction);
@@ -53,6 +55,10 @@ namespace Game {
 			void runPromptedScriptOfTile(Location* location);
 			void runTileSwitchScriptOfTile(Location* location);
 
+			void setCoordinateLabel(std::shared_ptr<Label> coordinateLabel);
+
+			bool exportCurrentWorld();
+
 		private:
 			// These are obtained from GameObjectProvider.
 			ResourceManager* resourceManager;
@@ -61,10 +67,14 @@ namespace Game {
 			ScriptManager* scriptManager;
 			TileAtlas* tileAtlas;
 			Character* playerCharacter;
+			AelaGame* game;
+			WorldExporter* worldExporter;
 
 			std::vector<World> worlds;
 			size_t currentWorld;
 			MapRebuilder mapRebuilder;
+
+			std::shared_ptr<Label> coordinateLabel;
 
 			// This is a handle to an Aela 3D map. The chunks of a world are loaded into this map. Because Aela's 3D
 			// system revolves around maps, and because this game is part-3D-part-2D, there must be a Map3D somewhere!

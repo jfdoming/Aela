@@ -28,6 +28,7 @@ namespace Game {
 	class DialogueHandler;
 	class TileInventoryDisplay;
 	class TileAtlas;
+	class WorldExporter;
 
 	class GameObjectProvider {
 		public:
@@ -58,6 +59,7 @@ namespace Game {
 			static DialogueHandler* getDialogueHandler();
 			static TileInventoryDisplay* getTileInventoryDisplay();
 			static TileAtlas* getTileAtlas();
+			static WorldExporter* getWorldExporter();
 
 			static Scene* getGameplayScene();
 			static Scene* getPauseScene();
@@ -71,6 +73,8 @@ namespace Game {
 			static void setDialogueHandler(DialogueHandler* dialogueHandler);
 			static void setTileInventoryDisplay(TileInventoryDisplay* tileInventoryDisplay);
 			static void setTileAtlas(TileAtlas* tileAtlas);
+			static void setWorldExporter(WorldExporter* worldExporter);
+
 			static void setGameplayScene(Scene* gameplayScene);
 			static void setPauseScene(Scene* pauseScene);
 
@@ -91,6 +95,7 @@ namespace Game {
 			static DialogueHandler* dialogueHandler;
 			static TileInventoryDisplay* tileInventoryDisplay;
 			static TileAtlas* tileAtlas;
+			static WorldExporter* worldExporter;
 
 			// These are pointers to scenes are should be set by a script that constructs the scenes.
 			static Scene* gameplayScene, *pauseScene;

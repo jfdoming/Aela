@@ -20,6 +20,7 @@ namespace Scripts {
 	void setupTeleporters();
 
 	void startNewGame();
+	void continueGame();
 
 	// This adds all gameplay scripts to the ScriptManager and also binds tile-related scripts to their tiles.
 	void addScriptsToGameWorld();

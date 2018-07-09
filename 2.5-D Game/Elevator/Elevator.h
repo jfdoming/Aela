@@ -7,7 +7,7 @@
 */
 
 #pragma once
-#include "../Worlds/Tile.h"
+#include "../Tiles/Tile.h"
 
 namespace Game {
 	class Elevator {

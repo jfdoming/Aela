@@ -1,5 +1,6 @@
 #include "SceneScript.h"
 #include "../../Game Object Provider/GameObjectProvider.h"
+#include "../../Worlds/WorldManager.h"
 #include "ScriptObjects.h"
 #include "Scenes/SceneManager.h"
 #include "Menus/Label.h"
@@ -62,7 +63,7 @@ void Scripts::setupScenes() {
 
 	// This sets up text.
 	auto titleText = std::make_shared<Label>("Pokemon Meitnerium", xeroxLarge, &almostWhite);
-	titleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() / 1.5f));
+	titleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() / 1.6f));
 	auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xerox, &almostWhite);
 	ekkonGamesText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), ((int) (windowDimensions.getHeight() * 0.95)));
 
@@ -75,6 +76,10 @@ void Scripts::setupScenes() {
 		game->continueGame();
 	};
 
+	auto editMapAction = [](Engine* engine) {
+		game->editMap();
+	};
+
 	auto optionsAction = [](Engine* engine) {AelaErrorHandling::windowWarning("There are no options!"); };
 	auto exitAction = [](Engine* engine) {engine->getWindow()->quit(); };
 
@@ -83,7 +88,7 @@ void Scripts::setupScenes() {
 	auto startGameButton = std::make_shared<Button>();
 	startGameButton->setupOnClick(std::bind(startNewGameAction, engine));
 	startGameButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
-		(int) (windowDimensions.getHeight() / 1.42f));
+		(int) (windowDimensions.getHeight() / 1.5f));
 	startGameButton->setText("Start a New Game");
 	startGameButton->setTextFont(xerox);
 	startGameButton->setTextColour(almostWhitePtr);
@@ -94,16 +99,25 @@ void Scripts::setupScenes() {
 	auto continueGameButton = std::make_shared<Button>();
 	continueGameButton->setupOnClick(std::bind(continueGameAction, engine));
 	continueGameButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
-		(int) (windowDimensions.getHeight() / 1.42f + spacing));
+		(int) (windowDimensions.getHeight() / 1.5f + spacing));
 	continueGameButton->setText("Continue Game");
 	continueGameButton->setTextFont(xerox);
 	continueGameButton->setTextColour(almostWhitePtr);
 	continueGameButton->wrapAroundText();
 
+	auto editMapButton = std::make_shared<Button>();
+	editMapButton->setupOnClick(std::bind(editMapAction, engine));
+	editMapButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
+		(int) (windowDimensions.getHeight() / 1.5f + spacing * 2));
+	editMapButton->setText("Edit Map");
+	editMapButton->setTextFont(xerox);
+	editMapButton->setTextColour(almostWhitePtr);
+	editMapButton->wrapAroundText();
+
 	auto optionsButton = std::make_shared<Button>();
 	optionsButton->setupOnClick(std::bind(optionsAction, engine));
 	optionsButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
-		(int) (windowDimensions.getHeight() / 1.42f + spacing * 2));
+		(int) (windowDimensions.getHeight() / 1.5f + spacing * 3));
 	optionsButton->setText("Options");
 	optionsButton->setTextFont(xerox);
 	optionsButton->setTextColour(almostWhitePtr);
@@ -112,7 +126,7 @@ void Scripts::setupScenes() {
 	auto exitButton = std::make_shared<Button>();
 	exitButton->setupOnClick(std::bind(exitAction, engine));
 	exitButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
-		(int) (windowDimensions.getHeight() / 1.42f + spacing * 3));
+		(int) (windowDimensions.getHeight() / 1.5f + spacing * 4));
 	exitButton->setText("Exit");
 	exitButton->setTextFont(xerox);
 	exitButton->setTextColour(almostWhitePtr);
@@ -125,6 +139,7 @@ void Scripts::setupScenes() {
 	mainMenuScene->getMenu()->add(ekkonGamesText);
 	mainMenuScene->getMenu()->add(startGameButton);
 	mainMenuScene->getMenu()->add(continueGameButton);
+	mainMenuScene->getMenu()->add(editMapButton);
 	mainMenuScene->getMenu()->add(optionsButton);
 	mainMenuScene->getMenu()->add(exitButton);
 
@@ -193,6 +208,11 @@ void Scripts::setupScenes() {
 
 	characterTracker->setGameplayMenuItems(deathBackgroundRect, deathText);
 
+	// This sets up the coordinate text.
+	auto coordinateText = std::make_shared<Label>("", xerox, almostWhitePtr);
+	coordinateText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.10), (int) (windowDimensions.getHeight() * 0.10));
+	worldManager->setCoordinateLabel(coordinateText);
+
 	// This sets up the world gameplay scene, in which the player is given a top-down view of the world.
 	auto worldGameplayScene = new Scene();
 	worldGameplayScene->enableMenu(engine->getWindow()->getDimensions(), engine->getRendererReference());
@@ -201,6 +221,7 @@ void Scripts::setupScenes() {
 	worldGameplayScene->getMenu()->add(tileInventorySubMenu2);
 	worldGameplayScene->getMenu()->add(deathBackgroundRect);
 	worldGameplayScene->getMenu()->add(deathText);
+	worldGameplayScene->getMenu()->add(coordinateText);
 
 	// This sets up the scenes for the pause menu.
 	Scene* pauseScene = new Scene();
@@ -229,6 +250,8 @@ void Scripts::setupScenes() {
 	// This creates sidebar buttons for the pause menu.
 	auto pauseMenuGameButton = std::make_shared<Button>(&hoverTint, &clickTint);
 	auto pauseMenuOptionsButton = std::make_shared<Button>(&hoverTint, &clickTint);
+	auto pauseMenuMapEditorButton = std::make_shared<Button>(&hoverTint, &clickTint);
+	auto pauseMenuExportButton = std::make_shared<Button>(hoverTintPtr, clickTintPtr);
 
 	// This gets textures for the pause menu buttons.
 	GLTexture* simpleButtonTexture;
@@ -240,13 +263,34 @@ void Scripts::setupScenes() {
 	pauseMenuGameSubMenu->init(&windowDimensions, *renderer);
 	auto pauseMenuOptionsSubMenu = std::make_shared<SubMenu>();
 	pauseMenuOptionsSubMenu->init(&windowDimensions, *renderer);
+	auto pauseMenuMapEditorSubMenu = std::make_shared<SubMenu>();
+	pauseMenuMapEditorSubMenu->init(&windowDimensions, *renderer);
 
-	auto goToGameSubMenu = [](Engine* engine) {
-
+	auto goToGameSubMenu = [pauseMenuGameSubMenu, pauseMenuOptionsSubMenu, pauseMenuMapEditorSubMenu](Engine* engine) {
+		pauseMenuGameSubMenu->show();
+		pauseMenuOptionsSubMenu->hide();
+		pauseMenuMapEditorSubMenu->hide();
 	};
 
-	auto goToOptionsSubMenu = [](Engine* engine) {
+	auto goToOptionsSubMenu = [pauseMenuGameSubMenu, pauseMenuOptionsSubMenu, pauseMenuMapEditorSubMenu](Engine* engine) {
+		pauseMenuGameSubMenu->hide();
+		pauseMenuOptionsSubMenu->show();
+		pauseMenuMapEditorSubMenu->hide();
+	};
 
+	auto goToMapEditorSubMenu = [pauseMenuGameSubMenu, pauseMenuOptionsSubMenu, pauseMenuMapEditorSubMenu](Engine* engine) {
+		pauseMenuGameSubMenu->hide();
+		pauseMenuOptionsSubMenu->hide();
+		pauseMenuMapEditorSubMenu->show();
+	};
+
+	auto exportMap = [](Engine* engine) {
+		WorldManager* worldManager = GameObjectProvider::getWorldManager();
+		if (worldManager->exportCurrentWorld()) {
+			AelaErrorHandling::windowWarning("Map was successfully exported.");
+		} else {
+			AelaErrorHandling::windowWarning("The map could not be exported.");
+		}
 	};
 
 	pauseMenuGameButton->setTexture(simpleButtonTextureLight);
@@ -266,6 +310,23 @@ void Scripts::setupScenes() {
 	pauseMenuOptionsButton->setTextColour(almostWhitePtr);
 	pauseMenuOptionsButton->wrapAroundText();
 
+	pauseMenuMapEditorButton->setTexture(simpleButtonTextureLight);
+	pauseMenuMapEditorButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.4444),
+		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
+	pauseMenuMapEditorButton->setupOnClick(std::bind(goToOptionsSubMenu, engine));
+	pauseMenuMapEditorButton->setText("Map Editor");
+	pauseMenuMapEditorButton->setTextFont(xerox);
+	pauseMenuMapEditorButton->setTextColour(almostWhitePtr);
+	pauseMenuMapEditorButton->wrapAroundText();
+
+	pauseMenuExportButton->setDimensions(&Rect<int>((int) (windowDimensions.getWidth() * 0.4), (int) (windowDimensions.getHeight() * 0.3333),
+		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
+	pauseMenuExportButton->setupOnClick(std::bind(exportMap, engine));
+	pauseMenuExportButton->setText("Export");
+	pauseMenuExportButton->setTextFont(xerox);
+	pauseMenuExportButton->setTextColour(almostWhitePtr);
+	pauseMenuMapEditorSubMenu->add(pauseMenuExportButton);
+
 	pauseMenuGameSubMenu->show();
 
 	pauseScene->getMenu()->add(tintRect);
@@ -274,6 +335,8 @@ void Scripts::setupScenes() {
 	pauseScene->getMenu()->add(pauseMenuGameSubMenu);
 	pauseScene->getMenu()->add(pauseMenuOptionsButton);
 	pauseScene->getMenu()->add(pauseMenuOptionsSubMenu);
+	pauseScene->getMenu()->add(pauseMenuMapEditorButton);
+	pauseScene->getMenu()->add(pauseMenuMapEditorSubMenu);
 	pauseScene->getMenu()->add(pauseMenuTextRect);
 	pauseScene->getMenu()->add(pauseMenuTitleText);
 

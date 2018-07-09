@@ -9,14 +9,13 @@
 
 #pragma once
 #include "../Game Object Provider/GameObjectProvider.h"
-#include "../Worlds/TileInventory.h"
+#include "../Tiles/TileInventory.h"
 #include <unordered_map>
 
 namespace Game {
 	class Player {
 		public:
-			Player() {
-			}
+			Player();
 
 			// These are getters and setters.
 			void setCharacterID(size_t id);
@@ -24,6 +23,7 @@ namespace Game {
 			TileInventory* getTileInventory();
 			void setCharacter(Character* character);
 			Character* getCharacter();
+			void setupTileInventoryForMapEditor();
 
 		private:
 			// This stores the Character ID of the player, which is assigned by the Character Tracker.

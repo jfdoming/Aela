@@ -9,7 +9,7 @@
 #include "../../Project Aela/3D/Maps/Map3D.h"
 #include "../../Project Aela/Animation/Animator.h"
 #include "World.h"
-#include "TileAtlas.h"
+#include "../Tiles/TileAtlas.h"
 #include "../Character/CharacterTracker.h"
 
 namespace Game {

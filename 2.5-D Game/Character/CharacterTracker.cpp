@@ -503,8 +503,7 @@ void Game::CharacterTracker::animatePlayerDeathScreen() {
 void Game::CharacterTracker::resetCameraPosition() {
 	Character* character = characters[playerID];
 	glm::vec3 entityPosition = *character->getEntity()->getPosition();
-	glm::vec3 basePosition(entityPosition.x, character->getLocation()->getTileGroup().y, entityPosition.z);
-	camera->setPosition(basePosition + glm::vec3(0, sin(PLAYER_CAMERA_ANGLE)
+	camera->setPosition(entityPosition + glm::vec3(0, sin(PLAYER_CAMERA_ANGLE)
 		* PLAYER_CAMERA_DISTANCE, -cos(PLAYER_CAMERA_ANGLE) * PLAYER_CAMERA_DISTANCE));
 	camera->setRotation(0, -PLAYER_CAMERA_ANGLE, 0);
 }

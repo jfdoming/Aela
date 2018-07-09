@@ -8,7 +8,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <unordered_map>
-#include "Chunk.h"
+#include "../Chunks/Chunk.h"
 #include "../../Project Aela/3D/Maps/Map3D.h"
 
 namespace Game {

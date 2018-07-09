@@ -48,7 +48,8 @@ namespace Scripts {
 
 	std::string pngTextureNames[] = {
 		"selector_box",
-		"inventory_slot"
+		"inventory_slot",
+		"black"
 	};
 
 	std::string spriteSheetNames[] = {

@@ -7,11 +7,11 @@
 
 #pragma once
 #include <glm/glm.hpp>
-#include "../Worlds/Chunk.h"
+#include "../Chunks/Chunk.h"
 
 namespace Game {
 	enum class TileDirection {
-		RIGHT, FORWARD, LEFT, BACKWARD
+		RIGHT, FORWARD, LEFT, BACKWARD, UP, DOWN
 	};
 
 	enum class ElevationDirection {

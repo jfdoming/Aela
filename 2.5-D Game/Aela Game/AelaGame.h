@@ -6,10 +6,10 @@
 */
 
 #pragma once
-
 #include "Aela_Engine.h"
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "../Camera Mode/CameraMode.h"
+#include "../Game Mode/GameMode.h"
 #include "../Location/Location.h"
 #include "../../Project Aela/Scenes/Scene.h"
 #include "../../Project Aela/Menus/SubMenu.h"
@@ -35,6 +35,9 @@ namespace Game {
 			// These are called by scripts that run when title screen buttons are pressed.
 			void startNewGame();
 			void continueGame();
+			void editMap();
+
+			GameMode getGameMode();
 
 			void setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
 				std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage);
@@ -57,13 +60,13 @@ namespace Game {
 			SceneManager* sceneManager;
 			Animator* animator;
 			Camera3D* camera;
-			
 
 			Character* playerCharacter;
 			Map3D* map;
 
 			// These store the states of keys.
-			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false;
+			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false,
+				movingUp = false, movingDown = false;
 			bool pressingRight = false, pressingForward = false, pressingLeft = false, pressingBackward = false;
 			bool pressingTileSelectLeft = false, pressingTileSelectRight = false, pressingTileSwitch = false;
 			bool pressingPauseButton = false, pressingInventoryButton = false;
@@ -77,6 +80,7 @@ namespace Game {
 			const long long TIME_BETWEEN_PLAYER_TURNS = 80000000;
 
 			CameraMode cameraMode;
+			GameMode gameMode;
 
 			void setupScripts();
 			void loadResources();
@@ -91,5 +95,7 @@ namespace Game {
 			void switchCameraMode(CameraMode cameraMode);
 
 			bool useTileSwitchGun();
+
+			void clearTilesAtPlayerLocation();
 	};
 }

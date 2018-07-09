@@ -28,6 +28,7 @@ namespace Game {
 			void setCurrentTile(size_t currentTile);
 			void increaseCurrentTileIfPossible();
 			void decreaseCurrentTileIfPossible();
+			void placeTile(TileGroup* tileGroup);
 
 		private:
 			std::vector<Tile> tiles;

@@ -8,8 +8,8 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <unordered_map>
-#include "Tile.h"
-#include "TileGroup.h"
+#include "../Tiles/Tile.h"
+#include "../Tiles/TileGroup.h"
 #include "../../Project Aela/Utilities/glmut.h"
 
 namespace Game {

@@ -3,8 +3,8 @@
 #include "Resource Management/ResourceManager.h"
 #include "../../Worlds/World.h"
 #include "../../Worlds/WorldLoader.h"
-#include "../../Worlds/TileAtlas.h"
-#include "../../Worlds/TileAtlasLoader.h"
+#include "../../Tiles/TileAtlas.h"
+#include "../../Tiles/TileAtlasLoader.h"
 #include "../../Resources/ResourceInfo.h"
 #include "../../Worlds/WorldManager.h"
 

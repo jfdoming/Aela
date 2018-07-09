@@ -71,3 +71,7 @@ void Game::TileInventory::increaseCurrentTileIfPossible() {
 void Game::TileInventory::decreaseCurrentTileIfPossible() {
 	setCurrentTile(currentTile - 1);
 }
+
+void Game::TileInventory::placeTile(TileGroup* tileGroup) {
+	tileGroup->addTile(&tiles[currentTile]);
+}

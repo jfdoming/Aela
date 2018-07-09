@@ -5,7 +5,7 @@
 * Description: A class used to store chunks that are close to one another.
 */
 
-#include "World.h"
+#include "../Worlds/World.h"
 
 void Game::World::addChunk(glm::ivec2 coordinate, Chunk* chunk) {
 	chunks[coordinate] = *chunk;
