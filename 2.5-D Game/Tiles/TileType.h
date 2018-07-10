@@ -11,7 +11,7 @@
 using namespace Aela;
 
 namespace Game {
-	enum class TileBehaviour {
+	enum class TileShape {
 		BLANK, FLOOR, BOXED_FLOOR, LIQUID_FLOOR, RAMP_RIGHT, RAMP_UP_RIGHT_DEPRESSED, RAMP_UP_RIGHT_ELEVATED, RAMP_UP, RAMP_UP_LEFT_DEPRESSED,
 		RAMP_UP_LEFT_ELEVATED, RAMP_LEFT, RAMP_DOWN_LEFT_DEPRESSED, RAMP_DOWN_LEFT_ELEVATED, RAMP_DOWN,
 		RAMP_DOWN_RIGHT_DEPRESSED, RAMP_DOWN_RIGHT_ELEVATED, BOX, WALL_RIGHT, WALL_FRONT, WALL_LEFT,
@@ -25,15 +25,15 @@ namespace Game {
 	class TileType {
 		public:
 			TileType();
-			TileType(bool collidable, TileBehaviour behaviour, std::string name);
+			TileType(bool collidable, TileShape shape, std::string name);
 
 			bool isCollidable();
-			TileBehaviour getBehaviour();
+			TileShape getShape();
 			std::string getName();
 
 		private:
 			bool collidable;
-			TileBehaviour behaviour;
+			TileShape shape;
 			std::string name;
 	};
 }

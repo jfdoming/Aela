@@ -7,9 +7,9 @@ Game::TileType::TileType() {
 	name = "tile";
 }
 
-Game::TileType::TileType(bool collidable, TileBehaviour behaviour, std::string name) {
+Game::TileType::TileType(bool collidable, TileShape shape, std::string name) {
 	this->collidable = collidable;
-	this->behaviour = behaviour;
+	this->shape = shape;
 	this->name = name;
 }
 
@@ -17,8 +17,8 @@ bool Game::TileType::isCollidable() {
 	return collidable;
 }
 
-TileBehaviour Game::TileType::getBehaviour() {
-	return behaviour;
+TileShape Game::TileType::getShape() {
+	return shape;
 }
 
 std::string Game::TileType::getName() {

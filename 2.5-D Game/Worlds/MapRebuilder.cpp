@@ -1,5 +1,7 @@
 #include "MapRebuilder.h"
 #include "../Player/Player.h"
+#include "WorldManager.h"
+#include "../Character/CharacterProvider.h"
 #include "../Utilities/MathConstants.h"
 
 Game::MapRebuilder::MapRebuilder() {
@@ -10,9 +12,14 @@ Game::MapRebuilder::MapRebuilder() {
 void Game::MapRebuilder::setup() {
 	tileAtlas = GameObjectProvider::getTileAtlas();
 	playerCharacter = GameObjectProvider::getPlayer()->getCharacter();
+	worldManager = GameObjectProvider::getWorldManager();
+	characterProvider = GameObjectProvider::getCharacterProvider();
 }
 
-void Game::MapRebuilder::rebuildMap(World* world, size_t currentWorldID, CharacterTracker* characterTracker) {
+void Game::MapRebuilder::rebuildMap(World* world) {
+	size_t currentWorldID = playerCharacter->getLocation()->getWorld();
+	map = worldManager->getMap3D();
+
 	// Clean the map here (by removing entities and such).
 	map->removeAllModels();
 
@@ -30,11 +37,11 @@ void Game::MapRebuilder::rebuildMap(World* world, size_t currentWorldID, Charact
 			chunkPositionOnMap.y = (float) ((-chunkRenderDistances.z) + z + 1) * CHUNK_LENGTH + 0.5f;
 
 			// In addition to adding tiles to the world, characters must also be added.
-			auto charactersPointer = characterTracker->getCharactersInChunk(currentWorldID, chunkCoord);
+			auto charactersPointer = characterProvider->getCharactersInChunk(currentWorldID, chunkCoord);
 			if (charactersPointer != nullptr) {
 				auto characters = *charactersPointer;
 				for (auto iter : characters) {
-					Character* character = characterTracker->getCharacterByID(iter.second);
+					Character* character = characterProvider->getCharacterByID(iter.second);
 
 					if (character->isAlive() && character->isVisible()) {
 						// Note that characters are represented by models.
@@ -95,71 +102,71 @@ void Game::MapRebuilder::rebuildMap(World* world, size_t currentWorldID, Charact
 								tilePositionOnMap.y = (float) tileGroupPair.first.y;
 								tilePositionOnMap.z = (float) (chunkPositionOnMap.y + tileGroupPair.first.z);
 
-								switch (tileAtlas->getTileType(tile.getType())->getBehaviour()) {
-									case TileBehaviour::FLOOR:
+								switch (tileAtlas->getTileType(tile.getType())->getShape()) {
+									case TileShape::FLOOR:
 										// tilePositionOnMap.y += 1;
 										break;
-									case TileBehaviour::BOXED_FLOOR:
+									case TileShape::BOXED_FLOOR:
 										break;
-									case TileBehaviour::LIQUID_FLOOR:
+									case TileShape::LIQUID_FLOOR:
 										tilePositionOnMap.y -= 0.2f;
 										break;
-									case TileBehaviour::RAMP_RIGHT:
+									case TileShape::RAMP_RIGHT:
 										tilePositionOnMap.y += 0.5f;
 										modelEntity.setRotation((float) -QUARTER_PI, (float) THREE_HALVES_PI, 0);
 										modelEntity.setScaling((float) ROOT_OF_TWO, (float) ROOT_OF_TWO, 1);
 										break;
-									case TileBehaviour::RAMP_UP:
+									case TileShape::RAMP_UP:
 										tilePositionOnMap.y += 0.5f;
 										modelEntity.setRotation((float) -QUARTER_PI, 0, 0);
 										modelEntity.setScaling(1, (float) ROOT_OF_TWO, (float) ROOT_OF_TWO);
 										break;
-									case TileBehaviour::RAMP_LEFT:
+									case TileShape::RAMP_LEFT:
 										tilePositionOnMap.y += 0.5f;
 										modelEntity.setRotation((float) -QUARTER_PI, (float) HALF_PI, 0);
 										modelEntity.setScaling((float) ROOT_OF_TWO, (float) ROOT_OF_TWO, 1);
 										break;
-									case TileBehaviour::RAMP_DOWN:
+									case TileShape::RAMP_DOWN:
 										tilePositionOnMap.y += 0.5f;
 										modelEntity.setRotation((float) -QUARTER_PI, (float) PI, 0);
 										modelEntity.setScaling(1, (float) ROOT_OF_TWO, (float) ROOT_OF_TWO);
 										break;
-									case TileBehaviour::RAMP_UP_RIGHT_DEPRESSED:
+									case TileShape::RAMP_UP_RIGHT_DEPRESSED:
 										modelEntity.setRotation(0, 0, 0);
 										modelEntity.setScaling(1, 1, 1);
 										break;
-									case TileBehaviour::RAMP_UP_LEFT_DEPRESSED:
+									case TileShape::RAMP_UP_LEFT_DEPRESSED:
 										modelEntity.setRotation(0, (float) HALF_PI, 0);
 										break;
-									case TileBehaviour::RAMP_DOWN_LEFT_DEPRESSED:
+									case TileShape::RAMP_DOWN_LEFT_DEPRESSED:
 										modelEntity.setRotation(0, (float) PI, 0);
 										break;
-									case TileBehaviour::RAMP_DOWN_RIGHT_DEPRESSED:
+									case TileShape::RAMP_DOWN_RIGHT_DEPRESSED:
 										modelEntity.setRotation(0, (float) THREE_HALVES_PI, 0);
 										break;
-									case TileBehaviour::RAMP_UP_RIGHT_ELEVATED:
+									case TileShape::RAMP_UP_RIGHT_ELEVATED:
 										modelEntity.setRotation(0, 0, 0);
 										break;
-									case TileBehaviour::RAMP_UP_LEFT_ELEVATED:
+									case TileShape::RAMP_UP_LEFT_ELEVATED:
 										modelEntity.setRotation(0, (float) HALF_PI, 0);
 										break;
-									case TileBehaviour::RAMP_DOWN_LEFT_ELEVATED:
+									case TileShape::RAMP_DOWN_LEFT_ELEVATED:
 										modelEntity.setRotation(0, (float) PI, 0);
 										break;
-									case TileBehaviour::RAMP_DOWN_RIGHT_ELEVATED:
+									case TileShape::RAMP_DOWN_RIGHT_ELEVATED:
 										modelEntity.setRotation(0, (float) THREE_HALVES_PI, 0);
 										break;
-									case TileBehaviour::BOX:
+									case TileShape::BOX:
 										break;
-									case TileBehaviour::WALL_RIGHT:
+									case TileShape::WALL_RIGHT:
 										tilePositionOnMap.x++;
 										modelEntity.setRotation(0, (float) -HALF_PI, 0);
 										break;
-									case TileBehaviour::WALL_FRONT:
+									case TileShape::WALL_FRONT:
 										tilePositionOnMap.z--;
 										modelEntity.setRotation(0, (float) 0, 0);
 										break;
-									case TileBehaviour::WALL_LEFT:
+									case TileShape::WALL_LEFT:
 										tilePositionOnMap.x--;
 										modelEntity.setRotation(0, (float) HALF_PI, 0);
 										break;
@@ -191,10 +198,6 @@ void Game::MapRebuilder::rebuildMap(World* world, size_t currentWorldID, Charact
 
 	// The animator must be updated in order to make sure that entity transformations are correct.
 	animator->update();
-}
-
-void Game::MapRebuilder::bindMap(Map3D* map) {
-	this->map = map;
 }
 
 void Game::MapRebuilder::setAnimator(Animator* animator) {

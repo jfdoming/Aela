@@ -13,7 +13,7 @@
 
 namespace Game {
 	class Turret : public Enemy {
-		friend class EnemyRegistrar;
+		friend class EnemyProvider;
 		public:
 			Turret();
 			Turret(int detectionRange);

@@ -4,7 +4,7 @@
 * Date: 02/01/2018
 * Description: A class used to represent the player and their properties.
 *              I wanted to make Player extend Character, but I can't due
-*              to the way that Characters must be stored in the CharacterTracker.
+*              to the way that Characters must be stored in the CharacterProvider.
 */
 
 #pragma once

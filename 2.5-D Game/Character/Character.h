@@ -20,7 +20,7 @@ using namespace Aela;
 namespace Game {
 	class Character {
 		friend class WorldManager;
-		friend class CharacterTracker;
+		friend class CharacterProvider;
 		public:
 			Character();
 			Character(std::string name);

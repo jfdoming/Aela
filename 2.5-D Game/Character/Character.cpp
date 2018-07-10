@@ -221,7 +221,7 @@ void Game::Character::turn(TileDirection direction) {
 	if (GameObjectProvider::getResourceManager()->obtain<Model>("ch/" + textureName + "/0/" + std::to_string(enumToInteger(direction)) + "/mo", model)) {
 		baseModel = model;
 		entity->setModel(model);
-		GameObjectProvider::getWorldManager()->rebuildMapWhenPossible();
+		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 	}
 }
 
@@ -253,7 +253,7 @@ void Game::Character::teleport(Location * location, bool animate) {
 void Game::Character::kill() {
 	alive = false;
 	animateDeath();
-	GameObjectProvider::getWorldManager()->rebuildMapWhenPossible();
+	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 }
 
 void Game::Character::revive() {
@@ -381,14 +381,14 @@ void Game::Character::processMovement(Movement* movement, std::string scriptOnCo
 	moving = true;
 	switchStep();
 
-	CharacterTracker* characterTracker = GameObjectProvider::getCharacterTracker();
+	CharacterProvider* characterProvider = GameObjectProvider::getCharacterProvider();
 	Location oldLocation = location;
 	Location* newLocation = movement->getDestination();
-	characterTracker->characterWasMoved(name, &oldLocation, newLocation);
+	characterProvider->characterWasMoved(name, &oldLocation, newLocation);
 	location = *newLocation;
 
 	if (!movement->isAnimated()) {
-		GameObjectProvider::getWorldManager()->rebuildMapWhenPossible();
+		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 		animationHasEnded();
 		return;
 	}
@@ -413,7 +413,7 @@ void Game::Character::processMovement(Movement* movement, std::string scriptOnCo
 		textures.push_back(texture);
 
 		auto halfLifeAction = [this, cameraController]() {
-			GameObjectProvider::getWorldManager()->rebuildMapWhenPossible();
+			GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 			cameraController->setLockCameraToPlayer(true);
 		};
 
@@ -558,25 +558,27 @@ void Game::Character::processPossibleMovement(TileDirection direction) {
 	newLocation.setTile(tileCoord);
 
 	WorldManager* worldManager = GameObjectProvider::getWorldManager();
-	CharacterTracker* characterTracker = GameObjectProvider::getCharacterTracker();
+	CharacterProvider* characterProvider = GameObjectProvider::getCharacterProvider();
 	AelaGame* game = GameObjectProvider::getGame();
 
 	if (newLocation.getWorld() < worldManager->getNumberOfWorlds()) {
-		Chunk* chunk = worldManager->getWorld(newLocation.getWorld())->getChunk(newLocation.getChunk());
+		Chunk* chunk = worldManager->getChunk(&newLocation);
 		GameMode mode = game->getGameMode();
 		Character* playerCharacter = GameObjectProvider::getPlayer()->getCharacter();
 
 		if (mode == GameMode::GAMEPLAY) {
+			std::cout << newLocation.getWorld() << " " << chunkCoord.x << " " << chunkCoord.y << "\n";
+
 			if (chunk != nullptr) {
-				TileGroup* tileGroup = worldManager->getWorld(newLocation.getWorld())->getChunk(newLocation.getChunk())->getTileGroup(newLocation.getTileGroup());
+				TileGroup* tileGroup = worldManager->getTileGroup(&newLocation);
 
 				if (tileGroup == nullptr || tileGroup->isCollidable(GameObjectProvider::getTileAtlas())) {
 					// If the movement is impossible, don't do it!
 					turn(direction);
-					return;
+					return; 
 				}
 
-				if (characterTracker->getCharacterByLocation(&newLocation) != nullptr) {
+				if (characterProvider->getCharacterByLocation(&newLocation) != nullptr) {
 					// If the movement is impossible, don't do it!
 					turn(direction);
 					return;
@@ -594,9 +596,9 @@ void Game::Character::processPossibleMovement(TileDirection direction) {
 			}
 		} else if (mode == GameMode::MAP_EDITOR) {
 			if (chunk != nullptr) {
-				TileGroup* tileGroup = worldManager->getWorld(newLocation.getWorld())->getChunk(newLocation.getChunk())->getTileGroup(newLocation.getTileGroup());
+				TileGroup* tileGroup = worldManager->getTileGroup(&newLocation);
 
-				if (tileGroup == nullptr || characterTracker->getCharacterByLocation(&newLocation) != nullptr) {
+				if (tileGroup == nullptr) {
 					if (this == playerCharacter) {
 						game->movedIntoNonExistentSpace(chunkCoord, tileCoord);
 					}
@@ -616,5 +618,4 @@ void Game::Character::processPossibleMovement(TileDirection direction) {
 			}
 		}
 	}
-
 }

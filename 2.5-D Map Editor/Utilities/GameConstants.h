@@ -1,4 +1,0 @@
-#pragma once
-
-#define PLAYER_CAMERA_DISTANCE 6.0f
-#define PLAYER_CAMERA_ANGLE 1.0471975512f

@@ -17,15 +17,15 @@ namespace Scripts {
 	extern ResourceManager* resourceManager;
 	extern ScriptManager* scriptManager;
 	extern GLRenderer* renderer;
-	extern CharacterTracker* characterTracker;
+	extern CharacterProvider* characterProvider;
 	extern Player* player;
 	extern TileInventoryDisplay* tileInventoryDisplay;
 	extern WorldManager* worldManager;
 	extern Scene* gameplayScene, *pauseScene;
 	extern EventHandler* eventHandler;
-	extern DialogueHandler* dialogueHandler;
+	extern DialogueDisplay* dialogueDisplay;
 	extern Time* time;
-	extern EnemyRegistrar* enemyRegistrar;
+	extern EnemyProvider* enemyProvider;
 	extern SceneManager* sceneManager;
 	extern Animator* animator;
 	extern Camera3D* camera;

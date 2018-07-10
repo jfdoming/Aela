@@ -20,16 +20,17 @@ namespace Game {
 	// needed class in its cpp file.
 	class AelaGame;
 	class WorldManager;
-	class CharacterTracker;
-	class EnemyRegistrar;
+	class CharacterProvider;
+	class EnemyProvider;
 	class Player;
 	class Character;
 	class ScriptManager;
-	class DialogueHandler;
+	class DialogueDisplay;
 	class TileInventoryDisplay;
 	class TileAtlas;
 	class WorldExporter;
 	class CameraController;
+	class TileBehaviourExecuter;
 
 	class GameObjectProvider {
 		public:
@@ -53,30 +54,32 @@ namespace Game {
 
 			static AelaGame* getGame();
 			static WorldManager* getWorldManager();
-			static CharacterTracker* getCharacterTracker();
-			static EnemyRegistrar* getEnemyRegistrar();
+			static CharacterProvider* getCharacterProvider();
+			static EnemyProvider* getEnemyProvider();
 			static Player* getPlayer();
 			static ScriptManager* getScriptManager();
-			static DialogueHandler* getDialogueHandler();
+			static DialogueDisplay* getDialogueDisplay();
 			static TileInventoryDisplay* getTileInventoryDisplay();
 			static TileAtlas* getTileAtlas();
 			static WorldExporter* getWorldExporter();
 			static CameraController* getCameraController();
+			static TileBehaviourExecuter* getTileBehaviourExecuter();
 
 			static Scene* getGameplayScene();
 			static Scene* getPauseScene();
 
 			static void setGame(AelaGame* game);
 			static void setWorldManager(WorldManager* worldManager);
-			static void setCharacterTracker(CharacterTracker* characterTracker);
-			static void setEnemyRegistrar(EnemyRegistrar* enemyRegistrar);
+			static void setCharacterProvider(CharacterProvider* characterProvider);
+			static void setEnemyProvider(EnemyProvider* enemyProvider);
 			static void setPlayer(Player* player);
 			static void setScriptManager(ScriptManager* scriptManager);
-			static void setDialogueHandler(DialogueHandler* dialogueHandler);
+			static void setDialogueDisplay(DialogueDisplay* dialogueDisplay);
 			static void setTileInventoryDisplay(TileInventoryDisplay* tileInventoryDisplay);
 			static void setTileAtlas(TileAtlas* tileAtlas);
 			static void setWorldExporter(WorldExporter* worldExporter);
 			static void setCameraController(CameraController* cameraController);
+			static void setTileBehaviourExecuter(TileBehaviourExecuter* tileBehaviourExecuter);
 
 			static void setGameplayScene(Scene* gameplayScene);
 			static void setPauseScene(Scene* pauseScene);
@@ -91,15 +94,16 @@ namespace Game {
 			// program runtime by an instance of AelaGame.
 			static AelaGame* game;
 			static WorldManager* worldManager;
-			static CharacterTracker* characterTracker;
-			static EnemyRegistrar* enemyRegistrar;
+			static CharacterProvider* characterProvider;
+			static EnemyProvider* enemyProvider;
 			static Player* player;
 			static ScriptManager* scriptManager;
-			static DialogueHandler* dialogueHandler;
+			static DialogueDisplay* dialogueDisplay;
 			static TileInventoryDisplay* tileInventoryDisplay;
 			static TileAtlas* tileAtlas;
 			static WorldExporter* worldExporter;
 			static CameraController* cameraController;
+			static TileBehaviourExecuter* tileBehaviourExecuter;
 
 			// These are pointers to scenes are should be set by a script that constructs the scenes.
 			static Scene* gameplayScene, *pauseScene;

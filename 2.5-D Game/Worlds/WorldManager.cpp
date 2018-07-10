@@ -8,8 +8,8 @@
 #include "WorldManager.h"
 #include "WorldExporter.h"
 #include "../Resources/ResourceInfo.h"
-#include "../Character/CharacterTracker.h"
-#include "../Dialogue/DialogueHandler.h"
+#include "../Character/CharacterProvider.h"
+#include "../Displays/Dialogue/DialogueDisplay.h"
 #include "../Tiles/TileAtlas.h"
 #include "Resource Management/ResourceManager.h"
 #include "../Scripts/ScriptManager.h"
@@ -26,11 +26,10 @@
 Game::WorldManager::WorldManager() {
 	resourceManager = GameObjectProvider::getResourceManager();
 	animationLooper = GameObjectProvider::getAnimationLooper();
-	currentWorld = 0;
 }
 
-bool Game::WorldManager::setup() {
-	characterTracker = GameObjectProvider::getCharacterTracker();
+void Game::WorldManager::setup() {
+	characterProvider = GameObjectProvider::getCharacterProvider();
 	scriptManager = GameObjectProvider::getScriptManager();
 	tileAtlas = GameObjectProvider::getTileAtlas();
 	playerCharacter = GameObjectProvider::getPlayer()->getCharacter();
@@ -38,9 +37,7 @@ bool Game::WorldManager::setup() {
 	worldExporter = GameObjectProvider::getWorldExporter();
 
 	mapRebuilder.setup();
-	mapRebuilder.bindMap(map);
 	setupAnimationLoopingForTiles();
-	return true;
 }
 
 void Game::WorldManager::setupAnimationLoopingForTiles() {
@@ -91,7 +88,7 @@ void Game::WorldManager::update() {
 	}
 }
 
-void Game::WorldManager::rebuildMapWhenPossible() {
+void Game::WorldManager::rebuildMapNextUpdate() {
 	mapNeedsToBeRebuilt = true;
 }
 
@@ -112,22 +109,12 @@ size_t Game::WorldManager::getNumberOfWorlds() {
 }
 
 Map3D* Game::WorldManager::getMap3D() {
-	return map;
-}
-
-bool Game::WorldManager::setCurrentWorld(size_t id) {
-	if (id < worlds.size()) {
-		currentWorld = id;
-		map = worlds[currentWorld].getMap3D();
-		mapRebuilder.bindMap(map);
-		rebuildMap();
-		return true;
-	}
-	return false;
+	currentWorld = playerCharacter->getLocation()->getWorld();
+	return worlds[currentWorld].getMap3D();
 }
 
 size_t Game::WorldManager::getCurrentWorld() {
-	return currentWorld;
+	return playerCharacter->getLocation()->getWorld();
 }
 
 Game::Teleporter* Game::WorldManager::getTeleporter(Location* location) {
@@ -146,9 +133,28 @@ Game::Teleporter* Game::WorldManager::getTeleporter(Location* location) {
 	return &iter3->second;
 }
 
+Game::Chunk* Game::WorldManager::getChunk(Location* location) {
+	unsigned int worldID = location->getWorld();
+	if (worldID >= worlds.size()) {
+		return nullptr;
+	}
+
+	World* world = &worlds[worldID];
+	return world->getChunk(location->getChunk());
+}
+
+Game::TileGroup* Game::WorldManager::getTileGroup(Location* location) {
+	Chunk* chunk = getChunk(location);
+	if (chunk == nullptr) {
+		return nullptr;
+	}
+
+	return chunk->getTileGroup(location->getTileGroup());
+}
+
 void Game::WorldManager::setChunkRenderDistances(glm::vec3 chunkRenderDistances) {
 	mapRebuilder.setChunkRenderingDistances(chunkRenderDistances);
-	rebuildMapWhenPossible();
+	rebuildMapNextUpdate();
 }
 
 void Game::WorldManager::getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::vec2& chunk, TileDirection direction) {
@@ -228,17 +234,21 @@ void Game::WorldManager::runTileSwitchScriptOfTile(Location* location) {
 }
 
 void Game::WorldManager::rebuildMap() {
-	mapRebuilder.rebuildMap(&worlds[currentWorld], currentWorld, characterTracker);
+	currentWorld = playerCharacter->getLocation()->getWorld();
+	mapRebuilder.rebuildMap(&worlds[currentWorld]);
 }
 
 void Game::WorldManager::createChunkInCurrentWorld(glm::ivec2 coordinate) {
+	currentWorld = playerCharacter->getLocation()->getWorld();
 	worlds[currentWorld].addChunk(coordinate, &Chunk());
 }
 
 void Game::WorldManager::createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, unsigned int layer) {
+	currentWorld = playerCharacter->getLocation()->getWorld();
 	worlds[currentWorld].getChunk(chunkCoordinate)->generateBlankTiles(layer);
 }
 
 bool Game::WorldManager::exportCurrentWorld() {
+	currentWorld = playerCharacter->getLocation()->getWorld();
 	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + MAP_BEING_EDITED, &worlds[currentWorld]);
 }

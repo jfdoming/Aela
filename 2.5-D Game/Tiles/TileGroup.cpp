@@ -59,8 +59,8 @@ void Game::TileGroup::setSwitchScript(std::string name) {
 
 Tile* Game::TileGroup::getFloorTile(TileAtlas* tileAtlas) {
 	for (auto& pair : tiles) {
-		TileBehaviour behaviour = tileAtlas->getTileType(pair.second.getType())->getBehaviour();
-		if (behaviour == TileBehaviour::FLOOR || behaviour == TileBehaviour::LIQUID_FLOOR || behaviour == TileBehaviour::BOXED_FLOOR) {
+		TileShape shape = tileAtlas->getTileType(pair.second.getType())->getShape();
+		if (shape == TileShape::FLOOR || shape == TileShape::LIQUID_FLOOR || shape == TileShape::BOXED_FLOOR) {
 			return &pair.second;
 		}
 	}
@@ -70,9 +70,9 @@ Tile* Game::TileGroup::getFloorTile(TileAtlas* tileAtlas) {
 Tile* Game::TileGroup::getSwitchableFloorTile(TileAtlas* tileAtlas) {
 	for (auto& pair : tiles) {
 		std::cout << tileAtlas << " is tileatlas.\n";
-		TileBehaviour behaviour = tileAtlas->getTileType(pair.second.getType())->getBehaviour();
-		std::cout << enumToInteger(behaviour) << " is behaviour\n";
-		if (behaviour == TileBehaviour::LIQUID_FLOOR || behaviour == TileBehaviour::BOXED_FLOOR) {
+		TileShape shape = tileAtlas->getTileType(pair.second.getType())->getShape();
+		std::cout << enumToInteger(shape) << " is shape\n";
+		if (shape == TileShape::LIQUID_FLOOR || shape == TileShape::BOXED_FLOOR) {
 			return &pair.second;
 		}
 	}

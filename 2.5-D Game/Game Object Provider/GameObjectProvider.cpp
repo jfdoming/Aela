@@ -1,14 +1,16 @@
 #include "GameObjectProvider.h"
 #include "../Aela Game/AelaGame.h"
 #include "../Worlds/WorldManager.h"
-#include "../Character/CharacterTracker.h"
-#include "../Enemies/EnemyRegistrar.h"
+#include "../Character/CharacterProvider.h"
+#include "../Enemies/EnemyProvider.h"
 #include "../Scripts/ScriptManager.h"
 #include "../Player/Player.h"
-#include "../Dialogue/DialogueHandler.h"
-#include "../Tiles/TileInventoryDisplay.h"
+#include "../Displays/Dialogue/DialogueDisplay.h"
+#include "../Displays/Tiles/TileInventoryDisplay.h"
 #include "../Tiles/TileAtlas.h"
+#include "../Worlds/WorldExporter.h"
 #include "../Camera/CameraController.h"
+#include "../Tiles/TileBehaviourExecuter.h"
 #include "../../Project Aela/Events/EventListener.h"
 #include "../../Project Aela/Aela_Engine.h"
 
@@ -17,17 +19,18 @@ using namespace Game;
 Engine* GameObjectProvider::engine = nullptr;
 AelaGame* GameObjectProvider::game = nullptr;
 WorldManager* GameObjectProvider::worldManager = nullptr;
-CharacterTracker* GameObjectProvider::characterTracker = nullptr;
-EnemyRegistrar* GameObjectProvider::enemyRegistrar = nullptr;
+CharacterProvider* GameObjectProvider::characterProvider = nullptr;
+EnemyProvider* GameObjectProvider::enemyProvider = nullptr;
 Player* GameObjectProvider::player = nullptr;
 ScriptManager* GameObjectProvider::scriptManager = nullptr;
-DialogueHandler* GameObjectProvider::dialogueHandler = nullptr;
+DialogueDisplay* GameObjectProvider::dialogueDisplay = nullptr;
 TileInventoryDisplay* GameObjectProvider::tileInventoryDisplay = nullptr;
 TileAtlas* GameObjectProvider::tileAtlas = nullptr;
 Scene* GameObjectProvider::gameplayScene = nullptr;
 Scene* GameObjectProvider::pauseScene = nullptr;
 WorldExporter* GameObjectProvider::worldExporter = nullptr;
 CameraController* GameObjectProvider::cameraController = nullptr;
+TileBehaviourExecuter* GameObjectProvider::tileBehaviourExecuter = nullptr;
 
 // These are pointers to scenes are should be set by a script that constructs the scenes.
 static Scene* gameplayScene, *pauseScene;
@@ -104,12 +107,12 @@ WorldManager* GameObjectProvider::getWorldManager() {
 	return worldManager;
 }
 
-CharacterTracker* GameObjectProvider::getCharacterTracker() {
-	return characterTracker;
+CharacterProvider* GameObjectProvider::getCharacterProvider() {
+	return characterProvider;
 }
 
-EnemyRegistrar* GameObjectProvider::getEnemyRegistrar() {
-	return enemyRegistrar;
+EnemyProvider* GameObjectProvider::getEnemyProvider() {
+	return enemyProvider;
 }
 
 Player* GameObjectProvider::getPlayer() {
@@ -120,8 +123,8 @@ ScriptManager* GameObjectProvider::getScriptManager() {
 	return scriptManager;
 }
 
-DialogueHandler* GameObjectProvider::getDialogueHandler() {
-	return dialogueHandler;
+DialogueDisplay* GameObjectProvider::getDialogueDisplay() {
+	return dialogueDisplay;
 }
 
 TileInventoryDisplay* GameObjectProvider::getTileInventoryDisplay() {
@@ -140,6 +143,10 @@ CameraController * Game::GameObjectProvider::getCameraController() {
 	return cameraController;
 }
 
+TileBehaviourExecuter * Game::GameObjectProvider::getTileBehaviourExecuter() {
+	return tileBehaviourExecuter;
+}
+
 Scene* GameObjectProvider::getGameplayScene() {
 	return gameplayScene;
 }
@@ -155,12 +162,12 @@ void GameObjectProvider::setWorldManager(WorldManager* setWorldManager) {
 	worldManager = setWorldManager;
 }
 
-void GameObjectProvider::setCharacterTracker(CharacterTracker* setCharacterTracker) {
-	characterTracker = setCharacterTracker;
+void GameObjectProvider::setCharacterProvider(CharacterProvider* setCharacterProvider) {
+	characterProvider = setCharacterProvider;
 }
 
-void GameObjectProvider::setEnemyRegistrar(EnemyRegistrar* setEnemyRegistrar) {
-	enemyRegistrar = setEnemyRegistrar;
+void GameObjectProvider::setEnemyProvider(EnemyProvider* setEnemyProvider) {
+	enemyProvider = setEnemyProvider;
 }
 
 void GameObjectProvider::setPlayer(Player* setPlayer) {
@@ -171,8 +178,8 @@ void GameObjectProvider::setScriptManager(ScriptManager* setScriptManager) {
 	scriptManager = setScriptManager;
 }
 
-void GameObjectProvider::setDialogueHandler(DialogueHandler* setDialogueHandler) {
-	dialogueHandler = setDialogueHandler;
+void GameObjectProvider::setDialogueDisplay(DialogueDisplay* setDialogueDisplay) {
+	dialogueDisplay = setDialogueDisplay;
 }
 
 void GameObjectProvider::setTileInventoryDisplay(TileInventoryDisplay* setTileInventoryDisplay) {
@@ -191,6 +198,10 @@ void Game::GameObjectProvider::setCameraController(CameraController* setCameraCo
 	cameraController = setCameraController;
 }
 
+void Game::GameObjectProvider::setTileBehaviourExecuter(TileBehaviourExecuter* setTileBehaviourExecuter) {
+	tileBehaviourExecuter = setTileBehaviourExecuter;
+}
+
 void GameObjectProvider::setGameplayScene(Scene* setGameplayScene) {
 	gameplayScene = setGameplayScene;
 }
@@ -202,13 +213,16 @@ void GameObjectProvider::setPauseScene(Scene* setPauseScene) {
 void GameObjectProvider::cleanupGameObjects() {
 	delete game;
 	delete worldManager;
-	delete characterTracker;
-	delete enemyRegistrar;
+	delete characterProvider;
+	delete enemyProvider;
 	delete player;
 	delete scriptManager;
-	delete dialogueHandler;
+	delete dialogueDisplay;
 	delete tileInventoryDisplay;
 	delete tileAtlas;
+	delete worldExporter;
+	delete cameraController;
+	delete tileBehaviourExecuter;
 }
 
 GameObjectProvider::GameObjectProvider() {

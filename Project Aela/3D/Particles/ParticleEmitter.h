@@ -55,7 +55,7 @@ namespace Aela {
 			float baseSpeed = 0.001f;
 			float baseDistance = 1000;
 
-			// These are offsets that allow some particles to be slightly different in their behaviour compared to other particles.
+			// These are offsets that allow some particles to be slightly different in their shape compared to other particles.
 			// Note that pathOffset modifies where the path of the particle starts.
 			float speedOffset = 0;
 			float distanceOffset = 0;

@@ -42,7 +42,7 @@ namespace Game {
 
 			void setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
 				std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage);
-			void setDeathMenuItems(std::shared_ptr<RectComponent> deathRect, std::shared_ptr<Label> deathText);
+			void setDeathMenuItems(std::shared_ptr<RectComponent> overlayRect, std::shared_ptr<Label> overlayText);
 			void setMapEditorCoordinateLabel(std::shared_ptr<Label> mapEditorCoordinateLabel);
 
 			void animatePlayerDeathScreen();
@@ -56,25 +56,26 @@ namespace Game {
 			ResourceManager* resourceManager;
 			ScriptManager* scriptManager;
 			Renderer* renderer;
-			CharacterTracker* characterTracker;
+			CharacterProvider* characterProvider;
 			Player* player;
 			TileInventoryDisplay* tileInventoryDisplay;
 			WorldManager* worldManager;
 			Scene* gameplayScene, *pauseScene;
 			EventHandler* eventHandler;
-			DialogueHandler* dialogueHandler;
+			DialogueDisplay* dialogueDisplay;
 			Time* time;
-			EnemyRegistrar* enemyRegistrar;
+			EnemyProvider* enemyProvider;
 			SceneManager* sceneManager;
 			Animator* animator;
 			Camera3D* camera;
 			CameraController* cameraController;
+			TileBehaviourExecuter* tileBehaviourExecuter;
 
 			Character* playerCharacter;
 			Map3D* map;
 
-			std::shared_ptr<RectComponent> deathRect;
-			std::shared_ptr<Label> deathText;
+			std::shared_ptr<RectComponent> overlayRect;
+			std::shared_ptr<Label> overlayText;
 
 			std::shared_ptr<Label> mapEditorCoordinateLabel;
 

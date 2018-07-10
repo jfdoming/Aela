@@ -14,7 +14,7 @@ namespace Game {
 	};
 
 	class Enemy : public Character {
-		friend class EnemyRegistrar;
+		friend class EnemyProvider;
 		public:
 			Enemy();
 			Enemy(int strength, long long attackCooldown);

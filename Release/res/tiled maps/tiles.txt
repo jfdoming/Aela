@@ -59,4 +59,5 @@
 <Tile name="Slime Sign Green" texture="tiles/0/5.png" collision="true" type="wall_front">
 <Tile name="Mini Tiles" texture="tiles/1/5.png" collision="false" type="floor">
 
-<Tile name="Black" texture="tiles/2/5.png" collision="true" type="floor">
+<Tile name="Black Collidable" texture="tiles/2/5.png" collision="true" type="floor">
+<Tile name="Black Uncollidable" texture="tiles/2/5.png" collision="false" type="floor">

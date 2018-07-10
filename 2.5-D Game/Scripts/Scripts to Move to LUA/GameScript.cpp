@@ -2,14 +2,14 @@
 #include "ScriptObjects.h"
 #include "../../Player/Player.h"
 #include "../../Aela Game/AelaGame.h"
-#include "../../Dialogue/DialogueHandler.h"
+#include "../../Displays/Dialogue/DialogueDisplay.h"
 #include "../../Worlds/WorldManager.h"
 #include "../ScriptManager.h"
 
 using namespace Game;
 
 void Scripts::hideDialogue() {
-	dialogueHandler->closeDialog();
+	dialogueDisplay->closeDialog();
 }
 
 void Scripts::setupCharacters() {}

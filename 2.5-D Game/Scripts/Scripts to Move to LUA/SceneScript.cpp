@@ -10,7 +10,7 @@
 #include "Menus/SubMenu.h"
 #include "../Aela Game/AelaGame.h"
 #include "../../Resources/ResourceInfo.h"
-#include "../../Dialogue/DialogueHandler.h"
+#include "../../Displays/Dialogue/DialogueDisplay.h"
 #include "../../Worlds/WorldManager.h"
 #include "../../../Project Aela/Resource Management/ResourcePaths.h"
 
@@ -169,8 +169,8 @@ void Scripts::setupScenes() {
 	dialogueBoxSubMenu->add(dialogueTextThree);
 	dialogueBoxSubMenu->add(dialogueTextFour);
 
-	dialogueHandler->setDialogueSubMenu(dialogueBoxSubMenu);
-	dialogueHandler->setDialogueLabels(dialogueTextOne, dialogueTextTwo, dialogueTextThree, dialogueTextFour);
+	dialogueDisplay->setDialogueSubMenu(dialogueBoxSubMenu);
+	dialogueDisplay->setDialogueLabels(dialogueTextOne, dialogueTextTwo, dialogueTextThree, dialogueTextFour);
 
 	// This sets up the submenu that shows the player's tile inventory. The second submenu only contains the
 	// box that signifies which tile is selected, which is done so that the selection box is always above
@@ -197,16 +197,16 @@ void Scripts::setupScenes() {
 	tileInventorySubMenu2->show();
 	game->setTileInventoryMenuItems(tileInventorySubMenu, tileInventoryTextOne, tileSelectorBox);
 
-	auto deathBackgroundRect = std::make_shared<RectComponent>();
-	deathBackgroundRect->setDimensions(&windowDimensions);
-	deathBackgroundRect->setColour(&ColourRGBA(0.15f, 0.15f, 0.15f, 0.95f));
-	deathBackgroundRect->setTint(&ColourRGBA(1, 1, 1, 0));
+	auto overlayBackgroundRect = std::make_shared<RectComponent>();
+	overlayBackgroundRect->setDimensions(&windowDimensions);
+	overlayBackgroundRect->setColour(&ColourRGBA(0.15f, 0.15f, 0.15f, 0.95f));
+	overlayBackgroundRect->setTint(&ColourRGBA(1, 1, 1, 0));
 
-	auto deathText = std::make_shared<Label>("You died.", xerox, &almostWhite);
-	deathText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.30), (int) (windowDimensions.getHeight() * 0.30));
-	deathText->setTint(&ColourRGBA(1, 1, 1, 0));
+	auto overlayText = std::make_shared<Label>("You died.", xerox, &almostWhite);
+	overlayText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.30), (int) (windowDimensions.getHeight() * 0.30));
+	overlayText->setTint(&ColourRGBA(1, 1, 1, 0));
 
-	game->setDeathMenuItems(deathBackgroundRect, deathText);
+	game->setDeathMenuItems(overlayBackgroundRect, overlayText);
 
 	// This sets up the coordinate text.
 	auto coordinateText = std::make_shared<Label>("", xerox, almostWhitePtr);
@@ -219,8 +219,8 @@ void Scripts::setupScenes() {
 	worldGameplayScene->getMenu()->add(dialogueBoxSubMenu);
 	worldGameplayScene->getMenu()->add(tileInventorySubMenu);
 	worldGameplayScene->getMenu()->add(tileInventorySubMenu2);
-	worldGameplayScene->getMenu()->add(deathBackgroundRect);
-	worldGameplayScene->getMenu()->add(deathText);
+	worldGameplayScene->getMenu()->add(overlayBackgroundRect);
+	worldGameplayScene->getMenu()->add(overlayText);
 	worldGameplayScene->getMenu()->add(coordinateText);
 
 	// This sets up the scenes for the pause menu.

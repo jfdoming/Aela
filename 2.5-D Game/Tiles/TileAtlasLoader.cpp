@@ -22,7 +22,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 
 	// Clear all tiles and set tile 0 as the blank tile.
 	atlas.clearAllTiles();
-	atlas.addTile(TileType(false, TileBehaviour::BLANK, "blank"), nullptr);
+	atlas.addTile(TileType(false, TileShape::BLANK, "blank"), nullptr);
 
 	std::ifstream in;
 	in.open(resourceRoot + path);
@@ -32,7 +32,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 		Material* material = nullptr;
 		Texture* texture = nullptr;
 		bool collidable = false;
-		TileBehaviour behaviour;
+		TileShape shape;
 		std::string name = "tile";
 		TileLoader tileLoader;
 		tileLoader.setResourceManager(resourceManager);
@@ -64,41 +64,41 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 					resourceManager->bindGroup("tileGroup" + std::to_string(currentTile));
 					std::string templateTile = (std::string) DEFAULT_MODEL_PATH;
 
-					if (behaviour == TileBehaviour::FLOOR
-						|| behaviour == TileBehaviour::RAMP_RIGHT
-						|| behaviour == TileBehaviour::RAMP_UP
-						|| behaviour == TileBehaviour::RAMP_LEFT
-						|| behaviour == TileBehaviour::RAMP_DOWN
-						|| behaviour == TileBehaviour::LIQUID_FLOOR) {
+					if (shape == TileShape::FLOOR
+						|| shape == TileShape::RAMP_RIGHT
+						|| shape == TileShape::RAMP_UP
+						|| shape == TileShape::RAMP_LEFT
+						|| shape == TileShape::RAMP_DOWN
+						|| shape == TileShape::LIQUID_FLOOR) {
 						templateTile += "floor.obj";
 					}
-					if (behaviour == TileBehaviour::BOXED_FLOOR) {
+					if (shape == TileShape::BOXED_FLOOR) {
 						templateTile += "boxed_floor.obj";
 					}
-					if (behaviour == TileBehaviour::RAMP_UP_RIGHT_DEPRESSED
-						|| behaviour == TileBehaviour::RAMP_UP_LEFT_DEPRESSED
-						|| behaviour == TileBehaviour::RAMP_DOWN_LEFT_DEPRESSED
-						|| behaviour == TileBehaviour::RAMP_DOWN_RIGHT_DEPRESSED) {
+					if (shape == TileShape::RAMP_UP_RIGHT_DEPRESSED
+						|| shape == TileShape::RAMP_UP_LEFT_DEPRESSED
+						|| shape == TileShape::RAMP_DOWN_LEFT_DEPRESSED
+						|| shape == TileShape::RAMP_DOWN_RIGHT_DEPRESSED) {
 						templateTile += "corner_depressed.obj";
 					}
-					if (behaviour == TileBehaviour::RAMP_UP_RIGHT_ELEVATED
-						|| behaviour == TileBehaviour::RAMP_UP_LEFT_ELEVATED
-						|| behaviour == TileBehaviour::RAMP_DOWN_LEFT_ELEVATED
-						|| behaviour == TileBehaviour::RAMP_DOWN_RIGHT_ELEVATED) {
+					if (shape == TileShape::RAMP_UP_RIGHT_ELEVATED
+						|| shape == TileShape::RAMP_UP_LEFT_ELEVATED
+						|| shape == TileShape::RAMP_DOWN_LEFT_ELEVATED
+						|| shape == TileShape::RAMP_DOWN_RIGHT_ELEVATED) {
 						templateTile += "corner_elevated.obj";
 					}
-					if (behaviour == TileBehaviour::BOX) {
+					if (shape == TileShape::BOX) {
 						templateTile += "box.obj";
 					}
-					if (behaviour == TileBehaviour::WALL_RIGHT
-						|| behaviour == TileBehaviour::WALL_FRONT
-						|| behaviour == TileBehaviour::WALL_LEFT) {
+					if (shape == TileShape::WALL_RIGHT
+						|| shape == TileShape::WALL_FRONT
+						|| shape == TileShape::WALL_LEFT) {
 						templateTile += "wall.obj";
 					}
-					if (behaviour == TileBehaviour::WALL_CORNER_UP_RIGHT
-						|| behaviour == TileBehaviour::WALL_CORNER_UP_LEFT
-						|| behaviour == TileBehaviour::WALL_CORNER_DOWN_LEFT
-						|| behaviour == TileBehaviour::WALL_CORNER_DOWN_RIGHT) {
+					if (shape == TileShape::WALL_CORNER_UP_RIGHT
+						|| shape == TileShape::WALL_CORNER_UP_LEFT
+						|| shape == TileShape::WALL_CORNER_DOWN_LEFT
+						|| shape == TileShape::WALL_CORNER_DOWN_RIGHT) {
 						templateTile += "wall_corner.obj";
 					}
 
@@ -119,7 +119,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 
 					// Add the model to the model list so that it can be referenced easily without spamming the resource
 					// manager.
-					atlas.addTile(TileType(collidable, behaviour, name), model);
+					atlas.addTile(TileType(collidable, shape, name), model);
 					name = "tile";
 				} else if (character == '/' && line.at(1) == '/') {
 					// This is a comment. Stay calm and move to the next line.
@@ -158,53 +158,53 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 
 							// Note: collidable is set to false by default.
 							if (value == "floor") {
-								behaviour = TileBehaviour::FLOOR;
+								shape = TileShape::FLOOR;
 							} else if (value == "boxed_floor") {
-								behaviour = TileBehaviour::BOXED_FLOOR;
+								shape = TileShape::BOXED_FLOOR;
 							} else if (value == "liquid_floor") {
-								behaviour = TileBehaviour::LIQUID_FLOOR;
+								shape = TileShape::LIQUID_FLOOR;
 							} else if (value == "ramp_right") {
-								behaviour = TileBehaviour::RAMP_RIGHT;
+								shape = TileShape::RAMP_RIGHT;
 							} else if (value == "ramp_up_right_depressed") {
-								behaviour = TileBehaviour::RAMP_UP_RIGHT_DEPRESSED;
+								shape = TileShape::RAMP_UP_RIGHT_DEPRESSED;
 							} else if (value == "ramp_up_right_elevated") {
-								behaviour = TileBehaviour::RAMP_UP_RIGHT_ELEVATED;
+								shape = TileShape::RAMP_UP_RIGHT_ELEVATED;
 							} else if (value == "ramp_up") {
-								behaviour = TileBehaviour::RAMP_UP;
+								shape = TileShape::RAMP_UP;
 							} else if (value == "ramp_up_left_depressed") {
-								behaviour = TileBehaviour::RAMP_UP_LEFT_DEPRESSED;
+								shape = TileShape::RAMP_UP_LEFT_DEPRESSED;
 							} else if (value == "ramp_up_left_elevated") {
-								behaviour = TileBehaviour::RAMP_UP_LEFT_ELEVATED;
+								shape = TileShape::RAMP_UP_LEFT_ELEVATED;
 							} else if (value == "ramp_left") {
-								behaviour = TileBehaviour::RAMP_LEFT;
+								shape = TileShape::RAMP_LEFT;
 							} else if (value == "ramp_down_left_depressed") {
-								behaviour = TileBehaviour::RAMP_DOWN_LEFT_DEPRESSED;
+								shape = TileShape::RAMP_DOWN_LEFT_DEPRESSED;
 							} else if (value == "ramp_down_left_elevated") {
-								behaviour = TileBehaviour::RAMP_DOWN_LEFT_ELEVATED;
+								shape = TileShape::RAMP_DOWN_LEFT_ELEVATED;
 							} else if (value == "ramp_down") {
-								behaviour = TileBehaviour::RAMP_DOWN;
+								shape = TileShape::RAMP_DOWN;
 							} else if (value == "ramp_down_right_depressed") {
-								behaviour = TileBehaviour::RAMP_DOWN_RIGHT_DEPRESSED;
+								shape = TileShape::RAMP_DOWN_RIGHT_DEPRESSED;
 							} else if (value == "ramp_down_right_elevated") {
-								behaviour = TileBehaviour::RAMP_DOWN_RIGHT_ELEVATED;
+								shape = TileShape::RAMP_DOWN_RIGHT_ELEVATED;
 							} else if (value == "box") {
-								behaviour = TileBehaviour::BOX;
+								shape = TileShape::BOX;
 							} else if (value == "wall_right") {
-								behaviour = TileBehaviour::WALL_RIGHT;
+								shape = TileShape::WALL_RIGHT;
 							} else if (value == "wall_front") {
-								behaviour = TileBehaviour::WALL_FRONT;
+								shape = TileShape::WALL_FRONT;
 							} else if (value == "wall_left") {
-								behaviour = TileBehaviour::WALL_LEFT;
+								shape = TileShape::WALL_LEFT;
 							} else if (value == "wall_corner_up_right") {
-								behaviour = TileBehaviour::WALL_CORNER_UP_RIGHT;
+								shape = TileShape::WALL_CORNER_UP_RIGHT;
 							} else if (value == "wall_corner_up_left") {
-								behaviour = TileBehaviour::WALL_CORNER_UP_LEFT;
+								shape = TileShape::WALL_CORNER_UP_LEFT;
 							} else if (value == "wall_corner_down_left") {
-								behaviour = TileBehaviour::WALL_CORNER_DOWN_LEFT;
+								shape = TileShape::WALL_CORNER_DOWN_LEFT;
 							} else if (value == "wall_corner_down_right") {
-								behaviour = TileBehaviour::WALL_CORNER_DOWN_RIGHT;
+								shape = TileShape::WALL_CORNER_DOWN_RIGHT;
 							} else {
-								behaviour = TileBehaviour::FLOOR;
+								shape = TileShape::FLOOR;
 							}
 						} else if ((propertyType == "name" || propertyType == "Name") && (currentTag == "Tile" || currentTag == "tile")) {
 							name = line.substr(j + 1, k - j - 1);

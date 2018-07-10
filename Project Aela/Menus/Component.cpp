@@ -11,7 +11,7 @@ Component::Component(int x, int y) {
 	dimensions = Rect<int>(x, y, 0, 0);
 }
 
-Component::Component(int x, int y, int width, int height){
+Component::Component(int x, int y, int width, int height) {
 	dimensions = Rect<int>(x, y, width, height);
 }
 
@@ -104,14 +104,16 @@ void Component::addListener(int type, EventListener listener) {
 }
 
 void Component::markDirty() {
-	dirty = true;
+	if (!dirty) {
+		dirty = true;
 
-	if (parent != nullptr) {
-		parent->markDirty();
-	}
+		if (parent != nullptr) {
+			parent->markDirty();
+		}
 
-	if (dirtyCallback != nullptr) {
-		dirtyCallback();
+		if (dirtyCallback != nullptr) {
+			dirtyCallback();
+		}
 	}
 }
 

@@ -23,18 +23,22 @@ namespace Game {
 		public:
 			WorldManager();
 
-			bool setup();
+			void setup();
 			void update();
 
-			void rebuildMapWhenPossible();
+			// This creates/recreates the Aela::Map3D that is used by the game.
+			void rebuildMapNextUpdate();
+			void rebuildMap();
 
 			size_t addWorld(World* world);
 			World* getWorld(size_t id);
 			size_t getNumberOfWorlds();
 			Map3D* getMap3D();
-			bool setCurrentWorld(size_t id);
 			size_t getCurrentWorld();
 			Teleporter* getTeleporter(Location* location);
+			Chunk* getChunk(Location* location);
+			TileGroup* getTileGroup(Location* location);
+
 			void setChunkRenderDistances(glm::vec3 chunkRenderDistances);
 			void getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::vec2& chunk, TileDirection direction);
 			void createChunkInCurrentWorld(glm::ivec2 coordinate);
@@ -54,7 +58,7 @@ namespace Game {
 			// These are obtained from GameObjectProvider.
 			ResourceManager* resourceManager;
 			AnimationLooper* animationLooper;
-			CharacterTracker* characterTracker;
+			CharacterProvider* characterProvider;
 			ScriptManager* scriptManager;
 			TileAtlas* tileAtlas;
 			Character* playerCharacter;
@@ -75,9 +79,6 @@ namespace Game {
 
 			// This is the path to the Aela 3D Map.
 			const std::string DEFAULT_MAP_SRC = "res/maps/map.txt";
-
-			// This creates/recreates the Aela::Map3D that is used by the game->
-			void rebuildMap();
 
 			void setupAnimationLoopingForTiles();
 
