@@ -11,17 +11,29 @@
 #include "../Location/Location.h"
 #include "3D/Models/ModelEntity.h"
 #include "CharacterStep.h"
+#include "CharacterModelGenerator.h"
 #include "../Movement/Movement.h"
+#include <queue>
 
 using namespace Aela;
 
 namespace Game {
 	class Character {
-		friend class CharacterTracker;
 		friend class WorldManager;
+		friend class CharacterTracker;
 		public:
 			Character();
 			Character(std::string name);
+
+			void turn(TileDirection direction);
+			void move(Movement* movement, std::string scriptOnCompletion);
+			void moveIfPossible(TileDirection direction);
+			void moveIfPossible(std::list<TileDirection> directions);
+			void teleport(Location* location, bool animate);
+			void kill();
+			void revive();
+
+			void generateModel(ResourceManager* resourceManager);
 
 			// These are getters, setters and adders.
 			Location* getLocation();
@@ -45,6 +57,7 @@ namespace Game {
 			CharacterStep getCurrentStep();
 			void switchStep();
 			bool isMoving();
+			bool isAlive();
 
 			void animationHasEnded();
 			bool animationHasJustEnded();
@@ -61,7 +74,7 @@ namespace Game {
 			void setVisibility(bool visible);
 			bool isVisible();
 			void allowNewMovements(bool newMovementsAreAllowed);
-			bool isFrozen();
+			bool areNewMovementsAllowed();
 
 		protected:
 			Location location;
@@ -80,6 +93,8 @@ namespace Game {
 			Model* baseModel = nullptr;
 			ModelEntity* entity = nullptr;
 
+			std::list<TileDirection> possibleMovementsToProcess;
+
 			std::string textureName;
 
 			// This stores the translations that the animator should use next to animate the character.
@@ -92,6 +107,8 @@ namespace Game {
 			bool moving = false;
 			bool running = false;
 
+			bool alive = true;
+
 			// This stores the foot that the player is using to step. It can be a 0, 1 or 2.
 			CharacterStep currentStep = CharacterStep::LEFT;
 
@@ -102,17 +119,19 @@ namespace Game {
 			long long timePassedAfterAnimationEnd = 0;
 
 			bool visible = true;
-			bool newMovementsAreAllowed = false;
+			bool newMovementsAreAllowed = true;
 
 			// To be accessed by this class's friends.
 			void addTranslation(Movement* movement, std::string scriptOnceComplete);
-			void removeNextTranslation();
-			std::pair<Movement, std::string>* getNextTranslation();
-			std::pair<Movement, std::string>* getLastTranslation();
-
-			void turnSimple(TileDirection direction);
-			void moveSimple(Movement* movement, std::string scriptOnCompletion);
 
 			void setLocation(Location* location);
+
+			void animateDeath();
+
+			// This processes movements added using move().
+			void processMovement(Movement* movement, std::string scriptOnCompletion);
+
+			// This processes movements added using moveIfPossible(...).
+			void processPossibleMovement(TileDirection direction);
 	};
 }

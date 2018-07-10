@@ -74,7 +74,7 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 				}
 				entityType = EntityType::GENERIC;
 			} else if (character == '/' && line.at(1) == '/') {
-				// This is a comment. Stay calm and moveSimple to the next line.
+				// This is a comment. Stay calm and move to the next line.
 				break;
 			} else if (character != ' ' && entityType != EntityType::GENERIC) {
 				std::string propertyType = "";

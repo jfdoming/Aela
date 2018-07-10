@@ -36,37 +36,39 @@ void Game::MapRebuilder::rebuildMap(World* world, size_t currentWorldID, Charact
 				for (auto iter : characters) {
 					Character* character = characterTracker->getCharacterByID(iter.second);
 
-					// Note that characters are represented by models.
-					ModelEntity modelEntity;
-					size_t entityInMap;
-					glm::ivec3 tileOfChunk = character->getLocation()->getTileGroup();
+					if (character->isAlive() && character->isVisible()) {
+						// Note that characters are represented by models.
+						ModelEntity modelEntity;
+						size_t entityInMap;
+						glm::ivec3 tileOfChunk = character->getLocation()->getTileGroup();
 
-					// The position of the character on the map. The distance the character is character->getModeltranslated up from its
-					// tileCoord is sin(PI/6) * 0.5 + 0.05;
-					glm::vec3 characterPositionOnMap((float)(chunkPositionOnMap.x + tileOfChunk.x),
-						(float)(tileOfChunk.y + 0.3f), (float)(chunkPositionOnMap.y + tileOfChunk.z));
+						// The position of the character on the map. The distance the character is character->getModeltranslated up from its
+						// tileCoord is sin(PI/6) * 0.5 + 0.05;
+						glm::vec3 characterPositionOnMap((float) (chunkPositionOnMap.x + tileOfChunk.x),
+							(float) (tileOfChunk.y + 0.3f), (float) (chunkPositionOnMap.y + tileOfChunk.z));
 
-					modelEntity.setPosition(characterPositionOnMap);
-					modelEntity.setRotation((float) ELEVEN_SIXTHS_PI, 0, 0);
-					modelEntity.setVisibility(character->isVisible());
-					modelEntity.setModel(character->getModel());
-					entityInMap = map->getModels()->size();
-					map->addModelWithTransparency(entityInMap, &modelEntity);
-					ModelEntity* newEntity = map->getModel(entityInMap);
-					character->setEntity(newEntity);
+						modelEntity.setPosition(characterPositionOnMap);
+						modelEntity.setRotation((float) ELEVEN_SIXTHS_PI, 0, 0);
+						modelEntity.setVisibility(character->isVisible());
+						modelEntity.setModel(character->getModel());
+						entityInMap = map->getModels()->size();
+						map->addModelWithTransparency(entityInMap, &modelEntity);
+						ModelEntity* newEntity = map->getModel(entityInMap);
+						character->setEntity(newEntity);
 
-					// Make sure to update the character's animation's ModelEntity pointer.
-					AnimationTrack3D* track3D = animator->get3DTrack(character->getName() + "/mv");
-					if (track3D != nullptr) {
-						for (auto& pair : *track3D->getKeyFrames()) {
-							pair.second.setObject(newEntity);
+						// Make sure to update the character's animation's ModelEntity pointer.
+						AnimationTrack3D* track3D = animator->get3DTrack(character->getName() + "/mv");
+						if (track3D != nullptr) {
+							for (auto& pair : *track3D->getKeyFrames()) {
+								pair.second.setObject(newEntity);
+							}
 						}
-					}
 
-					AnimationTrackModel* trackModel = animator->getModelTrack(character->getName() + "/st");
-					if (trackModel != nullptr) {
-						for (auto& pair : *trackModel->getKeyFrames()) {
-							pair.second.setModelEntity(newEntity);
+						AnimationTrackModel* trackModel = animator->getModelTrack(character->getName() + "/st");
+						if (trackModel != nullptr) {
+							for (auto& pair : *trackModel->getKeyFrames()) {
+								pair.second.setModelEntity(newEntity);
+							}
 						}
 					}
 				}

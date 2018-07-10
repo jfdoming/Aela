@@ -45,3 +45,15 @@ void Game::Player::setupTileInventoryForMapEditor() {
 		tileInventory.addTile(&tile);
 	}
 }
+
+void Game::Player::kill() {
+	character->kill();
+}
+
+void Game::Player::revive() {
+	character->revive();
+}
+
+bool Game::Player::isAlive() {
+	return character->isAlive();
+}

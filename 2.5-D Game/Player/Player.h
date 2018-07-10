@@ -25,6 +25,10 @@ namespace Game {
 			Character* getCharacter();
 			void setupTileInventoryForMapEditor();
 
+			void kill();
+			void revive();
+			bool isAlive();
+
 		private:
 			// This stores the Character ID of the player, which is assigned by the Character Tracker.
 			size_t id;

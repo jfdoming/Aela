@@ -8,12 +8,13 @@
 #pragma once
 #include "Aela_Engine.h"
 #include "../Game Object Provider/GameObjectProvider.h"
-#include "../Camera Mode/CameraMode.h"
+#include "../Camera/CameraMode.h"
 #include "../Game Mode/GameMode.h"
 #include "../Location/Location.h"
 #include "../../Project Aela/Scenes/Scene.h"
 #include "../../Project Aela/Menus/SubMenu.h"
 #include "../../Project Aela/Menus/ImageComponent.h"
+#include "../../Project Aela/Menus/RectComponent.h"
 
 using namespace Aela;
 
@@ -41,6 +42,13 @@ namespace Game {
 
 			void setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
 				std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage);
+			void setDeathMenuItems(std::shared_ptr<RectComponent> deathRect, std::shared_ptr<Label> deathText);
+			void setMapEditorCoordinateLabel(std::shared_ptr<Label> mapEditorCoordinateLabel);
+
+			void animatePlayerDeathScreen();
+
+			void movedIntoExistentSpace(glm::ivec2 chuck, glm::ivec3 tile);
+			void movedIntoNonExistentSpace(glm::ivec2 chuck, glm::ivec3 tile);
 
 		private:
 			// These are obtained from GameObjectProvider.
@@ -60,9 +68,15 @@ namespace Game {
 			SceneManager* sceneManager;
 			Animator* animator;
 			Camera3D* camera;
+			CameraController* cameraController;
 
 			Character* playerCharacter;
 			Map3D* map;
+
+			std::shared_ptr<RectComponent> deathRect;
+			std::shared_ptr<Label> deathText;
+
+			std::shared_ptr<Label> mapEditorCoordinateLabel;
 
 			// These store the states of keys.
 			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false,

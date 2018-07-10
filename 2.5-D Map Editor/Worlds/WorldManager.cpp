@@ -87,35 +87,6 @@ void Game::WorldManager::update() {
 		mapNeedsToBeRebuilt = false;
 		characterTracker.mapWasRebuilt();
 	}
-
-	for (size_t i = 0; i < characterMovementQueueByID.size(); i++) {
-		auto& pair = characterMovementQueueByID.at(i);
-		Character* character = characterTracker.getCharacterByID(pair.first);
-		if (character->isFrozen()) {
-			characterMovementQueueByID.erase(characterMovementQueueByID.begin() + i);
-			i--;
-		} else if (!character->isMoving()) {
-			processCharacterMovement(character, pair.second);
-			characterMovementQueueByID.erase(characterMovementQueueByID.begin() + i);
-			i--;
-		}
-	}
-
-
-	for (size_t i = 0; i < characterMovementQueueByName.size(); i++) {
-		auto& pair = characterMovementQueueByName.at(i);
-		Character* character = characterTracker.getCharacterByName(pair.first);
-		if (character->isFrozen()) {
-			characterMovementQueueByID.erase(characterMovementQueueByID.begin() + i);
-			i--;
-		} if (!character->isMoving()) {
-			processCharacterMovement(character, pair.second);
-			characterMovementQueueByName.erase(characterMovementQueueByName.begin() + i);
-			i--;
-		}
-	}
-
-	characterTracker.update();
 }
 
 void Game::WorldManager::rebuildMapWhenPossible() {

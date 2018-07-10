@@ -42,7 +42,7 @@ namespace Game {
 			void update();
 
 			// After all characters have been added, this will generate their models.
-			void generateCharacterModels(ResourceManager* resourceManager);
+			void generateCharacterModelsForAllCharacters(ResourceManager* resourceManager);
 
 			// These are adding and getting character functions.
 			bool trackCharacter(Character* character, size_t* id);

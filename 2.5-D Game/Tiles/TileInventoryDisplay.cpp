@@ -124,7 +124,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 		}
 
 		for (size_t i = 0; i < NUMBER_OF_SLOTS; i++) {
-			int whichTile = currentTile + i - 1;
+			size_t whichTile = currentTile + i - 1;
 
 			if (whichTile >= player->getTileInventory()->getNumberOfTiles() || whichTile < 0) {
 				GLTexture* texture;

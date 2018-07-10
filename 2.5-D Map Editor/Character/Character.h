@@ -63,10 +63,10 @@ namespace Game {
 			void setVisibility(bool visible);
 			bool isVisible();
 			void allowNewMovements(bool newMovementsAreAllowed);
-			bool isFrozen();
+			bool newMovementsAreAllowed();
 
 			void turnSimple(TileDirection direction);
-			void moveSimple(Movement* movement, std::string scriptOnCompletion);
+			void move(Movement* movement, std::string scriptOnCompletion);
 
 		protected:
 			Location location;

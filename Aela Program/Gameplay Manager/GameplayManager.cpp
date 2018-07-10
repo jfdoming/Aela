@@ -108,7 +108,7 @@ void GameplayManager::updatePlayerMovements() {
 
 	// Since physics calculations are performed using the bounding box that is bound to the player's ModelEntity, this modifies
 	// that bounding box but keeps a copy of the original just in case the physics calculations detect a collision and does
-	// not allow the player to moveSimple.
+	// not allow the player to move.
 	BoundingBox3D originalBox = *player.getEntity()->getBoundingBox();
 	BoundingBox3D* playerBox = player.getEntity()->getBoundingBox();
 	if (movingLeft) {
@@ -127,7 +127,7 @@ void GameplayManager::updatePlayerMovements() {
 	player.getEntity()->getBoundingBox()->generateVertices();
 
 	// This literally just checks to see if the player's bounding box is inside of another model's bounding box. If the player
-	// is moving fast enough, they could moveSimple past another model's bounding box.
+	// is moving fast enough, they could move past another model's bounding box.
 	// Actually, for now, forget collision.
 	// if (!physics->collidingInMap(player.getEntityIDInMap(), currentMap)) {
 		// There was not a collision! Move the player!

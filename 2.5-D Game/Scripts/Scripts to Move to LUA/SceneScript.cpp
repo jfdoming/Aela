@@ -206,12 +206,12 @@ void Scripts::setupScenes() {
 	deathText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.30), (int) (windowDimensions.getHeight() * 0.30));
 	deathText->setTint(&ColourRGBA(1, 1, 1, 0));
 
-	characterTracker->setGameplayMenuItems(deathBackgroundRect, deathText);
+	game->setDeathMenuItems(deathBackgroundRect, deathText);
 
 	// This sets up the coordinate text.
 	auto coordinateText = std::make_shared<Label>("", xerox, almostWhitePtr);
 	coordinateText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.10), (int) (windowDimensions.getHeight() * 0.10));
-	worldManager->setCoordinateLabel(coordinateText);
+	game->setMapEditorCoordinateLabel(coordinateText);
 
 	// This sets up the world gameplay scene, in which the player is given a top-down view of the world.
 	auto worldGameplayScene = new Scene();

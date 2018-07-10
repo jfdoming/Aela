@@ -3,7 +3,7 @@
 * Author: Robert Ciborowski
 * Date: 12/08/2017
 * Description: A class used by Aela's GLRenderer to store properties of a skybox entity.
-*              Keep in mind that a skybox entity can moveSimple and animate, making it behave
+*              Keep in mind that a skybox entity can move and animate, making it behave
 *              like other entities.
 */
 

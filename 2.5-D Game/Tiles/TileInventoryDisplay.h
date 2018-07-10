@@ -43,6 +43,6 @@ namespace Game {
 			bool setThingsUp = false;
 
 			const long long TIME_FOR_SELECTOR_TO_MOVE = 80;
-			const int NUMBER_OF_SLOTS = 3;
+			const unsigned int NUMBER_OF_SLOTS = 3;
 	};
 }

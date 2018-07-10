@@ -122,7 +122,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 					atlas.addTile(TileType(collidable, behaviour, name), model);
 					name = "tile";
 				} else if (character == '/' && line.at(1) == '/') {
-					// This is a comment. Stay calm and moveSimple to the next line.
+					// This is a comment. Stay calm and move to the next line.
 					break;
 				} else if (character != ' ' && currentTag != "") {
 					std::string propertyType = "";

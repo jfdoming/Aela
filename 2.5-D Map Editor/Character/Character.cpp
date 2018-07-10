@@ -146,7 +146,7 @@ void Game::Character::turnSimple(TileDirection direction) {
 	directionFacing = direction;
 }
 
-void Game::Character::moveSimple(Movement* movement, std::string scriptOnCompletion) {
+void Game::Character::move(Movement* movement, std::string scriptOnCompletion) {
 	moving = true;
 	switchStep();
 
@@ -226,7 +226,7 @@ void Game::Character::allowNewMovements(bool newMovementsAreAllowed) {
 	this->newMovementsAreAllowed = newMovementsAreAllowed;
 }
 
-bool Game::Character::isFrozen() {
+bool Game::Character::areNewMovementsAllowed() {
 	return newMovementsAreAllowed;
 }
 

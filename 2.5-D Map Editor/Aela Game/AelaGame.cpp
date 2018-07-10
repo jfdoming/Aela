@@ -93,7 +93,7 @@ void Game::AelaGame::setup() {
 	GameScripts::runStartingScripts();
 
 	// Tell the character manager that we've added all of our characters!
-	characterTracker->generateCharacterModels(resourceManager);
+	characterTracker->generateCharacterModelsForAllCharacters(resourceManager);
 
 	// Setup the world manager!
 	worldManager.setup(engine, &scriptManager, &dialogueHandler, playerCharacter);
@@ -125,7 +125,7 @@ void Game::AelaGame::update() {
 			renderer->set3DTint(&ColourRGBA(1, tint, tint, 1));*/
 
 			if (!playerCharacter->isMoving() && !dialogueHandler.dialogueIsBeingShown() && cameraMode == CameraMode::PLAYER_LOCKED
-				&& !playerCharacter->isFrozen()) {
+				&& !playerCharacter->areNewMovementsAllowed()) {
 				if (movingRight) {
 					if (playerCharacter->getDirectionFacing() != TileDirection::RIGHT && !playerCharacter->animationHasJustEnded()) {
 						characterTracker->turnTrackedCharacter(playerCharacter, TileDirection::RIGHT);

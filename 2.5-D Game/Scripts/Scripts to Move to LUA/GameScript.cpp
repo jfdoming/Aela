@@ -17,8 +17,7 @@ void Scripts::setupCharacters() {}
 void Scripts::setupTeleporters() {}
 
 void Scripts::startNewGame() {
-	characterTracker->teleportTrackedCharacter(player->getCharacter(),
-		&Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 2)), false);
+	player->getCharacter()->teleport(&Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 2)), false);		
 	// worldManager->setCurrentWorld(0);
 
 	// This sets up the player's tile inventory for a new game.

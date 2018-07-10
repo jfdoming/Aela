@@ -29,6 +29,7 @@ namespace Game {
 	class TileInventoryDisplay;
 	class TileAtlas;
 	class WorldExporter;
+	class CameraController;
 
 	class GameObjectProvider {
 		public:
@@ -60,13 +61,14 @@ namespace Game {
 			static TileInventoryDisplay* getTileInventoryDisplay();
 			static TileAtlas* getTileAtlas();
 			static WorldExporter* getWorldExporter();
+			static CameraController* getCameraController();
 
 			static Scene* getGameplayScene();
 			static Scene* getPauseScene();
 
 			static void setGame(AelaGame* game);
 			static void setWorldManager(WorldManager* worldManager);
-			static void setCharacterTracker(CharacterTracker* characterTRacker);
+			static void setCharacterTracker(CharacterTracker* characterTracker);
 			static void setEnemyRegistrar(EnemyRegistrar* enemyRegistrar);
 			static void setPlayer(Player* player);
 			static void setScriptManager(ScriptManager* scriptManager);
@@ -74,6 +76,7 @@ namespace Game {
 			static void setTileInventoryDisplay(TileInventoryDisplay* tileInventoryDisplay);
 			static void setTileAtlas(TileAtlas* tileAtlas);
 			static void setWorldExporter(WorldExporter* worldExporter);
+			static void setCameraController(CameraController* cameraController);
 
 			static void setGameplayScene(Scene* gameplayScene);
 			static void setPauseScene(Scene* pauseScene);
@@ -96,6 +99,7 @@ namespace Game {
 			static TileInventoryDisplay* tileInventoryDisplay;
 			static TileAtlas* tileAtlas;
 			static WorldExporter* worldExporter;
+			static CameraController* cameraController;
 
 			// These are pointers to scenes are should be set by a script that constructs the scenes.
 			static Scene* gameplayScene, *pauseScene;

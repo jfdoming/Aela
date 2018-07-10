@@ -1,3 +1,4 @@
+#include "..\..\2.5-D Game\Character\CharacterTracker.h"
 
 /*
 * Class: Character Tracker
@@ -87,7 +88,7 @@ void Game::CharacterTracker::update() {
 	}
 }
 
-void Game::CharacterTracker::generateCharacterModels(ResourceManager* resourceManager) {
+void Game::CharacterTracker::generateCharacterModelsForAllCharacters(ResourceManager* resourceManager) {
 	CharacterModelGenerator generator;
 	generator.setCharacters(&characters);
 
@@ -240,7 +241,7 @@ void Game::CharacterTracker::turnTrackedCharacter(std::string name, TileDirectio
 }
 
 void Game::CharacterTracker::moveTrackedCharacter(Character* character, Movement* movement, std::string scriptOnCompletion) {
-	character->moveSimple(movement, scriptOnCompletion);
+	character->move(movement, scriptOnCompletion);
 	turnTrackedCharacter(character, movement->getDirection());
 }
 

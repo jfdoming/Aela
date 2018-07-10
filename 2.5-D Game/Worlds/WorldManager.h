@@ -28,24 +28,17 @@ namespace Game {
 
 			void rebuildMapWhenPossible();
 
-			/*TileAtlas* getTileAtlas();
-			CharacterTracker* getCharacterTracker();*/
 			size_t addWorld(World* world);
 			World* getWorld(size_t id);
+			size_t getNumberOfWorlds();
 			Map3D* getMap3D();
 			bool setCurrentWorld(size_t id);
 			size_t getCurrentWorld();
 			Teleporter* getTeleporter(Location* location);
 			void setChunkRenderDistances(glm::vec3 chunkRenderDistances);
-			void setGameplayScene(Scene* gameplayScene);
 			void getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::vec2& chunk, TileDirection direction);
 			void createChunkInCurrentWorld(glm::ivec2 coordinate);
 			void createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, unsigned int layer);
-
-			void moveCharacterIfPossible(size_t id, TileDirection direction);
-			void moveCharacterIfPossible(std::string name, TileDirection direction);
-			void moveCharacterIfPossible(size_t id, std::vector<TileDirection> directions);
-			void moveCharacterIfPossible(std::string name, std::vector<TileDirection> directions);
 
 			void addWalkedOnScript(std::string script, Location* location);
 			void addPromptedScript(std::string script, Location* location);
@@ -54,8 +47,6 @@ namespace Game {
 
 			void runPromptedScriptOfTile(Location* location);
 			void runTileSwitchScriptOfTile(Location* location);
-
-			void setCoordinateLabel(std::shared_ptr<Label> coordinateLabel);
 
 			bool exportCurrentWorld();
 
@@ -74,8 +65,6 @@ namespace Game {
 			size_t currentWorld;
 			MapRebuilder mapRebuilder;
 
-			std::shared_ptr<Label> coordinateLabel;
-
 			// This is a handle to an Aela 3D map. The chunks of a world are loaded into this map. Because Aela's 3D
 			// system revolves around maps, and because this game is part-3D-part-2D, there must be a Map3D somewhere!
 			Map3D* map;
@@ -83,10 +72,6 @@ namespace Game {
 			bool mapNeedsToBeRebuilt;
 
 			TeleporterMap teleporters;
-
-			// These can't actually be std::queues.
-			std::vector<std::pair<size_t, TileDirection>> characterMovementQueueByID;
-			std::vector<std::pair<std::string, TileDirection>> characterMovementQueueByName;
 
 			// This is the path to the Aela 3D Map.
 			const std::string DEFAULT_MAP_SRC = "res/maps/map.txt";
