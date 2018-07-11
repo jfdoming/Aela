@@ -87,11 +87,17 @@ namespace Aela {
 				return glm::vec3(r, g, b);
 			}
 
+			glm::vec3* getVec3Ptr() {
+				vec = glm::vec3(r, g, b);
+				return &vec;
+			}
+
 			inline friend std::ostream& operator<<(std::ostream &os, ColourRGB const& me) {
 				return (os << "ColourRGB(" << me.r << ", " << me.g << ", " << me.b << ")");
 			}
 
 		private:
 			float r, g, b;
+			glm::vec3 vec;
 	};
 }

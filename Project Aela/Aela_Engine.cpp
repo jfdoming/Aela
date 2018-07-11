@@ -60,14 +60,14 @@ int Aela::Engine::runningLoop() {
 	do {
 		// This updates events. It must be done first.
 		eventHandler.updateSDLEvents();
-		timeManager.updateTime();
+		time.updateTime();
 		animationLooper.update();
 		animator.update();
 		
 		// This updates and renders the current scene.
 		/*Aela::Scene* currentScene = sceneManager.getCurrentScene();
 		if (currentScene != nullptr) {
-			currentScene->update();
+			currentScene->updateRegisteredEnemies();
 			currentScene->render(&renderer);
 		}*/
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
@@ -114,7 +114,7 @@ int Aela::Engine::setupRenderer() {
 	// This passes the window and time manager to the renderer and control manager.
 	// Please note that the window must be set before calling setup functions.
 	renderer.setWindow(&window);
-	renderer.setTime(&timeManager);
+	renderer.setTime(&time);
 	renderer.setFontManager(&fontManager);
 	renderer.setup3D();
 	renderer.setup2D();
@@ -162,9 +162,9 @@ int Aela::Engine::setupAudioPlayer() {
 }
 
 int Aela::Engine::setupAnimation() {
-	animator.setTime(&timeManager);
+	animator.setTime(&time);
 	animationLooper.setAnimator(&animator);
-	keyedAnimator.setTime(&timeManager);
+	keyedAnimator.setTime(&time);
 	keyedAnimator.setWindow(&window);
 	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
 	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(KeyedAnimator::onEvent, &keyedAnimator));
@@ -183,22 +183,52 @@ int Aela::Engine::loadUserEnvironmentInformation() {
 
 // This method is meant to be run by another program that uses the Project Aela library. It starts Project Aela.
 void Engine::update() {
-	// Note: Events should be updated first.
-	eventHandler.updateSDLEvents();
+	if (useStopwatch) {
+		stopwatch.startRecording("Event Handler Updating");
+		// Note: Events should be updated first.
+		eventHandler.updateSDLEvents();
+		stopwatch.stopRecording("Event Handler Updating");
 
-	timeManager.updateTime();
-	sceneManager.update();
-	animationLooper.update();
-	animator.update();
-	keyedAnimator.update();
+		stopwatch.startRecording("Time Updating");
+		time.updateTime();
+		stopwatch.stopRecording("Time Updating");
+
+		stopwatch.startRecording("Scene Manager Updating");
+		sceneManager.update();
+		stopwatch.stopRecording("Scene Manager Updating");
+
+		stopwatch.startRecording("Animation Updating");
+		animationLooper.update();
+		animator.update();
+		keyedAnimator.update();
+		stopwatch.stopRecording("Animation Updating");
+	} else {
+		// Note: Events should be updated first.
+		eventHandler.updateSDLEvents();
+		time.updateTime();
+		sceneManager.update();
+		animationLooper.update();
+		animator.update();
+		keyedAnimator.update();
+	}
 }
 
 void Engine::render() {
+	stopwatch.startRecording("Scene Manager Rendering");
 	sceneManager.render(renderer);
+	stopwatch.stopRecording("Scene Manager Rendering");
 }
 
 bool Engine::shouldExit() {
 	return window.quitCheck() || AelaErrorHandling::programCloseWasRequested();
+}
+
+void Aela::Engine::setUseStopwatch(bool useStopwatch) {
+	this->useStopwatch = useStopwatch;
+}
+
+bool Aela::Engine::isUsingStopwatch() {
+	return useStopwatch;
 }
 
 Window* Engine::getWindow() {
@@ -218,7 +248,7 @@ EventHandler* Engine::getEventHandler() {
 }
 
 Time* Engine::getTime() {
-	return &timeManager;
+	return &time;
 }
 
 FontManager* Engine::getFontManager() {
@@ -265,6 +295,10 @@ Map3DExporter* Aela::Engine::getMapExporter() {
 	return &mapExporter;
 }
 
-Physics* Aela::Engine::getPhysicsManager() {
-	return &physicsManager;
+Physics* Aela::Engine::getPhysics() {
+	return &physics;
+}
+
+Stopwatch* Aela::Engine::getStopwatch() {
+	return &stopwatch;
 }

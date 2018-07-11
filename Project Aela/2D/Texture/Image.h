@@ -14,7 +14,7 @@ namespace Aela {
 	class Image {
 		public:
 			Image() {
-				dimensions.setValues(0, 0, 0, 0);
+				dimensions = Rect<int>(0, 0, 0, 0);
 			}
 
 			virtual ~Image() {
@@ -27,7 +27,7 @@ namespace Aela {
 			}
 
 			void setDimensions(int x, int y, int width, int height) {
-				dimensions.setValues(x, y, width, height);
+				dimensions = Rect<int>(x, y, width, height);
 			}
 
 			Rect<int>* getDimensions() {

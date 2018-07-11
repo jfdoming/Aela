@@ -8,15 +8,13 @@
 
 using namespace Aela;
 
-const unsigned int numberOfMaterialsAndModels = 5;
 std::string materialsAndModelNames[] = {
 	"meme_mug",
 	"corner_elevated",
 	"floor"
 };
 
-const unsigned int numberOfTextures = 5;
-std::string textureNames[] = {
+std::string ddsTextureNames[] = {
 	"map_editor_main_background",
 	"map_editor_top_bar",
 	"simple_button",
@@ -24,18 +22,15 @@ std::string textureNames[] = {
 	"arrow",
 };
 
-const unsigned int numberOfBillboards = 2;
 std::string billboardNames[] = {
 	"ekkon"
 };
 
-const unsigned int numberOfParticles = 2;
 std::string particleNames[] = {
 	"particle_1",
 	"particle_2"
 };
 
-const unsigned int numberOfSkyboxes = 2;
 std::string skyboxNames[] = {
 	"skybox_1",
 	"skybox_2"
@@ -78,7 +73,7 @@ void loadTextures(ResourceManager* resourceManager) {
 		resourceManager->addToGroup("res/textures/" + path + ".dds", false);
 	}
 
-	for (std::string path : textureNames) {
+	for (std::string path : ddsTextureNames) {
 		resourceManager->addToGroup("res/textures/" + path + ".dds", false);
 	}
 
@@ -116,7 +111,7 @@ void loadSkyboxes(ResourceManager* resourceManager) {
 	}
 }
 
-void loadStartupMap(ResourceManager* resourceManager, GLRenderer& renderer) {
+void loadMaps(ResourceManager* resourceManager, GLRenderer& renderer) {
 	Map3DLoader mapLoader(resourceManager->getResourceRoot());
 	mapLoader.bindRenderer(&renderer);
 	resourceManager->bindLoader(&mapLoader);

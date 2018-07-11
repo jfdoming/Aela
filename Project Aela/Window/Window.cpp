@@ -39,7 +39,7 @@ bool Window::createWindow(int setWidth, int setHeight, int setXPosition, int set
 	windowName = setName.c_str();
 	width = setWidth;
 	height = setHeight;
-	dimensions.setValues(0, 0, width, height);
+	dimensions = Rect<unsigned int>(0, 0, width, height);
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -110,7 +110,7 @@ void Aela::Window::setDimensions(int width, int height) {
 	SDL_SetWindowSize(window, width, height);
 	width = width;
 	height = height;
-	dimensions.setValues(0, 0, width, height);
+	dimensions = Rect<unsigned int>(0, 0, width, height);
 	recentlyResized = true;
 }
 

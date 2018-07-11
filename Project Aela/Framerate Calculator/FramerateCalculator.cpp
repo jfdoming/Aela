@@ -33,7 +33,7 @@ double FramerateCalculator::getTrueFPS() {
 }
 
 double FramerateCalculator::getSmoothedFPS() {
-	return trueFPS;
+	return smoothedFPS;
 }
 
 double FramerateCalculator::getFPSSmoothingAmount() {

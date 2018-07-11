@@ -11,7 +11,7 @@
 
 using namespace Aela;
 
-void abbreviate(std::string& src, std::string defaultPath) {
+void Aela::Map3DExporter::abbreviate(std::string& src, std::string defaultPath) {
 	if (startsWith(src, defaultPath)) {
 		src = "~" + src.substr(defaultPath.size(), src.size());
 	}

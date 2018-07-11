@@ -2,39 +2,42 @@
 * Class: Character
 * Author: Robert Ciborowski
 * Date: 07/08/2017
-* Description: A class used to represent a Character.
+* Description: A class used to represent a character.
 */
 
 #pragma once
+#include "../Game Object Provider/GameObjectProvider.h"
 #include "3D/Models/Model.h"
 #include "../Location/Location.h"
 #include "3D/Models/ModelEntity.h"
 #include "CharacterStep.h"
+#include "CharacterModelGenerator.h"
+#include "../Movement/Movement.h"
+#include <queue>
 
 using namespace Aela;
 
 namespace Game {
 	class Character {
-		friend class CharacterManager;
 		friend class WorldManager;
+		friend class CharacterProvider;
 		public:
-			Character() {
-				// According to Platinum, it should be 0.00375.
-				walkingSpeed = 0.00375f;
-				// According to Platinum, it should be 0.0075, but that feels too fast.
-				runningSpeed = 0.0075f;
-				directionFacing = TileDirection::BACKWARD;
-			}
+			Character();
+			Character(std::string name);
 
-			Character(std::string name) : Character() {
-				this->name = name;
-			}
+			void turn(TileDirection direction);
+			void move(Movement* movement, std::string scriptOnCompletion);
+			void moveIfPossible(TileDirection direction);
+			void moveIfPossible(std::list<TileDirection> directions);
+			void teleport(Location* location, bool animate);
+			void kill();
+			void revive();
 
-			void setup(Location* location);
+			void generateModel(ResourceManager* resourceManager);
 
 			// These are getters, setters and adders.
-			void setLocation(Location* location);
 			Location* getLocation();
+			Location* getLocationBeforeAnimation();
 			void setModel(Model* model);
 			Model* getModel();
 			void setName(std::string name);
@@ -54,26 +57,48 @@ namespace Game {
 			CharacterStep getCurrentStep();
 			void switchStep();
 			bool isMoving();
+			bool isAlive();
 
 			void animationHasEnded();
 			bool animationHasJustEnded();
 			void stopMoving();
 
-		private:
+			void setHealth(int health);
+			int getHealth();
+			void increaseHealth(int amount);
+			void decreaseHealth(int amount);
+			void setMaxHealth(int maxHealth);
+			int getMaxHealth();
+			void increaseMaxHealth(int amount);
+			void decreaseMaxHealth(int amount);
+			void setVisibility(bool visible);
+			bool isVisible();
+			void allowNewMovements(bool newMovementsAreAllowed);
+			bool areNewMovementsAllowed();
+
+		protected:
 			Location location;
+			Location locationBeforeAnimation;
 			TileDirection directionFacing;
 
 			// Each character should have a unique name.
 			std::string name;
 
+			int health, maxHealth;
+
+			virtual void update();
+
+		private:
 			// Unlike tiles, characters are unique and get their own models.
 			Model* baseModel = nullptr;
 			ModelEntity* entity = nullptr;
 
+			std::list<TileDirection> possibleMovementsToProcess;
+
 			std::string textureName;
 
 			// This stores the translations that the animator should use next to animate the character.
-			std::vector<std::pair<glm::vec3, std::string>> translations;
+			std::vector<std::pair<Movement, std::string>> translations;
 
 			// These represent several speeds, in units/millisecond.
 			float walkingSpeed, runningSpeed;
@@ -81,6 +106,8 @@ namespace Game {
 			// These store the states of player movement.
 			bool moving = false;
 			bool running = false;
+
+			bool alive = true;
 
 			// This stores the foot that the player is using to step. It can be a 0, 1 or 2.
 			CharacterStep currentStep = CharacterStep::LEFT;
@@ -91,13 +118,20 @@ namespace Game {
 
 			long long timePassedAfterAnimationEnd = 0;
 
-			// To be accessed by this class's friends.
-			void addTranslation(glm::vec3 translation, std::string scriptOnceComplete);
-			void removeNextTranslation();
-			std::pair<glm::vec3, std::string>* getNextTranslation();
-			std::pair<glm::vec3, std::string>* getLastTranslation();
+			bool visible = true;
+			bool newMovementsAreAllowed = true;
 
-			void turnSimple(TileDirection direction);
-			void moveSimple(TileDirection direction, std::string scriptOnCompletion);
+			// To be accessed by this class's friends.
+			void addTranslation(Movement* movement, std::string scriptOnceComplete);
+
+			void setLocation(Location* location);
+
+			void animateDeath();
+
+			// This processes movements added using move().
+			void processMovement(Movement* movement, std::string scriptOnCompletion);
+
+			// This processes movements added using moveIfPossible(...).
+			void processPossibleMovement(TileDirection direction);
 	};
 }

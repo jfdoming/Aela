@@ -10,7 +10,12 @@
 void AelaSimpleError::setProperties(AelaErrorMessageType setType, std::string setMessage) {
 	errorMessageType = setType;
 	message = setMessage;
-	title = "Aela Error";
+
+	if (setType == AELA_WARNING_WINDOW) {
+		title = "Aela Warning";
+	} else {
+		title = "Aela Error";
+	}
 }
 
 void AelaSimpleError::setProperties(AelaErrorMessageType setType, std::string setTitle, std::string setMessage) {

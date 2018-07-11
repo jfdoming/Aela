@@ -47,6 +47,9 @@ namespace Aela {
 			void renderShadows(Map3D* map);
 			void renderModelEntities(Map3D* map, bool multisampling);
 
+			// Don't use this, it's only here for debugging!
+			// void renderSingleModelEntityShadow(ModelEntity* entity, Map3D* map);
+
 			void clearColourFrameBuffer(bool multisampling);
 			void renderTextureIn3DSpace(GLuint* texture, bool cullTexture, glm::vec3* position, glm::vec3* scaling, glm::vec3* lookAt, bool inverseRotation, bool multisampling);
 			void renderBillboard(BillboardEntity* billboard, bool multisampling);
@@ -84,7 +87,8 @@ namespace Aela {
 			// These are a bunch of handles to GLSL variables that get passed to the shadow and
 			// model renderer during rendering.
 			GLuint depthProgramID, modelProgramID, billboardProgramID, skyboxProgramID;
-			GLuint modelTextureID, projectionMatrixID, depthMatrixID, viewMatrixID, modelMatrixID, rotationMatrixID, cameraPositionID, shadowMapID, shadowMatrixID, shadowModelMatrixID;
+			GLuint modelTextureID, projectionMatrixID, depthMatrixID, viewMatrixID, modelMatrixID, rotationMatrixID, cameraPositionID,
+				shadowMapID, shadowMatrixID, shadowModelMatrixID;
 			GLuint billboardTextureID, billboardMVPMatrixID;
 			GLuint skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID;
 			GLuint numberOfLightsID, lightPositionsID, lightDirectionsID, lightColoursID, lightPowersID, lightShadowPositionsID;

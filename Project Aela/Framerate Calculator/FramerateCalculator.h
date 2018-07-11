@@ -22,7 +22,7 @@ namespace Aela {
 			void setFPSSmoothing(double fpsSmoothingAmount), setTimeBetweenFrameChecks(long long timeBetweenFrameChecks);
 
 		private:
-			double trueFPS = -1, smoothedFPS = -1, fpsSmoothingAmount = 0.9f;
+			double trueFPS = -1, smoothedFPS = -1, fpsSmoothingAmount = 0.2f;
 			long long timeBetweenFrameChecks = 250;
 			long long timeOfLastFrameCheck = 0;
 	};

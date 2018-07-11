@@ -18,11 +18,11 @@ namespace Aela {
 
 			float getSpeed();
 			void setSpeed(float baseSpeed);
-			unsigned int getLifetime();
-			void setLifetime(unsigned int baseLifetime);
+			unsigned int getDistance();
+			void setDistance(unsigned int baseDistance);
 
 		private:
 			float baseSpeed = 0.000000001f;
-			unsigned int baseLifetime = 1000;
+			unsigned int baseDistance = 1000;
 	};
 }

@@ -10,7 +10,7 @@
 // This is the input data.
 layout(location = 0) in vec3 vertexPosition;
 
-// This is the only uniform. The depth vertex shader does not need that much information.
+// These are the uniforms.
 uniform mat4 modelMatrices[100];
 
 void main(){

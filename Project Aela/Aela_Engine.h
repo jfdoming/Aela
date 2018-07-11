@@ -34,6 +34,7 @@
 #include "User Environment/UserEnvironment.h"
 #include "Framerate Calculator/FramerateCalculator.h"
 #include "3D/Maps/Map3DExporter.h"
+#include "Time/Stopwatch/Stopwatch.h"
 
 namespace Aela {
 	class Engine {
@@ -55,6 +56,8 @@ namespace Aela {
 			void render();
 
 			bool shouldExit();
+			void setUseStopwatch(bool useStopwatch);
+			bool isUsingStopwatch();
 
 			// These are getters. Some of the Aela Objects inside of this class are not allowed to be accessed externally.
 			Window* getWindow();
@@ -74,14 +77,15 @@ namespace Aela {
 			KeyedAnimator* getKeyedAnimator();
 			FramerateCalculator* getFramerateCalculator();
 			Map3DExporter* getMapExporter();
-			Physics* getPhysicsManager();
+			Physics* getPhysics();
+			Stopwatch* getStopwatch();
 
 		private:
 			// These are global objects who's classes come from Project Aela.
 			Window window;
 			GLRenderer renderer;
 			EventHandler eventHandler;
-			Time timeManager;
+			Time time;
 			FontManager fontManager;
 			LuaManager luaManager;
 			SceneManager sceneManager;
@@ -93,7 +97,10 @@ namespace Aela {
 			KeyedAnimator keyedAnimator;
 			FramerateCalculator framerateCalculator;
 			Map3DExporter mapExporter;
-			Physics physicsManager;
+			Physics physics;
+			Stopwatch stopwatch;
+
+			bool useStopwatch = false;
 
 			int runningLoop();
 	};

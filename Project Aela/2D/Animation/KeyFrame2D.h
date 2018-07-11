@@ -28,10 +28,13 @@ namespace Aela {
 			void setDimensions(Rect<int>* dimensions);
 			Rect<int>* getDimensions();
 			Rect<int>* getOriginalDimensions();
+			bool isUsingDimensions();
 
 		private:
 			std::shared_ptr<Transformable2D> object = nullptr;
 			ColourRGBA tint, originalTint;
 			Rect<int> dimensions, originalDimensions;
+
+			bool useDimensions = false;
 	};
 }

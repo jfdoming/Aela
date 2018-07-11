@@ -10,19 +10,27 @@
 // This is the input data.
 in vec2 UV;
 in vec3 worldSpacePosition;
-in vec3 modelViewProjectionPosition;
-in vec3 cameraSpaceNormal;
-in vec3 cameraSpaceEyeDirection;
-in vec4 shadowCoordinate;
+// in vec3 modelViewProjectionPosition;
+// in vec3 cameraSpaceNormal;
+// in vec3 cameraSpaceEyeDirection;
 in vec3 normal;
 
 // This is the output data.
 vec3 colourAsVec3;
 layout(location = 0) out vec4 colour;
 
-// These are values that are hard-coded into the shader.
+// This represents the max number of lights allowed.
 const int MAX_LIGHT_AMOUNT = 5;
-float distanceToLightModifier = 0.05;
+
+// This represents how bright an object can get as it gets closer to a light source.
+const float MAX_DISTANCE_MODIFIER_RESULT = 1.5;
+
+// This modifies the minimum brightness as the angle changes. It larger this value is
+// the less the light decays as you go further away from it.
+const float COS_THETA_MINIMUM = 0.4;
+const float COS_THETA_MAXIMUM = 0.8;
+
+float distanceToLightModifier = 0.065; // 0.05
 bool PCF = true;
 float PI  = 3.14159265358979323846;
 float far = 100.0;
@@ -36,13 +44,15 @@ vec3 PCFDirections[20] = vec3[](
 );
 
 // These are the uniforms used by the shader.
+// I have no clue as to why, but openGL does not return the proper uniform address unless I name these
+// uniforms EXACTLY like this.
 uniform sampler2D textureSampler;
 uniform samplerCube shadowMaps[MAX_LIGHT_AMOUNT];
 uniform int numberOfLights;
-uniform vec3 lightPositions[MAX_LIGHT_AMOUNT];
-uniform vec3 lightDirections[MAX_LIGHT_AMOUNT];
-uniform vec3 lightColours[MAX_LIGHT_AMOUNT];
-uniform float lightPowers[MAX_LIGHT_AMOUNT];
+uniform vec3 openGLSucksAtPositions[MAX_LIGHT_AMOUNT];
+// uniform vec3 lightDirections[MAX_LIGHT_AMOUNT];
+uniform vec3 openGLSucksAtColours[MAX_LIGHT_AMOUNT];
+uniform float openGLSucksAtLightPowers[MAX_LIGHT_AMOUNT];
 uniform vec3 cameraPosition;
 
 // This is used for pseudo-randomness.
@@ -62,7 +72,7 @@ vec4 noise(vec4 colourToModify, vec2 UV) {
 // including the fixing of shadow acne and peter panning. It also includes percentage-closer
 // filtering (PCF).
 float shadowCalculation(vec3 positionInLightSpace, int whichLight, float bias) {
-    vec3 fragToLight = positionInLightSpace - lightPositions[whichLight];
+    vec3 fragToLight = positionInLightSpace - openGLSucksAtPositions[whichLight];
     float currentDepth = length(fragToLight) * shadowScalingFactor;
 	if (currentDepth > far) {
 		return 0;
@@ -95,8 +105,8 @@ float shadowCalculation(vec3 positionInLightSpace, int whichLight, float bias) {
 void main(){
 	// This calculates several colours.
 	vec4 UVSample = texture(textureSampler, UV).rgba;
-	vec3 MaterialDiffuseColor = UVSample.rgb;
-	vec3 MaterialAmbientColor = vec3(0.15, 0.15, 0.15) * MaterialDiffuseColor;
+	vec3 materialDiffuseColor = UVSample.rgb;
+	vec3 MaterialAmbientColor = vec3(0.15, 0.15, 0.15) * materialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(0.3, 0.3, 0.3);
 	vec3 diffuseColours[MAX_LIGHT_AMOUNT];
 	vec3 finalDiffuseColour = vec3(0, 0, 0);
@@ -105,34 +115,35 @@ void main(){
 	
 	for (int i = 0; i < numberOfLights; i++) {
 		vec3 n = normal;
-		vec3 l = normalize(lightPositions[i] - worldSpacePosition);
+		vec3 l = normalize(openGLSucksAtPositions[i] - worldSpacePosition);
 		
 		// This calculates the cosine between the normal and the light direction. It is clamped.
 		// If the light is at the vertical of the triangle, cosTheta is 1.
 		// If the light perpendicular to the triangle, cosTheta is 0.
 		// If the light behind the triangle, cosTheta is 0.
-		float cosTheta = clamp(dot(n, l), 0, 1);
+		float cosTheta = clamp(dot(n, l), COS_THETA_MINIMUM, COS_THETA_MAXIMUM);
 		
 		float bias = 0.005 * tan(acos(cosTheta));
 		bias = clamp(bias, 0.0, 0.01);
 		
 		float shadow = shadowCalculation(worldSpacePosition, i, bias);
-		visibility -= shadow;
+		// visibility -= shadow;
 		
-		float distanceBetweenLightAndFragment = distance(worldSpacePosition, lightPositions[i]);
-		
-		diffuseColours[i] = MaterialDiffuseColor * lightColours[i] * lightPowers[i] * cosTheta * ((1 / distanceBetweenLightAndFragment) / distanceToLightModifier);
-		visibility += cosTheta * lightPowers[i];
+		float distanceBetweenLightAndFragment = distance(worldSpacePosition, openGLSucksAtPositions[i]);
+		float distanceModifier = clamp(((1 / distanceBetweenLightAndFragment) / distanceToLightModifier), 0, MAX_DISTANCE_MODIFIER_RESULT);
+		diffuseColours[i] = materialDiffuseColor * openGLSucksAtColours[i] * openGLSucksAtLightPowers[i] * cosTheta * distanceModifier;
+		visibility += cosTheta * openGLSucksAtLightPowers[i];
 	}
 	
 	for (int i = 0; i < numberOfLights; i++) {
 		finalDiffuseColour += diffuseColours[i];
 	}
 	
-	clamp(finalDiffuseColour, 0.0, 1.0);
-	clamp(visibility, 0, 1);
+	finalDiffuseColour = clamp(finalDiffuseColour, 0.0, 1.0);
+	visibility = clamp(visibility, 0.0, 1.0);
 	
 	colourAsVec3 = MaterialAmbientColor + visibility * finalDiffuseColour;
 	// colour = noise(vec4(colourAsVec3, 1), UV);
 	colour = vec4(colourAsVec3, UVSample.a);
+	// colour = UVSample;
 }

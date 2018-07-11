@@ -18,32 +18,38 @@ namespace Aela {
 				height = 0;
 			}
 
-			Rect(T setX, T setY, T setWidth, T setHeight) {
-				xPosition = setX;
-				yPosition = setY;
-				width = setWidth;
-				height = setHeight;
+			Rect(T xPosition, T yPosition, T width, T height) {
+				this->xPosition = xPosition;
+				this->yPosition = yPosition;
+				this->width = width;
+				this->height = height;
 			}
 
-			void setX(T setX) {
-				xPosition = setX;
+			void setX(T xPosition) {
+				this->xPosition = xPosition;
 			}
 
-			void setY(T setY) {
-				yPosition = setY;
+			void setY(T yPosition) {
+				this->yPosition = yPosition;
 			}
 
-			void setXY(T setX, T setY) {
-				xPosition = setX;
-				yPosition = setY;
+			void setXY(T xPosition, T yPosition) {
+				this->xPosition = xPosition;
+				this->yPosition = yPosition;
 			}
 
-			void setWidth(T setWidth) {
-				width = setWidth;
+			// Should this be called "setWidthHeight" or "setWidthAndHeight"?
+			void setWidthHeight(T width, T height) {
+				this->width = width;
+				this->height = height;
 			}
 
-			void setHeight(T setHeight) {
-				height = setHeight;
+			void setWidth(T width) {
+				this->width = width;
+			}
+
+			void setHeight(T height) {
+				this->height = height;
 			}
 
 			void setDimensions(T width, T height) {
@@ -51,18 +57,11 @@ namespace Aela {
 				this->height = height;
 			}
 
-			void getValues(T* setX, T* setY, T* setWidth, T* setHeight) {
-				*setX = xPosition;
-				*setY = yPosition;
-				*setWidth = width;
-				*setHeight = height;
-			}
-
-			void setValues(T setX, T setY, T setWidth, T setHeight) {
-				xPosition = setX;
-				yPosition = setY;
-				width = setWidth;
-				height = setHeight;
+			void getValues(T* xPosition, T* yPosition, T* width, T* height) {
+				*xPosition = this->xPosition;
+				*yPosition = this->yPosition;
+				*width = this->width;
+				*height = this->height;
 			}
 
 			T getX() {

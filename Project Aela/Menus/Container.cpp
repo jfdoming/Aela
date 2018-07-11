@@ -33,10 +33,24 @@ void Container::add(std::shared_ptr<Component> component) {
 }
 
 void Aela::Container::markDirty() {
-	dirty = true;
+	if (!dirty) {
+		dirty = true;
 
-	if (dirtyCallback != nullptr) {
-		dirtyCallback();
+		if (dirtyCallback != nullptr) {
+			dirtyCallback();
+		}
+
+		for (auto& child : children) {
+			// If a container is dirty and must be rendered, then its children must also
+			// become dirty. Yes, there may be a way for this to not have to occur, but I don't
+			// want to modify Julian's stuff too much. Ask me for more details. -Robert
+
+			// TO ROBERT: Given that we aren't clearing the framebuffer (see other comment),
+			// not setting the children to dirty is an optimization that is worth making.
+
+			// child->markDirty();
+
+		}
 	}
 }
 
@@ -49,14 +63,7 @@ void Container::updateComponent() {
 }
 
 void Container::renderComponent(GLRenderer& renderer) {
-	for (auto child : children) {
-		// If a container is dirty and must be rendered, then its children must also
-		// become dirty. Yes, there may be a way for this to not have to occur, but I don't
-		// want to modify Julian's stuff too much. Ask me for more details. -Robert
-
-		// TO ROBERT: Given that we aren't clearing the framebuffer (see other comment),
-		// not setting the children to dirty is an optimization that is worth making.
-		//child->markDirty();
+	for (auto& child : children) {
 		child->render(renderer);
 	}
 }

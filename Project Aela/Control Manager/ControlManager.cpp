@@ -21,7 +21,7 @@ void ControlManager::setWindow(Window* setWindow) {
 }
 
 void ControlManager::setTime(Time* setTime) {
-	timeManager = setTime;
+	time = setTime;
 }
 
 void ControlManager::updateCameraTransforms(Camera3D* camera) {
@@ -29,7 +29,7 @@ void ControlManager::updateCameraTransforms(Camera3D* camera) {
 	if (window->isFocused()) {
 		windowFocus = true;
 
-		float deltaTime = (float) timeManager->getTimeBetweenFramesInNanos();
+		float deltaTime = (float) time->getTimeBetweenFramesInNanos();
 
 		// This gets the cursor's position.
 		int xpos, ypos;
@@ -45,7 +45,7 @@ void ControlManager::updateCameraTransforms(Camera3D* camera) {
 		float verticalAngle = camera->getRotation()->y;
 
 		// If the renderer is in charge of updating the camera controls (rather than an animator being responsible for doing so),
-		// the renderer must update the camera's rotation.
+		// the renderer must updateRegisteredEnemies the camera's rotation.
 		if (camera->isUsingKeyboardControls()) {
 			// This computes the new horizontal angle.
 			horizontalAngle += mouseSpeed * float(width / 2 - xpos);
@@ -143,7 +143,7 @@ void ControlManager::updateCameraTransforms(Camera3D* camera) {
 
 void ControlManager::transform3DObject(Transformable3D* object, float speedModifier) {
 	if (window->isFocused()) {
-		float deltaTime = (float) timeManager->getTimeBetweenFramesInNanos();
+		float deltaTime = (float) time->getTimeBetweenFramesInNanos();
 
 		// This is for translation.
 		// This occurs when "LEFT" is pressed.

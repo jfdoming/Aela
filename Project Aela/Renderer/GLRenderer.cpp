@@ -99,9 +99,9 @@ void GLRenderer::setWindow(Window* window) {
 	this->window = window;
 }
 
-void GLRenderer::setTime(Time* timeManager) {
-	this->timeManager = timeManager;
-	camera.setTime(timeManager);
+void GLRenderer::setTime(Time* time) {
+	this->time = time;
+	camera.setTime(time);
 }
 
 void GLRenderer::setFontManager(FontManager* fontManager) {
@@ -118,6 +118,11 @@ void Aela::GLRenderer::bindLights(std::unordered_map<long long, LightEntity>* li
 
 void Aela::GLRenderer::bindSimple2DFramebuffer(Simple2DFramebuffer* framebuffer) {
 	bound2DFramebuffer = framebuffer;
+
+	// This makes sure to sync the frambuffer's multisampling to the multisampling of the renderer.
+	if (framebuffer->isUsingRendererMultsamplingLevel()) {
+		framebuffer->setMultisampling(multisampling2D);
+	}
 }
 
 // This starts the rendering of a frame.
@@ -148,7 +153,7 @@ void Aela::GLRenderer::renderMap(Map3D* map, unsigned int skybox) {
 	basic3DRenderer.renderShadows(map);
 
 	/*for (auto& entity : *map->getModels()) {
-		renderModelEntityShadows(&entity);
+		basic3DRenderer.renderSingleModelEntityShadow(&entity.second, map);
 	}*/
 	sendBoundLightDataToShader();
 
@@ -215,6 +220,7 @@ void GLRenderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsi
 void GLRenderer::renderSimple2DFramebuffer() {
 	// basic2DRenderer.renderMultisampledBufferToBuffer(*framebuffer->getFramebuffer(), mainFramebuffer, window->getDimensions());
 	if (bound2DFramebuffer->getMultisampling() > 0) {
+		// std::cout << *bound2DFramebuffer->getMultisampledFramebuffer() << " " << *bound2DFramebuffer->getFramebuffer() << "lol\n";
 		basic2DRenderer.renderMultisampledBufferToBuffer(*bound2DFramebuffer->getMultisampledFramebuffer(), *bound2DFramebuffer->getFramebuffer(), window->getDimensions());
 	}
 	basic2DRenderer.renderImageToFramebuffer(bound2DFramebuffer->getFramebufferImage(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), nullptr, effects2DShader);
@@ -224,7 +230,7 @@ void GLRenderer::endRendering3D() {
 	if (multisampling3D > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultisampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getDimensions());
 	}
-	basic2DRenderer.renderImageToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), nullptr, effects3DShader);
+	basic2DRenderer.renderImageToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), &tint3D, effects3DShader);
 }
 
 void GLRenderer::endRenderingFrame() {
@@ -392,6 +398,9 @@ int getTextWidth(std::string text, TextFont* font) {
 	char* p;
 	for (unsigned int i = 0; i < text.size(); i++) {
 		p = &((char)(text.at(i)));
+
+		std::cout << face << " getWidth\n";
+
 		// This loads the character.
 		if (FT_Load_Char(face, *p, FT_LOAD_RENDER)) {
 			continue;
@@ -403,6 +412,15 @@ int getTextWidth(std::string text, TextFont* font) {
 
 void Aela::GLRenderer::setFOV(float value) {
 	camera.setFieldOfView(value);
+}
+
+void Aela::GLRenderer::scissor(int x, int y, size_t width, size_t height) {
+	glEnable(GL_SCISSOR_TEST);
+	glScissor(x, y, width, height);
+}
+
+void Aela::GLRenderer::resetScissor() {
+	glDisable(GL_SCISSOR_TEST);
 }
 
 void Aela::GLRenderer::updateCameraMatrices() {
@@ -477,7 +495,7 @@ Window* GLRenderer::getWindow() {
 }
 
 Time* GLRenderer::getTime() {
-	return timeManager;
+	return time;
 }
 
 Camera3D* GLRenderer::getCamera() {

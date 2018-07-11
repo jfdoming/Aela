@@ -6,28 +6,26 @@
 */
 
 #pragma once
-
 #include "Aela_Engine.h"
-#include "../Worlds/WorldManager.h"
-#include "../Character/CharacterManager.h"
-#include "../Scripts/ScriptManager.h"
-#include "../Player/Player.h"
-#include "../Dialogue/DialogueHandler.h"
-#include "../Worlds/TileInventoryDisplay.h"
-
-#define PI 3.14159265359
-#define THIRD_PI 1.0471975512
+#include "../Game Object Provider/GameObjectProvider.h"
+#include "../Camera/CameraMode.h"
+#include "../Game Mode/GameMode.h"
+#include "../Location/Location.h"
+#include "../../Project Aela/Scenes/Scene.h"
+#include "../../Project Aela/Menus/SubMenu.h"
+#include "../../Project Aela/Menus/ImageComponent.h"
+#include "../../Project Aela/Menus/RectComponent.h"
 
 using namespace Aela;
 
 namespace Game {
 	class AelaGame {
 		public:
-			AelaGame(Engine* engine);
+			AelaGame();
+			~AelaGame();
 
 			void setup();
 			void update();
-			void cleanup();
 
 			// This is triggered on an event.
 			void onEvent(Event* event);
@@ -35,53 +33,69 @@ namespace Game {
 			// This should be run on a change of scenes. 
 			void switchScene(int sceneID);
 
-			WorldManager* getWorldManager();
-			ScriptManager* getScriptManager();
-			DialogueHandler* getDialogueHandler();
+			// These are called by scripts that run when title screen buttons are pressed.
+			void startNewGame();
+			void continueGame();
+			void editMap();
+
+			GameMode getGameMode();
 
 			void setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
 				std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage);
+			void setDeathMenuItems(std::shared_ptr<RectComponent> overlayRect, std::shared_ptr<Label> overlayText);
+			void setMapEditorCoordinateLabel(std::shared_ptr<Label> mapEditorCoordinateLabel);
+
+			void animatePlayerDeathScreen();
+
+			void movedIntoExistentSpace(glm::ivec2 chuck, glm::ivec3 tile);
+			void movedIntoNonExistentSpace(glm::ivec2 chuck, glm::ivec3 tile);
 
 		private:
-			// These are Aela Engine objects.
+			// These are obtained from GameObjectProvider.
 			Engine* engine;
-			Window* window;
-			GLRenderer* renderer;
-			EventHandler* eventHandler;
-			Time* timeManager;
-			SceneManager* sceneManager;
 			ResourceManager* resourceManager;
-			AudioPlayer* audioPlayer;
+			ScriptManager* scriptManager;
+			Renderer* renderer;
+			CharacterProvider* characterProvider;
+			Player* player;
+			TileInventoryDisplay* tileInventoryDisplay;
+			WorldManager* worldManager;
+			Scene* gameplayScene, *pauseScene;
+			EventHandler* eventHandler;
+			DialogueDisplay* dialogueDisplay;
+			Time* time;
+			EnemyProvider* enemyProvider;
+			SceneManager* sceneManager;
 			Animator* animator;
-			UserEnvironment* userEnvironment;
-			FramerateCalculator* framerateCalculator;
 			Camera3D* camera;
-			// LuaManager* luaManager;
-			// Animator* animator;
+			CameraController* cameraController;
+			TileBehaviourExecuter* tileBehaviourExecuter;
 
-			// These are game-related objects.
-			WorldManager worldManager;
-			CharacterManager* characterManager;
-			Player player;
 			Character* playerCharacter;
-			ScriptManager scriptManager;
-			DialogueHandler dialogueHandler;
+			Map3D* map;
 
-			// These are display-related objects.
-			TileInventoryDisplay tileInventoryDisplay;
+			std::shared_ptr<RectComponent> overlayRect;
+			std::shared_ptr<Label> overlayText;
+
+			std::shared_ptr<Label> mapEditorCoordinateLabel;
 
 			// These store the states of keys.
-			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false;
+			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false,
+				movingUp = false, movingDown = false;
 			bool pressingRight = false, pressingForward = false, pressingLeft = false, pressingBackward = false;
-			bool pressingTileSelectUp = false, pressingTileSelectDown = false, pressingTileSwitch = false;
+			bool pressingTileSelectLeft = false, pressingTileSelectRight = false, pressingTileSwitch = false;
+			bool pressingPauseButton = false, pressingInventoryButton = false;
 			long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 190000000;
 			bool pressingReturn = false;
 
-			float distanceBetweenPlayerAndCamera = 6.0f, angleBetweenPlayerAndCamera = (float) THIRD_PI;
 			int currentScene = 0;
+			int sceneBeforePause = 0;
 
 			long long timeAtLastPlayerTurn = 0;
 			const long long TIME_BETWEEN_PLAYER_TURNS = 80000000;
+
+			CameraMode cameraMode;
+			GameMode gameMode;
 
 			void setupScripts();
 			void loadResources();
@@ -90,5 +104,13 @@ namespace Game {
 			void tileSelectUpAction(), tileSelectDownAction();
 
 			void changePlayerAnimationToRunning();
+
+			void addTileSwitchParticleEmitter(Location* location, GLTexture* texture);
+
+			void switchCameraMode(CameraMode cameraMode);
+
+			bool useTileSwitchGun();
+
+			void clearTilesAtPlayerLocation();
 	};
 }

@@ -87,14 +87,13 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	exitButton->setText("Exit");
 
 	// This sets up particles.
-	PlanarParticleEmitter* particleEmitter = new PlanarParticleEmitter();
+	PlanarParticleEmitter* particleEmitter = new PlanarParticleEmitter(engine->getTime());
 	Rect<GLfloat> emitterDimensions(0, 0, 10, 10);
 	particleEmitter->setupDimensions(&emitterDimensions);
-	particleEmitter->setCamera(engine->getRendererReference().getCamera());
-	particleEmitter->setStats(0.000000001f, 20, 0.000000001f, 2, 2);
+	// particleEmitter->setCamera(engine->getRendererReference().getCamera());
+	particleEmitter->setStats(0.000000001f, 20, 0.000000001f, 2, 2, 1000000000);
 	particleEmitter->setPosition(5, 0, 5);
 	particleEmitter->setRotation(0, 3.4f, 0.7f);
-	particleEmitter->setTime(engine->getTime());
 
 	// This sets up the title screen scene.
 	Scene* mainMenuScene = new Scene();

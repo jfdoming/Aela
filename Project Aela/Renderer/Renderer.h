@@ -52,10 +52,9 @@ namespace Aela {
 
 	class Renderer {
 		public:
-			Renderer() {}
-			Renderer(Window* window) {
-				this->window = window;
-			}
+			Renderer();
+			Renderer(Window* window);
+
 			~Renderer() {}
 
 			// These functions initialize required elements for different types of rendering.
@@ -73,7 +72,7 @@ namespace Aela {
 			// These functions bind the Renderer with other Aela classes. They must be called
 			// before rendering.
 			void setWindow(Window* window);
-			void setTime(Time* timeManager);
+			void setTime(Time* time);
 			void setEventHandler(EventHandler* eventHandler);
 
 			virtual void renderMap(Map3D* map, unsigned int skybox) = 0;
@@ -112,6 +111,13 @@ namespace Aela {
 			// This sets the field of view of the bounded camera.
 			void setFOV(float value);
 
+			void set3DTint(ColourRGBA* tint3D);
+			void clear3DTint();
+
+			// This allows for only a certain portion of a framebuffer to be rendered to.
+			virtual void scissor(int x, int y, size_t width, size_t height);
+			virtual void resetScissor();
+
 			// These are some getters.
 			Window* getWindow();
 			Time* getTime();
@@ -120,9 +126,12 @@ namespace Aela {
 		protected:
 			// These are a bunch of Project Aela objects that the renderer uses.
 			Camera3D camera;
-			Time* timeManager = nullptr;
+			Time* time = nullptr;
 			Window* window = nullptr;
 			EventHandler* eventHandler;
+
+			// This is a general tint.
+			ColourRGBA tint3D;
 
 			// These specify the features that the renderer is allowed to use during rendering.
 			bool useShadows = false, useBillboards = false, useSkybox = false;

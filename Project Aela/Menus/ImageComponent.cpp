@@ -44,8 +44,10 @@ Aela::ImageComponent::~ImageComponent() {
 }
 
 void Aela::ImageComponent::updateComponent() {
-	if (wasTransformed()) {
+	if (wasModified()) {
+		std::cout << "Was modified.\n";
 		markDirty();
+		resetModificationStatus();
 	}
 }
 

@@ -8,6 +8,7 @@
 #pragma once
 #include <string>
 #include "World.h"
+#include "../Game Object Provider/GameObjectProvider.h"
 
 namespace Game {
 	class WorldLoader {
@@ -15,7 +16,8 @@ namespace Game {
 			WorldLoader() {}
 
 			bool loadWorld(std::string path, World& world);
+
 		private:
-			bool generateTileTypes(TileMap& tiles, std::vector<std::string> data, int height);
+			bool generateTileTypes(TileGroupMap& tiles, std::stringstream& data, int height);
 	};
 }

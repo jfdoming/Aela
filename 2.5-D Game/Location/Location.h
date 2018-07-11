@@ -2,15 +2,20 @@
 * Class: Location
 * Author : Robert Ciborowski
 * Date : 16/12/2017
-* Description: A class used to represent a location in the game.
+* Description: A class used to represent a location in the game->
 */
 
 #pragma once
 #include <glm/glm.hpp>
+#include "../Chunks/Chunk.h"
 
 namespace Game {
 	enum class TileDirection {
-		RIGHT, FORWARD, LEFT, BACKWARD
+		RIGHT, FORWARD, LEFT, BACKWARD, UP, DOWN
+	};
+
+	enum class ElevationDirection {
+		UP, NONE, DOWN
 	};
 
 	class Location {
@@ -32,7 +37,8 @@ namespace Game {
 			void setTile(glm::ivec3 tile);
 			unsigned int getWorld();
 			glm::ivec2 getChunk();
-			glm::ivec3 getTile();
+			glm::ivec3 getTileGroup();
+			glm::vec3 getWorldSpaceLocation();
 
 		private:
 			unsigned int world;

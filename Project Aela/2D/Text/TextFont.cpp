@@ -6,10 +6,12 @@
 */
 
 #include "TextFont.h"
+#include <iostream>
 
 using namespace Aela;
 
 FT_Face* TextFont::getFace() {
+	// std::cout << face << " is the face of getFace.\n";
 	return &face;
 }
 

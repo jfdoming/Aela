@@ -36,6 +36,10 @@ namespace Aela {
 				set(value, value, value, value);
 			}
 
+			ColourRGBA(glm::vec4 vec4) {
+				set(vec4.r, vec4.g, vec4.b, vec4.a);
+			}
+
 			void setR(float r) {
 				this->r = r;
 			}

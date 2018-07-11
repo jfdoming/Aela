@@ -12,3 +12,4 @@
 #define DEFAULT_SKYBOX_PATH "res/skyboxes/"
 #define DEFAULT_TEXTURE_PATH "res/textures/"
 #define DEFAULT_PARTICLE_PATH "res/particles/"
+#define DEFAULT_MAP_PATH "res/maps/"

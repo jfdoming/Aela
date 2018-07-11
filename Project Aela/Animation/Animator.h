@@ -28,7 +28,7 @@ namespace Aela {
 			void update();
 
 			// These are getters and setters.
-			void setTime(Time* timeManager);
+			void setTime(Time* time);
 			void addAnimationTrack3D(AnimationTrack3D* track);
 			AnimationTrack3D* get3DTrack(std::string name);
 			void addAnimationTrack2D(AnimationTrack2D* track);
@@ -43,9 +43,16 @@ namespace Aela {
 			bool trackWithTagExists(std::string tag);
 			long long tracksWithTag(std::string tag);
 
+			void pause3DAnimations();
+			void unpause3DAnimations();
+			bool is3DPaused();
+			void pause2DAnimations();
+			void unpause2DAnimations();
+			bool is2DPaused();
+
 		private:
 			// These are the Aela objects that this class uses.
-			Time* timeManager;
+			Time* time;
 
 			// These are basically the "tracks" in which the lists of keyframes are layed out. Note that 3D animation
 			// uses a seperate track from 2D animation.
@@ -53,5 +60,7 @@ namespace Aela {
 			std::vector<AnimationTrackMaterial> tracksMaterial;
 			std::vector<AnimationTrackModel> tracksModel;
 			std::vector<AnimationTrack2D> tracks2D;
+
+			bool paused3D = false, paused2D = false;
 	};
 }
