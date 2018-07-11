@@ -47,13 +47,33 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
+	error = engine.setupAudioPlayer();
+	if (error != 0) {
+		return error;
+	}
+
 	error = engine.loadUserEnvironmentInformation();
 	if (error != 0) {
 		return error;
 	}
 
-	AelaGame game(&engine);
-	game.setup();
+	ResourceManager& resourceManager = *engine.getResourceManager();
+	resourceManager.bindGroup("test");
+	WAVEClipLoader waveClipLoader;
+	resourceManager.bindLoader(&waveClipLoader);
+	resourceManager.addToGroup("res/audio/streams/Rondo.wav", false);
+
+	// load test textures
+	if (resourceManager.loadGroup("test") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"test\"!" << std::endl;
+	}
+
+	AudioClip* acResult;
+	resourceManager.obtain<AudioClip>("res/audio/streams/Rondo.wav", acResult);
+	engine.getAudioPlayer()->playClip(acResult);
+
+	//AelaGame game(&engine);
+	//game.setup();
 
 	// This is temporary and is here for framerate.
 	FramerateCalculator calc;
@@ -61,7 +81,7 @@ int main(int argc, char *args[]) {
 
 	do {
 		engine.update();
-		game.update();
+		//game.update();
 		engine.render();
 		if (counter >= 100) {
 			calc.calculate(engine.getTime()->getCurrentTimeInNanos(), engine.getTime()->getTimeBetweenFramesInNanos());
@@ -71,7 +91,7 @@ int main(int argc, char *args[]) {
 		counter++;
 	} while (!engine.shouldExit());
 
-	game.cleanup();
+	//game.cleanup();
 
     return 0;
 }

@@ -11,7 +11,6 @@
 namespace Aela {
 	class Label : public Component {
 		public:
-			// These are constructors that do not require the user to call setup() as they do it for the user.
 			Label(std::string text, TextFont* font);
 			Label(std::string text, TextFont* font, ColourRGBA* colour);
 
@@ -25,7 +24,7 @@ namespace Aela {
 			void setColour(ColourRGBA* colour);
 			ColourRGBA* getColour();
 
-			virtual void renderWithTint(GLRenderer& renderer, ColourRGBA* tint);
+			virtual void renderWithDifferentTint(GLRenderer& renderer, ColourRGBA* tint);
 		protected:
 			std::string text;
 			TextFont* font;

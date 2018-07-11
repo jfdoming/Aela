@@ -72,19 +72,19 @@ void setupScenes(Engine* engine, AelaGame* game) {
 	continueGameButton->setDimensions(continueGameButtonText->getDimensions());
 	continueGameButton->setupOnClick(std::bind(continueGameAction, engine));
 	continueGameButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f));
-	continueGameButton->setText(continueGameButtonText.get());
+	continueGameButton->setText("Edit Map");
 
 	auto optionsButton = std::make_shared<Button>();
 	optionsButton->setDimensions(optionsButtonText->getDimensions());
 	optionsButton->setupOnClick(std::bind(optionsAction, engine));
 	optionsButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f + spacing));
-	optionsButton->setText(optionsButtonText.get());
+	optionsButton->setText("Help");
 
 	auto exitButton = std::make_shared<Button>();
 	exitButton->setDimensions(exitButtonText->getDimensions());
 	exitButton->setupOnClick(std::bind(exitAction, engine));
 	exitButton->getDimensions()->setXY((int)(windowDimensions.getWidth() * 0.06), (int)(windowDimensions.getHeight() / 1.24f + spacing * 2));
-	exitButton->setText(exitButtonText.get());
+	exitButton->setText("Exit");
 
 	// This sets up particles.
 	PlanarParticleEmitter* particleEmitter = new PlanarParticleEmitter();

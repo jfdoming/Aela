@@ -9,8 +9,10 @@
 #include <al.h>
 #include <alc.h>
 #include <string>
+#include <thread>
 #include "AudioListener.h"
 #include "AudioClip.h"
+#include "ctpl_stl.h"
 
 namespace Aela {
 	class AudioPlayer {
@@ -19,7 +21,10 @@ namespace Aela {
 			~AudioPlayer();
 
 			bool init();
+			void die();
 			void playClip(AudioClip* clip);
+
+			void update();
 
 			AudioListener getListener();
 
@@ -30,5 +35,8 @@ namespace Aela {
 			void clearErrors();
 			bool checkError(std::string* msg);
 			void parseErrorMessage(ALuint error, std::string* msg);
+
+			std::thread backgroundThread;
+			std::vector<AudioClip*> playingClips;
 	};
 }
