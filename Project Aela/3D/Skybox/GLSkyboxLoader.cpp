@@ -63,11 +63,11 @@ bool GLSkyboxLoader::load(ResourceMap& resources, std::string src) {
 			return false;
 		}
 
-		/*if (!loadTextureUsingFILE(src + paths[i], GL_TEXTURE_CUBE_MAP_POSITIVE_X + i)) {
+		/*if (!loadDDSUsingFILE(src + paths[i], GL_TEXTURE_CUBE_MAP_POSITIVE_X + i)) {
 			return false;
 		}*/
 		// loadTexture(in, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
-		loadTextureToBoundId(in, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
+		loadDDSToBoundId(in, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i);
 
 		// in.close();
 	}

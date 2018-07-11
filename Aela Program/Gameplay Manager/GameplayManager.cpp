@@ -93,12 +93,12 @@ void GameplayManager::updatePlayerMovements() {
 	}
 	glm::vec3 newRotation = *player.getEntity()->getRotation();
 	if (rotationVector.y > newRotation.y) {
-		newRotation.y += player.getRotationSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		newRotation.y += player.getRotationSpeed() * time->getTimeBetweenFramesInNanos();
 		if (rotationVector.y < newRotation.y) {
 			newRotation.y = rotationVector.y;
 		}
 	} else if (rotationVector.y < newRotation.y) {
-		newRotation.y -= player.getRotationSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		newRotation.y -= player.getRotationSpeed() * time->getTimeBetweenFramesInNanos();
 		if (rotationVector.y > newRotation.y) {
 			newRotation.y = rotationVector.y;
 		}
@@ -108,28 +108,28 @@ void GameplayManager::updatePlayerMovements() {
 
 	// Since physics calculations are performed using the bounding box that is bound to the player's ModelEntity, this modifies
 	// that bounding box but keeps a copy of the original just in case the physics calculations detect a collision and does
-	// not allow the player to moveSimple.
+	// not allow the player to move.
 	BoundingBox3D originalBox = *player.getEntity()->getBoundingBox();
 	BoundingBox3D* playerBox = player.getEntity()->getBoundingBox();
 	if (movingLeft) {
-		playerBox->getPosition()->x += player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		playerBox->getPosition()->x += player.getWalkingSpeed() * time->getTimeBetweenFramesInNanos();
 	}
 	if (movingRight) {
-		playerBox->getPosition()->x -= player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		playerBox->getPosition()->x -= player.getWalkingSpeed() * time->getTimeBetweenFramesInNanos();
 	}
 	if (movingUp) {
-		playerBox->getPosition()->z += player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		playerBox->getPosition()->z += player.getWalkingSpeed() * time->getTimeBetweenFramesInNanos();
 	}
 	if (movingDown) {
-		playerBox->getPosition()->z -= player.getWalkingSpeed() * timeManager->getTimeBetweenFramesInNanos();
+		playerBox->getPosition()->z -= player.getWalkingSpeed() * time->getTimeBetweenFramesInNanos();
 	}
 	player.getEntity()->getBoundingBox()->setPosition(*playerBox->getPosition());
 	player.getEntity()->getBoundingBox()->generateVertices();
 
 	// This literally just checks to see if the player's bounding box is inside of another model's bounding box. If the player
-	// is moving fast enough, they could moveSimple past another model's bounding box.
+	// is moving fast enough, they could move past another model's bounding box.
 	// Actually, for now, forget collision.
-	// if (!physicsManager->collidingInMap(player.getEntityIDInMap(), currentMap)) {
+	// if (!physics->collidingInMap(player.getEntityIDInMap(), currentMap)) {
 		// There was not a collision! Move the player!
 		player.getEntity()->setPosition(*playerBox->getPosition());
 	/*} else {
@@ -189,8 +189,8 @@ Player* GameplayManager::getPlayer() {
 	return &player;
 }
 
-CharacterManager* GameplayManager::getNPCManager() {
-	return &characterManager;
+CharacterTracker* GameplayManager::getNPCManager() {
+	return &characterTracker;
 }
 
 void GameplayManager::setCurrentMap(Map3D* map) {

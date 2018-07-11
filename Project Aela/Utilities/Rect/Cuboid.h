@@ -22,28 +22,27 @@ namespace Aela {
 				depth = 0;
 			}
 
-			Cuboid(T setX, T setY, T setZ, T setWidth, T setHeight, T setDepth) {
-				xPosition = setX;
-				yPosition = setY;
-				zPosition = setZ;
-				width = setWidth;
-				height = setHeight;
-				depth = setDepth;
-				std::cout << this->width << " is the width according to Cuboid.\n";
+			Cuboid(T xPosition, T yPosition, T zPosition, T width, T height, T depth) {
+				this->xPosition = xPosition;
+				this->yPosition = yPosition;
+				this->zPosition = zPosition;
+				this->width = width;
+				this->height = height;
+				this->depth = depth;
 			}
 
-			void setZ(T setZ) {
-				zPosition = setZ;
+			void setZ(T zPosition) {
+				this->zPosition = zPosition;
 			}
 
-			void setXYZ(T setX, T setY, T setZ) {
-				xPosition = setX;
-				yPosition = setY;
-				zPosition = setZ;
+			void setXYZ(T xPosition, T yPosition, T zPosition) {
+				this->xPosition = xPosition;
+				this->yPosition = yPosition;
+				this->zPosition = zPosition;
 			}
 
-			void setDepth(T setDepth) {
-				depth = setDepth;
+			void setDepth(T depth) {
+				this->depth = depth;
 			}
 
 			T getZ() {
@@ -60,22 +59,13 @@ namespace Aela {
 				this->depth = depth;
 			}
 
-			void getValues(T* setX, T* setY, T* setZ, T* setWidth, T* setHeight, T* setDepth) {
-				*setX = xPosition;
-				*setY = yPosition;
-				*setZ = zPosition;
-				*setWidth = width;
-				*setHeight = height;
-				*setDepth = depth;
-			}
-
-			void setValues(T setX, T setY, T setZ, T setWidth, T setHeight, T setDepth) {
-				xPosition = setX;
-				yPosition = setY;
-				zPosition = setZ;
-				width = setWidth;
-				height = setHeight;
-				depth = setDepth;
+			void getValues(T* xPosition, T* yPosition, T* zPosition, T* width, T* height, T* depth) {
+				*xPosition = this->xPosition;
+				*yPosition = this->yPosition;
+				*zPosition = this->zPosition;
+				*width = this->width;
+				*height = this->height;
+				*depth = this->depth;
 			}
 
 			// This returns a string with all of the properties of the transformable.

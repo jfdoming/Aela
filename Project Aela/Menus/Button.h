@@ -29,6 +29,11 @@ namespace Aela {
 			std::string getText();
 			void setHoverTint(ColourRGBA* hoverTint);
 			void setClickTint(ColourRGBA* clickTint);
+			void setTextFont(TextFont* font);
+			void setTextColour(ColourRGBA* colour);
+			void setDimensions(Rect<int>* dimensions);
+			void setPosition(int x, int y);
+			void setWidthAndHeight(int width, int height);
 
 			virtual void updateComponent();
 			virtual void renderComponent(GLRenderer& renderer);
@@ -37,6 +42,9 @@ namespace Aela {
 			virtual void onMouseReleased(MouseEvent* event);
 			virtual void onMouseEntered(MouseEvent* event);
 			virtual void onMouseExited(MouseEvent* event);
+
+			// This changes the button's width and height to match that of the text.
+			void wrapAroundText();
 
 		private:
 			bool clickStarted = false, active = false;
@@ -47,5 +55,7 @@ namespace Aela {
 			ColourRGBA hoverTint, clickTint;
 
 			Label textLabel;
+
+			void setupLabelDimensions();
 	};
 }

@@ -26,11 +26,15 @@ void Label::updateComponent() {
 }
 
 void Label::renderComponent(GLRenderer& renderer) {
-	renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint.getVec4()));
+	if (font != nullptr) {
+		renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint.getVec4()));
+	}
 }
 
 void Label::renderWithDifferentTint(GLRenderer& renderer, ColourRGBA* tint) {
-	renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint->getVec4()));
+	if (font != nullptr) {
+		renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint->getVec4()));
+	}
 }
 
 void Label::setText(std::string text) {
@@ -45,6 +49,7 @@ std::string Label::getText() {
 
 void Label::setFont(TextFont* font) {
 	this->font = font;
+	setupWidthAndHeight();
 }
 
 TextFont* Label::getFont() {
@@ -60,6 +65,8 @@ ColourRGBA* Label::getColour() {
 }
 
 void Label::setupWidthAndHeight() {
-	Rect<int> newDimensions = FontManager::dimensionsOfText(font, text);
-	dimensions.setDimensions(newDimensions.getWidth(), newDimensions.getHeight());
+	if (font != nullptr) {
+		Rect<int> newDimensions = FontManager::dimensionsOfText(font, text);
+		dimensions.setDimensions(newDimensions.getWidth(), newDimensions.getHeight());
+	}
 }

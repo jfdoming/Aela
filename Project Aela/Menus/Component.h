@@ -42,7 +42,7 @@ namespace Aela {
 
 			void addListener(int type, EventListener listener);
 
-			void markDirty();
+			virtual void markDirty();
 			void setParent(Component* parent);
 
 		protected:

@@ -18,6 +18,14 @@ Aela::Button::Button(ColourRGBA* hoverTint, ColourRGBA* clickTint) : textLabel("
 Aela::Button::~Button() {
 }
 
+void Aela::Button::setTextFont(TextFont* font) {
+	textLabel.setFont(font);
+}
+
+void Aela::Button::setTextColour(ColourRGBA* colour) {
+	textLabel.setColour(colour);
+}
+
 void Aela::Button::updateComponent() {
 	if (isDirty()) {
 		if (active) {
@@ -44,7 +52,8 @@ void Aela::Button::updateComponent() {
 
 void Aela::Button::renderComponent(GLRenderer& renderer) {
 	ImageComponent::renderComponent(renderer);
-	textLabel.renderWithTint(renderer, &tint);
+
+	textLabel.renderWithDifferentTint(renderer, &tint);
 }
 
 void Button::onMousePressed(MouseEvent* event) {
@@ -94,11 +103,7 @@ void Aela::Button::setupOnClick(std::function<void()> function) {
 
 void Aela::Button::setText(std::string text) {
 	textLabel.setText(text);
-	Rect<int>* textDimensions = textLabel.getDimensions();
-	int width = textDimensions->getWidth();
-	int height = textDimensions->getHeight();
-	textDimensions->setXY(dimensions.getX() + dimensions.getWidth() / 2 - width / 2,
-		dimensions.getY() + dimensions.getHeight() / 2 + height / 2);
+	setupLabelDimensions();
 }
 
 std::string Aela::Button::getText() {
@@ -111,4 +116,33 @@ void Aela::Button::setHoverTint(ColourRGBA* hoverTint) {
 
 void Aela::Button::setClickTint(ColourRGBA* clickTint) {
 	this->clickTint = *clickTint;
+}
+
+void Aela::Button::setDimensions(Rect<int>* dimensions) {
+	this->dimensions = *dimensions;
+	setupLabelDimensions();
+}
+
+void Aela::Button::setPosition(int x, int y) {
+	dimensions.setXY(x, y);
+	setupLabelDimensions();
+}
+
+void Aela::Button::setWidthAndHeight(int width, int height) {
+	dimensions.setWidthHeight(width, height);
+	setupLabelDimensions();
+}
+
+void Aela::Button::wrapAroundText() {
+	Rect<int>* textDimensions = textLabel.getDimensions();
+	dimensions.setWidthHeight(textDimensions->getWidth(), textDimensions->getHeight());
+	setupLabelDimensions();
+}
+
+void Aela::Button::setupLabelDimensions() {
+	Rect<int>* textDimensions = textLabel.getDimensions();
+	int width = textDimensions->getWidth();
+	int height = textDimensions->getHeight();
+	textDimensions->setXY(dimensions.getX() + dimensions.getWidth() / 2 - width / 2,
+		dimensions.getY() + dimensions.getHeight() / 2 + height / 2);
 }

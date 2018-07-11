@@ -74,7 +74,7 @@ namespace Aela {
 			// These functions bind the GLRenderer with other Aela classes. They must be called
 			// before rendering.
 			void setWindow(Window* window);
-			void setTime(Time* timeManager);
+			void setTime(Time* time);
 			void setFontManager(FontManager* fontManager);
 
 			RenderingAPI getRenderingAPI();
@@ -123,6 +123,9 @@ namespace Aela {
 			// This sets the field of view of the bounded camera.
 			void setFOV(float value);
 
+			void scissor(int x, int y, size_t width, size_t height);
+			void resetScissor();
+
 			// These are some getters.
 			std::string getInformation(GLRendererInformation infoToGet);
 			Window* getWindow();
@@ -134,7 +137,7 @@ namespace Aela {
 			Basic3DGLRenderer basic3DRenderer;
 			Basic2DGLRenderer basic2DRenderer;
 			Camera3D camera;
-			Time* timeManager = nullptr;
+			Time* time = nullptr;
 			Window* window = nullptr;
 			FontManager* fontManager = nullptr;
 			Simple2DFramebuffer* bound2DFramebuffer = nullptr;

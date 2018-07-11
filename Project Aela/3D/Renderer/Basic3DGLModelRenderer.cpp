@@ -14,7 +14,7 @@
 
 using namespace Aela;
 
-// This function is called in order to update camera-related matrices.
+// This function is called in order to updateRegisteredEnemies camera-related matrices.
 void Basic3DGLModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
 	viewMatrix = setViewMatrix;
 	projectionMatrix = setProjectionMatrix;
@@ -36,18 +36,23 @@ void Basic3DGLModelRenderer::sendLightDataToShader(std::unordered_map<long long,
 		if (numberOfLights > 0) {
 			unsigned int i = 0;
 			for (auto& light : *lights) {
-				if (*light.second.getShadowMapTexture() != NULL && *light.second.getShadowMapBuffer() != NULL && light.second.getPower() != NULL) {
+				if (light.second.isVisible() && *light.second.getShadowMapTexture() != NULL && *light.second.getShadowMapBuffer() != NULL
+					&& light.second.getPower() != NULL) {
 					if (i + 1 > MAX_LIGHT_AMOUNT) {
 						break;
 					}
 					glUniform3fv(lightPositionsID + i, 1, &light.second.getPosition()->x);
-					glUniform3fv(lightDirectionsID + i, 1, &light.second.getRotation()->x);
+					// glUniform3fv(lightDirectionsID + i, 1, &light.second.getRotation()->x);
 
-					glm::vec3 value = light.second.getColour()->getVec3();
-					glUniform3fv(lightColoursID + i, 1, &value.x);
+					glm::vec3* value = light.second.getColour()->getVec3Ptr();
+					glUniform3fv(lightColoursID + i, 1, &value->x);
+
+					/*std::cout << "Light: " << value->x << " " << value->y << " " << value->z << " " << i << " " << lightColoursID << " " << glGetError();*/
 
 					float power = light.second.getPower();
 					glUniform1fv(lightPowersID + i, 1, &power);
+
+					/*std::cout << " " << power << "\n";*/
 
 					glActiveTexture(GL_TEXTURE1 + i);
 					glBindTexture(GL_TEXTURE_CUBE_MAP, *light.second.getShadowMapTexture());
@@ -125,16 +130,23 @@ void Basic3DGLModelRenderer::renderInstancedModelEntities(Map3D* map, std::vecto
 	size_t end, GLuint modelProgramID, GLuint frameBuffer,
 	GLuint modelMatrixID, GLuint rotationMatrixID, GLuint modelTextureID) {
 	if (entities != nullptr && entities->size() > 0) {
-		Model& model = *map->getModel(entities->at(start))->getModel();
+		Model* model = map->getModel(entities->at(start))->getModel();
 		std::vector<glm::mat4> modelMatrices, rotationMatrices;
+		size_t primitiveCount = 0;
 
 		for (size_t i = start; i < end; i++) {
-			auto entity = *map->getModel(entities->at(i));
+			auto entity = map->getModel(entities->at(i));
+
+			if (!entity->isVisible()) {
+				continue;
+			}
+
+			primitiveCount++;
 
 			// This is positioning/rotation of the subModel.
-			glm::vec3* position = entity.getPosition();
-			glm::vec3* rotation = entity.getRotation();
-			glm::vec3* scaling = entity.getScaling();
+			glm::vec3* position = entity->getPosition();
+			glm::vec3* rotation = entity->getRotation();
+			glm::vec3* scaling = entity->getScaling();
 
 			// This computes more matrices.
 			glm::mat4 rotationMatrix = glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
@@ -146,7 +158,7 @@ void Basic3DGLModelRenderer::renderInstancedModelEntities(Map3D* map, std::vecto
 		glUniformMatrix4fv(modelMatrixID, (GLsizei) modelMatrices.size(), GL_FALSE, &modelMatrices[0][0][0]);
 		glUniformMatrix4fv(rotationMatrixID, (GLsizei) rotationMatrices.size(), GL_FALSE, &rotationMatrices[0][0][0]);
 
-		for (SubModel& subModel : *model.getSubModels()) {
+		for (SubModel subModel : *model->getSubModels()) {
 			// This loads buffers.
 			glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 			glBufferData(GL_ARRAY_BUFFER, subModel.getVertexSize() * sizeof(glm::vec3), &subModel.getVertices()->at(0), GL_STATIC_DRAW);
@@ -165,7 +177,7 @@ void Basic3DGLModelRenderer::renderInstancedModelEntities(Map3D* map, std::vecto
 			glUniform1i(modelTextureID, 0);
 
 			// This draws the elements to the screen.
-			glDrawElementsInstanced(GL_TRIANGLES, (GLsizei) (subModel.getIndexSize()), GL_UNSIGNED_SHORT, (void*) 0, (GLsizei) (end - start));
+			glDrawElementsInstanced(GL_TRIANGLES, (GLsizei) (subModel.getIndexSize()), GL_UNSIGNED_SHORT, (void*) 0, (GLsizei) (primitiveCount));
 		}
 	}
 }
@@ -443,6 +455,8 @@ void Basic3DGLModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint textu
 
 		// This computes matrices based on control input.
 		glm::mat4 modelMatrix = glm::scale(glm::translate(glm::mat4(1), *position), *scale) * glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
+
+		// glm::mat4 modelMatrix = glm::scale(glm::translate(glm::mat4(1), *position), *scale) * glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
 		glm::mat4 MVP = projectionMatrix * viewMatrix * modelMatrix;
 
 		glUniformMatrix4fv(billboardMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);

@@ -19,20 +19,21 @@ namespace Aela {
 	class Transformable2D : public Transformable {
 		friend class Animator;
 		public:
-			Transformable2D() : tint(1, 1, 1, 1), dimensions(0, 0, 0, 0) {
+			Transformable2D() : tint(1), dimensions(0, 0, 0, 0) {
 
 			}
 
 			void setTint(ColourRGBA* tint);
 			ColourRGBA* getTint();
-			void setDimensions(Rect<int>* dimensions);
+			virtual void setDimensions(Rect<int>* dimensions);
 			Rect<int>* getDimensions();
 
 			// These are functions used for changing any single property.
 			void setProperty(Transformable2DProperty property, float value);
 			float getProperty(Transformable2DProperty property);
 
-			bool wasTransformed();
+			bool wasModified();
+			void resetModificationStatus();
 
 		protected:
 			ColourRGBA tint;

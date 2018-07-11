@@ -34,7 +34,7 @@ void Aela::SceneManager::update() {
 	// determine the current scene
 	consumeSceneChangeEvent();
 
-	// update the current scene
+	// updateRegisteredEnemies the current scene
 	if (currentScene != nullptr) {
 		currentScene->update();
 	}

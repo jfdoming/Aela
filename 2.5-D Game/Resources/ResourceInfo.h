@@ -2,7 +2,7 @@
 * Name: ResourceInfo
 * Author: Robert Ciborowski
 * Date: 18/03/2018
-* Description: Contains information about the resources that are specific to this game.
+* Description: Contains information about the resources that are specific to this game->
 */
 
 #pragma once
@@ -12,3 +12,5 @@
 // not have access to the ResourceManager, so it must be able to know the resource root in some other
 // way.
 #define RESOURCE_ROOT "../../"
+#define TILED_MAP_LOCATION "res/tiled maps/"
+#define MAP_BEING_EDITED "res/tiled maps/interiors.txt"

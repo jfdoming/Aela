@@ -24,5 +24,7 @@ namespace Aela {
 			std::string getTransformableString(Transformable3D* transformable);
 			std::string getLightString(LightEntity* light);
 			std::string getBillboardString(BillboardEntity* billboard);
+
+			void abbreviate(std::string& src, std::string defaultPath);
 	};
 }

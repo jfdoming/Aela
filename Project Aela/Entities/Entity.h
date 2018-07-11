@@ -15,7 +15,7 @@ namespace Aela {
 	class Entity {
 		public:
 			Entity() {
-
+				visible = true;
 			}
 
 			~Entity() {
@@ -23,6 +23,11 @@ namespace Aela {
 			}
 
 			virtual EntityType getEntityType();
+
+			void setVisibility(bool visible);
+			bool isVisible();
+
 		private:
+			bool visible;
 	};
 }

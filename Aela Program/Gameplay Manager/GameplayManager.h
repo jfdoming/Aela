@@ -17,7 +17,7 @@ class GameplayManager {
 		GameplayManager(Engine* engine) : engine(engine) {
 			window = engine->getWindow();
 			eventHandler = engine->getEventHandler();
-			timeManager = engine->getTime();
+			time = engine->getTime();
 			luaManager = engine->getLuaManager();
 			sceneManager = engine->getSceneManager();
 			resourceManager = engine->getResourceManager();
@@ -26,7 +26,7 @@ class GameplayManager {
 			userEnvironment = engine->getUserEnvironment();
 			framerateCalculator = engine->getFramerateCalculator();
 			camera = engine->getRendererReference().getCamera();
-			physicsManager = engine->getPhysicsManager();
+			physics = engine->getPhysics();
 		}
 
 		void setup();
@@ -38,7 +38,7 @@ class GameplayManager {
 
 		// These are getters and setters.
 		Player* getPlayer();
-		CharacterManager* getNPCManager();
+		CharacterTracker* getNPCManager();
 		void setCurrentMap(Map3D* map);
 
 	private:
@@ -46,7 +46,7 @@ class GameplayManager {
 		Engine* engine;
 		Window* window;
 		EventHandler* eventHandler;
-		Time* timeManager;
+		Time* time;
 		LuaManager* luaManager;
 		SceneManager* sceneManager;
 		ResourceManager* resourceManager;
@@ -55,11 +55,11 @@ class GameplayManager {
 		UserEnvironment* userEnvironment;
 		FramerateCalculator* framerateCalculator;
 		Camera3D* camera;
-		Physics* physicsManager;
+		Physics* physics;
 
 		// These are game-related objects.
 		Player player;
-		CharacterManager characterManager;
+		CharacterTracker characterTracker;
 		Map3D* currentMap = nullptr;
 
 		// These store the states of keys.

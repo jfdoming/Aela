@@ -45,7 +45,7 @@ namespace Aela {
 			bool isUsingKeyboardControls();
 			void setForceCursorToMiddle(bool forceCursorToMiddle);
 			bool isForcingCursorToMiddle();
-			void setTime(Time* timeManager);
+			void setTime(Time* time);
 			void setWindow(Window* window);
 
 			// These functions allow the camera to rotate and look at a point that is on its plane.
@@ -53,13 +53,13 @@ namespace Aela {
 			void focusAtPointOnPlane(glm::vec3 point);
 			void focusAtPointOnPlane(float x, float y, float z);
 
-			// These functions are mainly used by the renderer to update the camera.
+			// These functions are mainly used by the renderer to updateRegisteredEnemies the camera.
 			void calculateCartesionalDirection(), calculateRightVector(), calculateUpVector();
 			glm::vec3* getCartesionalDirection(), *getRightVector(), *getUpVector();
 			glm::vec3 getPointInFrontOfCamera(float distanceFromCamera);
 
 		private:
-			Time* timeManager;
+			Time* time;
 			Window* window;
 
 			// These are the camera's matrices.

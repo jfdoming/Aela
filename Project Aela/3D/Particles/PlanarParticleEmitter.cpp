@@ -15,6 +15,14 @@ void PlanarParticleEmitter::setupDimensions(Rect<GLfloat>* dimensions) {
 	this->dimensions = *dimensions;
 }
 
+Aela::PlanarParticleEmitter::PlanarParticleEmitter(Time* time) : ParticleEmitter(time) {
+
+}
+
+Aela::PlanarParticleEmitter::~PlanarParticleEmitter() {
+	end();
+}
+
 void PlanarParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight, unsigned int amount) {
 	ParticleEmitter::setupParticles(textures, particleWidth, particleHeight, amount);
 }
@@ -24,27 +32,21 @@ void PlanarParticleEmitter::update() {
 	// which renders the particles while taking these transformations into account.
 	for (size_t i = 0; i < particles.size(); i++) {
 		Particle* particle = &particles.at(i);
-		if (particle->getProperty(Transformable3DProperty::Y_POSITION) >= particle->getLifetime()) {
+		if (particle->getProperty(Transformable3DProperty::Y_POSITION) >= particle->getDistance()) {
 			setupParticlePositioning(i, particles.size());
 		} else {
-			particle->translate(0, timeManager->getTimeBetweenFramesInNanos() * particle->getSpeed(), 0);
+			particle->translate(0, time->getTimeBetweenFramesInNanos() * particle->getSpeed(), 0);
 		}
 	}
 }
 
-Camera3D* PlanarParticleEmitter::getCamera() {
-	return camera;
-}
-
-void PlanarParticleEmitter::setCamera(Camera3D* camera) {
-	this->camera = camera;
-}
-
 void PlanarParticleEmitter::setupParticlePositioning(size_t whichParticle, size_t numberOfParticles) {
 	// This chooses the position of the particle, relative to the emitter.
-	srand((unsigned int) (timeManager->getCurrentTimeInNanos() + whichParticle));
-	float particleZ = dimensions.getHeight() - (dimensions.getHeight() / numberOfParticles) * whichParticle;
-	particles[whichParticle].setPosition((rand() % 100) / 100.0f * dimensions.getWidth(), pathOffset * (rand() % 100) / 100.0f, particleZ);
+	srand((unsigned int) (time->getCurrentTimeInNanos() + whichParticle));
+	float particleZ = dimensions.getHeight() - (dimensions.getHeight() / numberOfParticles) * whichParticle + dimensions.getY();
+	particles[whichParticle].setPosition((rand() % 100) / 100.0f * dimensions.getWidth() + dimensions.getX(),
+		pathOffset * (rand() % 100) / 100.0f, particleZ);
+	std::cout << particles[whichParticle].getPosition()->x << " " << particleZ << " are things.\n";
 	for (size_t i = 0; i < particles.size(); i++) {
 		if (particles[i].getPosition()->z >= particles[whichParticle].getPosition()->z) {
 			particles.insert(particles.begin() + i, particles[whichParticle]);

@@ -27,9 +27,12 @@ namespace Aela {
 			virtual Image* getMultisampledFramebufferImage() = 0;
 			unsigned int getMultisampling();
 			void setMultisampling(unsigned int multisampling);
+			void useRendererMultisamplingLevel(bool use);
+			bool isUsingRendererMultsamplingLevel();
 
 		protected:
 			unsigned int framebuffer, multisampledFramebuffer;
 			unsigned int multisampling = 0;
+			bool usingRendererMultisamplingLevel = true;
 	};
 }

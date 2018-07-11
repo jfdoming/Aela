@@ -44,6 +44,7 @@ ColourRGBA* KeyFrame2D::getOriginalTint() {
 
 void KeyFrame2D::setDimensions(Rect<int>* dimensions) {
 	this->dimensions = *dimensions;
+	useDimensions = true;
 }
 
 Rect<int>* KeyFrame2D::getDimensions() {
@@ -52,4 +53,8 @@ Rect<int>* KeyFrame2D::getDimensions() {
 
 Rect<int>* KeyFrame2D::getOriginalDimensions() {
 	return &originalDimensions;
+}
+
+bool Aela::KeyFrame2D::isUsingDimensions() {
+	return useDimensions;
 }

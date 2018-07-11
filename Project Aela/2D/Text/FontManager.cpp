@@ -11,9 +11,9 @@
 using namespace Aela;
 
 // This returns a TextFont with the specified properties.
-TextFont* FontManager::obtainTextFont(std::string name, unsigned int size) {
+TextFont* FontManager::obtainTextFont(std::string resourceRoot, std::string name, unsigned int size) {
 	TextFont* font = new TextFont();
-	if (FT_New_Face(freetype, name.c_str(), 0, font->getFace())) {
+	if (FT_New_Face(freetype, (resourceRoot + name).c_str(), 0, font->getFace())) {
 		AelaErrorHandling::consoleWindowError("Project Aela's Font Manager", "Could not open the font " + name + ".");
 		return nullptr;
 	}
@@ -21,9 +21,6 @@ TextFont* FontManager::obtainTextFont(std::string name, unsigned int size) {
 	fonts.push_back(font);
 	return font;
 }
-
-
-//// ROBERT: I made this static for now to fix some bugs. In reality this function should be a member function of TextFont. It is the behaviour of the font.
 
 Rect<int> FontManager::dimensionsOfText(TextFont* font, std::string text) {
 	Rect<int> dimensions;
@@ -38,6 +35,9 @@ Rect<int> FontManager::dimensionsOfText(TextFont* font, std::string text) {
 	for (unsigned int i = 0; i < text.size(); i++) {
 		p = &((char) (text.at(i)));
 		// This loads the character.
+
+		std::cout << face << " dimsOfText.\n";
+
 		if (FT_Load_Char(face, *p, FT_LOAD_RENDER)) {
 			continue;
 		}

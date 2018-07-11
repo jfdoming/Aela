@@ -2,22 +2,114 @@
 * Class: Character
 * Author: Robert Ciborowski
 * Date: 07/08/2017
-* Description: A class used to represent an Character.
+* Description: A class used to represent an character.
 */
 
 #include "Character.h"
+#include "../Worlds/WorldManager.h"
+#include "../Particles/TileSwitchParticleEmitter.h"
+#include "../Particles/CharacterTeleportParticleEmitter.h"
+#include "../Player/Player.h"
+#include "../Aela Game/AelaGame.h"
+#include "../Resources/ResourceInfo.h"
+#include "../Scripts/ScriptManager.h"
+#include "../Camera/CameraController.h"
+#include "../../Project Aela/Resource Management/ResourcePaths.h"
+#include "../../Project Aela/Utilities/enumut.h"
 #include <iostream>
 
-void Game::Character::setup(Location* location) {
-	this->location = *location;
+using namespace Game;
+
+Game::Character::Character() {
+	// According to Platinum, it should be 0.00375.
+	walkingSpeed = 0.00375f;
+	// According to Platinum, it should be 0.0075, but that feels too fast.
+	runningSpeed = 0.0075f;
+	directionFacing = TileDirection::BACKWARD;
+	health = 1;
+	maxHealth = 1;
+}
+
+Game::Character::Character(std::string name) : Character() {
+	this->name = name;
 }
 
 void Game::Character::setLocation(Location* location) {
 	this->location = *location;
 }
 
+void Game::Character::animateDeath() {
+	TileSwitchParticleEmitter* particleEmitter = new TileSwitchParticleEmitter(GameObjectProvider::getTime());
+	glm::vec3 worldSpacePosition = locationBeforeAnimation.getWorldSpaceLocation();
+	particleEmitter->setBaseDistance(worldSpacePosition.y + 10);
+	particleEmitter->setBaseSpeed(0.00000002f);
+	particleEmitter->setPathOffset(worldSpacePosition.y);
+	particleEmitter->setLifeTime(500000000);
+	particleEmitter->setupDimensions(&Rect<float>(worldSpacePosition.x, worldSpacePosition.z, 1, 1));
+
+	if (this == GameObjectProvider::getPlayer()->getCharacter()) {
+		std::cout << "The player is dead.\n";
+		auto endingAction = [this]() {
+			GameObjectProvider::getGame()->animatePlayerDeathScreen();
+		};
+
+		particleEmitter->setActionOnEnd(endingAction);
+	}
+
+	std::vector<GLTexture*> textures;
+	GLTexture* texture = static_cast<GLTexture*>(entity->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
+	textures.push_back(texture);
+
+	particleEmitter->setupParticles(&textures, 1, 1, 1);
+	GameObjectProvider::getGameplayScene()->putParticleEmitter(particleEmitter);
+
+	newMovementsAreAllowed = false;
+}
+
+void Game::Character::generateModel(ResourceManager* resourceManager) {
+	std::unordered_map<size_t, Character*> characterList;
+	characterList[0] = this;
+
+	CharacterModelGenerator generator;
+	generator.setCharacters(&characterList);
+
+	std::string modelA = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_A.obj";
+	std::string modelB = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_B.obj";
+	std::string modelTemp = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "floor.obj";
+
+	resourceManager->bindLoader(&generator);
+	resourceManager->bindGroup("ch/" + name);
+
+	for (unsigned int y = 0; y < 4; y++) {
+		for (unsigned int x = 0; x < 3; x++) {
+			if (x == 0 && (y == 1 || y == 3)) {
+				generator.setTemplateModelSource(modelA);
+			} else if (y == 0 || y == 2) {
+				generator.setTemplateModelSource(modelTemp);
+			} else {
+				generator.setTemplateModelSource(modelB);
+			}
+
+			generator.setSpriteSheetX(x);
+			generator.setSpriteSheetY(y);
+
+			// We want to generate one set of models, so we'll tell the resource manager to run the generator once.
+			resourceManager->addToGroup("", false);
+
+			if (resourceManager->loadGroup("characters") != Aela::ResourceManager::Status::OK) {
+				std::cerr << "Failed to load a resource from group \"characters\": " << resourceManager->getNewInvalidResourceKeys()[0] << "\n";
+				break;
+			}
+		}
+	}
+}
+
 Game::Location* Game::Character::getLocation() {
 	return &location;
+}
+
+Location* Game::Character::getLocationBeforeAnimation() {
+	return &locationBeforeAnimation;
 }
 
 void Game::Character::setModel(Model* model) {
@@ -81,12 +173,10 @@ Game::TileDirection Game::Character::getDirectionFacing() {
 }
 
 Aela::ModelEntity* Game::Character::getEntity() {
-	std::cout << "Entity: " << entity << "\n";
 	return entity;
 }
 
 void Game::Character::setEntity(ModelEntity* entity) {
-	std::cout << "Setting entity.\n";
 	this->entity = entity;
 }
 
@@ -109,7 +199,8 @@ bool Game::Character::isMoving() {
 void Game::Character::animationHasEnded() {
 	// Moving gets sets to false by the character manager! It does this since it performs some actions
 	// when the character is done moving!
-	// moving = false;
+	moving = false;
+	locationBeforeAnimation = location;
 	animationHadJustEnded = true;
 	timePassedAfterAnimationEnd = entity->getTimePassedAfterAnimationEnd();
 }
@@ -118,60 +209,413 @@ bool Game::Character::animationHasJustEnded() {
 	return animationHadJustEnded;
 }
 
-void Game::Character::turnSimple(TileDirection direction) {
+void Game::Character::turn(TileDirection direction) {
 	if (directionFacing != direction) {
 		timePassedAfterAnimationEnd = 0;
 		animationHadJustEnded = false;
 	}
 
 	directionFacing = direction;
+
+	Model* model;
+	if (GameObjectProvider::getResourceManager()->obtain<Model>("ch/" + textureName + "/0/" + std::to_string(enumToInteger(direction)) + "/mo", model)) {
+		baseModel = model;
+		entity->setModel(model);
+		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+	}
 }
 
-void Game::Character::moveSimple(TileDirection direction, std::string scriptOnCompletion) {
-	moving = true;
-	switchStep();
-	glm::vec3 translationForAnimation;
-	switch (direction) {
-		case TileDirection::RIGHT:
-			translationForAnimation = glm::vec3(-1, 0, 0);
-			break;
-		case TileDirection::FORWARD:
-			translationForAnimation = glm::vec3(0, 0, 1);
-			break;
-		case TileDirection::LEFT:
-			translationForAnimation = glm::vec3(1, 0, 0);
-			break;
-		case TileDirection::BACKWARD:
-			translationForAnimation = glm::vec3(0, 0, -1);
-			break;
+void Game::Character::move(Movement* movement, std::string scriptOnCompletion) {
+	addTranslation(movement, scriptOnCompletion);
+	turn(movement->getDirection());
+}
+
+void Game::Character::moveIfPossible(TileDirection direction) {
+	if (newMovementsAreAllowed) {
+		possibleMovementsToProcess.push_back(direction);
 	}
-	addTranslation(translationForAnimation, scriptOnCompletion);
+}
+
+void Game::Character::moveIfPossible(std::list<TileDirection> directions) {
+	if (newMovementsAreAllowed) {
+		possibleMovementsToProcess.splice(possibleMovementsToProcess.end(), directions);
+	}
+}
+
+void Game::Character::teleport(Location * location, bool animate) {
+	Movement teleportation(location, &glm::vec3(), directionFacing, true);
+	if (!animate) {
+		teleportation.setAnimated(false);
+	}
+	move(&teleportation, "");
+}
+
+void Game::Character::kill() {
+	alive = false;
+	animateDeath();
+	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+}
+
+void Game::Character::revive() {
+	alive = true;
+}
+
+bool Game::Character::isAlive() {
+	return alive;
 }
 
 void Game::Character::stopMoving() {
 	moving = false;
 }
 
-void Game::Character::addTranslation(glm::vec3 translation, std::string scriptOnceComplete) {
-	translations.push_back(std::pair<glm::vec3, std::string>(translation, scriptOnceComplete));
+void Game::Character::setHealth(int health) {
+	this->health = health;
+	if (health > maxHealth) {
+		health = maxHealth;
+	}
+	if (health < 0) {
+		health = 0;
+		kill();
+	}
 }
 
-void Game::Character::removeNextTranslation() {
-	if (translations.size() > 0) {
+int Game::Character::getHealth() {
+	return health;
+}
+
+void Game::Character::increaseHealth(int amount) {
+	health += amount;
+	if (health > maxHealth) {
+		health = maxHealth;
+	}
+}
+
+void Game::Character::decreaseHealth(int amount) {
+	health -= amount;
+	if (health < 0) {
+		health = 0;
+		kill();
+	}
+}
+
+void Game::Character::setMaxHealth(int maxHealth) {
+	this->maxHealth = maxHealth;
+	if (maxHealth < 1) {
+		maxHealth = 1;
+	}
+	if (health > maxHealth) {
+		health = maxHealth;
+	}
+}
+
+int Game::Character::getMaxHealth() {
+	return maxHealth;
+}
+
+void Game::Character::increaseMaxHealth(int amount) {
+	maxHealth += amount;
+}
+
+void Game::Character::decreaseMaxHealth(int amount) {
+	maxHealth -= amount;
+	if (maxHealth < 1) {
+		maxHealth = 1;
+	}
+	if (health > maxHealth) {
+		health = maxHealth;
+	}
+}
+
+void Game::Character::setVisibility(bool visible) {
+	this->visible = visible;
+	entity->setVisibility(visible);
+}
+
+bool Game::Character::isVisible() {
+	return visible;
+}
+
+void Game::Character::allowNewMovements(bool newMovementsAreAllowed) {
+	this->newMovementsAreAllowed = newMovementsAreAllowed;
+}
+
+bool Game::Character::areNewMovementsAllowed() {
+	return newMovementsAreAllowed;
+}
+
+void Game::Character::update() {
+	animationHadJustEnded = false;
+
+	if (!newMovementsAreAllowed) {
+		possibleMovementsToProcess.clear();
+	} else if (!moving && possibleMovementsToProcess.size() > 0) {
+		processPossibleMovement(possibleMovementsToProcess.front());
+		possibleMovementsToProcess.pop_front();
+	}
+
+	if (!moving) {
+		if (translations.size() == 0) {
+			return;
+		}
+
+		std::pair<Movement, std::string> translation = translations[0];
+		processMovement(&translation.first, translation.second);
+		translations.erase(translations.begin());
+	} else if (!GameObjectProvider::getAnimator()->trackWithTagExists(name + "/mv")) {
+		if (translations.size() == 0) {
+			moving = false;
+			return;
+		}
+
+		std::pair<Movement, std::string> translation = translations[0];
+		processMovement(&translation.first, translation.second);
 		translations.erase(translations.begin());
 	}
 }
 
-std::pair<glm::vec3, std::string>* Game::Character::getNextTranslation() {
-	if (translations.size() == 0) {
-		return nullptr;
-	}
-	return &translations[0];
+void Game::Character::addTranslation(Movement* movement, std::string scriptOnceComplete) {
+	translations.push_back(std::pair<Movement, std::string>(*movement, scriptOnceComplete));
 }
 
-std::pair<glm::vec3, std::string>* Game::Character::getLastTranslation() {
-	if (translations.size() == 0) {
-		return nullptr;
+void Game::Character::processMovement(Movement* movement, std::string scriptOnCompletion) {
+	moving = true;
+	switchStep();
+
+	CharacterProvider* characterProvider = GameObjectProvider::getCharacterProvider();
+	Location oldLocation = location;
+	Location* newLocation = movement->getDestination();
+	characterProvider->characterWasMoved(name, &oldLocation, newLocation);
+	location = *newLocation;
+
+	if (!movement->isAnimated()) {
+		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+		animationHasEnded();
+		return;
 	}
-	return &translations[translations.size() - 1];
+
+	if (movement->isATeleportation()) {
+		CameraController* cameraController = GameObjectProvider::getCameraController();
+
+		newMovementsAreAllowed = false;
+		cameraController->setLockCameraToPlayer(false);
+
+		CharacterTeleportParticleEmitter* particleEmitter = new CharacterTeleportParticleEmitter(GameObjectProvider::getTime());
+		particleEmitter->setBaseDistance(oldLocation.getWorldSpaceLocation().y + 10);
+		particleEmitter->setBaseSpeed(0.00000001f);
+		particleEmitter->setPathOffset(oldLocation.getWorldSpaceLocation().y);
+		particleEmitter->setLifeTime(1500000000);
+		particleEmitter->setCharacter(this);
+		particleEmitter->setLocations(&oldLocation, newLocation);
+		particleEmitter->setSecondaryPathOffset(newLocation->getWorldSpaceLocation().y + 8);
+
+		std::vector<GLTexture*> textures;
+		GLTexture* texture = static_cast<GLTexture*>(entity->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
+		textures.push_back(texture);
+
+		auto halfLifeAction = [this, cameraController]() {
+			GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+			cameraController->setLockCameraToPlayer(true);
+		};
+
+		auto onEndAction = [this]() {
+			allowNewMovements(true);
+		};
+
+		particleEmitter->setActionOnHalfLife(halfLifeAction);
+		particleEmitter->setActionOnEnd(onEndAction);
+		particleEmitter->setupParticles(&textures, 1, 1, 1);
+		GameObjectProvider::getGameplayScene()->putParticleEmitter(particleEmitter);
+		return;
+	}
+
+	glm::vec3 translationForAnimation = *movement->getWorldspaceTranslation();
+
+	long long timeToAdvanceTrackBy;
+
+	if (animationHadJustEnded) {
+		timeToAdvanceTrackBy = timePassedAfterAnimationEnd;
+	} else {
+		timeToAdvanceTrackBy = 0;
+	}
+
+	AnimationTrack3D track3D;
+
+	// "mv" means "movement". The name is shortened to an abbreviation to save memory.
+	track3D.setTag(name + "/mv");
+
+	KeyFrame3D frame;
+	frame.setObject(entity);
+	glm::vec3 characterTranslation = *entity->getPosition() + translationForAnimation;
+	frame.setTranslation(&characterTranslation);
+	auto action = [this, scriptOnCompletion]() {
+		animationHasEnded();
+		GameObjectProvider::getScriptManager()->runScript(scriptOnCompletion);
+	};
+
+	frame.setEndingAction(std::bind(action));
+
+	track3D.addKeyFrame((size_t) (1000000.0f / getCurrentSpeed()), &frame);
+	// frame.start();
+	// track.updatePositionInTrack(timeToAdvanceTrackBy);
+	// std::cout << timeToAdvanceTrackBy << " - " << track.getPositionInTrack() << " is the time.\n";
+
+	Animator* animator = GameObjectProvider::getAnimator();
+	animator->addAnimationTrack3D(&track3D);
+
+	AnimationTrackModel modelTrack;
+
+	// "st" means "stepping". The name is shortened to an abbreviation to save memory.
+	modelTrack.setTag(name + "/st");
+
+	std::string step = std::to_string(enumToInteger(currentStep) + 1);
+
+	std::string direction = std::to_string(enumToInteger(directionFacing));
+	Model* model1 = nullptr, *model2 = nullptr;
+
+	ResourceManager* resourceManager = GameObjectProvider::getResourceManager();
+	if (!resourceManager->obtain<Model>("ch/" + textureName + "/" + step + "/" + direction + "/mo", model1)
+		|| !resourceManager->obtain<Model>("ch/" + textureName + "/0/" + direction + "/mo", model2)) {
+		return;
+	}
+
+	auto action1 = [this, model1]() {
+		setModel(model1);
+	};
+
+	auto action2 = [this, model2]() {
+		setModel(model2);
+	};
+
+	KeyFrameModel step1Frame, step2Frame;
+
+	step1Frame.setModel(model1);
+	step1Frame.setModelEntity(entity);
+	step1Frame.setEndingAction(action1);
+	modelTrack.addKeyFrame(1, &step1Frame);
+
+	step2Frame.setModel(model2);
+	step2Frame.setModelEntity(entity);
+	step2Frame.setEndingAction(action2);
+	modelTrack.addKeyFrame((long long) (1000000.0f / getCurrentSpeed() / 2), &step2Frame);
+
+	frame.setEndingAction(std::bind(action));
+
+	animator->addAnimationTrackModel(&modelTrack);
+}
+
+void Game::Character::processPossibleMovement(TileDirection direction) {
+	if (direction != directionFacing) {
+		turn(direction);
+		return;
+	}
+
+	Location newLocation = location;
+	glm::ivec2 chunkCoord = newLocation.getChunk();
+	glm::ivec3 tileCoord = newLocation.getTileGroup();
+	glm::vec3 translation;
+
+	switch (direction) {
+		case TileDirection::RIGHT:
+			translation = glm::vec3(-1, 0, 0);
+			break;
+		case TileDirection::FORWARD:
+			translation = glm::vec3(0, 0, 1);
+			break;
+		case TileDirection::LEFT:
+			translation = glm::vec3(1, 0, 0);
+			break;
+		case TileDirection::BACKWARD:
+			translation = glm::vec3(0, 0, -1);
+			break;
+		case TileDirection::UP:
+			translation = glm::vec3(0, 1, 0);
+			break;
+		case TileDirection::DOWN:
+			translation = glm::vec3(0, -1, 0);
+			break;
+	}
+
+	tileCoord += translation;
+
+	if (tileCoord.x < 0) {
+		tileCoord.x = CHUNK_WIDTH - 1;
+		chunkCoord.x--;
+	}
+	if (tileCoord.x == CHUNK_WIDTH) {
+		tileCoord.x = 0;
+		chunkCoord.x++;
+	}
+	if (tileCoord.z < 0) {
+		tileCoord.z = CHUNK_LENGTH - 1;
+		chunkCoord.y--;
+	}
+	if (tileCoord.z == CHUNK_LENGTH) {
+		tileCoord.z = 0;
+		chunkCoord.y++;
+	}
+
+	newLocation.setChunk(chunkCoord);
+	newLocation.setTile(tileCoord);
+
+	WorldManager* worldManager = GameObjectProvider::getWorldManager();
+	CharacterProvider* characterProvider = GameObjectProvider::getCharacterProvider();
+	AelaGame* game = GameObjectProvider::getGame();
+
+	if (newLocation.getWorld() < worldManager->getNumberOfWorlds()) {
+		Chunk* chunk = worldManager->getChunk(&newLocation);
+		GameMode mode = game->getGameMode();
+		Character* playerCharacter = GameObjectProvider::getPlayer()->getCharacter();
+
+		if (mode == GameMode::GAMEPLAY) {
+			std::cout << newLocation.getWorld() << " " << chunkCoord.x << " " << chunkCoord.y << "\n";
+
+			if (chunk != nullptr) {
+				TileGroup* tileGroup = worldManager->getTileGroup(&newLocation);
+
+				if (tileGroup == nullptr || tileGroup->isCollidable(GameObjectProvider::getTileAtlas())) {
+					// If the movement is impossible, don't do it!
+					turn(direction);
+					return; 
+				}
+
+				if (characterProvider->getCharacterByLocation(&newLocation) != nullptr) {
+					// If the movement is impossible, don't do it!
+					turn(direction);
+					return;
+				}
+
+				std::string script = *tileGroup->getWalkedOnScriptID();
+				Movement movement(&newLocation, &translation, direction, false);
+				move(&movement, script);
+
+				Teleporter* teleporter = worldManager->getTeleporter(&newLocation);
+				if (teleporter != nullptr) {
+					Movement teleportation(teleporter->getDestination(), &glm::vec3(), directionFacing, true);
+					move(&teleportation, script);
+				}
+			}
+		} else if (mode == GameMode::MAP_EDITOR) {
+			if (chunk != nullptr) {
+				TileGroup* tileGroup = worldManager->getTileGroup(&newLocation);
+
+				if (tileGroup == nullptr) {
+					if (this == playerCharacter) {
+						game->movedIntoNonExistentSpace(chunkCoord, tileCoord);
+					}
+				} else if (this == playerCharacter) {
+					game->movedIntoExistentSpace(chunkCoord, tileCoord);
+				}
+
+				Movement movement(&newLocation, &translation, direction, false);
+				move(&movement, "");
+			} else {
+				if (this == playerCharacter) {
+					game->movedIntoNonExistentSpace(chunkCoord, tileCoord);
+				}
+
+				Movement movement(&newLocation, &translation, direction, false);
+				move(&movement, "");
+			}
+		}
+	}
 }

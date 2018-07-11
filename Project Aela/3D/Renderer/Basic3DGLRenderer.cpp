@@ -37,10 +37,13 @@ void Basic3DGLRenderer::getIDs() {
 	cameraPositionID = glGetUniformLocation(modelProgramID, "cameraPosition");
 	shadowMapID = glGetUniformLocation(modelProgramID, "shadowMaps");
 	numberOfLightsID = glGetUniformLocation(modelProgramID, "numberOfLights");
-	lightPositionsID = glGetUniformLocation(modelProgramID, "lightPositions");
+
+	// I have no clue as to why, but openGL does not return the proper uniform address unless I name these
+	// uniforms EXACTLY like this.
+	lightPositionsID = glGetUniformLocation(modelProgramID, "openGLSucksAtPositions[0]");
 	lightDirectionsID = glGetUniformLocation(modelProgramID, "lightDirections");
-	lightColoursID = glGetUniformLocation(modelProgramID, "lightColours[0]");
-	lightPowersID = glGetUniformLocation(modelProgramID, "lightPowers[0]");
+	lightColoursID = glGetUniformLocation(modelProgramID, "openGLSucksAtColours[0]");
+	lightPowersID = glGetUniformLocation(modelProgramID, "openGLSucksAtLightPowers[0]");
 
 	billboardTextureID = glGetUniformLocation(billboardProgramID, "textureSampler");
 	billboardMVPMatrixID = glGetUniformLocation(billboardProgramID, "modelViewProjectionMatrix");
@@ -48,6 +51,8 @@ void Basic3DGLRenderer::getIDs() {
 	shadowMatrixID = glGetUniformLocation(depthProgramID, "shadowMatrices");
 	shadowModelMatrixID = glGetUniformLocation(depthProgramID, "modelMatrices");
 	lightShadowPositionsID = glGetUniformLocation(depthProgramID, "lightPosition");
+
+	std::cout << shadowMatrixID << " " << shadowModelMatrixID << " " << lightShadowPositionsID << "\n";
 
 	skyboxTextureID = glGetUniformLocation(skyboxProgramID, "skyboxTexture");
 	skyboxViewMatrixID = glGetUniformLocation(skyboxProgramID, "viewMatrix");
@@ -59,16 +64,15 @@ void Basic3DGLRenderer::getIDs() {
 void Basic3DGLRenderer::setupFrameBuffers(unsigned int multisampling) {
 	// This generates the colour framebuffer.
 	glGenFramebuffers(1, &colourFrameBuffer);
-	std::cout << "Good 3.\n";
 	glBindFramebuffer(GL_FRAMEBUFFER, colourFrameBuffer);
 
 	glGenTextures(1, colourFrameBufferTexture.getTexture());
 	glBindTexture(GL_TEXTURE_2D, *(colourFrameBufferTexture.getTexture()));
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, windowWidth, windowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-	/* Clamping to edges is important to prevent artifacts when scaling */
+	// Clamping to edges is important to prevent artifacts when scaling.
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	/* Linear filtering usually looks best for text */
+	// Linear filtering usually looks best for text.
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -117,19 +121,14 @@ void Basic3DGLRenderer::setupFrameBuffers(unsigned int multisampling) {
 }
 
 void Aela::Basic3DGLRenderer::rebuildFrameBuffers(bool multisampling) {
-	std::cout << "About to delete: " << colourFrameBuffer << "\n";
 	glDeleteFramebuffers(1, &colourFrameBuffer);
-	std::cout << "Deleted.\n";
 	glDeleteTextures(1, colourFrameBufferTexture.getTexture());
 	glDeleteRenderbuffers(1, &depthRenderBuffer);
-	std::cout << "Good.\n";
 
 	if (multisampling) {
 		glDeleteBuffers(1, &multisampledColourFrameBuffer);
 		glDeleteTextures(1, multisampledColourFrameBufferTexture.getTexture());
 	}
-	std::cout << "Good 2.\n";
-
 
 	setupFrameBuffers(multisampling);
 }
@@ -217,7 +216,7 @@ void Aela::Basic3DGLRenderer::renderShadows(Map3D* map) {
 				end = pair.second.size();
 			}
 			shadowRenderer.renderInstancedShadows(map, &pair.second, start, end, depthProgramID, shadowModelMatrixID, shadowMatrixID,
-				lights, lightPositionsID);
+				lights, lightShadowPositionsID);
 		}
 	}
 	shadowRenderer.endRenderingShadows();
@@ -267,6 +266,11 @@ void Aela::Basic3DGLRenderer::renderModelEntities(Map3D* map, bool multisampling
 
 	modelRenderer.endRenderingModelEntities();
 }
+
+//void Aela::Basic3DGLRenderer::renderSingleModelEntityShadow(ModelEntity* entity, Map3D* map) {
+//	shadowRenderer.renderUninstancedShadow(entity, depthProgramID, shadowModelMatrixID,
+//		shadowMatrixID, map->getLights(), lightShadowPositionsID);
+//}
 
 // This clears the colour frame buffer.
 void Basic3DGLRenderer::clearColourFrameBuffer(bool multisampling) {
@@ -357,6 +361,8 @@ void Aela::Basic3DGLRenderer::renderParticles(ParticleEmitter* particleEmitter, 
 	glm::vec3 difference = glm::vec3(glm::min(differenceA.x, differenceB.x), glm::min(differenceA.y, differenceB.y),
 		glm::min(differenceA.z, differenceB.z));
 	float angle = glm::compMax(difference);
+
+	glm::vec3 fakeOffset;
 
 	if (angle < glm::pi<float>() / 2) {
 		for (Particle particle : *particleEmitter->getParticles()) {

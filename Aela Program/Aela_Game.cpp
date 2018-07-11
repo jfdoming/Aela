@@ -18,7 +18,7 @@ void AelaGame::loadResources() {
 	loadTextures(resourceManager);
 	loadParticles(resourceManager);
 	loadSkyboxes(resourceManager);
-	loadStartupMap(resourceManager, engine->getRendererReference());
+	loadMaps(resourceManager, engine->getRendererReference());
 }
 
 void AelaGame::loadScenes() {

@@ -23,6 +23,7 @@ namespace Aela {
 			void bindRenderer(GLRenderer* renderer);
 
 		private:
+			// TODO make it so that this class does not require a renderer ptr
 			GLRenderer* renderer;
 
 			// Because a map refers to models, this loader needs to know what the resource root is.

@@ -47,7 +47,7 @@ namespace Aela {
 
 			/**
 			 * Why does this need to be private? Well, keep in mind that avoiding getters is necessary whenever possible,
-			 * as it can increase coupling and allow objects to try to implement behaviour that is not theirs. Knowing this,
+			 * as it can increase coupling and allow objects to try to implement shape that is not theirs. Knowing this,
 			 * we can reduce coupling by preventing outside classes from knowing that we even use a Scene* at all, beyond
 			 * those that do initialization. This is why the getCurrentSceneId() function exists; even though the Scene class
 			 * has a getId() function, we can avoid exposing unnecessary instances of Scene to other classes by delegating rather

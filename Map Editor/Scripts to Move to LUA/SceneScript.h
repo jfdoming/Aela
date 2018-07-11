@@ -56,11 +56,11 @@ void setupScenes(Engine* engine, AelaGame* game) {
 		engine->getSceneManager()->setCurrentScene(EDITOR_SCENE);
 		game->switchScene(EDITOR_SCENE);
 	};
-	auto helpMapAction = [](Engine* engine) {
+	auto helpAction = [](Engine* engine) {
 		// Lol, this is temporary until I feel like creating a seperate scene for this garbage.
-		std::string controls = (std::string) "WASD - moveSimple camera\n"
+		std::string controls = (std::string) "WASD - move camera\n"
 			+ "\\ - change entity type being placed\n"
-			+ "Esc - open pause menu\n"
+			+ "Esc - open pause3DAnimations menu\n"
 			+ "Left/Right Arrows - change resource of entity\n"
 			+ "1/2/3 - modify rotation\n"
 			+ "4/5/6 - modify scaling\n"
@@ -82,7 +82,7 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	auto helpButton = std::make_shared<Button>();
 	helpButton->setDimensions(loadMapButtonText->getDimensions());
-	helpButton->setupOnClick(std::bind(helpMapAction, engine));
+	helpButton->setupOnClick(std::bind(helpAction, engine));
 	helpButton->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.06), (int) (windowDimensions.getHeight() / 1.24f + spacing));
 	helpButton->setText(loadMapButtonText);
 

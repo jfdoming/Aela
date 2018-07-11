@@ -21,11 +21,13 @@ namespace Aela {
 
 			void startRenderingShadows(GLuint depthProgramID);
 			void renderInstancedShadows(Map3D* map, std::vector<long long>* entities, size_t start, size_t end,
-				GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::unordered_map<long long, LightEntity>* lights, GLuint lightPositionsID);
+				GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID,
+				std::unordered_map<long long, LightEntity>* lights, GLuint lightPositionsID);
 			void endRenderingShadows();
 
-			// This adds a model's shadow to the shadow map.
-			void renderUninstancedShadow(ModelEntity* entity, GLuint depthProgramID, GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::vector<LightEntity>* lights, GLuint lightPositionsID);
+			// This adds a model's shadow to the shadow map. Don't use this function anymore, its deprecated!
+			void renderUninstancedShadow(ModelEntity* entity, GLuint depthProgramID, GLuint shadowModelMatrixID,
+				GLuint shadowMatrixID, std::unordered_map<long long, LightEntity>* lights, GLuint lightPositionsID);
 
 			// This clears all shadow maps of lights.
 			void clearShadowMaps(std::unordered_map<long long, LightEntity>* lights);
@@ -41,6 +43,6 @@ namespace Aela {
 			const unsigned int DEPTH_TEXTURE_WIDTH = 2048, DEPTH_TEXTURE_HEIGHT = 2048;
 			const unsigned int MAX_LIGHT_AMOUNT = 5;
 
-			GLuint vertexBuffer, elementBuffer;
+			GLuint vertexBuffer, normalBuffer, elementBuffer;
 	};
 }

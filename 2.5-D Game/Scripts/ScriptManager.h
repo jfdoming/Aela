@@ -6,10 +6,11 @@
 */
 
 #pragma once
+#include "../Game Object Provider/GameObjectProvider.h"
+#include "Animation/KeyFrame.h"
 #include <string>
 #include <unordered_map>
 #include <functional>
-#include "Animation/KeyFrame.h"
 
 using namespace Aela;
 

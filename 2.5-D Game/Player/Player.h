@@ -4,20 +4,18 @@
 * Date: 02/01/2018
 * Description: A class used to represent the player and their properties.
 *              I wanted to make Player extend Character, but I can't due
-*              to the way that Characters must be stored in the CharacterManager.
+*              to the way that Characters must be stored in the CharacterProvider.
 */
 
 #pragma once
+#include "../Game Object Provider/GameObjectProvider.h"
+#include "../Tiles/TileInventory.h"
 #include <unordered_map>
-#include "../Character/Character.h"
-#include "../Worlds/WorldManager.h"
-#include "../Worlds/TileInventory.h"
 
 namespace Game {
 	class Player {
 		public:
-			Player() {
-			}
+			Player();
 
 			// These are getters and setters.
 			void setCharacterID(size_t id);
@@ -25,11 +23,15 @@ namespace Game {
 			TileInventory* getTileInventory();
 			void setCharacter(Character* character);
 			Character* getCharacter();
+			void setupTileInventoryForMapEditor();
+
+			void kill();
+			void revive();
+			bool isAlive();
 
 		private:
-			// This stores the Character ID of the player, which is assigned by the Character Manager.
+			// This stores the Character ID of the player, which is assigned by the Character Tracker.
 			size_t id;
-
 			Character* character;
 
 			TileInventory tileInventory;

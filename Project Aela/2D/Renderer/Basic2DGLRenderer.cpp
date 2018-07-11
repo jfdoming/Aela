@@ -71,7 +71,7 @@ void Basic2DGLRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffe
 	GLuint* texture = framebuffer->getFramebufferImage()->getTexture();
 	GLuint* multisampledTexture = framebuffer->getMultisampledFramebufferImage()->getTexture();
 
-	if (multisampling > 0) {
+	// if (multisampling > 0) {
 		// This generates the multisampled colour framebuffer, which later is blitted to the regular colour framebuffer.
 		glGenFramebuffers(1, framebuffer->getMultisampledFramebuffer());
 		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
@@ -89,7 +89,7 @@ void Basic2DGLRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffe
 		framebuffer->getMultisampledFramebufferImage()->setDimensions(0, 0, windowWidth, windowHeight);
 		glDrawBuffer(GL_COLOR_ATTACHMENT0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *multisampledTexture, 0);
-	}
+	// }
 
 	glGenFramebuffers(1, framebuffer->getFramebuffer());
 	glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getFramebuffer());
@@ -131,7 +131,8 @@ void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int fram
 // Note: Custom shaders can be used for post-process effects.
 // Note: Shaders that use the same uniforms and buffers as the 2DTextureBufferToBuffer shader (bufferTextureToBufferProgramID) should set the same
 // locations of uniforms as they are in the 2DTextureBufferToBuffer shader.
-void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, unsigned int customShader) {
+void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int framebuffer, Rect<int>* output, Rect<int>* cropping,
+	Rect<unsigned int>* windowDimensions, ColourRGBA* tint, unsigned int customShader) {
 	glDisable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -270,6 +271,7 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 	for (unsigned int i = 0; i < text.length(); i++) {
 		p = &((char) (text.at(i)));
 
+		std::cout << textFont->getFace() << " textToSimple2D\n";
 		// This loads the character.
 		if (FT_Load_Char(*(textFont->getFace()), *p, FT_LOAD_RENDER)) {
 			continue;

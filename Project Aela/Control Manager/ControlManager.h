@@ -56,7 +56,7 @@ namespace Aela {
 
 		private:
 		// These are pointers to other Aela classes.
-		Time* timeManager;
+		Time* time;
 		Window* window;
 		const Uint8* keystate;
 

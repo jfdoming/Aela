@@ -1,0 +1,2 @@
+<Light power="0.8" position="0,8,0" scaling="1.0,1.0,1.0" colour="0.7,0.7,0.7">
+<Skybox src="~black">

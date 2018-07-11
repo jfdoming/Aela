@@ -12,3 +12,11 @@ using namespace Aela;
 EntityType Entity::getEntityType() {
 	return EntityType::GENERIC;
 }
+
+void Aela::Entity::setVisibility(bool visible) {
+	this->visible = visible;
+}
+
+bool Aela::Entity::isVisible() {
+	return visible;
+}

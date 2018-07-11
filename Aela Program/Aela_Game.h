@@ -18,7 +18,7 @@ class AelaGame {
 			window = engine->getWindow();
 			renderer = engine->getRenderer();
 			eventHandler = engine->getEventHandler();
-			timeManager = engine->getTime();
+			time = engine->getTime();
 			luaManager = engine->getLuaManager();
 			sceneManager = engine->getSceneManager();
 			resourceManager = engine->getResourceManager();
@@ -27,7 +27,7 @@ class AelaGame {
 			userEnvironment = engine->getUserEnvironment();
 			framerateCalculator = engine->getFramerateCalculator();
 			camera = engine->getRendererReference().getCamera();
-			physicsManager = engine->getPhysicsManager();
+			physics = engine->getPhysics();
 		}
 
 		void setup();
@@ -43,7 +43,7 @@ class AelaGame {
 		Window* window;
 		GLRenderer* renderer;
 		EventHandler* eventHandler;
-		Time* timeManager;
+		Time* time;
 		LuaManager* luaManager;
 		SceneManager* sceneManager;
 		ResourceManager* resourceManager;
@@ -52,7 +52,7 @@ class AelaGame {
 		UserEnvironment* userEnvironment;
 		FramerateCalculator* framerateCalculator;
 		Camera3D* camera;
-		Physics* physicsManager;
+		Physics* physics;
 
 		// These are game-related objects.
 		GameplayManager gameplayManager;
