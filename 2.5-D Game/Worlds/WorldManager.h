@@ -14,16 +14,12 @@
 #include <unordered_map>
 
 namespace Game {
-	// The following represents a map of teleporters, in which the teleporters are organized by map, chunk and position in 
-	// their chunk.
-	typedef std::unordered_map<size_t, std::unordered_map<glm::ivec2, std::unordered_map<glm::ivec3, Teleporter,
-		IVec3HashMapFunctions, IVec3HashMapFunctions>, IVec2HashMapFunctions, IVec2HashMapFunctions>> TeleporterMap;
-
 	class WorldManager {
 		public:
 			WorldManager();
 
 			void setup();
+			void scenesWereSetUp();
 			void update();
 
 			// This creates/recreates the Aela::Map3D that is used by the game.
@@ -36,23 +32,31 @@ namespace Game {
 			Map3D* getMap3D();
 			size_t getCurrentWorld();
 			Teleporter* getTeleporter(Location* location);
+			Teleporter* getTeleporter(Location* location, size_t tileType);
 			Chunk* getChunk(Location* location);
 			TileGroup* getTileGroup(Location* location);
+			glm::ivec3* getChunkRenderDistances();
+			float getCharacterYOffsetInWorldspace();
 
 			void setChunkRenderDistances(glm::vec3 chunkRenderDistances);
-			void getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::vec2& chunk, TileDirection direction);
+			void getCoordinateOfNeighbouringTile(glm::ivec3& tile, glm::ivec2& chunk, TileDirection direction);
 			void createChunkInCurrentWorld(glm::ivec2 coordinate);
 			void createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, unsigned int layer);
 
 			void addWalkedOnScript(std::string script, Location* location);
 			void addPromptedScript(std::string script, Location* location);
 			void addTileSwitchScript(std::string script, Location* location);
-			void addTeleporter(Teleporter* teleporter, Location* location);
+
+			bool addTeleporterToFloorTile(Location* teleporterLocation, Location* teleporterDestination);
+			bool addTeleporterToSwitchableFloorTile(Location* teleporterLocation, Location* teleporterDestination);
+			bool addTeleporterToTile(Location* teleporterLocation, Location* teleporterDestination, size_t tileType);
 
 			void runPromptedScriptOfTile(Location* location);
-			void runTileSwitchScriptOfTile(Location* location);
+			void runTileSwitchScriptOfTileGroup(Location* location);
 
 			bool exportCurrentWorld();
+			bool exportCurrentWorld(std::string path);
+			bool autoExportCurrentWorld();
 
 		private:
 			// These are obtained from GameObjectProvider.
@@ -75,12 +79,11 @@ namespace Game {
 
 			bool mapNeedsToBeRebuilt;
 
-			TeleporterMap teleporters;
-
 			// This is the path to the Aela 3D Map.
 			const std::string DEFAULT_MAP_SRC = "res/maps/map.txt";
 
-			void setupAnimationLoopingForTiles();
+			// This is the path to the autosave location.
+			const std::string WORLD_AUTO_EXPORT_PATH = "res/tiled maps/autosave.txt";
 
 			void processCharacterMovement(Character* character, TileDirection& direction);
 	};

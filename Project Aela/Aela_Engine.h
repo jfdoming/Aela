@@ -11,6 +11,7 @@
 #include "Window/Window.h"
 #include "Error Handler/ErrorHandler.h"
 #include "Time/Time.h"
+#include "Time/Timer/Timer.h"
 #include "2D/Text/FontManager.h"
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
@@ -39,7 +40,7 @@
 namespace Aela {
 	class Engine {
 		public:
-			Engine() : resourceManager(0) {}
+			Engine();
 
 			int setupWindow(unsigned int width, unsigned int height, unsigned int windowXPosition, unsigned int windowYPosition);
 			int setupRenderer();
@@ -66,6 +67,7 @@ namespace Aela {
 			GLRenderer* getRenderer();
 			EventHandler* getEventHandler();
 			Time* getTime();
+			Timer* getTimer();
 			FontManager* getFontManager();
 			LuaManager* getLuaManager();
 			SceneManager* getSceneManager();
@@ -86,6 +88,7 @@ namespace Aela {
 			GLRenderer renderer;
 			EventHandler eventHandler;
 			Time time;
+			Timer timer;
 			FontManager fontManager;
 			LuaManager luaManager;
 			SceneManager sceneManager;

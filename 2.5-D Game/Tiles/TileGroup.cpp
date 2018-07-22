@@ -1,5 +1,8 @@
 #include "TileGroup.h"
 #include "../../Project Aela/Utilities/enumut.h"
+#include "../Game Object Provider/GameObjectProvider.h"
+#include "../Tiles/TileBehaviourExecuter.h"
+#include "../Worlds/WorldManager.h"
 
 using namespace Game;
 
@@ -10,6 +13,23 @@ void Game::TileGroup::addTile(Tile* tile) {
 		tiles.clear();
 	}
 	tiles[tile->getType()] = *tile;
+
+	// Maybe this should be done?
+	// GameObjectProvider::getTileBehaviourExecuter()->runBehaviour()
+
+	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+}
+
+void Game::TileGroup::addTile(size_t type) {
+	if (tiles.size() == 1 && tiles.find(0) != tiles.end()) {
+		tiles.clear();
+	}
+	tiles[type] = Tile(type);
+
+	// Maybe this should be done?
+	// GameObjectProvider::getTileBehaviourExecuter()->runBehaviour()
+
+	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 }
 
 bool Game::TileGroup::removeTile(size_t type) {
@@ -20,6 +40,9 @@ bool Game::TileGroup::removeTile(size_t type) {
 		if (tiles.size() == 0) {
 			addTile(&Tile());
 		}
+
+		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+		return true;
 	}
 	return false;
 }
@@ -31,6 +54,14 @@ void Game::TileGroup::clear() {
 
 TileMap* Game::TileGroup::getTiles() {
 	return &tiles;
+}
+
+Tile* Game::TileGroup::getTile(size_t type) {
+	auto pos = tiles.find(type);
+	if (pos != tiles.end()) {
+		return &pos->second;
+	}
+	return nullptr;
 }
 
 std::string* Game::TileGroup::getWalkedOnScriptID() {
@@ -69,9 +100,7 @@ Tile* Game::TileGroup::getFloorTile(TileAtlas* tileAtlas) {
 
 Tile* Game::TileGroup::getSwitchableFloorTile(TileAtlas* tileAtlas) {
 	for (auto& pair : tiles) {
-		std::cout << tileAtlas << " is tileatlas.\n";
 		TileShape shape = tileAtlas->getTileType(pair.second.getType())->getShape();
-		std::cout << enumToInteger(shape) << " is shape\n";
 		if (shape == TileShape::LIQUID_FLOOR || shape == TileShape::BOXED_FLOOR) {
 			return &pair.second;
 		}

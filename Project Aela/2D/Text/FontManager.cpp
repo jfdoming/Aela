@@ -31,14 +31,8 @@ Rect<int> FontManager::dimensionsOfText(TextFont* font, std::string text) {
 	// I would not normally use this approach to calculate width because it is a little faster to use FT_Glyph_Get_CBox.
 	// However, that function causes an access violation and this method is slightly more accurate.
 	int width = 0;
-	char* p;
 	for (unsigned int i = 0; i < text.size(); i++) {
-		p = &((char) (text.at(i)));
-		// This loads the character.
-
-		std::cout << face << " dimsOfText.\n";
-
-		if (FT_Load_Char(face, *p, FT_LOAD_RENDER)) {
+		if (FT_Load_Char(face, ((char) (text.at(i))), FT_LOAD_RENDER)) {
 			continue;
 		}
 		width += glyph->metrics.horiAdvance / POINTS_PER_PIXEL;

@@ -13,12 +13,18 @@ Scene* Scripts::gameplayScene, *Scripts::pauseScene = nullptr;
 EventHandler* Scripts::eventHandler = nullptr;
 DialogueDisplay* Scripts::dialogueDisplay = nullptr;
 Time* Scripts::time = nullptr;
+Timer* Scripts::timer = nullptr;
 EnemyProvider* Scripts::enemyProvider = nullptr;
 SceneManager* Scripts::sceneManager = nullptr;
 Animator* Scripts::animator = nullptr;
 Camera3D* Scripts::camera = nullptr;
 TileAtlas* Scripts::tileAtlas = nullptr;
 FontManager* Scripts::fontManager = nullptr;
+WorldExporter* Scripts::worldExporter = nullptr;
+CameraController* Scripts::cameraController = nullptr;
+TileBehaviourExecuter* Scripts::tileBehaviourExecuter = nullptr;
+HintDisplay* Scripts::hintDisplay = nullptr;
+DoorProvider* Scripts::doorProvider = nullptr;
 
 void Scripts::setupScriptObjects() {
 	engine = GameObjectProvider::getEngine();
@@ -33,11 +39,16 @@ void Scripts::setupScriptObjects() {
 	eventHandler = GameObjectProvider::getEventHandler();
 	dialogueDisplay = GameObjectProvider::getDialogueDisplay();
 	time = GameObjectProvider::getTime();
+	timer = GameObjectProvider::getTimer();
 	enemyProvider = GameObjectProvider::getEnemyProvider();
 	sceneManager = GameObjectProvider::getSceneManager();
 	animator = GameObjectProvider::getAnimator();
 	camera = GameObjectProvider::getCamera();
 	tileAtlas = GameObjectProvider::getTileAtlas();
 	fontManager = GameObjectProvider::getFontManager();
-	std::cout << resourceManager << " was resManager\n";
+	worldExporter = GameObjectProvider::getWorldExporter();
+	cameraController = GameObjectProvider::getCameraController();
+	tileBehaviourExecuter = GameObjectProvider::getTileBehaviourExecuter();
+	hintDisplay = GameObjectProvider::getHintDisplay();
+	doorProvider = GameObjectProvider::getDoorProvider();
 }

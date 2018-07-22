@@ -36,9 +36,12 @@ void Map3D::removeModel(long long id) {
 	if (iter != resourceGroupedModelsWithoutTransparency[models[id].getModel()].end()) {
 		resourceGroupedModelsWithoutTransparency[models[id].getModel()].erase(iter);
 	}
-	iter = std::find(resourceGroupedModelsWithTransparency[models[id].getModel()].begin(), resourceGroupedModelsWithTransparency[models[id].getModel()].end(), id);
-	if (iter != resourceGroupedModelsWithTransparency[models[id].getModel()].end()) {
-		resourceGroupedModelsWithTransparency[models[id].getModel()].erase(iter);
+	for (auto& layer : resourceGroupedModelsWithTransparency) {
+		auto unorderedMap = layer.second->at(models[id].getModel());
+		iter = std::find(unorderedMap.begin(), unorderedMap.end(), id);
+		if (iter != unorderedMap.end()) {
+			unorderedMap.erase(iter);
+		}
 	}
 	for (auto& iter1 : resourceGroupedModelsWithoutTransparency) {
 		for (auto& value : iter1.second) {
@@ -48,9 +51,11 @@ void Map3D::removeModel(long long id) {
 		}
 	}
 	for (auto& iter1 : resourceGroupedModelsWithTransparency) {
-		for (auto& value : iter1.second) {
-			if (value > id) {
-				value--;
+		for (auto& iter2 : *iter1.second) {
+			for (auto& value : iter2.second) {
+				if (value > id) {
+					value--;
+				}
 			}
 		}
 	}
@@ -67,24 +72,24 @@ void Map3D::removeSkybox(long long id) {
 
 void Map3D::removeAllLights() {
 	lights.clear();
-	lastLightKey = 0;
 }
 
 void Map3D::removeAllBillboards() {
 	billboards.clear();
-	lastBillboardKey = 0;
 }
 
 void Map3D::removeAllSkyboxes() {
 	skyboxes.clear();
-	lastSkyboxKey = 0;
 }
 
 void Map3D::removeAllModels() {
 	models.clear();
 	resourceGroupedModelsWithoutTransparency.clear();
+
+	for (auto& iter : resourceGroupedModelsWithTransparency) {
+		delete iter.second;
+	}
 	resourceGroupedModelsWithTransparency.clear();
-	lastModelKey = 0;
 }
 
 std::unordered_map<long long, LightEntity>* Map3D::getLights() {
@@ -103,26 +108,32 @@ std::unordered_map<long long, SkyboxEntity>* Map3D::getSkyboxes() {
 	return &skyboxes;
 }
 
-std::unordered_map<Model*, std::vector<long long>>* Map3D::getResourceGroupedModelsWithoutTransparency() {
+ModelResourceMap* Map3D::getResourceGroupedModelsWithoutTransparency() {
 	return &resourceGroupedModelsWithoutTransparency;
 }
 
-std::unordered_map<Model*, std::vector<long long>>* Map3D::getResourceGroupedModelsWithTransparency() {
+std::map<size_t, ModelResourceMap*>* Map3D::getResourceGroupedModelsWithTransparency() {
 	return &resourceGroupedModelsWithTransparency;
+}
+
+void Aela::Map3D::addModelTransparencyLayer(size_t layer) {
+	if (resourceGroupedModelsWithTransparency.find(layer) == resourceGroupedModelsWithTransparency.end()) {
+		resourceGroupedModelsWithTransparency[layer] = new ModelResourceMap();
+	}
 }
 
 void Map3D::addLight(long long id, LightEntity* light) {
 	lights[id] = *light;
 }
 
-void Map3D::addModelWithTransparency(long long id, ModelEntity * model) {
+void Map3D::addModelWithTransparency(long long id, ModelEntity* model, size_t layer) {
 	addModelWithoutGeneratingData(id, model);
-	generateAdditionalModelData(id, true);
+	generateAdditionalModelDataWithTransparency(id, layer);
 }
 
 void Map3D::addModel(long long id, ModelEntity* model) {
 	addModelWithoutGeneratingData(id, model);
-	generateAdditionalModelData(id, false);
+	generateAdditionalModelDataWithoutTransparency(id);
 }
 
 void Map3D::addModelWithoutGeneratingData(long long id, ModelEntity* model) {
@@ -131,11 +142,14 @@ void Map3D::addModelWithoutGeneratingData(long long id, ModelEntity* model) {
 	}
 }
 
-void Map3D::generateAdditionalModelData(long long whichModel, bool containsTransparency) {
-	if (containsTransparency) {
-		resourceGroupedModelsWithTransparency[models[whichModel].getModel()].push_back(whichModel);
-	} else {
-		resourceGroupedModelsWithoutTransparency[models[whichModel].getModel()].push_back(whichModel);
+void Map3D::generateAdditionalModelDataWithoutTransparency(long long whichModel) {
+	resourceGroupedModelsWithoutTransparency[models[whichModel].getModel()].push_back(whichModel);
+}
+
+void Map3D::generateAdditionalModelDataWithTransparency(long long whichModel, size_t layer) {
+	auto pos = resourceGroupedModelsWithTransparency.find(layer);
+	if (pos != resourceGroupedModelsWithTransparency.end()) {
+		(*pos->second)[models[whichModel].getModel()].push_back(whichModel);
 	}
 }
 
@@ -145,6 +159,14 @@ void Map3D::removeAdditionalModelData(bool modelsAreTransparent) {
 	} else {
 		resourceGroupedModelsWithoutTransparency.clear();
 	}
+}
+
+void Aela::Map3D::setAmbientLighting(float ambientLighting) {
+	this->ambientLighting = ambientLighting;
+}
+
+float Aela::Map3D::getAmbientLighting() {
+	return ambientLighting;
 }
 
 

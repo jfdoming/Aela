@@ -42,7 +42,7 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 
 	int width = window->getDimensions()->getWidth(), height = window->getDimensions()->getHeight();
 	int imageWidthAndHeight = height / 8;
-	int currentTile = player->getTileInventory()->getCurrentTileIndex();
+	size_t currentTile = player->getTileInventory()->getCurrentTileIndex();
 
 	TileAtlas* tileAtlas = GameObjectProvider::getTileAtlas();
 

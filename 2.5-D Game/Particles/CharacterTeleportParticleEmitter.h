@@ -40,7 +40,6 @@ namespace Game {
 			float secondaryPathOffset;
 
 			Character* character;
-			Location oldLocation, newLocation;
 
 			std::function<void()> onHalfLife = NULL;
 

@@ -2,13 +2,7 @@
 * Class: Character Tracker
 * Author: Robert Ciborowski
 * Date: 07/08/2017
-* Description: A class used to keep track of characters.
-*
-*              Why do you need to track characters? Well, a lot of their own behaviours can be done by themselves.
-*              However, there are some things that should not be done by them since it would require each
-*              individual character to have their own pointer to things like Aela objects, etc. This would
-*              be a waste of memory. In addition, a CharacterProvider gives its WorldManager the ability to
-*              get a character based on a given criteria, such as a coordinate.
+* Description: A class used to store and provide characters.
 */
 
 #pragma once
@@ -39,8 +33,8 @@ namespace Game {
 			void generateCharacterModelsForAllCharacters(ResourceManager* resourceManager);
 
 			// These are adding and getting character functions.
-			bool trackCharacter(Character* character, size_t* id);
-			bool deleteCharacterByID(size_t id);
+			bool addCharacter(Character* character, size_t* id);
+			bool removeCharacterByID(size_t id);
 			Character* getCharacterByID(size_t id);
 			Character* getCharacterByName(std::string name);
 			Character* getCharacterByLocation(Location* location);

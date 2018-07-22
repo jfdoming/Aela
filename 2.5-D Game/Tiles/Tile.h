@@ -8,6 +8,7 @@
 #pragma once
 #include <string>
 #include "2D/Texture/Texture.h"
+#include "../Teleporter/Teleporter.h"
 #include "3D/Models/ModelEntity.h"
 
 using namespace Aela;
@@ -15,26 +16,27 @@ using namespace Aela;
 namespace Game {
 	class Tile {
 		public:
-		Tile() {
-			type = 0;
-			entity = nullptr;
-		}
+			Tile();
+			Tile(size_t type);
+			~Tile();
 
-		Tile(unsigned int type) {
-			this->type = type;
-			entity = nullptr;
-		}
-
-		size_t getType();
-		void setType(size_t type);
-		ModelEntity* getEntity();
-		void setEntity(ModelEntity* entity);
+			size_t getType();
+			void setType(size_t type);
+			ModelEntity* getEntity();
+			void setEntity(ModelEntity* entity);
+			Teleporter* getTeleporter();
+			
+			void createTeleporter(Location* locationToTeleportTo);
+			void removeTeleporter();
 
 		private:
-		// The texture used to represent the tile, which comes from one of the images that contain
-		// several textures.
-		size_t type;
+			// The texture used to represent the tile, which comes from one of the images that contain
+			// several textures.
+			size_t type;
 
-		ModelEntity* entity;
+			ModelEntity* entity;
+
+			Teleporter* teleporterPtr = nullptr;
+			Teleporter teleporter;
 	};
 }

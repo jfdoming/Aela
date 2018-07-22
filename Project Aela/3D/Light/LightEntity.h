@@ -21,16 +21,9 @@
 namespace Aela {
 	class LightEntity : public Entity, public Transformable3D {
 		public:
-			LightEntity() {
-				useDefaultValues();
-			}
-
-			LightEntity(glm::vec3 position, glm::vec3 rotation, ColourRGB colour, float power) {
-				this->position = position;
-				this->rotation = rotation;
-				this->colour = colour;
-				this->power = power;
-			}
+			LightEntity();
+			LightEntity(glm::vec3 position, glm::vec3 rotation, ColourRGB* colour, float power);
+			~LightEntity();
 
 			void useDefaultValues();
 			void setupForNewShadowMap();
@@ -46,10 +39,14 @@ namespace Aela {
 			GLuint* getShadowMapBuffer();
 			void setShadowMapBuffer(GLuint* shadowMapBuffer);
 			EntityType getEntityType();
+			void hasBeenSetUpForShadows();
+			bool isSetUpForShadows();
 
 		private:
 			ColourRGB colour;
 			float power;
-			GLuint shadowMapTexture, shadowMapBuffer;
+			GLuint shadowMapTexture = 0, shadowMapBuffer = 0;
+
+			bool setUpForShadows = false;
 	};
 }

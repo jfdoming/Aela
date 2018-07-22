@@ -29,7 +29,9 @@ namespace Game {
 			void move(Movement* movement, std::string scriptOnCompletion);
 			void moveIfPossible(TileDirection direction);
 			void moveIfPossible(std::list<TileDirection> directions);
-			void teleport(Location* location, bool animate);
+			void clearFutureMovements();
+			void teleportWithoutAnimation(Location* location);
+			void teleportWithAnimation(Location* location, TeleportationAnimation animation);
 			void kill();
 			void revive();
 

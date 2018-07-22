@@ -59,8 +59,6 @@ void Game::CharacterTeleportParticleEmitter::setCharacter(Character* character) 
 }
 
 void Game::CharacterTeleportParticleEmitter::setLocations(Location* oldLocation, Location* newLocation) {
-	this->oldLocation = *oldLocation;
-	this->newLocation = *newLocation;
 	glm::vec3 oldWorldSpacePosition = oldLocation->getWorldSpaceLocation();
 	glm::vec3 newWorldSpacePosition = newLocation->getWorldSpaceLocation();
 	dimensions1 = Rect<float>(oldWorldSpacePosition.x, oldWorldSpacePosition.z, 1, 1);

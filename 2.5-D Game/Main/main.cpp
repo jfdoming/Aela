@@ -24,6 +24,19 @@ int main(int argc, char *args[]) {
 		return error;
 	}
 
+	Renderer* renderer = engine.getRenderer();
+	// This activates features of the renderer. These can be changed at any point during the runtime of the application.
+	renderer->activateFeature(RendererFeature::BILLBOARDS);
+	renderer->activateFeature(RendererFeature::SKYBOX);
+	renderer->activateFeature(RendererFeature::MSAA_3D_X0);
+	renderer->activateFeature(RendererFeature::MSAA_2D_X0);
+
+	// If a world tells the game to use lights (because the world is outdoors), then shadows and lights are turned on.
+	// Most of this game takes place indoors with well let rooms, so the only source of lighting is ambient light.
+	// The indoors looks better without the lights and shadows (I think).
+	// renderer->activateFeature(RendererFeature::LIGHTS);
+	// renderer->activateFeature(RendererFeature::SHADOWS);
+
 	error = engine.setupControlManager();
 	if (error != 0) {
 		return error;
@@ -75,9 +88,9 @@ int main(int argc, char *args[]) {
 
 		if (engine.getTime()->getCurrentTimeInMillis() % 1000 < lastRemainder || engine.getTime()->getTimeBetweenFramesInMillis() >= 1000) {
 			calc.calculate(engine.getTime()->getCurrentTimeInNanos(), engine.getTime()->getTimeBetweenFramesInNanos());
-			std::cout << "True FPS: " << calc.getTrueFPS() << "\n";
-			std::cout << "Smoothed FPS: " << calc.getSmoothedFPS() << "\n";
-			engine.getStopwatch()->outputTimesIntoConsole();
+			// std::cout << "True FPS: " << calc.getTrueFPS() << "\n";
+			// std::cout << "Smoothed FPS: " << calc.getSmoothedFPS() << "\n";
+			// engine.getStopwatch()->outputTimesIntoConsole();
 			engine.getStopwatch()->reset();
 		}
 

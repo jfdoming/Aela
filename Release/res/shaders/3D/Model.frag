@@ -2,7 +2,7 @@
  * Name: Model Shader
  * Author: Ekkon Games - Robert Ciborowski
  * Date: October 2016
- * Description: Project Aela's Depth Texture Renderer, which is used for shadows.
+ * Description: Project Aela's model fragment shader.
 */
 
 #version 430 core
@@ -53,7 +53,7 @@ uniform vec3 openGLSucksAtPositions[MAX_LIGHT_AMOUNT];
 // uniform vec3 lightDirections[MAX_LIGHT_AMOUNT];
 uniform vec3 openGLSucksAtColours[MAX_LIGHT_AMOUNT];
 uniform float openGLSucksAtLightPowers[MAX_LIGHT_AMOUNT];
-uniform vec3 cameraPosition;
+uniform float ambientLighting;
 
 // This is used for pseudo-randomness.
 float rand(vec2 seed){
@@ -82,7 +82,6 @@ float shadowCalculation(vec3 positionInLightSpace, int whichLight, float bias) {
 	
 	// This undergoes the PCF process, if enabled.
 	if (PCF) {
-		// float PCFRadius = (1.0 + length(cameraPosition - worldSpacePosition)) / 500.0;
 		float PCFRadius = 0.03;
 		for (int i = 0; i < PCFDirections.length(); i++) {
 			float closestDepth = texture(shadowMaps[whichLight], fragToLight + PCFDirections[i] * PCFRadius).r;
@@ -106,7 +105,7 @@ void main(){
 	// This calculates several colours.
 	vec4 UVSample = texture(textureSampler, UV).rgba;
 	vec3 materialDiffuseColor = UVSample.rgb;
-	vec3 MaterialAmbientColor = vec3(0.15, 0.15, 0.15) * materialDiffuseColor;
+	vec3 MaterialAmbientColor = vec3(ambientLighting) * materialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(0.3, 0.3, 0.3);
 	vec3 diffuseColours[MAX_LIGHT_AMOUNT];
 	vec3 finalDiffuseColour = vec3(0, 0, 0);
@@ -127,7 +126,7 @@ void main(){
 		bias = clamp(bias, 0.0, 0.01);
 		
 		float shadow = shadowCalculation(worldSpacePosition, i, bias);
-		// visibility -= shadow;
+		visibility -= shadow;
 		
 		float distanceBetweenLightAndFragment = distance(worldSpacePosition, openGLSucksAtPositions[i]);
 		float distanceModifier = clamp(((1 / distanceBetweenLightAndFragment) / distanceToLightModifier), 0, MAX_DISTANCE_MODIFIER_RESULT);

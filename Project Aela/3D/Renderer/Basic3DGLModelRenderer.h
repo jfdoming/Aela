@@ -16,11 +16,15 @@
 namespace Aela {
 	class Basic3DGLModelRenderer {
 		public:
-			Basic3DGLModelRenderer() {}
+			Basic3DGLModelRenderer();
+			~Basic3DGLModelRenderer();
+
+			void setup();
 
 			void startRenderingModelEntities(GLuint modelProgramID, GLuint frameBuffer, GLuint viewMatrixID, GLuint projectionMatrixID);
 			void renderInstancedModelEntities(Map3D* map, std::vector<long long>* entities, size_t start, size_t end,
-				GLuint modelProgramID, GLuint frameBuffer, GLuint modelMatrixID, GLuint rotationMatrixID, GLuint modelTextureID);
+				GLuint modelProgramID, GLuint frameBuffer, GLuint modelMatrixID, GLuint rotationMatrixID, GLuint modelTextureID,
+				GLuint ambientLightingID);
 			void endRenderingModelEntities();
 
 			// This function renders a model. It requires a lot of GLuints that are provided by
@@ -46,7 +50,7 @@ namespace Aela {
 			glm::mat4 viewMatrix, projectionMatrix;
 			const unsigned int MAX_LIGHT_AMOUNT = 5;
 
-			GLuint vertexBuffer, UVBuffer, normalBuffer, elementBuffer, whichMatrixBuffer;
+			GLuint vertexBuffer = NULL, UVBuffer = NULL, normalBuffer = NULL, elementBuffer = NULL, whichMatrixBuffer = NULL;
 
 			// These functions are here for debugging purposes.
 			void drawTestQuad();

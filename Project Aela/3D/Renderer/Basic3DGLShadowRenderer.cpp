@@ -6,6 +6,7 @@
 */
 
 #include "Basic3DGLShadowRenderer.h"
+#include "../../Error Handler/ErrorHandler.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -19,7 +20,7 @@ void Basic3DGLShadowRenderer::clearShadowMaps(std::unordered_map<long long, Ligh
 	if (lights != nullptr) {
 		unsigned int i = 0;
 		for (auto& light : *lights) {
-			if (*light.second.getShadowMapTexture() != NULL && *light.second.getShadowMapBuffer() != NULL) {
+			if (light.second.isSetUpForShadows()) {
 				if (i + 1 > MAX_LIGHT_AMOUNT) {
 					break;
 				}
@@ -32,6 +33,61 @@ void Basic3DGLShadowRenderer::clearShadowMaps(std::unordered_map<long long, Ligh
 	}
 }
 
+void Aela::Basic3DGLShadowRenderer::generateShadowMap(LightEntity* light) {
+	GLuint* buffer = light->getShadowMapBuffer();
+	glGenFramebuffers(1, buffer);
+
+	// This generates the depth texture, which is sampled from later when rendering models.
+	GLuint* texture = light->getShadowMapTexture();
+	glGenTextures(1, texture);
+
+	glBindTexture(GL_TEXTURE_CUBE_MAP, *texture);
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+	for (unsigned int i = 0; i < 6; i++) {
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT24, DEPTH_TEXTURE_WIDTH,
+			DEPTH_TEXTURE_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	}
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	glBindFramebuffer(GL_FRAMEBUFFER, *buffer);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, *texture, 0);
+
+	// There is no colour output in the bound framebuffer, only depth.
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		AelaErrorHandling::windowError("Aela 3D",
+			(std::string) "There was a problem setting movingUp the depth framebuffer.\nIt's probably OpenGL's fault.\n"
+			+ "It's possible that you ran out of VRAM.\nMaybe your graphics processor is a potato.");
+		light->setShadowMapBuffer(NULL);
+		light->setShadowMapTexture(NULL);
+	} else {
+		light->setShadowMapBuffer(buffer);
+		light->setShadowMapTexture(texture);
+	}
+
+	light->hasBeenSetUpForShadows();
+}
+
+Aela::Basic3DGLShadowRenderer::Basic3DGLShadowRenderer() {}
+
+Aela::Basic3DGLShadowRenderer::~Basic3DGLShadowRenderer() {
+	glDeleteBuffers(1, &vertexBuffer);
+	glDeleteBuffers(1, &elementBuffer);
+}
+
+void Aela::Basic3DGLShadowRenderer::setup() {
+	// This sets up necessary buffers.
+	glGenBuffers(1, &vertexBuffer);
+	glGenBuffers(1, &elementBuffer);
+}
+
 void Basic3DGLShadowRenderer::startRenderingShadows(GLuint depthProgramID) {
 	// This enables face culling.
 	glEnable(GL_CULL_FACE);
@@ -40,7 +96,6 @@ void Basic3DGLShadowRenderer::startRenderingShadows(GLuint depthProgramID) {
 
 	glUseProgram(depthProgramID);
 
-	// This sets up necessary buffers.
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &elementBuffer);
 
@@ -84,15 +139,13 @@ void Basic3DGLShadowRenderer::renderInstancedShadows(Map3D* map, std::vector<lon
 
 		unsigned int i = 0;
 		for (auto& light : *lights) {
-			if (*light.second.getShadowMapTexture() == NULL && *light.second.getShadowMapBuffer() == NULL) {
+			if (!light.second.isSetUpForShadows()) {
 				continue;
 			}
 
 			if (i + 1 > MAX_LIGHT_AMOUNT) {
 				break;
 			}
-
-			glBindFramebuffer(GL_FRAMEBUFFER, *light.second.getShadowMapBuffer());
 
 			// This calculates more matrices.
 			float near = 1, far = 100;
@@ -130,100 +183,97 @@ void Basic3DGLShadowRenderer::renderInstancedShadows(Map3D* map, std::vector<lon
 }
 
 void Basic3DGLShadowRenderer::endRenderingShadows() {
-	// This frees the buffers from the memory. Delete this if you want to screw over your users.
 	glDisableVertexAttribArray(0);
-	glDeleteBuffers(1, &vertexBuffer);
-	glDeleteBuffers(1, &elementBuffer);
 }
 
 // This renders a shadow of a entity to each light's depth buffer.
 void Basic3DGLShadowRenderer::renderUninstancedShadow(ModelEntity* entity, GLuint depthProgramID,
 	GLuint shadowModelMatrixID, GLuint shadowMatrixID, std::unordered_map<long long, LightEntity>* lights, GLuint lightPositionsID) {
 	// This is old code that is only here for reference.
-	if (entity != nullptr && entity->getModel() != nullptr && entity->getModel()->getSubModels() != nullptr) {
-		// This enables face culling.
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_FRONT);
-		// glDisable(GL_CULL_FACE);
+	//if (entity != nullptr && entity->getModel() != nullptr && entity->getModel()->getSubModels() != nullptr) {
+	//	// This enables face culling.
+	//	glEnable(GL_CULL_FACE);
+	//	glCullFace(GL_FRONT);
+	//	// glDisable(GL_CULL_FACE);
 
-		glUseProgram(depthProgramID);
+	//	glUseProgram(depthProgramID);
 
-		// This sets up necessary buffers.
-		GLuint vertexbuffer;
-		glGenBuffers(1, &vertexbuffer);
+	//	// This sets up necessary buffers.
+	//	GLuint vertexbuffer;
+	//	glGenBuffers(1, &vertexbuffer);
 
-		GLuint elementbuffer;
-		glGenBuffers(1, &elementbuffer);
+	//	GLuint elementbuffer;
+	//	glGenBuffers(1, &elementbuffer);
 
-		/*std::cout << entity << " " << depthProgramID << " " << shadowModelMatrixID << " " << shadowMatrixID << " "
-			<< lights << " " << lightPositionsID << "\n";*/
+	//	/*std::cout << entity << " " << depthProgramID << " " << shadowModelMatrixID << " " << shadowMatrixID << " "
+	//		<< lights << " " << lightPositionsID << "\n";*/
 
-		// For some reason, range-based for loops break here so I had to use a regular for loop.
-		for (unsigned int whichSubModel = 0; whichSubModel < entity->getModel()->getSubModels()->size(); whichSubModel++) {
-			SubModel& subModel = entity->getModel()->getSubModels()->at(whichSubModel);
-			unsigned int i = 0;
-			for (auto& light : *lights) {
-				if (*light.second.getShadowMapTexture() != NULL && *light.second.getShadowMapBuffer() != NULL) {
-					if (i + 1 > MAX_LIGHT_AMOUNT) {
-						break;
-					}
+	//	// For some reason, range-based for loops break here so I had to use a regular for loop.
+	//	for (unsigned int whichSubModel = 0; whichSubModel < entity->getModel()->getSubModels()->size(); whichSubModel++) {
+	//		SubModel& subModel = entity->getModel()->getSubModels()->at(whichSubModel);
+	//		unsigned int i = 0;
+	//		for (auto& light : *lights) {
+	//			if (!light.second.isSetUpForShadows()) {
+	//				if (i + 1 > MAX_LIGHT_AMOUNT) {
+	//					break;
+	//				}
 
-					// This sends data to the buffers.
-					glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-					glBufferData(GL_ARRAY_BUFFER, subModel.getVertexSize() * sizeof(glm::vec3), &subModel.getVertices()->at(0), GL_STATIC_DRAW);
+	//				// This sends data to the buffers.
+	//				glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	//				glBufferData(GL_ARRAY_BUFFER, subModel.getVertexSize() * sizeof(glm::vec3), &subModel.getVertices()->at(0), GL_STATIC_DRAW);
 
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-					glBufferData(GL_ELEMENT_ARRAY_BUFFER, subModel.getIndexSize() * sizeof(unsigned short), &subModel.getIndices()->at(0), GL_STATIC_DRAW);
+	//				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	//				glBufferData(GL_ELEMENT_ARRAY_BUFFER, subModel.getIndexSize() * sizeof(unsigned short), &subModel.getIndices()->at(0), GL_STATIC_DRAW);
 
-					// These are positions and rotations for light and the subModel.
-					glm::vec3* lightPosition = light.second.getPosition();
-					glm::vec3* rotation = entity->getRotation();
-					glm::vec3* position = entity->getPosition();
-					glm::vec3* scaling = entity->getScaling();
+	//				// These are positions and rotations for light and the subModel.
+	//				glm::vec3* lightPosition = light.second.getPosition();
+	//				glm::vec3* rotation = entity->getRotation();
+	//				glm::vec3* position = entity->getPosition();
+	//				glm::vec3* scaling = entity->getScaling();
 
-					// This calculates more matrices.
-					float near = 1, far = 100;
-					glm::mat4 depthProjectionMatrix = glm::perspective(glm::radians(90.0f), (float)DEPTH_TEXTURE_WIDTH / (float)DEPTH_TEXTURE_HEIGHT, near, far);
-					glm::mat4 shadowTransformations[6];
-					shadowTransformations[0] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-					shadowTransformations[1] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-					shadowTransformations[2] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-					shadowTransformations[3] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-					shadowTransformations[4] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-					shadowTransformations[5] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	//				// This calculates more matrices.
+	//				float near = 1, far = 100;
+	//				glm::mat4 depthProjectionMatrix = glm::perspective(glm::radians(90.0f), (float)DEPTH_TEXTURE_WIDTH / (float)DEPTH_TEXTURE_HEIGHT, near, far);
+	//				glm::mat4 shadowTransformations[6];
+	//				shadowTransformations[0] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	//				shadowTransformations[1] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	//				shadowTransformations[2] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//				shadowTransformations[3] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+	//				shadowTransformations[4] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	//				shadowTransformations[5] = depthProjectionMatrix * glm::lookAt(*lightPosition, *lightPosition + glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 
-					glBindFramebuffer(GL_FRAMEBUFFER, *light.second.getShadowMapBuffer());
+	//				glBindFramebuffer(GL_FRAMEBUFFER, *light.second.getShadowMapBuffer());
 
-					glUniformMatrix4fv(shadowMatrixID, 6, GL_FALSE, &shadowTransformations[0][0][0]);
-					glUniform3fv(lightPositionsID, 1, &(light.second.getPosition()->x));
+	//				glUniformMatrix4fv(shadowMatrixID, 6, GL_FALSE, &shadowTransformations[0][0][0]);
+	//				glUniform3fv(lightPositionsID, 1, &(light.second.getPosition()->x));
 
-					// This computes more matrices.
-					glm::mat4 modelMatrix = glm::scale(glm::translate(glm::mat4(1.0), *position), *scaling) * glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
+	//				// This computes more matrices.
+	//				glm::mat4 modelMatrix = glm::scale(glm::translate(glm::mat4(1.0), *position), *scaling) * glm::eulerAngleYXZ(rotation->y, rotation->x, rotation->z);
 
-					// This sends all transformations to the shader.
-					glUniformMatrix4fv(shadowModelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
+	//				// This sends all transformations to the shader.
+	//				glUniformMatrix4fv(shadowModelMatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
 
-					// These are the vertex attributes.
-					glEnableVertexAttribArray(0);
-					glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-					glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	//				// These are the vertex attributes.
+	//				glEnableVertexAttribArray(0);
+	//				glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	//				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-					// This is the index buffer.
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	//				// This is the index buffer.
+	//				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
-					// This draws the elements.
-					glDrawElements(GL_TRIANGLES, subModel.getIndexSize(), GL_UNSIGNED_SHORT, (void*)0);
+	//				// This draws the elements.
+	//				glDrawElements(GL_TRIANGLES, (GLsizei) subModel.getIndexSize(), GL_UNSIGNED_SHORT, (void*)0);
 
-					// This frees the buffers from the memory. Delete this if you want to screw over your users.
-					glDisableVertexAttribArray(0);
-					i++;
-				}
-			}
-		}
+	//				// This frees the buffers from the memory. Delete this if you want to screw over your users.
+	//				glDisableVertexAttribArray(0);
+	//				i++;
+	//			}
+	//		}
+	//	}
 
-		glDeleteBuffers(1, &vertexbuffer);
-		glDeleteBuffers(1, &elementbuffer);
-	}
+	//	glDeleteBuffers(1, &vertexbuffer);
+	//	glDeleteBuffers(1, &elementbuffer);
+	//}
 }
 
 unsigned int Basic3DGLShadowRenderer::getDepthTextureWidth() {

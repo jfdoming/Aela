@@ -8,6 +8,7 @@
 #pragma once
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "Tile.h"
+#include "TileGroup.h"
 #include "../Location/Location.h"
 
 namespace Game {
@@ -20,7 +21,7 @@ namespace Game {
 			Tile* switchTile(TileGroup* tileGroup, size_t whichTile);
 			Tile* switchCurrentTile(TileGroup* tileGroup);
 			void replaceTile(Tile* tile, size_t whichTile);
-			int addTile(Tile* tile);
+			size_t addTile(Tile* tile);
 			size_t getNumberOfTiles();
 			size_t getCurrentTileIndex();
 			Tile* getCurrentTile();

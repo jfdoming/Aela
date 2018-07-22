@@ -18,11 +18,13 @@ namespace Game {
 			TileGroup();
 
 			void addTile(Tile* tile);
+			void addTile(size_t type);
 			bool removeTile(size_t type);
 			void clear();
 
 			// This is probably bad and should be removed.
 			TileMap* getTiles();
+			Tile* getTile(size_t type);
 
 			Tile* getFloorTile(TileAtlas* tileAtlas);
 			Tile* getSwitchableFloorTile(TileAtlas* tileAtlas);

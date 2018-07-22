@@ -15,12 +15,18 @@ bool Game::WorldExporter::exportWorld(std::string path, World* world) {
 		return false;
 	}
 
-	std::cout << world->getMap3D()->getSrc();
+	AelaErrorHandling::consoleWindowWarning("Attempting to Export Map: ", path);
 
 	stream << "<Map3D name=\"";
 	std::string mapPath = world->getMap3D()->getSrc();
 	abbreviate(mapPath, (std::string) RESOURCE_ROOT + DEFAULT_MAP_PATH);
-	stream << mapPath << "\">\n";
+	stream << mapPath << "\" lights=\"";
+	if (world->isUsingLights()) {
+		stream << "on";
+	} else {
+		stream << "off";
+	}
+	stream << "\">\n";
 
 	for (auto chunkPair : *world->getChunks()) {
 		stream << "<Chunk position=\"" << chunkPair.first.x << "," << chunkPair.first.y << "\">\n";

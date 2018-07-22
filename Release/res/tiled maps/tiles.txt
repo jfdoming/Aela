@@ -1,63 +1,106 @@
-<Tile name="Tile" texture="tiles/0/0.png" collision="false" type="boxed_floor">
-<Tile name="Tile" texture="tiles/1/0.png" collision="false" type="boxed_floor">
-<Tile name="Tile" texture="tiles/2/0.png" collision="false" type="boxed_floor">
-<Tile name="Tile" texture="tiles/3/0.png" collision="false" type="boxed_floor">
-<Tile name="Tile" texture="tiles/4/0.png" collision="false" type="boxed_floor">
-
-<Tile name="Red Wire" texture="tiles/5/0.png" collision="false" type="boxed_floor">
-<Tile name="Black Wire" texture="tiles/6/0.png" collision="false" type="boxed_floor">
-<Tile name="Teleporter" texture="tiles/7/0.png" collision="false" type="boxed_floor">
-
-<Tile name="Water" texture="tiles/0/1.png" collision="true" type="liquid_floor">
-<Tile name="Water" texture="tiles/1/1.png" collision="true" type="liquid_floor">
-<Tile name="Lava" texture="tiles/2/1.png" collision="true" type="liquid_floor">
-<Tile name="Lava" texture="tiles/3/1.png" collision="true" type="liquid_floor">
-
-<Tile name="Metal Grating" texture="tiles/4/1.png" collision="false" type="boxed_floor">
-<Tile name="Metal Grating" texture="tiles/5/1.png" collision="false" type="boxed_floor">
-<Tile name="Metal Wall" texture="tiles/6/1.png" collision="true" type="wall_right">
-<Tile name="Metal Wall" texture="tiles/6/1.png" collision="true" type="wall_front">
-<Tile name="Metal Wall" texture="tiles/6/1.png" collision="true" type="wall_left">
-<Tile name="Metal Wall" texture="tiles/7/1.png" collision="true" type="wall_right">
-<Tile name="Metal Wall" texture="tiles/7/1.png" collision="true" type="wall_front">
-<Tile name="Metal Wall" texture="tiles/7/1.png" collision="true" type="wall_left">
-<Tile name="Metal Wall" texture="tiles/0/2.png" collision="true" type="wall_right">
-<Tile name="Metal Wall" texture="tiles/0/2.png" collision="true" type="wall_front">
-<Tile name="Metal Wall" texture="tiles/0/2.png" collision="true" type="wall_left">
-<Tile name="Metal Wall" texture="tiles/1/2.png" collision="true" type="wall_right">
-<Tile name="Metal Wall" texture="tiles/1/2.png" collision="true" type="wall_front">
-<Tile name="Metal Wall" texture="tiles/1/2.png" collision="true" type="wall_left">
-<Tile name="Green Door" texture="tiles/2/2.png" collision="true" type="wall_front">
-<Tile name="Blue Door" texture="tiles/3/2.png" collision="true" type="wall_front">
-
-<Tile name="Meme" texture="tiles/4/2.png" collision="true" type="box">
-
-<Tile name="Metal Wall Sewer" texture="tiles/5/2.png" collision="true" type="wall_front">
-<Tile name="Elevator Wall" texture="tiles/6/2.png" collision="true" type="box">
-<Tile name="Elevator Wall" texture="tiles/7/2.png" collision="true" type="box">
-<Tile name="Elevator Wall" texture="tiles/0/3.png" collision="true" type="wall_right">
-<Tile name="Elevator Wall" texture="tiles/0/3.png" collision="true" type="wall_front">
-<Tile name="Elevator Wall" texture="tiles/0/3.png" collision="true" type="wall_left">
-<Tile name="Elevator Window" texture="tiles/1/3.png" collision="true" type="wall_front">
-<Tile name="Elevator Window" texture="tiles/2/3.png" collision="true" type="wall_front">
-<Tile name="Keypad" texture="tiles/3/3.png" collision="true" type="wall_left">
-<Tile name="Speaker" texture="tiles/4/3.png" collision="true" type="wall_left">
-
-<Tile name="Arrow Right" texture="tiles/5/3.png" collision="false" type="floor">
-<Tile name="Arrow Up" texture="tiles/6/3.png" collision="false" type="floor">
-<Tile name="Arrow Left" texture="tiles/7/3.png" collision="false" type="floor">
-<Tile name="Arrow Down" texture="tiles/0/4.png" collision="false" type="floor">
-
-<Tile name="Slime" texture="tiles/1/4.png" collision="true" type="liquid_floor">
-<Tile name="Slime" texture="tiles/2/4.png" collision="true" type="liquid_floor">
-
-<Tile name="Water Sign Red" texture="tiles/3/4.png" collision="true" type="wall_front">
-<Tile name="Water Sign Green" texture="tiles/4/4.png" collision="true" type="wall_front">
-<Tile name="Lava Sign Red" texture="tiles/5/4.png" collision="true" type="wall_front">
-<Tile name="Lava Sign Green" texture="tiles/6/4.png" collision="true" type="wall_front">
-<Tile name="Slime Sign Red" texture="tiles/7/4.png" collision="true" type="wall_front">
-<Tile name="Slime Sign Green" texture="tiles/0/5.png" collision="true" type="wall_front">
-<Tile name="Mini Tiles" texture="tiles/1/5.png" collision="false" type="floor">
-
-<Tile name="Black Collidable" texture="tiles/2/5.png" collision="true" type="floor">
-<Tile name="Black Uncollidable" texture="tiles/2/5.png" collision="false" type="floor">
+<Tile name="Black Uncollidable" texture="floors_1/0/0.png" collision="false" type="floor"> // Black
+<Tile name="Black Collidable" texture="floors_1/0/0.png" collision="true" type="floor">
+<Tile name="White Tile" texture="floors_1/1/0.png" collision="false" type="boxed_floor"> // Floor Tiles
+<Tile name="Green Tile" texture="floors_1/2/0.png" collision="false" type="boxed_floor">
+<Tile name="Yellow Tile" texture="floors_1/3/0.png" collision="false" type="boxed_floor">
+<Tile name="Purple Tile" texture="floors_1/4/0.png" collision="false" type="boxed_floor">
+<Tile name="Light Purple Tile" texture="floors_1/5/0.png" collision="false" type="boxed_floor">
+<Tile name="White Quartered Tile" texture="floors_1/6/0.png" collision="false" type="boxed_floor">
+<Tile name="Water" texture="floors_1/7/0.png" collision="true" type="liquid_floor"> // Water
+<Tile name="Lava" texture="floors_1/0/1.png" collision="true" type="liquid_floor">
+<Tile name="Slime" texture="floors_1/1/1.png" collision="true" type="liquid_floor">
+<Tile name="Poison" texture="floors_1/2/1.png" collision="true" type="liquid_floor">
+<Tile name="Lava Rock" texture="floors_1/3/1.png" collision="true" type="liquid_floor">
+<Tile name="Metal Grating" texture="floors_1/4/1.png" collision="false" type="boxed_floor"> // Metal Grating
+<Tile name="Metal Grating" texture="floors_1/5/1.png" collision="false" type="boxed_floor">
+<Tile name="Arrow Right" texture="floors_1/6/1.png" collision="false" type="floor"> // Arrow
+<Tile name="Arrow Up" texture="floors_1/7/1.png" collision="false" type="floor">
+<Tile name="Arrow Left" texture="floors_1/0/2.png" collision="false" type="floor">
+<Tile name="Arrow Down" texture="floors_1/1/2.png" collision="false" type="floor">
+<Tile name="Teleporter" texture="floors_1/2/2.png" collision="false" type="boxed_floor">
+<Tile name="Desk Edge" texture="floors_1/3/2.png" collision="false" type="floor">
+<Tile name="Metal Wall 1" texture="walls_1/0/0.png" collision="true" type="wall_right"> // Walls
+<Tile name="Metal Wall 1" texture="walls_1/0/0.png" collision="true" type="wall_front">
+<Tile name="Metal Wall 1" texture="walls_1/0/0.png" collision="true" type="wall_left">
+<Tile name="Metal Wall 2" texture="walls_1/1/0.png" collision="true" type="wall_right">
+<Tile name="Metal Wall 2" texture="walls_1/1/0.png" collision="true" type="wall_front">
+<Tile name="Metal Wall 2" texture="walls_1/1/0.png" collision="true" type="wall_left">
+<Tile name="Metal Wall 3" texture="walls_1/2/0.png" collision="true" type="wall_right">
+<Tile name="Metal Wall 3" texture="walls_1/2/0.png" collision="true" type="wall_front">
+<Tile name="Metal Wall 3" texture="walls_1/2/0.png" collision="true" type="wall_left">
+<Tile name="Metal Wall 4" texture="walls_1/3/0.png" collision="true" type="wall_right">
+<Tile name="Metal Wall 4" texture="walls_1/3/0.png" collision="true" type="wall_front">
+<Tile name="Metal Wall 4" texture="walls_1/3/0.png" collision="true" type="wall_left">
+<Tile name="Metal Wall 5" texture="walls_1/4/0.png" collision="true" type="wall_right">
+<Tile name="Metal Wall 5" texture="walls_1/4/0.png" collision="true" type="wall_front">
+<Tile name="Metal Wall 5" texture="walls_1/4/0.png" collision="true" type="wall_left">
+<Tile name="Water Lock Red" texture="walls_1/5/0.png" collision="true" type="wall_front"> // Tile Placement Signs
+<Tile name="Water Lock Green" texture="walls_1/6/0.png" collision="true" type="wall_front">
+<Tile name="Lava Lock Red" texture="walls_1/7/0.png" collision="true" type="wall_front">
+<Tile name="Lava Lock Green" texture="walls_1/0/1.png" collision="true" type="wall_front">
+<Tile name="Slime Lock Red" texture="walls_1/1/1.png" collision="true" type="wall_front">
+<Tile name="Slime Lock Green" texture="walls_1/2/1.png" collision="true" type="wall_front">
+<Tile name="Poison Lock Red" texture="walls_1/3/1.png" collision="true" type="wall_front">
+<Tile name="Poison Lock Green" texture="walls_1/4/1.png" collision="true" type="wall_front">
+<Tile name="Lava Rock Lock Red" texture="walls_1/5/1.png" collision="true" type="wall_front">
+<Tile name="Lava Rock Lock Green" texture="walls_1/6/1.png" collision="true" type="wall_front">
+<Tile name="Metal Elevator Wall 1" texture="walls_1/7/1.png" collision="true" type="wall_right"> // Elevator Walls
+<Tile name="Metal Elevator Wall 1" texture="walls_1/7/1.png" collision="true" type="wall_front">
+<Tile name="Metal Elevator Wall 1" texture="walls_1/7/1.png" collision="true" type="wall_left">
+<Tile name="Metal Elevator Wall 2" texture="walls_1/0/2.png" collision="true" type="wall_right">
+<Tile name="Metal Elevator Wall 2" texture="walls_1/0/2.png" collision="true" type="wall_front">
+<Tile name="Metal Elevator Wall 2" texture="walls_1/0/2.png" collision="true" type="wall_left">
+<Tile name="White Elevator Wall 1" texture="walls_1/1/2.png" collision="true" type="wall_right">
+<Tile name="White Elevator Wall 1" texture="walls_1/1/2.png" collision="true" type="wall_front">
+<Tile name="White Elevator Wall 1" texture="walls_1/1/2.png" collision="true" type="wall_left">
+<Tile name="Elevator Window 1" texture="walls_1/2/2.png" collision="true" type="wall_right"> // Elevator Windows
+<Tile name="Elevator Window 1" texture="walls_1/2/2.png" collision="true" type="wall_front">
+<Tile name="Elevator Window 1" texture="walls_1/2/2.png" collision="true" type="wall_left">
+<Tile name="Elevator Window 2" texture="walls_1/3/2.png" collision="true" type="wall_right">
+<Tile name="Elevator Window 2" texture="walls_1/3/2.png" collision="true" type="wall_front">
+<Tile name="Elevator Window 2" texture="walls_1/3/2.png" collision="true" type="wall_left">
+<Tile name="Door 1" texture="walls_1/4/2.png" collision="true" type="wall_front"> // Doors
+<Tile name="Door 2" texture="walls_1/5/2.png" collision="true" type="wall_front">
+<Tile name="Keypad" texture="walls_1/6/2.png" collision="true" type="wall_right"> // Wall Ornaments
+<Tile name="Keypad" texture="walls_1/6/2.png" collision="true" type="wall_front">
+<Tile name="Keypad" texture="walls_1/6/2.png" collision="true" type="wall_left">
+<Tile name="Speaker" texture="walls_1/7/2.png" collision="true" type="wall_right">
+<Tile name="Speaker" texture="walls_1/7/2.png" collision="true" type="wall_front">
+<Tile name="Speaker" texture="walls_1/7/2.png" collision="true" type="wall_left">
+<Tile name="Info Sign" texture="walls_1/0/3.png" collision="true" type="wall_right">
+<Tile name="Info Sign" texture="walls_1/0/3.png" collision="true" type="wall_front">
+<Tile name="Info Sign" texture="walls_1/0/3.png" collision="true" type="wall_left">
+<Tile name="Info Display Off" texture="walls_1/1/3.png" collision="true" type="wall_front">
+<Tile name="Info Display On" texture="walls_1/2/3.png" collision="true" type="wall_front">
+<Tile name="Computer 1" texture="walls_1/3/3.png" collision="true" type="wall_right"> // Computers
+<Tile name="Computer 1" texture="walls_1/3/3.png" collision="true" type="wall_front">
+<Tile name="Computer 1" texture="walls_1/3/3.png" collision="true" type="wall_left">
+<Tile name="Computer 2" texture="walls_1/4/3.png" collision="true" type="wall_right">
+<Tile name="Computer 2" texture="walls_1/4/3.png" collision="true" type="wall_front">
+<Tile name="Computer 2" texture="walls_1/4/3.png" collision="true" type="wall_left">
+<Tile name="Metal Wall" texture="walls_1/5/3.png" collision="true" type="wall_right"> // Walls
+<Tile name="Metal Wall" texture="walls_1/5/3.png" collision="true" type="wall_front">
+<Tile name="Metal Wall" texture="walls_1/5/3.png" collision="true" type="wall_left">
+<Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="wall_right"> // Glass
+<Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="wall_front">
+<Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="wall_left">
+<Tile name="White Glass" texture="glass_1/1/0.png" collision="true" type="wall_right">
+<Tile name="White Glass" texture="glass_1/1/0.png" collision="true" type="wall_front">
+<Tile name="White Glass" texture="glass_1/1/0.png" collision="true" type="wall_left">
+<Tile name="Green Glass" texture="glass_1/2/0.png" collision="true" type="wall_right">
+<Tile name="Green Glass" texture="glass_1/2/0.png" collision="true" type="wall_front">
+<Tile name="Green Glass" texture="glass_1/2/0.png" collision="true" type="wall_left">
+<Tile name="Yellow Glass" texture="glass_1/3/0.png" collision="true" type="wall_right">
+<Tile name="Yellow Glass" texture="glass_1/3/0.png" collision="true" type="wall_front">
+<Tile name="Yellow Glass" texture="glass_1/3/0.png" collision="true" type="wall_left">
+<Tile name="Dark Blue Glass" texture="glass_1/4/0.png" collision="true" type="wall_right">
+<Tile name="Dark Blue Glass" texture="glass_1/4/0.png" collision="true" type="wall_front">
+<Tile name="Dark Blue Glass" texture="glass_1/4/0.png" collision="true" type="wall_left">
+<Tile name="Purple Glass" texture="glass_1/5/0.png" collision="true" type="wall_right">
+<Tile name="Purple Glass" texture="glass_1/5/0.png" collision="true" type="wall_front">
+<Tile name="Purple Glass" texture="glass_1/5/0.png" collision="true" type="wall_left">
+<Tile name="White Top of Wall" texture="floors_1/4/2.png" collision="false" type="floor">
+<Tile name="Green Top of Wall" texture="floors_1/5/2.png" collision="false" type="floor">
+<Tile name="Yellow Top of Wall" texture="floors_1/6/2.png" collision="false" type="floor">
+<Tile name="Purple Top of Wall" texture="floors_1/7/2.png" collision="false" type="floor">
+<Tile name="Metal Top of Wall" texture="floors_1/0/3.png" collision="false" type="floor">

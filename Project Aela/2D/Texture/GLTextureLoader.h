@@ -13,7 +13,6 @@
 
 #include <GL/glew.h>
 #include <fstream>
-#include "../../../Libraries/libpng/png.h"
 #include "png.h"
 #include "../../Resource Management/ResourceLoader.h"
 #include "../../2D/Texture/GLTexture.h"

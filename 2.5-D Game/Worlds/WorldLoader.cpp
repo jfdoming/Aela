@@ -21,7 +21,7 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 	in.open(RESOURCE_ROOT + path);
 
 	if (in.is_open()) {
-		std::cout << "Loaded: " << RESOURCE_ROOT + path << "\n";
+		AelaErrorHandling::consoleWindowWarning("World Loader", "Loading: " + (std::string) RESOURCE_ROOT + path);
 
 		std::string line;
 		std::string currentTag = "";
@@ -50,13 +50,7 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 					}
 					charactersToErase += j;
 
-					if (currentTag == "Chunk" || currentTag == "chunk") {
-						/*for (unsigned int z = 0; z < CHUNK_LENGTH; z++) {
-						for (unsigned int x = 0; x < CHUNK_WIDTH; x++) {
-						tiles[glm::ivec3(x, height, z)].addTile(&Tile());
-						}
-						}*/
-					} else if (currentTag == "/Chunk" || currentTag == "/chunk") {
+					if (currentTag == "/Chunk" || currentTag == "/chunk") {
 						chunk.setTiles(&tiles);
 						world.addChunk(chunkCoordinate, &chunk);
 						chunk = Chunk();
@@ -64,7 +58,6 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 					} else if (currentTag == "Tiles" || currentTag == "tiles") {
 						dataWithinTag.clear();
 					} else if (currentTag == "/Tiles" || currentTag == "/tiles") {
-						std::cout << "About to generate tiles.\n";
 						if (!generateTileTypes(tiles, dataWithinTag, height)) {
 							return false;
 						}
@@ -114,6 +107,13 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 							}
 
 							world.setMap3D(map);
+						} else if (propertyType == "lights" && (currentTag == "Map3D" || currentTag == "map3D")) {
+							std::string value = line.substr(j + 1, k - j - 1);
+							if (value == "off") {
+								world.setUseLights(false);
+							} else {
+								world.setUseLights(true);
+							}
 						}
 					} else if (currentTag == "Tiles" || currentTag == "tiles") {
 						dataWithinTag << line;
@@ -128,6 +128,7 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 		AelaErrorHandling::consoleWindowError("Tile World Loader", "The file " + path + " was not found.");
 		return false;
 	}
+
 	return true;
 }
 

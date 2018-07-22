@@ -11,6 +11,7 @@
 #include "../Aela Game/AelaGame.h"
 #include "../../Resources/ResourceInfo.h"
 #include "../../Displays/Dialogue/DialogueDisplay.h"
+#include "../../Displays/Hint Display/HintDisplay.h"
 #include "../../Worlds/WorldManager.h"
 #include "../../../Project Aela/Resource Management/ResourcePaths.h"
 
@@ -209,9 +210,9 @@ void Scripts::setupScenes() {
 	game->setDeathMenuItems(overlayBackgroundRect, overlayText);
 
 	// This sets up the coordinate text.
-	auto coordinateText = std::make_shared<Label>("", xerox, almostWhitePtr);
-	coordinateText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.10), (int) (windowDimensions.getHeight() * 0.10));
-	game->setMapEditorCoordinateLabel(coordinateText);
+	auto hintText = std::make_shared<Label>("", xerox, almostWhitePtr);
+	hintText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.10), (int) (windowDimensions.getHeight() * 0.10));
+	hintDisplay->setHintLabel(hintText);
 
 	// This sets up the world gameplay scene, in which the player is given a top-down view of the world.
 	auto worldGameplayScene = new Scene();
@@ -221,7 +222,7 @@ void Scripts::setupScenes() {
 	worldGameplayScene->getMenu()->add(tileInventorySubMenu2);
 	worldGameplayScene->getMenu()->add(overlayBackgroundRect);
 	worldGameplayScene->getMenu()->add(overlayText);
-	worldGameplayScene->getMenu()->add(coordinateText);
+	worldGameplayScene->getMenu()->add(hintText);
 
 	// This sets up the scenes for the pause menu.
 	Scene* pauseScene = new Scene();

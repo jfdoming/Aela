@@ -47,7 +47,8 @@ void Game::CharacterProvider::generateCharacterModelsForAllCharacters(ResourceMa
 
 	std::string modelA = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_A.obj";
 	std::string modelB = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_B.obj";
-	std::string modelTemp = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "floor.obj";
+	std::string modelC = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_C.obj";
+	std::string modelD = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_D.obj";
 
 	resourceManager->bindLoader(&generator);
 	resourceManager->bindGroup("characters");
@@ -56,10 +57,12 @@ void Game::CharacterProvider::generateCharacterModelsForAllCharacters(ResourceMa
 		for (unsigned int x = 0; x < 3; x++) {
 			if (x == 0 && (y == 1 || y == 3)) {
 				generator.setTemplateModelSource(modelA);
-			} else if (y == 0 || y == 2) {
-				generator.setTemplateModelSource(modelTemp);
-			} else {
+			} else if (x == 0 && (y == 0 || y == 2)) {
+				generator.setTemplateModelSource(modelC);
+			} else if (y == 1 || y == 3) {
 				generator.setTemplateModelSource(modelB);
+			} else {
+				generator.setTemplateModelSource(modelD);
 			}
 
 			generator.setSpriteSheetX(x);
@@ -76,7 +79,7 @@ void Game::CharacterProvider::generateCharacterModelsForAllCharacters(ResourceMa
 	}
 }
 
-bool Game::CharacterProvider::trackCharacter(Character* character, size_t* id) {
+bool Game::CharacterProvider::addCharacter(Character* character, size_t* id) {
 	if (getCharacterByName(character->getName()) != nullptr || getCharacterByLocation(character->getLocation()) != nullptr) {
 		AelaErrorHandling::consoleWindowError("Character already exists by name (" + character->getName() + ") or at the location.");
 		return false;
@@ -90,7 +93,7 @@ bool Game::CharacterProvider::trackCharacter(Character* character, size_t* id) {
 	return true;
 }
 
-bool Game::CharacterProvider::deleteCharacterByID(size_t id) {
+bool Game::CharacterProvider::removeCharacterByID(size_t id) {
 	if (getCharacterByID(id) == nullptr) {
 		return false;
 	}

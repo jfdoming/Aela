@@ -9,7 +9,6 @@
 #include "../../Old Garbage/texture.hpp"
 #include "../../Error Handler/ErrorHandler.h"
 #include "../../Old Garbage/shader.hpp"
-#include "../../Time/Time.h"
 #include <freetype/ftglyph.h>
 #include <iostream>
 
@@ -256,7 +255,6 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 
 	// These are some more glyph-related variables.
 	FT_GlyphSlot glyph = (*(textFont->getFace()))->glyph;
-	char* p;
 
 	struct RenderableGlyph {
 		unsigned char* buffer;
@@ -269,11 +267,10 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 
 	// This goes through every glyph to perform actions upon every glyph's properties.
 	for (unsigned int i = 0; i < text.length(); i++) {
-		p = &((char) (text.at(i)));
+		char p = ((char) (text.at(i)));
 
-		std::cout << textFont->getFace() << " textToSimple2D\n";
 		// This loads the character.
-		if (FT_Load_Char(*(textFont->getFace()), *p, FT_LOAD_RENDER)) {
+		if (FT_Load_Char(*(textFont->getFace()), p, FT_LOAD_RENDER)) {
 			continue;
 		}
 		
@@ -301,9 +298,9 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 			charBuffer.width = glyph->bitmap.width;
 			charBuffer.rows = glyph->bitmap.rows;
 			charBuffer.originY = glyph->metrics.horiBearingY / pointsPerPixel;
-			charBuffer.character = *p;
+			charBuffer.character = p;
 			glyphs.push_back(charBuffer);
-		} else if (*p != ' ') {
+		} else if (p != ' ') {
 			continue;
 		}
 

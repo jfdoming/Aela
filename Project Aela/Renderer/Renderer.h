@@ -41,7 +41,7 @@
 namespace Aela {
 	// This enum is used to toggle features of the renderer.
 	enum class RendererFeature {
-		SHADOWS, BILLBOARDS, SKYBOX,
+		SHADOWS, BILLBOARDS, SKYBOX, LIGHTS,
 		MSAA_3D_X0, MSAA_3D_X2, MSAA_3D_X4, MSAA_3D_X8, MSAA_3D_X16,
 		MSAA_2D_X0, MSAA_2D_X2, MSAA_2D_X4, MSAA_2D_X8, MSAA_2D_X16
 	};
@@ -134,7 +134,7 @@ namespace Aela {
 			ColourRGBA tint3D;
 
 			// These specify the features that the renderer is allowed to use during rendering.
-			bool useShadows = false, useBillboards = false, useSkybox = false;
+			bool useShadows = false, useBillboards = false, useSkybox = false, useLights = false;
 			unsigned int multisampling3D = 0, multisampling2D = 0;
 			bool resolutionWasChangedFlag = false;
 

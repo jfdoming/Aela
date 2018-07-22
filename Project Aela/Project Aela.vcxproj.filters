@@ -96,6 +96,7 @@
     <ClCompile Include="Window\Window.cpp" />
     <ClCompile Include="2D\Texture\GLSpriteSheetLoader.cpp" />
     <ClCompile Include="Time\Stopwatch\Stopwatch.cpp" />
+    <ClCompile Include="Time\Timer\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3D\Animation\AnimationTrackModel.h" />
@@ -224,5 +225,6 @@
     <ClInclude Include="Window\Window.h" />
     <ClInclude Include="2D\Texture\GLSpriteSheetLoader.h" />
     <ClInclude Include="Time\Stopwatch\Stopwatch.h" />
+    <ClInclude Include="Time\Timer\Timer.h" />
   </ItemGroup>
 </Project>

@@ -16,11 +16,8 @@ namespace Game {
 
 	class World {
 		public:
-			World() {}
-
-			World(ChunkMap* chunks) {
-				this->chunks = *chunks;
-			}
+			World();
+			World(ChunkMap* chunks);
 
 			void addChunk(glm::ivec2 coordinate, Chunk* chunk);
 			void setChunks(ChunkMap* chunks);
@@ -28,9 +25,13 @@ namespace Game {
 			ChunkMap* getChunks();
 			void setMap3D(Map3D* map3D);
 			Map3D* getMap3D();
+			void setUseLights(bool useLights);
+			bool isUsingLights();
 
 		private:
 			ChunkMap chunks;
 			Map3D* map3D;
+
+			bool useLights = true;
 	};
 }

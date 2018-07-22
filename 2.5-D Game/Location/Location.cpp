@@ -6,8 +6,29 @@
 */
 
 #include "Location.h"
+#include "../Chunks/Chunk.h"
+#include "../Game Object Provider/GameObjectProvider.h"
+#include "../Worlds/WorldManager.h"
 
-void Game::Location::setWorld(int world) {
+Game::Location::Location() {
+	world = 0;
+	chunk = glm::ivec2();
+	tile = glm::ivec3();
+}
+
+Game::Location::Location(size_t world, glm::ivec2 chunk, glm::ivec3 tile) {
+	this->world = world;
+	this->chunk = chunk;
+	this->tile = tile;
+}
+
+Game::Location::Location(size_t, int chunkX, int chunkY, int tileX, int tileY, int tileZ) {
+	this->world = world;
+	this->chunk = glm::ivec2(chunkX, chunkY);
+	this->tile = glm::ivec3(tileX, tileY, tileZ);
+}
+
+void Game::Location::setWorld(size_t) {
 	this->world = world;
 }
 
@@ -19,7 +40,7 @@ void Game::Location::setTile(glm::ivec3 tile) {
 	this->tile = tile;
 }
 
-unsigned int Game::Location::getWorld() {
+size_t Game::Location::getWorld() {
 	return world;
 }
 
@@ -32,5 +53,9 @@ glm::ivec3 Game::Location::getTileGroup() {
 }
 
 glm::vec3 Game::Location::getWorldSpaceLocation() {
-	return glm::vec3(chunk.x * CHUNK_WIDTH + tile.x, tile.y, chunk.y * CHUNK_LENGTH + tile.z);
+	glm::ivec3 chunkRenderDistances = *GameObjectProvider::getWorldManager()->getChunkRenderDistances();
+	glm::vec2 chunkPositionOnMap;
+	chunkPositionOnMap.x = (float) ((-chunkRenderDistances.x) + chunk.x + 1) * CHUNK_WIDTH;
+	chunkPositionOnMap.y = (float) ((-chunkRenderDistances.z) + chunk.y + 1) * CHUNK_LENGTH;
+	return glm::vec3(chunkPositionOnMap.x + tile.x, tile.y, chunkPositionOnMap.y + tile.z);
 }

@@ -25,6 +25,18 @@ void AelaErrorHandling::consoleWindowError(std::string title, std::string messag
 	errorHandler.throwError(simpleError);
 }
 
+void AelaErrorHandling::consoleWindowWarning(std::string message) {
+	// This outputs an error into the seperate window that acts as a console.
+	AelaSimpleError simpleError(AELA_WARNING_CONSOLE_WINDOW, message);
+	errorHandler.throwError(simpleError);
+}
+
+void AelaErrorHandling::consoleWindowWarning(std::string title, std::string message) {
+	// This outputs an error into the seperate window that acts as a console.
+	AelaSimpleError simpleError(AELA_WARNING_CONSOLE_WINDOW, title, message);
+	errorHandler.throwError(simpleError);
+}
+
 void AelaErrorHandling::consoleInternalError(std::string message) {
 	// Implementation for an internal console within the engine/game must be added.
 	AelaSimpleError simpleError(AELA_ERROR_CONSOLE_INTERNAL, message);

@@ -13,11 +13,14 @@ void Game::CameraController::setup() {
 
 void Game::CameraController::update() {
 	if (!camera->isUsingKeyboardControls() && lockCameraToPlayer && GameObjectProvider::getPlayer()->isAlive()) {
-		// The camera has not been taken over by the user using a cheat-code.
-		glm::vec3 entityPosition = *playerCharacter->getEntity()->getPosition();
-		camera->setPosition(entityPosition + glm::vec3(0, sin(PLAYER_CAMERA_ANGLE)
-			* PLAYER_CAMERA_DISTANCE, -cos(PLAYER_CAMERA_ANGLE) * PLAYER_CAMERA_DISTANCE));
-		camera->setRotation(0, -PLAYER_CAMERA_ANGLE, 0);
+		ModelEntity* entity = playerCharacter->getEntity();
+		if (entity != nullptr) {
+			// The camera has not been taken over by the user using a cheat-code.
+			glm::vec3 entityPosition = *entity->getPosition();
+			camera->setPosition(entityPosition + glm::vec3(0, sin(PLAYER_CAMERA_ANGLE)
+				* PLAYER_CAMERA_DISTANCE, -cos(PLAYER_CAMERA_ANGLE) * PLAYER_CAMERA_DISTANCE));
+			camera->setRotation(0, -PLAYER_CAMERA_ANGLE, 0);
+		}
 	}
 }
 

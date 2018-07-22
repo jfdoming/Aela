@@ -24,6 +24,10 @@ namespace Aela {
 				return !(*this == other);
 			}
 
+			ColourRGBA(glm::vec3* colour, float alpha) {
+				set(colour->r, colour->g, colour->b, alpha);
+			}
+
 			ColourRGBA(glm::vec4* colour) {
 				set(colour->r, colour->g, colour->b, colour->a);
 			}

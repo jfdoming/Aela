@@ -92,7 +92,10 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 					}
 					if (shape == TileShape::WALL_RIGHT
 						|| shape == TileShape::WALL_FRONT
-						|| shape == TileShape::WALL_LEFT) {
+						|| shape == TileShape::WALL_LEFT
+						|| shape == TileShape::GLASS_RIGHT
+						|| shape == TileShape::GLASS_FRONT
+						|| shape == TileShape::GLASS_LEFT) {
 						templateTile += "wall.obj";
 					}
 					if (shape == TileShape::WALL_CORNER_UP_RIGHT
@@ -203,6 +206,12 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 								shape = TileShape::WALL_CORNER_DOWN_LEFT;
 							} else if (value == "wall_corner_down_right") {
 								shape = TileShape::WALL_CORNER_DOWN_RIGHT;
+							} else if (value == "glass_right") {
+								shape = TileShape::GLASS_RIGHT;
+							} else if (value == "glass_front") {
+								shape = TileShape::GLASS_FRONT;
+							} else if (value == "glass_left") {
+								shape = TileShape::GLASS_LEFT;
 							} else {
 								shape = TileShape::FLOOR;
 							}
@@ -210,31 +219,36 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 							name = line.substr(j + 1, k - j - 1);
 						} else if ((propertyType == "texture" || propertyType == "Texture") && (currentTag == "Tile" || currentTag == "tile")) {
 							std::string value = line.substr(j + 1, k - j - 1);
-							GenericMaterialLoader materialLoader;
-							resourceManager->bindLoader(&materialLoader);
-							resourceManager->bindGroup("material/" + value);
-							resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + value + "_mtl", false);
-
-							std::string path2 = (std::string) DEFAULT_TEXTURE_PATH + value;
-							bool success = resourceManager->obtain<Texture>(path2, texture);
+							std::string path2 = DEFAULT_MATERIAL_PATH + value + "_mtl";
+							bool success = resourceManager->obtain<Material>(path2, material);
 							if (!success) {
-								AelaErrorHandling::consoleWindowError("Tile Atlas Loader", path2 + " was requested by "
-									+ path + " and was not found.");
-								return false;
-							}
-							materialLoader.setDefaultTexture(texture);
+								// The material has not already been added.
+								GenericMaterialLoader materialLoader;
+								resourceManager->bindLoader(&materialLoader);
+								resourceManager->bindGroup("material/" + value);
+								resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + value + "_mtl", false);
 
-							if (resourceManager->loadGroup("material/" + value) != Aela::ResourceManager::Status::OK) {
-								std::cerr << "Failed to load a resource from group \"material/" + name + "\": " << resourceManager->getNewInvalidResourceKeys()[0] << "\n";
-								return false;
-							}
+								path2 = (std::string) DEFAULT_TEXTURE_PATH + value;
+								bool success = resourceManager->obtain<Texture>(path2, texture);
+								if (!success) {
+									AelaErrorHandling::consoleWindowError("Tile Atlas Loader", path2 + " was requested by "
+										+ path + " and was not found.");
+									return false;
+								}
+								materialLoader.setDefaultTexture(texture);
 
-							path2 = DEFAULT_MATERIAL_PATH + value + "_mtl";
-							success = resourceManager->obtain<Material>(path2, material);
-							if (!success) {
-								AelaErrorHandling::consoleWindowError("Tile Atlas Loader", path2 + " was requested by "
-									+ path + " and was not found.");
-								return false;
+								if (resourceManager->loadGroup("material/" + value) != Aela::ResourceManager::Status::OK) {
+									std::cerr << "Failed to load a resource from group \"material/" + name + "\": " << resourceManager->getNewInvalidResourceKeys()[0] << "\n";
+									return false;
+								}
+
+								path2 = DEFAULT_MATERIAL_PATH + value + "_mtl";
+								success = resourceManager->obtain<Material>(path2, material);
+								if (!success) {
+									AelaErrorHandling::consoleWindowError("Tile Atlas Loader", path2 + " was requested by "
+										+ path + " and was not found.");
+									return false;
+								}
 							}
 						}
 					}

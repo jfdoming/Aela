@@ -15,10 +15,14 @@ void AelaErrorHandler::requestProgramClose() {
 void AelaErrorHandler::throwError(AelaSimpleError error) {
 	AelaErrorMessageType type = error.getType();
 	if (type == AELA_ERROR_CONSOLE_WINDOW) {
+		std::cout << "Aela Engine Error! " << error.getTitle() << ": " << error.getMessage() << "\n";
+	} else if (type == AELA_WARNING_CONSOLE_WINDOW) {
 		std::cout << "Aela Engine Message! " << error.getTitle() << ": " << error.getMessage() << "\n";
 	} else if (type == AELA_ERROR_CONSOLE_INTERNAL) {
 		// Implementation for an internal console within the engine/game must be added.
 	} else if (type == AELA_ERROR_WINDOW) {
+		std::cout << "Aela Engine Error! " << error.getTitle() << ": " << error.getMessage() << "\n";
+
 		// This must save the error message text as a string and then converting to a c string.
 		// Doing error.getTitle().c_str() returns nothing for some amazing reason.
 		std::string titleAsString = error.getTitle();
@@ -47,6 +51,8 @@ void AelaErrorHandler::throwError(AelaSimpleError error) {
 			requestProgramClose();
 		}
 	} else if (type == AELA_WARNING_WINDOW) {
+		std::cout << "Aela Engine Warning! " << error.getTitle() << ": " << error.getMessage() << "\n";
+
 		// This must save the error message text as a string and then converting to a c string.
 		// Doing error.getTitle().c_str() returns nothing for some amazing reason.
 		std::string titleAsString = error.getTitle();
@@ -64,7 +70,6 @@ void AelaErrorHandler::throwError(AelaSimpleError error) {
 			&colorScheme /* .colorScheme */
 		};
 
-		std::cout << error.getTitle().c_str() << "\n";
 		int buttonid;
 		if (SDL_ShowMessageBox(&messageboxdata, &buttonid) < 0) {
 			SDL_Log("error displaying message box");

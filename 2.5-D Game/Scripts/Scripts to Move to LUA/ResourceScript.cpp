@@ -34,7 +34,9 @@ namespace Scripts {
 
 	std::string otherModelNames[] = {
 		"character_A",
-		"character_B"
+		"character_B",
+		"character_C",
+		"character_D"
 	};
 
 	std::string ddsTextureNames[] = {
@@ -55,7 +57,11 @@ namespace Scripts {
 	std::string spriteSheetNames[] = {
 		"character",
 		"turret",
-		"tiles"
+		"floors_1",
+		"walls_1",
+		"glass_1",
+		"animations_1",
+		"animations_2"
 	};
 
 	std::string billboardNames[] = {
@@ -84,8 +90,6 @@ namespace Scripts {
 
 void Scripts::loadMaterials() {
 	GLMaterialLoader materialLoader;
-	std::cout << resourceManager << " resManager (2)\n";
-	std::cout << fontManager << " fontManager (2)\n";
 	resourceManager->bindLoader(&materialLoader);
 	resourceManager->bindGroup("materials");
 
@@ -192,8 +196,6 @@ void Scripts::loadMaps() {
 	mapLoader.bindRenderer(renderer);
 	resourceManager->bindLoader(&mapLoader);
 	resourceManager->bindGroup("maps");
-
-	std::cout << "Loading those maps!\n";
 
 	for (std::string path : mapNames) {
 		resourceManager->addToGroup(DEFAULT_MAP_PATH + path + ".txt", false);

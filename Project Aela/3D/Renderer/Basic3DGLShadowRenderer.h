@@ -15,9 +15,10 @@
 namespace Aela {
 	class Basic3DGLShadowRenderer {
 		public:
-			Basic3DGLShadowRenderer() {
+			Basic3DGLShadowRenderer();
+			~Basic3DGLShadowRenderer();
 
-			}
+			void setup();
 
 			void startRenderingShadows(GLuint depthProgramID);
 			void renderInstancedShadows(Map3D* map, std::vector<long long>* entities, size_t start, size_t end,
@@ -31,6 +32,8 @@ namespace Aela {
 
 			// This clears all shadow maps of lights.
 			void clearShadowMaps(std::unordered_map<long long, LightEntity>* lights);
+
+			void generateShadowMap(LightEntity* light);
 
 			// These are getters and setters.
 			unsigned int getDepthTextureWidth();

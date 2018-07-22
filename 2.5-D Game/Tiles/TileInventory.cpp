@@ -13,7 +13,6 @@ using namespace Game;
 
 Tile* Game::TileInventory::switchTile(TileGroup* tileGroup, size_t whichTile) {
 	Tile* floorTilePtr = tileGroup->getSwitchableFloorTile(GameObjectProvider::getTileAtlas());
-	std::cout << floorTilePtr << " is floortile\n";
 
 	if (floorTilePtr != nullptr) {
 		Tile floorTile = *floorTilePtr;
@@ -33,7 +32,7 @@ void Game::TileInventory::replaceTile(Tile* tile, size_t whichTile) {
 	tiles[whichTile] = *tile;
 }
 
-int Game::TileInventory::addTile(Tile* tile) {
+size_t Game::TileInventory::addTile(Tile* tile) {
 	tiles.push_back(*tile);
 	return tiles.size() - 1;
 }

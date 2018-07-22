@@ -38,6 +38,10 @@ namespace Aela {
 				return std::chrono::duration_cast<std::chrono::milliseconds>(currentTime.time_since_epoch()).count();
 			}
 
+			long long getCurrentTimeInSecs() {
+				return std::chrono::duration_cast<std::chrono::seconds>(currentTime.time_since_epoch()).count();
+			}
+
 			long long getLastFrameTimeInNanos() {
 				return std::chrono::duration_cast<std::chrono::nanoseconds>(lastTime.time_since_epoch()).count();
 			}

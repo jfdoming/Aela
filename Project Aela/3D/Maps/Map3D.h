@@ -20,16 +20,19 @@
 #include "../Billboards/BillboardEntity.h"
 #include "../Skybox/SkyboxEntity.h"
 #include <unordered_map>
+#include <map>
 
 namespace Aela {
+	typedef std::unordered_map<Model*, std::vector<long long>> ModelResourceMap;
+
 	class Map3D : public Resource {
 		public:
 			Map3D(std::string src) : Resource(src) {}
 
 			// These allow the user to interact with the map using single entities.
 			void addLight(long long key, LightEntity* light), addModel(long long key, ModelEntity* model),
-				addModelWithTransparency(long long key, ModelEntity* model), addBillboard(long long key, BillboardEntity* billboard),
-				addSkybox(long long key, SkyboxEntity* skybox);
+				addModelWithTransparency(long long key, ModelEntity* model, size_t layer),
+				addBillboard(long long key, BillboardEntity* billboard), addSkybox(long long key, SkyboxEntity* skybox);
 			LightEntity* getLight(long long id);
 			ModelEntity* getModel(long long id);
 			BillboardEntity* getBillboard(long long id);
@@ -42,13 +45,23 @@ namespace Aela {
 			std::unordered_map<long long, ModelEntity>* getModels();
 			std::unordered_map<long long, BillboardEntity>* getBillboards();
 			std::unordered_map<long long, SkyboxEntity>* getSkyboxes();
-			std::unordered_map<Model*, std::vector<long long>>* getResourceGroupedModelsWithoutTransparency();
-			std::unordered_map<Model*, std::vector<long long>>* getResourceGroupedModelsWithTransparency();
+			ModelResourceMap* getResourceGroupedModelsWithoutTransparency();
+			std::map<size_t, ModelResourceMap*>* getResourceGroupedModelsWithTransparency();
+
+			// This adds a new transparent models layer (see comment above resourceGroupedModelsWithTransparency).
+			void addModelTransparencyLayer(size_t layer);
 
 			// Used by the MapLoader.
 			void addModelWithoutGeneratingData(long long id, ModelEntity* model);
-			void generateAdditionalModelData(long long whichModel, bool containsTransparency);
+			void generateAdditionalModelDataWithoutTransparency(long long whichModel);
+			void generateAdditionalModelDataWithTransparency(long long whichModel, size_t layer);
+
+			// This used to be used by the MapLoader (apparently). However, it doesn't seem to be used anywhere anymore.
+			// Maybe it should be deleted?
 			void removeAdditionalModelData(bool modelsAreTransparent);
+
+			void setAmbientLighting(float ambientLighting);
+			float getAmbientLighting();
 
 		private:
 			// These are the maps of entities in the world.
@@ -58,14 +71,14 @@ namespace Aela {
 			std::unordered_map<long long, BillboardEntity> billboards;
 			std::unordered_map<long long, SkyboxEntity> skyboxes;
 
+			float ambientLighting = 0.15f;
+
 			// This stores the model entities based on the model resource that is used. This allows for a beneficial
 			// optimization in the renderer. Note that models that contain transparency should be rendered LAST.
-			std::unordered_map<Model*, std::vector<long long>> resourceGroupedModelsWithoutTransparency;
-			std::unordered_map<Model*, std::vector<long long>> resourceGroupedModelsWithTransparency;
-
-			// These store the keys with the highest values. These are used for determining where to add a new entity using
-			// a method that makes adding and removing entities fast, with the only drawback being that a key cannot be
-			// reused.
-			unsigned int lastLightKey = 0, lastModelKey = 0, lastBillboardKey = 0, lastSkyboxKey = 0;
+			// Transparent models are placed in different transparent layers, with the layer number corresponding to
+			// render order. This is so that some transparent models are guaranteed to be seen through other transparent
+			// models, if that is something that you wish to be able to do.
+			ModelResourceMap resourceGroupedModelsWithoutTransparency;
+			std::map<size_t, ModelResourceMap*> resourceGroupedModelsWithTransparency;
 	};
 }

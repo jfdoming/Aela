@@ -12,6 +12,8 @@
 #include "../Camera/CameraController.h"
 #include "../Tiles/TileBehaviourExecuter.h"
 #include "../../Project Aela/Events/EventListener.h"
+#include "../Displays/Hint Display/HintDisplay.h"
+#include "../Doors/DoorProvider.h"
 #include "../../Project Aela/Aela_Engine.h"
 
 using namespace Game;
@@ -31,6 +33,8 @@ Scene* GameObjectProvider::pauseScene = nullptr;
 WorldExporter* GameObjectProvider::worldExporter = nullptr;
 CameraController* GameObjectProvider::cameraController = nullptr;
 TileBehaviourExecuter* GameObjectProvider::tileBehaviourExecuter = nullptr;
+HintDisplay* GameObjectProvider::hintDisplay = nullptr;
+DoorProvider* GameObjectProvider::doorProvider = nullptr;
 
 // These are pointers to scenes are should be set by a script that constructs the scenes.
 static Scene* gameplayScene, *pauseScene;
@@ -57,6 +61,10 @@ EventHandler* GameObjectProvider::getEventHandler() {
 
 Time* GameObjectProvider::getTime() {
 	return engine->getTime();
+}
+
+Timer* Game::GameObjectProvider::getTimer() {
+	return engine->getTimer();
 }
 
 SceneManager* GameObjectProvider::getSceneManager() {
@@ -139,12 +147,20 @@ WorldExporter* Game::GameObjectProvider::getWorldExporter() {
 	return worldExporter;
 }
 
-CameraController * Game::GameObjectProvider::getCameraController() {
+CameraController* Game::GameObjectProvider::getCameraController() {
 	return cameraController;
 }
 
-TileBehaviourExecuter * Game::GameObjectProvider::getTileBehaviourExecuter() {
+TileBehaviourExecuter* Game::GameObjectProvider::getTileBehaviourExecuter() {
 	return tileBehaviourExecuter;
+}
+
+HintDisplay* Game::GameObjectProvider::getHintDisplay() {
+	return hintDisplay;
+}
+
+DoorProvider * Game::GameObjectProvider::getDoorProvider() {
+	return doorProvider;
 }
 
 Scene* GameObjectProvider::getGameplayScene() {
@@ -202,6 +218,14 @@ void Game::GameObjectProvider::setTileBehaviourExecuter(TileBehaviourExecuter* s
 	tileBehaviourExecuter = setTileBehaviourExecuter;
 }
 
+void Game::GameObjectProvider::setHintDisplay(HintDisplay* setHintDisplay) {
+	hintDisplay = setHintDisplay;
+}
+
+void Game::GameObjectProvider::setDoorProvider(DoorProvider* setDoorProvider) {
+	doorProvider = setDoorProvider;
+}
+
 void GameObjectProvider::setGameplayScene(Scene* setGameplayScene) {
 	gameplayScene = setGameplayScene;
 }
@@ -223,6 +247,8 @@ void GameObjectProvider::cleanupGameObjects() {
 	delete worldExporter;
 	delete cameraController;
 	delete tileBehaviourExecuter;
+	delete hintDisplay;
+	delete doorProvider;
 }
 
 GameObjectProvider::GameObjectProvider() {

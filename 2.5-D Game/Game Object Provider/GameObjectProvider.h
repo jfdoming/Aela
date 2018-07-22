@@ -31,6 +31,8 @@ namespace Game {
 	class WorldExporter;
 	class CameraController;
 	class TileBehaviourExecuter;
+	class HintDisplay;
+	class DoorProvider;
 
 	class GameObjectProvider {
 		public:
@@ -41,6 +43,7 @@ namespace Game {
 			static GLRenderer* getRenderer();
 			static EventHandler* getEventHandler();
 			static Time* getTime();
+			static Timer* getTimer();
 			static SceneManager* getSceneManager();
 			static ResourceManager* getResourceManager();
 			static AudioPlayer* getAudioPlayer();
@@ -64,6 +67,8 @@ namespace Game {
 			static WorldExporter* getWorldExporter();
 			static CameraController* getCameraController();
 			static TileBehaviourExecuter* getTileBehaviourExecuter();
+			static HintDisplay* getHintDisplay();
+			static DoorProvider* getDoorProvider();
 
 			static Scene* getGameplayScene();
 			static Scene* getPauseScene();
@@ -80,6 +85,8 @@ namespace Game {
 			static void setWorldExporter(WorldExporter* worldExporter);
 			static void setCameraController(CameraController* cameraController);
 			static void setTileBehaviourExecuter(TileBehaviourExecuter* tileBehaviourExecuter);
+			static void setHintDisplay(HintDisplay* hintDisplay);
+			static void setDoorProvider(DoorProvider* doorProvider);
 
 			static void setGameplayScene(Scene* gameplayScene);
 			static void setPauseScene(Scene* pauseScene);
@@ -104,6 +111,8 @@ namespace Game {
 			static WorldExporter* worldExporter;
 			static CameraController* cameraController;
 			static TileBehaviourExecuter* tileBehaviourExecuter;
+			static HintDisplay* hintDisplay;
+			static DoorProvider* doorProvider;
 
 			// These are pointers to scenes are should be set by a script that constructs the scenes.
 			static Scene* gameplayScene, *pauseScene;

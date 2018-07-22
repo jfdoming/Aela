@@ -34,18 +34,13 @@
 namespace Aela {
 	class Basic3DGLRenderer {
 		public:
-			Basic3DGLRenderer() {
-			}
-
-			~Basic3DGLRenderer() {
-				// This cleans all VBOs and shaders.
-				glDeleteProgram(modelProgramID);
-				glDeleteProgram(depthProgramID);
-			}
+			Basic3DGLRenderer();
+			~Basic3DGLRenderer();
 
 			// These are some functions related to rendering.
 			void renderShadows(Map3D* map);
-			void renderModelEntities(Map3D* map, bool multisampling);
+			void renderModelEntitiesWithLights(Map3D* map, bool multisampling);
+			void renderModelEntitiesWithoutLights(Map3D* map, bool multisampling);
 
 			// Don't use this, it's only here for debugging!
 			// void renderSingleModelEntityShadow(ModelEntity* entity, Map3D* map);
@@ -61,6 +56,7 @@ namespace Aela {
 			// These are some functions related to setup.
 			void setup(unsigned int multisampling);
 			void bindLights(std::unordered_map<long long, LightEntity>* lights);
+			void prepareLightShadows();
 			void generateShadowMap(LightEntity* light);
 
 			// These are some getters and setters.
@@ -86,12 +82,14 @@ namespace Aela {
 
 			// These are a bunch of handles to GLSL variables that get passed to the shadow and
 			// model renderer during rendering.
-			GLuint depthProgramID, modelProgramID, billboardProgramID, skyboxProgramID;
-			GLuint modelTextureID, projectionMatrixID, depthMatrixID, viewMatrixID, modelMatrixID, rotationMatrixID, cameraPositionID,
+			GLuint depthProgramID, modelProgramID, lightlessModelProgramID, billboardProgramID, skyboxProgramID;
+			GLuint projectionMatrixID, depthMatrixID, viewMatrixID, modelMatrixID, rotationMatrixID,
+				lightlessProjectionMatrixID, lightlessViewMatrixID, lightlessModelMatrixID, lightlessRotationMatrixID,
 				shadowMapID, shadowMatrixID, shadowModelMatrixID;
-			GLuint billboardTextureID, billboardMVPMatrixID;
+			GLuint modelTextureID, lightlessModelTextureID, billboardTextureID, billboardMVPMatrixID;
 			GLuint skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID;
-			GLuint numberOfLightsID, lightPositionsID, lightDirectionsID, lightColoursID, lightPowersID, lightShadowPositionsID;
+			GLuint numberOfLightsID, lightPositionsID, lightDirectionsID, lightColoursID, lightPowersID, lightShadowPositionsID,
+				ambientLightingID, lightlessGlobalLightingID;
 
 			// These properties are used for the framebuffers.
 			GLuint multisampledColourFrameBuffer, colourFrameBuffer, depthRenderBuffer;

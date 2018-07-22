@@ -14,6 +14,26 @@
 
 using namespace Aela;
 
+Aela::Basic3DGLModelRenderer::Basic3DGLModelRenderer() {}
+
+Aela::Basic3DGLModelRenderer::~Basic3DGLModelRenderer() {
+	if (vertexBuffer != NULL) {
+		glDeleteBuffers(1, &vertexBuffer);
+		glDeleteBuffers(1, &UVBuffer);
+		glDeleteBuffers(1, &normalBuffer);
+		glDeleteBuffers(1, &elementBuffer);
+	}
+}
+
+void Aela::Basic3DGLModelRenderer::setup() {
+	// This sets up buffers.
+	glGenBuffers(1, &vertexBuffer);
+	glGenBuffers(1, &UVBuffer);
+	glGenBuffers(1, &normalBuffer);
+	glGenBuffers(1, &elementBuffer);
+	glGenBuffers(1, &whichMatrixBuffer);
+}
+
 // This function is called in order to updateRegisteredEnemies camera-related matrices.
 void Basic3DGLModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
 	viewMatrix = setViewMatrix;
@@ -36,23 +56,18 @@ void Basic3DGLModelRenderer::sendLightDataToShader(std::unordered_map<long long,
 		if (numberOfLights > 0) {
 			unsigned int i = 0;
 			for (auto& light : *lights) {
-				if (light.second.isVisible() && *light.second.getShadowMapTexture() != NULL && *light.second.getShadowMapBuffer() != NULL
-					&& light.second.getPower() != NULL) {
+
+				if (light.second.isVisible() && light.second.getPower() != 0) {
 					if (i + 1 > MAX_LIGHT_AMOUNT) {
 						break;
 					}
 					glUniform3fv(lightPositionsID + i, 1, &light.second.getPosition()->x);
-					// glUniform3fv(lightDirectionsID + i, 1, &light.second.getRotation()->x);
 
 					glm::vec3* value = light.second.getColour()->getVec3Ptr();
 					glUniform3fv(lightColoursID + i, 1, &value->x);
 
-					/*std::cout << "Light: " << value->x << " " << value->y << " " << value->z << " " << i << " " << lightColoursID << " " << glGetError();*/
-
 					float power = light.second.getPower();
 					glUniform1fv(lightPowersID + i, 1, &power);
-
-					/*std::cout << " " << power << "\n";*/
 
 					glActiveTexture(GL_TEXTURE1 + i);
 					glBindTexture(GL_TEXTURE_CUBE_MAP, *light.second.getShadowMapTexture());
@@ -75,13 +90,6 @@ void Basic3DGLModelRenderer::sendLightDataToShader(std::unordered_map<long long,
 void Basic3DGLModelRenderer::startRenderingModelEntities(GLuint modelProgramID, GLuint frameBuffer, GLuint viewMatrixID,
 	GLuint projectionMatrixID) {
 	glUseProgram(modelProgramID);
-
-	// This sets up buffers.
-	glGenBuffers(1, &vertexBuffer);
-	glGenBuffers(1, &UVBuffer);
-	glGenBuffers(1, &normalBuffer);
-	glGenBuffers(1, &elementBuffer);
-	glGenBuffers(1, &whichMatrixBuffer);
 
 	// This binds the framebuffer and enables features.
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
@@ -127,8 +135,9 @@ void Basic3DGLModelRenderer::startRenderingModelEntities(GLuint modelProgramID, 
 }
 
 void Basic3DGLModelRenderer::renderInstancedModelEntities(Map3D* map, std::vector<long long>* entities, size_t start,
-	size_t end, GLuint modelProgramID, GLuint frameBuffer,
-	GLuint modelMatrixID, GLuint rotationMatrixID, GLuint modelTextureID) {
+	size_t end, GLuint modelProgramID, GLuint frameBuffer, GLuint modelMatrixID, GLuint rotationMatrixID, GLuint modelTextureID,
+	GLuint ambientLightingID) {
+
 	if (entities != nullptr && entities->size() > 0) {
 		Model* model = map->getModel(entities->at(start))->getModel();
 		std::vector<glm::mat4> modelMatrices, rotationMatrices;
@@ -157,6 +166,7 @@ void Basic3DGLModelRenderer::renderInstancedModelEntities(Map3D* map, std::vecto
 		// This sends more uniforms to the shader.
 		glUniformMatrix4fv(modelMatrixID, (GLsizei) modelMatrices.size(), GL_FALSE, &modelMatrices[0][0][0]);
 		glUniformMatrix4fv(rotationMatrixID, (GLsizei) rotationMatrices.size(), GL_FALSE, &rotationMatrices[0][0][0]);
+		glUniform1f(ambientLightingID, map->getAmbientLighting());
 
 		for (SubModel subModel : *model->getSubModels()) {
 			// This loads buffers.
@@ -183,12 +193,6 @@ void Basic3DGLModelRenderer::renderInstancedModelEntities(Map3D* map, std::vecto
 }
 
 void Basic3DGLModelRenderer::endRenderingModelEntities() {
-	glDeleteBuffers(1, &vertexBuffer);
-	glDeleteBuffers(1, &UVBuffer);
-	glDeleteBuffers(1, &normalBuffer);
-	glDeleteBuffers(1, &elementBuffer);
-
-	// This deletes buffers.
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);

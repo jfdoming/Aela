@@ -11,6 +11,7 @@
 #include "../Camera/CameraMode.h"
 #include "../Game Mode/GameMode.h"
 #include "../Location/Location.h"
+#include "../Guns/TileSwitchGun.h"
 #include "../../Project Aela/Scenes/Scene.h"
 #include "../../Project Aela/Menus/SubMenu.h"
 #include "../../Project Aela/Menus/ImageComponent.h"
@@ -43,12 +44,11 @@ namespace Game {
 			void setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
 				std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage);
 			void setDeathMenuItems(std::shared_ptr<RectComponent> overlayRect, std::shared_ptr<Label> overlayText);
-			void setMapEditorCoordinateLabel(std::shared_ptr<Label> mapEditorCoordinateLabel);
 
 			void animatePlayerDeathScreen();
+			void animateFadeTeleport();
 
-			void movedIntoExistentSpace(glm::ivec2 chuck, glm::ivec3 tile);
-			void movedIntoNonExistentSpace(glm::ivec2 chuck, glm::ivec3 tile);
+			TileSwitchGun* getTileSwitchGun();
 
 		private:
 			// These are obtained from GameObjectProvider.
@@ -70,14 +70,17 @@ namespace Game {
 			Camera3D* camera;
 			CameraController* cameraController;
 			TileBehaviourExecuter* tileBehaviourExecuter;
+			HintDisplay* hintDisplay;
 
 			Character* playerCharacter;
 			Map3D* map;
 
+			// For now, this is here. Eventually, once more types of guns are created,
+			// this will probably go elsewhere.
+			TileSwitchGun tileSwitchGun;
+
 			std::shared_ptr<RectComponent> overlayRect;
 			std::shared_ptr<Label> overlayText;
-
-			std::shared_ptr<Label> mapEditorCoordinateLabel;
 
 			// These store the states of keys.
 			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false,
@@ -93,6 +96,8 @@ namespace Game {
 
 			long long timeAtLastPlayerTurn = 0;
 			const long long TIME_BETWEEN_PLAYER_TURNS = 80000000;
+			long long timeAtLastAutoWorldExport = 0;
+			const long long TIME_BETWEEN_AUTO_WORLD_EXPORTS = 20;
 
 			CameraMode cameraMode;
 			GameMode gameMode;
@@ -100,12 +105,11 @@ namespace Game {
 			void setupScripts();
 			void loadResources();
 			void loadScenes();
+			void loadAnimations();
 
 			void tileSelectUpAction(), tileSelectDownAction();
 
 			void changePlayerAnimationToRunning();
-
-			void addTileSwitchParticleEmitter(Location* location, GLTexture* texture);
 
 			void switchCameraMode(CameraMode cameraMode);
 

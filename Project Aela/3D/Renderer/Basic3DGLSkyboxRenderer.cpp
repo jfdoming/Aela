@@ -11,6 +11,20 @@
 
 using namespace Aela;
 
+Aela::Basic3DSkyboxRenderer::Basic3DSkyboxRenderer() {}
+
+Aela::Basic3DSkyboxRenderer::~Basic3DSkyboxRenderer() {
+	if (vertexBuffer == NULL) {
+		glDeleteBuffers(1, &vertexBuffer);
+		glDeleteVertexArrays(1, &vertexArray);
+	}
+}
+
+void Aela::Basic3DSkyboxRenderer::setup() {
+	glGenBuffers(1, &vertexBuffer);
+	glGenVertexArrays(1, &vertexArray);
+}
+
 // This renders a skybox.
 void Basic3DSkyboxRenderer::renderSkybox(Skybox* skybox, GLuint skyboxProgramID, GLuint frameBuffer, GLuint skyboxID, GLuint viewMatrixID, GLuint projectionMatrixID) {
 	if (skybox != nullptr && skybox->getTexture() != nullptr) {
@@ -20,9 +34,6 @@ void Basic3DSkyboxRenderer::renderSkybox(Skybox* skybox, GLuint skyboxProgramID,
 		glCullFace(GL_BACK);
 
 		// This loads buffers.
-		GLuint vertexBuffer, vertexArray;
-		glGenBuffers(1, &vertexBuffer);
-		glGenVertexArrays(1, &vertexArray);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		glBindVertexArray(vertexArray);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexValues), &vertexValues, GL_STATIC_DRAW);
@@ -57,8 +68,6 @@ void Basic3DSkyboxRenderer::renderSkybox(Skybox* skybox, GLuint skyboxProgramID,
 		glDepthFunc(GL_LEQUAL);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
-		glDeleteBuffers(1, &vertexBuffer);
-		glDeleteVertexArrays(1, &vertexArray);
 	}
 }
 

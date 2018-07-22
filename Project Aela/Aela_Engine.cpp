@@ -17,6 +17,8 @@
 
 using namespace Aela;
 
+Aela::Engine::Engine() : resourceManager(0), timer(&time) {}
+
 // Thi function is old and will be deleted. It still contains code for elements which will be moved.
 int Aela::Engine::runningLoop() {
 	// This animates entities just to make sure that the Animator actually works.
@@ -119,13 +121,6 @@ int Aela::Engine::setupRenderer() {
 	renderer.setup3D();
 	renderer.setup2D();
 	renderer.setupWindow();
-
-	// This activates features of the renderer. These can be changed at any point during the runtime of the application.
-	renderer.activateFeature(RendererFeature::SHADOWS);
-	renderer.activateFeature(RendererFeature::BILLBOARDS);
-	renderer.activateFeature(RendererFeature::SKYBOX);
-	renderer.activateFeature(RendererFeature::MSAA_3D_X0);
-	renderer.activateFeature(RendererFeature::MSAA_2D_X0);
 	return 0;
 }
 
@@ -189,9 +184,10 @@ void Engine::update() {
 		eventHandler.updateSDLEvents();
 		stopwatch.stopRecording("Event Handler Updating");
 
-		stopwatch.startRecording("Time Updating");
+		stopwatch.startRecording("Time & Timer Updating");
 		time.updateTime();
-		stopwatch.stopRecording("Time Updating");
+		timer.update();
+		stopwatch.stopRecording("Time & Timer Updating");
 
 		stopwatch.startRecording("Scene Manager Updating");
 		sceneManager.update();
@@ -249,6 +245,10 @@ EventHandler* Engine::getEventHandler() {
 
 Time* Engine::getTime() {
 	return &time;
+}
+
+Timer* Aela::Engine::getTimer() {
+	return &timer;
 }
 
 FontManager* Engine::getFontManager() {

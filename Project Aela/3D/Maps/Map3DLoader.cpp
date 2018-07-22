@@ -31,8 +31,8 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 
 	// This actually reads the file.
 	std::string line;
-	EntityType entityType = EntityType::GENERIC;
 	size_t entityID;
+	std::string tagID = "";
 
 	while (std::getline(in, line)) {
 		while (line.length() > 0) {
@@ -40,43 +40,36 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 			size_t charactersToErase = 1;
 
 			if (character == '<') {
-				std::string tagID = "";
-
 				size_t j = line.find(' ');
 				if (j != std::string::npos) {
-					tagID += line.substr(1, j - 1);
+					tagID = line.substr(1, j - 1);
 				}
 				charactersToErase += j;
 
 				if (tagID == "Model") {
-					entityType = EntityType::MODEL;
 					entityID = map->getModels()->size();
 					map->addModelWithoutGeneratingData(entityID, &ModelEntity());
 				} else if (tagID == "Light") {
-					entityType = EntityType::LIGHT;
 					entityID = map->getLights()->size();
 					map->addLight(entityID, &LightEntity());
-					renderer->generateShadowMap(&map->getLights()->at(map->getLights()->size() - 1));
 				} else if(tagID == "Billboard") {
-					entityType = EntityType::BILLBOARD;
 					entityID = map->getBillboards()->size();
 					map->addBillboard(entityID, &BillboardEntity());
 				} else if (tagID == "Skybox") {
-					entityType = EntityType::SKYBOX;
 					entityID = map->getSkyboxes()->size();
 					map->addSkybox(entityID, &SkyboxEntity());
 				}
 			} else if (character == '>') {
-				if (entityType == EntityType::MODEL) {
-					map->generateAdditionalModelData(entityID, false);
+				if (tagID == "Model") {
+					map->generateAdditionalModelDataWithoutTransparency(entityID);
 					// Bounding boxes are currently unnecessary.
 					// map->getModel(entityID)->generateBoundingBox();
 				}
-				entityType = EntityType::GENERIC;
+				tagID = "";
 			} else if (character == '/' && line.at(1) == '/') {
 				// This is a comment. Stay calm and move to the next line.
 				break;
-			} else if (character != ' ' && entityType != EntityType::GENERIC) {
+			} else if (character != ' ' && tagID != "") {
 				std::string propertyType = "";
 
 				size_t j = line.find('=');
@@ -93,23 +86,23 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						std::string source = line.substr(j + 1, k - j - 1);
 						if (source.at(0) == '~') {
 							source = source.substr(1, source.size() - 1);
-							if (entityType == EntityType::MODEL) {
+							if (tagID == "Model") {
 								source = resourceRoot + DEFAULT_MODEL_PATH + source;
 							}
-							if (entityType == EntityType::BILLBOARD) {
+							if (tagID == "Billboard") {
 								source = resourceRoot + DEFAULT_TEXTURE_PATH + source;
 							}
-							if (entityType == EntityType::SKYBOX) {
+							if (tagID == "Skybox") {
 								source = resourceRoot + DEFAULT_SKYBOX_PATH + source;
 							}
 						}
 						bool success = resources.get(source, res);
 						if (success) {
-							if (entityType == EntityType::MODEL) {
+							if (tagID == "Model") {
 								map->getModel(entityID)->setModel((Model*) res);
-							} else if (entityType == EntityType::BILLBOARD) {
+							} else if (tagID == "Billboard") {
 								map->getBillboard(entityID)->setTexture((GLTexture*) res);
-							} else if (entityType == EntityType::SKYBOX) {
+							} else if (tagID == "Skybox") {
 								map->getSkybox(entityID)->setSkybox((Skybox*) res);
 							}
 						} else {
@@ -118,11 +111,17 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 							std::cout << source << " was the source.\n";
 							return false;
 						}
-					} else if (propertyType == "power" && entityType == EntityType::LIGHT) {
-						std::string value = line.substr(j + 1, k - j - 1);
-						float power = (float) std::stof(value);
-						map->getLight(entityID)->setPower(power);
-					} else if (propertyType == "colour" && entityType == EntityType::LIGHT) {
+					} else if (propertyType == "power") {
+						if (tagID == "Light") {
+							std::string value = line.substr(j + 1, k - j - 1);
+							float power = (float) std::stof(value);
+							map->getLight(entityID)->setPower(power);
+						} else if (tagID == "AmbientLight") {
+							std::string value = line.substr(j + 1, k - j - 1);
+							float power = (float) std::stof(value);
+							map->setAmbientLighting(power);
+						}
+					} else if (propertyType == "colour" && tagID == "Light") {
 						std::string value = line.substr(j + 1, k - j - 1);
 						glm::vec3 vec3;
 						setVec3UsingString(&value, &vec3);
@@ -132,11 +131,11 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						glm::vec3 vec3;
 						setVec3UsingString(&value, &vec3);
 
-						if (entityType == EntityType::MODEL) {
+						if (tagID == "Model") {
 							map->getModel(entityID)->setPosition(vec3);
-						} else if (entityType == EntityType::LIGHT) {
+						} else if (tagID == "Light") {
 							map->getLight(entityID)->setPosition(vec3);
-						} else if (entityType == EntityType::BILLBOARD) {
+						} else if (tagID == "Billboard") {
 							map->getBillboard(entityID)->setPosition(vec3);
 						} else {
 							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", src + " has invalid syntax regarding position.");
@@ -147,11 +146,11 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						glm::vec3 vec3;
 						setVec3UsingString(&value, &vec3);
 
-						if (entityType == EntityType::MODEL) {
+						if (tagID == "Model") {
 							map->getModel(entityID)->setRotation(vec3);
-						} else if (entityType == EntityType::LIGHT) {
+						} else if (tagID == "Light") {
 							map->getLight(entityID)->setRotation(vec3);
-						} else if (entityType == EntityType::BILLBOARD) {
+						} else if (tagID == "Billboard") {
 							map->getBillboard(entityID)->setRotation(vec3);
 						} else {
 							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", src + " has invalid syntax regarding rotation.");
@@ -162,17 +161,17 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						glm::vec3 vec3;
 						setVec3UsingString(&value, &vec3);
 
-						if (entityType == EntityType::MODEL) {
+						if (tagID == "Model") {
 							map->getModel(entityID)->setScaling(vec3);
-						} else if (entityType == EntityType::LIGHT) {
+						} else if (tagID == "Light") {
 							map->getLight(entityID)->setScaling(vec3);
-						} else if (entityType == EntityType::BILLBOARD) {
+						} else if (tagID == "Billboard") {
 							map->getBillboard(entityID)->setScaling(vec3);
 						} else {
 							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", src + " has invalid syntax regarding scaling.");
 							return false;
 						}
-					} else if (propertyType == "useRotation" && entityType == EntityType::BILLBOARD) {
+					} else if (propertyType == "useRotation" && tagID == "Billboard") {
 						// Note: billboards use their rotation values by default. If they aren't,
 						// they always face the camera.
 						std::string value = line.substr(j + 1, k - j - 1);

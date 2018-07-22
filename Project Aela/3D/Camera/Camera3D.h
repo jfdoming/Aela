@@ -25,7 +25,7 @@ namespace Aela {
 				speed = 0.000000015f;
 				superSpeed = 0.000000045f;
 				currentSpeed = speed;
-				mouseSpeed = 0.015f;
+				mouseSpeed = 0.003f;
 			}
 
 			// This is triggered on an event.

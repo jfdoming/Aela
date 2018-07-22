@@ -25,12 +25,18 @@ namespace Scripts {
 	extern EventHandler* eventHandler;
 	extern DialogueDisplay* dialogueDisplay;
 	extern Time* time;
+	extern Timer* timer;
 	extern EnemyProvider* enemyProvider;
 	extern SceneManager* sceneManager;
 	extern Animator* animator;
 	extern Camera3D* camera;
 	extern TileAtlas* tileAtlas;
 	extern FontManager* fontManager;
+	extern WorldExporter* worldExporter;
+	extern CameraController* cameraController;
+	extern TileBehaviourExecuter* tileBehaviourExecuter;
+	extern HintDisplay* hintDisplay;
+	extern DoorProvider* doorProvider;
 
 	void setupScriptObjects();
 }

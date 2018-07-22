@@ -148,19 +148,29 @@ void GLRenderer::startRenderingFrame() {
 }
 
 void Aela::GLRenderer::renderMap(Map3D* map, unsigned int skybox) {
-	renderSkybox(map->getSkybox(skybox));
+	if (useSkybox) {
+		renderSkybox(map->getSkybox(skybox));
+	}
 
-	basic3DRenderer.renderShadows(map);
+	if (useLights) {
+		// Don't put this in the if statement below. Just trust me.
+		basic3DRenderer.prepareLightShadows();
 
-	/*for (auto& entity : *map->getModels()) {
-		basic3DRenderer.renderSingleModelEntityShadow(&entity.second, map);
-	}*/
-	sendBoundLightDataToShader();
+		if (useShadows) {
+			basic3DRenderer.renderShadows(map);
+		}
 
-	basic3DRenderer.renderModelEntities(map, !!multisampling3D);
+		sendBoundLightDataToShader();
 
-	for (auto& entity : *map->getBillboards()) {
-		renderBillboard(&entity.second);
+		basic3DRenderer.renderModelEntitiesWithLights(map, !!multisampling3D);
+	} else {
+		basic3DRenderer.renderModelEntitiesWithoutLights(map, !!multisampling3D);
+	}
+
+	if (useBillboards) {
+		for (auto& entity : *map->getBillboards()) {
+			renderBillboard(&entity.second);
+		}
 	}
 }
 
@@ -239,9 +249,9 @@ void GLRenderer::endRenderingFrame() {
 }
 
 void GLRenderer::generateShadowMap(LightEntity* light) {
-	if (useShadows) {
+	// if (useShadows) {
 		basic3DRenderer.generateShadowMap(light);
-	}
+	// }
 }
 
 void GLRenderer::startRendering3D() {
@@ -271,6 +281,9 @@ void GLRenderer::activateFeature(RendererFeature feature) {
 			break;
 		case RendererFeature::SKYBOX:
 			useSkybox = true;
+			break;
+		case RendererFeature::LIGHTS:
+			useLights = true;
 			break;
 		case RendererFeature::MSAA_3D_X0:
 			multisampling3D = 0;
@@ -321,6 +334,9 @@ void GLRenderer::deactivateFeature(RendererFeature feature) {
 			break;
 		case RendererFeature::SKYBOX:
 			useSkybox = false;
+			break;
+		case RendererFeature::LIGHTS:
+			useLights = false;
 			break;
 		case RendererFeature::MSAA_3D_X0:
 			// You want to deactivate having no MSAA? What does that even mean?
@@ -387,6 +403,9 @@ void Aela::GLRenderer::toggleFeature(RendererFeature feature) {
 		case RendererFeature::SKYBOX:
 			useSkybox = !useSkybox;
 			break;
+		case RendererFeature::LIGHTS:
+			useLights = !useLights;
+			break;
 	}
 }
 
@@ -395,14 +414,9 @@ int getTextWidth(std::string text, TextFont* font) {
 	FT_GlyphSlot glyph = face->glyph;
 
 	int width = 0;
-	char* p;
 	for (unsigned int i = 0; i < text.size(); i++) {
-		p = &((char)(text.at(i)));
-
-		std::cout << face << " getWidth\n";
-
 		// This loads the character.
-		if (FT_Load_Char(face, *p, FT_LOAD_RENDER)) {
+		if (FT_Load_Char(face, ((char) (text.at(i))), FT_LOAD_RENDER)) {
 			continue;
 		}
 		width += glyph->metrics.horiAdvance / FontManager::POINTS_PER_PIXEL;
@@ -416,7 +430,7 @@ void Aela::GLRenderer::setFOV(float value) {
 
 void Aela::GLRenderer::scissor(int x, int y, size_t width, size_t height) {
 	glEnable(GL_SCISSOR_TEST);
-	glScissor(x, y, width, height);
+	glScissor(x, y, (GLsizei) width, (GLsizei) height);
 }
 
 void Aela::GLRenderer::resetScissor() {

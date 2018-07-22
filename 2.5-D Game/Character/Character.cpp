@@ -14,6 +14,7 @@
 #include "../Resources/ResourceInfo.h"
 #include "../Scripts/ScriptManager.h"
 #include "../Camera/CameraController.h"
+#include "../Displays/Hint Display/HintDisplay.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
 #include "../../Project Aela/Utilities/enumut.h"
 #include <iostream>
@@ -48,7 +49,6 @@ void Game::Character::animateDeath() {
 	particleEmitter->setupDimensions(&Rect<float>(worldSpacePosition.x, worldSpacePosition.z, 1, 1));
 
 	if (this == GameObjectProvider::getPlayer()->getCharacter()) {
-		std::cout << "The player is dead.\n";
 		auto endingAction = [this]() {
 			GameObjectProvider::getGame()->animatePlayerDeathScreen();
 		};
@@ -210,6 +210,10 @@ bool Game::Character::animationHasJustEnded() {
 }
 
 void Game::Character::turn(TileDirection direction) {
+	if (!newMovementsAreAllowed) {
+		return;
+	}
+
 	if (directionFacing != direction) {
 		timePassedAfterAnimationEnd = 0;
 		animationHadJustEnded = false;
@@ -228,6 +232,10 @@ void Game::Character::turn(TileDirection direction) {
 void Game::Character::move(Movement* movement, std::string scriptOnCompletion) {
 	addTranslation(movement, scriptOnCompletion);
 	turn(movement->getDirection());
+
+	if (movement->isATeleportation() && movement->isAnimated()) {
+		newMovementsAreAllowed = false;
+	}
 }
 
 void Game::Character::moveIfPossible(TileDirection direction) {
@@ -242,11 +250,18 @@ void Game::Character::moveIfPossible(std::list<TileDirection> directions) {
 	}
 }
 
-void Game::Character::teleport(Location * location, bool animate) {
-	Movement teleportation(location, &glm::vec3(), directionFacing, true);
-	if (!animate) {
-		teleportation.setAnimated(false);
-	}
+void Game::Character::clearFutureMovements() {
+	possibleMovementsToProcess.clear();
+}
+
+void Game::Character::teleportWithoutAnimation(Location * location) {
+	Movement teleportation(location, &glm::vec3(), directionFacing, true, false);
+	move(&teleportation, "");
+}
+
+void Game::Character::teleportWithAnimation(Location* location, TeleportationAnimation animation) {
+	newMovementsAreAllowed = false;
+	Movement teleportation(location, &glm::vec3(), directionFacing, true, animation);
 	move(&teleportation, "");
 }
 
@@ -383,53 +398,80 @@ void Game::Character::processMovement(Movement* movement, std::string scriptOnCo
 
 	CharacterProvider* characterProvider = GameObjectProvider::getCharacterProvider();
 	Location oldLocation = location;
-	Location* newLocation = movement->getDestination();
-	characterProvider->characterWasMoved(name, &oldLocation, newLocation);
-	location = *newLocation;
+	Location newLocation = *movement->getDestination();
 
 	if (!movement->isAnimated()) {
+		characterProvider->characterWasMoved(name, &oldLocation, &newLocation);
+		location = newLocation;
 		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 		animationHasEnded();
 		return;
 	}
 
 	if (movement->isATeleportation()) {
-		CameraController* cameraController = GameObjectProvider::getCameraController();
+		TeleportationAnimation teleportationAnimation = movement->getTeleportationAnimation();
 
-		newMovementsAreAllowed = false;
-		cameraController->setLockCameraToPlayer(false);
+		// This already occurs elsewhere:
+		// newMovementsAreAllowed = false;
 
-		CharacterTeleportParticleEmitter* particleEmitter = new CharacterTeleportParticleEmitter(GameObjectProvider::getTime());
-		particleEmitter->setBaseDistance(oldLocation.getWorldSpaceLocation().y + 10);
-		particleEmitter->setBaseSpeed(0.00000001f);
-		particleEmitter->setPathOffset(oldLocation.getWorldSpaceLocation().y);
-		particleEmitter->setLifeTime(1500000000);
-		particleEmitter->setCharacter(this);
-		particleEmitter->setLocations(&oldLocation, newLocation);
-		particleEmitter->setSecondaryPathOffset(newLocation->getWorldSpaceLocation().y + 8);
+		if (teleportationAnimation == TeleportationAnimation::RISE) {
+			characterProvider->characterWasMoved(name, &oldLocation, &newLocation);
+			location = newLocation;
 
-		std::vector<GLTexture*> textures;
-		GLTexture* texture = static_cast<GLTexture*>(entity->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
-		textures.push_back(texture);
+			CameraController* cameraController = GameObjectProvider::getCameraController();
+			cameraController->setLockCameraToPlayer(false);
 
-		auto halfLifeAction = [this, cameraController]() {
-			GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
-			cameraController->setLockCameraToPlayer(true);
-		};
+			float offset = GameObjectProvider::getWorldManager()->getCharacterYOffsetInWorldspace();
 
-		auto onEndAction = [this]() {
-			allowNewMovements(true);
-		};
+			CharacterTeleportParticleEmitter* particleEmitter = new CharacterTeleportParticleEmitter(GameObjectProvider::getTime());
+			particleEmitter->setBaseDistance(oldLocation.getWorldSpaceLocation().y + offset + 10);
+			particleEmitter->setBaseSpeed(0.00000001f);
+			particleEmitter->setPathOffset(oldLocation.getWorldSpaceLocation().y + offset);
+			particleEmitter->setLifeTime(1500000000);
+			particleEmitter->setCharacter(this);
+			particleEmitter->setLocations(&oldLocation, &newLocation);
+			particleEmitter->setSecondaryPathOffset(newLocation.getWorldSpaceLocation().y - offset + 8);
 
-		particleEmitter->setActionOnHalfLife(halfLifeAction);
-		particleEmitter->setActionOnEnd(onEndAction);
-		particleEmitter->setupParticles(&textures, 1, 1, 1);
-		GameObjectProvider::getGameplayScene()->putParticleEmitter(particleEmitter);
+			std::vector<GLTexture*> textures;
+			GLTexture* texture = static_cast<GLTexture*>(entity->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
+			textures.push_back(texture);
+
+			auto halfLifeAction = [this, cameraController]() {
+				GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+				cameraController->setLockCameraToPlayer(true);
+			};
+
+			auto onEndAction = [this]() {
+				newMovementsAreAllowed = true;
+			};
+
+			particleEmitter->setActionOnHalfLife(halfLifeAction);
+			particleEmitter->setActionOnEnd(onEndAction);
+			particleEmitter->setupParticles(&textures, 1, 1, 1);
+			GameObjectProvider::getGameplayScene()->putParticleEmitter(particleEmitter);
+		} else if (teleportationAnimation == TeleportationAnimation::FADE) {
+			auto halfwayTeleportAction = [this, oldLocation, newLocation]() {
+				Location oldLocation2 = oldLocation;
+				Location newLocation2 = newLocation;
+				GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+				GameObjectProvider::getCharacterProvider()->characterWasMoved(name, &oldLocation2, &newLocation2);
+				location = newLocation;
+			};
+
+			auto teleportationEnd = [this]() {
+				newMovementsAreAllowed = true;
+			};
+
+			GameObjectProvider::getTimer()->scheduleEventInMillis(750, halfwayTeleportAction);
+			GameObjectProvider::getTimer()->scheduleEventInMillis(1500, teleportationEnd);
+			GameObjectProvider::getGame()->animateFadeTeleport();
+		}
 		return;
 	}
 
+	characterProvider->characterWasMoved(name, &oldLocation, &newLocation);
+	location = newLocation;
 	glm::vec3 translationForAnimation = *movement->getWorldspaceTranslation();
-
 	long long timeToAdvanceTrackBy;
 
 	if (animationHadJustEnded) {
@@ -455,9 +497,6 @@ void Game::Character::processMovement(Movement* movement, std::string scriptOnCo
 	frame.setEndingAction(std::bind(action));
 
 	track3D.addKeyFrame((size_t) (1000000.0f / getCurrentSpeed()), &frame);
-	// frame.start();
-	// track.updatePositionInTrack(timeToAdvanceTrackBy);
-	// std::cout << timeToAdvanceTrackBy << " - " << track.getPositionInTrack() << " is the time.\n";
 
 	Animator* animator = GameObjectProvider::getAnimator();
 	animator->addAnimationTrack3D(&track3D);
@@ -499,7 +538,6 @@ void Game::Character::processMovement(Movement* movement, std::string scriptOnCo
 	modelTrack.addKeyFrame((long long) (1000000.0f / getCurrentSpeed() / 2), &step2Frame);
 
 	frame.setEndingAction(std::bind(action));
-
 	animator->addAnimationTrackModel(&modelTrack);
 }
 
@@ -567,8 +605,6 @@ void Game::Character::processPossibleMovement(TileDirection direction) {
 		Character* playerCharacter = GameObjectProvider::getPlayer()->getCharacter();
 
 		if (mode == GameMode::GAMEPLAY) {
-			std::cout << newLocation.getWorld() << " " << chunkCoord.x << " " << chunkCoord.y << "\n";
-
 			if (chunk != nullptr) {
 				TileGroup* tileGroup = worldManager->getTileGroup(&newLocation);
 
@@ -590,7 +626,8 @@ void Game::Character::processPossibleMovement(TileDirection direction) {
 
 				Teleporter* teleporter = worldManager->getTeleporter(&newLocation);
 				if (teleporter != nullptr) {
-					Movement teleportation(teleporter->getDestination(), &glm::vec3(), directionFacing, true);
+					Movement teleportation(teleporter->getDestination(), &glm::vec3(), directionFacing, true,
+						TeleportationAnimation::RISE);
 					move(&teleportation, script);
 				}
 			}
@@ -600,17 +637,25 @@ void Game::Character::processPossibleMovement(TileDirection direction) {
 
 				if (tileGroup == nullptr) {
 					if (this == playerCharacter) {
-						game->movedIntoNonExistentSpace(chunkCoord, tileCoord);
+						GameObjectProvider::getHintDisplay()->displayHint("(Does not exist yet) Chunk: ("
+							+ std::to_string(chunkCoord.x) + ", " + std::to_string(chunkCoord.y) + ") Tile: ("
+							+ std::to_string(tileCoord.x) + ", " + std::to_string(tileCoord.y) + ", "
+							+ std::to_string(tileCoord.z) + ")", HintDisplayDuration::FOREVER);
 					}
 				} else if (this == playerCharacter) {
-					game->movedIntoExistentSpace(chunkCoord, tileCoord);
+					GameObjectProvider::getHintDisplay()->displayHint("Chunk: (" + std::to_string(chunkCoord.x) + ", "
+						+ std::to_string(chunkCoord.y) + ") Tile: (" + std::to_string(tileCoord.x) + ", "
+						+ std::to_string(tileCoord.y) + ", " + std::to_string(tileCoord.z) + ")", HintDisplayDuration::FOREVER);
 				}
 
 				Movement movement(&newLocation, &translation, direction, false);
 				move(&movement, "");
 			} else {
 				if (this == playerCharacter) {
-					game->movedIntoNonExistentSpace(chunkCoord, tileCoord);
+					GameObjectProvider::getHintDisplay()->displayHint("(Does not exist yet) Chunk: ("
+						+ std::to_string(chunkCoord.x) + ", " + std::to_string(chunkCoord.y) + ") Tile: ("
+						+ std::to_string(tileCoord.x) + ", " + std::to_string(tileCoord.y) + ", "
+						+ std::to_string(tileCoord.z) + ")", HintDisplayDuration::FOREVER);
 				}
 
 				Movement movement(&newLocation, &translation, direction, false);

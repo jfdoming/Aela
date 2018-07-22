@@ -28,6 +28,8 @@ namespace AelaErrorHandling {
 	// These are the namespace's simple behaviours.
 	void consoleWindowError(std::string message);
 	void consoleWindowError(std::string setTitle, std::string message);
+	void consoleWindowWarning(std::string message);
+	void consoleWindowWarning(std::string setTitle, std::string message);
 	void consoleInternalError(std::string message);
 	void consoleInternalError(std::string setTitle, std::string message);
 	void windowError(std::string message);

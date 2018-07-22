@@ -37,48 +37,10 @@ void Game::WorldManager::setup() {
 	worldExporter = GameObjectProvider::getWorldExporter();
 
 	mapRebuilder.setup();
-	setupAnimationLoopingForTiles();
 }
 
-void Game::WorldManager::setupAnimationLoopingForTiles() {
-	// The following code is an example for a simple water animation!
-	AnimationTrackMaterial track0, track1;
-	KeyFrameMaterial frame0, frame1, frame2, frame3;
-	Texture* texture0 = nullptr, *texture1 = nullptr;
-	Material* material0 = nullptr, *material1 = nullptr;
-
-	if (!resourceManager->obtain<Texture>((std::string) DEFAULT_MATERIAL_PATH + (std::string) "water_0.dds", texture0)
-		|| !resourceManager->obtain<Texture>((std::string) DEFAULT_MATERIAL_PATH + (std::string) "water_1.dds", texture1)) {
-		AelaErrorHandling::consoleWindowError("World Manager", "Could not load some textures for some tile animations.");
-		return;
-	}
-
-	if (!resourceManager->obtain<Material>((std::string) DEFAULT_MATERIAL_PATH + "water_0.mtl/water_0", material0)
-		|| !resourceManager->obtain<Material>((std::string) DEFAULT_MATERIAL_PATH + "water_1.mtl/water_1", material1)) {
-		AelaErrorHandling::consoleWindowError("World Manager", "Could not load some materials for some tile animations.");
-		std::cout << DEFAULT_MATERIAL_PATH + (std::string) "water_0.mtl/water_0 failed.\n";
-		return;
-	}
-
-	frame0.setTexture(texture0);
-	frame1.setTexture(texture1);
-	frame0.setMaterial(material0);
-	frame1.setMaterial(material0);
-
-	track0.addKeyFrameUsingSeconds(1, &frame0);
-	track0.addKeyFrameUsingSeconds(1, &frame1);
-
-	animationLooper->loopAnimation(&track0);
-
-	frame2.setTexture(texture1);
-	frame3.setTexture(texture0);
-	frame2.setMaterial(material1);
-	frame3.setMaterial(material1);
-
-	track1.addKeyFrameUsingSeconds(1, &frame1);
-	track1.addKeyFrameUsingSeconds(1, &frame0);
-
-	animationLooper->loopAnimation(&track1);
+void Game::WorldManager::scenesWereSetUp() {
+	mapRebuilder.scenesWereSetup();
 }
 
 void Game::WorldManager::update() {
@@ -118,23 +80,39 @@ size_t Game::WorldManager::getCurrentWorld() {
 }
 
 Game::Teleporter* Game::WorldManager::getTeleporter(Location* location) {
-	auto iter1 = teleporters.find(location->getWorld());
-	if (iter1 == teleporters.end()) {
+	TileGroup* tileGroup = getTileGroup(location);
+	if (tileGroup == nullptr) {
 		return nullptr;
 	}
-	auto iter2 = iter1->second.find(location->getChunk());
-	if (iter2 == iter1->second.end()) {
+
+	TileMap* tileMap = tileGroup->getTiles();
+
+	for (auto& pair : *tileMap) {
+		Teleporter* teleporter = pair.second.getTeleporter();
+		if (teleporter != nullptr) {
+			return teleporter;
+		}
+	}
+
+	return nullptr;
+}
+
+Game::Teleporter* Game::WorldManager::getTeleporter(Location* location, size_t tileType) {
+	TileGroup* tileGroup = getTileGroup(location);
+	if (tileGroup == nullptr) {
 		return nullptr;
 	}
-	auto iter3 = iter2->second.find(location->getTileGroup());
-	if (iter3 == iter2->second.end()) {
+
+	Tile* tile = tileGroup->getTile(tileType);
+	if (tile == nullptr) {
 		return nullptr;
 	}
-	return &iter3->second;
+
+	return tile->getTeleporter();
 }
 
 Game::Chunk* Game::WorldManager::getChunk(Location* location) {
-	unsigned int worldID = location->getWorld();
+	size_t worldID = location->getWorld();
 	if (worldID >= worlds.size()) {
 		return nullptr;
 	}
@@ -152,12 +130,20 @@ Game::TileGroup* Game::WorldManager::getTileGroup(Location* location) {
 	return chunk->getTileGroup(location->getTileGroup());
 }
 
+glm::ivec3* Game::WorldManager::getChunkRenderDistances() {
+	return mapRebuilder.getChunkRenderDistances();;
+}
+
+float Game::WorldManager::getCharacterYOffsetInWorldspace() {
+	return mapRebuilder.getCharacterYOffsetInWorldspace();
+}
+
 void Game::WorldManager::setChunkRenderDistances(glm::vec3 chunkRenderDistances) {
 	mapRebuilder.setChunkRenderingDistances(chunkRenderDistances);
 	rebuildMapNextUpdate();
 }
 
-void Game::WorldManager::getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::vec2& chunk, TileDirection direction) {
+void Game::WorldManager::getCoordinateOfNeighbouringTile(glm::ivec3& tile, glm::ivec2& chunk, TileDirection direction) {
 	switch (direction) {
 		case TileDirection::RIGHT:
 			tile += glm::ivec3(-1, 0, 0);
@@ -187,6 +173,12 @@ void Game::WorldManager::getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::v
 				chunk.y--;
 			}
 			break;
+		case TileDirection::UP:
+			tile += glm::ivec3(0, 1, 0);
+			break;
+		case TileDirection::DOWN:
+			tile += glm::ivec3(0, -1, 0);
+			break;
 	}
 }
 
@@ -203,12 +195,53 @@ void Game::WorldManager::addTileSwitchScript(std::string script, Location* locat
 	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setSwitchScript(script);
 }
 
-void Game::WorldManager::addTeleporter(Teleporter* teleporter, Location* location) {
-	teleporters[location->getWorld()][location->getChunk()][location->getTileGroup()] = *teleporter;
+bool Game::WorldManager::addTeleporterToFloorTile(Location* teleporterLocation, Location* teleporterDestination) {
+	TileGroup* tileGroup = getTileGroup(teleporterLocation);
+	if (tileGroup == nullptr) {
+		return false;
+	}
+
+	Tile* tile = tileGroup->getFloorTile(tileAtlas);
+	if (tile == nullptr) {
+		return false;
+	}
+
+	tile->createTeleporter(teleporterDestination);
+	return true;
+}
+
+bool Game::WorldManager::addTeleporterToSwitchableFloorTile(Location* teleporterLocation, Location* teleporterDestination) {
+	TileGroup* tileGroup = getTileGroup(teleporterLocation);
+	if (tileGroup == nullptr) {
+		return false;
+	}
+
+	Tile* tile = tileGroup->getSwitchableFloorTile(tileAtlas);
+	if (tile == nullptr) {
+		return false;
+	}
+
+	tile->createTeleporter(teleporterDestination);
+	return true;
+}
+
+bool Game::WorldManager::addTeleporterToTile(Location* teleporterLocation, Location* teleporterDestination, size_t tileType) {
+	TileGroup* tileGroup = getTileGroup(teleporterLocation);
+	if (tileGroup == nullptr) {
+		return false;
+	}
+
+	Tile* tile = tileGroup->getTile(tileType);
+	if (tile == nullptr) {
+		return false;
+	}
+
+	tile->createTeleporter(teleporterDestination);
+	return true;
 }
 
 void Game::WorldManager::runPromptedScriptOfTile(Location* location) {
-	unsigned int world = location->getWorld();
+	size_t world = location->getWorld();
 	if (world < worlds.size()) {
 		Chunk* chunk = worlds[world].getChunk(location->getChunk());
 		if (chunk != nullptr) {
@@ -220,8 +253,8 @@ void Game::WorldManager::runPromptedScriptOfTile(Location* location) {
 	}
 }
 
-void Game::WorldManager::runTileSwitchScriptOfTile(Location* location) {
-	unsigned int world = location->getWorld();
+void Game::WorldManager::runTileSwitchScriptOfTileGroup(Location* location) {
+	size_t world = location->getWorld();
 	if (world < worlds.size()) {
 		Chunk* chunk = worlds[world].getChunk(location->getChunk());
 		if (chunk != nullptr) {
@@ -251,4 +284,14 @@ void Game::WorldManager::createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, u
 bool Game::WorldManager::exportCurrentWorld() {
 	currentWorld = playerCharacter->getLocation()->getWorld();
 	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + MAP_BEING_EDITED, &worlds[currentWorld]);
+}
+
+bool Game::WorldManager::exportCurrentWorld(std::string path) {
+	currentWorld = playerCharacter->getLocation()->getWorld();
+	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + path, &worlds[currentWorld]);
+}
+
+bool Game::WorldManager::autoExportCurrentWorld() {
+	currentWorld = playerCharacter->getLocation()->getWorld();
+	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + WORLD_AUTO_EXPORT_PATH, &worlds[currentWorld]);
 }

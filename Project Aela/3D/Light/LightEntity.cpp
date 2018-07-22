@@ -6,8 +6,27 @@
 */
 
 #include "LightEntity.h"
+#include <iostream>
 
 using namespace Aela;
+
+Aela::LightEntity::LightEntity() {
+	useDefaultValues();
+}
+
+Aela::LightEntity::LightEntity(glm::vec3 position, glm::vec3 rotation, ColourRGB* colour, float power) {
+	this->position = position;
+	this->rotation = rotation;
+	this->colour = *colour;
+	this->power = power;
+}
+
+Aela::LightEntity::~LightEntity() {
+	if (setUpForShadows) {
+		glDeleteTextures(1, &shadowMapTexture);
+		glDeleteFramebuffers(1, &shadowMapBuffer);
+	}
+}
 
 void LightEntity::useDefaultValues() {
 	position = glm::vec3(0, 0, 0);
@@ -20,6 +39,7 @@ void LightEntity::useDefaultValues() {
 void LightEntity::setupForNewShadowMap() {
 	shadowMapBuffer = NULL;
 	shadowMapTexture = NULL;
+	setUpForShadows = false;
 }
 
 void LightEntity::setColour(ColourRGB* colour) {
@@ -60,4 +80,12 @@ void LightEntity::setShadowMapBuffer(GLuint* shadowMapBuffer) {
 
 EntityType LightEntity::getEntityType() {
 	return EntityType::LIGHT;
+}
+
+void LightEntity::hasBeenSetUpForShadows() {
+	setUpForShadows = true;
+}
+
+bool LightEntity::isSetUpForShadows() {
+	return setUpForShadows;
 }

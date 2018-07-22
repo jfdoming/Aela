@@ -472,7 +472,8 @@ bool Aela::GLTextureLoader::loadPNGToBuffer(std::string src, png_bytep** rows, u
 	png_bytep* rowBuffer;
 
 	// This opens the file.
-	FILE *file = fopen(src.c_str(), "rb");
+	FILE *file;
+	fopen_s(&file, src.c_str(), "rb");
 	if (!file) {
 		AelaErrorHandling::consoleWindowError("Project Aela's PNG loader", src + " could not be found.");
 		return false;

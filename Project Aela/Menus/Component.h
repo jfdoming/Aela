@@ -60,6 +60,7 @@ namespace Aela {
 			virtual void updateComponent() = 0;
 			virtual void renderComponent(GLRenderer& renderer) = 0;
 			bool isDirty();
+
 		private:
 			// whether this component needs to be repainted
 			std::atomic_bool dirty{true};
