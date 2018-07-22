@@ -63,14 +63,7 @@ AudioPlayer::AudioPlayer() {
 }
 
 AudioPlayer::~AudioPlayer() {
-	if (context != nullptr) {
-		alcMakeContextCurrent(NULL);
-		alcDestroyContext(context);
-	}
-
-	if (audioDevice != nullptr) {
-		alcCloseDevice(audioDevice);
-	}
+	die();
 }
 
 bool AudioPlayer::init() {
@@ -86,7 +79,30 @@ bool AudioPlayer::init() {
 		return false;
 	}
 
+	backgroundThread = std::thread(&AudioPlayer::update, this);
+
 	return true;
+}
+
+void AudioPlayer::update() {
+	ALuint source_state;
+	for (auto clip : playingClips) {
+		while (source_state == AL_PLAYING) {
+			// TODO make source object
+			alDoWithErrorCheck_noret(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
+		}
+	}
+}
+
+void AudioPlayer::die() {
+	if (context != nullptr) {
+		alcMakeContextCurrent(nullptr);
+		alcDestroyContext(context);
+	}
+
+	if (audioDevice != nullptr) {
+		alcCloseDevice(audioDevice);
+	}
 }
 
 void AudioPlayer::playClip(AudioClip* clip) {

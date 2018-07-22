@@ -43,7 +43,7 @@ void ResourceManager::bindGroup(std::string group) {
 ResourceManager::Status ResourceManager::loadGroup(std::string name) {
 	// ensure a group exists to load
 	auto iter = groups.find(name);
-	if (groups.find(name) == groups.end()) {
+	if (iter == groups.end()) {
 		return Status::FAILED;
 	}
 
@@ -77,7 +77,7 @@ ResourceManager::Status ResourceManager::loadGroup(std::string name) {
 ResourceManager::Status ResourceManager::unloadGroup(std::string name) {
 	// ensure a group exists to unload
 	auto iter = groups.find(name);
-	if (groups.find(name) == groups.end()) {
+	if (iter == groups.end()) {
 		return Status::FAILED;
 	}
 
