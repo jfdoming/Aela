@@ -11,7 +11,7 @@
 
 #include "Transformable3D.h"
 #include "../../Utilities/strut.h"
-#include "../../Utilities/flut.h"
+#include "../../Utilities/glmut.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -42,7 +42,7 @@ void Transformable3D::setRotation(float setX, float setY, float setZ) {
 
 void Transformable3D::setRotation(glm::vec3 setRotation) {
 	rotation = setRotation;
-	forceValuesWithinRange(&rotation, 0, glm::pi<float>() * 2);
+	forceWithinRange(&rotation, 0, glm::pi<float>() * 2);
 }
 
 glm::vec3* Transformable3D::getRotation() {
@@ -160,7 +160,7 @@ void Transformable3D::translate(glm::vec3 position) {
 
 void Transformable3D::rotate(glm::vec3 rotation) {
 	this->rotation += rotation;
-	forceValuesWithinRange(&(this->rotation), 0, (float) glm::pi<float>() * 2);
+	forceWithinRange(&(this->rotation), 0, (float) glm::pi<float>() * 2);
 }
 
 void Transformable3D::translate(float x, float y, float z) {

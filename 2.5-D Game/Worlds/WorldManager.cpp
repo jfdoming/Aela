@@ -16,6 +16,7 @@
 #include "3D/Maps/Map3DLoader.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
 #include "../Player/Player.h"
+#include "../Tiles/TileBehaviourExecuter.h"
 #include "../Aela Game/AelaGame.h"
 #include <glm/gtc/constants.hpp>
 #include <iostream>
@@ -30,6 +31,7 @@ Game::WorldManager::WorldManager() {
 
 void Game::WorldManager::setup() {
 	characterProvider = GameObjectProvider::getCharacterProvider();
+	tileBehaviourExecuter = GameObjectProvider::getTileBehaviourExecuter();
 	scriptManager = GameObjectProvider::getScriptManager();
 	tileAtlas = GameObjectProvider::getTileAtlas();
 	playerCharacter = GameObjectProvider::getPlayer()->getCharacter();
@@ -169,7 +171,7 @@ void Game::WorldManager::getCoordinateOfNeighbouringTile(glm::ivec3& tile, glm::
 		case TileDirection::BACKWARD:
 			tile += glm::ivec3(0, 0, -1);
 			if (tile.z == -1) {
-				tile.z = CHUNK_LENGTH;
+				tile.z = CHUNK_LENGTH - 1;
 				chunk.y--;
 			}
 			break;
@@ -294,4 +296,10 @@ bool Game::WorldManager::exportCurrentWorld(std::string path) {
 bool Game::WorldManager::autoExportCurrentWorld() {
 	currentWorld = playerCharacter->getLocation()->getWorld();
 	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + WORLD_AUTO_EXPORT_PATH, &worlds[currentWorld]);
+}
+
+void Game::WorldManager::tileWasPlaced(Location* location, size_t tileType) {
+	runTileSwitchScriptOfTileGroup(location);
+	tileBehaviourExecuter->runBehaviour(location, tileType);
+	mapNeedsToBeRebuilt = true;
 }

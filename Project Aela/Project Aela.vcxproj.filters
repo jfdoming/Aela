@@ -48,9 +48,6 @@
     <ClCompile Include="Control Manager\ControlManager.cpp" />
     <ClCompile Include="Entities\Entity.cpp" />
     <ClCompile Include="3D\Models\ModelEntity.cpp" />
-    <ClCompile Include="Error Handler\AelaErrorHandler.cpp" />
-    <ClCompile Include="Error Handler\AelaSimpleError.cpp" />
-    <ClCompile Include="Error Handler\ErrorHandler.cpp" />
     <ClCompile Include="Events\Event.cpp" />
     <ClCompile Include="Events\EventConstants.cpp" />
     <ClCompile Include="Events\EventDispatcher.cpp" />
@@ -117,12 +114,16 @@
     <ClCompile Include="Renderer\GLRenderer.cpp" />
     <ClCompile Include="Transformable\Transformable.cpp" />
     <ClCompile Include="Animation\AnimationLooper.cpp" />
-    <ClCompile Include="Menus\LAF.cpp" />
     <ClCompile Include="Utilities\Texture Splitter\GLTextureSplitter.cpp" />
     <ClCompile Include="Events\WindowResizeEvent.cpp" />
     <ClCompile Include="2D\Texture\GLSpriteSheetLoader.cpp" />
     <ClCompile Include="Time\Stopwatch\Stopwatch.cpp" />
     <ClCompile Include="Time\Timer\Timer.cpp" />
+    <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp" />
+    <ClCompile Include="Window\Window.cpp" />
+    <ClCompile Include="Error Handler\ErrorHandling.cpp" />
+    <ClCompile Include="Error Handler\Error Handler\AelaErrorHandler.cpp" />
+    <ClCompile Include="Error Handler\Simple Error\AelaSimpleError.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3D\Animation\AnimationTrackModel.h" />
@@ -182,9 +183,6 @@
     <ClInclude Include="Control Manager\ControlManager.h" />
     <ClInclude Include="Entities\Entity.h" />
     <ClInclude Include="3D\Models\ModelEntity.h" />
-    <ClInclude Include="Error Handler\AelaErrorHandler.h" />
-    <ClInclude Include="Error Handler\AelaSimpleError.h" />
-    <ClInclude Include="Error Handler\ErrorHandler.h" />
     <ClInclude Include="Events\Event.h" />
     <ClInclude Include="Events\EventConstants.h" />
     <ClInclude Include="Events\EventDispatcher.h" />
@@ -268,10 +266,6 @@
     <ClInclude Include="Transformable\Transformable.h" />
     <ClInclude Include="Time\Time.h" />
     <ClInclude Include="Utilities\enumut.h" />
-    <ClInclude Include="2D\Text\TextManager.h" />
-    <ClInclude Include="Utilities\AelaEngineFunctor.h" />
-    <ClInclude Include="Utilities\Pool\Pool.h" />
-    <ClInclude Include="Time Manager\TimeManager.h" />
     <ClInclude Include="Utilities\glmut.h" />
     <ClInclude Include="2D\Animation\AnimationTrack2D.h" />
     <ClInclude Include="2D\Renderer\Basic2DGLRenderer.h" />
@@ -295,7 +289,6 @@
     <ClInclude Include="3D\Animation\KeyFrameMaterial.h" />
     <ClInclude Include="3D\Animation\KeyFrameModel.h" />
     <ClInclude Include="Animation\AnimationLooper.h" />
-    <ClInclude Include="Menus\LAF.h" />
     <ClInclude Include="Utilities\Texture Splitter\GLTextureSplitter.h" />
     <ClInclude Include="Utilities\Paths\PathSegment.h" />
     <ClInclude Include="Utilities\Paths\PathSegment2D.h" />
@@ -304,5 +297,9 @@
     <ClInclude Include="2D\Texture\GLSpriteSheetLoader.h" />
     <ClInclude Include="Time\Stopwatch\Stopwatch.h" />
     <ClInclude Include="Time\Timer\Timer.h" />
+    <ClInclude Include="Error Handler\ErrorHandling.h" />
+    <ClInclude Include="Error Handler\Error Handler\AelaErrorHandler.h" />
+    <ClInclude Include="Error Handler\Simple Error\AelaSimpleError.h" />
+    <ClInclude Include="Utilities\intut.h" />
   </ItemGroup>
 </Project>

@@ -87,7 +87,7 @@ void Basic3DGLModelRenderer::sendLightDataToShader(std::unordered_map<long long,
 	}
 }
 
-void Basic3DGLModelRenderer::startRenderingModelEntities(GLuint modelProgramID, GLuint frameBuffer, GLuint viewMatrixID,
+void Basic3DGLModelRenderer::startRendering(GLuint modelProgramID, GLuint frameBuffer, GLuint viewMatrixID,
 	GLuint projectionMatrixID) {
 	glUseProgram(modelProgramID);
 
@@ -192,7 +192,7 @@ void Basic3DGLModelRenderer::renderInstancedModelEntities(Map3D* map, std::vecto
 	}
 }
 
-void Basic3DGLModelRenderer::endRenderingModelEntities() {
+void Basic3DGLModelRenderer::endRendering() {
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
@@ -351,15 +351,10 @@ void Basic3DGLModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint textu
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glUniform1i(modelTextureID, 0);
 
-		// Buffer generation.
-		GLuint vertexbuffer;
-		glGenBuffers(1, &vertexbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-		GLuint uvbuffer;
-		glGenBuffers(1, &uvbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, UVBuffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
 
 		// This computes matrices.
@@ -373,37 +368,8 @@ void Basic3DGLModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint textu
 
 		glUniformMatrix4fv(billboardMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
 
-		// Vertex buffer attributes.
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-		glVertexAttribPointer(
-			// Attribute
-			0,
-			// Size
-			3,
-			// Type
-			GL_FLOAT,
-			// Is it normalized?
-			GL_FALSE,
-			// Stride
-			0,
-			// Array buffer offset.
-			(void*) 0
-		);
-
-		// UV buffer attributes.
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-
 		// This draws triangles!
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		// This deletes stuff from the memory.
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDeleteBuffers(1, &vertexbuffer);
-		glDeleteBuffers(1, &uvbuffer);
 	}
 }
 
@@ -446,15 +412,10 @@ void Basic3DGLModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint textu
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glUniform1i(billboardTextureID, 0);
 
-		// Buffer generation.
-		GLuint vertexbuffer;
-		glGenBuffers(1, &vertexbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-		GLuint uvbuffer;
-		glGenBuffers(1, &uvbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, UVBuffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(uvs), uvs, GL_STATIC_DRAW);
 
 		// This computes matrices based on control input.
@@ -465,37 +426,8 @@ void Basic3DGLModelRenderer::renderTextureIn3DSpace(bool cullFaces, GLuint textu
 
 		glUniformMatrix4fv(billboardMVPMatrixID, 1, GL_FALSE, &MVP[0][0]);
 
-		// Vertex buffer attributes.
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-		glVertexAttribPointer(
-			// Attribute
-			0,
-			// Size
-			3,
-			// Type
-			GL_FLOAT,
-			// Is it normalized?
-			GL_FALSE,
-			// Stride
-			0,
-			// Array buffer offset.
-			(void*) 0
-		);
-
-		// UV buffer attributes.
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-
 		// This draws triangles!
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		// This deletes stuff from the memory.
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDeleteBuffers(1, &vertexbuffer);
-		glDeleteBuffers(1, &uvbuffer);
 	}
 }
 

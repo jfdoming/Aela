@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 using namespace Aela;
-#include "../Error Handler/ErrorHandler.h"
+#include "../Error Handler/ErrorHandling.h"
 #include <iostream>
 
 // This disables the following compilation warning:

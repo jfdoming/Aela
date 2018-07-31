@@ -5,9 +5,11 @@
 * Description: A namespace with classes that handles error messages.
 */
 
-#include "ErrorHandler.h"
-#include "AelaErrorHandler.h"
-#include "AelaSimpleError.h"
+#include "ErrorHandling.h"
+#include "Error Handler/AelaErrorHandler.h"
+#include "Simple Error/AelaSimpleError.h"
+#include <iostream>
+#include <signal.h>
 
 namespace AelaErrorHandling {
 	AelaErrorHandler errorHandler;
@@ -71,6 +73,19 @@ void AelaErrorHandling::windowWarning(std::string title, std::string message) {
 	// This outputs an error using the operating system's error message window.
 	AelaSimpleError simpleError(AELA_WARNING_WINDOW, title, message);
 	errorHandler.throwError(simpleError);
+}
+
+void AelaErrorHandling::basicHandleSignal(int signal) {
+	std::cout << "Signal " << signal << " has been received!";
+	throw "Signal";
+}
+
+AelaErrorHandling::SignalHandlerPointer AelaErrorHandling::handleSignal(int signalCode, SignalHandlerPointer handlingFunction) {
+	return signal(signalCode, handlingFunction);
+}
+
+AelaErrorHandling::SignalHandlerPointer AelaErrorHandling::handleSignal(int signalCode) {
+	return signal(signalCode, basicHandleSignal);
 }
 
 bool AelaErrorHandling::programCloseWasRequested() {

@@ -69,6 +69,6 @@ namespace Aela {
 			void end();
 
 			// This is meant to reset a particle's position once it has completed its life.
-			virtual void setupParticlePositioning(unsigned int whichParticle, unsigned int numberOfParticles);
+			virtual void setupParticlePositioning(size_t whichParticle, size_t numberOfParticles) = 0;
 	};
 }

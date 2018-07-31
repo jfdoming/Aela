@@ -23,6 +23,7 @@ Aela::ParticleEmitter::~ParticleEmitter() {
 }
 
 void ParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float particleWidthScaling, float particleHeightScaling, unsigned int amount) {
+	std::cout << "Setting up things....\n";
 	for (unsigned int i = 0; i < amount; i++) {
 		Particle particle;
 		particle.setTexture(textures->at(rand() % textures->size()));
@@ -31,6 +32,7 @@ void ParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float pa
 		particle.setSpeed(baseSpeed + (speedOffset * (rand() % 100) / 100));
 		particle.setDistance((unsigned int) (baseDistance + (distanceOffset * (rand() % 100) / 100)));
 		particles.push_back(particle);
+		std::cout << "About toc all setupPos()\n";
 		setupParticlePositioning(i, amount);
 	}
 }
@@ -103,7 +105,7 @@ bool Aela::ParticleEmitter::isExpired() {
 
 // The implementation of this function is to be done by the sub class. The function is meant to reset the particle's position once it has completed
 // its life. This creates the effect of spawning in a new particle, even though its actually just resetting the particle in the pool.
-void ParticleEmitter::setupParticlePositioning(unsigned int whichParticle, unsigned int numberOfParticles) {
+void ParticleEmitter::setupParticlePositioning(size_t whichParticle, size_t numberOfParticles) {
 }
 
 void ParticleEmitter::setActionOnEnd(std::function<void()> onEnd) {

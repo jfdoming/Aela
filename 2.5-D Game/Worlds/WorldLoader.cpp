@@ -7,7 +7,7 @@
 
 #pragma once
 #include "WorldLoader.h"
-#include "Error Handler/ErrorHandler.h"
+#include "../../Project Aela/Error Handler/ErrorHandling.h"
 #include "../Resources/ResourceInfo.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
 #include "WorldManager.h"

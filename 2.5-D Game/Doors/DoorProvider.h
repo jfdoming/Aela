@@ -13,6 +13,7 @@ namespace Game {
 	class DoorProvider {
 		public:
 			DoorProvider();
+			~DoorProvider();
 
 			void addDoor(std::string tag, Door* door);
 			Door* getDoor(std::string tag);

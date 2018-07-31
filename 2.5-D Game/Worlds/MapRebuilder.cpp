@@ -209,6 +209,18 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 										modelEntity.setRotation(0, (float) HALF_PI, 0);
 										isGlass = true;
 										break;
+									case TileShape::QUARTER_WALL_UP_RIGHT:
+										tilePositionOnMap.x -= 0.5f;
+										tilePositionOnMap.y += 0.5f;
+										break;
+									case TileShape::QUARTER_WALL_UP_LEFT:
+										tilePositionOnMap.y += 0.5f;
+										break;
+									case TileShape::QUARTER_WALL_DOWN_LEFT:
+										break;
+									case TileShape::QUARTER_WALL_DOWN_RIGHT:
+										tilePositionOnMap.x -= 0.5f;
+										break;
 									default:
 										// This type is unknown.
 										continue;

@@ -29,9 +29,9 @@ bool Scripts::loadLogoMaterialAnimation(int whichLevel) {
 		}
 	}
 
-	if (!resourceManager->obtain<Material>((std::string) DEFAULT_MATERIAL_PATH + "tiles/1/2.png_mtl", levelLogoMaterial)) {
+	if (!resourceManager->obtain<Material>((std::string) DEFAULT_MATERIAL_PATH + "walls_1/3/0.png_mtl", levelLogoMaterial)) {
 		AelaErrorHandling::consoleWindowError("World Manager", "Could not load a material for some tile animations: "
-			+ (std::string) "tiles/1/2.png_mtl");
+			+ (std::string) "walls_1/3/0.png_mtl");
 		return false;
 	}
 

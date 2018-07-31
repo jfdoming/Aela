@@ -19,7 +19,7 @@
 
 #include <map>
 
-#include "../../Error Handler/ErrorHandler.h"
+#include "../../Error Handler/ErrorHandling.h"
 #include "../../Old Garbage/shader.hpp"
 #include "../Particles/ParticleEmitter.h"
 #include "../../Window/Window.h"
@@ -73,6 +73,8 @@ namespace Aela {
 
 			// This will recreate all framebuffers.
 			void rebuildFrameBuffers(bool multisampling);
+
+			void endRendering();
 
 		private:
 			// These are the smaller renderers that the Basic3DGLRenderer uses.

@@ -1,5 +1,5 @@
 #include "LuaScript.h"
-#include "../Error Handler/ErrorHandler.h"
+#include "../Error Handler/ErrorHandling.h"
 
 using namespace luabridge;
 

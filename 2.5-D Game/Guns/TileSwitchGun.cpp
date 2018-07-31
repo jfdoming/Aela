@@ -16,6 +16,7 @@ void Game::TileSwitchGun::setup() {
 	worldManager = GameObjectProvider::getWorldManager();
 	tileInventoryDisplay = GameObjectProvider::getTileInventoryDisplay();
 	tileBehaviourExecuter = GameObjectProvider::getTileBehaviourExecuter();
+	tileAtlas = GameObjectProvider::getTileAtlas();
 	time = GameObjectProvider::getTime();
 	game = GameObjectProvider::getGame();
 }
@@ -45,14 +46,18 @@ bool Game::TileSwitchGun::use(GameMode gameMode) {
 		World* worldPtr = worldManager->getWorld(playerLocation->getWorld());
 
 		if (worldPtr == nullptr) {
+			std::cout << "FALSE (A)\n";
 			return false;
 		}
 		Chunk* chunkPtr = worldPtr->getChunk(chunk);
 		if (chunkPtr == nullptr) {
+			std::cout << "FALSE (B)\n";
 			return false;
 		}
-		TileGroup* tileGroupPtr = worldPtr->getChunk(chunk)->getTileGroup(tile);
-		if (tileGroupPtr == nullptr) {
+
+		TileGroup* tileGroupPtr = chunkPtr->getTileGroup(tile);
+		if (tileGroupPtr == nullptr || tileGroupPtr->containsCollidableNonSwitchableTile(tileAtlas)) {
+			std::cout << tileGroupPtr << " " << chunk.x << " " << chunk.y << " " << tile.x << " " << tile.y << " " << tile.z << " FALSE (C)\n";
 			return false;
 		}
 		//if (worldManager->getTileAtlas()->getTileType(tilePtr->getType())->getShape() != TileShape::FLOOR
@@ -66,11 +71,9 @@ bool Game::TileSwitchGun::use(GameMode gameMode) {
 
 		if (switchedOutTile != nullptr) {
 			GLTexture* texture = static_cast<GLTexture*>(switchedOutTile->getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
-			worldManager->runTileSwitchScriptOfTileGroup(&location);
+			worldManager->tileWasPlaced(&location, switchedInTileType);
 			addTileSwitchParticleEmitter(&location, texture);
 			tileInventoryDisplay->refreshSubMenu();
-			tileBehaviourExecuter->runBehaviour(&location, switchedInTileType);
-			worldManager->rebuildMapNextUpdate();
 		}
 		return true;
 	} else if (gameMode == GameMode::MAP_EDITOR) {

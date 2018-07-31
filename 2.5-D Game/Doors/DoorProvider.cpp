@@ -1,8 +1,17 @@
 #include "DoorProvider.h"
+#include <iostream>
 
 using namespace Game;
 
 Game::DoorProvider::DoorProvider() {}
+
+Game::DoorProvider::~DoorProvider() {
+	for (auto& pair : doors) {
+		std::cout << "A";
+		pair.second.cleanup();
+		std::cout << "B\n";
+	}
+}
 
 void Game::DoorProvider::addDoor(std::string tag, Door* door) {
 	doors[tag] = *door;

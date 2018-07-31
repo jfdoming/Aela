@@ -7,6 +7,7 @@
 
 #pragma once
 #include <string>
+#include <functional>
 
 // This enum is used for the types of errors:
 //		Console Window Errors:
@@ -25,16 +26,28 @@
 // The namespace uses Aela's error-related classes, which would more annoying to use by a programmer
 // than using one function call to create an error.
 namespace AelaErrorHandling {
+	typedef void(*SignalHandlerPointer)(int);
+
 	// These are the namespace's simple behaviours.
 	void consoleWindowError(std::string message);
 	void consoleWindowError(std::string setTitle, std::string message);
 	void consoleWindowWarning(std::string message);
 	void consoleWindowWarning(std::string setTitle, std::string message);
+
 	void consoleInternalError(std::string message);
 	void consoleInternalError(std::string setTitle, std::string message);
+
 	void windowError(std::string message);
 	void windowError(std::string setTitle, std::string message);
 	void windowWarning(std::string message);
 	void windowWarning(std::string setTitle, std::string message);
+
+	// These should be used along with signal.h in order to throw exceptions that aren't normally thrown
+	// by low-level erros (such as segment violations and abnormal program termination). See the following
+	// for more information: https://www.tutorialspoint.com/c_standard_library/signal_h.htm
+	void basicHandleSignal(int signal);
+	SignalHandlerPointer handleSignal(int signalCode, SignalHandlerPointer handlingFunction);
+	SignalHandlerPointer handleSignal(int signalCode);
+
 	bool programCloseWasRequested();
 }

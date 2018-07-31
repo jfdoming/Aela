@@ -504,7 +504,7 @@ void Game::AelaGame::onEvent(Event* event) {
 				break;
 			case SDLK_1:
 				// This is here for debugging!
-				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-1, 0), glm::ivec3(8, 0, 1)),
+				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-4, 0), glm::ivec3(7, 0, 6)),
 					TeleportationAnimation::RISE);
 				break;
 			case SDLK_2:

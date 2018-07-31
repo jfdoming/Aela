@@ -30,6 +30,6 @@ namespace Aela {
 			// This class requires a pointer to the camera so that it can properly sort particles.
 			Camera3D* camera;
 
-			void setupParticlePositioning(unsigned int whichParticle, unsigned int numberOfParticles);
+			void setupParticlePositioning(size_t whichParticle, size_t numberOfParticles);
 	};
 }

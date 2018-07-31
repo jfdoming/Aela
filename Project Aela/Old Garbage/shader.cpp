@@ -16,7 +16,7 @@ using namespace std;
 #include <GL/glew.h>
 
 #include "../Old Garbage/shader.hpp"
-#include "../Error Handler/ErrorHandler.h"
+#include "../Error Handler/ErrorHandling.h"
 
 GLuint loadShaders(std::string vertexShaderPath, std::string fragmentShaderPath) {
 	return loadShaders(vertexShaderPath, "", fragmentShaderPath);
@@ -80,7 +80,7 @@ GLuint loadShaders(std::string vertexShaderPath, std::string geometryShaderPath,
 	int logLength;
 
 	// This compiles the vertex shader.
-	AelaErrorHandling::consoleWindowError("Aela Shader Reader", "The vertex shader " + vertexShaderPath + " is compiling...");
+	AelaErrorHandling::consoleWindowWarning("Aela Shader Reader", "The vertex shader " + vertexShaderPath + " is compiling...");
 	char const* vertexCodeAsChar = vertexShaderCode.c_str();
 	glShaderSource(vertexShaderID, 1, &vertexCodeAsChar, NULL);
 	glCompileShader(vertexShaderID);
@@ -98,7 +98,7 @@ GLuint loadShaders(std::string vertexShaderPath, std::string geometryShaderPath,
 
 	if (geometryShaderPath != "") {
 		// This compiles the geometry shader shader.
-		AelaErrorHandling::consoleWindowError("Aela Shader Reader", "The geometry shader " + geometryShaderPath + " is compiling...");
+		AelaErrorHandling::consoleWindowWarning("Aela Shader Reader", "The geometry shader " + geometryShaderPath + " is compiling...");
 		char const* geometryCodeAsChar = geometryShaderCode.c_str();
 		glShaderSource(geometryShaderID, 1, &geometryCodeAsChar, NULL);
 		glCompileShader(geometryShaderID);
@@ -116,7 +116,7 @@ GLuint loadShaders(std::string vertexShaderPath, std::string geometryShaderPath,
 	}
 
 	// This compiles the fragment shader.
-	AelaErrorHandling::consoleWindowError("Aela Shader Reader", "The fragment shader " + fragmentShaderPath + " is compiling...");
+	AelaErrorHandling::consoleWindowWarning("Aela Shader Reader", "The fragment shader " + fragmentShaderPath + " is compiling...");
 	char const* fragmentCodeAsChar = fragmentShaderCode.c_str();
 	glShaderSource(fragmentShaderID, 1, &fragmentCodeAsChar, NULL);
 	glCompileShader(fragmentShaderID);
@@ -133,7 +133,7 @@ GLuint loadShaders(std::string vertexShaderPath, std::string geometryShaderPath,
 	}
 
 	// This links the shaders with OpenGL.
-	AelaErrorHandling::consoleWindowError("Aela Shader Reader", "Aela Shader Reader is linking shaders with OpenGL.");
+	AelaErrorHandling::consoleWindowWarning("Aela Shader Reader", "Aela Shader Reader is linking shaders with OpenGL.");
 	GLuint programID = glCreateProgram();
 	glAttachShader(programID, vertexShaderID);
 	glAttachShader(programID, geometryShaderID);

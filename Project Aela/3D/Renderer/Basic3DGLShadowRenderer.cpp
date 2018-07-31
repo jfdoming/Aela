@@ -6,7 +6,7 @@
 */
 
 #include "Basic3DGLShadowRenderer.h"
-#include "../../Error Handler/ErrorHandler.h"
+#include "../../Error Handler/ErrorHandling.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>

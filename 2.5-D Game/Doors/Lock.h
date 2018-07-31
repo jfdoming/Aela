@@ -9,14 +9,15 @@
 
 namespace Game {
 	class Lock {
+		friend class Door;
 		public:
 			Lock();
 			Lock(bool locked);
+			virtual ~Lock();
 
-			void setLocked(bool locked);
 			bool isLocked();
 
-		private:
+		protected:
 			bool locked = true;
 	};
 }

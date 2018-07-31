@@ -22,13 +22,13 @@ Game::Location::Location(size_t world, glm::ivec2 chunk, glm::ivec3 tile) {
 	this->tile = tile;
 }
 
-Game::Location::Location(size_t, int chunkX, int chunkY, int tileX, int tileY, int tileZ) {
+Game::Location::Location(size_t world, int chunkX, int chunkY, int tileX, int tileY, int tileZ) {
 	this->world = world;
 	this->chunk = glm::ivec2(chunkX, chunkY);
 	this->tile = glm::ivec3(tileX, tileY, tileZ);
 }
 
-void Game::Location::setWorld(size_t) {
+void Game::Location::setWorld(size_t world) {
 	this->world = world;
 }
 

@@ -6,7 +6,7 @@
 */
 
 #pragma once
-#include "AelaSimpleError.h"
+#include "../Simple Error/AelaSimpleError.h"
 #include "SDL.h"
 
 class AelaErrorHandler {

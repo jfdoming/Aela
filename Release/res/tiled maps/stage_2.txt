@@ -1,4 +1,4 @@
-<Map3D name="REPLACE_ME" lights="off">
+<Map3D name="stage_1" lights="off">
 <Chunk position="0,0">
 	<Tiles height="0">
 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

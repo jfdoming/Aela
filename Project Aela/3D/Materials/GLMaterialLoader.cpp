@@ -14,7 +14,7 @@
 
 #include "GLMaterialLoader.h"
 #include "Material.h"
-#include "../../Error Handler/ErrorHandler.h"
+#include "../../Error Handler/ErrorHandling.h"
 
 #include "../../Utilities/strut.h"
 

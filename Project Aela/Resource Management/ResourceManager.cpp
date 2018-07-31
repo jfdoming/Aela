@@ -1,5 +1,5 @@
 #include "ResourceManager.h"
-#include "../Error Handler/ErrorHandler.h"
+#include "../Error Handler/ErrorHandling.h"
 #include <ios>
 
 using namespace Aela;

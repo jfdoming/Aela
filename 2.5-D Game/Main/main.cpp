@@ -88,8 +88,8 @@ int main(int argc, char *args[]) {
 
 		if (engine.getTime()->getCurrentTimeInMillis() % 1000 < lastRemainder || engine.getTime()->getTimeBetweenFramesInMillis() >= 1000) {
 			calc.calculate(engine.getTime()->getCurrentTimeInNanos(), engine.getTime()->getTimeBetweenFramesInNanos());
-			// std::cout << "True FPS: " << calc.getTrueFPS() << "\n";
-			// std::cout << "Smoothed FPS: " << calc.getSmoothedFPS() << "\n";
+			std::cout << "True FPS: " << calc.getTrueFPS() << "\n";
+			std::cout << "Smoothed FPS: " << calc.getSmoothedFPS() << "\n";
 			// engine.getStopwatch()->outputTimesIntoConsole();
 			engine.getStopwatch()->reset();
 		}

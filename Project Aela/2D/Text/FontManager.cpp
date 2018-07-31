@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <signal.h>
 #include "FontManager.h"
 
 using namespace Aela;
@@ -28,13 +29,28 @@ Rect<int> FontManager::dimensionsOfText(TextFont* font, std::string text) {
 	FT_GlyphSlot glyph = face->glyph;
 	FT_BBox bbox = face->bbox;
 
+	FT_Error error;
+
 	// I would not normally use this approach to calculate width because it is a little faster to use FT_Glyph_Get_CBox.
 	// However, that function causes an access violation and this method is slightly more accurate.
+	// Update: Actually, this may not be true. I will investigate further.
 	int width = 0;
 	for (unsigned int i = 0; i < text.size(); i++) {
-		if (FT_Load_Char(face, ((char) (text.at(i))), FT_LOAD_RENDER)) {
+		AelaErrorHandling::handleSignal(SIGSEGV);
+
+		// FT_Load_Char was causing memory access violations. After using AelaErrorHandling's signal.h-related
+		// features, I managed to catch the violation as an exception (to prevent crashing) and also found that
+		// FT_Load_Char gives various errors.
+		try {
+			if (error = FT_Load_Char(face, (char) (text.at(i)), FT_LOAD_RENDER)) {
+				continue;
+			}
+		} catch (char* e) {
+			std::cout << face << " " << (char) (text.at(i)) << " " << getErrorMessage(error) << "\n";
+			std::cout << e << " is an FT_Load_Char exception\n";
 			continue;
 		}
+
 		width += glyph->metrics.horiAdvance / POINTS_PER_PIXEL;
 	}
 
@@ -59,4 +75,14 @@ void FontManager::setup() {
 	if (FT_Init_FreeType(&freetype)) {
 		AelaErrorHandling::windowError("Project Aela's FontManager", "There was an error initializing the freetype library.");
 	}
+}
+
+// https://stackoverflow.com/questions/31161284/how-can-i-get-the-corresponding-error-string-from-an-ft-error-code
+const char* FontManager::getErrorMessage(FT_Error err) {
+	#undef __FTERRORS_H__
+	#define FT_ERRORDEF( e, v, s )  case e: return s;
+	#define FT_ERROR_START_LIST     switch (err) {
+	#define FT_ERROR_END_LIST       }
+	#include FT_ERRORS_H
+	return "(Unknown error)";
 }

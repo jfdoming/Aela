@@ -7,29 +7,30 @@
 #include "../../Worlds/WorldManager.h"
 #include "../../Tiles/TileBehaviourExecuter.h"
 #include "../../Doors/DoorProvider.h"
+#include "../../Doors/TileAmountLock.h"
 #include "../../Resources/ResourceInfo.h"
 #include "../ScriptManager.h"
 
 using namespace Scripts;
 
-void di_0_1() {
-	dialogueDisplay->showDialogue("Now go!", "hide_dialogue");
+void dialogue_0_1() {
+	dialogueDisplay->showDialogue("Now go!", "hide_dialoguealogue");
 }
 
-void di_1_0() {
-	worldManager->getTileGroup(&Location(1, 0, 0, 10, 0, 6))->removeTile(57);
-	worldManager->getTileGroup(&Location(1, 0, 0, 10, 0, 6))->addTile(58);
-	dialogueDisplay->showDialogue("Yes, this is an info kiosk.", "di_1_1");
+void dialogue_1_0() {
+	worldManager->getTileGroup(&Location(1, 0, 0, 10, 0, 6))->removeTile(73);
+	worldManager->getTileGroup(&Location(1, 0, 0, 10, 0, 6))->addTile(74);
+	dialogueDisplay->showDialogue("Yes, this is an info kiosk.", "dialogue_1_1");
 }
 
-void di_1_1() {
+void dialogue_1_1() {
 	game->getTileSwitchGun()->setActive(true);
-	dialogueDisplay->showDialogue("Here is your gun.", "di_1_2");
+	dialogueDisplay->showDialogue("Here is your gun.", "dialogue_1_2");
 }
 
-void di_1_2() {
-	worldManager->getTileGroup(&Location(1, 0, 0, 10, 0, 6))->removeTile(58);
-	worldManager->getTileGroup(&Location(1, 0, 0, 10, 0, 6))->addTile(57);
+void dialogue_1_2() {
+	worldManager->getTileGroup(&Location(1, 0, 0, 10, 0, 6))->removeTile(74);
+	worldManager->getTileGroup(&Location(1, 0, 0, 10, 0, 6))->addTile(73);
 	hideDialogue();
 }
 
@@ -49,87 +50,237 @@ void Scripts::setupTeleporters() {
 
 void Scripts::setupDoors() {
 	// World 1 Door 0
-	//auto onOpen_1_0 = []() {
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(6, 0, 2)))->removeTile(27);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 2)))->removeTile(46);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 2)))->addTile(47);
-	//};
+	auto onOpen_1_0 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(10, 0, 2)))->removeTile(165);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 2)))->removeTile(197);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 2)))->addTile(198);
+	};
 
-	//auto onClose_1_0 = []() {
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(6, 0, 2)))->addTile(27);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 2)))->removeTile(47);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 2)))->addTile(46);
-	//};
+	auto onClose_1_0 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(10, 0, 2)))->addTile(165);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 2)))->removeTile(198);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 2)))->addTile(197);
+	};
 
-	//Door door_1_0(1, true);
-	//door_1_0.setOnOpen(&std::function<void()>(onOpen_1_0));
-	//door_1_0.setOnClose(&std::function<void()>(onClose_1_0));
+	Door door_1_0(1, true);
+	setupDoor(&door_1_0, "door_1_0", onOpen_1_0, onClose_1_0);
+	setupDoorSensor(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 1)), "door_1_0", "door_1_0 sensor_0", 9, 0);
 
-	//doorProvider->addDoor("door_1_0", &door_1_0);
+	// World 1 Door 1
+	auto onOpen_1_1 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(10, 0, 5)))->removeTile(169);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 5)))->removeTile(207);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 5)))->addTile(208);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(9, 0, 5)))->removeTile(209);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(9, 0, 5)))->addTile(210);
+	};
 
-	//Location door_1_0_sensorLocation_0(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 1));
-	//scriptManager->addScript("door_1_0 se_0", std::bind(&triggerDoorSensor, door_1_0_sensorLocation_0, 9, "door_1_0", 0));
-	//worldManager->addTileSwitchScript("door_1_0 se_0", &door_1_0_sensorLocation_0);
+	auto onClose_1_1 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(10, 0, 5)))->addTile(169);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 5)))->addTile(207);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 5)))->removeTile(208);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(9, 0, 5)))->addTile(209);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(9, 0, 5)))->removeTile(210);
+	};
 
-	//// World 1 Door 1
-	//auto onOpen_1_1 = []() {
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(6, 0, 4)))->removeTile(27);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 4)))->removeTile(46);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 4)))->addTile(47);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(5, 0, 4)))->removeTile(48);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(5, 0, 4)))->addTile(49);
-	//};
+	Door door_1_1(2, true, true);
+	setupDoor(&door_1_1, "door_1_1", onOpen_1_1, onClose_1_1);
+	setupDoorSensor(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 4)), "door_1_1", "door_1_1 sensor_0", 9, 0);
+	setupDoorSensor(&Location(1, glm::ivec2(-1, 0), glm::ivec3(9, 0, 4)), "door_1_1", "door_1_1 sensor_1", 10, 1);
 
-	//auto onClose_1_1 = []() {
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(6, 0, 4)))->addTile(27);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 4)))->removeTile(47);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 4)))->addTile(46);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(5, 0, 4)))->removeTile(49);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(5, 0, 4)))->addTile(48);
-	//};
+	// World 1 Door 2
+	auto onOpen_1_2 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(10, 0, 8)))->removeTile(173);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 8)))->removeTile(217);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 8)))->addTile(218);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(9, 0, 8)))->removeTile(221);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(9, 0, 8)))->addTile(222);
+	};
 
-	//Door door_1_1(2, true, true);
-	//door_1_1.setOnOpen(&std::function<void()>(onOpen_1_1));
-	//door_1_1.setOnClose(&std::function<void()>(onClose_1_1));
+	auto onClose_1_2 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(10, 0, 8)))->addTile(173);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 8)))->addTile(217);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 8)))->removeTile(218);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(9, 0, 8)))->addTile(221);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(9, 0, 8)))->removeTile(222);
+	};
 
-	//doorProvider->addDoor("door_1_1", &door_1_1);
+	Door door_1_2(2, true, true);
+	setupDoor(&door_1_2, "door_1_2", onOpen_1_2, onClose_1_2);
+	setupDoorSensor(&Location(1, glm::ivec2(-1, 0), glm::ivec3(11, 0, 7)), "door_1_2", "door_1_2 sensor_0", 9, 0);
+	setupDoorSensor(&Location(1, glm::ivec2(-1, 0), glm::ivec3(9, 0, 7)), "door_1_2", "door_1_2 sensor_1", 11, 1);
 
-	//Location door_1_1_sensorLocation_0(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 3));
-	//scriptManager->addScript("door_1_1 se_0", std::bind(&triggerDoorSensor, door_1_1_sensorLocation_0, 9, "door_1_1", 0));
-	//worldManager->addTileSwitchScript("door_1_1 se_0", &door_1_1_sensorLocation_0);
-	//Location door_1_1_sensorLocation_1(1, glm::ivec2(-1, 0), glm::ivec3(5, 0, 3));
-	//scriptManager->addScript("door_1_1 se_1", std::bind(&triggerDoorSensor, door_1_1_sensorLocation_1, 11, "door_1_1", 1));
-	//worldManager->addTileSwitchScript("door_1_1 se_1", &door_1_1_sensorLocation_1);
+	// World 1 Door 3
+	auto onOpen_1_3 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 5)))->removeTile(177);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(2, 0, 5)))->removeTile(231);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(2, 0, 5)))->addTile(232);
+	};
 
-	//// World 1 Door 2
-	//auto onOpen_1_2 = []() {
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(6, 0, 6)))->removeTile(27);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 6)))->removeTile(46);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 6)))->addTile(47);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(5, 0, 6)))->removeTile(50);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(5, 0, 6)))->addTile(51);
-	//};
+	auto onClose_1_3 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 5)))->addTile(177);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(2, 0, 5)))->addTile(231);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(2, 0, 5)))->removeTile(232);
+	};
 
-	//auto onClose_1_2 = []() {
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(6, 0, 6)))->addTile(27);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 6)))->removeTile(47);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 6)))->addTile(46);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(5, 0, 6)))->removeTile(51);
-	//	worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(5, 0, 6)))->addTile(50);
-	//};
+	Door door_1_3(1, true);
+	setupDoor(&door_1_3, "door_1_3", onOpen_1_3, onClose_1_3);
+	setupDoorSensor(&Location(1, glm::ivec2(-1, 0), glm::ivec3(2, 0, 4)), "door_1_3", "door_1_3 sensor_0", 11, 0);
 
-	//Door door_1_2(2, true, true);
-	//door_1_2.setOnOpen(&std::function<void()>(onOpen_1_2));
-	//door_1_2.setOnClose(&std::function<void()>(onClose_1_2));
+	// World 1 Door 4
+	auto onOpen_1_4 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(13, 0, 5)))->removeTile(181);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 8)))->removeTile(237);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 8)))->addTile(238);
+	};
 
-	//doorProvider->addDoor("door_1_2", &door_1_2);
+	auto onClose_1_4 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(13, 0, 5)))->addTile(181);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 8)))->addTile(237);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 8)))->removeTile(238);
+	};
 
-	//Location door_1_2_sensorLocation_0(1, glm::ivec2(-1, 0), glm::ivec3(7, 0, 5));
-	//scriptManager->addScript("door_1_2 se_0", std::bind(&triggerDoorSensor, door_1_2_sensorLocation_0, 9, "door_1_2", 0));
-	//worldManager->addTileSwitchScript("door_1_2 se_0", &door_1_2_sensorLocation_0);
-	//Location door_1_2_sensorLocation_1(1, glm::ivec2(-1, 0), glm::ivec3(5, 0, 5));
-	//scriptManager->addScript("door_1_2 se_1", std::bind(&triggerDoorSensor, door_1_2_sensorLocation_1, 44, "door_1_2", 1));
-	//worldManager->addTileSwitchScript("door_1_2 se_1", &door_1_2_sensorLocation_1);
+	Door door_1_4(1, true);
+	setupDoor(&door_1_4, "door_1_4", onOpen_1_4, onClose_1_4);
+	setupDoorSensor(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 7)), "door_1_4", "door_1_4 sensor_0", 9, 0);
+
+	// World 1 Door 5
+	auto onOpen_1_5 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, -1), glm::ivec3(1, 0, 14)))->removeTile(185);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(13, 0, 8)))->removeTile(247);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(13, 0, 8)))->addTile(248);
+	};
+
+	auto onClose_1_5 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, -1), glm::ivec3(1, 0, 14)))->addTile(185);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(13, 0, 8)))->addTile(247);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(13, 0, 8)))->removeTile(248);
+	};
+
+	Door door_1_5(1, true);
+	setupDoor(&door_1_5, "door_1_5", onOpen_1_5, onClose_1_5);
+	setupDoorSensor(&Location(1, glm::ivec2(-2, 0), glm::ivec3(13, 0, 7)), "door_1_5", "door_1_5 sensor_0", 9, 0);
+
+	// World 1 Door 6
+	auto onOpen_1_6 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(10, 0, 1)))->removeTile(189);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 1)))->removeTile(261);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 1)))->addTile(262);
+	};
+
+	auto onClose_1_6 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(10, 0, 1)))->addTile(189);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 1)))->addTile(261);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 1)))->removeTile(262);
+	};
+
+	Door door_1_6(1, true);
+	setupDoor(&door_1_6, "door_1_6", onOpen_1_6, onClose_1_6);
+	setupDoorSensor(&Location(1, glm::ivec2(-1, 0), glm::ivec3(1, 0, 0)), "door_1_6", "door_1_6 sensor_0", 11, 0);
+
+	// World 1 Door 7
+	auto onOpen_1_7 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(5, 0, 7)))->removeTile(193);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(8, 0, 8)))->removeTile(267);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(8, 0, 8)))->addTile(268);
+	};
+
+	auto onClose_1_7 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(5, 0, 7)))->addTile(193);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(8, 0, 8)))->addTile(267);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-2, 0), glm::ivec3(8, 0, 8)))->removeTile(268);
+	};
+
+	Door door_1_7(1, true);
+	setupDoor(&door_1_7, "door_1_7", onOpen_1_7, onClose_1_7);
+	setupDoorSensor(&Location(1, glm::ivec2(-2, 0), glm::ivec3(8, 0, 7)), "door_1_7", "door_1_7 sensor_0", 9, 0);
+
+	// World 1 Door 8
+	auto onOpen_1_8 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-3, 0), glm::ivec3(9, 0, 7)))->removeTile(165);
+		AelaErrorHandling::windowWarning("YAY!");
+	};
+
+	auto onClose_1_8 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-3, 0), glm::ivec3(9, 0, 7)))->addTile(165);
+		AelaErrorHandling::windowWarning("NAY!");
+	};
+
+	Door door_1_8(16);
+	setupDoor(&door_1_8, "door_1_8", onOpen_1_8, onClose_1_8);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(14, 0, 4)), "door_1_8", "door_1_8 sensor_0", 13, 0);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(13, 0, 4)), "door_1_8", "door_1_8 sensor_1", 9, 1);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(12, 0, 4)), "door_1_8", "door_1_8 sensor_2", 9, 2);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(11, 0, 4)), "door_1_8", "door_1_8 sensor_3", 13, 3);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(14, 0, 3)), "door_1_8", "door_1_8 sensor_4", 9, 4);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(13, 0, 3)), "door_1_8", "door_1_8 sensor_5", 9, 5);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(12, 0, 3)), "door_1_8", "door_1_8 sensor_6", 9, 6);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(11, 0, 3)), "door_1_8", "door_1_8 sensor_7", 9, 7);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(14, 0, 2)), "door_1_8", "door_1_8 sensor_8", 13, 8);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(13, 0, 2)), "door_1_8", "door_1_8 sensor_9", 9, 9);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(12, 0, 2)), "door_1_8", "door_1_8 sensor_10", 9, 10);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(11, 0, 2)), "door_1_8", "door_1_8 sensor_11", 13, 11);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(14, 0, 1)), "door_1_8", "door_1_8 sensor_12", 9, 12);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(13, 0, 1)), "door_1_8", "door_1_8 sensor_13", 13, 13);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(12, 0, 1)), "door_1_8", "door_1_8 sensor_14", 13, 14);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(11, 0, 1)), "door_1_8", "door_1_8 sensor_15", 9, 15);
+
+	// World 1 Door 9
+	auto onOpen_1_9 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-4, 0), glm::ivec3(13, 0, 7)))->removeTile(169);
+	};
+
+	auto onClose_1_9 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-4, 0), glm::ivec3(13, 0, 7)))->addTile(169);
+	};
+
+	Door door_1_9(16);
+	setupDoor(&door_1_9, "door_1_9", onOpen_1_9, onClose_1_9);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(3, 0, 4)), "door_1_9", "door_1_9 sensor_0", 13, 0);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(2, 0, 4)), "door_1_9", "door_1_9 sensor_1", 13, 1);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(1, 0, 4)), "door_1_9", "door_1_9 sensor_2", 9, 2);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(0, 0, 4)), "door_1_9", "door_1_9 sensor_3", 9, 3);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(3, 0, 3)), "door_1_9", "door_1_9 sensor_4", 9, 4);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(2, 0, 3)), "door_1_9", "door_1_9 sensor_5", 9, 5);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(1, 0, 3)), "door_1_9", "door_1_9 sensor_6", 13, 6);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(0, 0, 3)), "door_1_9", "door_1_9 sensor_7", 9, 7);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(3, 0, 2)), "door_1_9", "door_1_9 sensor_8", 13, 8);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(2, 0, 2)), "door_1_9", "door_1_9 sensor_9", 13, 9);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(1, 0, 2)), "door_1_9", "door_1_9 sensor_10", 11, 10);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(0, 0, 2)), "door_1_9", "door_1_9 sensor_11", 11, 11);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(3, 0, 1)), "door_1_9", "door_1_9 sensor_12", 10, 12);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(2, 0, 1)), "door_1_9", "door_1_9 sensor_13", 10, 13);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(1, 0, 1)), "door_1_9", "door_1_9 sensor_14", 10, 14);
+	setupDoorSensor(&Location(1, glm::ivec2(-3, 0), glm::ivec3(0, 0, 1)), "door_1_9", "door_1_9 sensor_15", 10, 15);
+
+	// World 1 Door 10
+	auto onOpen_1_10 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-4, 0), glm::ivec3(3, 0, 8)))->removeTile(173);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-4, 0), glm::ivec3(4, 0, 8)))->removeTile(173);
+		std::cout << "YES!\n";
+	};
+
+	auto onClose_1_10 = []() {
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-4, 0), glm::ivec3(3, 0, 8)))->addTile(173);
+		worldManager->getTileGroup(&Location(1, glm::ivec2(-4, 0), glm::ivec3(4, 0, 8)))->addTile(173);
+		std::cout << "NO!\n";
+	};
+
+	std::cout << "start lol\n";
+	Door door_1_10;
+	door_1_10.setOnOpen(&((std::function<void()>) onOpen_1_10));
+	door_1_10.setOnClose(&((std::function<void()>) onClose_1_10));
+	TileAmountLock* door_1_10_lock_0 = new TileAmountLock();
+	door_1_10_lock_0->specifyRegionAsCuboid(&Location(1, -4, 0, 1, 0, 3), 6, 1, 5);
+	door_1_10_lock_0->addTileTypeToCheckFor(9, 9);
+	door_1_10_lock_0->addTileTypeToCheckFor(10, 9);
+	door_1_10_lock_0->addTileTypeToCheckFor(11, 3);
+	door_1_10_lock_0->addTileTypeToCheckFor(13, 9);
+	door_1_10.addLock((Lock*) &door_1_10_lock_0);
+	setupDoorTileAmountSensors(door_1_10_lock_0, "door_1_10 sensor_0");
+	doorProvider->addDoor("door_1_10", &door_1_10);
+	door_1_10_lock_0->setIDInDoor(0);
+	door_1_10_lock_0->setDoor(doorProvider->getDoor("door_1_10"));
 }
 
 void Scripts::startNewGame() {
@@ -138,14 +289,14 @@ void Scripts::startNewGame() {
 
 	// This sets up the player's tile inventory for a new game.
 	for (int i = 0; i < 3; i++) {
-		player->getTileInventory()->addTile(&Tile(1));
+		player->getTileInventory()->addTile(&Tile(3));
 	}
 
 	// The tile switch gun is inactive by default.
 	// game->getTileSwitchGun()->setActive(false);
 
-	scriptManager->runScript("setup_st_1_le_1");
-	dialogueDisplay->showDialogue("Blah, blah, blah, plot, plot, plot.", "di_0_1");
+	scriptManager->runScript("setup_stage_1_level_1");
+	dialogueDisplay->showDialogue("Blah, blah, blah, plot, plot, plot.", "dialogue_0_1");
 }
 
 void Scripts::continueGame() {}
@@ -182,14 +333,13 @@ void onWaterPlace(Location* location) {
 	for (int i = 0; i < 4; i++) {
 		TileGroup* group = Scripts::worldManager->getTileGroup(&Location(location->getWorld(), chunkCoords[i], tileCoords[i]));
 		if (group != nullptr) {
-			Tile* tile = group->getTile(11);
+			Tile* tile = group->getTile(10);
 			if (tile == nullptr) {
 				continue;
 			}
-			Tile copy = *tile;
 			group->removeTile(tile->getType());
-			copy.setType(55);
-			group->addTile(&copy);
+			group->addTile(13);
+			worldManager->tileWasPlaced(&Location(location->getWorld(), chunkCoords[i], tileCoords[i]), 13);
 		}
 	}
 }
@@ -211,15 +361,16 @@ void onLavaPlace(Location* location) {
 	for (int i = 0; i < 4; i++) {
 		TileGroup* waterTileGroup = Scripts::worldManager->getTileGroup(&Location(location->getWorld(), chunkCoords[i], tileCoords[i]));
 		if (waterTileGroup != nullptr) {
-			Tile* tile = waterTileGroup->getTile(9);
-			if (tile == nullptr) {
+			if (!waterTileGroup->containsTile(9)) {
 				continue;
 			}
 			TileGroup* lavaTileGroup = Scripts::worldManager->getTileGroup(location);
-			if (!lavaTileGroup->removeTile(11)) {
+			if (!lavaTileGroup->removeTile(10)) {
 				AelaErrorHandling::windowError("A tilegroup is... corrupt or something?!");
+				continue;
 			}
-			waterTileGroup->addTile(&Tile(55));
+			lavaTileGroup->addTile(13);
+			worldManager->tileWasPlaced(location, 13);
 			break;
 		}
 	}
@@ -228,10 +379,8 @@ void onLavaPlace(Location* location) {
 void Scripts::addTileBehaviours() {
 	std::function<void(Location*)> water = &onWaterPlace;
 	tileBehaviourExecuter->addBehaviour(9, &water);
-	tileBehaviourExecuter->addBehaviour(10, &water);
 	std::function<void(Location*)> lava = &onLavaPlace;
-	tileBehaviourExecuter->addBehaviour(11, &lava);
-	tileBehaviourExecuter->addBehaviour(12, &lava);
+	tileBehaviourExecuter->addBehaviour(10, &lava);
 }
 
 void Scripts::fadeTeleportPlayer(size_t world, glm::ivec2 chunk, glm::ivec3 tile) {
@@ -246,6 +395,28 @@ void Scripts::unlockDoorLock(std::string tag, size_t lockID) {
 	doorProvider->getDoor(tag)->unlock(lockID);
 }
 
+void Scripts::setupDoor(Door* door, std::string name, std::function<void()> onOpen, std::function<void()> onClose) {
+	door->setOnOpen(&onOpen);
+	door->setOnClose(&onClose);
+	doorProvider->addDoor(name, door);
+}
+
+void Scripts::setupDoorSensor(Location* location, std::string doorName, std::string sensorScriptName, size_t tileType, size_t lockID) {
+	scriptManager->addScript(sensorScriptName, std::bind(triggerDoorSensor, *location, tileType, doorName, lockID));
+	worldManager->addTileSwitchScript(sensorScriptName, location);
+}
+
+void Scripts::setupDoorTileAmountSensors(TileAmountLock* lock, std::string sensorScriptName) {
+	auto script = [lock]() {
+		lock->checkIfUnlocked();
+	};
+	scriptManager->addScript(sensorScriptName, script);
+
+	for (auto& tileGroup : *lock->getRegion()) {
+		tileGroup->setSwitchScript(sensorScriptName);
+	}
+}
+
 void Scripts::triggerDoorSensor(Location location, size_t correctTileType, std::string doorTag, size_t lockID) {
 	if (worldManager->getTileGroup(&location)->getTile(correctTileType) != nullptr) {
 		doorProvider->getDoor(doorTag)->unlock(lockID);
@@ -258,28 +429,28 @@ void Scripts::addScriptsToGameWorld() {
 	scriptManager->addScript("setup_characters", &setupCharacters);
 	scriptManager->addScript("setup_teleporters", &setupTeleporters);
 	scriptManager->addScript("setup_doors", &setupDoors);
-	scriptManager->addScript("hide_dialogue", &hideDialogue);
+	scriptManager->addScript("hide_dialoguealogue", &hideDialogue);
 	scriptManager->addScript("start_new_game", &startNewGame);
 	scriptManager->addScript("continue_game", &continueGame);
 	scriptManager->addScript("edit_map", &editMap);
 	scriptManager->addScript("add_tile_behaviours", &addTileBehaviours);
 
-	/*scriptManager->addScript("setup_st_1_le_1", std::bind(&setupLevel, 1, 1));
-	scriptManager->addScript("setup_st_1_le_2", std::bind(&setupLevel, 1, 2));
-	scriptManager->addScript("setup_st_1_le_3", std::bind(&setupLevel, 1, 3));
-	scriptManager->addScript("setup_st_1_le_4", std::bind(&setupLevel, 1, 4));
-	scriptManager->addScript("setup_st_1_le_5", std::bind(&setupLevel, 1, 5));
+	scriptManager->addScript("setup_stage_1_level_1", std::bind(&setupLevel, 1, 1));
+	scriptManager->addScript("setup_stage_1_level_2", std::bind(&setupLevel, 1, 2));
+	scriptManager->addScript("setup_stage_1_level_3", std::bind(&setupLevel, 1, 3));
+	scriptManager->addScript("setup_stage_1_level_4", std::bind(&setupLevel, 1, 4));
+	scriptManager->addScript("setup_stage_1_level_5", std::bind(&setupLevel, 1, 5));
 
-	scriptManager->addScript("wa_0_0", std::bind(&fadeTeleportPlayer, 1, glm::ivec2(0, 0), glm::ivec3(14, 0, 6)));
-	worldManager->addWalkedOnScript("wa_0_0", &Location(0, glm::ivec2(0, -1), glm::ivec3(1, 0, 15)));
+	scriptManager->addScript("walked_on_0_0", std::bind(&fadeTeleportPlayer, 1, glm::ivec2(0, 0), glm::ivec3(14, 0, 6)));
+	worldManager->addWalkedOnScript("walked_on_0_0", &Location(0, glm::ivec2(0, -1), glm::ivec3(1, 0, 15)));
 
-	scriptManager->addScript("di_0_1", &di_0_1);
+	scriptManager->addScript("dialogue_0_1", &dialogue_0_1);
 
-	scriptManager->addScript("di_1_0", &di_1_0);
-	worldManager->addPromptedScript("di_1_0", &Location(1, glm::ivec2(0, 0), glm::ivec3(10, 0, 6)));
+	scriptManager->addScript("dialogue_1_0", &dialogue_1_0);
+	worldManager->addPromptedScript("dialogue_1_0", &Location(1, glm::ivec2(0, 0), glm::ivec3(10, 0, 6)));
 
-	scriptManager->addScript("di_1_1", &di_1_1);
-	scriptManager->addScript("di_1_2", &di_1_2);*/
+	scriptManager->addScript("dialogue_1_1", &dialogue_1_1);
+	scriptManager->addScript("dialogue_1_2", &dialogue_1_2);
 }
 
 void Scripts::setupScripts() {

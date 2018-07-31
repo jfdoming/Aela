@@ -27,6 +27,7 @@ namespace Game {
 			WorldManager* worldManager;
 			TileInventoryDisplay* tileInventoryDisplay;
 			TileBehaviourExecuter* tileBehaviourExecuter;
+			TileAtlas* tileAtlas;
 			Time* time;
 			AelaGame* game;
 

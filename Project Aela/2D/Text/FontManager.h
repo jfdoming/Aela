@@ -11,7 +11,7 @@
 #include <ft2build.h>
 #include <freetype/freetype.h>
 
-#include "../../Error Handler/ErrorHandler.h"
+#include "../../Error Handler/ErrorHandling.h"
 #include "TextFont.h"
 #include "../../Utilities/Rect/Rect.h"
 
@@ -41,6 +41,9 @@ namespace Aela {
 			// If something would like to free the memory of a font before the program runtime ends, it may use this function in order to
 			// SAFELY do so.
 			void deleteFont(TextFont* font);
+
+			// This turns a FreeType error code into text.
+			static const char* getErrorMessage(FT_Error err);
 
 			// This stores the amount of points in a character that make up one pixel.
 			static const unsigned short POINTS_PER_PIXEL = 64;

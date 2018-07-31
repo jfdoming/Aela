@@ -58,11 +58,14 @@ namespace Game {
 			bool exportCurrentWorld(std::string path);
 			bool autoExportCurrentWorld();
 
+			void tileWasPlaced(Location* location, size_t tileType);
+
 		private:
 			// These are obtained from GameObjectProvider.
 			ResourceManager* resourceManager;
 			AnimationLooper* animationLooper;
 			CharacterProvider* characterProvider;
+			TileBehaviourExecuter* tileBehaviourExecuter;
 			ScriptManager* scriptManager;
 			TileAtlas* tileAtlas;
 			Character* playerCharacter;

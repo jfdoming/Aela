@@ -6,7 +6,7 @@
 */
 
 #include "Camera3D.h"
-#include "../../Utilities/flut.h"
+#include "../../Utilities/glmut.h"
 #include <glm\gtc\constants.hpp>
 
 using namespace Aela;
@@ -215,7 +215,7 @@ void Camera3D::setProjectionMatrix(glm::mat4 setProjectionMatrix) {
 void Camera3D::focusAtPointOnPlane(glm::vec3 point, glm::vec3 offset) {
 	glm::vec3 angle = glm::normalize(point - position);
 	setRotation(angle.x + offset.x, angle.y + offset.y, offset.z);
-	forceValuesWithinRange(&rotation, 0, glm::pi<float>() * 2);
+	forceWithinRange(&rotation, 0, glm::pi<float>() * 2);
 }
 
 void Camera3D::focusAtPointOnPlane(glm::vec3 point) {

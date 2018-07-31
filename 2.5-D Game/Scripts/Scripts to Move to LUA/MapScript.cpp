@@ -13,7 +13,8 @@ using namespace Game;
 namespace Scripts {
 	std::string worldNames[] = {
 		"interiors",
-		"stage_1"
+		"stage_1",
+		"stage_2"
 	};
 }
 

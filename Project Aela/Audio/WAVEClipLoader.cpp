@@ -9,7 +9,7 @@
 
 #include "WAVEClipLoader.h"
 #include "AudioClip.h"
-#include "../Error Handler/ErrorHandler.h"
+#include "../Error Handler/ErrorHandling.h"
 
 using namespace Aela;
 

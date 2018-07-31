@@ -30,6 +30,8 @@ namespace Game {
 			Tile* getSwitchableFloorTile(TileAtlas* tileAtlas);
 			bool containsCollidableTile(TileAtlas* tileAtlas);
 			bool isCollidable(TileAtlas* tileAtlas);
+			bool containsTile(size_t type);
+			bool containsCollidableNonSwitchableTile(TileAtlas* tileAtlas);
 
 			// Note: if the IDs of the scripts are stored as nothing (""), then these functions
 			// return nullptr. Otherwise, they return a pointer to the name of the script, which

@@ -7,7 +7,7 @@
 */
 
 #include "Basic3DGLRenderer.h"
-#include "../../Utilities/flut.h"
+#include "../../Utilities/glmut.h"
 #include <glm/gtx/component_wise.hpp>
 
 using namespace Aela;
@@ -147,6 +147,10 @@ void Aela::Basic3DGLRenderer::rebuildFrameBuffers(bool multisampling) {
 	setupFrameBuffers(multisampling);
 }
 
+void Aela::Basic3DGLRenderer::endRendering() {
+	modelRenderer.endRendering();
+}
+
 // This generates a light's depth frame buffer.
 void Basic3DGLRenderer::generateShadowMap(LightEntity* light) {
 	shadowRenderer.generateShadowMap(light);
@@ -226,9 +230,9 @@ void Aela::Basic3DGLRenderer::renderModelEntitiesWithLights(Map3D* map, bool mul
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 
 	if (multisampling) {
-		modelRenderer.startRenderingModelEntities(modelProgramID, multisampledColourFrameBuffer, viewMatrixID, projectionMatrixID);
+		modelRenderer.startRendering(modelProgramID, multisampledColourFrameBuffer, viewMatrixID, projectionMatrixID);
 	} else {
-		modelRenderer.startRenderingModelEntities(modelProgramID, colourFrameBuffer, viewMatrixID, projectionMatrixID);
+		modelRenderer.startRendering(modelProgramID, colourFrameBuffer, viewMatrixID, projectionMatrixID);
 	}
 
 	for (auto& pair : *map->getResourceGroupedModelsWithoutTransparency()) {
@@ -264,8 +268,6 @@ void Aela::Basic3DGLRenderer::renderModelEntitiesWithLights(Map3D* map, bool mul
 			}
 		}
 	}
-
-	modelRenderer.endRenderingModelEntities();
 }
 
 void Aela::Basic3DGLRenderer::renderModelEntitiesWithoutLights(Map3D* map, bool multisampling) {
@@ -273,9 +275,9 @@ void Aela::Basic3DGLRenderer::renderModelEntitiesWithoutLights(Map3D* map, bool 
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 
 	if (multisampling) {
-		modelRenderer.startRenderingModelEntities(lightlessModelProgramID, multisampledColourFrameBuffer, lightlessViewMatrixID, lightlessProjectionMatrixID);
+		modelRenderer.startRendering(lightlessModelProgramID, multisampledColourFrameBuffer, lightlessViewMatrixID, lightlessProjectionMatrixID);
 	} else {
-		modelRenderer.startRenderingModelEntities(lightlessModelProgramID, colourFrameBuffer, lightlessViewMatrixID, lightlessProjectionMatrixID);
+		modelRenderer.startRendering(lightlessModelProgramID, colourFrameBuffer, lightlessViewMatrixID, lightlessProjectionMatrixID);
 	}
 
 	for (auto& pair : *map->getResourceGroupedModelsWithoutTransparency()) {
@@ -311,8 +313,6 @@ void Aela::Basic3DGLRenderer::renderModelEntitiesWithoutLights(Map3D* map, bool 
 			}
 		}
 	}
-
-	modelRenderer.endRenderingModelEntities();
 }
 
 //void Aela::Basic3DGLRenderer::renderSingleModelEntityShadow(ModelEntity* entity, Map3D* map) {
@@ -404,8 +404,8 @@ void Aela::Basic3DGLRenderer::renderParticles(ParticleEmitter* particleEmitter, 
 	glm::vec3 actualCameraRotation = glm::vec3(camera->getRotation()->y, camera->getRotation()->x, camera->getRotation()->z);
 	glm::vec3 differenceA = actualCameraRotation - *particleEmitter->getRotation();
 	glm::vec3 differenceB = *particleEmitter->getRotation() - actualCameraRotation;
-	forceValuesWithinRange(&differenceA, 0, glm::pi<float>() * 2);
-	forceValuesWithinRange(&differenceB, 0, glm::pi<float>() * 2);
+	forceWithinRange(&differenceA, 0, glm::pi<float>() * 2);
+	forceWithinRange(&differenceB, 0, glm::pi<float>() * 2);
 	glm::vec3 difference = glm::vec3(glm::min(differenceA.x, differenceB.x), glm::min(differenceA.y, differenceB.y),
 		glm::min(differenceA.z, differenceB.z));
 	float angle = glm::compMax(difference);

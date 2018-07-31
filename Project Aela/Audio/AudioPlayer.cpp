@@ -1,5 +1,5 @@
 #include "AudioPlayer.h"
-#include "../Error Handler/ErrorHandler.h"
+#include "../Error Handler/ErrorHandling.h"
 
 using namespace Aela;
 
@@ -89,7 +89,8 @@ void AudioPlayer::update() {
 	for (auto clip : playingClips) {
 		while (source_state == AL_PLAYING) {
 			// TODO make source object
-			alDoWithErrorCheck_noret(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
+			// Uncomment this once the "identifier 'source' is undefined" error that is caused from it is fixed.
+			// alDoWithErrorCheck_noret(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
 		}
 	}
 }

@@ -7,10 +7,12 @@
 
 #include "Basic2DGLRenderer.h"
 #include "../../Old Garbage/texture.hpp"
-#include "../../Error Handler/ErrorHandler.h"
+#include "../../Error Handler/ErrorHandling.h"
 #include "../../Old Garbage/shader.hpp"
+#include "../Text/FontManager.h"
 #include <freetype/ftglyph.h>
 #include <iostream>
+#include <signal.h>
 
 using namespace Aela;
 
@@ -268,12 +270,21 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 	// This goes through every glyph to perform actions upon every glyph's properties.
 	for (unsigned int i = 0; i < text.length(); i++) {
 		char p = ((char) (text.at(i)));
+		AelaErrorHandling::handleSignal(SIGSEGV);
+		FT_Error error;
 
 		// This loads the character.
-		if (FT_Load_Char(*(textFont->getFace()), p, FT_LOAD_RENDER)) {
+		try {
+			if (error = FT_Load_Char(*(textFont->getFace()), (char) (text.at(i)), FT_LOAD_RENDER)) {
+				continue;
+			}
+		} catch (char* e) {
+			std::cout << *(textFont->getFace()) << " " << (char) (text.at(i)) << " " << FontManager::getErrorMessage(error) << "\n";
+			std::cout << e << " is an FT_Load_Char exception\n";
 			continue;
 		}
 		
+
 		characterPositioning.setWidth(characterPositioning.getWidth() + glyph->bitmap.width);
 
 		if (glyph->metrics.horiBearingY / (signed int) pointsPerPixel > distanceToTop) {

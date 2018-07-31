@@ -2,7 +2,7 @@
 
 #include <string>
 #include "LuaManager.h"
-#include "../Error Handler/ErrorHandler.h"
+#include "../Error Handler/ErrorHandling.h"
 
 namespace Aela {
 	class LuaScript {

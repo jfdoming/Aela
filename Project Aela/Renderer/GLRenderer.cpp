@@ -6,9 +6,10 @@
 */
 
 #include "GLRenderer.h"
-#include "../Error Handler/ErrorHandler.h"
+#include "../Error Handler/ErrorHandling.h"
 #include "../Old Garbage/shader.hpp"
 #include "../Events/EventConstants.h"
+#include <signal.h>
 
 using namespace Aela;
 
@@ -237,6 +238,8 @@ void GLRenderer::renderSimple2DFramebuffer() {
 }
 
 void GLRenderer::endRendering3D() {
+	basic3DRenderer.endRendering();
+
 	if (multisampling3D > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultisampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getDimensions());
 	}
@@ -415,10 +418,20 @@ int getTextWidth(std::string text, TextFont* font) {
 
 	int width = 0;
 	for (unsigned int i = 0; i < text.size(); i++) {
+		AelaErrorHandling::handleSignal(SIGSEGV);
+		FT_Error error;
+		
 		// This loads the character.
-		if (FT_Load_Char(face, ((char) (text.at(i))), FT_LOAD_RENDER)) {
+		try {
+			if (error = FT_Load_Char(face, (char) (text.at(i)), FT_LOAD_RENDER)) {
+				continue;
+			}
+		} catch (char* e) {
+			std::cout << face << " " << (char) (text.at(i)) << " " << FontManager::getErrorMessage(error) << "\n";
+			std::cout << e << " is an FT_Load_Char exception\n";
 			continue;
 		}
+
 		width += glyph->metrics.horiAdvance / FontManager::POINTS_PER_PIXEL;
 	}
 	return width;

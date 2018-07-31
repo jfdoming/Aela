@@ -6,8 +6,8 @@
 */
 
 #include "TileAtlasLoader.h"
-#include "Error Handler\ErrorHandler.h"
-#include "Resource Management\ResourcePaths.h"
+#include "../../Project Aela/Error Handler/ErrorHandling.h"
+#include "../../Project Aela/Resource Management/ResourcePaths.h"
 #include "TileLoader.h"
 #include "../Resources/GenericMaterialLoader.h"
 #include <fstream>
@@ -103,6 +103,12 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 						|| shape == TileShape::WALL_CORNER_DOWN_LEFT
 						|| shape == TileShape::WALL_CORNER_DOWN_RIGHT) {
 						templateTile += "wall_corner.obj";
+					}
+					if (shape == TileShape::QUARTER_WALL_UP_RIGHT
+						|| shape == TileShape::QUARTER_WALL_UP_LEFT
+						|| shape == TileShape::QUARTER_WALL_DOWN_LEFT
+						|| shape == TileShape::QUARTER_WALL_DOWN_RIGHT) {
+						templateTile += "quarter_wall.obj";
 					}
 
 					resourceManager->addToGroup(templateTile, false);
@@ -212,6 +218,14 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 								shape = TileShape::GLASS_FRONT;
 							} else if (value == "glass_left") {
 								shape = TileShape::GLASS_LEFT;
+							} else if (value == "quarter_wall_up_right") {
+								shape = TileShape::QUARTER_WALL_UP_RIGHT;
+							} else if (value == "quarter_wall_up_left") {
+								shape = TileShape::QUARTER_WALL_UP_LEFT;
+							} else if (value == "quarter_wall_down_left") {
+								shape = TileShape::QUARTER_WALL_DOWN_LEFT;
+							} else if (value == "quarter_wall_down_right") {
+								shape = TileShape::QUARTER_WALL_DOWN_RIGHT;
 							} else {
 								shape = TileShape::FLOOR;
 							}

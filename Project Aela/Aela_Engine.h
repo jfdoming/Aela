@@ -9,7 +9,7 @@
 
 // These are headers that are part of Project Aela.
 #include "Window/Window.h"
-#include "Error Handler/ErrorHandler.h"
+#include "Error Handler/ErrorHandling.h"
 #include "Time/Time.h"
 #include "Time/Timer/Timer.h"
 #include "2D/Text/FontManager.h"

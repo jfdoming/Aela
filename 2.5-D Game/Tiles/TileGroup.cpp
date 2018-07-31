@@ -139,3 +139,19 @@ bool Game::TileGroup::isCollidable(TileAtlas* tileAtlas) {
 
 	return false;
 }
+
+bool Game::TileGroup::containsTile(size_t type) {
+	return tiles.find(type) != tiles.end();
+}
+
+bool Game::TileGroup::containsCollidableNonSwitchableTile(TileAtlas* tileAtlas) {
+	for (auto pair : tiles) {
+		TileType* type = tileAtlas->getTileType(pair.second.getType());
+		TileShape shape = type->getShape();
+		if (type->isCollidable() && shape != TileShape::BOXED_FLOOR && shape != TileShape::LIQUID_FLOOR) {
+			return true;
+		}
+	}
+
+	return false;
+}

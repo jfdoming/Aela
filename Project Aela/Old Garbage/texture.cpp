@@ -1,7 +1,7 @@
 #include <stdio.h>
 // #include <stdlib.h>
 #include <string>
-#include "../Error Handler/ErrorHandler.h"
+#include "../Error Handler/ErrorHandling.h"
 #include "../Old Garbage/texture.hpp"
 #include <iostream>
 #ifndef GLEW_STATIC

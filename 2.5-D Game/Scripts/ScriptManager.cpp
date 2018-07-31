@@ -6,7 +6,7 @@
 */
 
 #include "ScriptManager.h"
-#include "Error Handler\ErrorHandler.h"
+#include "../../Project Aela/Error Handler/ErrorHandling.h"
 
 void Game::ScriptManager::loadScript(std::string path) {
 	AelaErrorHandling::windowError((std::string) "Loading scripts from files is currently not supported\n"

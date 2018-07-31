@@ -5,6 +5,8 @@
  * Description: Project Aela's main.cpp file.
 */
 
+#include "Aela_Engine.h"
+
 // This includes standard headers.
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,12 +14,14 @@
 #include <iostream>
 #include <string>
 #include <mutex>
-
-#include "Aela_Engine.h"
+#include <signal.h>
 
 using namespace Aela;
 
-Aela::Engine::Engine() : resourceManager(0), timer(&time) {}
+Aela::Engine::Engine() : resourceManager(0), timer(&time) {
+	// This is crucial for many error handling-related features.
+	AelaErrorHandling::handleSignal(SIGSEGV);
+}
 
 // Thi function is old and will be deleted. It still contains code for elements which will be moved.
 int Aela::Engine::runningLoop() {

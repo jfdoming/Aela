@@ -36,7 +36,8 @@ namespace Scripts {
 		"character_A",
 		"character_B",
 		"character_C",
-		"character_D"
+		"character_D",
+		"quarter_wall"
 	};
 
 	std::string ddsTextureNames[] = {
@@ -60,8 +61,12 @@ namespace Scripts {
 		"floors_1",
 		"walls_1",
 		"glass_1",
+		"doors_1",
 		"animations_1",
-		"animations_2"
+		"animations_2",
+		"locks_1",
+		"locks_2",
+		"numbered_tiles"
 	};
 
 	std::string billboardNames[] = {
