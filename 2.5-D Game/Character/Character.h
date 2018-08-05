@@ -13,6 +13,7 @@
 #include "CharacterStep.h"
 #include "CharacterModelGenerator.h"
 #include "../Movement/Movement.h"
+#include "CharacterInformationBlock.h"
 #include <queue>
 
 using namespace Aela;
@@ -25,13 +26,21 @@ namespace Game {
 			Character();
 			Character(std::string name);
 
+			// These are movement-related functions. Functions with the word "immediately" complete
+			// the movement on the spot, wherever the player currently is. Other functions add the
+			// movements to a list of movements to perform sequencially.
 			void turn(TileDirection direction);
-			void move(Movement* movement, std::string scriptOnCompletion);
+			void turnImmediately(TileDirection direction);
 			void moveIfPossible(TileDirection direction);
-			void moveIfPossible(std::list<TileDirection> directions);
+			void moveIfPossible(std::list<Movement> directions);
+			void moveWithoutCollisionCheck(TileDirection direction);
+			void moveWithoutCollisionCheck(Movement* movement);
 			void clearFutureMovements();
+			void clearAllMovements();
+			void teleportImmediately(Location* location);
 			void teleportWithoutAnimation(Location* location);
 			void teleportWithAnimation(Location* location, TeleportationAnimation animation);
+
 			void kill();
 			void revive();
 
@@ -60,6 +69,8 @@ namespace Game {
 			void switchStep();
 			bool isMoving();
 			bool isAlive();
+			void setPropertiesUsingCharacterInformationBlock(CharacterInformationBlock* block);
+			CharacterInformationBlock getCharacterInformationBlock();
 
 			void animationHasEnded();
 			bool animationHasJustEnded();
@@ -91,11 +102,13 @@ namespace Game {
 			virtual void update();
 
 		private:
+			void move(Movement* movement, std::string scriptOnCompletion);
+
 			// Unlike tiles, characters are unique and get their own models.
 			Model* baseModel = nullptr;
 			ModelEntity* entity = nullptr;
 
-			std::list<TileDirection> possibleMovementsToProcess;
+			std::list<Movement> possibleMovementsToProcess;
 
 			std::string textureName;
 
@@ -130,10 +143,10 @@ namespace Game {
 
 			void animateDeath();
 
-			// This processes movements added using move().
-			void processMovement(Movement* movement, std::string scriptOnCompletion);
+			// This completes movements.
+			void completeMovement(Movement* movement, std::string scriptOnCompletion);
 
 			// This processes movements added using moveIfPossible(...).
-			void processPossibleMovement(TileDirection direction);
+			void processPossibleMovement(Movement* movement);
 	};
 }

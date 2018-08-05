@@ -7,6 +7,7 @@
 
 #pragma once
 #include <glm/glm.hpp>
+#include <ostream>
 
 namespace Game {
 	enum class TileDirection {
@@ -30,6 +31,11 @@ namespace Game {
 			glm::ivec2 getChunk();
 			glm::ivec3 getTileGroup();
 			glm::vec3 getWorldSpaceLocation();
+
+			inline friend std::ostream& operator<<(std::ostream &os, Location const& me) {
+				return (os << "World: " << me.world << ", Chunk: (" << me.chunk.x << ", " << me.chunk.y << "), Tile: (" << me.tile.x
+					<< ", " << me.tile.y << ", " << me.tile.z << ")");
+			}
 
 		private:
 			size_t world;

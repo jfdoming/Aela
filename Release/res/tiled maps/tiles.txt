@@ -59,7 +59,7 @@
 <Tile name="Elevator Window 2" texture="walls_1/3/2.png" collision="true" type="wall_right">
 <Tile name="Elevator Window 2" texture="walls_1/3/2.png" collision="true" type="wall_front">
 <Tile name="Elevator Window 2" texture="walls_1/3/2.png" collision="true" type="wall_left">
-<Tile name="Metal Door" texture="walls_1/4/2.png" collision="true" type="wall_front"> // Green Door
+<Tile name="Metal Door" texture="walls_1/4/2.png" collision="true" type="wall_front"> // Metal Door
 <Tile name="Metal Door Top" texture="walls_1/5/2.png" collision="true" type="wall_front">
 <Tile name="Keypad" texture="walls_1/6/2.png" collision="true" type="wall_right"> // Wall Ornaments
 <Tile name="Keypad" texture="walls_1/6/2.png" collision="true" type="wall_front">
@@ -78,9 +78,9 @@
 <Tile name="Computer 2" texture="walls_1/4/3.png" collision="true" type="wall_right">
 <Tile name="Computer 2" texture="walls_1/4/3.png" collision="true" type="wall_front">
 <Tile name="Computer 2" texture="walls_1/4/3.png" collision="true" type="wall_left">
-<Tile name="Metal Wall" texture="walls_1/5/3.png" collision="true" type="wall_right"> // Walls
-<Tile name="Metal Wall" texture="walls_1/5/3.png" collision="true" type="wall_front">
-<Tile name="Metal Wall" texture="walls_1/5/3.png" collision="true" type="wall_left">
+<Tile name="Metal Wall 6" texture="walls_1/5/3.png" collision="true" type="wall_right"> // Walls
+<Tile name="Metal Wall 6" texture="walls_1/5/3.png" collision="true" type="wall_front">
+<Tile name="Metal Wall 6" texture="walls_1/5/3.png" collision="true" type="wall_left">
 <Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="wall_right"> // Glass
 <Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="wall_front">
 <Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="wall_left">
@@ -154,10 +154,10 @@
 <Tile name="Red Teleporter Sign" texture="walls_1/0/5.png" collision="true" type="wall_front">
 <Tile name="Purple Teleporter Sign" texture="walls_1/1/5.png" collision="true" type="wall_front">
 <Tile name="White Teleporter Sign" texture="walls_1/2/5.png" collision="true" type="wall_front">
-<Tile name="Tropical Backdrop 1" texture="walls_1/3/6.png" collision="true" type="wall_front"> // Tropical Backdrop 1
-<Tile name="Tropical Backdrop 2" texture="walls_1/3/6.png" collision="true" type="wall_front">
-<Tile name="Ship Backdrop 1" texture="walls_1/5/6.png" collision="true" type="wall_front"> // Ship Backdrop
-<Tile name="Ship Backdrop 2" texture="walls_1/6/6.png" collision="true" type="wall_front">
+<Tile name="Painting 1" texture="walls_1/3/6.png" collision="true" type="wall_front"> // Tropical Backdrop 1
+<Tile name="Painting 2" texture="walls_1/4/6.png" collision="true" type="wall_front">
+<Tile name="Sign 1" texture="walls_1/5/6.png" collision="true" type="wall_front"> // Ship Backdrop
+<Tile name="Sign 2" texture="walls_1/6/6.png" collision="true" type="wall_front">
 <Tile name="Save Right Red" texture="walls_1/7/6.png" collision="true" type="wall_front"> // Savepoint
 <Tile name="Save Right Green" texture="walls_1/0/7.png" collision="true" type="wall_front">
 <Tile name="Save Left Red" texture="walls_1/1/7.png" collision="true" type="wall_front">
@@ -288,13 +288,24 @@
 <Tile name="#7 Sign (For Number)" texture="numbered_tiles/6/1.png" collision="true" type="wall_front">
 <Tile name="#8 Sign (For Number)" texture="numbered_tiles/7/1.png" collision="true" type="wall_front">
 <Tile name="#9 Sign (For Number)" texture="numbered_tiles/0/2.png" collision="true" type="wall_front">
-<Tile name="Blue Door Top" texture="doors_1/0/4.png" collision="true" type="wall_front"> // More Door Stuff
-<Tile name="Green Door Top" texture="doors_1/1/4.png" collision="true" type="wall_front">
-<Tile name="Yellow Door Top" texture="doors_1/2/4.png" collision="true" type="wall_front">
-<Tile name="Orange Door Top" texture="doors_1/3/4.png" collision="true" type="wall_front">
-<Tile name="Pink Door Top" texture="doors_1/4/4.png" collision="true" type="wall_front">
-<Tile name="Red Door Top" texture="doors_1/5/4.png" collision="true" type="wall_front">
-<Tile name="Purple Door Top" texture="doors_1/6/4.png" collision="true" type="wall_front">
-<Tile name="White Door Top" texture="doors_1/7/4.png" collision="true" type="wall_front">
+<Tile name="Blue Door Top" texture="doors_1/0/5.png" collision="true" type="wall_front"> // More Door Stuff
+<Tile name="Green Door Top" texture="doors_1/1/5.png" collision="true" type="wall_front">
+<Tile name="Yellow Door Top" texture="doors_1/2/5.png" collision="true" type="wall_front">
+<Tile name="Orange Door Top" texture="doors_1/3/5.png" collision="true" type="wall_front">
+<Tile name="Pink Door Top" texture="doors_1/4/5.png" collision="true" type="wall_front">
+<Tile name="Red Door Top" texture="doors_1/5/5.png" collision="true" type="wall_front">
+<Tile name="Purple Door Top" texture="doors_1/6/5.png" collision="true" type="wall_front">
+<Tile name="White Door Top" texture="doors_1/7/5.png" collision="true" type="wall_front">
 <Tile name="Metal Box" texture="walls_1/2/0.png" collision="true" type="boxed_floor"> // Box
 <Tile name="Black Wall" texture="floors_1/0/0.png" collision="true" type="wall_front">
+<Tile name="Asphalt" texture="floors_1/7/5.png" collision="false" type="boxed_floor">
+<Tile name="Black Wall" texture="floors_1/0/0.png" collision="true" type="wall_right">
+<Tile name="Black Wall" texture="floors_1/0/0.png" collision="true" type="wall_left">
+<Tile name="Timer Sign" texture="walls_1/4/7.png" collision="true" type="wall_front">
+<Tile name="Painting 3" texture="walls_1/6/7.png" collision="true" type="wall_front"> // Tropical Backdrop 1
+<Tile name="Painting 4" texture="walls_1/7/7.png" collision="true" type="wall_front">
+<Tile name="Save Door 4|4 Closed" texture="doors_1/0/4.png" collision="true" type="glass_front">
+<Tile name="Save Door 3|4 Closed" texture="doors_1/1/4.png" collision="true" type="glass_front">
+<Tile name="Save Door 2|4 Closed" texture="doors_1/2/4.png" collision="true" type="glass_front">
+<Tile name="Save Door 1|4 Closed" texture="doors_1/3/4.png" collision="true" type="glass_front">
+<Tile name="Save Door Top" texture="doors_1/0/6.png" collision="true" type="wall_front">

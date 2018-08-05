@@ -40,6 +40,7 @@ namespace Game {
 			Character* getCharacterByLocation(Location* location);
 			std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFunctions>*
 				getCharactersInChunk(size_t world, glm::ivec2 chunk);
+			std::unordered_map<size_t, Character*>* getAllCharacters();
 
 		private:
 			// This is a map of characters, sorted by their unique IDs.

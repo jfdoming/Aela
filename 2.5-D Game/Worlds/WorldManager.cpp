@@ -73,12 +73,7 @@ size_t Game::WorldManager::getNumberOfWorlds() {
 }
 
 Map3D* Game::WorldManager::getMap3D() {
-	currentWorld = playerCharacter->getLocation()->getWorld();
-	return worlds[currentWorld].getMap3D();
-}
-
-size_t Game::WorldManager::getCurrentWorld() {
-	return playerCharacter->getLocation()->getWorld();
+	return worlds[playerCharacter->getLocation()->getWorld()].getMap3D();
 }
 
 Game::Teleporter* Game::WorldManager::getTeleporter(Location* location) {
@@ -128,7 +123,6 @@ Game::TileGroup* Game::WorldManager::getTileGroup(Location* location) {
 	if (chunk == nullptr) {
 		return nullptr;
 	}
-
 	return chunk->getTileGroup(location->getTileGroup());
 }
 
@@ -269,33 +263,27 @@ void Game::WorldManager::runTileSwitchScriptOfTileGroup(Location* location) {
 }
 
 void Game::WorldManager::rebuildMap() {
-	currentWorld = playerCharacter->getLocation()->getWorld();
-	mapRebuilder.rebuildMap(&worlds[currentWorld]);
+	mapRebuilder.rebuildMap(&worlds[playerCharacter->getLocation()->getWorld()]);
 }
 
 void Game::WorldManager::createChunkInCurrentWorld(glm::ivec2 coordinate) {
-	currentWorld = playerCharacter->getLocation()->getWorld();
-	worlds[currentWorld].addChunk(coordinate, &Chunk());
+	worlds[playerCharacter->getLocation()->getWorld()].addChunk(coordinate, &Chunk());
 }
 
 void Game::WorldManager::createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, unsigned int layer) {
-	currentWorld = playerCharacter->getLocation()->getWorld();
-	worlds[currentWorld].getChunk(chunkCoordinate)->generateBlankTiles(layer);
+	worlds[playerCharacter->getLocation()->getWorld()].getChunk(chunkCoordinate)->generateBlankTiles(layer);
 }
 
 bool Game::WorldManager::exportCurrentWorld() {
-	currentWorld = playerCharacter->getLocation()->getWorld();
-	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + MAP_BEING_EDITED, &worlds[currentWorld]);
+	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + MAP_BEING_EDITED, &worlds[playerCharacter->getLocation()->getWorld()]);
 }
 
 bool Game::WorldManager::exportCurrentWorld(std::string path) {
-	currentWorld = playerCharacter->getLocation()->getWorld();
-	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + path, &worlds[currentWorld]);
+	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + path, &worlds[playerCharacter->getLocation()->getWorld()]);
 }
 
 bool Game::WorldManager::autoExportCurrentWorld() {
-	currentWorld = playerCharacter->getLocation()->getWorld();
-	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + WORLD_AUTO_EXPORT_PATH, &worlds[currentWorld]);
+	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + WORLD_AUTO_EXPORT_PATH, &worlds[playerCharacter->getLocation()->getWorld()]);
 }
 
 void Game::WorldManager::tileWasPlaced(Location* location, size_t tileType) {

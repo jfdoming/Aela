@@ -7,7 +7,6 @@
 Game::TileAmountLock::TileAmountLock() {}
 
 Game::TileAmountLock::~TileAmountLock() {
-	std::cout << "DELETING... TileAmountLock\n";
 }
 
 void Game::TileAmountLock::specifyRegionAsCuboid(Location* location, size_t width, size_t height, size_t depth) {
@@ -18,16 +17,15 @@ void Game::TileAmountLock::specifyRegionAsCuboid(Location* location, size_t widt
 			for (size_t z = 0; z < depth; z++) {
 				glm::ivec2 chunk = location->getChunk();
 				glm::ivec3 tile = location->getTileGroup();
-				size_t x2 = tile.x + x, z2 = tile.z + z;
-				chunk.x += (int) forceWithinRange<size_t>(&x2, (size_t) 0, (size_t) CHUNK_WIDTH - 1);
-				chunk.y += (int) forceWithinRange<size_t>(&z2, (size_t) 0, (size_t) CHUNK_LENGTH - 1);
+				int x2 = tile.x + (int) x, z2 = tile.z + (int) z;
+				chunk.x += (int) forceWithinRange<int>(&x2, (signed int) CHUNK_WIDTH);
+				chunk.y += (int) forceWithinRange<int>(&z2, (signed int) CHUNK_LENGTH);
 				TileGroup* tileGroup = worldManager->getTileGroup(&Location(location->getWorld(), chunk, glm::ivec3(x2, tile.y + y, z2)));
 				
 				glm::ivec3 tile2 = glm::ivec3(x2, tile.y + y, z2);
 
 				if (tileGroup != nullptr) {
 					region.push_back(tileGroup);
-					glm::ivec3 tile = location->getTileGroup() + glm::ivec3(x2, y, z2);
 				}
 			}
 		}

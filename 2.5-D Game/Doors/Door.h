@@ -15,7 +15,7 @@ namespace Game {
 		public:
 			Door();
 			Door(int lockAmount);
-			Door(int lockAmount, bool locked...);
+			Door(std::initializer_list<bool> locked);
 
 			void cleanup();
 
@@ -41,5 +41,6 @@ namespace Game {
 			std::function<void()> onClose = nullptr;
 
 			bool open;
+			
 	};
 }

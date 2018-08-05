@@ -20,16 +20,22 @@ namespace Game {
 
 			Tile* switchTile(TileGroup* tileGroup, size_t whichTile);
 			Tile* switchCurrentTile(TileGroup* tileGroup);
+
 			void replaceTile(Tile* tile, size_t whichTile);
 			size_t addTile(Tile* tile);
+
 			size_t getNumberOfTiles();
 			size_t getCurrentTileIndex();
 			Tile* getCurrentTile();
 			Tile* getTile(size_t whichTile);
+
 			void setCurrentTile(size_t currentTile);
 			void increaseCurrentTileIfPossible();
 			void decreaseCurrentTileIfPossible();
+
 			void placeTile(TileGroup* tileGroup);
+
+			void clear(size_t tileToFillBlanksWith);
 
 		private:
 			std::vector<Tile> tiles;

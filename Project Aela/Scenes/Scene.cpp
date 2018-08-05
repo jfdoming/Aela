@@ -28,7 +28,6 @@ void Scene::update() {
 			particleEmitters.erase(particleEmitters.begin() + i);
 			delete emitter;
 			i--;
-			std::cout << "Deleted some emitter.\n";
 			continue;
 		}
 		emitter->update();

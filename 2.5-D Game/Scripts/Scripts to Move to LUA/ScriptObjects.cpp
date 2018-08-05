@@ -25,6 +25,7 @@ CameraController* Scripts::cameraController = nullptr;
 TileBehaviourExecuter* Scripts::tileBehaviourExecuter = nullptr;
 HintDisplay* Scripts::hintDisplay = nullptr;
 DoorProvider* Scripts::doorProvider = nullptr;
+GameSaver* Scripts::gameSaver = nullptr;
 
 void Scripts::setupScriptObjects() {
 	engine = GameObjectProvider::getEngine();
@@ -51,4 +52,5 @@ void Scripts::setupScriptObjects() {
 	tileBehaviourExecuter = GameObjectProvider::getTileBehaviourExecuter();
 	hintDisplay = GameObjectProvider::getHintDisplay();
 	doorProvider = GameObjectProvider::getDoorProvider();
+	gameSaver = GameObjectProvider::getGameSaver();
 }

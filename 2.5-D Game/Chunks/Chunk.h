@@ -20,19 +20,19 @@ namespace Game {
 
 	class Chunk {
 		public:
-		Chunk() {}
+			Chunk() {}
 
-		Chunk(TileGroupMap* tiles) {
-			this->tiles = *tiles;
-		}
+			Chunk(TileGroupMap* tiles) {
+				this->tiles = *tiles;
+			}
 
-		void addTile(glm::ivec3 coordinate, Tile* tile);
-		void setTiles(TileGroupMap* tiles);
-		TileGroup* getTileGroup(glm::ivec3 position);
-		TileGroupMap* getTileGroups();
-		void generateBlankTiles(int height);
+			void addTile(glm::ivec3 coordinate, Tile* tile);
+			void setTiles(TileGroupMap* tiles);
+			TileGroup* getTileGroup(glm::ivec3 position);
+			TileGroupMap* getTileGroups();
+			void generateBlankTiles(int height);
 
 		private:
-		TileGroupMap tiles;
+			TileGroupMap tiles;
 	};
 }

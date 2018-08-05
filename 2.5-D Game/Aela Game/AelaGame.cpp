@@ -28,6 +28,7 @@
 #include "../Camera/CameraController.h"
 #include "../Displays/Hint Display/HintDisplay.h"
 #include "../Doors/DoorProvider.h"
+#include "../Save States/GameSaver.h"
 #include "../../Project Aela/Events/EventListener.h"
 
 using namespace Aela;
@@ -48,6 +49,7 @@ Game::AelaGame::AelaGame() {
 	tileBehaviourExecuter = new TileBehaviourExecuter();
 	hintDisplay = new HintDisplay();
 	DoorProvider* doorProvider = new DoorProvider();
+	gameSaver = new GameSaver();
 
 	GameObjectProvider::setWorldManager(worldManager);
 	GameObjectProvider::setCharacterProvider(characterProvider);
@@ -62,6 +64,7 @@ Game::AelaGame::AelaGame() {
 	GameObjectProvider::setTileBehaviourExecuter(tileBehaviourExecuter);
 	GameObjectProvider::setHintDisplay(hintDisplay);
 	GameObjectProvider::setDoorProvider(doorProvider);
+	GameObjectProvider::setGameSaver(gameSaver);
 	GameObjectProvider::setGame(this);
 
 	engine = GameObjectProvider::getEngine();
@@ -179,7 +182,7 @@ void Game::AelaGame::update() {
 				&& playerCharacter->areNewMovementsAllowed()) {
 				if (movingRight) {
 					if (playerCharacter->getDirectionFacing() != TileDirection::RIGHT && !playerCharacter->animationHasJustEnded()) {
-						playerCharacter->turn(TileDirection::RIGHT);
+						playerCharacter->turnImmediately(TileDirection::RIGHT);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
 					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
 						playerCharacter->moveIfPossible(TileDirection::RIGHT);
@@ -187,7 +190,7 @@ void Game::AelaGame::update() {
 				}
 				if (movingForward) {
 					if (playerCharacter->getDirectionFacing() != TileDirection::FORWARD && !playerCharacter->animationHasJustEnded()) {
-						playerCharacter->turn(TileDirection::FORWARD);
+						playerCharacter->turnImmediately(TileDirection::FORWARD);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
 					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
 						playerCharacter->moveIfPossible(TileDirection::FORWARD);
@@ -195,7 +198,7 @@ void Game::AelaGame::update() {
 				}
 				if (movingLeft) {
 					if (playerCharacter->getDirectionFacing() != TileDirection::LEFT && !playerCharacter->animationHasJustEnded()) {
-						playerCharacter->turn(TileDirection::LEFT);
+						playerCharacter->turnImmediately(TileDirection::LEFT);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
 					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
 						playerCharacter->moveIfPossible(TileDirection::LEFT);
@@ -203,7 +206,7 @@ void Game::AelaGame::update() {
 				}
 				if (movingBackward) {
 					if (playerCharacter->getDirectionFacing() != TileDirection::BACKWARD && !playerCharacter->animationHasJustEnded()) {
-						playerCharacter->turn(TileDirection::BACKWARD);
+						playerCharacter->turnImmediately(TileDirection::BACKWARD);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
 					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
 						playerCharacter->moveIfPossible(TileDirection::BACKWARD);
@@ -223,9 +226,11 @@ void Game::AelaGame::update() {
 				}
 				if (pressingTileSelectLeft && time->getCurrentTimeInNanos() > timeAtLastTileSelect + timeBetweenTileSelects) {
 					tileSelectUpAction();
+					timeBetweenTileSelects = TIME_BETWEEN_TILE_SELECTS_ON_HOLD;
 				}
 				if (pressingTileSelectRight && time->getCurrentTimeInNanos() > timeAtLastTileSelect + timeBetweenTileSelects) {
 					tileSelectDownAction();
+					timeBetweenTileSelects = TIME_BETWEEN_TILE_SELECTS_ON_HOLD;
 				}
 			}
 		}
@@ -361,6 +366,7 @@ void Game::AelaGame::onEvent(Event* event) {
 					}
 					tileSelectUpAction();
 					pressingTileSelectLeft = true;
+					timeBetweenTileSelects = TIME_BETWEEN_TILE_SELECTS_ON_FIRST_PRESS;
 					break;
 				case SDLK_RIGHT:
 					if (!player->isAlive() || pressingTileSelectLeft || pressingTileSelectRight) {
@@ -368,6 +374,7 @@ void Game::AelaGame::onEvent(Event* event) {
 					}
 					tileSelectDownAction();
 					pressingTileSelectRight = true;
+					timeBetweenTileSelects = TIME_BETWEEN_TILE_SELECTS_ON_FIRST_PRESS;
 					break;
 				case SDLK_LCTRL:
 					if (gameMode == GameMode::MAP_EDITOR) {
@@ -390,12 +397,6 @@ void Game::AelaGame::onEvent(Event* event) {
 					}
 					break;
 				}
-				case SDLK_LSHIFT:
-					if (!playerCharacter->getRunning()) {
-						playerCharacter->setRunning(true);
-						changePlayerAnimationToRunning();
-					}
-					break;
 				case SDLK_ESCAPE:
 					if (!pressingPauseButton && (currentScene == WORLD_GAMEPLAY_SCENE || currentScene == INVENTORY_SCENE)) {
 						sceneBeforePause = currentScene;
@@ -406,6 +407,14 @@ void Game::AelaGame::onEvent(Event* event) {
 					}
 					break;
 			}
+		}
+		switch (keyEvent->getKeycode()) {
+			case SDLK_LSHIFT:
+				if (!playerCharacter->getRunning()) {
+					playerCharacter->setRunning(true);
+					changePlayerAnimationToRunning();
+				}
+				break;
 		}
 	}
 
@@ -504,13 +513,13 @@ void Game::AelaGame::onEvent(Event* event) {
 				break;
 			case SDLK_1:
 				// This is here for debugging!
-				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-4, 0), glm::ivec3(7, 0, 6)),
+				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-7, 0), glm::ivec3(14, 0, 1)),
 					TeleportationAnimation::RISE);
 				break;
 			case SDLK_2:
 				// This is here for debugging!
-				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(0, 0), glm::ivec3(14, 0, 6)),
-					TeleportationAnimation::FADE);
+				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-15, 0), glm::ivec3(3, 0, 3)),
+					TeleportationAnimation::RISE);
 				break;
 			case SDLK_3:
 				// This is here for debugging!
@@ -523,6 +532,19 @@ void Game::AelaGame::onEvent(Event* event) {
 			case SDLK_5:
 				// This is here for debugging!
 				renderer->toggleFeature(RendererFeature::LIGHTS);
+				break;
+			case SDLK_6:
+				// This is here for debugging!
+				gameSaver->save("save_0");
+				break;
+			case SDLK_7:
+				// This is here for debugging!
+				gameSaver->load("save_0");
+				break;
+			case SDLK_8:
+				// This is here for debugging!
+				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-5, 0), glm::ivec3(14, 0, 12)),
+					TeleportationAnimation::FADE);
 				break;
 		}
 	}

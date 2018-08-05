@@ -22,6 +22,9 @@ void Game::World::setChunks(ChunkMap* chunks) {
 }
 
 Game::Chunk* Game::World::getChunk(glm::ivec2 position) {
+	if (chunks.size() == 0) {
+		return nullptr;
+	}
 	auto iter = chunks.find(position);
 	if (iter != chunks.end()) {
 		return &iter->second;

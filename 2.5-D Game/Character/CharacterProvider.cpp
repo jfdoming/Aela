@@ -167,6 +167,10 @@ std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFuncti
 	return &charactersByLocation[world][chunk];
 }
 
+std::unordered_map<size_t, Character*>* Game::CharacterProvider::getAllCharacters() {
+	return &characters;
+}
+
 void Game::CharacterProvider::characterWasMoved(std::string name, Location* oldLocation, Location* newLocation) {
 	charactersByLocation[oldLocation->getWorld()][oldLocation->getChunk()].erase(oldLocation->getTileGroup());
 	charactersByLocation[newLocation->getWorld()][newLocation->getChunk()][newLocation->getTileGroup()] = charactersByName[name];

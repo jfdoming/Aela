@@ -98,6 +98,16 @@ Tile* Game::TileGroup::getFloorTile(TileAtlas* tileAtlas) {
 	return nullptr;
 }
 
+Tile* Game::TileGroup::getLiquidFloorTile(TileAtlas* tileAtlas) {
+	for (auto& pair : tiles) {
+		TileShape shape = tileAtlas->getTileType(pair.second.getType())->getShape();
+		if (shape == TileShape::LIQUID_FLOOR) {
+			return &pair.second;
+		}
+	}
+	return nullptr;
+}
+
 Tile* Game::TileGroup::getSwitchableFloorTile(TileAtlas* tileAtlas) {
 	for (auto& pair : tiles) {
 		TileShape shape = tileAtlas->getTileType(pair.second.getType())->getShape();

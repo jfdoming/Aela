@@ -14,6 +14,7 @@
 #include "../../Project Aela/Events/EventListener.h"
 #include "../Displays/Hint Display/HintDisplay.h"
 #include "../Doors/DoorProvider.h"
+#include "../Save States/GameSaver.h"
 #include "../../Project Aela/Aela_Engine.h"
 
 using namespace Game;
@@ -35,6 +36,7 @@ CameraController* GameObjectProvider::cameraController = nullptr;
 TileBehaviourExecuter* GameObjectProvider::tileBehaviourExecuter = nullptr;
 HintDisplay* GameObjectProvider::hintDisplay = nullptr;
 DoorProvider* GameObjectProvider::doorProvider = nullptr;
+GameSaver* GameObjectProvider::gameSaver = nullptr;
 
 // These are pointers to scenes are should be set by a script that constructs the scenes.
 static Scene* gameplayScene, *pauseScene;
@@ -163,6 +165,10 @@ DoorProvider * Game::GameObjectProvider::getDoorProvider() {
 	return doorProvider;
 }
 
+GameSaver* Game::GameObjectProvider::getGameSaver() {
+	return gameSaver;
+}
+
 Scene* GameObjectProvider::getGameplayScene() {
 	return gameplayScene;
 }
@@ -224,6 +230,10 @@ void Game::GameObjectProvider::setHintDisplay(HintDisplay* setHintDisplay) {
 
 void Game::GameObjectProvider::setDoorProvider(DoorProvider* setDoorProvider) {
 	doorProvider = setDoorProvider;
+}
+
+void Game::GameObjectProvider::setGameSaver(GameSaver* setGameSaver) {
+	gameSaver = setGameSaver;
 }
 
 void GameObjectProvider::setGameplayScene(Scene* setGameplayScene) {

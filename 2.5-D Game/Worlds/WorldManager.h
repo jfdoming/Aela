@@ -30,7 +30,6 @@ namespace Game {
 			World* getWorld(size_t id);
 			size_t getNumberOfWorlds();
 			Map3D* getMap3D();
-			size_t getCurrentWorld();
 			Teleporter* getTeleporter(Location* location);
 			Teleporter* getTeleporter(Location* location, size_t tileType);
 			Chunk* getChunk(Location* location);
@@ -73,7 +72,6 @@ namespace Game {
 			WorldExporter* worldExporter;
 
 			std::vector<World> worlds;
-			size_t currentWorld;
 			MapRebuilder mapRebuilder;
 
 			// This is a handle to an Aela 3D map. The chunks of a world are loaded into this map. Because Aela's 3D

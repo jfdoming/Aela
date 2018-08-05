@@ -5,7 +5,6 @@
 * Description: A class used to emit particles from a point.
 */
 
-#pragma once
 #include "PointParticleEmitter.h"
 
 using namespace Aela;

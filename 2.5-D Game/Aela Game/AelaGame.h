@@ -71,6 +71,7 @@ namespace Game {
 			CameraController* cameraController;
 			TileBehaviourExecuter* tileBehaviourExecuter;
 			HintDisplay* hintDisplay;
+			GameSaver* gameSaver;
 
 			Character* playerCharacter;
 			Map3D* map;
@@ -88,7 +89,8 @@ namespace Game {
 			bool pressingRight = false, pressingForward = false, pressingLeft = false, pressingBackward = false;
 			bool pressingTileSelectLeft = false, pressingTileSelectRight = false, pressingTileSwitch = false;
 			bool pressingPauseButton = false, pressingInventoryButton = false;
-			long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 190000000;
+			long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 180000000;
+			const long long TIME_BETWEEN_TILE_SELECTS_ON_FIRST_PRESS = 300000000, TIME_BETWEEN_TILE_SELECTS_ON_HOLD = 100000000;
 			bool pressingReturn = false;
 
 			int currentScene = 0;

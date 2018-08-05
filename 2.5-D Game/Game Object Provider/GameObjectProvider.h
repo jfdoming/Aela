@@ -33,6 +33,7 @@ namespace Game {
 	class TileBehaviourExecuter;
 	class HintDisplay;
 	class DoorProvider;
+	class GameSaver;
 
 	class GameObjectProvider {
 		public:
@@ -69,6 +70,7 @@ namespace Game {
 			static TileBehaviourExecuter* getTileBehaviourExecuter();
 			static HintDisplay* getHintDisplay();
 			static DoorProvider* getDoorProvider();
+			static GameSaver* getGameSaver();
 
 			static Scene* getGameplayScene();
 			static Scene* getPauseScene();
@@ -87,6 +89,7 @@ namespace Game {
 			static void setTileBehaviourExecuter(TileBehaviourExecuter* tileBehaviourExecuter);
 			static void setHintDisplay(HintDisplay* hintDisplay);
 			static void setDoorProvider(DoorProvider* doorProvider);
+			static void setGameSaver(GameSaver* gameSaver);
 
 			static void setGameplayScene(Scene* gameplayScene);
 			static void setPauseScene(Scene* pauseScene);
@@ -113,6 +116,7 @@ namespace Game {
 			static TileBehaviourExecuter* tileBehaviourExecuter;
 			static HintDisplay* hintDisplay;
 			static DoorProvider* doorProvider;
+			static GameSaver* gameSaver;
 
 			// These are pointers to scenes are should be set by a script that constructs the scenes.
 			static Scene* gameplayScene, *pauseScene;

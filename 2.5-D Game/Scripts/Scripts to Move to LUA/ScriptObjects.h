@@ -37,6 +37,7 @@ namespace Scripts {
 	extern TileBehaviourExecuter* tileBehaviourExecuter;
 	extern HintDisplay* hintDisplay;
 	extern DoorProvider* doorProvider;
+	extern GameSaver* gameSaver;
 
 	void setupScriptObjects();
 }

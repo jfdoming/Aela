@@ -74,3 +74,7 @@ void Game::TileInventory::decreaseCurrentTileIfPossible() {
 void Game::TileInventory::placeTile(TileGroup* tileGroup) {
 	tileGroup->addTile(&tiles[currentTile]);
 }
+
+void Game::TileInventory::clear(size_t tileToFillBlanksWith) {
+	tiles = std::vector<Tile>(tiles.size(), Tile(tileToFillBlanksWith));
+}

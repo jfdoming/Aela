@@ -9,6 +9,7 @@
 #include "../Worlds/WorldManager.h"
 #include "../Particles/TileSwitchParticleEmitter.h"
 #include "../Particles/CharacterTeleportParticleEmitter.h"
+#include "../Particles/CharacterDeathParticleEmitter.h"
 #include "../Player/Player.h"
 #include "../Aela Game/AelaGame.h"
 #include "../Resources/ResourceInfo.h"
@@ -17,6 +18,7 @@
 #include "../Displays/Hint Display/HintDisplay.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
 #include "../../Project Aela/Utilities/enumut.h"
+#include "../../Project Aela/Time/Timer/Timer.h"
 #include <iostream>
 
 using namespace Game;
@@ -40,25 +42,29 @@ void Game::Character::setLocation(Location* location) {
 }
 
 void Game::Character::animateDeath() {
-	TileSwitchParticleEmitter* particleEmitter = new TileSwitchParticleEmitter(GameObjectProvider::getTime());
-	glm::vec3 worldSpacePosition = locationBeforeAnimation.getWorldSpaceLocation();
-	particleEmitter->setBaseDistance(worldSpacePosition.y + 10);
-	particleEmitter->setBaseSpeed(0.00000002f);
-	particleEmitter->setPathOffset(worldSpacePosition.y);
-	particleEmitter->setLifeTime(500000000);
-	particleEmitter->setupDimensions(&Rect<float>(worldSpacePosition.x, worldSpacePosition.z, 1, 1));
+	float offset = GameObjectProvider::getWorldManager()->getCharacterYOffsetInWorldspace();
 
-	if (this == GameObjectProvider::getPlayer()->getCharacter()) {
-		auto endingAction = [this]() {
-			GameObjectProvider::getGame()->animatePlayerDeathScreen();
-		};
-
-		particleEmitter->setActionOnEnd(endingAction);
-	}
+	CharacterDeathParticleEmitter* particleEmitter = new CharacterDeathParticleEmitter(GameObjectProvider::getTime());
+	particleEmitter->setBaseDistance(location.getWorldSpaceLocation().y + offset + 10);
+	particleEmitter->setBaseSpeed(0.00000001f);
+	particleEmitter->setPathOffset(location.getWorldSpaceLocation().y + offset);
+	particleEmitter->setLifeTime(990000000);
+	particleEmitter->setCharacter(this);
+	particleEmitter->setLocation(&location);
 
 	std::vector<GLTexture*> textures;
 	GLTexture* texture = static_cast<GLTexture*>(entity->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
 	textures.push_back(texture);
+
+	if (this == GameObjectProvider::getPlayer()->getCharacter()) {
+		auto endingAction = [this]() {
+			GameObjectProvider::getGame()->animatePlayerDeathScreen();
+			AelaErrorHandling::windowError((std::string) "Because the death screen isn't visible due to menus not being ready yet,\n"
+				+ "I have come to inform you that you have died.");
+		};
+
+		particleEmitter->setActionOnEnd(endingAction);
+	}
 
 	particleEmitter->setupParticles(&textures, 1, 1, 1);
 	GameObjectProvider::getGameplayScene()->putParticleEmitter(particleEmitter);
@@ -210,6 +216,13 @@ bool Game::Character::animationHasJustEnded() {
 }
 
 void Game::Character::turn(TileDirection direction) {
+	Movement turn(nullptr, nullptr, direction, false);
+	turn.setPreprocessed(true);
+	turn.setTurnOnly(true);
+	possibleMovementsToProcess.push_back(turn);
+}
+
+void Game::Character::turnImmediately(TileDirection direction) {
 	if (!newMovementsAreAllowed) {
 		return;
 	}
@@ -231,22 +244,36 @@ void Game::Character::turn(TileDirection direction) {
 
 void Game::Character::move(Movement* movement, std::string scriptOnCompletion) {
 	addTranslation(movement, scriptOnCompletion);
-	turn(movement->getDirection());
 
-	if (movement->isATeleportation() && movement->isAnimated()) {
+	/*if (movement->isATeleportation() && movement->isAnimated()) {
 		newMovementsAreAllowed = false;
-	}
+	}*/
 }
 
 void Game::Character::moveIfPossible(TileDirection direction) {
 	if (newMovementsAreAllowed) {
-		possibleMovementsToProcess.push_back(direction);
+		possibleMovementsToProcess.push_back(Movement(direction));
 	}
 }
 
-void Game::Character::moveIfPossible(std::list<TileDirection> directions) {
+void Game::Character::moveIfPossible(std::list<Movement> directions) {
 	if (newMovementsAreAllowed) {
 		possibleMovementsToProcess.splice(possibleMovementsToProcess.end(), directions);
+	}
+}
+
+void Game::Character::moveWithoutCollisionCheck(TileDirection direction) {
+	if (newMovementsAreAllowed) {
+		Movement movement(direction);
+		movement.setPreprocessed(true);
+		possibleMovementsToProcess.push_back(movement);
+	}
+}
+
+void Game::Character::moveWithoutCollisionCheck(Movement* movement) {
+	if (newMovementsAreAllowed) {
+		movement->setPreprocessed(true);
+		possibleMovementsToProcess.push_back(*movement);
 	}
 }
 
@@ -254,15 +281,34 @@ void Game::Character::clearFutureMovements() {
 	possibleMovementsToProcess.clear();
 }
 
+void Game::Character::clearAllMovements() {
+	possibleMovementsToProcess.clear();
+	translations.clear();
+
+	Animator* animator = GameObjectProvider::getAnimator();
+	AnimationTrackModel* trackModel = animator->getModelTrack(name + "/st");
+	if (trackModel != nullptr) {
+		animator->deleteModelTracksByTag(name + "/st");
+	}
+}
+
+void Game::Character::teleportImmediately(Location* location) {
+	GameObjectProvider::getCharacterProvider()->characterWasMoved(name, &this->location, location);
+	this->location = *location;
+	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+	animationHasEnded();
+}
+
 void Game::Character::teleportWithoutAnimation(Location * location) {
 	Movement teleportation(location, &glm::vec3(), directionFacing, true, false);
-	move(&teleportation, "");
+	teleportation.setPreprocessed(true);
+	possibleMovementsToProcess.push_back(teleportation);
 }
 
 void Game::Character::teleportWithAnimation(Location* location, TeleportationAnimation animation) {
-	newMovementsAreAllowed = false;
 	Movement teleportation(location, &glm::vec3(), directionFacing, true, animation);
-	move(&teleportation, "");
+	teleportation.setPreprocessed(true);
+	possibleMovementsToProcess.push_back(teleportation);
 }
 
 void Game::Character::kill() {
@@ -277,6 +323,42 @@ void Game::Character::revive() {
 
 bool Game::Character::isAlive() {
 	return alive;
+}
+
+void Game::Character::setPropertiesUsingCharacterInformationBlock(CharacterInformationBlock* block) {
+	clearAllMovements();
+	alive = block->alive;
+	directionFacing = block->directionFacing;
+	teleportImmediately(&block->location);
+	running = false;
+	runningSpeed = block->runningSpeed;
+	visible = block->visible;
+	walkingSpeed = block->walkingSpeed;
+	moving = false;
+	newMovementsAreAllowed = false;
+
+	// This lets every pause for a moment, letting the player breathe and realise what their new surroundings are.
+	// This delay will be moved elsewhere once menus work.
+	auto allowNewMovements = [this]() {
+		this->allowNewMovements(true);
+	};
+	GameObjectProvider::getTimer()->scheduleEventInMillis(1000, allowNewMovements);
+}
+
+CharacterInformationBlock Game::Character::getCharacterInformationBlock() {
+	CharacterInformationBlock block;
+	block.alive = alive;
+	block.directionFacing = directionFacing;
+	block.location = location;
+	block.moving = moving;
+	block.newMovementsAreAllowed = newMovementsAreAllowed;
+	block.possibleMovementsToProcess = possibleMovementsToProcess;
+	block.running = running;
+	block.runningSpeed = runningSpeed;
+	block.translations = translations;
+	block.visible = visible;
+	block.walkingSpeed = walkingSpeed;
+	return block;
 }
 
 void Game::Character::stopMoving() {
@@ -362,9 +444,9 @@ void Game::Character::update() {
 	animationHadJustEnded = false;
 
 	if (!newMovementsAreAllowed) {
-		possibleMovementsToProcess.clear();
+		// possibleMovementsToProcess.clear();
 	} else if (!moving && possibleMovementsToProcess.size() > 0) {
-		processPossibleMovement(possibleMovementsToProcess.front());
+		processPossibleMovement(&possibleMovementsToProcess.front());
 		possibleMovementsToProcess.pop_front();
 	}
 
@@ -374,7 +456,7 @@ void Game::Character::update() {
 		}
 
 		std::pair<Movement, std::string> translation = translations[0];
-		processMovement(&translation.first, translation.second);
+		completeMovement(&translation.first, translation.second);
 		translations.erase(translations.begin());
 	} else if (!GameObjectProvider::getAnimator()->trackWithTagExists(name + "/mv")) {
 		if (translations.size() == 0) {
@@ -383,18 +465,27 @@ void Game::Character::update() {
 		}
 
 		std::pair<Movement, std::string> translation = translations[0];
-		processMovement(&translation.first, translation.second);
+		completeMovement(&translation.first, translation.second);
 		translations.erase(translations.begin());
 	}
 }
 
 void Game::Character::addTranslation(Movement* movement, std::string scriptOnceComplete) {
+	moving = true;
 	translations.push_back(std::pair<Movement, std::string>(*movement, scriptOnceComplete));
 }
 
-void Game::Character::processMovement(Movement* movement, std::string scriptOnCompletion) {
+void Game::Character::completeMovement(Movement* movement, std::string scriptOnCompletion) {
+	std::cout << *movement->getDestination() << " Processing a movement...\n";
+	if (movement->isATurnOnly()) {
+		// The movement doesn't go anywhere. Just turn the character without moving it.
+		turnImmediately(movement->getDirection());
+		std::cout << "Yay I guess...\n";
+		moving = false;
+		return;
+	}
+
 	moving = true;
-	switchStep();
 
 	CharacterProvider* characterProvider = GameObjectProvider::getCharacterProvider();
 	Location oldLocation = location;
@@ -409,7 +500,27 @@ void Game::Character::processMovement(Movement* movement, std::string scriptOnCo
 	}
 
 	if (movement->isATeleportation()) {
+		newMovementsAreAllowed = false;
 		TeleportationAnimation teleportationAnimation = movement->getTeleportationAnimation();
+
+		auto teleportationEndAction = [this, newLocation]() mutable {
+			WorldManager* worldManager = GameObjectProvider::getWorldManager();
+			newMovementsAreAllowed = true;
+			animationHasEnded();
+
+			if (worldManager->getTileGroup(&newLocation)->getLiquidFloorTile(GameObjectProvider::getTileAtlas()) != nullptr) {
+				// The character teleported into a liquid. They must die.
+				kill();
+			}
+
+
+			Teleporter* teleporter = worldManager->getTeleporter(&newLocation);
+			if (teleporter != nullptr) {
+				Movement teleportation(teleporter->getDestination(), &glm::vec3(), directionFacing, true,
+					TeleportationAnimation::RISE);
+				addTranslation(&teleportation, "");
+			}
+		};
 
 		// This already occurs elsewhere:
 		// newMovementsAreAllowed = false;
@@ -441,12 +552,8 @@ void Game::Character::processMovement(Movement* movement, std::string scriptOnCo
 				cameraController->setLockCameraToPlayer(true);
 			};
 
-			auto onEndAction = [this]() {
-				newMovementsAreAllowed = true;
-			};
-
 			particleEmitter->setActionOnHalfLife(halfLifeAction);
-			particleEmitter->setActionOnEnd(onEndAction);
+			particleEmitter->setActionOnEnd(teleportationEndAction);
 			particleEmitter->setupParticles(&textures, 1, 1, 1);
 			GameObjectProvider::getGameplayScene()->putParticleEmitter(particleEmitter);
 		} else if (teleportationAnimation == TeleportationAnimation::FADE) {
@@ -458,17 +565,15 @@ void Game::Character::processMovement(Movement* movement, std::string scriptOnCo
 				location = newLocation;
 			};
 
-			auto teleportationEnd = [this]() {
-				newMovementsAreAllowed = true;
-			};
-
 			GameObjectProvider::getTimer()->scheduleEventInMillis(750, halfwayTeleportAction);
-			GameObjectProvider::getTimer()->scheduleEventInMillis(1500, teleportationEnd);
+			GameObjectProvider::getTimer()->scheduleEventInMillis(1500, teleportationEndAction);
 			GameObjectProvider::getGame()->animateFadeTeleport();
 		}
 		return;
 	}
 
+	switchStep();
+	turnImmediately(movement->getDirection());
 	characterProvider->characterWasMoved(name, &oldLocation, &newLocation);
 	location = newLocation;
 	glm::vec3 translationForAnimation = *movement->getWorldspaceTranslation();
@@ -541,9 +646,16 @@ void Game::Character::processMovement(Movement* movement, std::string scriptOnCo
 	animator->addAnimationTrackModel(&modelTrack);
 }
 
-void Game::Character::processPossibleMovement(TileDirection direction) {
+void Game::Character::processPossibleMovement(Movement* movement) {
+	if (movement->isPreprocessed()) {
+		move(movement, "");
+		std::cout << "Preprocessed!!!\n";
+		return;
+	}
+
+	TileDirection direction = movement->getDirection();
 	if (direction != directionFacing) {
-		turn(direction);
+		turnImmediately(direction);
 		return;
 	}
 
@@ -610,25 +722,28 @@ void Game::Character::processPossibleMovement(TileDirection direction) {
 
 				if (tileGroup == nullptr || tileGroup->isCollidable(GameObjectProvider::getTileAtlas())) {
 					// If the movement is impossible, don't do it!
-					turn(direction);
+					turnImmediately(direction);
 					return; 
 				}
 
 				if (characterProvider->getCharacterByLocation(&newLocation) != nullptr) {
 					// If the movement is impossible, don't do it!
-					turn(direction);
+					turnImmediately(direction);
 					return;
 				}
 
 				std::string script = *tileGroup->getWalkedOnScriptID();
-				Movement movement(&newLocation, &translation, direction, false);
-				move(&movement, script);
+				movement->setDestination(&newLocation);
+				movement->setWorldspaceTranslation(&translation);
+				movement->setDirection(direction);
+				move(movement, script);
 
 				Teleporter* teleporter = worldManager->getTeleporter(&newLocation);
 				if (teleporter != nullptr) {
 					Movement teleportation(teleporter->getDestination(), &glm::vec3(), directionFacing, true,
 						TeleportationAnimation::RISE);
-					move(&teleportation, script);
+					teleportation.setPreprocessed(true);
+					possibleMovementsToProcess.push_front(teleportation);
 				}
 			}
 		} else if (mode == GameMode::MAP_EDITOR) {
@@ -648,8 +763,10 @@ void Game::Character::processPossibleMovement(TileDirection direction) {
 						+ std::to_string(tileCoord.y) + ", " + std::to_string(tileCoord.z) + ")", HintDisplayDuration::FOREVER);
 				}
 
-				Movement movement(&newLocation, &translation, direction, false);
-				move(&movement, "");
+				movement->setDestination(&newLocation);
+				movement->setWorldspaceTranslation(&translation);
+				movement->setDirection(direction);
+				move(movement, "");
 			} else {
 				if (this == playerCharacter) {
 					GameObjectProvider::getHintDisplay()->displayHint("(Does not exist yet) Chunk: ("
@@ -658,8 +775,10 @@ void Game::Character::processPossibleMovement(TileDirection direction) {
 						+ std::to_string(tileCoord.z) + ")", HintDisplayDuration::FOREVER);
 				}
 
-				Movement movement(&newLocation, &translation, direction, false);
-				move(&movement, "");
+				movement->setDestination(&newLocation);
+				movement->setWorldspaceTranslation(&translation);
+				movement->setDirection(direction);
+				move(movement, "");
 			}
 		}
 	}

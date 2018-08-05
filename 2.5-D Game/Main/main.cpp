@@ -14,7 +14,7 @@ using namespace Game;
 int main(int argc, char *args[]) {
 	Aela::Engine engine;
 
-	int error = engine.setupWindow(1024, 768, 50, 50);
+	int error = engine.setupWindow(1400, 900, 50, 50);
 	if (error != 0) {
 		return error;
 	}
