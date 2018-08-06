@@ -181,35 +181,40 @@ void Game::AelaGame::update() {
 			if (!playerCharacter->isMoving() && !dialogueDisplay->dialogueIsBeingShown() && cameraMode == CameraMode::PLAYER_LOCKED
 				&& playerCharacter->areNewMovementsAllowed()) {
 				if (movingRight) {
-					if (playerCharacter->getDirectionFacing() != TileDirection::RIGHT && !playerCharacter->animationHasJustEnded()) {
+					if (playerCharacter->getDirectionFacing() != TileDirection::RIGHT && !playerCharacter->hasMovementJustEnded()) {
 						playerCharacter->turnImmediately(TileDirection::RIGHT);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
-					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
+					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS
+						&& !playerCharacter->isMoving()) {
 						playerCharacter->moveIfPossible(TileDirection::RIGHT);
 					}
 				}
 				if (movingForward) {
-					if (playerCharacter->getDirectionFacing() != TileDirection::FORWARD && !playerCharacter->animationHasJustEnded()) {
+					if (playerCharacter->getDirectionFacing() != TileDirection::FORWARD && !playerCharacter->hasMovementJustEnded()) {
 						playerCharacter->turnImmediately(TileDirection::FORWARD);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
-					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
+					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS
+						&& !playerCharacter->isMoving()) {
 						playerCharacter->moveIfPossible(TileDirection::FORWARD);
 					}
 				}
 				if (movingLeft) {
-					if (playerCharacter->getDirectionFacing() != TileDirection::LEFT && !playerCharacter->animationHasJustEnded()) {
+					if (playerCharacter->getDirectionFacing() != TileDirection::LEFT && !playerCharacter->hasMovementJustEnded()) {
 						playerCharacter->turnImmediately(TileDirection::LEFT);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
-					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
+					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS
+						&& !playerCharacter->isMoving()) {
 						playerCharacter->moveIfPossible(TileDirection::LEFT);
 					}
 				}
 				if (movingBackward) {
-					if (playerCharacter->getDirectionFacing() != TileDirection::BACKWARD && !playerCharacter->animationHasJustEnded()) {
+					if (playerCharacter->getDirectionFacing() != TileDirection::BACKWARD && !playerCharacter->hasMovementJustEnded()) {
 						playerCharacter->turnImmediately(TileDirection::BACKWARD);
 						timeAtLastPlayerTurn = time->getCurrentTimeInNanos();
-					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
+					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS
+						&& !playerCharacter->isMoving()) {
 						playerCharacter->moveIfPossible(TileDirection::BACKWARD);
+						std::cout << "Moving backward\n";
 					}
 				}
 				if (gameMode == GameMode::MAP_EDITOR) {
@@ -543,7 +548,7 @@ void Game::AelaGame::onEvent(Event* event) {
 				break;
 			case SDLK_8:
 				// This is here for debugging!
-				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-5, 0), glm::ivec3(14, 0, 12)),
+				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-7, 2), glm::ivec3(5, 0, 1)),
 					TeleportationAnimation::FADE);
 				break;
 		}

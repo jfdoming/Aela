@@ -1093,7 +1093,7 @@ void Scripts::setupCheckPointWithRightSaveSign(std::string name, Location checkP
 
 		worldManager->getTileGroup(&checkPointLocation)->addTile(307);
 
-		gameSaver->save("save_0");
+		timer->scheduleEventInNanos((size_t) (1.0 / player->getCharacter()->getCurrentSpeed()), std::bind(&GameSaver::save, gameSaver, "save_0"));
 	};
 
 	scriptManager->addScript(name, event);
@@ -1112,7 +1112,7 @@ void Scripts::setupCheckPointWithLeftSaveSign(std::string name, Location checkPo
 
 		worldManager->getTileGroup(&checkPointLocation)->addTile(307);
 
-		gameSaver->save("save_0");
+		timer->scheduleEventInNanos((size_t) (1.0 / player->getCharacter()->getCurrentSpeed()), std::bind(&GameSaver::save, gameSaver, "save_0"));
 	};
 
 	scriptManager->addScript(name, event);
@@ -1135,7 +1135,7 @@ void Scripts::setupCheckPointWithBothSaveSigns(std::string name, Location checkP
 
 		worldManager->getTileGroup(&checkPointLocation)->addTile(307);
 
-		gameSaver->save("save_0");
+		timer->scheduleEventInNanos((size_t) (1.0 / player->getCharacter()->getCurrentSpeed()), std::bind(&GameSaver::save, gameSaver, "save_0"));
 	};
 
 	scriptManager->addScript(name, event);

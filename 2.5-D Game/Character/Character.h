@@ -72,8 +72,8 @@ namespace Game {
 			void setPropertiesUsingCharacterInformationBlock(CharacterInformationBlock* block);
 			CharacterInformationBlock getCharacterInformationBlock();
 
-			void animationHasEnded();
-			bool animationHasJustEnded();
+			void movementHasEnded();
+			bool hasMovementJustEnded();
 			void stopMoving();
 
 			void setHealth(int health);
@@ -129,7 +129,7 @@ namespace Game {
 
 			// This stores at to whether the animation had ended during the current tick/frame. This is used
 			// to smoothen out character animation.
-			bool animationHadJustEnded = false;
+			bool movementEnded = false;
 
 			long long timePassedAfterAnimationEnd = 0;
 

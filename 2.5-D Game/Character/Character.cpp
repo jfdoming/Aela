@@ -202,17 +202,16 @@ bool Game::Character::isMoving() {
 	return moving;
 }
 
-void Game::Character::animationHasEnded() {
-	// Moving gets sets to false by the character manager! It does this since it performs some actions
-	// when the character is done moving!
-	moving = false;
+void Game::Character::movementHasEnded() {
+	// This now gets done in update() whenever movementEnded == true.
+	// moving = false;
 	locationBeforeAnimation = location;
-	animationHadJustEnded = true;
+	movementEnded = true;
 	timePassedAfterAnimationEnd = entity->getTimePassedAfterAnimationEnd();
 }
 
-bool Game::Character::animationHasJustEnded() {
-	return animationHadJustEnded;
+bool Game::Character::hasMovementJustEnded() {
+	return movementEnded;
 }
 
 void Game::Character::turn(TileDirection direction) {
@@ -229,7 +228,7 @@ void Game::Character::turnImmediately(TileDirection direction) {
 
 	if (directionFacing != direction) {
 		timePassedAfterAnimationEnd = 0;
-		animationHadJustEnded = false;
+		movementEnded = false;
 	}
 
 	directionFacing = direction;
@@ -243,6 +242,7 @@ void Game::Character::turnImmediately(TileDirection direction) {
 }
 
 void Game::Character::move(Movement* movement, std::string scriptOnCompletion) {
+	std::cout << "Moving!\n";
 	addTranslation(movement, scriptOnCompletion);
 
 	/*if (movement->isATeleportation() && movement->isAnimated()) {
@@ -253,6 +253,7 @@ void Game::Character::move(Movement* movement, std::string scriptOnCompletion) {
 void Game::Character::moveIfPossible(TileDirection direction) {
 	if (newMovementsAreAllowed) {
 		possibleMovementsToProcess.push_back(Movement(direction));
+		std::cout << "Adding new movement!!!!!!!!!\n";
 	}
 }
 
@@ -296,7 +297,7 @@ void Game::Character::teleportImmediately(Location* location) {
 	GameObjectProvider::getCharacterProvider()->characterWasMoved(name, &this->location, location);
 	this->location = *location;
 	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
-	animationHasEnded();
+	movementHasEnded();
 }
 
 void Game::Character::teleportWithoutAnimation(Location * location) {
@@ -441,7 +442,10 @@ bool Game::Character::areNewMovementsAllowed() {
 }
 
 void Game::Character::update() {
-	animationHadJustEnded = false;
+	if (movementEnded) {
+		movementEnded = false;
+		moving = false;
+	}
 
 	if (!newMovementsAreAllowed) {
 		// possibleMovementsToProcess.clear();
@@ -460,7 +464,7 @@ void Game::Character::update() {
 		translations.erase(translations.begin());
 	} else if (!GameObjectProvider::getAnimator()->trackWithTagExists(name + "/mv")) {
 		if (translations.size() == 0) {
-			moving = false;
+			// moving = false;
 			return;
 		}
 
@@ -476,11 +480,9 @@ void Game::Character::addTranslation(Movement* movement, std::string scriptOnceC
 }
 
 void Game::Character::completeMovement(Movement* movement, std::string scriptOnCompletion) {
-	std::cout << *movement->getDestination() << " Processing a movement...\n";
 	if (movement->isATurnOnly()) {
 		// The movement doesn't go anywhere. Just turn the character without moving it.
 		turnImmediately(movement->getDirection());
-		std::cout << "Yay I guess...\n";
 		moving = false;
 		return;
 	}
@@ -495,7 +497,7 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 		characterProvider->characterWasMoved(name, &oldLocation, &newLocation);
 		location = newLocation;
 		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
-		animationHasEnded();
+		movementHasEnded();
 		return;
 	}
 
@@ -506,7 +508,7 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 		auto teleportationEndAction = [this, newLocation]() mutable {
 			WorldManager* worldManager = GameObjectProvider::getWorldManager();
 			newMovementsAreAllowed = true;
-			animationHasEnded();
+			movementHasEnded();
 
 			if (worldManager->getTileGroup(&newLocation)->getLiquidFloorTile(GameObjectProvider::getTileAtlas()) != nullptr) {
 				// The character teleported into a liquid. They must die.
@@ -579,7 +581,7 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 	glm::vec3 translationForAnimation = *movement->getWorldspaceTranslation();
 	long long timeToAdvanceTrackBy;
 
-	if (animationHadJustEnded) {
+	if (movementEnded) {
 		timeToAdvanceTrackBy = timePassedAfterAnimationEnd;
 	} else {
 		timeToAdvanceTrackBy = 0;
@@ -595,7 +597,7 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 	glm::vec3 characterTranslation = *entity->getPosition() + translationForAnimation;
 	frame.setTranslation(&characterTranslation);
 	auto action = [this, scriptOnCompletion]() {
-		animationHasEnded();
+		movementHasEnded();
 		GameObjectProvider::getScriptManager()->runScript(scriptOnCompletion);
 	};
 
@@ -647,9 +649,9 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 }
 
 void Game::Character::processPossibleMovement(Movement* movement) {
+	std::cout << "Now processing a possible movement!\n";
 	if (movement->isPreprocessed()) {
 		move(movement, "");
-		std::cout << "Preprocessed!!!\n";
 		return;
 	}
 
@@ -742,8 +744,7 @@ void Game::Character::processPossibleMovement(Movement* movement) {
 				if (teleporter != nullptr) {
 					Movement teleportation(teleporter->getDestination(), &glm::vec3(), directionFacing, true,
 						TeleportationAnimation::RISE);
-					teleportation.setPreprocessed(true);
-					possibleMovementsToProcess.push_front(teleportation);
+					addTranslation(&teleportation, "");
 				}
 			}
 		} else if (mode == GameMode::MAP_EDITOR) {
