@@ -8,6 +8,7 @@
 #include "DialogueDisplay.h"
 #include "../Scripts/ScriptManager.h"
 #include "Time/Time.h"
+#include "../../../Project Aela/Resource Management/ResourcePaths.h"
 
 Game::DialogueDisplay::DialogueDisplay() {
 	eventHandler = GameObjectProvider::getEventHandler();
@@ -19,23 +20,25 @@ Game::DialogueDisplay::DialogueDisplay() {
 
 void Game::DialogueDisplay::setup() {
 	scriptManager = GameObjectProvider::getScriptManager();
+	animator = GameObjectProvider::getAnimator();
+	maxWidthOfText = (int) (GameObjectProvider::getWindow()->getDimensions()->getWidth() * 0.7f);
 }
 
 void Game::DialogueDisplay::update() {
-	if (state == DialogueState::MESSAGE && positionInDialogue < MAX_CHARACTERS_PER_LINE * 2
+	if (state == DialogueState::MESSAGE && positionInDialogue < maxCharactersOfText
 		&& time->getCurrentTimeInNanos() >= timeSinceNewCharacter + timeBetweenCharacterReveals) {
 		positionInDialogue++;
 		timeSinceNewCharacter = time->getCurrentTimeInNanos();
-		if (positionInDialogue < MAX_CHARACTERS_PER_LINE) {
+		if (positionInDialogue < maxCharactersInLabel1) {
 			label1->setText(line1OfText.substr(0, positionInDialogue));
 			label2->setText("");
-			if (positionInDialogue == MAX_CHARACTERS_PER_LINE - 1 && line2OfText == "") {
-				// To indidcate that the one-liner is completely shown.
-				positionInDialogue = MAX_CHARACTERS_PER_LINE * 2;
-			}
+			//if (positionInDialogue == maxCharactersPerLine - 1 && line2OfText == "") {
+			//	// To indidcate that the one-liner is completely shown.
+			//	positionInDialogue = maxCharactersPerLine * 2;
+			//}
 		} else {
-			label1->setText(line1OfText.substr(0, MAX_CHARACTERS_PER_LINE));
-			label2->setText(line2OfText.substr(0, positionInDialogue - MAX_CHARACTERS_PER_LINE));
+			label1->setText(line1OfText.substr(0, maxCharactersInLabel1));
+			label2->setText(line2OfText.substr(0, positionInDialogue - maxCharactersInLabel1));
 		}
 	}
 
@@ -65,18 +68,24 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 			case SDLK_RETURN:
 				if (!pressingReturn) {
 					if (state == DialogueState::MESSAGE) {
-						if (positionInDialogue > 1 && positionInDialogue < MAX_CHARACTERS_PER_LINE * 2) {
+						if (positionInDialogue > 1 && positionInDialogue < maxCharactersOfText) {
 							// Note that the dialogue must have scrolled past the first character in order for this to trigger. Otherwise,
 							// this could trigger right after the dialogue's initiation by AelaGame after a RETURN release.
-							positionInDialogue = MAX_CHARACTERS_PER_LINE * 2 - 1;
-						} else if (positionInDialogue == MAX_CHARACTERS_PER_LINE * 2) {
-							closeDialog();
-							scriptManager->runScript(scriptOnDialogueEnd);
+							positionInDialogue = maxCharactersOfText - 1;
+						} else if (positionInDialogue == maxCharactersOfText) {
+							if (scriptOnDialogueEnd == "") {
+								closeDialog();
+							} else {
+								scriptManager->runScript(scriptOnDialogueEnd);
+							}
 							justFinishedDialogue = true;
 						}
 					} else if (state == DialogueState::OPTIONS) {
-						closeDialog();
-						scriptManager->runScript(options[currentOption].getActionOnSelection());
+						if (options[currentOption].getActionOnSelection() == "") {
+							closeDialog();
+						} else {
+							scriptManager->runScript(options[currentOption].getActionOnSelection());
+						}
 					}
 					pressingReturn = true;
 				}
@@ -130,37 +139,92 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 }
 
 void Game::DialogueDisplay::showDialogue(std::string text, std::string scriptToRunOnceComplete) {
-	scriptOnDialogueEnd = scriptToRunOnceComplete;
-	state = DialogueState::MESSAGE;
+	showDialogue("", "", text, scriptToRunOnceComplete);
+}
 
-	if (text.size() > MAX_CHARACTERS_PER_LINE) {
-		size_t position = text.substr(0, MAX_CHARACTERS_PER_LINE).find_last_of(' ');
-		if (position >= MAX_CHARACTERS_PER_LINE || position == std::string::npos) {
-			line1OfText = text.substr(0, MAX_CHARACTERS_PER_LINE);
-			position = MAX_CHARACTERS_PER_LINE;
+void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc, std::string text, std::string scriptToRunOnceComplete) {
+	auto onAnimationComplete = [this, name, avatarSrc]() {
+		state = DialogueState::MESSAGE;
+		nameLabel->setText(name);
+
+		GLTexture* texture;
+		if (avatarSrc != "" && GameObjectProvider::getResourceManager()->obtain<GLTexture>(DEFAULT_TEXTURE_PATH + avatarSrc, texture)) {
+			avatar->setTexture(texture);
+			avatar->show();
 		} else {
-			line1OfText = text.substr(0, position);
-			if (text.at(position) == ' ') {
-				text.erase(text.begin() + position);
-			}
+			avatar->hide();
 		}
-		if (text.size() > MAX_CHARACTERS_PER_LINE * 2) {
-			line2OfText = text.substr(position, MAX_CHARACTERS_PER_LINE * 2);
-		} else {
-			line2OfText = text.substr(position, text.size());
-		}
+	};
+	
+	if (state == DialogueState::HIDDEN) {
+		AnimationTrack2D track;
+		KeyFrame2D frame;
+		frame.setObject(backdrop);
+		frame.setDimensions(&backdropExpandedDimensions);
+		frame.setEndingAction(onAnimationComplete);
+		track.addKeyFrame(BACKDROP_ANIMATION_PERIOD, &frame);
+		animator->addAnimationTrack2D(&track);
 	} else {
-		line1OfText = text;
-		line2OfText = "";
+		onAnimationComplete();
 	}
 
-	positionInDialogue = 1;
+	std::string splitText = text;
+	TextFont* font = label1->getFont();
+	int width = FontManager::dimensionsOfText(font, splitText).getWidth();
+	while (width > maxWidthOfText) {
+		size_t position = splitText.find_last_of(' ');
+		if (position == std::string::npos) {
+			break;
+		}
+		splitText = splitText.substr(0, position);
+		width = FontManager::dimensionsOfText(font, splitText).getWidth();
+	}
+
+	maxCharactersInLabel1 = (int) splitText.size();
+	maxCharactersOfText = (int) text.size();
+
+	if (maxCharactersInLabel1 == maxCharactersOfText) {
+		line1OfText = text;
+		line2OfText = "";
+	} else {
+		line1OfText = splitText;
+		line2OfText = text.substr(splitText.size() + 1, text.size() - splitText.size());
+	}
+
+	std::cout << "---------------\n";
+	std::cout << "-" << line1OfText << "-\n";
+	std::cout << "-" << line2OfText << "-\n";
+	std::cout << "---------------\n";
+
+	//if (text.size() > maxCharactersPerLine) {
+	//	size_t position = text.substr(0, maxCharactersPerLine).find_last_of(' ');
+	//	if (/*position >= maxCharactersPerLine || */position == std::string::npos) {
+	//		line1OfText = text.substr(0, maxCharactersPerLine);
+	//		position = maxCharactersPerLine;
+	//	} else {
+	//		line1OfText = text.substr(0, position);
+	//		if (text.at(position) == ' ') {
+	//			text.erase(text.begin() + position);
+	//		}
+	//	}
+	//	if (text.size() > maxCharactersPerLine * 2) {
+	//		line2OfText = text.substr(position, maxCharactersPerLine * 2);
+	//	} else {
+	//		line2OfText = text.substr(position, text.size());
+	//	}
+	//} else {
+	//	line1OfText = text;
+	//	line2OfText = "";
+	//}
+
+	positionInDialogue = 0;
+	scriptOnDialogueEnd = scriptToRunOnceComplete;
 	timeSinceNewCharacter = time->getCurrentTimeInNanos();
-	label1->setText(line1OfText.substr(0, 1));
+	label1->setText("");
 	label2->setText("");
 	label3->setText("");
 	label4->setText("");
-	dialogueSubMenu->show();
+	subMenu->show();
 }
 
 void Game::DialogueDisplay::showOptions(DialogueOption* option1, DialogueOption* option2) {
@@ -197,15 +261,42 @@ void Game::DialogueDisplay::showOptions(DialogueOption* option1, DialogueOption*
 void Game::DialogueDisplay::closeDialog() {
 	// Note that if the submenu changes visibility, it has to be rerendered. If it is already hidden,
 	// there's no point in rerendering it as hidden again as that is a waste of resources.
-	if (dialogueSubMenu->isVisible()) {
-		dialogueSubMenu->hide();
-		positionInDialogue = MAX_CHARACTERS_PER_LINE * 2;
+	if (state == DialogueState::MESSAGE || state == DialogueState::OPTIONS) {
+		auto endingAction = [this]() {
+			subMenu->hide();
+		};
+
+		AnimationTrack2D track;
+		KeyFrame2D frame;
+		frame.setObject(backdrop);
+		frame.setDimensions(&backdropClosedDimensions);
+		frame.setEndingAction(endingAction);
+		track.addKeyFrame(BACKDROP_ANIMATION_PERIOD, &frame);
+		animator->addAnimationTrack2D(&track);
+		label1->setText("");
+		label2->setText("");
+		label3->setText("");
+		label4->setText("");
+		nameLabel->setText("");
+		avatar->hide();
 	}
 	state = DialogueState::HIDDEN;
 }
 
-void Game::DialogueDisplay::setDialogueSubMenu(std::shared_ptr<SubMenu> dialogueSubMenu) {
-	this->dialogueSubMenu = dialogueSubMenu;
+void Game::DialogueDisplay::setSubMenu(std::shared_ptr<SubMenu> setSubMenu) {
+	this->subMenu = setSubMenu;
+}
+
+void Game::DialogueDisplay::setBackdrop(std::shared_ptr<ImageComponent> backdrop) {
+	this->backdrop = backdrop;
+	backdropExpandedDimensions = *backdrop->getDimensions();
+	backdropClosedDimensions = *backdrop->getDimensions();
+	backdropClosedDimensions.setWidth(0);
+	backdrop->setDimensions(&backdropClosedDimensions);
+}
+
+void Game::DialogueDisplay::setAvatar(std::shared_ptr<ImageComponent> avatar) {
+	this->avatar = avatar;
 }
 
 void Game::DialogueDisplay::setDialogueLabels(std::shared_ptr<Label> label1, std::shared_ptr<Label> label2,
@@ -216,12 +307,20 @@ void Game::DialogueDisplay::setDialogueLabels(std::shared_ptr<Label> label1, std
 	this->label4 = label4;
 }
 
+void Game::DialogueDisplay::setNameLabel(std::shared_ptr<Label> nameLabel) {
+	this->nameLabel = nameLabel;
+}
+
 bool Game::DialogueDisplay::dialogueIsBeingShown() {
 	return state != DialogueState::HIDDEN;
 }
 
 bool Game::DialogueDisplay::hadJustFinishedDialogue() {
 	return justFinishedDialogue;
+}
+
+float Game::DialogueDisplay::getDialogueTextStartX() {
+	return DIALOGUE_TEXT_START_X;
 }
 
 void Game::DialogueDisplay::setupOptions() {
@@ -253,7 +352,7 @@ void Game::DialogueDisplay::setupOptions() {
 	} else {
 		label4->setText("");
 	}
-	dialogueSubMenu->show();
+	subMenu->show();
 	state = DialogueState::OPTIONS;
 }
 

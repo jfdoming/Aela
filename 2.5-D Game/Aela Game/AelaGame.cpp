@@ -26,7 +26,7 @@
 #include "../Worlds/WorldExporter.h"
 #include "../Scripts/Scripts to Move to LUA/ScriptObjects.h"
 #include "../Camera/CameraController.h"
-#include "../Displays/Hint Display/HintDisplay.h"
+#include "../Displays/Hints/HintDisplay.h"
 #include "../Doors/DoorProvider.h"
 #include "../Save States/GameSaver.h"
 #include "../../Project Aela/Events/EventListener.h"
@@ -96,6 +96,7 @@ void Game::AelaGame::loadResources() {
 	scriptManager->runScript("load skyboxes");
 	scriptManager->runScript("load maps");
 	scriptManager->runScript("load tiled maps");
+	scriptManager->runScript("load audio");
 }
 
 void Game::AelaGame::loadScenes() {
@@ -149,7 +150,7 @@ void Game::AelaGame::setup() {
 	tileInventoryDisplay->refreshSubMenu();
 
 	// Tell the character manager that we've added all of our characters!
-	characterProvider->generateCharacterModelsForAllCharacters(resourceManager);
+	// characterProvider->generateCharacterModelsForAllCharacters();
 
 	player->setCharacter(playerCharacter);
 	player->setCharacterID(playerID);
@@ -228,6 +229,12 @@ void Game::AelaGame::update() {
 							playerCharacter->moveIfPossible(TileDirection::DOWN);
 						}
 					}
+					if (pressingTileSwitch) {
+						useTileSwitchGun();
+					}
+					if (pressingBackspace) {
+						clearTilesAtPlayerLocation();
+					}
 				}
 				if (pressingTileSelectLeft && time->getCurrentTimeInNanos() > timeAtLastTileSelect + timeBetweenTileSelects) {
 					tileSelectUpAction();
@@ -275,6 +282,7 @@ void Game::AelaGame::onEvent(Event* event) {
 							worldManager->getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
 							Location location(playerLocation->getWorld(), chunk, tile);
 							worldManager->runPromptedScriptOfTile(&location);
+							enemyProvider->returnWasPressed();
 							pressingReturn = true;
 						}
 						break;
@@ -287,6 +295,7 @@ void Game::AelaGame::onEvent(Event* event) {
 						}
 						break;
 					case SDLK_BACKSPACE:
+						pressingBackspace = true;
 						if (gameMode == GameMode::MAP_EDITOR) {
 							clearTilesAtPlayerLocation();
 						}
@@ -415,7 +424,7 @@ void Game::AelaGame::onEvent(Event* event) {
 		}
 		switch (keyEvent->getKeycode()) {
 			case SDLK_LSHIFT:
-				if (!playerCharacter->getRunning()) {
+				if (!playerCharacter->getRunning() && playerCharacter->areNewMovementsAllowed()) {
 					playerCharacter->setRunning(true);
 					changePlayerAnimationToRunning();
 				}
@@ -482,6 +491,9 @@ void Game::AelaGame::onEvent(Event* event) {
 			case SDLK_BACKSLASH:
 				pressingTileSwitch = false;
 				break;
+			case SDLK_BACKSPACE:
+				pressingBackspace = false;
+				break;
 			case SDLK_LCTRL:
 				movingDown = false;
 				break;
@@ -507,6 +519,13 @@ void Game::AelaGame::onEvent(Event* event) {
 				break;
 			case SDLK_i:
 				pressingInventoryButton = false;
+				break;
+			case SDLK_r:
+				if (gameSaver->load("save_0")) {
+					hintDisplay->displayHint("Loaded last savepoint!", HintDisplayDuration::LONG);
+				} else {
+					hintDisplay->displayHint("Failed to load savepoint!", HintDisplayDuration::LONG);
+				}
 				break;
 			case SDLK_0:
 				// This is here for debugging!
@@ -544,12 +563,21 @@ void Game::AelaGame::onEvent(Event* event) {
 				break;
 			case SDLK_7:
 				// This is here for debugging!
-				gameSaver->load("save_0");
+				// gameSaver->load("save_0");
 				break;
 			case SDLK_8:
 				// This is here for debugging!
-				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-7, 2), glm::ivec3(5, 0, 1)),
+				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-5, 0), glm::ivec3(14, 0, 12)),
 					TeleportationAnimation::FADE);
+				break;
+			case SDLK_9:
+				// This is here for debugging!
+				AudioClip* clip;
+				if (resourceManager->obtain<AudioClip>("res/audio/streams/Even the Tutorial Can Be Serious.wav", clip)) {
+					std::cout << "Success!\n";
+					GameObjectProvider::getAudioPlayer()->playClip(clip);
+					std::cout << "Now playing!\n";
+				}
 				break;
 		}
 	}
@@ -568,6 +596,7 @@ void Game::AelaGame::setupScripts() {
 	scriptManager->addScript("load skyboxes", std::bind(&loadSkyboxes));
 	scriptManager->addScript("load tiled maps", std::bind(&loadTiledMaps));
 	scriptManager->addScript("load maps", std::bind(&loadMaps));
+	scriptManager->addScript("load audio", std::bind(&loadAudio));
 	scriptManager->addScript("load scenes", std::bind(&setupScenes));
 	scriptManager->addScript("load startup material animations", std::bind(&loadMaterialAnimations));
 	scriptManager->addScript("unload resources", std::bind(&unloadResources));
@@ -711,70 +740,69 @@ GameMode Game::AelaGame::getGameMode() {
 	return gameMode;
 }
 
-void Game::AelaGame::setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
-	std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage) {
-	tileInventoryDisplay->setMenuItems(tileInventorySubMenu, tileInventoryLabel, tileInventoryBoxImage);
+void Game::AelaGame::setDeathMenuComponents(std::shared_ptr<RectComponent> deathRect, std::shared_ptr<Label> deathLabel) {
+	this->deathRect = deathRect;
+	this->deathLabel = deathLabel;
 }
 
-void Game::AelaGame::setDeathMenuItems(std::shared_ptr<RectComponent> overlayRect, std::shared_ptr<Label> overlayText) {
-	this->overlayRect = overlayRect;
-	this->overlayText = overlayText;
+void Game::AelaGame::setFadeTeleportRect(std::shared_ptr<RectComponent> fadeTeleportRect) {
+	this->fadeTeleportRect = fadeTeleportRect;
 }
 
 void Game::AelaGame::animatePlayerDeathScreen() {
-	overlayRect->setColour(&ColourRGBA(0.15f, 0.15f, 0.15f, 0.95f));
+	deathRect->setTint(&ColourRGBA(0, 0, 0, 0));
+	deathRect->show();
 
-	AnimationTrack2D rectTrack2D;
-	KeyFrame2D rectFrame;
-	rectFrame.setObject(overlayRect);
-	rectFrame.setTint(&ColourRGBA(1, 1, 1, 1));
-	rectTrack2D.addKeyFrameUsingMillis(1000, &rectFrame);
-	animator->addAnimationTrack2D(&rectTrack2D);
+	AnimationTrack2D track;
+	KeyFrame2D frame;
+	frame.setObject(deathRect);
+	frame.setTint(&ColourRGBA(1, 1, 1, 1));
+	track.addKeyFrameUsingMillis(1000, &frame);
+	animator->addAnimationTrack2D(&track);
 
-	AnimationTrack2D textTrack2D;
-	KeyFrame2D textFrame;
-	textFrame.setObject(overlayText);
-	textFrame.setTint(&ColourRGBA(1, 1, 1, 1));
-	textTrack2D.addKeyFrameUsingMillis(1000, &textFrame);
-	animator->addAnimationTrack2D(&textTrack2D);
+	deathLabel->setTint(&ColourRGBA(0, 0, 0, 0));
+	deathLabel->show();
+
+	AnimationTrack2D track2;
+	KeyFrame2D frame2;
+	frame2.setObject(deathLabel);
+	frame2.setTint(&ColourRGBA(1, 1, 1, 1));
+	track2.addKeyFrameUsingMillis(1000, &frame2);
+	animator->addAnimationTrack2D(&track2);
+}
+
+void Game::AelaGame::hideDeathScreen() {
+	deathRect->hide();
+	deathLabel->hide();
 }
 
 void Game::AelaGame::animateFadeTeleport() {
-	overlayRect->setColour(&ColourRGBA(0.05f, 0.05f, 0.05f, 1.0f));
+	fadeTeleportRect->show();
+	fadeTeleportRect->setTint(&ColourRGBA(0.0f));
 
 	AnimationTrack2D rectTrack2D;
 	KeyFrame2D rectFrame;
-	rectFrame.setObject(overlayRect);
-	rectFrame.setTint(&ColourRGBA(1, 1, 1, 1));
-	rectTrack2D.addKeyFrameUsingMillis(650, &rectFrame);
+	rectFrame.setObject(fadeTeleportRect);
+	rectFrame.setTint(&ColourRGBA(1, 1, 1, 0));
+	rectTrack2D.addKeyFrameUsingMillis(300, &rectFrame);
 
 	KeyFrame2D rectFrame2;
-	rectFrame2.setObject(overlayRect);
+	rectFrame2.setObject(fadeTeleportRect);
 	rectFrame2.setTint(&ColourRGBA(1, 1, 1, 1));
-	rectTrack2D.addKeyFrameUsingMillis(200, &rectFrame);
-
-	KeyFrame2D rectFrame3;
-	rectFrame3.setObject(overlayRect);
-	rectFrame3.setTint(&ColourRGBA(1, 1, 1, 0));
-	rectTrack2D.addKeyFrameUsingMillis(650, &rectFrame);
+	rectTrack2D.addKeyFrameUsingMillis(300, &rectFrame2);
 	animator->addAnimationTrack2D(&rectTrack2D);
 
-	AnimationTrack2D textTrack2D;
-	KeyFrame2D textFrame;
-	textFrame.setObject(overlayText);
-	textFrame.setTint(&ColourRGBA(1, 1, 1, 1));
-	textTrack2D.addKeyFrameUsingMillis(650, &textFrame);
+	KeyFrame2D rectFrame3;
+	rectFrame3.setObject(fadeTeleportRect);
+	rectFrame3.setTint(&ColourRGBA(1, 1, 1, 1));
+	rectTrack2D.addKeyFrameUsingMillis(500, &rectFrame3);
+	animator->addAnimationTrack2D(&rectTrack2D);
 
-	KeyFrame2D textFrame2;
-	textFrame2.setObject(overlayText);
-	textFrame2.setTint(&ColourRGBA(1, 1, 1, 1));
-	textTrack2D.addKeyFrameUsingMillis(200, &textFrame);
-
-	KeyFrame2D textFrame3;
-	textFrame3.setObject(overlayText);
-	textFrame3.setTint(&ColourRGBA(1, 1, 1, 0));
-	textTrack2D.addKeyFrameUsingMillis(650, &textFrame);
-	animator->addAnimationTrack2D(&textTrack2D);
+	KeyFrame2D rectFrame4;
+	rectFrame4.setObject(fadeTeleportRect);
+	rectFrame4.setTint(&ColourRGBA(1, 1, 1, 0));
+	rectTrack2D.addKeyFrameUsingMillis(300, &rectFrame4);
+	animator->addAnimationTrack2D(&rectTrack2D);
 }
 
 TileSwitchGun* Game::AelaGame::getTileSwitchGun() {

@@ -15,23 +15,24 @@ Game::Turret::Turret() {
 	setDetectionAngles(true, true, true, true);
 }
 
-Game::Turret::Turret(int detectionRange) : Turret() {
+Game::Turret::Turret(std::string name, Location* location, int detectionRange) : Enemy(name, location) {
+	setDetectionAngles(true, true, true, true);
 	this->detectionRange = detectionRange;
 }
 
-Game::Turret::Turret(int detectionRange, int strength, long long attackCooldown) : Turret(detectionRange) {
+Game::Turret::Turret(std::string name, Location* location, int detectionRange, int strength, long long attackCooldown) : Turret(name, location, detectionRange) {
 	this->strength = strength;
 	this->attackCooldown = attackCooldown;
 }
 
-Game::Turret::Turret(int detectionRange, bool detectRight, bool detectForward, bool detectLeft, bool detectBackward, int strength,
-	long long attackCooldown) : Turret(detectionRange, strength, attackCooldown) {
+Game::Turret::Turret(std::string name, Location* location, int detectionRange, bool detectRight, bool detectForward, bool detectLeft, bool detectBackward, int strength,
+	long long attackCooldown) : Turret(name, location, detectionRange, strength, attackCooldown) {
 	setDetectionAngles(detectRight, detectForward, detectLeft, detectBackward);
 }
 
 void Game::Turret::update(Character* playerCharacter, long long time) {
 	recentlyAttacked = false;
-	if (isInLineOfSight(playerCharacter->getLocationBeforeAnimation())) {
+	if (hostile && isInLineOfSight(playerCharacter->getLocationBeforeAnimation())) {
 		if (attackIfPossible(playerCharacter, time)) {
 			recentlyAttacked = true;
 		}
@@ -55,8 +56,8 @@ bool Game::Turret::isInLineOfSight(Location* location) {
 	if (location->getTileGroup().z == this->location.getTileGroup().z && this->location.getChunk().y == location->getChunk().y) {
 		int differenceInX = this->location.getChunk().x * CHUNK_WIDTH + this->location.getTileGroup().x
 			- location->getChunk().x * CHUNK_WIDTH - location->getTileGroup().x;
-		if ((differenceInX > 0 && detectionAngles[TileDirection::LEFT] && differenceInX <= detectionRange) || (differenceInX < 0 &&
-			detectionAngles[TileDirection::RIGHT] && differenceInX >= -detectionRange)) {
+		if ((differenceInX > 0 && detectionAngles[TileDirection::RIGHT] && differenceInX <= detectionRange) || (differenceInX < 0 &&
+			detectionAngles[TileDirection::LEFT] && differenceInX >= -detectionRange)) {
 			return true;
 		}
 	}

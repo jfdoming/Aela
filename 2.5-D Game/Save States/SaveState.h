@@ -9,6 +9,7 @@
 #include "../Character/CharacterInformationBlock.h"
 #include "../Worlds/World.h"
 #include "../Player/Player.h"
+#include "../Doors/Door.h"
 
 namespace Game {
 	class SaveState {
@@ -18,9 +19,12 @@ namespace Game {
 			void save();
 			void load();
 
+			void addData(std::string tag, void* dataPtr);
+			void* getData(std::string tag);
+
 		private:
-			World world;
 			Player player;
-			std::unordered_map<size_t, CharacterInformationBlock> characterInformation;
+
+			std::unordered_map<std::string, void*> data;
 	};
 }

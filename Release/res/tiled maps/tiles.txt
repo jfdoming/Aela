@@ -81,24 +81,24 @@
 <Tile name="Metal Wall 6" texture="walls_1/5/3.png" collision="true" type="wall_right"> // Walls
 <Tile name="Metal Wall 6" texture="walls_1/5/3.png" collision="true" type="wall_front">
 <Tile name="Metal Wall 6" texture="walls_1/5/3.png" collision="true" type="wall_left">
-<Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="wall_right"> // Glass
-<Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="wall_front">
-<Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="wall_left">
-<Tile name="White Glass" texture="glass_1/1/0.png" collision="true" type="wall_right">
-<Tile name="White Glass" texture="glass_1/1/0.png" collision="true" type="wall_front">
-<Tile name="White Glass" texture="glass_1/1/0.png" collision="true" type="wall_left">
-<Tile name="Green Glass" texture="glass_1/2/0.png" collision="true" type="wall_right">
-<Tile name="Green Glass" texture="glass_1/2/0.png" collision="true" type="wall_front">
-<Tile name="Green Glass" texture="glass_1/2/0.png" collision="true" type="wall_left">
-<Tile name="Yellow Glass" texture="glass_1/3/0.png" collision="true" type="wall_right">
-<Tile name="Yellow Glass" texture="glass_1/3/0.png" collision="true" type="wall_front">
-<Tile name="Yellow Glass" texture="glass_1/3/0.png" collision="true" type="wall_left">
-<Tile name="Dark Blue Glass" texture="glass_1/4/0.png" collision="true" type="wall_right">
-<Tile name="Dark Blue Glass" texture="glass_1/4/0.png" collision="true" type="wall_front">
-<Tile name="Dark Blue Glass" texture="glass_1/4/0.png" collision="true" type="wall_left">
-<Tile name="Purple Glass" texture="glass_1/5/0.png" collision="true" type="wall_right">
-<Tile name="Purple Glass" texture="glass_1/5/0.png" collision="true" type="wall_front">
-<Tile name="Purple Glass" texture="glass_1/5/0.png" collision="true" type="wall_left">
+<Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="glass_right"> // Glass
+<Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="glass_front">
+<Tile name="Black Glass" texture="glass_1/0/0.png" collision="true" type="glass_left">
+<Tile name="White Glass" texture="glass_1/1/0.png" collision="true" type="glass_right">
+<Tile name="White Glass" texture="glass_1/1/0.png" collision="true" type="glass_front">
+<Tile name="White Glass" texture="glass_1/1/0.png" collision="true" type="glass_left">
+<Tile name="Green Glass" texture="glass_1/2/0.png" collision="true" type="glass_right">
+<Tile name="Green Glass" texture="glass_1/2/0.png" collision="true" type="glass_front">
+<Tile name="Green Glass" texture="glass_1/2/0.png" collision="true" type="glass_left">
+<Tile name="Yellow Glass" texture="glass_1/3/0.png" collision="true" type="glass_right">
+<Tile name="Yellow Glass" texture="glass_1/3/0.png" collision="true" type="glass_front">
+<Tile name="Yellow Glass" texture="glass_1/3/0.png" collision="true" type="glass_left">
+<Tile name="Dark Blue Glass" texture="glass_1/4/0.png" collision="true" type="glass_right">
+<Tile name="Dark Blue Glass" texture="glass_1/4/0.png" collision="true" type="glass_front">
+<Tile name="Dark Blue Glass" texture="glass_1/4/0.png" collision="true" type="glass_left">
+<Tile name="Purple Glass" texture="glass_1/5/0.png" collision="true" type="glass_right">
+<Tile name="Purple Glass" texture="glass_1/5/0.png" collision="true" type="glass_front">
+<Tile name="Purple Glass" texture="glass_1/5/0.png" collision="true" type="glass_left">
 <Tile name="White Top of Wall" texture="floors_1/4/2.png" collision="false" type="floor"> // Wall Tops
 <Tile name="Green Top of Wall" texture="floors_1/5/2.png" collision="false" type="floor">
 <Tile name="Yellow Top of Wall" texture="floors_1/6/2.png" collision="false" type="floor">
@@ -304,8 +304,46 @@
 <Tile name="Timer Sign" texture="walls_1/4/7.png" collision="true" type="wall_front">
 <Tile name="Painting 3" texture="walls_1/6/7.png" collision="true" type="wall_front"> // Tropical Backdrop 1
 <Tile name="Painting 4" texture="walls_1/7/7.png" collision="true" type="wall_front">
-<Tile name="Save Door 4|4 Closed" texture="doors_1/0/4.png" collision="true" type="glass_front">
+<Tile name="Save Door 4|4 Closed" texture="doors_1/0/4.png" collision="true" type="glass_front"> // Save Door
 <Tile name="Save Door 3|4 Closed" texture="doors_1/1/4.png" collision="true" type="glass_front">
 <Tile name="Save Door 2|4 Closed" texture="doors_1/2/4.png" collision="true" type="glass_front">
 <Tile name="Save Door 1|4 Closed" texture="doors_1/3/4.png" collision="true" type="glass_front">
 <Tile name="Save Door Top" texture="doors_1/0/6.png" collision="true" type="wall_front">
+<Tile name="Rail" texture="rails_1/0/0.png" collision="false" type="floor"> // Rails
+<Tile name="Rail" texture="rails_1/1/0.png" collision="false" type="floor">
+<Tile name="Wall Arrow" texture="walls_2/0/0.png" collision="true" type="wall_front"> // Wall Arrows
+<Tile name="Wall Arrow" texture="walls_2/1/0.png" collision="true" type="wall_front">
+<Tile name="Painting" texture="walls_2/2/0.png" collision="true" type="wall_front"> // Wall Arrows
+<Tile name="Painting" texture="walls_2/3/0.png" collision="true" type="wall_front"> 
+<Tile name="Teal Wall" texture="walls_2/4/0.png" collision="true" type="wall_right"> // Coloured Walls
+<Tile name="Teal Wall" texture="walls_2/4/0.png" collision="true" type="wall_front"> 
+<Tile name="Teal Wall" texture="walls_2/4/0.png" collision="true" type="wall_left">
+<Tile name="Green Wall" texture="walls_2/5/0.png" collision="true" type="wall_right">
+<Tile name="Green Wall" texture="walls_2/5/0.png" collision="true" type="wall_front"> 
+<Tile name="Green Wall" texture="walls_2/5/0.png" collision="true" type="wall_left">
+<Tile name="Brown Wall" texture="walls_2/6/0.png" collision="true" type="wall_right">
+<Tile name="Brown Wall" texture="walls_2/6/0.png" collision="true" type="wall_front"> 
+<Tile name="Brown Wall" texture="walls_2/6/0.png" collision="true" type="wall_left">
+<Tile name="Blue Wall" texture="walls_2/7/0.png" collision="true" type="wall_right">
+<Tile name="Blue Wall" texture="walls_2/7/0.png" collision="true" type="wall_front"> 
+<Tile name="Blue Wall" texture="walls_2/7/0.png" collision="true" type="wall_left">
+<Tile name="Silver Wall" texture="walls_2/0/1.png" collision="true" type="wall_right">
+<Tile name="Silver Wall" texture="walls_2/0/1.png" collision="true" type="wall_front"> 
+<Tile name="Silver Wall" texture="walls_2/0/1.png" collision="true" type="wall_left">
+<Tile name="Purple Wall" texture="walls_2/1/1.png" collision="true" type="wall_right">
+<Tile name="Purple Wall" texture="walls_2/1/1.png" collision="true" type="wall_front"> 
+<Tile name="Purple Wall" texture="walls_2/1/1.png" collision="true" type="wall_left">
+<Tile name="Red Wall" texture="walls_2/2/1.png" collision="true" type="wall_right">
+<Tile name="Red Wall" texture="walls_2/2/1.png" collision="true" type="wall_front"> 
+<Tile name="Red Wall" texture="walls_2/2/1.png" collision="true" type="wall_left">
+<Tile name="Gold Wall" texture="walls_2/3/1.png" collision="true" type="wall_right">
+<Tile name="Gold Wall" texture="walls_2/3/1.png" collision="true" type="wall_front"> 
+<Tile name="Gold Wall" texture="walls_2/3/1.png" collision="true" type="wall_left"> 
+<Tile name="Prototype Teleporter" texture="floors_1/0/6.png" collision="false" type="floor">
+<Tile name="Button" texture="walls_2/4/1.png" collision="true" type="wall_front"> // Buttons
+<Tile name="Button" texture="walls_2/5/1.png" collision="true" type="wall_front">
+<Tile name="Metal Door 4|4 Closed" texture="doors_1/4/4.png" collision="true" type="glass_front"> // Metal Door
+<Tile name="Metal Door 3|4 Closed" texture="doors_1/5/4.png" collision="true" type="glass_front">
+<Tile name="Metal Door 2|4 Closed" texture="doors_1/6/4.png" collision="true" type="glass_front">
+<Tile name="Metal Door 1|4 Closed" texture="doors_1/7/4.png" collision="true" type="glass_front">
+<Tile name="Metal Door Top" texture="doors_1/1/6.png" collision="true" type="wall_front">

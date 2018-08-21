@@ -7,9 +7,7 @@ Game::DoorProvider::DoorProvider() {}
 
 Game::DoorProvider::~DoorProvider() {
 	for (auto& pair : doors) {
-		std::cout << "A";
 		pair.second.cleanup();
-		std::cout << "B\n";
 	}
 }
 
@@ -27,4 +25,18 @@ Door* Game::DoorProvider::getDoor(std::string tag) {
 
 bool Game::DoorProvider::removeDoor(std::string tag) {
 	return doors.erase(tag) != 0;
+}
+
+std::unordered_map<std::string, Door>* Game::DoorProvider::getDoors() {
+	return &doors;
+}
+
+void Game::DoorProvider::saveDataToSaveState(SaveState* saveState) {
+	std::unordered_map<std::string, Door>* doorsCopy = new std::unordered_map<std::string, Door>();
+	(*doorsCopy) = doors;
+	saveState->addData("doors", doorsCopy);
+}
+
+void Game::DoorProvider::loadDataFromSaveState(SaveState* saveState) {
+	doors = *((std::unordered_map<std::string, Door>*) saveState->getData("doors"));
 }

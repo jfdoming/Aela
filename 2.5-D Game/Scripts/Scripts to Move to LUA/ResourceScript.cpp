@@ -45,14 +45,16 @@ namespace Scripts {
 		"map_editor_top_bar",
 		"simple_button",
 		"simple_button_light",
-		"arrow",
-		"dialogue_box"
+		"arrow"
 	};
 
 	std::string pngTextureNames[] = {
 		"selector_box",
 		"inventory_slot",
-		"black"
+		"black",
+		"dialogue_box",
+		"hint_box",
+		"inventory_background"
 	};
 
 	std::string spriteSheetNames[] = {
@@ -60,13 +62,19 @@ namespace Scripts {
 		"turret",
 		"floors_1",
 		"walls_1",
+		"walls_2",
 		"glass_1",
 		"doors_1",
 		"animations_1",
 		"animations_2",
 		"locks_1",
 		"locks_2",
-		"numbered_tiles"
+		"numbered_tiles",
+		"rails_1"
+	};
+
+	std::string avatarNames[] = {
+		"avatars_1"
 	};
 
 	std::string billboardNames[] = {
@@ -91,6 +99,13 @@ namespace Scripts {
 		"stage_1"
 	};
 
+	std::string waveAudioStreamNames[] = {
+		"Even the Tutorial Can Be Serious"
+	};
+
+	std::string waveAudioClipNames[] = {
+		"test"
+	};
 }
 
 void Scripts::loadMaterials() {
@@ -165,6 +180,18 @@ void Scripts::loadSpriteSheets() {
 	if (resourceManager->loadGroup("sprite sheets") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"sprite sheets\"!" << std::endl;
 	}
+
+	spriteSheetLoader.setSpriteWidth(AVATAR_WIDTH);
+	spriteSheetLoader.setSpriteHeight(AVATAR_HEIGHT);
+	resourceManager->bindGroup("avatars");
+
+	for (std::string path : avatarNames) {
+		resourceManager->addToGroup(DEFAULT_TEXTURE_PATH + path + ".png", false);
+	}
+
+	if (resourceManager->loadGroup("avatars") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"avatars\"!" << std::endl;
+	}
 }
 
 void Scripts::loadParticles() {
@@ -208,6 +235,24 @@ void Scripts::loadMaps() {
 
 	if (resourceManager->loadGroup("maps") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"maps\"!" << std::endl;
+	}
+}
+
+void Scripts::loadAudio() {
+	WAVEClipLoader waveClipLoader;
+	resourceManager->bindLoader(&waveClipLoader);
+	resourceManager->bindGroup("wave audio");
+
+	for (std::string path : waveAudioStreamNames) {
+		resourceManager->addToGroup(DEFAULT_AUDIO_STREAM_PATH + path + ".wav", false);
+	}
+
+	for (std::string path : waveAudioClipNames) {
+		resourceManager->addToGroup(DEFAULT_AUDIO_CLIP_PATH + path + ".wav", false);
+	}
+
+	if (resourceManager->loadGroup("wave audio") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"wave audio\"!" << std::endl;
 	}
 }
 

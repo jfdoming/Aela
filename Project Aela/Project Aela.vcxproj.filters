@@ -301,5 +301,6 @@
     <ClInclude Include="Error Handler\Error Handler\AelaErrorHandler.h" />
     <ClInclude Include="Error Handler\Simple Error\AelaSimpleError.h" />
     <ClInclude Include="Utilities\intut.h" />
+    <ClInclude Include="2D\Positioning Mode\PositioningMode2D.h" />
   </ItemGroup>
 </Project>

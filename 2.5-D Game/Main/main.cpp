@@ -2,7 +2,7 @@
 * Class: Aela Program
 * Author: Robert Ciborowski
 * Date: 02/12/2017
-* Description: The main.cpp of a 2.5-dimensional game->
+* Description: The main.cpp of a 2.5-dimensional game.
 */
 
 #include "Aela_Engine.h"
@@ -14,7 +14,7 @@ using namespace Game;
 int main(int argc, char *args[]) {
 	Aela::Engine engine;
 
-	int error = engine.setupWindow(1400, 900, 50, 50);
+	int error = engine.setupWindow(1024, 768, 50, 50);
 	if (error != 0) {
 		return error;
 	}
@@ -43,6 +43,11 @@ int main(int argc, char *args[]) {
 	}
 
 	error = engine.setupEventHandler();
+	if (error != 0) {
+		return error;
+	}
+
+	error = engine.setupAudioPlayer();
 	if (error != 0) {
 		return error;
 	}
@@ -88,8 +93,8 @@ int main(int argc, char *args[]) {
 
 		if (engine.getTime()->getCurrentTimeInMillis() % 1000 < lastRemainder || engine.getTime()->getTimeBetweenFramesInMillis() >= 1000) {
 			calc.calculate(engine.getTime()->getCurrentTimeInNanos(), engine.getTime()->getTimeBetweenFramesInNanos());
-			std::cout << "True FPS: " << calc.getTrueFPS() << "\n";
-			std::cout << "Smoothed FPS: " << calc.getSmoothedFPS() << "\n";
+			// std::cout << "True FPS: " << calc.getTrueFPS() << "\n";
+			// std::cout << "Smoothed FPS: " << calc.getSmoothedFPS() << "\n";
 			// engine.getStopwatch()->outputTimesIntoConsole();
 			engine.getStopwatch()->reset();
 		}

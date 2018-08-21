@@ -1,5 +1,7 @@
 #include "EnemyProvider.h"
 #include "../Player/Player.h"
+#include "../Worlds/WorldManager.h"
+#include "../Character/CharacterProvider.h"
 
 using namespace Game;
 
@@ -22,6 +24,33 @@ void Game::EnemyProvider::updateRegisteredEnemies() {
 		if (turret->hasRecentlyAttacked()) {
 			turret->addBulletEffects(gameplayScene, resourceManager, time);
 		}
+	}
+}
+
+void Game::EnemyProvider::returnWasPressed() {
+	WorldManager* worldManager = GameObjectProvider::getWorldManager();
+	Character* character = player->getCharacter();
+	TileDirection direction = character->getDirectionFacing();
+	Location location = *character->getLocation();
+	CharacterProvider* characterProvider = GameObjectProvider::getCharacterProvider();
+	glm::ivec2 chunk = location.getChunk();
+	glm::ivec3 tile = location.getTileGroup();
+
+	worldManager->getCoordinateOfNeighbouringTile(tile, chunk, direction);
+	Character* enemyCharacter = characterProvider->getCharacterByLocation(&Location(location.getWorld(), chunk, tile));
+
+	if (enemyCharacter == nullptr) {
+		return;
+	}
+
+	Enemy* enemy = dynamic_cast<Enemy*>(enemyCharacter);
+	if (enemy == NULL) {
+		return;
+	}
+
+	if (enemy->getDirectionFacing() == character->getDirectionFacing()) {
+		// The player can turn enemies such as turrets off!
+		enemy->toggleHostility();
 	}
 }
 

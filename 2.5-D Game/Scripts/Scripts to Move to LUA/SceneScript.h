@@ -7,6 +7,7 @@
 */
 
 #pragma once
+#include "ScriptObjects.h"
 
 #define EKKON_INTRO_SCENE 1
 #define MAIN_MENU_SCENE 2

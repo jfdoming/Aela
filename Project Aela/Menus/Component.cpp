@@ -4,8 +4,7 @@
 
 using namespace Aela;
 
-Component::Component() {
-}
+Component::Component() {}
 
 Component::Component(int x, int y) {
 	dimensions = Rect<int>(x, y, 0, 0);
@@ -21,17 +20,26 @@ Component::~Component() {
 void Component::update() {
 	updateComponent();
 
-	if (dirty) {
+	// Delete this line and uncomment the block below to return to the old, WIP menu system!
+	dirty = true;
+
+	/*if (dirty) {
 		dirtyOnUpdate = true;
-	}
+	}*/
 }
 
 void Component::render(GLRenderer& renderer) {
-	if (dirtyOnUpdate) {
+	// Delete this block and uncomment the block below to return to the old, WIP menu system!
+	if (dirty && visible) {
+		renderComponent(renderer);
+		dirty = false;
+	}
+
+	/*if (dirtyOnUpdate && visible) {
 		renderComponent(renderer);
 		dirty = false;
 		dirtyOnUpdate = false;
-	}
+	}*/
 }
 
 void Component::handleMousePressed(Event* event) {
@@ -119,6 +127,20 @@ void Component::markDirty() {
 
 void Aela::Component::setParent(Component* parent) {
 	this->parent = parent;
+}
+
+void Aela::Component::show() {
+	visible = true;
+	markDirty();
+}
+
+void Aela::Component::hide() {
+	visible = false;
+	markDirty();
+}
+
+bool Aela::Component::isVisible() {
+	return visible;
 }
 
 bool Component::isDirty() {

@@ -21,6 +21,14 @@ Rect<int>* Transformable2D::getDimensions() {
 	return &dimensions;
 }
 
+void Aela::Transformable2D::setPositioningMode(PositioningMode2D positioningMode) {
+	this->positioningMode = positioningMode;
+}
+
+PositioningMode2D Aela::Transformable2D::getPositioningMode() {
+	return positioningMode;
+}
+
 void Transformable2D::setProperty(Transformable2DProperty property, float value) {
 	modified = true;
 	switch (property) {
@@ -35,6 +43,18 @@ void Transformable2D::setProperty(Transformable2DProperty property, float value)
 			break;
 		case Transformable2DProperty::TINT_A:
 			tint.setA(value);
+			break;
+		case Transformable2DProperty::RECT_X:
+			dimensions.setX((int) value);
+			break;
+		case Transformable2DProperty::RECT_Y:
+			dimensions.setY((int) value);
+			break;
+		case Transformable2DProperty::RECT_WIDTH:
+			dimensions.setWidth((int) value);
+			break;
+		case Transformable2DProperty::RECT_HEIGHT:
+			dimensions.setHeight((int) value);
 			break;
 		default:
 			modified = false;

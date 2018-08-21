@@ -199,23 +199,23 @@ void Aela::GLRenderer::renderParticles(ParticleEmitter* particleEmitter) {
 }
 
 // This renders a 2D texture using the 2D renderer.
-void GLRenderer::render2DImage(Image* image, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint) {
-	basic2DRenderer.renderImageToSimple2DFramebuffer(image, bound2DFramebuffer, output, cropping, window->getDimensions(), tint);
+void GLRenderer::render2DImage(Image* image, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint, PositioningMode2D positioningMode) {
+	basic2DRenderer.renderImageToSimple2DFramebuffer(image, bound2DFramebuffer, output, cropping, window->getDimensions(), tint, positioningMode);
 }
 
 // This renders text using the 2D renderer.
-void GLRenderer::renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour) {
+void GLRenderer::renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour, PositioningMode2D positioningMode) {
 	basic2DRenderer.renderTextToSimple2DFramebuffer(text, font, bound2DFramebuffer, output, window->getDimensions(), colour,
-		fontManager->POINTS_PER_PIXEL);
+		positioningMode, POINTS_PER_PIXEL);
 }
 
 // This renders a rectangle using the 2D renderer.
-void GLRenderer::renderRectangle(Rect<int>* output, ColourRGBA* colour) {
-	basic2DRenderer.renderRectangle(output, bound2DFramebuffer, window->getDimensions(), colour);
+void GLRenderer::renderRectangle(Rect<int>* output, ColourRGBA* colour, PositioningMode2D positioningMode) {
+	basic2DRenderer.renderRectangle(output, bound2DFramebuffer, window->getDimensions(), colour, positioningMode);
 }
 
-void GLRenderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour) {
-	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, bound2DFramebuffer, window->getDimensions(), colour);
+void GLRenderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour, PositioningMode2D positioningMode) {
+	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, bound2DFramebuffer, window->getDimensions(), colour, positioningMode);
 }
 
 // This renders a triangle using the 2D renderer.
@@ -234,7 +234,7 @@ void GLRenderer::renderSimple2DFramebuffer() {
 		// std::cout << *bound2DFramebuffer->getMultisampledFramebuffer() << " " << *bound2DFramebuffer->getFramebuffer() << "lol\n";
 		basic2DRenderer.renderMultisampledBufferToBuffer(*bound2DFramebuffer->getMultisampledFramebuffer(), *bound2DFramebuffer->getFramebuffer(), window->getDimensions());
 	}
-	basic2DRenderer.renderImageToFramebuffer(bound2DFramebuffer->getFramebufferImage(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), nullptr, effects2DShader);
+	basic2DRenderer.renderImageToFramebuffer(bound2DFramebuffer->getFramebufferImage(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), nullptr, PositioningMode2D::TOP_LEFT, effects2DShader);
 }
 
 void GLRenderer::endRendering3D() {
@@ -243,11 +243,11 @@ void GLRenderer::endRendering3D() {
 	if (multisampling3D > 0) {
 		basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultisampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getDimensions());
 	}
-	basic2DRenderer.renderImageToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), &tint3D, effects3DShader);
+	basic2DRenderer.renderImageToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), &tint3D, PositioningMode2D::TOP_LEFT, effects3DShader);
 }
 
 void GLRenderer::endRenderingFrame() {
-	basic2DRenderer.renderImageToFramebuffer(&mainFramebufferImage, 0, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), nullptr);
+	basic2DRenderer.renderImageToFramebuffer(&mainFramebufferImage, 0, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), nullptr, PositioningMode2D::TOP_LEFT);
 	window->updateBuffer();
 }
 
@@ -432,7 +432,7 @@ int getTextWidth(std::string text, TextFont* font) {
 			continue;
 		}
 
-		width += glyph->metrics.horiAdvance / FontManager::POINTS_PER_PIXEL;
+		width += glyph->metrics.horiAdvance / POINTS_PER_PIXEL;
 	}
 	return width;
 }

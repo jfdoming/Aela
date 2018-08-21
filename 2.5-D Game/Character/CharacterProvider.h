@@ -11,6 +11,7 @@
 #include "Utilities/glmut.h"
 #include "../Character/Character.h"
 #include "../Worlds/World.h"
+#include "../Save States/Saveable.h"
 #include <unordered_map>
 
 #define PLAYER_NAME "player"
@@ -21,7 +22,7 @@ namespace Game {
 	typedef std::unordered_map<size_t, std::unordered_map<glm::ivec2, std::unordered_map<glm::ivec3, size_t,
 		IVec3HashMapFunctions, IVec3HashMapFunctions>, IVec2HashMapFunctions, IVec2HashMapFunctions>> CharacterMap;
 
-	class CharacterProvider {
+	class CharacterProvider : public Saveable {
 		friend class Character;
 		public:
 			CharacterProvider();
@@ -30,9 +31,10 @@ namespace Game {
 			void update();
 
 			// After all characters have been added, this will generate their models.
-			void generateCharacterModelsForAllCharacters(ResourceManager* resourceManager);
+			void generateCharacterModelsForAllCharacters();
 
 			// These are adding and getting character functions.
+			bool addCharacter(Character* character);
 			bool addCharacter(Character* character, size_t* id);
 			bool removeCharacterByID(size_t id);
 			Character* getCharacterByID(size_t id);
@@ -40,7 +42,9 @@ namespace Game {
 			Character* getCharacterByLocation(Location* location);
 			std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFunctions>*
 				getCharactersInChunk(size_t world, glm::ivec2 chunk);
-			std::unordered_map<size_t, Character*>* getAllCharacters();
+			
+			void saveDataToSaveState(SaveState* saveState);
+			void loadDataFromSaveState(SaveState* saveState);
 
 		private:
 			// This is a map of characters, sorted by their unique IDs.
@@ -53,5 +57,6 @@ namespace Game {
 			CharacterMap charactersByLocation;
 
 			void characterWasMoved(std::string name, Location* oldLocation, Location* newLocation);
+			void generateCharacterModel(size_t character);
 	};
 }

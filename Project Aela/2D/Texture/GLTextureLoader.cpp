@@ -523,7 +523,6 @@ bool Aela::GLTextureLoader::loadPNGToBuffer(std::string src, png_bytep** rows, u
 	png_set_interlace_handling(pngPtr);
 	png_read_update_info(pngPtr, infoPtr);
 
-
 	// This actually reads the PNG content.
 	if (setjmp(png_jmpbuf(pngPtr))) {
 		AelaErrorHandling::consoleWindowError("Project Aela's PNG loader", (std::string) "There was a problem with" +
@@ -548,6 +547,9 @@ bool Aela::GLTextureLoader::loadPNGToBuffer(std::string src, png_bytep** rows, u
 	} else {
 		AelaErrorHandling::consoleWindowError("Project Aela's PNG loader", src + (std::string) " is in an incorrect"
 			+ " format. Try RGB or RGBA.");
+		for (size_t i = 0; i < *height; i++) {
+			delete[] rowBuffer[i];
+		}
 		delete[] rowBuffer;
 		return false;
 	}
@@ -577,10 +579,10 @@ bool Aela::GLTextureLoader::loadPNGUsingFILE(std::string src, GLenum target, uns
 		png_byte* row = rows[y];
 		for (unsigned int x = 0; x < imageWidth; x++) {
 			png_byte* ptr = &(row[x * bytesPerPixel]);
-			unsigned int index = (y * imageHeight + x) * bytesPerPixel;
+			unsigned int index = (y * imageWidth + x) * bytesPerPixel;
 
 			for (unsigned int i = 0; i < bytesPerPixel; i++) {
-				buffer[index + i] = ptr[i];
+				buffer[index + i] = (char) ptr[i];
 			}
 		}
 	}
@@ -590,7 +592,7 @@ bool Aela::GLTextureLoader::loadPNGUsingFILE(std::string src, GLenum target, uns
 		// The bytes per pixel is 3!
 		glTexImage2D(target, 0, GL_RGB, imageWidth, imageHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
 	} else {
-		// The bytes per pixel is 4!
+		// The bytes per pixel is 4! Idk if this actually works.
 		glTexImage2D(target, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 	}
 	glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -612,6 +614,7 @@ bool Aela::GLTextureLoader::loadPNGUsingFILE(std::string src, GLenum target, uns
 	for (unsigned int y = 0; y < imageHeight; y++) {
 		delete rows[y];
 	}
+
 	delete[] rows;
 	delete[] buffer;
 	return true;

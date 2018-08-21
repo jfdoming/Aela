@@ -2,12 +2,19 @@
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "../Worlds/WorldManager.h"
 #include "../Character/CharacterProvider.h"
+#include "../Player/Player.h"
+#include "../Character/Character.h"
 
 Game::GameSaver::GameSaver() {}
 
-void Game::GameSaver::save(std::string saveStateName) {
+bool Game::GameSaver::save(std::string saveStateName) {
+	if (!GameObjectProvider::getPlayer()->getCharacter()->isAlive()) {
+		return false;
+	}
+
 	saveStates[saveStateName] = SaveState();
 	saveStates[saveStateName].save();
+	return true;
 }
 
 bool Game::GameSaver::load(std::string saveStateName) {

@@ -12,7 +12,7 @@
 #include "../Camera/CameraController.h"
 #include "../Tiles/TileBehaviourExecuter.h"
 #include "../../Project Aela/Events/EventListener.h"
-#include "../Displays/Hint Display/HintDisplay.h"
+#include "../Displays/Hints/HintDisplay.h"
 #include "../Doors/DoorProvider.h"
 #include "../Save States/GameSaver.h"
 #include "../../Project Aela/Aela_Engine.h"

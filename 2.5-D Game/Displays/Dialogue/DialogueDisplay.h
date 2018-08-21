@@ -7,8 +7,9 @@
 
 #pragma once
 #include "../Game Object Provider/GameObjectProvider.h"
-#include "Menus/SubMenu.h"
-#include "Menus/Label.h"
+#include "../../../Project Aela/Menus/SubMenu.h"
+#include "../../../Project Aela/Menus/Label.h"
+#include "../../../Project Aela/Menus/ImageComponent.h"
 #include "DialogueOption.h"
 
 namespace Game {
@@ -27,25 +28,36 @@ namespace Game {
 			void onEvent(Event* event);
 		
 			void showDialogue(std::string text, std::string scriptToRunOnceComplete);
+			void showDialogue(std::string name, std::string avatarSrc, std::string text, std::string scriptToRunOnceComplete);
 			void showOptions(DialogueOption* option1, DialogueOption* option2), 
 				showOptions(DialogueOption* option1, DialogueOption* option2, DialogueOption* option3),
 				showOptions(DialogueOption* option1, DialogueOption* option2, DialogueOption* option3, DialogueOption* option4);
 			void closeDialog();
 
-			void setDialogueSubMenu(std::shared_ptr<SubMenu> dialogueSubMenu);
+			void setSubMenu(std::shared_ptr<SubMenu> subMenu);
+			void setBackdrop(std::shared_ptr<ImageComponent> backdrop);
+			void setAvatar(std::shared_ptr<ImageComponent> avatar);
 			void setDialogueLabels(std::shared_ptr<Label> label1, std::shared_ptr<Label> label2,
 				std::shared_ptr<Label> label3, std::shared_ptr<Label> label4);
+			void setNameLabel(std::shared_ptr<Label> nameLabel);
 
 			bool dialogueIsBeingShown();
 			bool hadJustFinishedDialogue();
+
+			float getDialogueTextStartX();
 		private:
 			// These are obtained from GameObjectProvider.
 			EventHandler* eventHandler;
 			Time* time;
 			ScriptManager* scriptManager;
+			Animator* animator;
 
-			std::shared_ptr<SubMenu> dialogueSubMenu;
-			std::shared_ptr<Label> label1, label2, label3, label4;
+			std::shared_ptr<SubMenu> subMenu;
+			std::shared_ptr<ImageComponent> backdrop;
+			std::shared_ptr<ImageComponent> avatar;
+			std::shared_ptr<Label> label1, label2, label3, label4, nameLabel;
+
+			Rect<int> backdropExpandedDimensions, backdropClosedDimensions;
 
 			DialogueState state = DialogueState::HIDDEN;
 
@@ -56,8 +68,11 @@ namespace Game {
 
 			bool justFinishedDialogue = false;
 
-			// This is the max amount of characters that the handler will display per row of dialogue.
-			const size_t MAX_CHARACTERS_PER_LINE = 46;
+			int maxWidthOfText;
+			size_t maxCharactersInLabel1, maxCharactersOfText;
+
+			// This is a multiplier for how much of the window width the dialogue text's x position is.
+			const float DIALOGUE_TEXT_START_X = 0.25f;
 
 			// These are the lines that are to be displayed.
 			std::string line1OfText = "", line2OfText = "";
@@ -75,6 +90,7 @@ namespace Game {
 			// These store variables related to text scrolling/appearing and time.
 			long long timeSinceNewCharacter;
 			long long timeBetweenCharacterReveals = 10000000;
+			const long long BACKDROP_ANIMATION_PERIOD = 150000000;
 
 			void setupOptions();
 			void pressUpAction(), pressDownAction(), pressLeftAction(), pressRightAction();

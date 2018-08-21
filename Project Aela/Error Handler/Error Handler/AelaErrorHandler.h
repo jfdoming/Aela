@@ -36,7 +36,7 @@ class AelaErrorHandler {
 		const int numberOfWarningButtons = 1;
 
 		const SDL_MessageBoxButtonData warningButtons[2] = {
-			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Okay" }
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Okay" }
 		};
 
 

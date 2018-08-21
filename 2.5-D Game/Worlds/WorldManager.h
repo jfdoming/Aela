@@ -11,10 +11,11 @@
 #include "MapRebuilder.h"
 #include "3D/Maps/Map3D.h"
 #include "../Teleporter/Teleporter.h"
+#include "../Save States/Saveable.h"
 #include <unordered_map>
 
 namespace Game {
-	class WorldManager {
+	class WorldManager : public Saveable {
 		public:
 			WorldManager();
 
@@ -58,6 +59,9 @@ namespace Game {
 			bool autoExportCurrentWorld();
 
 			void tileWasPlaced(Location* location, size_t tileType);
+
+			void saveDataToSaveState(SaveState* saveState);
+			void loadDataFromSaveState(SaveState* saveState);
 
 		private:
 			// These are obtained from GameObjectProvider.

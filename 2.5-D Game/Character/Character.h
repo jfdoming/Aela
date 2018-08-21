@@ -25,6 +25,7 @@ namespace Game {
 		public:
 			Character();
 			Character(std::string name);
+			Character(std::string name, Location* location);
 
 			// These are movement-related functions. Functions with the word "immediately" complete
 			// the movement on the spot, wherever the player currently is. Other functions add the

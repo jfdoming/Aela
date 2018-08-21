@@ -11,18 +11,20 @@
 #include "../Aela Game/AelaGame.h"
 #include "../../Resources/ResourceInfo.h"
 #include "../../Displays/Dialogue/DialogueDisplay.h"
-#include "../../Displays/Hint Display/HintDisplay.h"
+#include "../../Displays/Hints/HintDisplay.h"
 #include "../../Worlds/WorldManager.h"
+#include "../../Displays/Tiles/TileInventoryDisplay.h"
 #include "../../../Project Aela/Resource Management/ResourcePaths.h"
 
 void Scripts::setupScenes() {
 	using namespace Game;
 
 	// This creates some font objects for use later.
-	TextFont* xeroxLarge = fontManager->obtainTextFont((std::string) RESOURCE_ROOT, "res/fonts/xerox.ttf", 35);
-	TextFont* xerox = fontManager->obtainTextFont((std::string) RESOURCE_ROOT, "res/fonts/xerox.ttf", 22);
+	TextFont* xeroxLarge = fontManager->obtainTextFont((std::string) RESOURCE_ROOT, "res/fonts/xerox.ttf", 31);
+	TextFont* xeroxMedium = fontManager->obtainTextFont((std::string) RESOURCE_ROOT, "res/fonts/xerox.ttf", 24);
+	TextFont* xeroxSmall = fontManager->obtainTextFont((std::string) RESOURCE_ROOT, "res/fonts/xerox.ttf", 18);
 
-	if (xeroxLarge == nullptr || xerox == nullptr) {
+	if (xeroxLarge == nullptr || xeroxMedium == nullptr) {
 		AelaErrorHandling::windowError("A critical font (xerox.ttf) could not be loaded, aborting!");
 		return;
 	}
@@ -52,7 +54,7 @@ void Scripts::setupScenes() {
 	if (success) {
 		ekkonImage->setDimensions(&windowDimensions);
 		ekkonImage->setTexture(ekkonTexture);
-		ekkonImage->setTint(&ColourRGBA(1, 1, 1, 0));
+		ekkonImage->hide();
 	} else {
 		AelaErrorHandling::consoleWindowError("Missing texture: ../../res/textures/ekkon.dds");
 	}
@@ -65,7 +67,7 @@ void Scripts::setupScenes() {
 	// This sets up text.
 	auto titleText = std::make_shared<Label>("Pokemon Meitnerium", xeroxLarge, &almostWhite);
 	titleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() / 1.6f));
-	auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xerox, &almostWhite);
+	auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xeroxMedium, &almostWhite);
 	ekkonGamesText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), ((int) (windowDimensions.getHeight() * 0.95)));
 
 	// This sets up actions for the main menu buttons.
@@ -91,7 +93,7 @@ void Scripts::setupScenes() {
 	startGameButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 		(int) (windowDimensions.getHeight() / 1.5f));
 	startGameButton->setText("Start a New Game");
-	startGameButton->setTextFont(xerox);
+	startGameButton->setTextFont(xeroxMedium);
 	startGameButton->setTextColour(almostWhitePtr);
 	startGameButton->wrapAroundText();
 
@@ -102,7 +104,7 @@ void Scripts::setupScenes() {
 	continueGameButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 		(int) (windowDimensions.getHeight() / 1.5f + spacing));
 	continueGameButton->setText("Continue Game");
-	continueGameButton->setTextFont(xerox);
+	continueGameButton->setTextFont(xeroxMedium);
 	continueGameButton->setTextColour(almostWhitePtr);
 	continueGameButton->wrapAroundText();
 
@@ -111,7 +113,7 @@ void Scripts::setupScenes() {
 	editMapButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 		(int) (windowDimensions.getHeight() / 1.5f + spacing * 2));
 	editMapButton->setText("Edit Map");
-	editMapButton->setTextFont(xerox);
+	editMapButton->setTextFont(xeroxMedium);
 	editMapButton->setTextColour(almostWhitePtr);
 	editMapButton->wrapAroundText();
 
@@ -120,7 +122,7 @@ void Scripts::setupScenes() {
 	optionsButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 		(int) (windowDimensions.getHeight() / 1.5f + spacing * 3));
 	optionsButton->setText("Options");
-	optionsButton->setTextFont(xerox);
+	optionsButton->setTextFont(xeroxMedium);
 	optionsButton->setTextColour(almostWhitePtr);
 	optionsButton->wrapAroundText();
 
@@ -129,7 +131,7 @@ void Scripts::setupScenes() {
 	exitButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 		(int) (windowDimensions.getHeight() / 1.5f + spacing * 4));
 	exitButton->setText("Exit");
-	exitButton->setTextFont(xerox);
+	exitButton->setTextFont(xeroxMedium);
 	exitButton->setTextColour(almostWhitePtr);
 	exitButton->wrapAroundText();
 
@@ -149,29 +151,47 @@ void Scripts::setupScenes() {
 	dialogueBoxSubMenu->init(&windowDimensions, *renderer);
 
 	auto dialgoueBoxImage = std::make_shared<ImageComponent>();
-	GLTexture* dialgoueBoxTexture;
-	success = resourceManager->obtain<GLTexture>("res/textures/dialogue_box.dds", dialgoueBoxTexture);
-	dialgoueBoxImage->setDimensions(&Rect<int>(0, windowDimensions.getHeight() * 3 / 4, windowDimensions.getWidth(),
-		windowDimensions.getHeight() / 4));
-	dialgoueBoxImage->setTexture(dialgoueBoxTexture);
+	dialgoueBoxImage->setPositioningMode(PositioningMode2D::CENTER);
+	GLTexture* dialgueBoxTexture;
+	success = resourceManager->obtain<GLTexture>("res/textures/dialogue_box.png", dialgueBoxTexture);
+	dialgoueBoxImage->setDimensions(&Rect<int>(windowDimensions.getWidth() / 2, windowDimensions.getHeight() * 7 / 8, windowDimensions.getWidth() / 2,
+		windowDimensions.getHeight() / 8));
+	dialgoueBoxImage->setTexture(dialgueBoxTexture);
 
-	auto dialogueTextOne = std::make_shared<Label>("Dialogue!", xeroxLarge, &almostBlack);
-	auto dialogueTextTwo = std::make_shared<Label>("Dialogue 2!", xeroxLarge, &almostBlack);
-	auto dialogueTextThree = std::make_shared<Label>("Dialogue 3!", xeroxLarge, &almostBlack);
-	auto dialogueTextFour = std::make_shared<Label>("Dialogue 4!", xeroxLarge, &almostBlack);
-	dialogueTextOne->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() * 0.85));
-	dialogueTextTwo->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() * 0.95));
+	auto avatarImage = std::make_shared<ImageComponent>();
+	GLTexture* avatarTexture;
+	success = resourceManager->obtain<GLTexture>("res/textures/avatars_1/0/0.png", avatarTexture);
+	avatarImage->setDimensions(&Rect<int>(0, windowDimensions.getHeight() * 21 / 32, windowDimensions.getWidth() / 3,
+		windowDimensions.getHeight() / 3));
+	avatarImage->setTexture(avatarTexture);
+	avatarImage->hide();
+
+	auto dialogueTextOne = std::make_shared<Label>("Dialogue!", xeroxMedium, &almostWhite);
+	auto dialogueTextTwo = std::make_shared<Label>("Dialogue 2!", xeroxMedium, &almostWhite);
+	auto dialogueTextThree = std::make_shared<Label>("Dialogue 3!", xeroxMedium, &almostWhite);
+	auto dialogueTextFour = std::make_shared<Label>("Dialogue 4!", xeroxMedium, &almostWhite);
+	auto dialogueTextName = std::make_shared<Label>("Name!", xeroxMedium, &almostWhite);
+	dialogueTextName->setPositioningMode(PositioningMode2D::CENTER);
+	float dialogueTextStartX = dialogueDisplay->getDialogueTextStartX();
+	dialogueTextOne->getDimensions()->setXY((int) (windowDimensions.getWidth() * dialogueTextStartX), (int) (windowDimensions.getHeight() * 0.85));
+	dialogueTextTwo->getDimensions()->setXY((int) (windowDimensions.getWidth() * dialogueTextStartX), (int) (windowDimensions.getHeight() * 0.95));
 	dialogueTextThree->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.5), (int) (windowDimensions.getHeight() * 0.85));
 	dialogueTextFour->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.5), (int) (windowDimensions.getHeight() * 0.95));
+	dialogueTextName->getDimensions()->setXY((int)(windowDimensions.getWidth() / 8), (int)(windowDimensions.getHeight() * 0.98));
 
 	dialogueBoxSubMenu->add(dialgoueBoxImage);
+	dialogueBoxSubMenu->add(avatarImage);
 	dialogueBoxSubMenu->add(dialogueTextOne);
 	dialogueBoxSubMenu->add(dialogueTextTwo);
 	dialogueBoxSubMenu->add(dialogueTextThree);
 	dialogueBoxSubMenu->add(dialogueTextFour);
+	dialogueBoxSubMenu->add(dialogueTextName);
 
-	dialogueDisplay->setDialogueSubMenu(dialogueBoxSubMenu);
+	dialogueDisplay->setSubMenu(dialogueBoxSubMenu);
+	dialogueDisplay->setBackdrop(dialgoueBoxImage);
+	dialogueDisplay->setAvatar(avatarImage);
 	dialogueDisplay->setDialogueLabels(dialogueTextOne, dialogueTextTwo, dialogueTextThree, dialogueTextFour);
+	dialogueDisplay->setNameLabel(dialogueTextName);
 
 	// This sets up the submenu that shows the player's tile inventory. The second submenu only contains the
 	// box that signifies which tile is selected, which is done so that the selection box is always above
@@ -180,8 +200,15 @@ void Scripts::setupScenes() {
 	tileInventorySubMenu->init(&Rect<int>(0, 0, windowDimensions.getWidth(), windowDimensions.getHeight() / 3), *renderer);
 	tileInventorySubMenu2->init(&Rect<int>(0, 0, windowDimensions.getWidth(), windowDimensions.getHeight() / 3), *renderer);
 
-	auto tileInventoryTextOne = std::make_shared<Label>("<current tile>", xerox, &almostWhite);
-	tileInventoryTextOne->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), (int) (windowDimensions.getHeight() / 5));
+	auto tileInventoryBackgroundImage = std::make_shared<ImageComponent>();
+	GLTexture* tileInventoryBackgroundTexture;
+	success = resourceManager->obtain<GLTexture>("res/textures/inventory_background.png", tileInventoryBackgroundTexture);
+	tileInventoryBackgroundImage->setDimensions(&Rect<int>(windowDimensions.getWidth() / 2, windowDimensions.getHeight() / 15,
+		windowDimensions.getWidth() / 2, windowDimensions.getHeight() / 18));
+	tileInventoryBackgroundImage->setTexture(tileInventoryBackgroundTexture);
+
+	auto tileInventoryText = std::make_shared<Label>("<current tile>", xeroxMedium, &almostWhite);
+	tileInventoryText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), (int) (windowDimensions.getHeight() / 5));
 
 	auto tileSelectorBox = std::make_shared<ImageComponent>();
 	GLTexture* tileInventoryBoxTexture;
@@ -192,26 +219,42 @@ void Scripts::setupScenes() {
 		(int) (tileSelectorWidthAndHeight * 1.2), (int) (tileSelectorWidthAndHeight * 1.2)));
 	tileSelectorBox->setTexture(tileInventoryBoxTexture);
 
-	tileInventorySubMenu->add(tileInventoryTextOne);
+	tileInventorySubMenu->add(tileInventoryBackgroundImage);
+	tileInventorySubMenu->add(tileInventoryText);
 	tileInventorySubMenu2->add(tileSelectorBox);
 	tileInventorySubMenu->show();
 	tileInventorySubMenu2->show();
-	game->setTileInventoryMenuItems(tileInventorySubMenu, tileInventoryTextOne, tileSelectorBox);
+	tileInventoryDisplay->setMenuItems(tileInventorySubMenu, tileInventoryText, tileInventoryBackgroundImage, tileSelectorBox);
 
-	auto overlayBackgroundRect = std::make_shared<RectComponent>();
-	overlayBackgroundRect->setDimensions(&windowDimensions);
-	overlayBackgroundRect->setColour(&ColourRGBA(0.15f, 0.15f, 0.15f, 0.95f));
-	overlayBackgroundRect->setTint(&ColourRGBA(1, 1, 1, 0));
+	auto deathBackgroundRect = std::make_shared<RectComponent>();
+	deathBackgroundRect->setDimensions(&windowDimensions);
+	deathBackgroundRect->setColour(&ColourRGBA(0.15f, 0.15f, 0.15f, 0.95f));
+	deathBackgroundRect->hide();
 
-	auto overlayText = std::make_shared<Label>("You died.", xerox, &almostWhite);
-	overlayText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.30), (int) (windowDimensions.getHeight() * 0.30));
-	overlayText->setTint(&ColourRGBA(1, 1, 1, 0));
+	auto deathText = std::make_shared<Label>("You died. Press 'R' to go back to your last checkpoint.", xeroxMedium, &almostWhite);
+	deathText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.30), (int) (windowDimensions.getHeight() * 0.30));
+	deathText->hide();
 
-	game->setDeathMenuItems(overlayBackgroundRect, overlayText);
+	game->setDeathMenuComponents(deathBackgroundRect, deathText);
+
+	auto fadeTeleportRect = std::make_shared<RectComponent>();
+	fadeTeleportRect->setDimensions(&windowDimensions);
+	fadeTeleportRect->setColour(&ColourRGBA(0.05f, 0.05f, 0.05f, 1.0f));
+	fadeTeleportRect->hide();
+	game->setFadeTeleportRect(fadeTeleportRect);
+
+	auto hintImage = std::make_shared<ImageComponent>();
+	GLTexture* hintTexture;
+	success = resourceManager->obtain<GLTexture>("res/textures/hint_box.png", hintTexture);
+	hintImage->setDimensions(&Rect<int>(windowDimensions.getWidth() / 12, windowDimensions.getHeight() / 15,
+		windowDimensions.getWidth() / 2, windowDimensions.getHeight() / 18));
+	hintImage->setTexture(hintTexture);
+	hintImage->hide();
+	hintDisplay->setHintBackdrop(hintImage);
 
 	// This sets up the coordinate text.
-	auto hintText = std::make_shared<Label>("", xerox, almostWhitePtr);
-	hintText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.10), (int) (windowDimensions.getHeight() * 0.10));
+	auto hintText = std::make_shared<Label>("", xeroxSmall, almostWhitePtr);
+	hintText->getDimensions()->setXY((int) (windowDimensions.getWidth() / 10), (int) (windowDimensions.getHeight() / 10));
 	hintDisplay->setHintLabel(hintText);
 
 	// This sets up the world gameplay scene, in which the player is given a top-down view of the world.
@@ -220,8 +263,10 @@ void Scripts::setupScenes() {
 	worldGameplayScene->getMenu()->add(dialogueBoxSubMenu);
 	worldGameplayScene->getMenu()->add(tileInventorySubMenu);
 	worldGameplayScene->getMenu()->add(tileInventorySubMenu2);
-	worldGameplayScene->getMenu()->add(overlayBackgroundRect);
-	worldGameplayScene->getMenu()->add(overlayText);
+	worldGameplayScene->getMenu()->add(deathBackgroundRect);
+	worldGameplayScene->getMenu()->add(deathText);
+	worldGameplayScene->getMenu()->add(fadeTeleportRect);
+	worldGameplayScene->getMenu()->add(hintImage);
 	worldGameplayScene->getMenu()->add(hintText);
 
 	// This sets up the scenes for the pause menu.
@@ -245,7 +290,7 @@ void Scripts::setupScenes() {
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	pauseMenuTextRect->setColour(&ColourRGBA(0.2f, 0.2f, 0.2f, 0.95f));
 
-	auto pauseMenuTitleText = std::make_shared<Label>("Pause Menu", xerox, &almostWhite);
+	auto pauseMenuTitleText = std::make_shared<Label>("Pause Menu", xeroxMedium, &almostWhite);
 	pauseMenuTitleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.15), (int) (windowDimensions.getHeight() * 0.18));
 
 	// This creates sidebar buttons for the pause menu.
@@ -299,7 +344,7 @@ void Scripts::setupScenes() {
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	pauseMenuGameButton->setupOnClick(std::bind(goToGameSubMenu, engine));
 	pauseMenuGameButton->setText("Game");
-	pauseMenuGameButton->setTextFont(xerox);
+	pauseMenuGameButton->setTextFont(xeroxMedium);
 	pauseMenuGameButton->setTextColour(almostWhitePtr);
 
 	pauseMenuOptionsButton->setTexture(simpleButtonTextureLight);
@@ -307,7 +352,7 @@ void Scripts::setupScenes() {
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	pauseMenuOptionsButton->setupOnClick(std::bind(goToOptionsSubMenu, engine));
 	pauseMenuOptionsButton->setText("Options");
-	pauseMenuOptionsButton->setTextFont(xerox);
+	pauseMenuOptionsButton->setTextFont(xeroxMedium);
 	pauseMenuOptionsButton->setTextColour(almostWhitePtr);
 	pauseMenuOptionsButton->wrapAroundText();
 
@@ -316,7 +361,7 @@ void Scripts::setupScenes() {
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	pauseMenuMapEditorButton->setupOnClick(std::bind(goToOptionsSubMenu, engine));
 	pauseMenuMapEditorButton->setText("Map Editor");
-	pauseMenuMapEditorButton->setTextFont(xerox);
+	pauseMenuMapEditorButton->setTextFont(xeroxMedium);
 	pauseMenuMapEditorButton->setTextColour(almostWhitePtr);
 	pauseMenuMapEditorButton->wrapAroundText();
 
@@ -324,7 +369,7 @@ void Scripts::setupScenes() {
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	pauseMenuExportButton->setupOnClick(std::bind(exportMap, engine));
 	pauseMenuExportButton->setText("Export");
-	pauseMenuExportButton->setTextFont(xerox);
+	pauseMenuExportButton->setTextFont(xeroxMedium);
 	pauseMenuExportButton->setTextColour(almostWhitePtr);
 	pauseMenuMapEditorSubMenu->add(pauseMenuExportButton);
 
@@ -352,7 +397,7 @@ void Scripts::setupScenes() {
 	inventoryBackgroundRect->setColour(&ColourRGBA(0.15f, 0.15f, 0.15f, 0.95f));
 
 	// This sets up text for the inentory scene.
-	auto inventoryTitleText = std::make_shared<Label>("Inventory", xerox, &almostWhite);
+	auto inventoryTitleText = std::make_shared<Label>("Inventory", xeroxMedium, &almostWhite);
 	inventoryTitleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.33), (int) (windowDimensions.getHeight() * 0.38));
 
 	auto inventorySlotA = std::make_shared<ImageComponent>();

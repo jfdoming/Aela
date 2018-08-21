@@ -2,7 +2,16 @@
 
 Game::Enemy::Enemy() {}
 
+Game::Enemy::Enemy(std::string name, Location* location) : Character(name, location) {
+	
+}
+
 Game::Enemy::Enemy(int strength, long long attackCooldown) {
+	this->strength = strength;
+	this->attackCooldown = attackCooldown;
+}
+
+Game::Enemy::Enemy(std::string name, Location* location, int strength, long long attackCooldown) : Character(name, location) {
 	this->strength = strength;
 	this->attackCooldown = attackCooldown;
 }
@@ -33,4 +42,18 @@ bool Game::Enemy::attackIfPossible(Character* character, long long currentTime) 
 	return true;
 }
 
-void Game::Enemy::update() {}
+bool Game::Enemy::isHostile() {
+	return hostile;
+}
+
+void Game::Enemy::setHostile(bool hostile) {
+	this->hostile = hostile;
+}
+
+void Game::Enemy::toggleHostility() {
+	hostile = !hostile;
+}
+
+void Game::Enemy::update() {
+	
+}

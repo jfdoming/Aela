@@ -27,13 +27,13 @@ void Label::updateComponent() {
 
 void Label::renderComponent(GLRenderer& renderer) {
 	if (font != nullptr) {
-		renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint.getVec4()));
+		renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint.getVec4()), positioningMode);
 	}
 }
 
 void Label::renderWithDifferentTint(GLRenderer& renderer, ColourRGBA* tint) {
 	if (font != nullptr) {
-		renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint->getVec4()));
+		renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint->getVec4()), positioningMode);
 	}
 }
 

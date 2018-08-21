@@ -41,11 +41,11 @@ namespace Game {
 
 			GameMode getGameMode();
 
-			void setTileInventoryMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
-				std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage);
-			void setDeathMenuItems(std::shared_ptr<RectComponent> overlayRect, std::shared_ptr<Label> overlayText);
+			void setDeathMenuComponents(std::shared_ptr<RectComponent> deathRect, std::shared_ptr<Label> deathLabel);
+			void setFadeTeleportRect(std::shared_ptr<RectComponent> fadeTeleportRect);
 
 			void animatePlayerDeathScreen();
+			void hideDeathScreen();
 			void animateFadeTeleport();
 
 			TileSwitchGun* getTileSwitchGun();
@@ -80,8 +80,9 @@ namespace Game {
 			// this will probably go elsewhere.
 			TileSwitchGun tileSwitchGun;
 
-			std::shared_ptr<RectComponent> overlayRect;
-			std::shared_ptr<Label> overlayText;
+			std::shared_ptr<RectComponent> deathRect;
+			std::shared_ptr<Label> deathLabel;
+			std::shared_ptr<RectComponent> fadeTeleportRect;
 
 			// These store the states of keys.
 			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false,
@@ -89,9 +90,9 @@ namespace Game {
 			bool pressingRight = false, pressingForward = false, pressingLeft = false, pressingBackward = false;
 			bool pressingTileSelectLeft = false, pressingTileSelectRight = false, pressingTileSwitch = false;
 			bool pressingPauseButton = false, pressingInventoryButton = false;
+			bool pressingReturn = false, pressingBackspace = false;
 			long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 180000000;
 			const long long TIME_BETWEEN_TILE_SELECTS_ON_FIRST_PRESS = 300000000, TIME_BETWEEN_TILE_SELECTS_ON_HOLD = 100000000;
-			bool pressingReturn = false;
 
 			int currentScene = 0;
 			int sceneBeforePause = 0;

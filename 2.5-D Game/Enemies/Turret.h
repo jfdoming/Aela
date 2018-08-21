@@ -16,9 +16,9 @@ namespace Game {
 		friend class EnemyProvider;
 		public:
 			Turret();
-			Turret(int detectionRange);
-			Turret(int detectionRange, int strength, long long attackCooldown);
-			Turret(int detectionRange, bool detectRight, bool detectForward, bool detectLeft, bool detectBackward,
+			Turret(std::string name, Location* location, int detectionRange);
+			Turret(std::string name, Location* location, int detectionRange, int strength, long long attackCooldown);
+			Turret(std::string name, Location* location, int detectionRange, bool detectRight, bool detectForward, bool detectLeft, bool detectBackward,
 				int strength, long long attackCooldown);
 
 			virtual void update(Character* playerCharacter, long long time);

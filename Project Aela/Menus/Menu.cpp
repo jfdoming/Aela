@@ -3,6 +3,7 @@
 using namespace Aela;
 
 Menu::Menu() {
+	visible = false;
 }
 
 Menu::~Menu() {
@@ -33,20 +34,6 @@ void Menu::render(GLRenderer& renderer) {
 	renderer.renderSimple2DFramebuffer();
 }
 
-void Menu::show() {
-	this->visible = true;
-	markDirty();
-}
-
-void Menu::hide() {
-	this->visible = false;
-	markDirty();
-}
-
 bool Menu::isInitialized() {
 	return initialized;
-}
-
-bool Menu::isVisible() {
-	return visible;
 }

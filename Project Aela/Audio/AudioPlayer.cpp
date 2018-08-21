@@ -1,5 +1,6 @@
 #include "AudioPlayer.h"
 #include "../Error Handler/ErrorHandling.h"
+#include <iostream>
 
 using namespace Aela;
 
@@ -85,14 +86,14 @@ bool AudioPlayer::init() {
 }
 
 void AudioPlayer::update() {
-	ALuint source_state;
+	/*ALuint source_state;
 	for (auto clip : playingClips) {
 		while (source_state == AL_PLAYING) {
 			// TODO make source object
-			// Uncomment this once the "identifier 'source' is undefined" error that is caused from it is fixed.
+			// Uncomment this once the "identifier 'source' is undefined" error that is caused from this is fixed.
 			// alDoWithErrorCheck_noret(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
 		}
-	}
+	}*/
 }
 
 void AudioPlayer::die() {
@@ -104,6 +105,10 @@ void AudioPlayer::die() {
 	if (audioDevice != nullptr) {
 		alcCloseDevice(audioDevice);
 	}
+
+	// I think you might want to do this lol
+	// - Robert
+	backgroundThread.join();
 }
 
 void AudioPlayer::playClip(AudioClip* clip) {

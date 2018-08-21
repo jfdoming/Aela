@@ -95,6 +95,10 @@ namespace Aela {
 				return s;
 			}
 
+			inline friend std::ostream& operator<<(std::ostream &os, Rect<T> const& me) {
+				return (os << "Rect(" << me.xPosition << ", " << me.yPosition << ", " << me.width << ", " << me.height << ")");
+			}
+
 		protected:
 			T xPosition, yPosition, width, height;
 	};

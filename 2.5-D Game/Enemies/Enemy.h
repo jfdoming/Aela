@@ -17,7 +17,9 @@ namespace Game {
 		friend class EnemyProvider;
 		public:
 			Enemy();
+			Enemy(std::string name, Location* location);
 			Enemy(int strength, long long attackCooldown);
+			Enemy(std::string name, Location* location, int strength, long long attackCooldown);
 
 			virtual EnemyType getType();
 
@@ -27,11 +29,17 @@ namespace Game {
 
 			bool attackIfPossible(Character* character, long long currentTime);
 
+			bool isHostile();
+			void setHostile(bool hostile);
+			void toggleHostility();
+
 		protected:
 			virtual void update();
 			
 			int strength = 0;
 			long long attackCooldown = 1;
 			long long timeOnLastAttack = 0;
+
+			bool hostile = true;
 	};
 }

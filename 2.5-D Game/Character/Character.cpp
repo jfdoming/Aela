@@ -15,7 +15,7 @@
 #include "../Resources/ResourceInfo.h"
 #include "../Scripts/ScriptManager.h"
 #include "../Camera/CameraController.h"
-#include "../Displays/Hint Display/HintDisplay.h"
+#include "../Displays/Hints/HintDisplay.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
 #include "../../Project Aela/Utilities/enumut.h"
 #include "../../Project Aela/Time/Timer/Timer.h"
@@ -37,6 +37,11 @@ Game::Character::Character(std::string name) : Character() {
 	this->name = name;
 }
 
+Game::Character::Character(std::string name, Location* location) {
+	this->name = name;
+	this->location = *location;
+}
+
 void Game::Character::setLocation(Location* location) {
 	this->location = *location;
 }
@@ -48,7 +53,7 @@ void Game::Character::animateDeath() {
 	particleEmitter->setBaseDistance(location.getWorldSpaceLocation().y + offset + 10);
 	particleEmitter->setBaseSpeed(0.00000001f);
 	particleEmitter->setPathOffset(location.getWorldSpaceLocation().y + offset);
-	particleEmitter->setLifeTime(990000000);
+	particleEmitter->setLifeTime(1000000000);
 	particleEmitter->setCharacter(this);
 	particleEmitter->setLocation(&location);
 
@@ -59,8 +64,6 @@ void Game::Character::animateDeath() {
 	if (this == GameObjectProvider::getPlayer()->getCharacter()) {
 		auto endingAction = [this]() {
 			GameObjectProvider::getGame()->animatePlayerDeathScreen();
-			AelaErrorHandling::windowError((std::string) "Because the death screen isn't visible due to menus not being ready yet,\n"
-				+ "I have come to inform you that you have died.");
 		};
 
 		particleEmitter->setActionOnEnd(endingAction);
@@ -207,7 +210,9 @@ void Game::Character::movementHasEnded() {
 	// moving = false;
 	locationBeforeAnimation = location;
 	movementEnded = true;
-	timePassedAfterAnimationEnd = entity->getTimePassedAfterAnimationEnd();
+	if (entity != nullptr) {
+		timePassedAfterAnimationEnd = entity->getTimePassedAfterAnimationEnd();
+	}
 }
 
 bool Game::Character::hasMovementJustEnded() {
@@ -236,13 +241,14 @@ void Game::Character::turnImmediately(TileDirection direction) {
 	Model* model;
 	if (GameObjectProvider::getResourceManager()->obtain<Model>("ch/" + textureName + "/0/" + std::to_string(enumToInteger(direction)) + "/mo", model)) {
 		baseModel = model;
-		entity->setModel(model);
+		if (entity != nullptr) {
+			entity->setModel(model);
+		}
 		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 	}
 }
 
 void Game::Character::move(Movement* movement, std::string scriptOnCompletion) {
-	std::cout << "Moving!\n";
 	addTranslation(movement, scriptOnCompletion);
 
 	/*if (movement->isATeleportation() && movement->isAnimated()) {
@@ -253,7 +259,6 @@ void Game::Character::move(Movement* movement, std::string scriptOnCompletion) {
 void Game::Character::moveIfPossible(TileDirection direction) {
 	if (newMovementsAreAllowed) {
 		possibleMovementsToProcess.push_back(Movement(direction));
-		std::cout << "Adding new movement!!!!!!!!!\n";
 	}
 }
 
@@ -300,7 +305,7 @@ void Game::Character::teleportImmediately(Location* location) {
 	movementHasEnded();
 }
 
-void Game::Character::teleportWithoutAnimation(Location * location) {
+void Game::Character::teleportWithoutAnimation(Location* location) {
 	Movement teleportation(location, &glm::vec3(), directionFacing, true, false);
 	teleportation.setPreprocessed(true);
 	possibleMovementsToProcess.push_back(teleportation);
@@ -320,6 +325,12 @@ void Game::Character::kill() {
 
 void Game::Character::revive() {
 	alive = true;
+
+	if (this == GameObjectProvider::getPlayer()->getCharacter()) {
+		GameObjectProvider::getGame()->hideDeathScreen();
+	}
+
+	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 }
 
 bool Game::Character::isAlive() {
@@ -330,7 +341,9 @@ void Game::Character::setPropertiesUsingCharacterInformationBlock(CharacterInfor
 	clearAllMovements();
 	alive = block->alive;
 	directionFacing = block->directionFacing;
+	std::cout << &block->location << " D\n";
 	teleportImmediately(&block->location);
+
 	running = false;
 	runningSpeed = block->runningSpeed;
 	visible = block->visible;
@@ -338,7 +351,7 @@ void Game::Character::setPropertiesUsingCharacterInformationBlock(CharacterInfor
 	moving = false;
 	newMovementsAreAllowed = false;
 
-	// This lets every pause for a moment, letting the player breathe and realise what their new surroundings are.
+	// This creates a pause for a moment, letting the player breathe and realise what their new surroundings are.
 	// This delay will be moved elsewhere once menus work.
 	auto allowNewMovements = [this]() {
 		this->allowNewMovements(true);
@@ -480,6 +493,7 @@ void Game::Character::addTranslation(Movement* movement, std::string scriptOnceC
 }
 
 void Game::Character::completeMovement(Movement* movement, std::string scriptOnCompletion) {
+	std::cout << "New movement: " << *movement->getDestination() << "\n";
 	if (movement->isATurnOnly()) {
 		// The movement doesn't go anywhere. Just turn the character without moving it.
 		turnImmediately(movement->getDirection());
@@ -497,6 +511,7 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 		characterProvider->characterWasMoved(name, &oldLocation, &newLocation);
 		location = newLocation;
 		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+		GameObjectProvider::getScriptManager()->runScript(scriptOnCompletion);
 		movementHasEnded();
 		return;
 	}
@@ -505,9 +520,10 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 		newMovementsAreAllowed = false;
 		TeleportationAnimation teleportationAnimation = movement->getTeleportationAnimation();
 
-		auto teleportationEndAction = [this, newLocation]() mutable {
+		auto teleportationEndAction = [this, newLocation, scriptOnCompletion]() mutable {
 			WorldManager* worldManager = GameObjectProvider::getWorldManager();
 			newMovementsAreAllowed = true;
+			GameObjectProvider::getScriptManager()->runScript(scriptOnCompletion);
 			movementHasEnded();
 
 			if (worldManager->getTileGroup(&newLocation)->getLiquidFloorTile(GameObjectProvider::getTileAtlas()) != nullptr) {
@@ -559,11 +575,15 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 			particleEmitter->setupParticles(&textures, 1, 1, 1);
 			GameObjectProvider::getGameplayScene()->putParticleEmitter(particleEmitter);
 		} else if (teleportationAnimation == TeleportationAnimation::FADE) {
-			auto halfwayTeleportAction = [this, oldLocation, newLocation]() {
-				Location oldLocation2 = oldLocation;
-				Location newLocation2 = newLocation;
+			auto halfwayTeleportAction = [this, oldLocation, newLocation]() mutable {
+				/*Location oldLocation2 = oldLocation;
+				Location newLocation2 = newLocation;*/
+
+				std::cout << newLocation.getWorld() << " is the world.\n";
+
+
 				GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
-				GameObjectProvider::getCharacterProvider()->characterWasMoved(name, &oldLocation2, &newLocation2);
+				GameObjectProvider::getCharacterProvider()->characterWasMoved(name, &oldLocation, &newLocation);
 				location = newLocation;
 			};
 
@@ -649,9 +669,15 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 }
 
 void Game::Character::processPossibleMovement(Movement* movement) {
-	std::cout << "Now processing a possible movement!\n";
 	if (movement->isPreprocessed()) {
-		move(movement, "");
+		std::string script;
+		TileGroup* tileGroup = GameObjectProvider::getWorldManager()->getTileGroup(movement->getDestination());
+		if (tileGroup != nullptr) {
+			script = *tileGroup->getWalkedOnScriptID();
+		} else {
+			script = "";
+		}
+		move(movement, script);
 		return;
 	}
 

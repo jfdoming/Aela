@@ -20,6 +20,8 @@ namespace Game {
 
 			void updateRegisteredEnemies();
 
+			void returnWasPressed();
+
 			size_t addTurret(Turret* turret);
 			Turret* getTurret(size_t id);
 

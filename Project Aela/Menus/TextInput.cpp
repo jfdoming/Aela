@@ -24,14 +24,14 @@ void Aela::TextInput::setup(FontManager* fontManager) {
 	FT_BBox bbox = face->bbox;
 
 	// determine the height of this textfield
-	dimensions.setHeight((bbox.yMax - bbox.yMin) / fontManager->POINTS_PER_PIXEL);
+	dimensions.setHeight((bbox.yMax - bbox.yMin) / POINTS_PER_PIXEL);
 }
 
 void TextInput::updateComponent() {
 }
 
 void TextInput::renderComponent(GLRenderer& renderer) {
-	renderer.renderText(text, font, &dimensions, &colour);
+	renderer.renderText(text, font, &dimensions, &colour, positioningMode);
 }
 
 std::string Aela::TextInput::getText() {

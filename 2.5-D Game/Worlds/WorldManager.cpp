@@ -291,3 +291,13 @@ void Game::WorldManager::tileWasPlaced(Location* location, size_t tileType) {
 	tileBehaviourExecuter->runBehaviour(location, tileType);
 	mapNeedsToBeRebuilt = true;
 }
+
+void Game::WorldManager::saveDataToSaveState(SaveState* saveState) {
+	World* world = new World();
+	(*world) = worlds[GameObjectProvider::getPlayer()->getCharacter()->getLocation()->getWorld()];
+	saveState->addData("world", world);
+}
+
+void Game::WorldManager::loadDataFromSaveState(SaveState* saveState) {
+	worlds[GameObjectProvider::getPlayer()->getCharacter()->getLocation()->getWorld()] = *((World*) saveState->getData("world"));
+}

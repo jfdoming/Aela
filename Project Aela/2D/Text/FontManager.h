@@ -45,9 +45,6 @@ namespace Aela {
 			// This turns a FreeType error code into text.
 			static const char* getErrorMessage(FT_Error err);
 
-			// This stores the amount of points in a character that make up one pixel.
-			static const unsigned short POINTS_PER_PIXEL = 64;
-
 		private:
 			// This is the FreeType Library object.
 			FT_Library freetype;

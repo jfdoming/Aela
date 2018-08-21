@@ -41,7 +41,8 @@ void Game::CharacterProvider::update() {
 	}
 }
 
-void Game::CharacterProvider::generateCharacterModelsForAllCharacters(ResourceManager* resourceManager) {
+void Game::CharacterProvider::generateCharacterModelsForAllCharacters() {
+	ResourceManager* resourceManager = GameObjectProvider::getResourceManager();
 	CharacterModelGenerator generator;
 	generator.setCharacters(&characters);
 
@@ -88,9 +89,19 @@ bool Game::CharacterProvider::addCharacter(Character* character, size_t* id) {
 	characters[nextCharacterID] = character;
 	charactersByName[character->getName()] = nextCharacterID;
 	charactersByLocation[location->getWorld()][location->getChunk()][location->getTileGroup()] = nextCharacterID;
-	*id = nextCharacterID;
+	
+	if (id != nullptr) {
+		*id = nextCharacterID;
+	}
+
+	generateCharacterModel(nextCharacterID);
+
 	nextCharacterID++;
 	return true;
+}
+
+bool Game::CharacterProvider::addCharacter(Character* character) {
+	return addCharacter(character, nullptr);
 }
 
 bool Game::CharacterProvider::removeCharacterByID(size_t id) {
@@ -167,11 +178,71 @@ std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFuncti
 	return &charactersByLocation[world][chunk];
 }
 
-std::unordered_map<size_t, Character*>* Game::CharacterProvider::getAllCharacters() {
-	return &characters;
+void Game::CharacterProvider::saveDataToSaveState(SaveState* saveState) {
+	std::unordered_map<size_t, CharacterInformationBlock>* characterInformation = new std::unordered_map<size_t, CharacterInformationBlock>();
+	
+	for (auto& pair : characters) {
+		std::cout << "Saving char: " << pair.second->getName() << "\n";
+		(*characterInformation)[pair.first] = pair.second->getCharacterInformationBlock();
+	}
+
+	saveState->addData("characters", characterInformation);
+}
+
+void Game::CharacterProvider::loadDataFromSaveState(SaveState* saveState) {
+	std::unordered_map<size_t, CharacterInformationBlock>* characterInformation = (std::unordered_map<size_t, CharacterInformationBlock>*) saveState->getData("characters");
+	
+	std::cout << characterInformation << " is char info\n";
+	for (auto& pair : *characterInformation) {
+		std::cout << "Loading char\n";
+		characters[pair.first]->setPropertiesUsingCharacterInformationBlock(&pair.second);
+		std::cout << "Done loading char.\n";
+	}
 }
 
 void Game::CharacterProvider::characterWasMoved(std::string name, Location* oldLocation, Location* newLocation) {
 	charactersByLocation[oldLocation->getWorld()][oldLocation->getChunk()].erase(oldLocation->getTileGroup());
 	charactersByLocation[newLocation->getWorld()][newLocation->getChunk()][newLocation->getTileGroup()] = charactersByName[name];
+}
+
+void Game::CharacterProvider::generateCharacterModel(size_t character) {
+	ResourceManager* resourceManager = GameObjectProvider::getResourceManager();
+	CharacterModelGenerator generator;
+	std::unordered_map<size_t, Character*> map;
+	map[character] = characters[character];
+	generator.setCharacters(&map);
+	std::string groupName = "characters_" + std::to_string(character);
+
+	std::string modelA = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_A.obj";
+	std::string modelB = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_B.obj";
+	std::string modelC = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_C.obj";
+	std::string modelD = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_D.obj";
+
+	resourceManager->bindLoader(&generator);
+	resourceManager->bindGroup(groupName);
+
+	for (unsigned int y = 0; y < 4; y++) {
+		for (unsigned int x = 0; x < 3; x++) {
+			if (x == 0 && (y == 1 || y == 3)) {
+				generator.setTemplateModelSource(modelA);
+			} else if (x == 0 && (y == 0 || y == 2)) {
+				generator.setTemplateModelSource(modelC);
+			} else if (y == 1 || y == 3) {
+				generator.setTemplateModelSource(modelB);
+			} else {
+				generator.setTemplateModelSource(modelD);
+			}
+
+			generator.setSpriteSheetX(x);
+			generator.setSpriteSheetY(y);
+
+			// We want to generate one set of models, so we'll tell the resource manager to run the generator once.
+			resourceManager->addToGroup("", false);
+
+			if (resourceManager->loadGroup(groupName) != Aela::ResourceManager::Status::OK) {
+				std::cerr << "Failed to load a resource from group \"" + groupName + "\": " << resourceManager->getNewInvalidResourceKeys()[0] << "\n";
+				break;
+			}
+		}
+	}
 }

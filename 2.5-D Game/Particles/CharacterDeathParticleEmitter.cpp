@@ -20,14 +20,13 @@ void CharacterDeathParticleEmitter::setupParticles(std::vector<GLTexture*>* text
 }
 
 void CharacterDeathParticleEmitter::update() {
-
-
 	// Note: the particle positioning is relative to the emitter. The rotation, position and scaling of the emitter is looked at by the renderer,
 	// which renders the particles while taking these transformations into account.
 	for (size_t i = 0; i < particles.size(); i++) {
 		Particle* particle = &particles.at(i);
 		if (particle->getProperty(Transformable3DProperty::Y_POSITION) >= particle->getDistance()) {
-			setupParticlePositioning(i, particles.size());
+			// There's no point in resetting the particle for this type of emitter.
+			// setupParticlePositioning(i, particles.size());
 		} else {
 			particle->translate(0, time->getTimeBetweenFramesInNanos() * particle->getSpeed(), 0);
 		}

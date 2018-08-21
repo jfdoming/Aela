@@ -68,3 +68,7 @@ unsigned int Aela::UserEnvironment::getLogicalCPUCores() {
 unsigned int Aela::UserEnvironment::getSystemRAM() {
 	return systemRAM;
 }
+
+void Aela::UserEnvironment::getDisplayDPI(int whichDisplay, float* diagonalDPI, float* horizontalDPI, float* verticalDPI) {
+	SDL_GetDisplayDPI(whichDisplay, diagonalDPI, horizontalDPI, verticalDPI);
+}

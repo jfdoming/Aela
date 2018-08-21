@@ -45,6 +45,10 @@ namespace Aela {
 			virtual void markDirty();
 			void setParent(Component* parent);
 
+			void show();
+			void hide();
+			bool isVisible();
+
 		protected:
 			// whether this component is moused over
 			bool hovered = false;
@@ -54,6 +58,8 @@ namespace Aela {
 
 			// If this is marked as dirty, here is a parent that must also be marked as dirty.
 			Component* parent = nullptr;
+
+			bool visible = true;
 
 			EventListenerList listeners;
 

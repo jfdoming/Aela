@@ -15,7 +15,7 @@ namespace Game {
 		public:
 			GameSaver();
 
-			void save(std::string saveStateName);
+			bool save(std::string saveStateName);
 			bool load(std::string saveStateName);
 
 		private:

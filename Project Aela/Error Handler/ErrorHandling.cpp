@@ -76,7 +76,7 @@ void AelaErrorHandling::windowWarning(std::string title, std::string message) {
 }
 
 void AelaErrorHandling::basicHandleSignal(int signal) {
-	std::cout << "Signal " << signal << " has been received!";
+	// std::cout << "Signal " << signal << " has been received!";
 	throw "Signal";
 }
 

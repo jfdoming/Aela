@@ -26,14 +26,10 @@ namespace Aela {
 
 			virtual void render(GLRenderer& renderer);
 
-			void show();
-			void hide();
-
 			bool isInitialized();
-			bool isVisible();
 
 		protected:
-			bool initialized = false, visible = false;
+			bool initialized = false;
 
 		private:
 			Simple2DGLFramebuffer buffer;

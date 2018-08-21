@@ -10,6 +10,8 @@
 
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
+#define AVATAR_WIDTH 64
+#define AVATAR_HEIGHT 64
 
 namespace Scripts {
 	void loadMaterials();
@@ -19,5 +21,6 @@ namespace Scripts {
 	void loadParticles();
 	void loadSkyboxes();
 	void loadMaps();
+	void loadAudio();
 	void unloadResources();
 }

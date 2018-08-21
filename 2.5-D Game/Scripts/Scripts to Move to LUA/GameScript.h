@@ -11,15 +11,21 @@
 #include "../../Location/Location.h"
 #include "../../Doors/Door.h"
 #include "../../Doors/TileAmountLock.h"
+#include "../../Displays/Hints/HintDisplayDuration.h"
+#include "../../Displays/Dialogue/DialogueOption.h"
 
 namespace Scripts {
 	using namespace Game;
 
-	void showDialogue(std::string text, std::string scriptToRunOnceComplete);
+	void showDialogue(std::string name, std::string avatar, std::string text, std::string scriptToRunOnceComplete);
+	void showTwoOptions(DialogueOption option1, DialogueOption option2);
+	void showThreeOptions(DialogueOption option1, DialogueOption option2, DialogueOption option3);
+	void showFourOptions(DialogueOption option1, DialogueOption option2, DialogueOption option3, DialogueOption option4);
+	void showHint(std::string text, HintDisplayDuration duration);
 	void hideDialogue();
 
 	// This sets up game elements.
-	void setupCharacters();
+	void setupCharacters(int stage, int level);
 	void setupTeleporters(int stage, int level);
 	void setupDoors(int stage, int level);
 	void setupCheckPoints(int stage, int level);
@@ -36,7 +42,14 @@ namespace Scripts {
 	void fadeTeleportPlayer(size_t world, glm::ivec2 chunk, glm::ivec3 tile);
 	void riseTeleportPlayer(size_t world, glm::ivec2 chunk, glm::ivec3 tile);
 
-	void unlockDoorLock(std::string tag, size_t lockID);
+	void unlockDoorLock(std::string doorID, size_t lockID);
+	void openDoor(std::string doorID, size_t tileType, Location location);
+	void closeDoor(std::string doorID, size_t tileType, Location location);
+	void clearDoorAnimations(std::string doorID);
+	void turnDisplayOn(Location location);
+	void turnDisplayOff(Location location);
+	void pressButton(Location location);
+
 	void setupDoor(Door* door, std::string name, std::function<void()> onOpen, std::function<void()> onClose);
 	void setupDoorSensor(Location* location, std::string doorName, std::string sensorScriptName, size_t tileType, size_t lockID);
 	void setupMultiTypeDoorSensor(Location* location, std::string doorName, std::string sensorScriptName, std::vector<size_t> correctTileTypes, size_t lockID);

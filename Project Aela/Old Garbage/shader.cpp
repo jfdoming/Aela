@@ -136,7 +136,9 @@ GLuint loadShaders(std::string vertexShaderPath, std::string geometryShaderPath,
 	AelaErrorHandling::consoleWindowWarning("Aela Shader Reader", "Aela Shader Reader is linking shaders with OpenGL.");
 	GLuint programID = glCreateProgram();
 	glAttachShader(programID, vertexShaderID);
-	glAttachShader(programID, geometryShaderID);
+	if (geometryShaderPath != "") {
+		glAttachShader(programID, geometryShaderID);
+	}
 	glAttachShader(programID, fragmentShaderID);
 	glLinkProgram(programID);
 
@@ -151,10 +153,12 @@ GLuint loadShaders(std::string vertexShaderPath, std::string geometryShaderPath,
 	}
 
 	glDetachShader(programID, vertexShaderID);
-	glDetachShader(programID, geometryShaderID);
-	glDetachShader(programID, fragmentShaderID);
 	glDeleteShader(vertexShaderID);
-	glDeleteShader(geometryShaderID);
+	if (geometryShaderPath != "") {
+		glDetachShader(programID, geometryShaderID);
+		glDeleteShader(geometryShaderID);
+	}
+	glDetachShader(programID, fragmentShaderID);
 	glDeleteShader(fragmentShaderID);
 	return programID;
 }

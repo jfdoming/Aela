@@ -39,8 +39,8 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 	}
 
 	// This creates transparency layers.
-	map->addModelTransparencyLayer(0);
-	map->addModelTransparencyLayer(1);
+	map->addModelTransparencyLayer(CHARACTER_LAYER);
+	map->addModelTransparencyLayer(GLASS_LAYER);
 
 	Location* playerLocation = playerCharacter->getLocation();
 	glm::ivec3 playerTile = playerLocation->getTileGroup();
@@ -128,7 +128,7 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 
 								switch (tileAtlas->getTileType(tile.getType())->getShape()) {
 									case TileShape::FLOOR:
-										// tilePositionOnMap.y += 1;
+										tilePositionOnMap.y += 0.0001f;
 										break;
 									case TileShape::BOXED_FLOOR:
 										break;
@@ -220,6 +220,10 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 										break;
 									case TileShape::QUARTER_WALL_DOWN_RIGHT:
 										tilePositionOnMap.x -= 0.5f;
+										break;
+									case TileShape::GLASS_FLOOR:
+										tilePositionOnMap.y += 0.0001f;
+										isGlass = true;
 										break;
 									default:
 										// This type is unknown.

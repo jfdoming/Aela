@@ -76,8 +76,6 @@ void AelaErrorHandler::throwError(AelaSimpleError error) {
 		}
 		if (buttonid == -1) {
 			SDL_Log("no selection");
-		} else if (errorButtons[buttonid].text == "End Program") {
-			requestProgramClose();
 		}
 	} else {
 		// This should be unreachable code.

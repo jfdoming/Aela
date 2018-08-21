@@ -22,7 +22,7 @@ namespace Aela {
 			// This generates the info on the user's machine.
 			void generateInfo(GLRenderer* renderer);
 
-			// These are getters and setters.
+			// These are getters and setters for properties that won't change duing runtime:
 			std::vector<std::string>* getAudioDeviceNames();
 			std::vector<std::string>* getAudioDeviceDrivers();
 			std::string getCurrentAudioDriver();
@@ -36,7 +36,10 @@ namespace Aela {
 			unsigned int getLogicalCPUCores();
 			unsigned int getSystemRAM();
 
+			void getDisplayDPI(int whichDisplay, float* diagonalDPI, float* horizontalDPI, float* verticalDPI);
+
 		private:
+			// Things that will never change:
 			std::vector<std::string> audioDeviceNames;
 			std::vector<std::string> audioDeviceDrivers;
 			std::string currentAudioDriver;

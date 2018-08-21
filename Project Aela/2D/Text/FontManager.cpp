@@ -26,6 +26,7 @@ TextFont* FontManager::obtainTextFont(std::string resourceRoot, std::string name
 Rect<int> FontManager::dimensionsOfText(TextFont* font, std::string text) {
 	Rect<int> dimensions;
 	FT_Face face = *font->getFace();
+
 	FT_GlyphSlot glyph = face->glyph;
 	FT_BBox bbox = face->bbox;
 
@@ -33,7 +34,7 @@ Rect<int> FontManager::dimensionsOfText(TextFont* font, std::string text) {
 
 	// I would not normally use this approach to calculate width because it is a little faster to use FT_Glyph_Get_CBox.
 	// However, that function causes an access violation and this method is slightly more accurate.
-	// Update: Actually, this may not be true. I will investigate further.
+	// Update: Actually, calculating width with CBox may not make sense. I will investigate further.
 	int width = 0;
 	for (unsigned int i = 0; i < text.size(); i++) {
 		AelaErrorHandling::handleSignal(SIGSEGV);
@@ -43,10 +44,11 @@ Rect<int> FontManager::dimensionsOfText(TextFont* font, std::string text) {
 		// FT_Load_Char gives various errors.
 		try {
 			if (error = FT_Load_Char(face, (char) (text.at(i)), FT_LOAD_RENDER)) {
+				AelaErrorHandling::consoleWindowError("Aela Text Rendering", "FreeType Error: " + (std::string) getErrorMessage(error));
 				continue;
 			}
 		} catch (char* e) {
-			std::cout << face << " " << (char) (text.at(i)) << " " << getErrorMessage(error) << "\n";
+			std::cout << text << " " << face->family_name << face << " " << (char) (text.at(i)) << " " << getErrorMessage(error) << "\n";
 			std::cout << e << " is an FT_Load_Char exception\n";
 			continue;
 		}
@@ -55,7 +57,7 @@ Rect<int> FontManager::dimensionsOfText(TextFont* font, std::string text) {
 	}
 
 	// This sets the dimensions object of the text to what it should be.
-	dimensions.setWidth(width);
+	dimensions.setWidth(width + 50);
 	int height = (bbox.yMax - bbox.yMin) / POINTS_PER_PIXEL;
 	dimensions.setHeight(height);
 	return dimensions;

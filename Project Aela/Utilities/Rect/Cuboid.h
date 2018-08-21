@@ -79,6 +79,11 @@ namespace Aela {
 				return s;
 			}
 
+			inline friend std::ostream& operator<<(std::ostream &os, Cuboid<T> const& me) {
+				return (os << "Rect(" << me.xPosition << ", " << me.yPosition << ", " << me.zPosition << ", " << me.width << ", "
+					<< me.height << ", " << me.getDepth << ")");
+			}
+
 		protected:
 			T zPosition, depth;
 	};

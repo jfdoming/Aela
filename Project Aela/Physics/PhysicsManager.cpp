@@ -91,8 +91,8 @@ bool Physics::collidingInMap(int whichModel, Map3D* map) {
 				return true;
 			} else if (whichModel != pair && pair.getBoundingBox()->verticesWereGenerated()) {
 			}
-		}
-		return false*/;
+		}*/
+		return false;
 	} else {
 		return false;
 	}

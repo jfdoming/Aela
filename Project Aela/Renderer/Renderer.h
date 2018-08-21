@@ -36,6 +36,7 @@
 #include "../Events/EventListener.h"
 #include "../Events/EventHandler.h"
 #include "../Events/KeyEvent.h"
+#include "../2D/Positioning Mode/PositioningMode2D.h"
 
 // These are some enums used by the Renderer.
 namespace Aela {
@@ -88,10 +89,10 @@ namespace Aela {
 			virtual void clearSimple2DFramebuffer() = 0;
 
 			// These functions are related to 2D rendering.
-			virtual void render2DImage(Image* image, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint) = 0;
-			virtual void renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour) = 0;
-			virtual void renderRectangle(Rect<int>* output, ColourRGBA* colour) = 0;
-			virtual void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour) = 0;
+			virtual void render2DImage(Image* image, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint, PositioningMode2D positioningMode) = 0;
+			virtual void renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour, PositioningMode2D positioningMode) = 0;
+			virtual void renderRectangle(Rect<int>* output, ColourRGBA* colour, PositioningMode2D positioningMode) = 0;
+			virtual void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour, PositioningMode2D positioningMode) = 0;
 			virtual void renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, ColourRGBA* colour) = 0;
 			virtual void renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX,
 				unsigned int pointCY, ColourRGBA* colour) = 0;

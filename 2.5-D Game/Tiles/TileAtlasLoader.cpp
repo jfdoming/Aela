@@ -69,7 +69,8 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 						|| shape == TileShape::RAMP_UP
 						|| shape == TileShape::RAMP_LEFT
 						|| shape == TileShape::RAMP_DOWN
-						|| shape == TileShape::LIQUID_FLOOR) {
+						|| shape == TileShape::LIQUID_FLOOR
+						|| shape == TileShape::GLASS_FLOOR) {
 						templateTile += "floor.obj";
 					}
 					if (shape == TileShape::BOXED_FLOOR) {
@@ -226,6 +227,8 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 								shape = TileShape::QUARTER_WALL_DOWN_LEFT;
 							} else if (value == "quarter_wall_down_right") {
 								shape = TileShape::QUARTER_WALL_DOWN_RIGHT;
+							} else if (value == "glass_floor") {
+								shape = TileShape::GLASS_FLOOR;
 							} else {
 								shape = TileShape::FLOOR;
 							}

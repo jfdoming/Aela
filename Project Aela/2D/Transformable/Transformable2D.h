@@ -9,6 +9,7 @@
 #include "../../Transformable/Transformable.h"
 #include "../../Utilities/Colour/ColourRGBA.h"
 #include "../../Utilities/Rect/Rect.h"
+#include "../Positioning Mode/PositioningMode2D.h"
 
 namespace Aela {
 	// This enum is used in an Camera3D function to change a single property.
@@ -27,6 +28,8 @@ namespace Aela {
 			ColourRGBA* getTint();
 			virtual void setDimensions(Rect<int>* dimensions);
 			Rect<int>* getDimensions();
+			void setPositioningMode(PositioningMode2D positioningMode);
+			PositioningMode2D getPositioningMode();
 
 			// These are functions used for changing any single property.
 			void setProperty(Transformable2DProperty property, float value);
@@ -37,6 +40,7 @@ namespace Aela {
 
 		protected:
 			ColourRGBA tint;
+			PositioningMode2D positioningMode = PositioningMode2D::TOP_LEFT;
 			Rect<int> dimensions;
 
 		private:

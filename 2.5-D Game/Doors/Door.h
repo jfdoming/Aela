@@ -10,6 +10,8 @@
 #include <vector>
 #include <functional>
 
+#define TIME_BETWEEN_DOOR_ANIMATION_FRAMES 32000000ll
+
 namespace Game {
 	class Door {
 		public:
@@ -41,6 +43,5 @@ namespace Game {
 			std::function<void()> onClose = nullptr;
 
 			bool open;
-			
 	};
 }

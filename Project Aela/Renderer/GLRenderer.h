@@ -106,10 +106,10 @@ namespace Aela {
 			void clearSimple2DFramebuffer();
 
 			// These functions are related to 2D rendering.
-			void render2DImage(Image* image, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint);
-			void renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour);
-			void renderRectangle(Rect<int>* output, ColourRGBA* colour);
-			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour);
+			void render2DImage(Image* image, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint, PositioningMode2D PositioningMode);
+			void renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour, PositioningMode2D PositioningMode);
+			void renderRectangle(Rect<int>* output, ColourRGBA* colour, PositioningMode2D PositioningMode);
+			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour, PositioningMode2D PositioningMode);
 			void renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, ColourRGBA* colour);
 			void renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX,
 				unsigned int pointCY, ColourRGBA* colour);

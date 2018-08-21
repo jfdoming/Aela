@@ -10,6 +10,10 @@
 #include <ft2build.h>
 #include <freetype/freetype.h>
 
+// This stores the amount of points in a character that make up one pixel.
+#define POINTS_PER_PIXEL 64
+
+
 namespace Aela {
 	class TextFont {
 		public:

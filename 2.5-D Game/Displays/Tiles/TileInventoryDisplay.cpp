@@ -28,6 +28,18 @@ void Game::TileInventoryDisplay::setup() {
 	worldManager = GameObjectProvider::getWorldManager();
 }
 
+void Game::TileInventoryDisplay::hide() {
+	subMenu->hide();
+	backgroundImage->hide();
+	boxImage->hide();
+}
+
+void Game::TileInventoryDisplay::show() {
+	subMenu->show();
+	backgroundImage->show();
+	boxImage->show();
+}
+
 void Game::TileInventoryDisplay::refreshSubMenu() {
 	if (tileInventory->getNumberOfTiles() == 0) {
 		return;
@@ -40,19 +52,26 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 	// on what current game mode is being used.
 	GameMode gameMode = GameObjectProvider::getGame()->getGameMode();
 
+	size_t numberOfTiles = player->getTileInventory()->getNumberOfTiles();
+
 	int width = window->getDimensions()->getWidth(), height = window->getDimensions()->getHeight();
 	int imageWidthAndHeight = height / 8;
+	int border = (int) (BACKGROUND_BORDER * width);
 	size_t currentTile = player->getTileInventory()->getCurrentTileIndex();
 
 	TileAtlas* tileAtlas = GameObjectProvider::getTileAtlas();
 
-	tileInventoryLabel->setText(tileAtlas->getTileType(player->getTileInventory()->getCurrentTile()->getType())->getName());
+	label->setText(tileAtlas->getTileType(player->getTileInventory()->getCurrentTile()->getType())->getName());
 
 	if (gameMode == GameMode::GAMEPLAY) {
-		for (size_t i = 0; i < player->getTileInventory()->getNumberOfTiles(); i++) {
+		backgroundImage->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (numberOfTiles * imageWidthAndHeight) - border),
+			(int) (height * VERTICAL_CENTER - imageWidthAndHeight - border), (int) (imageWidthAndHeight * numberOfTiles + border * 2),
+			(int) (imageWidthAndHeight * HEIGHT_MULTIPLIER + border * 2)));
+
+		for (size_t i = 0; i < numberOfTiles; i++) {
 			Tile* tile = player->getTileInventory()->getTile(i);
 
-			if (tileInventoryImages.size() == i) {
+			if (tileImages.size() == i) {
 				auto image = std::make_shared<ImageComponent>();
 				GLTexture* texture = nullptr;
 
@@ -68,12 +87,12 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 					resourceManager->useResourceRoot(true);
 				}
 
-				image->setDimensions(&Rect<int>((int) (width * 0.98 - (i * imageWidthAndHeight) - imageWidthAndHeight),
-					(int) (height * 0.15 - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
+				image->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
+					(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
 				image->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
 				image->setTexture(texture);
-				tileInventoryImages.push_back(image);
-				tileInventorySubMenu->add(image);
+				tileImages.push_back(image);
+				subMenu->add(image);
 			} else {
 				GLTexture* texture;
 
@@ -82,18 +101,25 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 				if (tile->getEntity() == nullptr) {
 					resourceManager->obtain<GLTexture>((std::string) DEFAULT_MATERIAL_PATH + (std::string) "grass.dds", texture);
 				} else {
+					resourceManager->useResourceRoot(false);
 					if (!resourceManager->obtain<GLTexture>(tileAtlas->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
-						break;
+						resourceManager->useResourceRoot(true);
+						continue;
 					}
+					resourceManager->useResourceRoot(true);
 				}
 
-				tileInventoryImages[i]->setDimensions(&Rect<int>((int) (width * 0.98 - (i * imageWidthAndHeight) - imageWidthAndHeight),
-					(int) (height * 0.15 - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
-				tileInventoryImages[i]->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
-				tileInventoryImages[i]->setTexture(texture);
+				tileImages[i]->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
+					(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
+				tileImages[i]->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
+				tileImages[i]->setTexture(texture);
 			}
 		}
 	} else if (gameMode == GameMode::MAP_EDITOR) {
+		backgroundImage->setDimensions(&Rect<int>((int)(width * HORIZONTAL_CENTER - (NUMBER_OF_SLOTS * imageWidthAndHeight) - border),
+			(int) (height * VERTICAL_CENTER - imageWidthAndHeight - border), (int) (imageWidthAndHeight * NUMBER_OF_SLOTS + border * 2),
+			(int) (imageWidthAndHeight * HEIGHT_MULTIPLIER + border * 2)));
+
 		if (!setThingsUp) {
 			for (size_t i = 0; i < NUMBER_OF_SLOTS; i++) {
 				Tile* tile = player->getTileInventory()->getTile(i);
@@ -112,12 +138,12 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 					resourceManager->useResourceRoot(true);
 				}
 
-				image->setDimensions(&Rect<int>((int) (width * 0.98 - (i * imageWidthAndHeight) - imageWidthAndHeight),
-					(int) (height * 0.15 - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
+				image->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
+					(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
 				image->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
 				image->setTexture(texture);
-				tileInventoryImages.push_back(image);
-				tileInventorySubMenu->add(image);
+				tileImages.push_back(image);
+				subMenu->add(image);
 			}
 			animateSelectorBox();
 			setThingsUp = true;
@@ -131,10 +157,10 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 
 				resourceManager->obtain<GLTexture>((std::string) DEFAULT_TEXTURE_PATH + "black.png", texture);
 
-				tileInventoryImages[i]->setDimensions(&Rect<int>((int) (width * 0.98 - (i * imageWidthAndHeight) - imageWidthAndHeight),
-					(int) (height * 0.15 - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
-				tileInventoryImages[i]->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
-				tileInventoryImages[i]->setTexture(texture);
+				tileImages[i]->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
+					(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
+				tileImages[i]->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
+				tileImages[i]->setTexture(texture);
 			} else {
 				Tile* tile = player->getTileInventory()->getTile(whichTile);
 				GLTexture* texture;
@@ -142,17 +168,21 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 				// Until Aela is designed better (which I don't have the time to do), we must do this to get a GLTexture* (as opposed to getting
 				// a Texture* via tile->...->getTexture()).
 				if (tile->getEntity() == nullptr) {
-					resourceManager->obtain<GLTexture>((std::string) DEFAULT_MATERIAL_PATH + (std::string) "grass.dds", texture);
+					resourceManager->obtain<GLTexture>((std::string) DEFAULT_TEXTURE_PATH + (std::string) "black.png", texture);
 				} else {
+					// We need to disable resource root because getSrc() returns the src with the resource root.
+					resourceManager->useResourceRoot(false);
 					if (!resourceManager->obtain<GLTexture>(tileAtlas->getTileModel(tile->getType())->getSubModels()->at(0).getMaterial()->getTexture()->getSrc(), texture)) {
+						resourceManager->useResourceRoot(true);
 						break;
 					}
+					resourceManager->useResourceRoot(true);
 				}
 
-				tileInventoryImages[i]->setDimensions(&Rect<int>((int) (width * 0.98 - (i * imageWidthAndHeight) - imageWidthAndHeight),
-					(int) (height * 0.15 - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
-				tileInventoryImages[i]->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
-				tileInventoryImages[i]->setTexture(texture);
+				tileImages[i]->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
+					(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
+				tileImages[i]->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
+				tileImages[i]->setTexture(texture);
 			}
 		}
 	}
@@ -165,29 +195,30 @@ void Game::TileInventoryDisplay::animateSelectorBox() {
 		AnimationTrack2D track;
 		track.setTag("selector_box_movement");
 		KeyFrame2D frame;
-		frame.setObject(tileInventoryBoxImage);
-		Rect<int> dimensions = *tileInventoryBoxImage->getDimensions();
+		frame.setObject(boxImage);
+		Rect<int> dimensions = *boxImage->getDimensions();
 		int imageWidthAndHeight = window->getDimensions()->getHeight() / 8;
-		dimensions.setX((int) (window->getDimensions()->getWidth() * 0.98
+		dimensions.setX((int) (window->getDimensions()->getWidth() * HORIZONTAL_CENTER
 			- (player->getTileInventory()->getCurrentTileIndex() * imageWidthAndHeight)
 			- imageWidthAndHeight - imageWidthAndHeight * 0.1));
 		frame.setDimensions(&dimensions);
 		track.addKeyFrameUsingMillis((size_t) (TIME_FOR_SELECTOR_TO_MOVE), &frame);
 		animator->addAnimationTrack2D(&track);
 	} else if (gameMode == GameMode::MAP_EDITOR) {
-		Rect<int> dimensions = *tileInventoryBoxImage->getDimensions();
-		tileInventoryBoxImage->setCropping(tileInventoryBoxImage->getTexture()->getDimensions());
+		Rect<int> dimensions = *boxImage->getDimensions();
+		boxImage->setCropping(boxImage->getTexture()->getDimensions());
 		int imageWidthAndHeight = window->getDimensions()->getHeight() / 8;
-		dimensions.setX((int) (window->getDimensions()->getWidth() * 0.98
+		dimensions.setX((int) (window->getDimensions()->getWidth() * HORIZONTAL_CENTER
 			- (1 * imageWidthAndHeight)
 			- imageWidthAndHeight - imageWidthAndHeight * 0.1));
-		tileInventoryBoxImage->setDimensions(&dimensions);
+		boxImage->setDimensions(&dimensions);
 	}
 }
 
-void Game::TileInventoryDisplay::setMenuItems(std::shared_ptr<SubMenu> tileInventorySubMenu,
-	std::shared_ptr<Label> tileInventoryLabel, std::shared_ptr<ImageComponent> tileInventoryBoxImage) {
-	this->tileInventorySubMenu = tileInventorySubMenu;
-	this->tileInventoryLabel = tileInventoryLabel;
-	this->tileInventoryBoxImage = tileInventoryBoxImage;
+void Game::TileInventoryDisplay::setMenuItems(std::shared_ptr<SubMenu> subMenu, std::shared_ptr<Label> label,
+	std::shared_ptr<ImageComponent> backgroundImage, std::shared_ptr<ImageComponent> boxImage) {
+	this->subMenu = subMenu;
+	this->label = label;
+	this->backgroundImage = backgroundImage;
+	this->boxImage = boxImage;
 }

@@ -23,7 +23,7 @@ void Basic2DGLRenderer::setup() {
 
 	// This gets handles to GLSL variables.
 	getGLSLVariableHandles();
-	
+
 	// This loads the character texture.
 	glGenTextures(1, &characterTexture);
 	glBindTexture(GL_TEXTURE_2D, characterTexture);
@@ -73,23 +73,23 @@ void Basic2DGLRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffe
 	GLuint* multisampledTexture = framebuffer->getMultisampledFramebufferImage()->getTexture();
 
 	// if (multisampling > 0) {
-		// This generates the multisampled colour framebuffer, which later is blitted to the regular colour framebuffer.
-		glGenFramebuffers(1, framebuffer->getMultisampledFramebuffer());
-		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
+	// This generates the multisampled colour framebuffer, which later is blitted to the regular colour framebuffer.
+	glGenFramebuffers(1, framebuffer->getMultisampledFramebuffer());
+	glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
 
-		glGenTextures(1, multisampledTexture);
-		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, *multisampledTexture);
-		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, windowWidth, windowHeight, GL_TRUE);
-		/* Clamping to edges is important to prevent artifacts when scaling */
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		/* Linear filtering usually looks best for text */
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glGenTextures(1, multisampledTexture);
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, *multisampledTexture);
+	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, windowWidth, windowHeight, GL_TRUE);
+	/* Clamping to edges is important to prevent artifacts when scaling */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	/* Linear filtering usually looks best for text */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		framebuffer->getMultisampledFramebufferImage()->setDimensions(0, 0, windowWidth, windowHeight);
-		glDrawBuffer(GL_COLOR_ATTACHMENT0);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *multisampledTexture, 0);
+	framebuffer->getMultisampledFramebufferImage()->setDimensions(0, 0, windowWidth, windowHeight);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *multisampledTexture, 0);
 	// }
 
 	glGenFramebuffers(1, framebuffer->getFramebuffer());
@@ -109,23 +109,23 @@ void Basic2DGLRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffe
 }
 
 // This function renders a texture directly to a specified framebuffer using the shader for rendering images.
-void Basic2DGLRenderer::renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
-	renderImageToSimple2DFramebuffer(image, framebuffer, output, cropping, windowDimensions, tint, imageToBufferProgramID);
+void Basic2DGLRenderer::renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, PositioningMode2D positioningMode) {
+	renderImageToSimple2DFramebuffer(image, framebuffer, output, cropping, windowDimensions, tint, positioningMode, imageToBufferProgramID);
 }
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
 // Note: Custom shaders can be used for post-process effects.
-void Basic2DGLRenderer::renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, unsigned int customShader) {
+void Basic2DGLRenderer::renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, PositioningMode2D positioningMode, unsigned int customShader) {
 	if (framebuffer->getMultisampling() > 0) {
-		renderImageToFramebuffer(image, *framebuffer->getMultisampledFramebuffer(), output, cropping, windowDimensions, tint, customShader);
+		renderImageToFramebuffer(image, *framebuffer->getMultisampledFramebuffer(), output, cropping, windowDimensions, tint, positioningMode, customShader);
 	} else {
-		renderImageToFramebuffer(image, *framebuffer->getFramebuffer(), output, cropping, windowDimensions, tint, customShader);
+		renderImageToFramebuffer(image, *framebuffer->getFramebuffer(), output, cropping, windowDimensions, tint, positioningMode, customShader);
 	}
 }
 
 // This function renders a texture directly to a specified framebuffer.
-void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint) {
-	renderImageToFramebuffer(image, framebuffer, output, cropping, windowDimensions, tint, bufferTextureToBufferProgramID);
+void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint, PositioningMode2D positioningMode) {
+	renderImageToFramebuffer(image, framebuffer, output, cropping, windowDimensions, tint, positioningMode, bufferTextureToBufferProgramID);
 }
 
 // This function renders a texture directly to a framebuffer, using a custom shader.
@@ -133,17 +133,31 @@ void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int fram
 // Note: Shaders that use the same uniforms and buffers as the 2DTextureBufferToBuffer shader (bufferTextureToBufferProgramID) should set the same
 // locations of uniforms as they are in the 2DTextureBufferToBuffer shader.
 void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int framebuffer, Rect<int>* output, Rect<int>* cropping,
-	Rect<unsigned int>* windowDimensions, ColourRGBA* tint, unsigned int customShader) {
+	Rect<unsigned int>* windowDimensions, ColourRGBA* tint, PositioningMode2D positioningMode, unsigned int customShader) {
 	glDisable(GL_CULL_FACE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
-	int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
 	int textureWidth = image->getDimensions()->getWidth(), textureHeight = image->getDimensions()->getHeight();
-	float vertexTopLeftX = (float) (-1 + ((float) output->getX() / (windowWidth / 2))),
-		vertexTopLeftY = (float) (-1 + ((float) output->getY() / (windowHeight / 2))),
-		vertexBottomRightX = (-1 + ((float) (output->getX() + output->getWidth()) / (windowWidth / 2))),
-		vertexBottomRightY = (float) (-1 + ((float) (output->getY() + output->getHeight()) / (windowHeight / 2)));
+	int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
+	float vertexTopLeftX, vertexTopLeftY, vertexBottomRightX, vertexBottomRightY;
+
+	// You know, it would be nice if Visual Studio would stop secretly taking out the spaces between my C-style casts.
+	switch (positioningMode) {
+		case PositioningMode2D::TOP_LEFT:
+			vertexTopLeftX = (float)(-1 + ((float)output->getX() / (windowWidth / 2)));
+			vertexTopLeftY = (float)(-1 + ((float)output->getY() / (windowHeight / 2)));
+			vertexBottomRightX = (-1 + ((float)(output->getX() + output->getWidth()) / (windowWidth / 2)));
+			vertexBottomRightY = (float)(-1 + ((float)(output->getY() + output->getHeight()) / (windowHeight / 2)));
+			break;
+		case PositioningMode2D::CENTER:
+			int halfWidth = output->getWidth(), halfHeight = output->getHeight();
+			vertexTopLeftX = (float)(-1 + ((float) (output->getX() - halfWidth) / (windowWidth / 2)));
+			vertexTopLeftY = (float)(-1 + ((float) (output->getY() - halfHeight) / (windowHeight / 2)));
+			vertexBottomRightX = (-1 + ((float) (output->getX() + halfWidth) / (windowWidth / 2)));
+			vertexBottomRightY = (float)(-1 + ((float) (output->getY() + +halfHeight) / (windowHeight / 2)));
+			break;
+	}
 
 	GLfloat vertexBufferData[] = {
 		vertexTopLeftX,  vertexBottomRightY, 0.0f,
@@ -154,10 +168,10 @@ void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int fram
 		vertexBottomRightX,  vertexBottomRightY, 0.0f
 	};
 
-	float UVTopLeftX = (float) cropping->getX() / textureWidth,
-		UVTopLeftY = (float) cropping->getY() / textureHeight,
-		UVBottomRightX = (float) (cropping->getX() + cropping->getWidth()) / textureWidth,
-		UVBottomRightY = (float) (cropping->getY() + cropping->getHeight()) / textureHeight;
+	float UVTopLeftX = (float)cropping->getX() / textureWidth,
+		UVTopLeftY = (float)cropping->getY() / textureHeight,
+		UVBottomRightX = (float)(cropping->getX() + cropping->getWidth()) / textureWidth,
+		UVBottomRightY = (float)(cropping->getY() + cropping->getHeight()) / textureHeight;
 
 	GLfloat UVBufferData[] = {
 		UVTopLeftX,  UVBottomRightY,
@@ -198,7 +212,7 @@ void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int fram
 		GL_FLOAT,
 		GL_FALSE,
 		0,
-		(void*) 0
+		(void*)0
 	);
 
 	GLuint UVBuffer;
@@ -215,17 +229,17 @@ void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int fram
 		GL_FLOAT,
 		GL_FALSE,
 		0,
-		(void*) 0
+		(void*)0
 	);
 
-	GLfloat topLeftArray[] = { 
+	GLfloat topLeftArray[] = {
 		1.0f + vertexTopLeftX, 1.0f + vertexTopLeftY
 	};
 
 	glUniform2fv(imageTopLeftCoordID, 1, &topLeftArray[0]);
 
 	GLfloat windowDimensionsArray[] = {
-		(float) windowWidth, (float) windowHeight
+		(float)windowWidth, (float)windowHeight
 	};
 
 	glUniform2fv(imageWindowDimensionsID, 1, &windowDimensionsArray[0]);
@@ -240,7 +254,7 @@ void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int fram
 
 // This function renders text directly to the 2D renderer's buffer.
 void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFont* textFont, Simple2DFramebuffer* framebuffer, Rect<int>* output,
-	Rect<unsigned int>* windowDimensions, ColourRGBA* colour, unsigned int pointsPerPixel) {
+	Rect<unsigned int>* windowDimensions, ColourRGBA* colour, PositioningMode2D positioningMode, unsigned int pointsPerPixel) {
 	// Some of the terms used in this function may be confusing. See https://www.freetype.org/freetype2/docs/tutorial/step2.html to look up the terms.
 	// This function creates a buffer that represents the texture of the text. It does this by combining the buffers of the individual glyphs.
 	// Then it renders the buffer of the entire text. This is faster than rendering each individual character using the GPU.
@@ -269,33 +283,34 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 
 	// This goes through every glyph to perform actions upon every glyph's properties.
 	for (unsigned int i = 0; i < text.length(); i++) {
-		char p = ((char) (text.at(i)));
+		char p = ((char)(text.at(i)));
 		AelaErrorHandling::handleSignal(SIGSEGV);
 		FT_Error error;
 
 		// This loads the character.
 		try {
-			if (error = FT_Load_Char(*(textFont->getFace()), (char) (text.at(i)), FT_LOAD_RENDER)) {
+			if (error = FT_Load_Char(*(textFont->getFace()), (char)(text.at(i)), FT_LOAD_RENDER)) {
 				continue;
 			}
 		} catch (char* e) {
-			std::cout << *(textFont->getFace()) << " " << (char) (text.at(i)) << " " << FontManager::getErrorMessage(error) << "\n";
+			std::cout << *(textFont->getFace()) << " " << (char)(text.at(i)) << " " << FontManager::getErrorMessage(error) << "\n";
 			std::cout << e << " is an FT_Load_Char exception\n";
 			continue;
 		}
-		
+
 
 		characterPositioning.setWidth(characterPositioning.getWidth() + glyph->bitmap.width);
+		// characterPositioning.setWidth(characterPositioning.getWidth() + glyph->metrics.horiAdvance);
 
-		if (glyph->metrics.horiBearingY / (signed int) pointsPerPixel > distanceToTop) {
-			distanceToTop = glyph->metrics.horiBearingY / (signed int) pointsPerPixel;
+		if (glyph->metrics.horiBearingY / (signed int)pointsPerPixel > distanceToTop) {
+			distanceToTop = glyph->metrics.horiBearingY / (signed int)pointsPerPixel;
 		}
 
-		if ((glyph->metrics.height - glyph->metrics.horiBearingY) / (signed int) pointsPerPixel > distanceToBottom) {
-			distanceToBottom = (glyph->metrics.height - glyph->metrics.horiBearingY) / (signed int) pointsPerPixel;
+		if ((glyph->metrics.height - glyph->metrics.horiBearingY) / (signed int)pointsPerPixel > distanceToBottom) {
+			distanceToBottom = (glyph->metrics.height - glyph->metrics.horiBearingY) / (signed int)pointsPerPixel;
 		}
 
-		if (glyph->metrics.horiBearingY / (signed int) pointsPerPixel > originY) {
+		if (glyph->metrics.horiBearingY / (signed int)pointsPerPixel > originY) {
 			originY = glyph->metrics.horiBearingY / (signed int) pointsPerPixel;
 		}
 
@@ -303,7 +318,7 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 		// typedef'd pointer.
 		if (glyph->bitmap.buffer != nullptr) {
 			RenderableGlyph charBuffer;
-			unsigned char* data = (unsigned char*) malloc(glyph->bitmap.width * glyph->bitmap.rows);
+			unsigned char* data = (unsigned char*)malloc(glyph->bitmap.width * glyph->bitmap.rows);
 			memcpy(data, glyph->bitmap.buffer, glyph->bitmap.width * glyph->bitmap.rows);
 			charBuffer.buffer = data;
 			charBuffer.width = glyph->bitmap.width;
@@ -317,7 +332,8 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 
 		// This sets up a RenderableGlyph for the space in between characters. It also makes a space for the character ' '.
 		RenderableGlyph advancementBuffer;
-		unsigned int advancement = glyph->metrics.horiAdvance / pointsPerPixel - glyph->bitmap.width;
+		unsigned int horiAdvance = glyph->metrics.horiAdvance / pointsPerPixel;
+		unsigned int advancement = horiAdvance - glm::clamp(glyph->bitmap.width, (unsigned int) 0, horiAdvance);
 		characterPositioning.setWidth(characterPositioning.getWidth() + advancement);
 		advancementBuffer.width = advancement;
 		advancementBuffer.rows = 0;
@@ -327,8 +343,17 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 		glyphs.push_back(advancementBuffer);
 	}
 
+	switch (positioningMode) {
+		case PositioningMode2D::TOP_LEFT:
+			characterPositioning.setY(characterPositioning.getY() - distanceToTop);
+			break;
+		case PositioningMode2D::CENTER:
+			characterPositioning.setX((int) (characterPositioning.getX() - characterPositioning.getWidth() / 2.0f));
+			characterPositioning.setY((int) (characterPositioning.getY() - distanceToTop - characterPositioning.getHeight() / 2.0f));
+			break;
+	}
+
 	characterPositioning.setHeight(distanceToTop + distanceToBottom);
-	characterPositioning.setY(characterPositioning.getY() - distanceToTop);
 
 	// This creates one buffer out of each glyph's individual buffer.
 	if (glyphs.size() > 0) {
@@ -346,8 +371,10 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 		}
 	}
 
-	// This renders the text's buffer using the GPU.
-	renderCharacterBuffer(framebuffer, &characterPositioning, windowDimensions, &buffer, characterPositioning.getWidth(), characterPositioning.getHeight(), colour);
+	if (characterPositioning.getWidth() != 0) {
+		// This renders the text's buffer using the GPU.
+		renderCharacterBuffer(framebuffer, &characterPositioning, windowDimensions, &buffer, characterPositioning.getWidth(), characterPositioning.getHeight(), colour);
+	}
 
 	// This frees the memory of each glyph's individual buffer.
 	for (unsigned int i = 0; i < glyphs.size(); i++) {
@@ -388,10 +415,10 @@ void Basic2DGLRenderer::renderCharacterBuffer(Simple2DFramebuffer* framebuffer, 
 
 		// This sets up positioning data.
 		int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
-		float topLeftX = (float) (-1 + ((float) output->getX() / (windowWidth / 2))),
-			topLeftY = (float) (-1 + ((float) output->getY() / (windowHeight / 2))),
-			bottomRightX = (-1 + ((float) (output->getX() + output->getWidth()) / (windowWidth / 2))),
-			bottomRightY = (float) (-1 + ((float) (output->getY() + output->getHeight()) / (windowHeight / 2)));
+		float topLeftX = (float)(-1 + ((float)output->getX() / (windowWidth / 2))),
+			topLeftY = (float)(-1 + ((float)output->getY() / (windowHeight / 2))),
+			bottomRightX = (-1 + ((float)(output->getX() + output->getWidth()) / (windowWidth / 2))),
+			bottomRightY = (float)(-1 + ((float)(output->getY() + output->getHeight()) / (windowHeight / 2)));
 
 		GLfloat vertexBufferData[] = {
 			topLeftX,  bottomRightY, 0.0f,
@@ -432,7 +459,7 @@ void Basic2DGLRenderer::renderCharacterBuffer(Simple2DFramebuffer* framebuffer, 
 			GL_FLOAT,
 			GL_FALSE,
 			0,
-			(void*) 0
+			(void*)0
 		);
 
 		GLfloat topLeftArray[] = {
@@ -442,13 +469,13 @@ void Basic2DGLRenderer::renderCharacterBuffer(Simple2DFramebuffer* framebuffer, 
 		glUniform2fv(characterTopLeftCoordID, 1, &topLeftArray[0]);
 
 		GLfloat textureDimensionsArray[] = {
-			(float) textureWidth, (float) textureHeight
+			(float)textureWidth, (float)textureHeight
 		};
 
 		glUniform2fv(characterDimensionsID, 1, &textureDimensionsArray[0]);
 
 		GLfloat windowDimensionsArray[] = {
-			(float) windowWidth, (float) windowHeight
+			(float)windowWidth, (float)windowHeight
 		};
 
 		glUniform2fv(characterWindowDimensionsID, 1, &windowDimensionsArray[0]);
@@ -487,7 +514,7 @@ void Basic2DGLRenderer::drawTestQuad() {
 }
 
 // This function is used to draw a rectangle.
-void Basic2DGLRenderer::renderRectangle(Rect<int>* output, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions,  ColourRGBA* colour) {
+void Basic2DGLRenderer::renderRectangle(Rect<int>* output, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, PositioningMode2D positioningMode) {
 	glUseProgram(0);
 	if (framebuffer->getMultisampling() > 0) {
 		glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
@@ -501,16 +528,36 @@ void Basic2DGLRenderer::renderRectangle(Rect<int>* output, Simple2DFramebuffer* 
 	int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
 	glColor4f(colour->getR(), colour->getG(), colour->getB(), colour->getA());
 	glBegin(GL_QUADS);
-	glVertex2f(-1 + 2 * ((float) output->getX() / windowWidth), -(-1 + 2 * ((float) output->getY() / windowHeight)));
-	glVertex2f(-1 + 2 * ((float) output->getX() / windowWidth), -(-1 + 2 * (((float) output->getY() + output->getHeight()) / windowHeight)));
-	glVertex2f(-1 + 2 * (((float) output->getX() + output->getWidth()) / windowWidth), -(-1 + 2 * (((float) output->getY() + output->getHeight()) / windowHeight)));
-	glVertex2f(-1 + 2 * (((float) output->getX() + output->getWidth()) / windowWidth), -(-1 + 2 * ((float) output->getY() / windowHeight)));
+
+	float vertexTopLeftX, vertexTopLeftY, vertexBottomRightX, vertexBottomRightY;
+
+	// You know, it would be nice if Visual Studio would stop secretly taking out the spaces between my C-style casts.
+	switch (positioningMode) {
+		case PositioningMode2D::TOP_LEFT:
+			vertexTopLeftX = (float)(-1 + ((float)output->getX() / (windowWidth / 2)));
+			vertexTopLeftY = (float)(-1 + ((float)output->getY() / (windowHeight / 2)));
+			vertexBottomRightX = (-1 + ((float)(output->getX() + output->getWidth()) / (windowWidth / 2)));
+			vertexBottomRightY = (float)(-1 + ((float)(output->getY() + output->getHeight()) / (windowHeight / 2)));
+			break;
+		case PositioningMode2D::CENTER:
+			int halfWidth = output->getWidth(), halfHeight = output->getHeight();
+			vertexTopLeftX = (float)(-1 + ((float)(output->getX() - halfWidth) / (windowWidth / 2)));
+			vertexTopLeftY = (float)(-1 + ((float)(output->getY() - halfHeight) / (windowHeight / 2)));
+			vertexBottomRightX = (-1 + ((float)(output->getX() + halfWidth) / (windowWidth / 2)));
+			vertexBottomRightY = (float)(-1 + ((float)(output->getY() + +halfHeight) / (windowHeight / 2)));
+			break;
+	}
+
+	glVertex2f(vertexTopLeftX, -(vertexTopLeftY));
+	glVertex2f(vertexTopLeftX, -(vertexBottomRightY));
+	glVertex2f(vertexBottomRightX, -(vertexBottomRightY));
+	glVertex2f(vertexBottomRightX, -(vertexTopLeftY));
 	glEnd();
 }
 
-void Basic2DGLRenderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour) {
+void Basic2DGLRenderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, PositioningMode2D positioningMode) {
 	Rect<int> rect(xPosition, yPosition, width, height);
-	renderRectangle(&rect, framebuffer, windowDimensions, colour);
+	renderRectangle(&rect, framebuffer, windowDimensions, colour, positioningMode);
 }
 
 // This function is used to draw a triangle.
@@ -528,9 +575,9 @@ void Basic2DGLRenderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::
 	int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
 	glColor4f(colour->getR(), colour->getG(), colour->getB(), colour->getA());
 	glBegin(GL_TRIANGLES);
-	glVertex2f(-1 + 2 * ((float) pointA.x / windowWidth), -(-1 + 2 * ((float) pointA.y / windowHeight)));
-	glVertex2f(-1 + 2 * ((float) pointB.x / windowWidth), -(-1 + 2 * ((float) pointB.y / windowHeight)));
-	glVertex2f(-1 + 2 * ((float) pointC.x / windowWidth), -(-1 + 2 * ((float) pointC.y / windowHeight)));
+	glVertex2f(-1 + 2 * ((float)pointA.x / windowWidth), -(-1 + 2 * ((float) pointA.y / windowHeight)));
+	glVertex2f(-1 + 2 * ((float)pointB.x / windowWidth), -(-1 + 2 * ((float) pointB.y / windowHeight)));
+	glVertex2f(-1 + 2 * ((float)pointC.x / windowWidth), -(-1 + 2 * ((float) pointC.y / windowHeight)));
 	glEnd();
 }
 
