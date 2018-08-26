@@ -93,7 +93,6 @@ void Game::Turret::update() {
 }
 
 void Game::Turret::addBulletEffects(Scene* gameplayScene, ResourceManager* resourceManager, Time* time) {
-	std::cout << "Getting\n";
 	std::vector<GLTexture*> textures;
 	GLTexture* texture;
 	if (!resourceManager->obtain<GLTexture>((std::string) "res/particles/laser.dds", texture)) {

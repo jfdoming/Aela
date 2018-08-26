@@ -12,23 +12,26 @@ namespace Aela {
 	class Label : public Component {
 		public:
 			// These are constructors that do not require the user to call setup() since they do it for the user.
-			Label(std::string text, TextFont* font);
-			Label(std::string text, TextFont* font, ColourRGBA* colour);
+			Label(std::string text, Font* font, unsigned int size);
+			Label(std::string text, Font* font, unsigned int size, ColourRGBA* colour);
 
 			virtual ~Label();
 
 			// These are getters and setters.
 			void setText(std::string text);
 			std::string getText();
-			void setFont(TextFont* font);
-			TextFont* getFont();
+			void setFont(Font* font);
+			Font* getFont();
+			void setSize(unsigned int size);
+			unsigned int getSize();
 			void setColour(ColourRGBA* colour);
 			ColourRGBA* getColour();
 
 			virtual void renderWithDifferentTint(GLRenderer& renderer, ColourRGBA* tint);
 		protected:
 			std::string text;
-			TextFont* font;
+			Font* font;
+			unsigned int size;
 			ColourRGBA colour;
 
 			void setupWidthAndHeight();

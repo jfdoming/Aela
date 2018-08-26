@@ -45,12 +45,30 @@ void Scripts::hideDialogue() {
 }
 
 void Scripts::setupCharacters(int stage, int level) {
-	Turret* turret = new Turret("test", &Location(1, -15, 0, 0, 0, 11), 1);
-	turret->setTextureName("character");
-	turret->setDetectionAngles(false, false, true, false);
-	turret->turnImmediately(TileDirection::LEFT);
-	characterProvider->addCharacter(turret);
-	enemyProvider->addTurret(turret);
+	switch (stage) {
+		case 1:
+			switch (level) {
+				case 2: {
+					Character* soldier_1 = new Character("soldier_1", &Location(1, -9, 4, 11, -4, 1));
+					soldier_1->setTextureName("soldier_1");
+					characterProvider->addCharacter(soldier_1);
+
+					Character* scientist_1 = new Character("scientist_1", &Location(1, -9, 4, 11, -4, 0));
+					scientist_1->setTextureName("scientist_1");
+					characterProvider->addCharacter(scientist_1);
+					break;
+				}
+				case 3: {
+					Turret* turret = new Turret("test", &Location(1, -15, 0, 0, 0, 11), 1);
+					turret->setTextureName("character");
+					turret->setDetectionAngles(false, false, true, false);
+					turret->turnImmediately(TileDirection::LEFT);
+					characterProvider->addCharacter(turret);
+					enemyProvider->addTurret(turret);
+					break;
+				}
+			}
+	}
 }
 
 void Scripts::setupTeleporters(int stage, int level) {
@@ -1165,9 +1183,87 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 					};
 
 					scriptManager->addScript("dialogue_6_4", dialogue_6_4);
+
+					auto walked_on_3_0 = []() {
+						Character* character = player->getCharacter();
+						character->turn(TileDirection::FORWARD);
+						character->moveIfPossible(TileDirection::FORWARD);
+						character->allowNewMovements(false);
+
+						std::list<Movement> movements;
+
+						for (size_t i = 0; i < 20; i++) {
+							movements.push_back(Movement(TileDirection::BACKWARD));
+						}
+
+						// Move other characters
+						Character* soldier = characterProvider->getCharacterByName("soldier_1");
+						soldier->moveIfPossible(&movements);
+
+						Character* scientist = characterProvider->getCharacterByName("scientist_1");
+						scientist->moveIfPossible(&movements);
+
+						std::cout << "Good meme\n";
+
+						auto walked_on_3_1 = [character]() {
+							character->allowNewMovements(true);
+							showDialogue("Aela", "", "Why is there a soldier holding a scientist hostage?", "walked_on_3_2");
+						};
+
+						timer->scheduleEventInSeconds(4, walked_on_3_1);
+						scriptManager->addScript("walked_on_3_2", std::bind(&showDialogue, "Aela", "", "Give me a sec - I've got to report this!", "hide_dialogue"));
+					};
+
+					scriptManager->addScript("walked_on_3_0", walked_on_3_0);
+					worldManager->addWalkedOnScript("walked_on_3_0", &Location(1, -9, 3, 11, 0, 2));
+					worldManager->addWalkedOnScript("walked_on_3_0", &Location(1, -9, 3, 11, 0, 1));
+
+					auto button_1_1 = []() {
+						Character* character = player->getCharacter();
+						character->allowNewMovements(false);
+						pressButton(Location(1, glm::ivec2(-10, 3), glm::ivec3(6, 0, 3)));
+
+						auto event2 = []() {
+							openDoor("metal door", 345, Location(1, glm::ivec2(-10, 3), glm::ivec3(5, 0, 3)));
+						};
+
+						auto event3 = [character]() {
+							character->allowNewMovements(true);
+							character->turn(TileDirection::RIGHT);
+							character->moveIfPossible(TileDirection::RIGHT);
+							character->turn(TileDirection::FORWARD);
+							character->moveIfPossible(TileDirection::FORWARD);
+							character->teleportWithAnimation(&Location(0, 0, 0, 1, 0, 0), TeleportationAnimation::FADE);
+							character->moveIfPossible(TileDirection::FORWARD);
+							character->turn(TileDirection::BACKWARD);
+							character->allowNewMovements(false);
+							setupLevel(1, 3);
+						};
+
+						timer->scheduleEventInMillis(1000, event2);
+						timer->scheduleEventInMillis(1500, event3);
+					};
+
+					scriptManager->addScript("button_1_1", button_1_1);
+					worldManager->addPromptedScript("button_1_1", &Location(1, glm::ivec2(-10, 3), glm::ivec3(6, 0, 3)));
+
 					break;
 				}
 				case 3: {
+					auto dialogue_9_0 = []() {
+						player->getCharacter()->allowNewMovements(true);
+						dialogueDisplay->showDialogue("Aela", "", "Apparently, all employees are being called down for some emergency meeting.", "dialogue_9_1");
+					};
+
+					scriptManager->addScript("dialogue_9_0", dialogue_9_0);
+
+					scriptManager->addScript("dialogue_9_1", std::bind(&showDialogue, "Aela", "", "The only way for you to exit these testing facilities is to finish this upcoming level.", "dialogue_9_2"));
+					scriptManager->addScript("dialogue_9_2", std::bind(&showDialogue, "Aela", "", "I'm in a surveillance room that's close to the meeting point.", "dialogue_9_3"));
+					scriptManager->addScript("dialogue_9_3", std::bind(&showDialogue, "Aela", "", "When the meeting is over, I'll try and come back to fill you in on the details.", "hide_dialogue"));
+
+					scriptManager->addScript("walked_on_2_0", std::bind(&fadeTeleportPlayer, 1, glm::ivec2(-15, 0), glm::ivec3(13, 0, 14)), true);
+					worldManager->addWalkedOnScript("walked_on_2_0", &Location(0, glm::ivec2(0, -1), glm::ivec3(1, 0, 15)));
+
 					auto dialogue_7_0 = []() {
 						turnDisplayOn(Location(1, -15, 0, 10, 0, 3));
 						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/0.png", "WELCOME TO LEVEL 3 OF THE PROJECT ECHO TESTING FACILITY.", "dialogue_7_1");
@@ -1218,15 +1314,16 @@ void Scripts::editMap() {
 }
 
 void Scripts::setupLevel(int stage, int level) {
+	setupTeleporters(stage, level);
+	setupDoors(stage, level);
+	setupCheckPoints(stage, level);
+	setupCharacters(stage, level);
+	setupGeneralEvents(stage, level);
+
 	switch (stage) {
 		case 1:
 			if (level < 4) {
 				loadLogoMaterialAnimation(level);
-				setupTeleporters(stage, level);
-				setupDoors(stage, level);
-				setupCheckPoints(stage, level);
-				setupCharacters(stage, level);
-				setupGeneralEvents(stage, level);
 			}
 			break;
 	}

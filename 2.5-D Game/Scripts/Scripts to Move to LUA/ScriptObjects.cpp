@@ -19,7 +19,6 @@ SceneManager* Scripts::sceneManager = nullptr;
 Animator* Scripts::animator = nullptr;
 Camera3D* Scripts::camera = nullptr;
 TileAtlas* Scripts::tileAtlas = nullptr;
-FontManager* Scripts::fontManager = nullptr;
 WorldExporter* Scripts::worldExporter = nullptr;
 CameraController* Scripts::cameraController = nullptr;
 TileBehaviourExecuter* Scripts::tileBehaviourExecuter = nullptr;
@@ -46,7 +45,6 @@ void Scripts::setupScriptObjects() {
 	animator = GameObjectProvider::getAnimator();
 	camera = GameObjectProvider::getCamera();
 	tileAtlas = GameObjectProvider::getTileAtlas();
-	fontManager = GameObjectProvider::getFontManager();
 	worldExporter = GameObjectProvider::getWorldExporter();
 	cameraController = GameObjectProvider::getCameraController();
 	tileBehaviourExecuter = GameObjectProvider::getTileBehaviourExecuter();

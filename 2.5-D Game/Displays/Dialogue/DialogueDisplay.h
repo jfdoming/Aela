@@ -80,6 +80,10 @@ namespace Game {
 			// This stores the script to run once a regular piece of dialogue is complete.
 			std::string scriptOnDialogueEnd = "";
 
+			// This is set to true typically when an SDLK_RETURN event is received. It lets update()
+			// (which runs on the main thread) know that it should run the script on dialogue end.
+			bool runScript = false;
+
 			// These are option-related properties.
 			std::vector<DialogueOption> options;
 			size_t numberOfCurrentOptions, currentOption;

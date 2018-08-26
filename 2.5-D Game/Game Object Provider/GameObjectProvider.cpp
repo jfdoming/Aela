@@ -105,10 +105,6 @@ AnimationLooper* GameObjectProvider::getAnimationLooper() {
 	return engine->getAnimationLooper();
 }
 
-FontManager* GameObjectProvider::getFontManager() {
-	return engine->getFontManager();
-}
-
 AelaGame* GameObjectProvider::getGame() {
 	return game;
 }

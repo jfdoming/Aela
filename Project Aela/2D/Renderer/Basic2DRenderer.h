@@ -14,7 +14,7 @@
 #include "../../Utilities/Rect/Rect.h"
 #include "../../2D/Texture/GLImage.h"
 #include "../Simple 2D Framebuffer/Simple2DFramebuffer.h"
-#include "../Text/TextFont.h"
+#include "../Fonts/Font.h"
 #include "../../Utilities/Colour/ColourRGBA.h"
 #include "../../Window/Window.h"
 #include "../Positioning Mode/PositioningMode2D.h"
@@ -39,7 +39,7 @@ namespace Aela {
 				PositioningMode2D positioningMode) = 0;
 			virtual void renderImageToFramebuffer(Image* image, unsigned int framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint,
 				PositioningMode2D positioningMode, unsigned int customShader) = 0;
-			virtual void renderTextToSimple2DFramebuffer(std::string text, TextFont* textFont, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
+			virtual void renderTextToSimple2DFramebuffer(std::string text, Font* Font, unsigned int size, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
 				PositioningMode2D positioningMode, unsigned int pointsPerPixel) = 0;
 			virtual void renderMultisampledBufferToBuffer(unsigned int multisampledBuffer, unsigned int secondaryBuffer, Rect<unsigned int>* windowDimensions) = 0;
 			virtual void renderRectangle(Rect<int>* output, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,

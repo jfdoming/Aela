@@ -78,8 +78,6 @@ bool Aela::GLSpriteSheetLoader::loadPNGSpriteSheet(ResourceMap& resources, std::
 			unsigned int xInsideOfBuffer = x % spriteWidth, yInsideOfBuffer = y % spriteHeight;
 			unsigned int indexInsideOfBuffer = (yInsideOfBuffer * spriteWidth + xInsideOfBuffer) * bytesPerPixel;
 
-			/*std::cout << bufferX << " " << bufferY << " " << whichBuffer << " " << xInsideOfBuffer
-				<< " " << yInsideOfBuffer << " " << indexInsideOfBuffer << " is some info.\n";*/
 			for (unsigned int i = 0; i < bytesPerPixel; i++) {
 				buffers[whichBuffer][indexInsideOfBuffer + i] = ptr[i];
 			}

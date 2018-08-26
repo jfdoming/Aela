@@ -23,7 +23,6 @@ Aela::ParticleEmitter::~ParticleEmitter() {
 }
 
 void ParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float particleWidthScaling, float particleHeightScaling, unsigned int amount) {
-	std::cout << "Setting up things....\n";
 	for (unsigned int i = 0; i < amount; i++) {
 		Particle particle;
 		particle.setTexture(textures->at(rand() % textures->size()));
@@ -32,7 +31,6 @@ void ParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float pa
 		particle.setSpeed(baseSpeed + (speedOffset * (rand() % 100) / 100));
 		particle.setDistance((unsigned int) (baseDistance + (distanceOffset * (rand() % 100) / 100)));
 		particles.push_back(particle);
-		std::cout << "About toc all setupPos()\n";
 		setupParticlePositioning(i, amount);
 	}
 }

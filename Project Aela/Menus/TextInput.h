@@ -11,16 +11,16 @@
 namespace Aela {
 	class TextInput : public Component {
 		public:
-			TextInput(std::string text, TextFont* font, FontManager* fontManager);
-			TextInput(std::string text, TextFont* font, ColourRGBA* colour, FontManager* fontManager);
+			TextInput(std::string text, Font* font, unsigned int size);
+			TextInput(std::string text, Font* font, unsigned int size, ColourRGBA* colour);
 
 			virtual ~TextInput();
 
-			void setup(FontManager* fontManager);
+			void setup();
 
 			// These are getters and setters.
 			std::string getText();
-			TextFont* getFont();
+			Font* getFont();
 			ColourRGBA* getColour();
 
 		protected:
@@ -28,7 +28,8 @@ namespace Aela {
 			int cursorPosition = 0;
 			int selectionPosition = 0;
 
-			TextFont* font;
+			Font* font;
+			unsigned int size = 0;
 			ColourRGBA colour;
 			virtual void updateComponent();
 			virtual void renderComponent(GLRenderer& renderer);

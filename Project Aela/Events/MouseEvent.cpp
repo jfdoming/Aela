@@ -2,6 +2,8 @@
 
 using namespace Aela;
 
+Aela::MouseEvent::MouseEvent() : Event(0) {}
+
 MouseEvent::MouseEvent(int _type, int _button, int _modifier, int _clicks, int _x, int _y, int _wheel) : Event (_type) {
 	button = _button;
 	modifier = _modifier;

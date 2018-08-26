@@ -8,6 +8,8 @@
 #pragma once
 #include <string>
 #include <functional>
+#include <ft2build.h>
+#include <freetype/freetype.h>
 
 // This enum is used for the types of errors:
 //		Console Window Errors:
@@ -48,6 +50,9 @@ namespace AelaErrorHandling {
 	void basicHandleSignal(int signal);
 	SignalHandlerPointer handleSignal(int signalCode, SignalHandlerPointer handlingFunction);
 	SignalHandlerPointer handleSignal(int signalCode);
+
+	// This is used to decipher FreeType errors.
+	const char* getFreeTypeErrorMessage(FT_Error err);
 
 	bool programCloseWasRequested();
 }

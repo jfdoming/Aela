@@ -29,7 +29,6 @@
 #include "../Control Manager/ControlManager.h"
 #include "../3D/Renderer/Basic3DGLRenderer.h"
 #include "../2D/Renderer/Basic2DGLRenderer.h"
-#include "../2D/Text/FontManager.h"
 #include "../3D/Light/LightEntity.h"
 #include "../3D/Models/ModelEntity.h"
 #include "../3D/Skybox/SkyboxEntity.h"
@@ -75,7 +74,6 @@ namespace Aela {
 			// before rendering.
 			void setWindow(Window* window);
 			void setTime(Time* time);
-			void setFontManager(FontManager* fontManager);
 
 			RenderingAPI getRenderingAPI();
 
@@ -107,7 +105,7 @@ namespace Aela {
 
 			// These functions are related to 2D rendering.
 			void render2DImage(Image* image, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint, PositioningMode2D PositioningMode);
-			void renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour, PositioningMode2D PositioningMode);
+			void renderText(std::string text, Font* font, unsigned int size, Rect<int>* output, ColourRGBA* colour, PositioningMode2D PositioningMode);
 			void renderRectangle(Rect<int>* output, ColourRGBA* colour, PositioningMode2D PositioningMode);
 			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour, PositioningMode2D PositioningMode);
 			void renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, ColourRGBA* colour);
@@ -136,10 +134,9 @@ namespace Aela {
 			// These are a bunch of Project Aela objects that the renderer uses.
 			Basic3DGLRenderer basic3DRenderer;
 			Basic2DGLRenderer basic2DRenderer;
-			Camera3D camera;
+			/*Camera3D camera;
 			Time* time = nullptr;
-			Window* window = nullptr;
-			FontManager* fontManager = nullptr;
+			Window* window = nullptr;*/
 			Simple2DFramebuffer* bound2DFramebuffer = nullptr;
 
 			// This represents the framebuffer that is attached to the screen.
@@ -149,8 +146,8 @@ namespace Aela {
 			// These are the post process shaders.
 			GLuint effects3DShader, effects2DShader;
 			// These specify the features that the renderer is allowed to use during rendering.
-			bool useShadows = false, useBillboards = false, useSkybox = false;
-			unsigned int multisampling3D = 0, multisampling2D = 0;
+			/*bool useShadows = false, useBillboards = false, useSkybox = false;
+			unsigned int multisampling3D = 0, multisampling2D = 0;*/
 
 
 			// These are some setup functions used internally by the GLRenderer.

@@ -7,6 +7,7 @@
 #include "3D/Models/OBJLoader.h"
 #include "3D/Skybox/GLSkyboxLoader.h"
 #include "3D/Maps/Map3DLoader.h"
+#include "2D/Fonts/FontLoader.h"
 
 namespace Scripts {
 	using namespace Game;
@@ -70,7 +71,9 @@ namespace Scripts {
 		"locks_1",
 		"locks_2",
 		"numbered_tiles",
-		"rails_1"
+		"rails_1",
+		"soldier_1",
+		"scientist_1"
 	};
 
 	std::string avatarNames[] = {
@@ -105,6 +108,10 @@ namespace Scripts {
 
 	std::string waveAudioClipNames[] = {
 		"test"
+	};
+
+	std::string ttfFontNames[] = {
+		"xerox"
 	};
 }
 
@@ -256,11 +263,29 @@ void Scripts::loadAudio() {
 	}
 }
 
+void Scripts::loadFonts() {
+	FontLoader fontLoader;
+	resourceManager->bindLoader(&fontLoader);
+	resourceManager->bindGroup("ttf fonts");
+
+	for (std::string path : ttfFontNames) {
+		resourceManager->addToGroup(DEFAULT_FONT_PATH + path + ".ttf", true);
+	}
+
+	if (resourceManager->loadGroup("ttf fonts") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"wave audio\"!" << std::endl;
+	}
+}
+
 void Scripts::unloadResources() {
 	resourceManager->unloadGroup("materials");
 	resourceManager->unloadGroup("models");
 	resourceManager->unloadGroup("textures");
+	resourceManager->unloadGroup("sprite sheets");
+	resourceManager->unloadGroup("avatars");
 	resourceManager->unloadGroup("particles");
 	resourceManager->unloadGroup("skybox");
 	resourceManager->unloadGroup("maps");
+	resourceManager->unloadGroup("wave audio");
+	resourceManager->unloadGroup("ttf fonts");
 }

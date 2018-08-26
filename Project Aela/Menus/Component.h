@@ -30,9 +30,9 @@ namespace Aela {
 			virtual void update();
 			virtual void render(GLRenderer& renderer);
 
-			void handleMousePressed(Event* event);
-			void handleMouseReleased(Event* event);
-			void handleMouseMoved(Event* event);
+			void handleMousePressed(MouseEvent* event);
+			void handleMouseReleased(MouseEvent* event);
+			void handleMouseMoved(MouseEvent* event);
 
 			virtual void onMousePressed(MouseEvent* event);
 			virtual void onMouseReleased(MouseEvent* event);

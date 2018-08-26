@@ -1,16 +1,18 @@
 #include "Button.h"
 #include "../Events/EventConstants.h"
 
-Aela::Button::Button() : hoverTint(0.0f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0), textLabel("", nullptr) {
+Aela::Button::Button() : hoverTint(0.0f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0), textLabel("", nullptr, 0) {
 }
 
-Aela::Button::Button(GLTexture* texture) : ImageComponent(texture), hoverTint(0.7f, 0.7f, 0.7f, 1.0f), clickTint(0.5f, 0.5f, 0.5f, 1.0), textLabel("", nullptr) {
+Aela::Button::Button(GLTexture* texture) : ImageComponent(texture), hoverTint(0.7f, 0.7f, 0.7f, 1.0f),
+	clickTint(0.5f, 0.5f, 0.5f, 1.0), textLabel("", nullptr, 0) {
 }
 
-Aela::Button::Button(GLTexture* texture, Rect<int>* dimensions) : ImageComponent(texture, dimensions), hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0), textLabel("", nullptr) {
+Aela::Button::Button(GLTexture* texture, Rect<int>* dimensions) : ImageComponent(texture, dimensions),
+	hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0), textLabel("", nullptr, 0) {
 }
 
-Aela::Button::Button(ColourRGBA* hoverTint, ColourRGBA* clickTint) : textLabel("", nullptr) {
+Aela::Button::Button(ColourRGBA* hoverTint, ColourRGBA* clickTint) : textLabel("", nullptr, 0) {
 	this->hoverTint = *hoverTint;
 	this->clickTint = *clickTint;
 }
@@ -18,8 +20,12 @@ Aela::Button::Button(ColourRGBA* hoverTint, ColourRGBA* clickTint) : textLabel("
 Aela::Button::~Button() {
 }
 
-void Aela::Button::setTextFont(TextFont* font) {
+void Aela::Button::setFont(Font* font) {
 	textLabel.setFont(font);
+}
+
+void Aela::Button::setFontSize(unsigned int size) {
+	textLabel.setSize(size);
 }
 
 void Aela::Button::setTextColour(ColourRGBA* colour) {

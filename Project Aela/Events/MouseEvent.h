@@ -11,6 +11,7 @@ namespace Aela {
 		int x, y;
 		int wheel;
 	public:
+		MouseEvent();
 		MouseEvent(int _type, int _button, int _modifier, int _clicks, int _x, int _y, int _wheel);
 		virtual ~MouseEvent();
 

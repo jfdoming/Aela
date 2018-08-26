@@ -46,18 +46,15 @@ bool Game::TileSwitchGun::use(GameMode gameMode) {
 		World* worldPtr = worldManager->getWorld(playerLocation->getWorld());
 
 		if (worldPtr == nullptr) {
-			std::cout << "FALSE (A)\n";
 			return false;
 		}
 		Chunk* chunkPtr = worldPtr->getChunk(chunk);
 		if (chunkPtr == nullptr) {
-			std::cout << "FALSE (B)\n";
 			return false;
 		}
 
 		TileGroup* tileGroupPtr = chunkPtr->getTileGroup(tile);
 		if (tileGroupPtr == nullptr || tileGroupPtr->containsCollidableNonSwitchableTile(tileAtlas)) {
-			std::cout << tileGroupPtr << " " << chunk.x << " " << chunk.y << " " << tile.x << " " << tile.y << " " << tile.z << " FALSE (C)\n";
 			return false;
 		}
 		//if (worldManager->getTileAtlas()->getTileType(tilePtr->getType())->getShape() != TileShape::FLOOR

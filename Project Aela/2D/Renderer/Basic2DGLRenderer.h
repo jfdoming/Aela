@@ -23,7 +23,7 @@
 #include "../../Utilities/Rect/Rect.h"
 #include "../../2D/Texture/GLImage.h"
 #include "../Simple 2D Framebuffer/Simple2DFramebuffer.h"
-#include "../Text/TextFont.h"
+#include "../Fonts/Font.h"
 #include "../../Utilities/Colour/ColourRGBA.h"
 #include "../../Window/Window.h"
 #include "../Positioning Mode/PositioningMode2D.h"
@@ -32,13 +32,7 @@
 namespace Aela {
 	class Basic2DGLRenderer : public Basic2DRenderer {
 		public:
-			Basic2DGLRenderer() {
-
-			}
-
-			~Basic2DGLRenderer() {
-
-			}
+			Basic2DGLRenderer();
 
 			// This is the setup function.
 			void setup();
@@ -52,7 +46,7 @@ namespace Aela {
 				PositioningMode2D positioningMode);
 			void renderImageToFramebuffer(Image* image, unsigned int framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint,
 				PositioningMode2D positioningMode, unsigned int customShader);
-			void renderTextToSimple2DFramebuffer(std::string text, TextFont* textFont, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
+			void renderTextToSimple2DFramebuffer(std::string text, Font* font, unsigned int size, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
 				PositioningMode2D positioningMode, unsigned int pointsPerPixel);
 			void renderMultisampledBufferToBuffer(unsigned int multisampledBuffer, unsigned int secondaryBuffer, Rect<unsigned int>* windowDimensions);
 			void renderRectangle(Rect<int>* output, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, PositioningMode2D positioningMode);
@@ -71,12 +65,17 @@ namespace Aela {
 
 			void clearSimple2DFramebuffer(Simple2DFramebuffer* framebuffer);
 
+			void setTextScaling(unsigned int textScaling);
+
 		private:
 			// This function is used to render a single character.
-			void renderCharacterBuffer(Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, std::vector<unsigned char>* buffer, unsigned int width, unsigned int rows, ColourRGBA* colour);
+			void renderCharacterBuffer(Simple2DFramebuffer* framebuffer, Rect<float>* output, Rect<unsigned int>* windowDimensions, std::vector<unsigned char>* buffer, unsigned int width, unsigned int rows, ColourRGBA* colour);
 
 			// These functions are used in the setup of the 2D renderer.
 			void load2DShaders();
 			void getGLSLVariableHandles();
+
+			// This is used for text super sampling.
+			unsigned int textScaling = 1;
 	};
 }

@@ -19,8 +19,8 @@ void setupScenes(Engine* engine, AelaGame* game) {
 
 	// This creates some objects for later.
 	//FontManager* fontManager = engine->getFontManager();
-	//TextFont* xeroxLarge = fontManager->obtainTextFont("../../res/fonts/xerox.ttf", 35);
-	//TextFont* xerox = fontManager->obtainTextFont("../../res/fonts/xerox.ttf", 18);
+	//Font* xeroxLarge = fontManager->obtainFont("../../res/fonts/xerox.ttf", 35);
+	//Font* xerox = fontManager->obtainFont("../../res/fonts/xerox.ttf", 18);
 	//if (xeroxLarge == nullptr || xerox == nullptr) {
 	//	AelaErrorHandling::windowError("A critical font (xerox.ttf) could not be loaded, aborting!");
 	//	return;

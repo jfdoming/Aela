@@ -54,6 +54,9 @@ void GLRenderer::setupMainFrameBuffer() {
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(mainFramebufferImage.getTexture()), 0);
 	checkFrameBuffer();
+
+	// MSAA'd framebuffers will be rendered onto the main one, so we need to enable MSAA.
+	glEnable(GL_MULTISAMPLE);
 }
 
 void Aela::GLRenderer::setupWindow() {
@@ -103,10 +106,6 @@ void GLRenderer::setWindow(Window* window) {
 void GLRenderer::setTime(Time* time) {
 	this->time = time;
 	camera.setTime(time);
-}
-
-void GLRenderer::setFontManager(FontManager* fontManager) {
-	this->fontManager = fontManager;
 }
 
 RenderingAPI Aela::GLRenderer::getRenderingAPI() {
@@ -204,8 +203,8 @@ void GLRenderer::render2DImage(Image* image, Rect<int>* output, Rect<int>* cropp
 }
 
 // This renders text using the 2D renderer.
-void GLRenderer::renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour, PositioningMode2D positioningMode) {
-	basic2DRenderer.renderTextToSimple2DFramebuffer(text, font, bound2DFramebuffer, output, window->getDimensions(), colour,
+void GLRenderer::renderText(std::string text, Font* font, unsigned int size, Rect<int>* output, ColourRGBA* colour, PositioningMode2D positioningMode) {
+	basic2DRenderer.renderTextToSimple2DFramebuffer(text, font, size, bound2DFramebuffer, output, window->getDimensions(), colour,
 		positioningMode, POINTS_PER_PIXEL);
 }
 
@@ -231,7 +230,6 @@ void GLRenderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsi
 void GLRenderer::renderSimple2DFramebuffer() {
 	// basic2DRenderer.renderMultisampledBufferToBuffer(*framebuffer->getFramebuffer(), mainFramebuffer, window->getDimensions());
 	if (bound2DFramebuffer->getMultisampling() > 0) {
-		// std::cout << *bound2DFramebuffer->getMultisampledFramebuffer() << " " << *bound2DFramebuffer->getFramebuffer() << "lol\n";
 		basic2DRenderer.renderMultisampledBufferToBuffer(*bound2DFramebuffer->getMultisampledFramebuffer(), *bound2DFramebuffer->getFramebuffer(), window->getDimensions());
 	}
 	basic2DRenderer.renderImageToFramebuffer(bound2DFramebuffer->getFramebufferImage(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), nullptr, PositioningMode2D::TOP_LEFT, effects2DShader);
@@ -290,23 +288,23 @@ void GLRenderer::activateFeature(RendererFeature feature) {
 			break;
 		case RendererFeature::MSAA_3D_X0:
 			multisampling3D = 0;
-			basic3DRenderer.setupFrameBuffers(0);
+			basic3DRenderer.rebuildFrameBuffers(false);
 			break;
 		case RendererFeature::MSAA_3D_X2:
 			multisampling3D = 2;
-			basic3DRenderer.setupFrameBuffers(2);
+			basic3DRenderer.rebuildFrameBuffers(true);
 			break;
 		case RendererFeature::MSAA_3D_X4:
 			multisampling3D = 4;
-			basic3DRenderer.setupFrameBuffers(4);
+			basic3DRenderer.rebuildFrameBuffers(true);
 			break;
 		case RendererFeature::MSAA_3D_X8:
 			multisampling3D = 8;
-			basic3DRenderer.setupFrameBuffers(8);
+			basic3DRenderer.rebuildFrameBuffers(true);
 			break;
 		case RendererFeature::MSAA_3D_X16:
 			multisampling3D = 16;
-			basic3DRenderer.setupFrameBuffers(16);
+			basic3DRenderer.rebuildFrameBuffers(true);
 			break;
 		case RendererFeature::MSAA_2D_X0:
 			multisampling2D = 0;
@@ -322,6 +320,21 @@ void GLRenderer::activateFeature(RendererFeature feature) {
 			break;
 		case RendererFeature::MSAA_2D_X16:
 			multisampling2D = 16;
+			break;
+		case RendererFeature::SSAA_TEXT_X1:
+			basic2DRenderer.setTextScaling(1);
+			break;
+		case RendererFeature::SSAA_TEXT_X2:
+			basic2DRenderer.setTextScaling(2);
+			break;
+		case RendererFeature::SSAA_TEXT_X4:
+			basic2DRenderer.setTextScaling(4);
+			break;
+		case RendererFeature::SSAA_TEXT_X8:
+			basic2DRenderer.setTextScaling(8);
+			break;
+		case RendererFeature::SSAA_TEXT_X16:
+			basic2DRenderer.setTextScaling(16);
 			break;
 	}
 }
@@ -347,29 +360,30 @@ void GLRenderer::deactivateFeature(RendererFeature feature) {
 		case RendererFeature::MSAA_3D_X2:
 			if (multisampling3D == 2) {
 				multisampling3D = 0;
-				basic3DRenderer.setupFrameBuffers(0);
+				basic3DRenderer.rebuildFrameBuffers(0);
 			}
 			break;
 		case RendererFeature::MSAA_3D_X4:
 			if (multisampling3D == 4) {
 				multisampling3D = 0;
-				basic3DRenderer.setupFrameBuffers(0);
+				basic3DRenderer.rebuildFrameBuffers(0);
 			}
 			break;
 		case RendererFeature::MSAA_3D_X8:
 			if (multisampling3D == 8) {
 				multisampling3D = 0;
-				basic3DRenderer.setupFrameBuffers(0);
+				basic3DRenderer.rebuildFrameBuffers(0);
 			}
 			break;
 		case RendererFeature::MSAA_3D_X16:
 			if (multisampling3D == 16) {
 				multisampling3D = 0;
-				basic3DRenderer.setupFrameBuffers(0);
+				basic3DRenderer.rebuildFrameBuffers(0);
 			}
 			break;
 		case RendererFeature::MSAA_2D_X0:
 			// You want to deactivate having no MSAA? What does that even mean?
+			// Enabling MSAA? But to what scaling factor?
 			break;
 		case RendererFeature::MSAA_2D_X2:
 			if (multisampling2D == 2) {
@@ -391,6 +405,22 @@ void GLRenderer::deactivateFeature(RendererFeature feature) {
 				multisampling2D = 0;
 			}
 			break;
+		case RendererFeature::SSAA_TEXT_X1:
+			// What would disabling no text supersampling mean?
+			// Enabling supersampling? But to what scaling factor?
+			break;
+		case RendererFeature::SSAA_TEXT_X2:
+			basic2DRenderer.setTextScaling(1);
+			break;
+		case RendererFeature::SSAA_TEXT_X4:
+			basic2DRenderer.setTextScaling(1);
+			break;
+		case RendererFeature::SSAA_TEXT_X8:
+			basic2DRenderer.setTextScaling(1);
+			break;
+		case RendererFeature::SSAA_TEXT_X16:
+			basic2DRenderer.setTextScaling(1);
+			break;
 	}
 }
 
@@ -410,31 +440,6 @@ void Aela::GLRenderer::toggleFeature(RendererFeature feature) {
 			useLights = !useLights;
 			break;
 	}
-}
-
-int getTextWidth(std::string text, TextFont* font) {
-	FT_Face face = *(font->getFace());
-	FT_GlyphSlot glyph = face->glyph;
-
-	int width = 0;
-	for (unsigned int i = 0; i < text.size(); i++) {
-		AelaErrorHandling::handleSignal(SIGSEGV);
-		FT_Error error;
-		
-		// This loads the character.
-		try {
-			if (error = FT_Load_Char(face, (char) (text.at(i)), FT_LOAD_RENDER)) {
-				continue;
-			}
-		} catch (char* e) {
-			std::cout << face << " " << (char) (text.at(i)) << " " << FontManager::getErrorMessage(error) << "\n";
-			std::cout << e << " is an FT_Load_Char exception\n";
-			continue;
-		}
-
-		width += glyph->metrics.horiAdvance / POINTS_PER_PIXEL;
-	}
-	return width;
 }
 
 void Aela::GLRenderer::setFOV(float value) {

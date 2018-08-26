@@ -45,6 +45,9 @@ namespace Aela {
 
 			Menu menu;
 
+			MouseEvent mousePressed, mouseReleased, mouseMoved;
+			bool processMousePressed = false, processMouseReleased = false, processMouseMoved = false;
+
 			void handleMousePressed(Event* event);
 			void handleMouseReleased(Event* event);
 			void handleMouseMoved(Event* event);

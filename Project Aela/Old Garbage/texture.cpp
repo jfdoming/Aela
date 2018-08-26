@@ -99,8 +99,6 @@ GLuint loadDDSToGLuint(std::string filePath) {
 	unsigned int blockSize = (format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT) ? 8 : 16;
 	unsigned int offset = 0;
 
-	std::cout << mipMapAmount << " is the mipmap amount, according to texture.cpp.\n";
-
 	// This loads the mipmaps.
 	for (unsigned int level = 0; level < mipMapAmount && (imageWidth || imageHeight); level++) {
 		unsigned int size = ((imageWidth + 3) / 4) * ((imageHeight + 3) / 4) * blockSize;

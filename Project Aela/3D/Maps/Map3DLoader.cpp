@@ -108,7 +108,6 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						} else {
 							AelaErrorHandling::consoleWindowError("Aela Map3DLoader", "The resource " + line.substr(j + 1, k - j - 1) + "(\"" + source + "\") was requested by "
 							+ src + " and was not found.");
-							std::cout << source << " was the source.\n";
 							return false;
 						}
 					} else if (propertyType == "power") {

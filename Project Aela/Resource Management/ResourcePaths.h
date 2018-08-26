@@ -16,3 +16,4 @@
 #define DEFAULT_AUDIO_PATH "res/audio/"
 #define DEFAULT_AUDIO_CLIP_PATH "res/audio/clips/"
 #define DEFAULT_AUDIO_STREAM_PATH "res/audio/streams/"
+#define DEFAULT_FONT_PATH "res/fonts/"

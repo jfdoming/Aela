@@ -2,24 +2,24 @@
 
 using namespace Aela;
 
-Aela::TextInput::TextInput(std::string text, TextFont* font, FontManager* fontManager) : colour(1, 1, 1, 1) {
+Aela::TextInput::TextInput(std::string text, Font* font, unsigned int size) : colour(1, 1, 1, 1) {
 	this->text = text;
 	this->font = font;
-	setup(fontManager);
+	this->size = size;
 }
 
-Aela::TextInput::TextInput(std::string text, TextFont* font, ColourRGBA* colour, FontManager* fontManager) {
+Aela::TextInput::TextInput(std::string text, Font* font, unsigned int size, ColourRGBA* colour) {
 	this->text = text;
 	this->font = font;
+	this->size = size;
 	this->colour = *colour;
-	setup(fontManager);
 }
 
 TextInput::~TextInput() {
 }
 
-void Aela::TextInput::setup(FontManager* fontManager) {
-	FT_Face face = *font->getFace();
+void Aela::TextInput::setup() {
+	FT_Face face = font->getFace();
 	FT_GlyphSlot glyph = face->glyph;
 	FT_BBox bbox = face->bbox;
 
@@ -31,14 +31,14 @@ void TextInput::updateComponent() {
 }
 
 void TextInput::renderComponent(GLRenderer& renderer) {
-	renderer.renderText(text, font, &dimensions, &colour, positioningMode);
+	renderer.renderText(text, font, size, &dimensions, &colour, positioningMode);
 }
 
 std::string Aela::TextInput::getText() {
 	return text;
 }
 
-TextFont* Aela::TextInput::getFont() {
+Font* Aela::TextInput::getFont() {
 	return font;
 }
 

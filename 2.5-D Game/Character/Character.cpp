@@ -262,9 +262,9 @@ void Game::Character::moveIfPossible(TileDirection direction) {
 	}
 }
 
-void Game::Character::moveIfPossible(std::list<Movement> directions) {
+void Game::Character::moveIfPossible(std::list<Movement>* directions) {
 	if (newMovementsAreAllowed) {
-		possibleMovementsToProcess.splice(possibleMovementsToProcess.end(), directions);
+		possibleMovementsToProcess.splice(possibleMovementsToProcess.end(), *directions);
 	}
 }
 
@@ -341,7 +341,6 @@ void Game::Character::setPropertiesUsingCharacterInformationBlock(CharacterInfor
 	clearAllMovements();
 	alive = block->alive;
 	directionFacing = block->directionFacing;
-	std::cout << &block->location << " D\n";
 	teleportImmediately(&block->location);
 
 	running = false;
@@ -493,7 +492,6 @@ void Game::Character::addTranslation(Movement* movement, std::string scriptOnceC
 }
 
 void Game::Character::completeMovement(Movement* movement, std::string scriptOnCompletion) {
-	std::cout << "New movement: " << *movement->getDestination() << "\n";
 	if (movement->isATurnOnly()) {
 		// The movement doesn't go anywhere. Just turn the character without moving it.
 		turnImmediately(movement->getDirection());
@@ -578,9 +576,6 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 			auto halfwayTeleportAction = [this, oldLocation, newLocation]() mutable {
 				/*Location oldLocation2 = oldLocation;
 				Location newLocation2 = newLocation;*/
-
-				std::cout << newLocation.getWorld() << " is the world.\n";
-
 
 				GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 				GameObjectProvider::getCharacterProvider()->characterWasMoved(name, &oldLocation, &newLocation);

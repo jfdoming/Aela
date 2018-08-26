@@ -33,7 +33,7 @@ namespace Game {
 			void turn(TileDirection direction);
 			void turnImmediately(TileDirection direction);
 			void moveIfPossible(TileDirection direction);
-			void moveIfPossible(std::list<Movement> directions);
+			void moveIfPossible(std::list<Movement>* directions);
 			void moveWithoutCollisionCheck(TileDirection direction);
 			void moveWithoutCollisionCheck(Movement* movement);
 			void clearFutureMovements();

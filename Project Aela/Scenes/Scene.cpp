@@ -19,6 +19,21 @@ void Scene::hide() {
 
 void Scene::update() {
 	if (menu.isInitialized()) {
+		if (processMousePressed) {
+			menu.handleMousePressed(&mousePressed);
+			processMousePressed = false;
+		}
+
+		if (processMouseReleased) {
+			menu.handleMouseReleased(&mouseReleased);
+			processMouseReleased = false;
+		}
+
+		if (processMouseMoved) {
+			menu.handleMouseMoved(&mouseMoved);
+			processMouseMoved = false;
+		}
+
 		menu.update();
 	}
 
@@ -97,8 +112,10 @@ void Scene::handleMousePressed(Event* event) {
 		return;
 	}
 
-	// send the event to the menu
-	menu.handleMousePressed(event);
+	// Copy the event and mark it as an event that needs to be processed in update(), which runs on the main thread.
+	MouseEvent* mEvent = static_cast<MouseEvent*>(event);
+	mousePressed = *mEvent;
+	processMousePressed = true;
 }
 
 void Scene::handleMouseReleased(Event* event) {
@@ -110,8 +127,10 @@ void Scene::handleMouseReleased(Event* event) {
 		return;
 	}
 
-	// send the event to the menu
-	menu.handleMouseReleased(event);
+	// Copy the event and mark it as an event that needs to be processed in update(), which runs on the main thread.
+	MouseEvent* mEvent = static_cast<MouseEvent*>(event);
+	mouseReleased = *mEvent;
+	processMouseReleased = true;
 }
 
 void Scene::handleMouseMoved(Event* event) {
@@ -123,6 +142,8 @@ void Scene::handleMouseMoved(Event* event) {
 		return;
 	}
 
-	// send the event to the menu
-	menu.handleMouseMoved(event);
+	// Copy the event and mark it as an event that needs to be processed in update(), which runs on the main thread.
+	MouseEvent* mEvent = static_cast<MouseEvent*>(event);
+	mouseMoved = *mEvent;
+	processMouseMoved = true;
 }

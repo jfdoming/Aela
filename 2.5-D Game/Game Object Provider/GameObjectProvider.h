@@ -54,7 +54,6 @@ namespace Game {
 			static Camera3D* getCamera();
 			static LuaManager* getLuaManager();
 			static AnimationLooper* getAnimationLooper();
-			static FontManager* getFontManager();
 
 			static AelaGame* getGame();
 			static WorldManager* getWorldManager();

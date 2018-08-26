@@ -2,15 +2,17 @@
 
 using namespace Aela;
 
-Label::Label(std::string text, TextFont* font) : colour(1, 1, 1, 1) {
+Label::Label(std::string text, Font* font, unsigned int size) : colour(1, 1, 1, 1) {
 	this->text = text;
 	this->font = font;
+	this->size = size;
 	setup();
 }
 
-Label::Label(std::string text, TextFont* font, ColourRGBA* colour) {
+Label::Label(std::string text, Font* font, unsigned int size, ColourRGBA* colour) {
 	this->text = text;
 	this->font = font;
+	this->size = size;
 	this->colour = *colour;
 	setup();
 }
@@ -27,13 +29,13 @@ void Label::updateComponent() {
 
 void Label::renderComponent(GLRenderer& renderer) {
 	if (font != nullptr) {
-		renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint.getVec4()), positioningMode);
+		renderer.renderText(text, font, size, &dimensions, &ColourRGBA(colour.getVec4() * tint.getVec4()), positioningMode);
 	}
 }
 
 void Label::renderWithDifferentTint(GLRenderer& renderer, ColourRGBA* tint) {
 	if (font != nullptr) {
-		renderer.renderText(text, font, &dimensions, &ColourRGBA(colour.getVec4() * tint->getVec4()), positioningMode);
+		renderer.renderText(text, font, size, &dimensions, &ColourRGBA(colour.getVec4() * tint->getVec4()), positioningMode);
 	}
 }
 
@@ -47,13 +49,21 @@ std::string Label::getText() {
 	return text;
 }
 
-void Label::setFont(TextFont* font) {
+void Label::setFont(Font* font) {
 	this->font = font;
 	setupWidthAndHeight();
 }
 
-TextFont* Label::getFont() {
+Font* Label::getFont() {
 	return font;
+}
+
+void Aela::Label::setSize(unsigned int size) {
+	this->size = size;
+}
+
+unsigned int Aela::Label::getSize() {
+	return size;
 }
 
 void Label::setColour(ColourRGBA* colour) {
@@ -66,7 +76,7 @@ ColourRGBA* Label::getColour() {
 
 void Label::setupWidthAndHeight() {
 	if (font != nullptr) {
-		Rect<int> newDimensions = FontManager::dimensionsOfText(font, text);
+		Rect<int> newDimensions = font->getDimensionsOfText(text);
 		dimensions.setDimensions(newDimensions.getWidth(), newDimensions.getHeight());
 	}
 }

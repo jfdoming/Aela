@@ -42,6 +42,14 @@ void Aela::Renderer::setEventHandler(EventHandler* eventHandler) {
 	this->eventHandler = eventHandler;
 }
 
+unsigned int Aela::Renderer::getMultisampling3D() {
+	return multisampling3D;
+}
+
+unsigned int Aela::Renderer::getMultisampling2D() {
+	return multisampling2D;
+}
+
 void Renderer::setFOV(float value) {
 	camera.setFieldOfView(value);
 }

@@ -9,12 +9,13 @@
 #include "../../Old Garbage/texture.hpp"
 #include "../../Error Handler/ErrorHandling.h"
 #include "../../Old Garbage/shader.hpp"
-#include "../Text/FontManager.h"
 #include <freetype/ftglyph.h>
 #include <iostream>
 #include <signal.h>
 
 using namespace Aela;
+
+Aela::Basic2DGLRenderer::Basic2DGLRenderer() {}
 
 // This is the setup function, which sets up OpenGL-related variables.
 void Basic2DGLRenderer::setup() {
@@ -72,14 +73,13 @@ void Basic2DGLRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffe
 	GLuint* texture = framebuffer->getFramebufferImage()->getTexture();
 	GLuint* multisampledTexture = framebuffer->getMultisampledFramebufferImage()->getTexture();
 
-	// if (multisampling > 0) {
 	// This generates the multisampled colour framebuffer, which later is blitted to the regular colour framebuffer.
 	glGenFramebuffers(1, framebuffer->getMultisampledFramebuffer());
 	glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getMultisampledFramebuffer());
 
 	glGenTextures(1, multisampledTexture);
 	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, *multisampledTexture);
-	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, windowWidth, windowHeight, GL_TRUE);
+	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, multisampling, GL_RGBA, windowWidth, windowHeight, GL_TRUE);
 	/* Clamping to edges is important to prevent artifacts when scaling */
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -90,7 +90,6 @@ void Basic2DGLRenderer::setupSimple2DFramebuffer(Simple2DFramebuffer* framebuffe
 	framebuffer->getMultisampledFramebufferImage()->setDimensions(0, 0, windowWidth, windowHeight);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *multisampledTexture, 0);
-	// }
 
 	glGenFramebuffers(1, framebuffer->getFramebuffer());
 	glBindFramebuffer(GL_FRAMEBUFFER, *framebuffer->getFramebuffer());
@@ -253,15 +252,20 @@ void Basic2DGLRenderer::renderImageToFramebuffer(Image* image, unsigned int fram
 }
 
 // This function renders text directly to the 2D renderer's buffer.
-void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFont* textFont, Simple2DFramebuffer* framebuffer, Rect<int>* output,
+void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, Font* font, unsigned int size, Simple2DFramebuffer* framebuffer, Rect<int>* output,
 	Rect<unsigned int>* windowDimensions, ColourRGBA* colour, PositioningMode2D positioningMode, unsigned int pointsPerPixel) {
 	// Some of the terms used in this function may be confusing. See https://www.freetype.org/freetype2/docs/tutorial/step2.html to look up the terms.
 	// This function creates a buffer that represents the texture of the text. It does this by combining the buffers of the individual glyphs.
 	// Then it renders the buffer of the entire text. This is faster than rendering each individual character using the GPU.
 
+	font->setSize(size);
+	font->prepareForRendering(textScaling);
+
 	// This creates a bounding box for the text.
-	Rect<int> characterPositioning = *output;
-	characterPositioning.setDimensions(0, 0);
+	Rect<float> characterPositioning(output->getX(), output->getY(), 0, 0);
+	// characterPositioning.setDimensions(0, 0);
+
+	int bufferWidth = 0, bufferHeight;
 
 	// This is the y position of the origin if the top of the glyph had a y position of zero. It's basically just bearingY.
 	int originY = 0;
@@ -270,7 +274,7 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 	int distanceToTop = 0, distanceToBottom = 0;
 
 	// These are some more glyph-related variables.
-	FT_GlyphSlot glyph = (*(textFont->getFace()))->glyph;
+	FT_GlyphSlot glyph = font->getFace()->glyph;
 
 	struct RenderableGlyph {
 		unsigned char* buffer;
@@ -281,36 +285,28 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 	std::vector<RenderableGlyph> glyphs;
 	std::vector<unsigned char> buffer;
 
+	FT_Face face = font->getFace();
+
 	// This goes through every glyph to perform actions upon every glyph's properties.
 	for (unsigned int i = 0; i < text.length(); i++) {
-		char p = ((char)(text.at(i)));
-		AelaErrorHandling::handleSignal(SIGSEGV);
 		FT_Error error;
-
-		// This loads the character.
-		try {
-			if (error = FT_Load_Char(*(textFont->getFace()), (char)(text.at(i)), FT_LOAD_RENDER)) {
-				continue;
-			}
-		} catch (char* e) {
-			std::cout << *(textFont->getFace()) << " " << (char)(text.at(i)) << " " << FontManager::getErrorMessage(error) << "\n";
-			std::cout << e << " is an FT_Load_Char exception\n";
+		error = FT_Load_Char(face, text[i], FT_LOAD_RENDER);
+		if (error != 0) {
 			continue;
 		}
 
+		bufferWidth += glyph->bitmap.width;
+		characterPositioning.setWidth(characterPositioning.getWidth() + (float) glyph->bitmap.width / textScaling);
 
-		characterPositioning.setWidth(characterPositioning.getWidth() + glyph->bitmap.width);
-		// characterPositioning.setWidth(characterPositioning.getWidth() + glyph->metrics.horiAdvance);
-
-		if (glyph->metrics.horiBearingY / (signed int)pointsPerPixel > distanceToTop) {
-			distanceToTop = glyph->metrics.horiBearingY / (signed int)pointsPerPixel;
+		if (glyph->metrics.horiBearingY / (signed int) pointsPerPixel > distanceToTop) {
+			distanceToTop = glyph->metrics.horiBearingY / (signed int) pointsPerPixel;
 		}
 
-		if ((glyph->metrics.height - glyph->metrics.horiBearingY) / (signed int)pointsPerPixel > distanceToBottom) {
-			distanceToBottom = (glyph->metrics.height - glyph->metrics.horiBearingY) / (signed int)pointsPerPixel;
+		if ((glyph->metrics.height - glyph->metrics.horiBearingY) / (signed int) pointsPerPixel > distanceToBottom) {
+			distanceToBottom = (glyph->metrics.height - glyph->metrics.horiBearingY) / (signed int) pointsPerPixel;
 		}
 
-		if (glyph->metrics.horiBearingY / (signed int)pointsPerPixel > originY) {
+		if (glyph->metrics.horiBearingY / (signed int) pointsPerPixel > originY) {
 			originY = glyph->metrics.horiBearingY / (signed int) pointsPerPixel;
 		}
 
@@ -318,15 +314,15 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 		// typedef'd pointer.
 		if (glyph->bitmap.buffer != nullptr) {
 			RenderableGlyph charBuffer;
-			unsigned char* data = (unsigned char*)malloc(glyph->bitmap.width * glyph->bitmap.rows);
+			unsigned char* data = (unsigned char*) malloc(glyph->bitmap.width * glyph->bitmap.rows);
 			memcpy(data, glyph->bitmap.buffer, glyph->bitmap.width * glyph->bitmap.rows);
 			charBuffer.buffer = data;
 			charBuffer.width = glyph->bitmap.width;
 			charBuffer.rows = glyph->bitmap.rows;
 			charBuffer.originY = glyph->metrics.horiBearingY / pointsPerPixel;
-			charBuffer.character = p;
+			charBuffer.character = text[i];
 			glyphs.push_back(charBuffer);
-		} else if (p != ' ') {
+		} else if (text[i] != ' ') {
 			continue;
 		}
 
@@ -334,8 +330,9 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 		RenderableGlyph advancementBuffer;
 		unsigned int horiAdvance = glyph->metrics.horiAdvance / pointsPerPixel;
 		unsigned int advancement = horiAdvance - glm::clamp(glyph->bitmap.width, (unsigned int) 0, horiAdvance);
-		characterPositioning.setWidth(characterPositioning.getWidth() + advancement);
+		bufferWidth += advancement;
 		advancementBuffer.width = advancement;
+		characterPositioning.setWidth(characterPositioning.getWidth() + (float) advancement / textScaling);
 		advancementBuffer.rows = 0;
 		advancementBuffer.originY = 0;
 		advancementBuffer.buffer = nullptr;
@@ -345,19 +342,22 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 
 	switch (positioningMode) {
 		case PositioningMode2D::TOP_LEFT:
-			characterPositioning.setY(characterPositioning.getY() - distanceToTop);
+			characterPositioning.setY(characterPositioning.getY() - distanceToTop / textScaling);
 			break;
 		case PositioningMode2D::CENTER:
-			characterPositioning.setX((int) (characterPositioning.getX() - characterPositioning.getWidth() / 2.0f));
-			characterPositioning.setY((int) (characterPositioning.getY() - distanceToTop - characterPositioning.getHeight() / 2.0f));
+			characterPositioning.setX(characterPositioning.getX() - characterPositioning.getWidth() / 2.0f);
+			characterPositioning.setY(characterPositioning.getY() - (double) distanceToTop / textScaling - characterPositioning.getHeight() / 2.0f);
 			break;
 	}
 
-	characterPositioning.setHeight(distanceToTop + distanceToBottom);
+	bufferHeight = distanceToTop + distanceToBottom;
+
+	characterPositioning.setHeight((float) bufferHeight / textScaling);
+	// characterPositioning.setDimensions((float) bufferWidth / textScaling, (float) bufferHeight / textScaling);
 
 	// This creates one buffer out of each glyph's individual buffer.
 	if (glyphs.size() > 0) {
-		for (int i = 0; i < characterPositioning.getHeight(); i++) {
+		for (int i = 0; i < bufferHeight; i++) {
 			for (unsigned int whichGlyph = 0; whichGlyph < glyphs.size(); whichGlyph++) {
 				for (int whichChar = 0; whichChar < glyphs[whichGlyph].width; whichChar++) {
 					int whichRowToAccess = i - (originY - glyphs[whichGlyph].originY);
@@ -371,9 +371,9 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, TextFo
 		}
 	}
 
-	if (characterPositioning.getWidth() != 0) {
+	if (bufferWidth != 0) {
 		// This renders the text's buffer using the GPU.
-		renderCharacterBuffer(framebuffer, &characterPositioning, windowDimensions, &buffer, characterPositioning.getWidth(), characterPositioning.getHeight(), colour);
+		renderCharacterBuffer(framebuffer, &characterPositioning, windowDimensions, &buffer, bufferWidth, bufferHeight, colour);
 	}
 
 	// This frees the memory of each glyph's individual buffer.
@@ -402,8 +402,12 @@ void Basic2DGLRenderer::clearSimple2DFramebuffer(Simple2DFramebuffer* framebuffe
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
+void Aela::Basic2DGLRenderer::setTextScaling(unsigned int textScaling) {
+	this->textScaling = textScaling;
+}
+
 // This renders a single character using the character shader.
-void Basic2DGLRenderer::renderCharacterBuffer(Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, std::vector<unsigned char>* buffer, unsigned int width, unsigned int rows, ColourRGBA* colour) {
+void Basic2DGLRenderer::renderCharacterBuffer(Simple2DFramebuffer* framebuffer, Rect<float>* output, Rect<unsigned int>* windowDimensions, std::vector<unsigned char>* buffer, unsigned int width, unsigned int rows, ColourRGBA* colour) {
 	if (buffer != nullptr && buffer->size() > 0) {
 		glBindTexture(GL_TEXTURE_2D, characterTexture);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, rows, 0, GL_ALPHA, GL_UNSIGNED_BYTE, &buffer->at(0));
@@ -415,10 +419,10 @@ void Basic2DGLRenderer::renderCharacterBuffer(Simple2DFramebuffer* framebuffer, 
 
 		// This sets up positioning data.
 		int windowWidth = windowDimensions->getWidth(), windowHeight = windowDimensions->getHeight();
-		float topLeftX = (float)(-1 + ((float)output->getX() / (windowWidth / 2))),
-			topLeftY = (float)(-1 + ((float)output->getY() / (windowHeight / 2))),
-			bottomRightX = (-1 + ((float)(output->getX() + output->getWidth()) / (windowWidth / 2))),
-			bottomRightY = (float)(-1 + ((float)(output->getY() + output->getHeight()) / (windowHeight / 2)));
+		float topLeftX = (float) (-1 + ((float) output->getX() / (windowWidth / 2))),
+			topLeftY = (float) (-1 + ((float) output->getY() / (windowHeight / 2))),
+			bottomRightX = (-1 + ((float) (output->getX() + output->getWidth()) / (windowWidth / 2))),
+			bottomRightY = (float) (-1 + ((float) (output->getY() + output->getHeight()) / (windowHeight / 2)));
 
 		GLfloat vertexBufferData[] = {
 			topLeftX,  bottomRightY, 0.0f,

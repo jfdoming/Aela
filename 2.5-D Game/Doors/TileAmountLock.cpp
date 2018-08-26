@@ -76,12 +76,10 @@ void Game::TileAmountLock::checkIfUnlocked() {
 		for (auto pair : amounts) {
 			if (tileAmounts[pair.first] < amounts[pair.first]) {
 				door->lock(id);
-				std::cout << "locking...\n";
 				return;
 			}
 		}
 
-		std::cout << "unlocking...\n";
 		door->unlock(id);
 	}
 }

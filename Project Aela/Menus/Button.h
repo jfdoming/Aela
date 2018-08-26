@@ -29,7 +29,8 @@ namespace Aela {
 			std::string getText();
 			void setHoverTint(ColourRGBA* hoverTint);
 			void setClickTint(ColourRGBA* clickTint);
-			void setTextFont(TextFont* font);
+			void setFont(Font* font);
+			void setFontSize(unsigned int size);
 			void setTextColour(ColourRGBA* colour);
 			void setDimensions(Rect<int>* dimensions);
 			void setPosition(int x, int y);

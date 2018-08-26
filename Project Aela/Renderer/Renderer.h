@@ -29,7 +29,6 @@
 #include "../Window/Window.h"
 #include "../3D/Camera/Camera3D.h"
 #include "../Control Manager/ControlManager.h"
-#include "../2D/Text/FontManager.h"
 #include "../3D/Light/LightEntity.h"
 #include "../3D/Models/ModelEntity.h"
 #include "../3D/Skybox/SkyboxEntity.h"
@@ -37,6 +36,7 @@
 #include "../Events/EventHandler.h"
 #include "../Events/KeyEvent.h"
 #include "../2D/Positioning Mode/PositioningMode2D.h"
+#include "../2D/Fonts/Font.h"
 
 // These are some enums used by the Renderer.
 namespace Aela {
@@ -44,7 +44,8 @@ namespace Aela {
 	enum class RendererFeature {
 		SHADOWS, BILLBOARDS, SKYBOX, LIGHTS,
 		MSAA_3D_X0, MSAA_3D_X2, MSAA_3D_X4, MSAA_3D_X8, MSAA_3D_X16,
-		MSAA_2D_X0, MSAA_2D_X2, MSAA_2D_X4, MSAA_2D_X8, MSAA_2D_X16
+		MSAA_2D_X0, MSAA_2D_X2, MSAA_2D_X4, MSAA_2D_X8, MSAA_2D_X16,
+		SSAA_TEXT_X1, SSAA_TEXT_X2, SSAA_TEXT_X4, SSAA_TEXT_X8, SSAA_TEXT_X16
 	};
 
 	enum class RenderingAPI {
@@ -90,7 +91,7 @@ namespace Aela {
 
 			// These functions are related to 2D rendering.
 			virtual void render2DImage(Image* image, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint, PositioningMode2D positioningMode) = 0;
-			virtual void renderText(std::string text, TextFont* font, Rect<int>* output, ColourRGBA* colour, PositioningMode2D positioningMode) = 0;
+			virtual void renderText(std::string text, Font* font, unsigned int size, Rect<int>* output, ColourRGBA* colour, PositioningMode2D positioningMode) = 0;
 			virtual void renderRectangle(Rect<int>* output, ColourRGBA* colour, PositioningMode2D positioningMode) = 0;
 			virtual void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour, PositioningMode2D positioningMode) = 0;
 			virtual void renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, ColourRGBA* colour) = 0;
@@ -108,6 +109,9 @@ namespace Aela {
 			virtual void activateFeature(RendererFeature feature) = 0;
 			virtual void deactivateFeature(RendererFeature feature) = 0;
 			virtual void toggleFeature(RendererFeature feature) = 0;
+
+			unsigned int getMultisampling3D();
+			unsigned int getMultisampling2D();
 
 			// This sets the field of view of the bounded camera.
 			void setFOV(float value);

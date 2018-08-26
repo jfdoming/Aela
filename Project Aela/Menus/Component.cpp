@@ -42,52 +42,47 @@ void Component::render(GLRenderer& renderer) {
 	}*/
 }
 
-void Component::handleMousePressed(Event* event) {
+void Component::handleMousePressed(MouseEvent* event) {
 	if (event->getType() != EventConstants::MOUSE_PRESSED) {
 		return;
 	}
 
-	MouseEvent* mEvent = static_cast<MouseEvent*>(event);
-
-	if (alwaysTriggerMouseEvents || dimensions.contains(mEvent->getMouseX(), mEvent->getMouseY())) {
-		onMousePressed(mEvent);
+	if (alwaysTriggerMouseEvents || dimensions.contains(event->getMouseX(), event->getMouseY())) {
+		onMousePressed(event);
 		listeners.fire(event);
 
 		event->consume();
 	}
 }
 
-void Component::handleMouseReleased(Event* event) {
+void Component::handleMouseReleased(MouseEvent* event) {
 	if (event->getType() != EventConstants::MOUSE_RELEASED) {
 		return;
 	}
 
-	MouseEvent* mEvent = static_cast<MouseEvent*>(event);
-
-	if (alwaysTriggerMouseEvents || dimensions.contains(mEvent->getMouseX(), mEvent->getMouseY())) {
-		onMouseReleased(mEvent);
+	if (alwaysTriggerMouseEvents || dimensions.contains(event->getMouseX(), event->getMouseY())) {
+		onMouseReleased(event);
 		listeners.fire(event);
 
 		event->consume();
 	}
 }
 
-void Component::handleMouseMoved(Event* event) {
+void Component::handleMouseMoved(MouseEvent* event) {
 	if (event->getType() != EventConstants::MOUSE_MOTIONED) {
 		return;
 	}
 
-	MouseEvent* mEvent = static_cast<MouseEvent*>(event);
-	onMouseMoved(mEvent);
+	onMouseMoved(event);
 
-	bool contains = alwaysTriggerMouseEvents || dimensions.contains(mEvent->getMouseX(), mEvent->getMouseY());
+	bool contains = alwaysTriggerMouseEvents || dimensions.contains(event->getMouseX(), event->getMouseY());
 
 	if (contains) {
 		if (!hovered) {
 			hovered = true;
 			// dirty = true;
 
-			onMouseEntered(mEvent);
+			onMouseEntered(event);
 			listeners.fire(EventConstants::MOUSE_ENTERED_COMPONENT, event);
 		}
 	} else {
@@ -95,7 +90,7 @@ void Component::handleMouseMoved(Event* event) {
 			hovered = false;
 			// dirty = true;
 
-			onMouseExited(mEvent);
+			onMouseExited(event);
 			listeners.fire(EventConstants::MOUSE_EXITED_COMPONENT, event);
 		}
 	}

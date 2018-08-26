@@ -1,5 +1,4 @@
 #include "HintDisplay.h"
-#include "../../../Project Aela/2D/Text/FontManager.h"
 
 Game::HintDisplay::HintDisplay() : defaultColour(0.9f, 0.9f, 0.9f, 1.0f) {
 	timer = GameObjectProvider::getTimer();
@@ -64,7 +63,7 @@ void Game::HintDisplay::processNextHint() {
 	hintBackdrop->show();
 	hintLabel->setColour(&hint.colour);
 
-	int width = FontManager::dimensionsOfText(hintLabel->getFont(), text).getWidth();
+	int width = hintLabel->getFont()->getDimensionsOfText(text).getWidth();
 	hintBackdrop->setProperty(Transformable2DProperty::RECT_WIDTH, (float) width);
 
 	if (hint.duration != HintDisplayDuration::FOREVER) {

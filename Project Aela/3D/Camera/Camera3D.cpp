@@ -123,7 +123,6 @@ void Camera3D::onEvent(Event* event) {
 }
 
 void Camera3D::update() {
-	// std::cout << position.x << " " << position.y << " " << position.z << "\n";
 	if (usingControls && inUse && window->isFocused()) {
 		// This gets the cursor's position.
 		int xpos, ypos;

@@ -107,9 +107,6 @@ int Aela::Engine::setupWindow(unsigned int width, unsigned int height, unsigned 
 }
 
 int Aela::Engine::setupRenderer() {
-	// This makes the fontManager initialize the FreeType library and setup other things.
-	fontManager.setup();
-
 	// This initializes GLEW.
 	glewExperimental = true;
 	if (glewInit() != GLEW_OK) {
@@ -121,10 +118,10 @@ int Aela::Engine::setupRenderer() {
 	// Please note that the window must be set before calling setup functions.
 	renderer.setWindow(&window);
 	renderer.setTime(&time);
-	renderer.setFontManager(&fontManager);
 	renderer.setup3D();
 	renderer.setup2D();
 	renderer.setupWindow();
+
 	return 0;
 }
 
@@ -253,10 +250,6 @@ Time* Engine::getTime() {
 
 Timer* Aela::Engine::getTimer() {
 	return &timer;
-}
-
-FontManager* Engine::getFontManager() {
-	return &fontManager;
 }
 
 LuaManager* Engine::getLuaManager() {

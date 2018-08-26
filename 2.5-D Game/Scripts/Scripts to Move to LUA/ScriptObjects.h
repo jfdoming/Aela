@@ -31,7 +31,6 @@ namespace Scripts {
 	extern Animator* animator;
 	extern Camera3D* camera;
 	extern TileAtlas* tileAtlas;
-	extern FontManager* fontManager;
 	extern WorldExporter* worldExporter;
 	extern CameraController* cameraController;
 	extern TileBehaviourExecuter* tileBehaviourExecuter;

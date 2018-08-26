@@ -22,5 +22,6 @@ namespace Scripts {
 	void loadSkyboxes();
 	void loadMaps();
 	void loadAudio();
+	void loadFonts();
 	void unloadResources();
 }

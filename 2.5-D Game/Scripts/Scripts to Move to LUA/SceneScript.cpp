@@ -15,19 +15,19 @@
 #include "../../Worlds/WorldManager.h"
 #include "../../Displays/Tiles/TileInventoryDisplay.h"
 #include "../../../Project Aela/Resource Management/ResourcePaths.h"
+#include "../../Menus/FontSizes.h"
 
 void Scripts::setupScenes() {
 	using namespace Game;
 
-	// This creates some font objects for use later.
-	TextFont* xeroxLarge = fontManager->obtainTextFont((std::string) RESOURCE_ROOT, "res/fonts/xerox.ttf", 31);
-	TextFont* xeroxMedium = fontManager->obtainTextFont((std::string) RESOURCE_ROOT, "res/fonts/xerox.ttf", 24);
-	TextFont* xeroxSmall = fontManager->obtainTextFont((std::string) RESOURCE_ROOT, "res/fonts/xerox.ttf", 18);
+	Font* xerox;
 
-	if (xeroxLarge == nullptr || xeroxMedium == nullptr) {
+	if (!resourceManager->obtain<Font>("res/fonts/xerox.ttf", xerox)) {
 		AelaErrorHandling::windowError("A critical font (xerox.ttf) could not be loaded, aborting!");
 		return;
 	}
+
+	xerox->setSize(FontSizes::MEDIUM_FONT_SIZE);
 
 	// These are some fun colours.
 	ColourRGBA darkerBlue(0.8392f, 0.8588f, 0.9137f, 1.0f);
@@ -54,7 +54,7 @@ void Scripts::setupScenes() {
 	if (success) {
 		ekkonImage->setDimensions(&windowDimensions);
 		ekkonImage->setTexture(ekkonTexture);
-		ekkonImage->hide();
+		ekkonImage->hide(); 
 	} else {
 		AelaErrorHandling::consoleWindowError("Missing texture: ../../res/textures/ekkon.dds");
 	}
@@ -65,9 +65,9 @@ void Scripts::setupScenes() {
 	ekkonScene->getMenu()->add(ekkonImage);
 
 	// This sets up text.
-	auto titleText = std::make_shared<Label>("Pokemon Meitnerium", xeroxLarge, &almostWhite);
+	auto titleText = std::make_shared<Label>("Pokemon Meitnerium", xerox, FontSizes::LARGE_FONT_SIZE, almostWhitePtr);
 	titleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() / 1.6f));
-	auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xeroxMedium, &almostWhite);
+	auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
 	ekkonGamesText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), ((int) (windowDimensions.getHeight() * 0.95)));
 
 	// This sets up actions for the main menu buttons.
@@ -93,7 +93,8 @@ void Scripts::setupScenes() {
 	startGameButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 		(int) (windowDimensions.getHeight() / 1.5f));
 	startGameButton->setText("Start a New Game");
-	startGameButton->setTextFont(xeroxMedium);
+	startGameButton->setFont(xerox);
+	startGameButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	startGameButton->setTextColour(almostWhitePtr);
 	startGameButton->wrapAroundText();
 
@@ -104,7 +105,8 @@ void Scripts::setupScenes() {
 	continueGameButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 		(int) (windowDimensions.getHeight() / 1.5f + spacing));
 	continueGameButton->setText("Continue Game");
-	continueGameButton->setTextFont(xeroxMedium);
+	continueGameButton->setFont(xerox);
+	continueGameButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	continueGameButton->setTextColour(almostWhitePtr);
 	continueGameButton->wrapAroundText();
 
@@ -113,7 +115,8 @@ void Scripts::setupScenes() {
 	editMapButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 		(int) (windowDimensions.getHeight() / 1.5f + spacing * 2));
 	editMapButton->setText("Edit Map");
-	editMapButton->setTextFont(xeroxMedium);
+	editMapButton->setFont(xerox);
+	editMapButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	editMapButton->setTextColour(almostWhitePtr);
 	editMapButton->wrapAroundText();
 
@@ -122,7 +125,8 @@ void Scripts::setupScenes() {
 	optionsButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 		(int) (windowDimensions.getHeight() / 1.5f + spacing * 3));
 	optionsButton->setText("Options");
-	optionsButton->setTextFont(xeroxMedium);
+	optionsButton->setFont(xerox);
+	optionsButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	optionsButton->setTextColour(almostWhitePtr);
 	optionsButton->wrapAroundText();
 
@@ -131,7 +135,8 @@ void Scripts::setupScenes() {
 	exitButton->setPosition((int) (windowDimensions.getWidth() * 0.06),
 		(int) (windowDimensions.getHeight() / 1.5f + spacing * 4));
 	exitButton->setText("Exit");
-	exitButton->setTextFont(xeroxMedium);
+	exitButton->setFont(xerox);
+	exitButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	exitButton->setTextColour(almostWhitePtr);
 	exitButton->wrapAroundText();
 
@@ -166,11 +171,11 @@ void Scripts::setupScenes() {
 	avatarImage->setTexture(avatarTexture);
 	avatarImage->hide();
 
-	auto dialogueTextOne = std::make_shared<Label>("Dialogue!", xeroxMedium, &almostWhite);
-	auto dialogueTextTwo = std::make_shared<Label>("Dialogue 2!", xeroxMedium, &almostWhite);
-	auto dialogueTextThree = std::make_shared<Label>("Dialogue 3!", xeroxMedium, &almostWhite);
-	auto dialogueTextFour = std::make_shared<Label>("Dialogue 4!", xeroxMedium, &almostWhite);
-	auto dialogueTextName = std::make_shared<Label>("Name!", xeroxMedium, &almostWhite);
+	auto dialogueTextOne = std::make_shared<Label>("Dialogue!", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
+	auto dialogueTextTwo = std::make_shared<Label>("Dialogue 2!", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
+	auto dialogueTextThree = std::make_shared<Label>("Dialogue 3!", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
+	auto dialogueTextFour = std::make_shared<Label>("Dialogue 4!", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
+	auto dialogueTextName = std::make_shared<Label>("Name!", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
 	dialogueTextName->setPositioningMode(PositioningMode2D::CENTER);
 	float dialogueTextStartX = dialogueDisplay->getDialogueTextStartX();
 	dialogueTextOne->getDimensions()->setXY((int) (windowDimensions.getWidth() * dialogueTextStartX), (int) (windowDimensions.getHeight() * 0.85));
@@ -207,7 +212,7 @@ void Scripts::setupScenes() {
 		windowDimensions.getWidth() / 2, windowDimensions.getHeight() / 18));
 	tileInventoryBackgroundImage->setTexture(tileInventoryBackgroundTexture);
 
-	auto tileInventoryText = std::make_shared<Label>("<current tile>", xeroxMedium, &almostWhite);
+	auto tileInventoryText = std::make_shared<Label>("<current tile>", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
 	tileInventoryText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), (int) (windowDimensions.getHeight() / 5));
 
 	auto tileSelectorBox = std::make_shared<ImageComponent>();
@@ -231,7 +236,7 @@ void Scripts::setupScenes() {
 	deathBackgroundRect->setColour(&ColourRGBA(0.15f, 0.15f, 0.15f, 0.95f));
 	deathBackgroundRect->hide();
 
-	auto deathText = std::make_shared<Label>("You died. Press 'R' to go back to your last checkpoint.", xeroxMedium, &almostWhite);
+	auto deathText = std::make_shared<Label>("You died. Press 'R' to go back to your last checkpoint.", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
 	deathText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.30), (int) (windowDimensions.getHeight() * 0.30));
 	deathText->hide();
 
@@ -252,8 +257,8 @@ void Scripts::setupScenes() {
 	hintImage->hide();
 	hintDisplay->setHintBackdrop(hintImage);
 
-	// This sets up the coordinate text.
-	auto hintText = std::make_shared<Label>("", xeroxSmall, almostWhitePtr);
+	// This sets up the hint text.
+	auto hintText = std::make_shared<Label>("", xerox, FontSizes::SMALL_FONT_SIZE, almostWhitePtr);
 	hintText->getDimensions()->setXY((int) (windowDimensions.getWidth() / 10), (int) (windowDimensions.getHeight() / 10));
 	hintDisplay->setHintLabel(hintText);
 
@@ -290,7 +295,7 @@ void Scripts::setupScenes() {
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	pauseMenuTextRect->setColour(&ColourRGBA(0.2f, 0.2f, 0.2f, 0.95f));
 
-	auto pauseMenuTitleText = std::make_shared<Label>("Pause Menu", xeroxMedium, &almostWhite);
+	auto pauseMenuTitleText = std::make_shared<Label>("Pause Menu", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
 	pauseMenuTitleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.15), (int) (windowDimensions.getHeight() * 0.18));
 
 	// This creates sidebar buttons for the pause menu.
@@ -344,7 +349,8 @@ void Scripts::setupScenes() {
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	pauseMenuGameButton->setupOnClick(std::bind(goToGameSubMenu, engine));
 	pauseMenuGameButton->setText("Game");
-	pauseMenuGameButton->setTextFont(xeroxMedium);
+	pauseMenuGameButton->setFont(xerox);
+	pauseMenuGameButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	pauseMenuGameButton->setTextColour(almostWhitePtr);
 
 	pauseMenuOptionsButton->setTexture(simpleButtonTextureLight);
@@ -352,7 +358,8 @@ void Scripts::setupScenes() {
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	pauseMenuOptionsButton->setupOnClick(std::bind(goToOptionsSubMenu, engine));
 	pauseMenuOptionsButton->setText("Options");
-	pauseMenuOptionsButton->setTextFont(xeroxMedium);
+	pauseMenuOptionsButton->setFont(xerox);
+	pauseMenuOptionsButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	pauseMenuOptionsButton->setTextColour(almostWhitePtr);
 	pauseMenuOptionsButton->wrapAroundText();
 
@@ -361,7 +368,8 @@ void Scripts::setupScenes() {
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	pauseMenuMapEditorButton->setupOnClick(std::bind(goToOptionsSubMenu, engine));
 	pauseMenuMapEditorButton->setText("Map Editor");
-	pauseMenuMapEditorButton->setTextFont(xeroxMedium);
+	pauseMenuMapEditorButton->setFont(xerox);
+	pauseMenuMapEditorButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	pauseMenuMapEditorButton->setTextColour(almostWhitePtr);
 	pauseMenuMapEditorButton->wrapAroundText();
 
@@ -369,7 +377,8 @@ void Scripts::setupScenes() {
 		(int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111)));
 	pauseMenuExportButton->setupOnClick(std::bind(exportMap, engine));
 	pauseMenuExportButton->setText("Export");
-	pauseMenuExportButton->setTextFont(xeroxMedium);
+	pauseMenuExportButton->setFont(xerox);
+	pauseMenuExportButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	pauseMenuExportButton->setTextColour(almostWhitePtr);
 	pauseMenuMapEditorSubMenu->add(pauseMenuExportButton);
 
@@ -397,7 +406,7 @@ void Scripts::setupScenes() {
 	inventoryBackgroundRect->setColour(&ColourRGBA(0.15f, 0.15f, 0.15f, 0.95f));
 
 	// This sets up text for the inentory scene.
-	auto inventoryTitleText = std::make_shared<Label>("Inventory", xeroxMedium, &almostWhite);
+	auto inventoryTitleText = std::make_shared<Label>("Inventory", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
 	inventoryTitleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.33), (int) (windowDimensions.getHeight() * 0.38));
 
 	auto inventorySlotA = std::make_shared<ImageComponent>();

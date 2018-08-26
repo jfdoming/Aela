@@ -217,7 +217,6 @@ bool Aela::GLTextureLoader::loadBMPToBoundId(std::ifstream& in, GLenum target, u
 	if (!validFile) {
 		AelaErrorHandling::consoleWindowError("Project Aela's BMP loader", (std::string) "The BMP does not contain a" +
 			"proper bits per pixel value or is corrupt!");
-		std::cout << *(int*)&(header[0x1E]) << " " << *(int*)&(header[0x1C]) << " " << bytesPerPixel << "\n";
 		return false;
 	}
 
@@ -391,8 +390,6 @@ bool Aela::GLTextureLoader::loadBMPUsingFILE(std::string src, GLenum target, uns
 		AelaErrorHandling::consoleWindowError("Project Aela's BMP loader", src + " could not be found.");
 		return false;
 	}
-
-	std::cout << src << " is the src.\n";
 
 	bool validFile = true;
 

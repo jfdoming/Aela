@@ -9,6 +9,9 @@
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "../Aela Game/AelaGame.h"
 
+#include <ft2build.h>
+#include <freetype/freetype.h>
+
 using namespace Game;
 
 int main(int argc, char *args[]) {
@@ -28,8 +31,10 @@ int main(int argc, char *args[]) {
 	// This activates features of the renderer. These can be changed at any point during the runtime of the application.
 	renderer->activateFeature(RendererFeature::BILLBOARDS);
 	renderer->activateFeature(RendererFeature::SKYBOX);
-	renderer->activateFeature(RendererFeature::MSAA_3D_X0);
-	renderer->activateFeature(RendererFeature::MSAA_2D_X0);
+	renderer->activateFeature(RendererFeature::MSAA_3D_X4);
+	renderer->activateFeature(RendererFeature::MSAA_2D_X8);
+	// renderer->activateFeature(RendererFeature::MSAA_2D_X0);
+	// renderer->activateFeature(RendererFeature::SSAA_TEXT_X4);
 
 	// If a world tells the game to use lights (because the world is outdoors), then shadows and lights are turned on.
 	// Most of this game takes place indoors with well let rooms, so the only source of lighting is ambient light.
@@ -93,8 +98,8 @@ int main(int argc, char *args[]) {
 
 		if (engine.getTime()->getCurrentTimeInMillis() % 1000 < lastRemainder || engine.getTime()->getTimeBetweenFramesInMillis() >= 1000) {
 			calc.calculate(engine.getTime()->getCurrentTimeInNanos(), engine.getTime()->getTimeBetweenFramesInNanos());
-			// std::cout << "True FPS: " << calc.getTrueFPS() << "\n";
-			// std::cout << "Smoothed FPS: " << calc.getSmoothedFPS() << "\n";
+			/*std::cout << "True FPS: " << calc.getTrueFPS() << "\n";
+			std::cout << "Smoothed FPS: " << calc.getSmoothedFPS() << "\n";*/
 			// engine.getStopwatch()->outputTimesIntoConsole();
 			engine.getStopwatch()->reset();
 		}

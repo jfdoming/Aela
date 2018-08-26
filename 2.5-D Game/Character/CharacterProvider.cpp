@@ -182,7 +182,6 @@ void Game::CharacterProvider::saveDataToSaveState(SaveState* saveState) {
 	std::unordered_map<size_t, CharacterInformationBlock>* characterInformation = new std::unordered_map<size_t, CharacterInformationBlock>();
 	
 	for (auto& pair : characters) {
-		std::cout << "Saving char: " << pair.second->getName() << "\n";
 		(*characterInformation)[pair.first] = pair.second->getCharacterInformationBlock();
 	}
 
@@ -192,11 +191,8 @@ void Game::CharacterProvider::saveDataToSaveState(SaveState* saveState) {
 void Game::CharacterProvider::loadDataFromSaveState(SaveState* saveState) {
 	std::unordered_map<size_t, CharacterInformationBlock>* characterInformation = (std::unordered_map<size_t, CharacterInformationBlock>*) saveState->getData("characters");
 	
-	std::cout << characterInformation << " is char info\n";
 	for (auto& pair : *characterInformation) {
-		std::cout << "Loading char\n";
 		characters[pair.first]->setPropertiesUsingCharacterInformationBlock(&pair.second);
-		std::cout << "Done loading char.\n";
 	}
 }
 

@@ -97,6 +97,7 @@ void Game::AelaGame::loadResources() {
 	scriptManager->runScript("load maps");
 	scriptManager->runScript("load tiled maps");
 	scriptManager->runScript("load audio");
+	scriptManager->runScript("load fonts");
 }
 
 void Game::AelaGame::loadScenes() {
@@ -129,8 +130,8 @@ void Game::AelaGame::setup() {
 
 	Scripts::setupScripts();
 
-	renderer->activateFeature(RendererFeature::MSAA_2D_X4);
-	renderer->activateFeature(RendererFeature::MSAA_3D_X4);
+	// renderer->activateFeature(RendererFeature::MSAA_2D_X4);
+	// renderer->activateFeature(RendererFeature::MSAA_3D_X4);
 
 	using namespace Game;
 
@@ -215,7 +216,6 @@ void Game::AelaGame::update() {
 					} else if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS
 						&& !playerCharacter->isMoving()) {
 						playerCharacter->moveIfPossible(TileDirection::BACKWARD);
-						std::cout << "Moving backward\n";
 					}
 				}
 				if (gameMode == GameMode::MAP_EDITOR) {
@@ -567,16 +567,15 @@ void Game::AelaGame::onEvent(Event* event) {
 				break;
 			case SDLK_8:
 				// This is here for debugging!
-				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-5, 0), glm::ivec3(14, 0, 12)),
+				Scripts::setupLevel(1, 2);
+				playerCharacter->teleportWithAnimation(&Location(1, -9, 3, 12, 0, 2),
 					TeleportationAnimation::FADE);
 				break;
 			case SDLK_9:
 				// This is here for debugging!
 				AudioClip* clip;
 				if (resourceManager->obtain<AudioClip>("res/audio/streams/Even the Tutorial Can Be Serious.wav", clip)) {
-					std::cout << "Success!\n";
 					GameObjectProvider::getAudioPlayer()->playClip(clip);
-					std::cout << "Now playing!\n";
 				}
 				break;
 		}
@@ -597,6 +596,7 @@ void Game::AelaGame::setupScripts() {
 	scriptManager->addScript("load tiled maps", std::bind(&loadTiledMaps));
 	scriptManager->addScript("load maps", std::bind(&loadMaps));
 	scriptManager->addScript("load audio", std::bind(&loadAudio));
+	scriptManager->addScript("load fonts", std::bind(&loadFonts));
 	scriptManager->addScript("load scenes", std::bind(&setupScenes));
 	scriptManager->addScript("load startup material animations", std::bind(&loadMaterialAnimations));
 	scriptManager->addScript("unload resources", std::bind(&unloadResources));

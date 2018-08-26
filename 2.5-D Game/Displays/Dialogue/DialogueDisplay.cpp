@@ -9,6 +9,7 @@
 #include "../Scripts/ScriptManager.h"
 #include "Time/Time.h"
 #include "../../../Project Aela/Resource Management/ResourcePaths.h"
+#include "../../Menus/FontSizes.h"
 
 Game::DialogueDisplay::DialogueDisplay() {
 	eventHandler = GameObjectProvider::getEventHandler();
@@ -21,10 +22,15 @@ Game::DialogueDisplay::DialogueDisplay() {
 void Game::DialogueDisplay::setup() {
 	scriptManager = GameObjectProvider::getScriptManager();
 	animator = GameObjectProvider::getAnimator();
-	maxWidthOfText = (int) (GameObjectProvider::getWindow()->getDimensions()->getWidth() * 0.7f);
+	maxWidthOfText = (int) (GameObjectProvider::getWindow()->getDimensions()->getWidth() * 0.75f);
 }
 
 void Game::DialogueDisplay::update() {
+	if (runScript) {
+		scriptManager->runScript(scriptOnDialogueEnd);
+		runScript = false;
+	}
+
 	if (state == DialogueState::MESSAGE && positionInDialogue < maxCharactersOfText
 		&& time->getCurrentTimeInNanos() >= timeSinceNewCharacter + timeBetweenCharacterReveals) {
 		positionInDialogue++;
@@ -32,10 +38,6 @@ void Game::DialogueDisplay::update() {
 		if (positionInDialogue < maxCharactersInLabel1) {
 			label1->setText(line1OfText.substr(0, positionInDialogue));
 			label2->setText("");
-			//if (positionInDialogue == maxCharactersPerLine - 1 && line2OfText == "") {
-			//	// To indidcate that the one-liner is completely shown.
-			//	positionInDialogue = maxCharactersPerLine * 2;
-			//}
 		} else {
 			label1->setText(line1OfText.substr(0, maxCharactersInLabel1));
 			label2->setText(line2OfText.substr(0, positionInDialogue - maxCharactersInLabel1));
@@ -76,7 +78,7 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 							if (scriptOnDialogueEnd == "") {
 								closeDialog();
 							} else {
-								scriptManager->runScript(scriptOnDialogueEnd);
+								runScript = true;
 							}
 							justFinishedDialogue = true;
 						}
@@ -169,15 +171,16 @@ void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc
 	}
 
 	std::string splitText = text;
-	TextFont* font = label1->getFont();
-	int width = FontManager::dimensionsOfText(font, splitText).getWidth();
+	Font* font = label1->getFont();
+	font->setSize(FontSizes::MEDIUM_FONT_SIZE);
+	int width = font->getDimensionsOfText(splitText).getWidth();
 	while (width > maxWidthOfText) {
 		size_t position = splitText.find_last_of(' ');
 		if (position == std::string::npos) {
 			break;
 		}
 		splitText = splitText.substr(0, position);
-		width = FontManager::dimensionsOfText(font, splitText).getWidth();
+		width = font->getDimensionsOfText(splitText).getWidth();
 	}
 
 	maxCharactersInLabel1 = (int) splitText.size();
@@ -190,32 +193,6 @@ void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc
 		line1OfText = splitText;
 		line2OfText = text.substr(splitText.size() + 1, text.size() - splitText.size());
 	}
-
-	std::cout << "---------------\n";
-	std::cout << "-" << line1OfText << "-\n";
-	std::cout << "-" << line2OfText << "-\n";
-	std::cout << "---------------\n";
-
-	//if (text.size() > maxCharactersPerLine) {
-	//	size_t position = text.substr(0, maxCharactersPerLine).find_last_of(' ');
-	//	if (/*position >= maxCharactersPerLine || */position == std::string::npos) {
-	//		line1OfText = text.substr(0, maxCharactersPerLine);
-	//		position = maxCharactersPerLine;
-	//	} else {
-	//		line1OfText = text.substr(0, position);
-	//		if (text.at(position) == ' ') {
-	//			text.erase(text.begin() + position);
-	//		}
-	//	}
-	//	if (text.size() > maxCharactersPerLine * 2) {
-	//		line2OfText = text.substr(position, maxCharactersPerLine * 2);
-	//	} else {
-	//		line2OfText = text.substr(position, text.size());
-	//	}
-	//} else {
-	//	line1OfText = text;
-	//	line2OfText = "";
-	//}
 
 	positionInDialogue = 0;
 	scriptOnDialogueEnd = scriptToRunOnceComplete;

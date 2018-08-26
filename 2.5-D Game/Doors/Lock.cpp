@@ -7,9 +7,7 @@ Game::Lock::Lock(bool locked) {
 	this->locked = locked;
 }
 
-Game::Lock::~Lock() {
-	std::cout << "DELETING... lock\n";
-}
+Game::Lock::~Lock() {}
 
 bool Game::Lock::isLocked() {
 	return locked;
