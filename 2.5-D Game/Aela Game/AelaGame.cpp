@@ -247,6 +247,18 @@ void Game::AelaGame::update() {
 			}
 		}
 
+		if (pressedReturn) {
+			Location* playerLocation = playerCharacter->getLocation();
+			glm::ivec3 tile = playerLocation->getTileGroup();
+			glm::ivec2 chunk = playerLocation->getChunk();
+			worldManager->getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
+			Location location(playerLocation->getWorld(), chunk, tile);
+			worldManager->runPromptedScriptOfTile(&location);
+			enemyProvider->returnWasPressed();
+			pressingReturn = true;
+			pressedReturn = false;
+		}
+
 		worldManager->update();
 		characterProvider->update();
 		cameraController->update();
@@ -276,14 +288,7 @@ void Game::AelaGame::onEvent(Event* event) {
 						break;
 					case SDLK_RETURN:
 						if (!pressingReturn && !dialogueDisplay->hadJustFinishedDialogue()) {
-							Location* playerLocation = playerCharacter->getLocation();
-							glm::ivec3 tile = playerLocation->getTileGroup();
-							glm::ivec2 chunk = playerLocation->getChunk();
-							worldManager->getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
-							Location location(playerLocation->getWorld(), chunk, tile);
-							worldManager->runPromptedScriptOfTile(&location);
-							enemyProvider->returnWasPressed();
-							pressingReturn = true;
+							pressedReturn = true;
 						}
 						break;
 					case SDLK_i:
@@ -537,25 +542,32 @@ void Game::AelaGame::onEvent(Event* event) {
 				break;
 			case SDLK_1:
 				// This is here for debugging!
+				Scripts::setupLevel(1, 2);
 				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-7, 0), glm::ivec3(14, 0, 1)),
 					TeleportationAnimation::RISE);
+				hintDisplay->clearAndDisplayHint("Cheat Activated: Rise Teleport", HintDisplayDuration::SHORT);
 				break;
 			case SDLK_2:
 				// This is here for debugging!
+				Scripts::setupLevel(1, 3);
 				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-15, 0), glm::ivec3(3, 0, 3)),
 					TeleportationAnimation::RISE);
+				hintDisplay->clearAndDisplayHint("Cheat Activated: Rise Teleport", HintDisplayDuration::SHORT);
 				break;
 			case SDLK_3:
 				// This is here for debugging!
 				player->kill();
+				hintDisplay->clearAndDisplayHint("Cheat Activated: Kill Player", HintDisplayDuration::SHORT);
 				break;
 			case SDLK_4:
 				// This is here for debugging!
-				renderer->toggleFeature(RendererFeature::SHADOWS);
+				player->getCharacter()->toggleCollidability();
+				hintDisplay->clearAndDisplayHint("Cheat Activated: Toggle Player Collidability", HintDisplayDuration::SHORT);
 				break;
 			case SDLK_5:
 				// This is here for debugging!
 				renderer->toggleFeature(RendererFeature::LIGHTS);
+				hintDisplay->clearAndDisplayHint("Cheat Activated: Toggle Lights", HintDisplayDuration::SHORT);
 				break;
 			case SDLK_6:
 				// This is here for debugging!
@@ -570,6 +582,7 @@ void Game::AelaGame::onEvent(Event* event) {
 				Scripts::setupLevel(1, 2);
 				playerCharacter->teleportWithAnimation(&Location(1, -9, 3, 12, 0, 2),
 					TeleportationAnimation::FADE);
+				hintDisplay->clearAndDisplayHint("Cheat Activated: Fade Teleport", HintDisplayDuration::SHORT);
 				break;
 			case SDLK_9:
 				// This is here for debugging!

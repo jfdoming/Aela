@@ -18,6 +18,8 @@ namespace Game {
 
 			void displayHint(std::string text, HintDisplayDuration hintDisplayDuration);
 			void displayHint(std::string text, HintDisplayDuration hintDisplayDuration, ColourRGBA* colour);
+			void clearAndDisplayHint(std::string text, HintDisplayDuration hintDisplayDuration);
+			void clearAndDisplayHint(std::string text, HintDisplayDuration hintDisplayDuration, ColourRGBA* colour);
 			void clear();
 
 			void setHintLabel(std::shared_ptr<Label> hintLabel);

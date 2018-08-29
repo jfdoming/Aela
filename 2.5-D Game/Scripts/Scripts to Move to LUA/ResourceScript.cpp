@@ -59,8 +59,6 @@ namespace Scripts {
 	};
 
 	std::string spriteSheetNames[] = {
-		"character",
-		"turret",
 		"floors_1",
 		"walls_1",
 		"walls_2",
@@ -72,8 +70,16 @@ namespace Scripts {
 		"locks_2",
 		"numbered_tiles",
 		"rails_1",
+		"character",
+		"turret_1",
 		"soldier_1",
-		"scientist_1"
+		"scientist_1",
+		"scientist_4",
+		"soldier_1",
+		"soldier_2",
+		"the_looker",
+		"Julian",
+		"Robert"
 	};
 
 	std::string avatarNames[] = {

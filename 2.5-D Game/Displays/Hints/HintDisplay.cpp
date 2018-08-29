@@ -12,7 +12,12 @@ void Game::HintDisplay::displayHint(std::string text, HintDisplayDuration hintDi
 	hintQueue.push(hint);
 
 	if (!displayingHint || hint.duration == HintDisplayDuration::FOREVER) {
-		processNextHint();
+		auto processHint = [this]() {
+				processNextHint();
+		};
+
+		// This forces the hint to be processed during the next major update() call on the main thread.
+		timer->scheduleEventInMillis(0, processHint);
 	}
 }
 
@@ -24,8 +29,23 @@ void Game::HintDisplay::displayHint(std::string text, HintDisplayDuration hintDi
 	hintQueue.push(hint);
 
 	if (!displayingHint || hint.duration == HintDisplayDuration::FOREVER) {
-		processNextHint();
+		auto processHint = [this]() {
+			processNextHint();
+		};
+
+		// This forces the hint to be processed during the next major update() call on the main thread.
+		timer->scheduleEventInMillis(0, processHint);
 	}
+}
+
+void Game::HintDisplay::clearAndDisplayHint(std::string text, HintDisplayDuration hintDisplayDuration) {
+	clear();
+	displayHint(text, hintDisplayDuration);
+}
+
+void Game::HintDisplay::clearAndDisplayHint(std::string text, HintDisplayDuration hintDisplayDuration, ColourRGBA* colour) {
+	clear();
+	displayHint(text, hintDisplayDuration, colour);
 }
 
 void Game::HintDisplay::clear() {

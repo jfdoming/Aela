@@ -37,9 +37,14 @@ Game::Character::Character(std::string name) : Character() {
 	this->name = name;
 }
 
-Game::Character::Character(std::string name, Location* location) {
+Game::Character::Character(std::string name, Location* location) : Character() {
 	this->name = name;
 	this->location = *location;
+}
+
+Game::Character::Character(std::string name, Location* location, float walkingSpeed, float runningSpeed) : Character(name, location) {
+	this->walkingSpeed = walkingSpeed;
+	this->runningSpeed = runningSpeed;
 }
 
 void Game::Character::setLocation(Location* location) {
@@ -206,8 +211,6 @@ bool Game::Character::isMoving() {
 }
 
 void Game::Character::movementHasEnded() {
-	// This now gets done in update() whenever movementEnded == true.
-	// moving = false;
 	locationBeforeAnimation = location;
 	movementEnded = true;
 	if (entity != nullptr) {
@@ -227,9 +230,9 @@ void Game::Character::turn(TileDirection direction) {
 }
 
 void Game::Character::turnImmediately(TileDirection direction) {
-	if (!newMovementsAreAllowed) {
-		return;
-	}
+	//if (!newMovementsAreAllowed) {
+	//	return;
+	//}
 
 	if (directionFacing != direction) {
 		timePassedAfterAnimationEnd = 0;
@@ -264,7 +267,8 @@ void Game::Character::moveIfPossible(TileDirection direction) {
 
 void Game::Character::moveIfPossible(std::list<Movement>* directions) {
 	if (newMovementsAreAllowed) {
-		possibleMovementsToProcess.splice(possibleMovementsToProcess.end(), *directions);
+		std::list<Movement> directionsCopy = *directions;
+		possibleMovementsToProcess.splice(possibleMovementsToProcess.end(), directionsCopy);
 	}
 }
 
@@ -453,15 +457,25 @@ bool Game::Character::areNewMovementsAllowed() {
 	return newMovementsAreAllowed;
 }
 
+void Game::Character::setCollidable(bool collidable) {
+	this->collidable = collidable;
+}
+
+bool Game::Character::isCollidable() {
+	return collidable;
+}
+
+void Game::Character::toggleCollidability() {
+	collidable = !collidable;
+}
+
 void Game::Character::update() {
 	if (movementEnded) {
 		movementEnded = false;
 		moving = false;
 	}
 
-	if (!newMovementsAreAllowed) {
-		// possibleMovementsToProcess.clear();
-	} else if (!moving && possibleMovementsToProcess.size() > 0) {
+	if (!moving && possibleMovementsToProcess.size() > 0) {
 		processPossibleMovement(&possibleMovementsToProcess.front());
 		possibleMovementsToProcess.pop_front();
 	}
@@ -487,7 +501,7 @@ void Game::Character::update() {
 }
 
 void Game::Character::addTranslation(Movement* movement, std::string scriptOnceComplete) {
-	moving = true;
+	// moving = true;
 	translations.push_back(std::pair<Movement, std::string>(*movement, scriptOnceComplete));
 }
 
@@ -612,8 +626,8 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 	glm::vec3 characterTranslation = *entity->getPosition() + translationForAnimation;
 	frame.setTranslation(&characterTranslation);
 	auto action = [this, scriptOnCompletion]() {
-		movementHasEnded();
 		GameObjectProvider::getScriptManager()->runScript(scriptOnCompletion);
+		movementHasEnded();
 	};
 
 	frame.setEndingAction(std::bind(action));
@@ -743,7 +757,7 @@ void Game::Character::processPossibleMovement(Movement* movement) {
 			if (chunk != nullptr) {
 				TileGroup* tileGroup = worldManager->getTileGroup(&newLocation);
 
-				if (tileGroup == nullptr || tileGroup->isCollidable(GameObjectProvider::getTileAtlas())) {
+				if (tileGroup == nullptr || (collidable && tileGroup->isCollidable(GameObjectProvider::getTileAtlas()))) {
 					// If the movement is impossible, don't do it!
 					turnImmediately(direction);
 					return; 

@@ -183,12 +183,23 @@ void Game::WorldManager::addWalkedOnScript(std::string script, Location* locatio
 }
 
 void Game::WorldManager::addPromptedScript(std::string script, Location* location) {
-	std::cout << worlds[location->getWorld()].getChunk(location->getChunk()) << "\n";
 	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setPromptedScript(script);
 }
 
 void Game::WorldManager::addTileSwitchScript(std::string script, Location* location) {
 	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setSwitchScript(script);
+}
+
+void Game::WorldManager::removeWalkedOnScript(Location* location) {
+	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setWalkedOnScript("");
+}
+
+void Game::WorldManager::removePromptedScript(Location* location) {
+	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setPromptedScript("");
+}
+
+void Game::WorldManager::removeTileSwitchScript(Location* location) {
+	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setSwitchScript("");
 }
 
 bool Game::WorldManager::addTeleporterToFloorTile(Location* teleporterLocation, Location* teleporterDestination) {

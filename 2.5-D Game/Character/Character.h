@@ -26,6 +26,7 @@ namespace Game {
 			Character();
 			Character(std::string name);
 			Character(std::string name, Location* location);
+			Character(std::string name, Location* location, float walkingSpeed, float runningSpeed);
 
 			// These are movement-related functions. Functions with the word "immediately" complete
 			// the movement on the spot, wherever the player currently is. Other functions add the
@@ -89,6 +90,9 @@ namespace Game {
 			bool isVisible();
 			void allowNewMovements(bool newMovementsAreAllowed);
 			bool areNewMovementsAllowed();
+			void setCollidable(bool collidable);
+			bool isCollidable();
+			void toggleCollidability();
 
 		protected:
 			Location location;
@@ -97,6 +101,8 @@ namespace Game {
 
 			// Each character should have a unique name.
 			std::string name;
+
+			bool collidable = true;
 
 			int health, maxHealth;
 

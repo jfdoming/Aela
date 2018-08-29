@@ -146,7 +146,6 @@ void Game::DialogueDisplay::showDialogue(std::string text, std::string scriptToR
 
 void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc, std::string text, std::string scriptToRunOnceComplete) {
 	auto onAnimationComplete = [this, name, avatarSrc]() {
-		state = DialogueState::MESSAGE;
 		nameLabel->setText(name);
 
 		GLTexture* texture;
@@ -169,6 +168,8 @@ void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc
 	} else {
 		onAnimationComplete();
 	}
+
+	state = DialogueState::MESSAGE;
 
 	std::string splitText = text;
 	Font* font = label1->getFont();

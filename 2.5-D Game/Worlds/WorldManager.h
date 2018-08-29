@@ -47,6 +47,10 @@ namespace Game {
 			void addPromptedScript(std::string script, Location* location);
 			void addTileSwitchScript(std::string script, Location* location);
 
+			void removeWalkedOnScript(Location* location);
+			void removePromptedScript(Location* location);
+			void removeTileSwitchScript(Location* location);
+
 			bool addTeleporterToFloorTile(Location* teleporterLocation, Location* teleporterDestination);
 			bool addTeleporterToSwitchableFloorTile(Location* teleporterLocation, Location* teleporterDestination);
 			bool addTeleporterToTile(Location* teleporterLocation, Location* teleporterDestination, size_t tileType);
