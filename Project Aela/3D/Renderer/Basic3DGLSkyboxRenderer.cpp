@@ -14,7 +14,7 @@ using namespace Aela;
 Aela::Basic3DSkyboxRenderer::Basic3DSkyboxRenderer() {}
 
 Aela::Basic3DSkyboxRenderer::~Basic3DSkyboxRenderer() {
-	if (vertexBuffer == NULL) {
+	if (vertexBuffer == 0) {
 		glDeleteBuffers(1, &vertexBuffer);
 		glDeleteVertexArrays(1, &vertexArray);
 	}

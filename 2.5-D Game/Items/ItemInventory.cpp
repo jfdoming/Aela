@@ -2,6 +2,8 @@
 
 using namespace Game;
 
+ItemInventory::ItemInventory() = default;
+
 size_t Game::ItemInventory::addItem(Item* item) {
 	items.push_back(*item);
 	return items.size() - 1;

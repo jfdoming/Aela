@@ -1,9 +1,8 @@
 #include "DoorProvider.h"
-#include <iostream>
 
 using namespace Game;
 
-Game::DoorProvider::DoorProvider() {}
+Game::DoorProvider::DoorProvider() = default;
 
 Game::DoorProvider::~DoorProvider() {
 	for (auto& pair : doors) {
@@ -32,7 +31,7 @@ std::unordered_map<std::string, Door>* Game::DoorProvider::getDoors() {
 }
 
 void Game::DoorProvider::saveDataToSaveState(SaveState* saveState) {
-	std::unordered_map<std::string, Door>* doorsCopy = new std::unordered_map<std::string, Door>();
+	auto* doorsCopy = new std::unordered_map<std::string, Door>();
 	(*doorsCopy) = doors;
 	saveState->addData("doors", doorsCopy);
 }

@@ -13,7 +13,6 @@ namespace Scripts {
 	using namespace Game;
 
 	std::string materialsAndModelNames[] = {
-		"meme_mug",
 		"floor",
 		"boxed_floor",
 		"corner_elevated",
@@ -126,11 +125,11 @@ void Scripts::loadMaterials() {
 	resourceManager->bindLoader(&materialLoader);
 	resourceManager->bindGroup("materials");
 
-	for (std::string path : materialsAndModelNames) {
+	for (auto& path : materialsAndModelNames) {
 		resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + path + ".mtl", false);
 	}
 
-	for (std::string path : otherMaterialNames) {
+	for (auto& path : otherMaterialNames) {
 		resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + path + ".mtl", false);
 	}
 
@@ -144,11 +143,11 @@ void Scripts::loadModels() {
 	resourceManager->bindLoader(&objLoader);
 	resourceManager->bindGroup("models");
 
-	for (std::string path : materialsAndModelNames) {
+	for (auto& path : materialsAndModelNames) {
 		resourceManager->addToGroup(DEFAULT_MODEL_PATH + path + ".obj", false);
 	}
 
-	for (std::string path : otherModelNames) {
+	for (auto& path : otherModelNames) {
 		resourceManager->addToGroup(DEFAULT_MODEL_PATH + path + ".obj", false);
 	}
 
@@ -162,21 +161,23 @@ void Scripts::loadTextures() {
 	resourceManager->bindLoader(&textureLoader);
 	resourceManager->bindGroup("textures");
 
-	for (std::string path : billboardNames) {
+	for (auto& path : billboardNames) {
 		resourceManager->addToGroup(DEFAULT_TEXTURE_PATH + path + ".dds", false);
 	}
 
-	for (std::string path : ddsTextureNames) {
+	for (auto& path : ddsTextureNames) {
 		resourceManager->addToGroup(DEFAULT_TEXTURE_PATH + path + ".dds", false);
 	}
 
-	for (std::string path : pngTextureNames) {
+	for (auto& path : pngTextureNames) {
 		resourceManager->addToGroup(DEFAULT_TEXTURE_PATH + path + ".png", false);
 	}
+	std::cout << "done adding\n";
 
 	if (resourceManager->loadGroup("textures") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"textures\"!" << std::endl;
 	}
+	std::cout << "done loading\n";
 }
 
 void Scripts::loadSpriteSheets() {
@@ -186,7 +187,7 @@ void Scripts::loadSpriteSheets() {
 	resourceManager->bindLoader(&spriteSheetLoader);
 	resourceManager->bindGroup("sprite sheets");
 
-	for (std::string path : spriteSheetNames) {
+	for (auto& path : spriteSheetNames) {
 		resourceManager->addToGroup(DEFAULT_TEXTURE_PATH + path + ".png", false);
 	}
 
@@ -198,7 +199,7 @@ void Scripts::loadSpriteSheets() {
 	spriteSheetLoader.setSpriteHeight(AVATAR_HEIGHT);
 	resourceManager->bindGroup("avatars");
 
-	for (std::string path : avatarNames) {
+	for (auto& path : avatarNames) {
 		resourceManager->addToGroup(DEFAULT_TEXTURE_PATH + path + ".png", false);
 	}
 
@@ -213,7 +214,7 @@ void Scripts::loadParticles() {
 	resourceManager->bindLoader(&textureLoader);
 	resourceManager->bindGroup("particles");
 
-	for (std::string path : particleNames) {
+	for (auto& path : particleNames) {
 		resourceManager->addToGroup(DEFAULT_PARTICLE_PATH + path + ".dds", false);
 	}
 
@@ -227,7 +228,7 @@ void Scripts::loadSkyboxes() {
 	resourceManager->bindLoader(&skyboxLoader);
 	resourceManager->bindGroup("skybox");
 
-	for (std::string path : skyboxNames) {
+	for (auto& path : skyboxNames) {
 		resourceManager->addToGroup(DEFAULT_SKYBOX_PATH + path, false);
 	}
 
@@ -242,7 +243,7 @@ void Scripts::loadMaps() {
 	resourceManager->bindLoader(&mapLoader);
 	resourceManager->bindGroup("maps");
 
-	for (std::string path : mapNames) {
+	for (auto& path : mapNames) {
 		resourceManager->addToGroup(DEFAULT_MAP_PATH + path + ".txt", false);
 	}
 
@@ -256,11 +257,11 @@ void Scripts::loadAudio() {
 	resourceManager->bindLoader(&waveClipLoader);
 	resourceManager->bindGroup("wave audio");
 
-	for (std::string path : waveAudioStreamNames) {
+	for (auto& path : waveAudioStreamNames) {
 		resourceManager->addToGroup(DEFAULT_AUDIO_STREAM_PATH + path + ".wav", false);
 	}
 
-	for (std::string path : waveAudioClipNames) {
+	for (auto& path : waveAudioClipNames) {
 		resourceManager->addToGroup(DEFAULT_AUDIO_CLIP_PATH + path + ".wav", false);
 	}
 
@@ -274,7 +275,7 @@ void Scripts::loadFonts() {
 	resourceManager->bindLoader(&fontLoader);
 	resourceManager->bindGroup("ttf fonts");
 
-	for (std::string path : ttfFontNames) {
+	for (auto& path : ttfFontNames) {
 		resourceManager->addToGroup(DEFAULT_FONT_PATH + path + ".ttf", true);
 	}
 

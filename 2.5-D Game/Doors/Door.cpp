@@ -69,7 +69,7 @@ void Game::Door::addLocks(int lockAmount, ...) {
 	va_start(args, lockAmount);
 
 	for (int i = 0; i < lockAmount; i++) {
-		addLock(va_arg(args, bool));
+		addLock((bool) va_arg(args, int));
 	}
 
 	va_end(args);

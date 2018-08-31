@@ -13,7 +13,7 @@
 namespace Game {
 	class BulletParticleEmitter : public ParticleEmitter {
 	public:
-		BulletParticleEmitter(Time* time);
+		BulletParticleEmitter(Clock* time);
 		virtual ~BulletParticleEmitter();
 
 		// These are the functions that are overwritten from the ParticleEmitter class.

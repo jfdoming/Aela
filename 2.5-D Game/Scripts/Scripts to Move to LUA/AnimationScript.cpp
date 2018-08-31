@@ -5,6 +5,7 @@
 
 void Scripts::loadMaterialAnimations() {
 	AnimationLooper* animationLooper = engine->getAnimationLooper();
+	// TODO add material animations here
 }
 
 bool Scripts::loadLogoMaterialAnimation(int whichLevel) {

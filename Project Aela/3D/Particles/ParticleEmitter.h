@@ -9,12 +9,12 @@
 #pragma once
 #include <functional>
 #include "Particle.h"
-#include "../../Time/Time.h"
+#include "Time/Clock.h"
 
 namespace Aela {
 	class ParticleEmitter : public Transformable3D {
 		public:
-			ParticleEmitter(Time* time);
+			ParticleEmitter(Clock* time);
 
 			virtual ~ParticleEmitter();
 
@@ -49,7 +49,7 @@ namespace Aela {
 		protected:
 			// These are the Aela classes that are used.
 			std::vector<Particle> particles;
-			Time* time;
+			Clock* time;
 
 			// This defines properties of the particles. Speed = distance / nanosecond, lifetime = distance.
 			float baseSpeed = 0.001f;

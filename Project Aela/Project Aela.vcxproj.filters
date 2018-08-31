@@ -115,7 +115,7 @@
     <ClCompile Include="Utilities\Texture Splitter\GLTextureSplitter.cpp" />
     <ClCompile Include="Events\WindowResizeEvent.cpp" />
     <ClCompile Include="2D\Texture\GLSpriteSheetLoader.cpp" />
-    <ClCompile Include="Time\Stopwatch\Stopwatch.cpp" />
+    <ClCompile Include="Clock\Stopwatch\Stopwatch.cpp" />
     <ClCompile Include="Time\Timer\Timer.cpp" />
     <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp" />
     <ClCompile Include="Window\Window.cpp" />
@@ -222,7 +222,7 @@
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneManager.h" />
     <ClInclude Include="Scenes\stdafx.h" />
-    <ClInclude Include="Time\Time.h" />
+    <ClInclude Include="Clock\Clock.h" />
     <ClInclude Include="Transformable\Transformable.h" />
     <ClInclude Include="User Environment\UserEnvironment.h" />
     <ClInclude Include="Utilities\Colour\ColourRGB.h" />
@@ -262,7 +262,7 @@
     <ClInclude Include="3D\Skybox\Skybox.h" />
     <ClInclude Include="Old Garbage\shader.hpp" />
     <ClInclude Include="Transformable\Transformable.h" />
-    <ClInclude Include="Time\Time.h" />
+    <ClInclude Include="Clock\Clock.h" />
     <ClInclude Include="Utilities\enumut.h" />
     <ClInclude Include="Utilities\glmut.h" />
     <ClInclude Include="2D\Animation\AnimationTrack2D.h" />
@@ -293,7 +293,7 @@
     <ClInclude Include="Utilities\Paths\PathSegment3D.h" />
     <ClInclude Include="Events\WindowResizeEvent.h" />
     <ClInclude Include="2D\Texture\GLSpriteSheetLoader.h" />
-    <ClInclude Include="Time\Stopwatch\Stopwatch.h" />
+    <ClInclude Include="Clock\Stopwatch\Stopwatch.h" />
     <ClInclude Include="Time\Timer\Timer.h" />
     <ClInclude Include="Error Handler\ErrorHandling.h" />
     <ClInclude Include="Error Handler\Error Handler\AelaErrorHandler.h" />

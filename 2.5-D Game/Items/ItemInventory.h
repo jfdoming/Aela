@@ -12,7 +12,7 @@
 namespace Game {
 	class ItemInventory {
 		public:
-			ItemInventory() {}
+			ItemInventory();
 
 			size_t addItem(Item* item);
 			Item* getItem(size_t id);

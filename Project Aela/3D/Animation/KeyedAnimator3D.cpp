@@ -23,56 +23,56 @@ void KeyedAnimator::onEvent(Event* event) {
 		}
 
 		switch (keyEvent->getType()) {
-		case EventConstants::KEY_PRESSED:
-			if (keyEvent->getKeycode() == SDLK_w) {
-				movingForward = true;
-			}
+			case EventConstants::KEY_PRESSED:
+				if (keyEvent->getKeycode() == SDLK_w) {
+					movingForward = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_s) {
-				movingBackward = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_s) {
+					movingBackward = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_d) {
-				movingRight = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_d) {
+					movingRight = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_a) {
-				movingLeft = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_a) {
+					movingLeft = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_SPACE) {
-				movingUp = true;
-			}
+				if (keyEvent->getKeycode() == SDLK_SPACE) {
+					movingUp = true;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_LCTRL) {
-				movingDown = true;
-			}
-			break;
-		case EventConstants::KEY_RELEASED:
-			if (keyEvent->getKeycode() == SDLK_w) {
-				movingForward = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_LCTRL) {
+					movingDown = true;
+				}
+				break;
+			case EventConstants::KEY_RELEASED:
+				if (keyEvent->getKeycode() == SDLK_w) {
+					movingForward = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_s) {
-				movingBackward = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_s) {
+					movingBackward = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_d) {
-				movingRight = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_d) {
+					movingRight = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_a) {
-				movingLeft = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_a) {
+					movingLeft = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_SPACE) {
-				movingUp = false;
-			}
+				if (keyEvent->getKeycode() == SDLK_SPACE) {
+					movingUp = false;
+				}
 
-			if (keyEvent->getKeycode() == SDLK_LCTRL) {
-				movingDown = false;
-			}
-			break;
+				if (keyEvent->getKeycode() == SDLK_LCTRL) {
+					movingDown = false;
+				}
+				break;
 		}
 	}
 }
@@ -108,11 +108,11 @@ void KeyedAnimator::update() {
 	}
 }
 
-void KeyedAnimator::setTime(Time* time) {
+void KeyedAnimator::setTime(Clock* time) {
 	this->time = time;
 }
 
-Time* KeyedAnimator::getTime() {
+Clock* KeyedAnimator::getTime() {
 	return time;
 }
 

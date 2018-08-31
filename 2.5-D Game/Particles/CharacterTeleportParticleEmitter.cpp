@@ -4,7 +4,7 @@
 
 using namespace Game;
 
-Game::CharacterTeleportParticleEmitter::CharacterTeleportParticleEmitter(Time* time) : ParticleEmitter(time) {
+Game::CharacterTeleportParticleEmitter::CharacterTeleportParticleEmitter(Clock* time) : ParticleEmitter(time) {
 }
 
 Game::CharacterTeleportParticleEmitter::~CharacterTeleportParticleEmitter() {

@@ -12,12 +12,10 @@
 
 using namespace Game;
 
-Game::TileSwitchParticleEmitter::TileSwitchParticleEmitter(Time* time) : ParticleEmitter(time) {
+Game::TileSwitchParticleEmitter::TileSwitchParticleEmitter(Clock* time) : ParticleEmitter(time) {
 }
 
-Game::TileSwitchParticleEmitter::~TileSwitchParticleEmitter() {
-
-}
+Game::TileSwitchParticleEmitter::~TileSwitchParticleEmitter() = default;
 
 void TileSwitchParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight, unsigned int amount) {
 	ParticleEmitter::setupParticles(textures, particleWidth, particleHeight, amount);

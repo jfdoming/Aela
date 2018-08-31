@@ -46,7 +46,7 @@ Game::Teleporter* Game::Tile::getTeleporter() {
 	return &teleporter;
 }
 
-void Game::Tile::createTeleporter(Location* location) {
+void Game::Tile::createTeleporter(const Location& location) {
 	teleporter = Teleporter(location);
 	teleporterPtr = &teleporter;
 }

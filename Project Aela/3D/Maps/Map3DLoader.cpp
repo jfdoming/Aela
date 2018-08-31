@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
 * Class: Map3D Loader
 * Author: Robert Ciborowski
@@ -13,11 +15,10 @@
 using namespace Aela;
 
 Aela::Map3DLoader::Map3DLoader(std::string resourceRoot) {
-	this->resourceRoot = resourceRoot;
+	this->resourceRoot = std::move(resourceRoot);
 }
 
-Aela::Map3DLoader::~Map3DLoader() {
-}
+Aela::Map3DLoader::~Map3DLoader() = default;
 
 bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 	// This tries to open the file.
@@ -31,10 +32,10 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 
 	// This actually reads the file.
 	std::string line;
-	size_t entityID;
-	std::string tagID = "";
+	size_t entityID = 0;
+	std::string tagID;
 
-	while (std::getline(in, line)) {
+	while (getline(in, line)) {
 		while (line.length() > 0) {
 			char character = line.at(0);
 			size_t charactersToErase = 1;
@@ -48,16 +49,24 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 
 				if (tagID == "Model") {
 					entityID = map->getModels()->size();
-					map->addModelWithoutGeneratingData(entityID, &ModelEntity());
+
+					ModelEntity modelEntity;
+					map->addModelWithoutGeneratingData(entityID, &modelEntity);
 				} else if (tagID == "Light") {
 					entityID = map->getLights()->size();
-					map->addLight(entityID, &LightEntity());
+
+					LightEntity lightEntity;
+					map->addLight(entityID, &lightEntity);
 				} else if(tagID == "Billboard") {
 					entityID = map->getBillboards()->size();
-					map->addBillboard(entityID, &BillboardEntity());
+
+					BillboardEntity billboardEntity;
+					map->addBillboard(entityID, &billboardEntity);
 				} else if (tagID == "Skybox") {
 					entityID = map->getSkyboxes()->size();
-					map->addSkybox(entityID, &SkyboxEntity());
+
+					SkyboxEntity skyboxEntity;
+					map->addSkybox(entityID, &skyboxEntity);
 				}
 			} else if (character == '>') {
 				if (tagID == "Model") {
@@ -69,8 +78,8 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 			} else if (character == '/' && line.at(1) == '/') {
 				// This is a comment. Stay calm and move to the next line.
 				break;
-			} else if (character != ' ' && tagID != "") {
-				std::string propertyType = "";
+			} else if (character != ' ' && !tagID.empty()) {
+				std::string propertyType;
 
 				size_t j = line.find('=');
 				if (j != std::string::npos) {
@@ -87,13 +96,13 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 						if (source.at(0) == '~') {
 							source = source.substr(1, source.size() - 1);
 							if (tagID == "Model") {
-								source = resourceRoot + DEFAULT_MODEL_PATH + source;
+								source = DEFAULT_MODEL_PATH + source;
 							}
 							if (tagID == "Billboard") {
-								source = resourceRoot + DEFAULT_TEXTURE_PATH + source;
+								source = DEFAULT_TEXTURE_PATH + source;
 							}
 							if (tagID == "Skybox") {
-								source = resourceRoot + DEFAULT_SKYBOX_PATH + source;
+								source = DEFAULT_SKYBOX_PATH + source;
 							}
 						}
 						bool success = resources.get(source, res);
@@ -113,18 +122,19 @@ bool Aela::Map3DLoader::load(ResourceMap& resources, std::string src) {
 					} else if (propertyType == "power") {
 						if (tagID == "Light") {
 							std::string value = line.substr(j + 1, k - j - 1);
-							float power = (float) std::stof(value);
+							float power = std::stof(value);
 							map->getLight(entityID)->setPower(power);
 						} else if (tagID == "AmbientLight") {
 							std::string value = line.substr(j + 1, k - j - 1);
-							float power = (float) std::stof(value);
+							float power = std::stof(value);
 							map->setAmbientLighting(power);
 						}
 					} else if (propertyType == "colour" && tagID == "Light") {
 						std::string value = line.substr(j + 1, k - j - 1);
 						glm::vec3 vec3;
 						setVec3UsingString(&value, &vec3);
-						map->getLight(entityID)->setColour(&(ColourRGB(&vec3)));
+						// TODO fix
+//						map->getLight(entityID)->setColour(&(ColourRGB(&vec3)));
 					} else if (propertyType == "position") {
 						std::string value = line.substr(j + 1, k - j - 1);
 						glm::vec3 vec3;

@@ -132,7 +132,7 @@ void Aela::Stopwatch::outputTimesIntoConsole() {
 			std::cout << "- " << pair.first << " - Number of Recordings: 0\n";
 		} else {
 			double average = (double) timeable.totalTime / timeable.numberOfRecordings;
-			std::cout << "- " << pair.first << " - Average Time: " << average << " ns, Total Time: "
+			std::cout << "- " << pair.first << " - Average Clock: " << average << " ns, Total Clock: "
 				<< timeable.totalTime << " ns, # of Recordings: " << timeable.numberOfRecordings << "\n";
 			sumOfAverages += (long long) average;
 		}

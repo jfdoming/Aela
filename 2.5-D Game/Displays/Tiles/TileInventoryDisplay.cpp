@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
 * Class: TileInventoryDisplay
 * Author: Robert Ciborowski
@@ -64,9 +66,10 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 	label->setText(tileAtlas->getTileType(player->getTileInventory()->getCurrentTile()->getType())->getName());
 
 	if (gameMode == GameMode::GAMEPLAY) {
-		backgroundImage->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (numberOfTiles * imageWidthAndHeight) - border),
-			(int) (height * VERTICAL_CENTER - imageWidthAndHeight - border), (int) (imageWidthAndHeight * numberOfTiles + border * 2),
-			(int) (imageWidthAndHeight * HEIGHT_MULTIPLIER + border * 2)));
+		Rect<int> backgroundDimensions((int) (width * HORIZONTAL_CENTER - (numberOfTiles * imageWidthAndHeight) - border),
+				  (int) (height * VERTICAL_CENTER - imageWidthAndHeight - border), (int) (imageWidthAndHeight * numberOfTiles + border * 2),
+				  (int) (imageWidthAndHeight * HEIGHT_MULTIPLIER + border * 2));
+		backgroundImage->setDimensions(&backgroundDimensions);
 
 		for (size_t i = 0; i < numberOfTiles; i++) {
 			Tile* tile = player->getTileInventory()->getTile(i);
@@ -87,9 +90,12 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 					resourceManager->useResourceRoot(true);
 				}
 
-				image->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
-					(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
-				image->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
+				auto dimensions = Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
+						(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight);
+				image->setDimensions(&dimensions);
+
+				auto cropping = Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight());
+				image->setCropping(&cropping);
 				image->setTexture(texture);
 				tileImages.push_back(image);
 				subMenu->add(image);
@@ -109,16 +115,19 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 					resourceManager->useResourceRoot(true);
 				}
 
-				tileImages[i]->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
-					(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
-				tileImages[i]->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
+				Rect<int> tileDimensions((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
+						  (int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight);
+				tileImages[i]->setDimensions(&tileDimensions);
+				Rect<int> tileCropping(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight());
+				tileImages[i]->setCropping(&tileCropping);
 				tileImages[i]->setTexture(texture);
 			}
 		}
 	} else if (gameMode == GameMode::MAP_EDITOR) {
-		backgroundImage->setDimensions(&Rect<int>((int)(width * HORIZONTAL_CENTER - (NUMBER_OF_SLOTS * imageWidthAndHeight) - border),
-			(int) (height * VERTICAL_CENTER - imageWidthAndHeight - border), (int) (imageWidthAndHeight * NUMBER_OF_SLOTS + border * 2),
-			(int) (imageWidthAndHeight * HEIGHT_MULTIPLIER + border * 2)));
+		Rect<int> backgroundDimensions((int)(width * HORIZONTAL_CENTER - (NUMBER_OF_SLOTS * imageWidthAndHeight) - border),
+				  (int) (height * VERTICAL_CENTER - imageWidthAndHeight - border), (int) (imageWidthAndHeight * NUMBER_OF_SLOTS + border * 2),
+				  (int) (imageWidthAndHeight * HEIGHT_MULTIPLIER + border * 2));
+		backgroundImage->setDimensions(&backgroundDimensions);
 
 		if (!setThingsUp) {
 			for (size_t i = 0; i < NUMBER_OF_SLOTS; i++) {
@@ -138,9 +147,12 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 					resourceManager->useResourceRoot(true);
 				}
 
-				image->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
-					(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
-				image->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
+				auto dimensions = Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
+											(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight);
+				image->setDimensions(&dimensions);
+
+				auto cropping = Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight());
+				image->setCropping(&cropping);
 				image->setTexture(texture);
 				tileImages.push_back(image);
 				subMenu->add(image);
@@ -157,9 +169,11 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 
 				resourceManager->obtain<GLTexture>((std::string) DEFAULT_TEXTURE_PATH + "black.png", texture);
 
-				tileImages[i]->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
-					(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
-				tileImages[i]->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
+				Rect<int> tileDimensions((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
+						  (int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight);
+				tileImages[i]->setDimensions(&tileDimensions);
+				Rect<int> tileCropping(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight());
+				tileImages[i]->setCropping(&tileCropping);
 				tileImages[i]->setTexture(texture);
 			} else {
 				Tile* tile = player->getTileInventory()->getTile(whichTile);
@@ -179,9 +193,11 @@ void Game::TileInventoryDisplay::refreshSubMenu() {
 					resourceManager->useResourceRoot(true);
 				}
 
-				tileImages[i]->setDimensions(&Rect<int>((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
-					(int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight));
-				tileImages[i]->setCropping(&Rect<int>(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight()));
+				Rect<int> tileDimensions((int) (width * HORIZONTAL_CENTER - (i * imageWidthAndHeight) - imageWidthAndHeight),
+						  (int) (height * VERTICAL_CENTER - (imageWidthAndHeight)), imageWidthAndHeight, imageWidthAndHeight);
+				tileImages[i]->setDimensions(&tileDimensions);
+				Rect<int> tileCropping(0, 0, texture->getDimensions()->getWidth(), texture->getDimensions()->getHeight());
+				tileImages[i]->setCropping(&tileCropping);
 				tileImages[i]->setTexture(texture);
 			}
 		}
@@ -217,8 +233,8 @@ void Game::TileInventoryDisplay::animateSelectorBox() {
 
 void Game::TileInventoryDisplay::setMenuItems(std::shared_ptr<SubMenu> subMenu, std::shared_ptr<Label> label,
 	std::shared_ptr<ImageComponent> backgroundImage, std::shared_ptr<ImageComponent> boxImage) {
-	this->subMenu = subMenu;
-	this->label = label;
-	this->backgroundImage = backgroundImage;
-	this->boxImage = boxImage;
+	this->subMenu = std::move(subMenu);
+	this->label = std::move(label);
+	this->backgroundImage = std::move(backgroundImage);
+	this->boxImage = std::move(boxImage);
 }

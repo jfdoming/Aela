@@ -18,7 +18,7 @@ namespace Aela {
 			Map3DLoader(std::string resourceRoot);
 			virtual ~Map3DLoader();
 
-			virtual bool load(ResourceMap& resources, std::string src);
+			bool load(ResourceMap& resources, std::string src) override;
 
 			void bindRenderer(GLRenderer* renderer);
 

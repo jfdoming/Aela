@@ -16,9 +16,9 @@ namespace Game {
 		friend class EnemyProvider;
 		public:
 			Turret();
-			Turret(std::string name, Location* location, int detectionRange);
-			Turret(std::string name, Location* location, int detectionRange, int strength, long long attackCooldown);
-			Turret(std::string name, Location* location, int detectionRange, bool detectRight, bool detectForward, bool detectLeft, bool detectBackward,
+			Turret(std::string name, const Location& location, unsigned int detectionRange);
+			Turret(std::string name, const Location& location, unsigned int detectionRange, int strength, long long attackCooldown);
+			Turret(std::string name, const Location& location, unsigned int detectionRange, bool detectRight, bool detectForward, bool detectLeft, bool detectBackward,
 				int strength, long long attackCooldown);
 
 			virtual void update(Character* playerCharacter, long long time);
@@ -35,10 +35,10 @@ namespace Game {
 			virtual void update();
 
 		private:
-			int detectionRange = 0;
+			unsigned int detectionRange = 0;
 			std::unordered_map<TileDirection, bool> detectionAngles;
 			bool recentlyAttacked = false;
 
-			void addBulletEffects(Scene* gameplayScene, ResourceManager* resourceManager, Time* time);
+			void addBulletEffects(Scene* gameplayScene, ResourceManager* resourceManager, Clock* time);
 	};
 }

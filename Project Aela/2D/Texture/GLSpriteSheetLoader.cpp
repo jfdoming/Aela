@@ -1,8 +1,8 @@
 #include "GLSpriteSheetLoader.h"
 
-Aela::GLSpriteSheetLoader::GLSpriteSheetLoader() {}
+Aela::GLSpriteSheetLoader::GLSpriteSheetLoader() = default;
 
-Aela::GLSpriteSheetLoader::~GLSpriteSheetLoader() {}
+Aela::GLSpriteSheetLoader::~GLSpriteSheetLoader() = default;
 
 void Aela::GLSpriteSheetLoader::expose(LuaManager & mgr) {
 	// only expose part of the class to Lua

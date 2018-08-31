@@ -14,10 +14,10 @@
 
 using namespace Aela;
 
-Aela::Basic3DGLModelRenderer::Basic3DGLModelRenderer() {}
+Aela::Basic3DGLModelRenderer::Basic3DGLModelRenderer() = default;
 
 Aela::Basic3DGLModelRenderer::~Basic3DGLModelRenderer() {
-	if (vertexBuffer != NULL) {
+	if (vertexBuffer != 0) {
 		glDeleteBuffers(1, &vertexBuffer);
 		glDeleteBuffers(1, &UVBuffer);
 		glDeleteBuffers(1, &normalBuffer);
@@ -56,7 +56,6 @@ void Basic3DGLModelRenderer::sendLightDataToShader(std::unordered_map<long long,
 		if (numberOfLights > 0) {
 			unsigned int i = 0;
 			for (auto& light : *lights) {
-
 				if (light.second.isVisible() && light.second.getPower() != 0) {
 					if (i + 1 > MAX_LIGHT_AMOUNT) {
 						break;
@@ -78,10 +77,10 @@ void Basic3DGLModelRenderer::sendLightDataToShader(std::unordered_map<long long,
 
 			// If the number of lights is less than the max light amount, the first light's shadow map is sent to fill in the remaining spots in the
 			// shader's shadow map array. Not doing so causes the shader to crash.
-			for (size_t i = lights->size(); i < MAX_LIGHT_AMOUNT; i++) {
-				glActiveTexture((GLenum) (GL_TEXTURE1 + i));
+			for (size_t j = lights->size(); j < MAX_LIGHT_AMOUNT; j++) {
+				glActiveTexture((GLenum) (GL_TEXTURE1 + j));
 				glBindTexture(GL_TEXTURE_CUBE_MAP, *lights->begin()->second.getShadowMapTexture());
-				glUniform1i((GLint) (shadowMapID + i), (GLint) (1 + i));
+				glUniform1i((GLint) (shadowMapID + j), (GLint) (1 + j));
 			}
 		}
 	}
@@ -116,16 +115,16 @@ void Basic3DGLModelRenderer::startRendering(GLuint modelProgramID, GLuint frameB
 		// Stride.
 		0,
 		// Array buffer offset.
-		(void*)0
+		(void*) nullptr
 	);
 
 	// These are attributes for the UV buffer.
 	glBindBuffer(GL_ARRAY_BUFFER, UVBuffer);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) nullptr);
 
 	// These are attributes for the normal buffer.
 	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*) nullptr);
 
 	// This binds the index buffer.
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBuffer);
@@ -138,7 +137,7 @@ void Basic3DGLModelRenderer::renderInstancedModelEntities(Map3D* map, std::vecto
 	size_t end, GLuint modelProgramID, GLuint frameBuffer, GLuint modelMatrixID, GLuint rotationMatrixID, GLuint modelTextureID,
 	GLuint ambientLightingID) {
 
-	if (entities != nullptr && entities->size() > 0) {
+	if (entities != nullptr && !entities->empty()) {
 		Model* model = map->getModel(entities->at(start))->getModel();
 		std::vector<glm::mat4> modelMatrices, rotationMatrices;
 		size_t primitiveCount = 0;

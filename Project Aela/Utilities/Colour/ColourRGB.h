@@ -7,6 +7,7 @@
 
 #pragma once
 #include <glm/glm.hpp>
+#include <iostream>
 
 namespace Aela {
 	class ColourRGB {
@@ -27,13 +28,18 @@ namespace Aela {
 				set(value, value, value);
 			}
 
-			bool ColourRGB::operator==(const ColourRGB& other) {
+			bool operator==(const ColourRGB& other) {
 				return r == other.r && b == other.b && g == other.g;
 			}
 
-			bool ColourRGB::operator!=(const ColourRGB& other) {
+			bool operator!=(const ColourRGB& other) {
 				return !(*this == other);
 			}
+
+            inline friend std::ostream& operator<<(std::ostream& os, ColourRGB const& me) {
+                os << "ColourRGB(" << me.r << ", " << me.g << ", " << me.b << ")";
+                return os;
+            }
 
 			void setR(float r) {
 				this->r = r;
@@ -90,10 +96,6 @@ namespace Aela {
 			glm::vec3* getVec3Ptr() {
 				vec = glm::vec3(r, g, b);
 				return &vec;
-			}
-
-			inline friend std::ostream& operator<<(std::ostream &os, ColourRGB const& me) {
-				return (os << "ColourRGB(" << me.r << ", " << me.g << ", " << me.b << ")");
 			}
 
 		private:

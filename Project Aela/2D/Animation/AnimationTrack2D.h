@@ -14,9 +14,7 @@
 namespace Aela {
 	class AnimationTrack2D : public AnimationTrack<KeyFrame2D> {
 		public:
-			AnimationTrack2D() {
-
-			}
+			AnimationTrack2D() = default;
 
 
 		private:

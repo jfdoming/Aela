@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
 * Class: Character Loader
 * Author: Robert Ciborowski
@@ -41,10 +43,10 @@ bool Game::CharacterModelGenerator::load(ResourceMap& resources, std::string src
 			Material* material = new Material("ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet)
 				+ "/" + std::to_string(yOfSpriteSheet) + "/ma");
 			Texture* texture;
-			if (!resources.get<Texture>((std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + character->getTextureName()
+			if (!resources.get<Texture>((std::string) DEFAULT_TEXTURE_PATH + character->getTextureName()
 				+ "/" + std::to_string(xOfSpriteSheet) + "/" + std::to_string(yOfSpriteSheet) + ".png", texture)) {
 				AelaErrorHandling::consoleWindowError("Character Loader", "There was a problem obtaining the texture "
-					+ (std::string) RESOURCE_ROOT + DEFAULT_TEXTURE_PATH + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet)
+					+ (std::string) DEFAULT_TEXTURE_PATH + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet)
 					+ "/" + std::to_string(yOfSpriteSheet) + ".png"
 					+ ", as requested by the character " + character->getName() + " with an ID of "
 					+ std::to_string(charactersLoaded) + ".");
@@ -72,7 +74,7 @@ void Game::CharacterModelGenerator::setCharacters(std::unordered_map<size_t, Cha
 }
 
 void Game::CharacterModelGenerator::setTemplateModelSource(std::string templateModelSource) {
-	this->templateModelSource = templateModelSource;
+	this->templateModelSource = std::move(templateModelSource);
 }
 
 unsigned int Game::CharacterModelGenerator::getNumberOfCharactersLoaded() {

@@ -20,7 +20,7 @@ void ControlManager::setWindow(Window* setWindow) {
 	window = setWindow;
 }
 
-void ControlManager::setTime(Time* setTime) {
+void ControlManager::setTime(Clock* setTime) {
 	time = setTime;
 }
 

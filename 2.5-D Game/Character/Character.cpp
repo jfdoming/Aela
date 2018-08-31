@@ -1,3 +1,7 @@
+#include <utility>
+
+#include <utility>
+
 /*
 * Class: Character
 * Author: Robert Ciborowski
@@ -34,15 +38,16 @@ Game::Character::Character() {
 }
 
 Game::Character::Character(std::string name) : Character() {
-	this->name = name;
+	this->name = std::move(name);
 }
 
-Game::Character::Character(std::string name, Location* location) : Character() {
-	this->name = name;
-	this->location = *location;
+Game::Character::Character(std::string name, const Location& location) : Character() {
+	this->name = std::move(name);
+	this->location = location;
 }
 
-Game::Character::Character(std::string name, Location* location, float walkingSpeed, float runningSpeed) : Character(name, location) {
+Game::Character::Character(std::string name, const Location& location, float walkingSpeed, float runningSpeed) : Character(
+		std::move(name), location) {
 	this->walkingSpeed = walkingSpeed;
 	this->runningSpeed = runningSpeed;
 }
@@ -54,7 +59,7 @@ void Game::Character::setLocation(Location* location) {
 void Game::Character::animateDeath() {
 	float offset = GameObjectProvider::getWorldManager()->getCharacterYOffsetInWorldspace();
 
-	CharacterDeathParticleEmitter* particleEmitter = new CharacterDeathParticleEmitter(GameObjectProvider::getTime());
+	auto* particleEmitter = new CharacterDeathParticleEmitter(GameObjectProvider::getTime());
 	particleEmitter->setBaseDistance(location.getWorldSpaceLocation().y + offset + 10);
 	particleEmitter->setBaseSpeed(0.00000001f);
 	particleEmitter->setPathOffset(location.getWorldSpaceLocation().y + offset);
@@ -63,7 +68,7 @@ void Game::Character::animateDeath() {
 	particleEmitter->setLocation(&location);
 
 	std::vector<GLTexture*> textures;
-	GLTexture* texture = static_cast<GLTexture*>(entity->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
+	auto* texture = dynamic_cast<GLTexture*>(entity->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
 	textures.push_back(texture);
 
 	if (this == GameObjectProvider::getPlayer()->getCharacter()) {
@@ -87,9 +92,9 @@ void Game::Character::generateModel(ResourceManager* resourceManager) {
 	CharacterModelGenerator generator;
 	generator.setCharacters(&characterList);
 
-	std::string modelA = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_A.obj";
-	std::string modelB = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_B.obj";
-	std::string modelTemp = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "floor.obj";
+	std::string modelA = (std::string) DEFAULT_MODEL_PATH + "character_A.obj";
+	std::string modelB = (std::string) DEFAULT_MODEL_PATH + "character_B.obj";
+	std::string modelTemp = (std::string) DEFAULT_MODEL_PATH + "floor.obj";
 
 	resourceManager->bindLoader(&generator);
 	resourceManager->bindGroup("ch/" + name);
@@ -135,7 +140,7 @@ Model* Game::Character::getModel() {
 }
 
 void Game::Character::setName(std::string name) {
-	this->name = name;
+	this->name = std::move(name);
 }
 
 std::string Game::Character::getName() {
@@ -175,7 +180,7 @@ bool Game::Character::getRunning() {
 }
 
 void Game::Character::setTextureName(std::string textureName) {
-	this->textureName = textureName;
+	this->textureName = std::move(textureName);
 }
 
 std::string Game::Character::getTextureName() {
@@ -252,7 +257,7 @@ void Game::Character::turnImmediately(TileDirection direction) {
 }
 
 void Game::Character::move(Movement* movement, std::string scriptOnCompletion) {
-	addTranslation(movement, scriptOnCompletion);
+	addTranslation(movement, std::move(scriptOnCompletion));
 
 	/*if (movement->isATeleportation() && movement->isAnimated()) {
 		newMovementsAreAllowed = false;
@@ -261,7 +266,7 @@ void Game::Character::move(Movement* movement, std::string scriptOnCompletion) {
 
 void Game::Character::moveIfPossible(TileDirection direction) {
 	if (newMovementsAreAllowed) {
-		possibleMovementsToProcess.push_back(Movement(direction));
+		possibleMovementsToProcess.emplace_back(direction);
 	}
 }
 
@@ -302,21 +307,23 @@ void Game::Character::clearAllMovements() {
 	}
 }
 
-void Game::Character::teleportImmediately(Location* location) {
-	GameObjectProvider::getCharacterProvider()->characterWasMoved(name, &this->location, location);
-	this->location = *location;
+void Game::Character::teleportImmediately(const Location& location) {
+	GameObjectProvider::getCharacterProvider()->characterWasMoved(name, &this->location, &((Location&) location));
+	this->location = location;
 	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 	movementHasEnded();
 }
 
-void Game::Character::teleportWithoutAnimation(Location* location) {
-	Movement teleportation(location, &glm::vec3(), directionFacing, true, false);
+void Game::Character::teleportWithoutAnimation(const Location& location) {
+	glm::vec3 vec3;
+	Movement teleportation(&((Location&) location), &vec3, directionFacing, true, false);
 	teleportation.setPreprocessed(true);
 	possibleMovementsToProcess.push_back(teleportation);
 }
 
-void Game::Character::teleportWithAnimation(Location* location, TeleportationAnimation animation) {
-	Movement teleportation(location, &glm::vec3(), directionFacing, true, animation);
+void Game::Character::teleportWithAnimation(const Location& location, TeleportationAnimation animation) {
+	glm::vec3 vec3;
+	Movement teleportation(&((Location&) location), &vec3, directionFacing, true, animation);
 	teleportation.setPreprocessed(true);
 	possibleMovementsToProcess.push_back(teleportation);
 }
@@ -345,7 +352,7 @@ void Game::Character::setPropertiesUsingCharacterInformationBlock(CharacterInfor
 	clearAllMovements();
 	alive = block->alive;
 	directionFacing = block->directionFacing;
-	teleportImmediately(&block->location);
+	teleportImmediately(block->location);
 
 	running = false;
 	runningSpeed = block->runningSpeed;
@@ -475,13 +482,13 @@ void Game::Character::update() {
 		moving = false;
 	}
 
-	if (!moving && possibleMovementsToProcess.size() > 0) {
+	if (!moving && !possibleMovementsToProcess.empty()) {
 		processPossibleMovement(&possibleMovementsToProcess.front());
 		possibleMovementsToProcess.pop_front();
 	}
 
 	if (!moving) {
-		if (translations.size() == 0) {
+		if (translations.empty()) {
 			return;
 		}
 
@@ -489,7 +496,7 @@ void Game::Character::update() {
 		completeMovement(&translation.first, translation.second);
 		translations.erase(translations.begin());
 	} else if (!GameObjectProvider::getAnimator()->trackWithTagExists(name + "/mv")) {
-		if (translations.size() == 0) {
+		if (translations.empty()) {
 			// moving = false;
 			return;
 		}
@@ -502,7 +509,7 @@ void Game::Character::update() {
 
 void Game::Character::addTranslation(Movement* movement, std::string scriptOnceComplete) {
 	// moving = true;
-	translations.push_back(std::pair<Movement, std::string>(*movement, scriptOnceComplete));
+	translations.emplace_back(*movement, scriptOnceComplete);
 }
 
 void Game::Character::completeMovement(Movement* movement, std::string scriptOnCompletion) {
@@ -538,15 +545,16 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 			GameObjectProvider::getScriptManager()->runScript(scriptOnCompletion);
 			movementHasEnded();
 
-			if (worldManager->getTileGroup(&newLocation)->getLiquidFloorTile(GameObjectProvider::getTileAtlas()) != nullptr) {
+			if (worldManager->getTileGroup(newLocation)->getLiquidFloorTile(GameObjectProvider::getTileAtlas()) != nullptr) {
 				// The character teleported into a liquid. They must die.
 				kill();
 			}
 
 
-			Teleporter* teleporter = worldManager->getTeleporter(&newLocation);
+			Teleporter* teleporter = worldManager->getTeleporter(newLocation);
 			if (teleporter != nullptr) {
-				Movement teleportation(teleporter->getDestination(), &glm::vec3(), directionFacing, true,
+				glm::vec3 vec3;
+				Movement teleportation(teleporter->getDestination(), &vec3, directionFacing, true,
 					TeleportationAnimation::RISE);
 				addTranslation(&teleportation, "");
 			}
@@ -564,7 +572,7 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 
 			float offset = GameObjectProvider::getWorldManager()->getCharacterYOffsetInWorldspace();
 
-			CharacterTeleportParticleEmitter* particleEmitter = new CharacterTeleportParticleEmitter(GameObjectProvider::getTime());
+			auto* particleEmitter = new CharacterTeleportParticleEmitter(GameObjectProvider::getTime());
 			particleEmitter->setBaseDistance(oldLocation.getWorldSpaceLocation().y + offset + 10);
 			particleEmitter->setBaseSpeed(0.00000001f);
 			particleEmitter->setPathOffset(oldLocation.getWorldSpaceLocation().y + offset);
@@ -574,7 +582,7 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 			particleEmitter->setSecondaryPathOffset(newLocation.getWorldSpaceLocation().y - offset + 8);
 
 			std::vector<GLTexture*> textures;
-			GLTexture* texture = static_cast<GLTexture*>(entity->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
+			auto* texture = dynamic_cast<GLTexture*>(entity->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
 			textures.push_back(texture);
 
 			auto halfLifeAction = [this, cameraController]() {
@@ -680,7 +688,7 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 void Game::Character::processPossibleMovement(Movement* movement) {
 	if (movement->isPreprocessed()) {
 		std::string script;
-		TileGroup* tileGroup = GameObjectProvider::getWorldManager()->getTileGroup(movement->getDestination());
+		TileGroup* tileGroup = GameObjectProvider::getWorldManager()->getTileGroup(*movement->getDestination());
 		if (tileGroup != nullptr) {
 			script = *tileGroup->getWalkedOnScriptID();
 		} else {
@@ -749,13 +757,13 @@ void Game::Character::processPossibleMovement(Movement* movement) {
 	AelaGame* game = GameObjectProvider::getGame();
 
 	if (newLocation.getWorld() < worldManager->getNumberOfWorlds()) {
-		Chunk* chunk = worldManager->getChunk(&newLocation);
+		Chunk* chunk = worldManager->getChunk(newLocation);
 		GameMode mode = game->getGameMode();
 		Character* playerCharacter = GameObjectProvider::getPlayer()->getCharacter();
 
 		if (mode == GameMode::GAMEPLAY) {
 			if (chunk != nullptr) {
-				TileGroup* tileGroup = worldManager->getTileGroup(&newLocation);
+				TileGroup* tileGroup = worldManager->getTileGroup(newLocation);
 
 				if (tileGroup == nullptr || (collidable && tileGroup->isCollidable(GameObjectProvider::getTileAtlas()))) {
 					// If the movement is impossible, don't do it!
@@ -763,7 +771,7 @@ void Game::Character::processPossibleMovement(Movement* movement) {
 					return; 
 				}
 
-				if (characterProvider->getCharacterByLocation(&newLocation) != nullptr) {
+				if (characterProvider->getCharacterByLocation(newLocation) != nullptr) {
 					// If the movement is impossible, don't do it!
 					turnImmediately(direction);
 					return;
@@ -775,16 +783,17 @@ void Game::Character::processPossibleMovement(Movement* movement) {
 				movement->setDirection(direction);
 				move(movement, script);
 
-				Teleporter* teleporter = worldManager->getTeleporter(&newLocation);
+				Teleporter* teleporter = worldManager->getTeleporter(newLocation);
 				if (teleporter != nullptr) {
-					Movement teleportation(teleporter->getDestination(), &glm::vec3(), directionFacing, true,
+					auto vector = glm::vec3();
+					Movement teleportation(teleporter->getDestination(), &vector, directionFacing, true,
 						TeleportationAnimation::RISE);
 					addTranslation(&teleportation, "");
 				}
 			}
 		} else if (mode == GameMode::MAP_EDITOR) {
 			if (chunk != nullptr) {
-				TileGroup* tileGroup = worldManager->getTileGroup(&newLocation);
+				TileGroup* tileGroup = worldManager->getTileGroup(newLocation);
 
 				if (tileGroup == nullptr) {
 					if (this == playerCharacter) {

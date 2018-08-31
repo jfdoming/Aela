@@ -1,0 +1,959 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
+    <generated>
+      <config projectName="Aela" targetName="Aela" />
+    </generated>
+  </component>
+  <component name="CMakeSettings" AUTO_RELOAD="true">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" GENERATION_DIR="build/bin/debug/x64" />
+      <configuration PROFILE_NAME="Release" CONFIG_NAME="Release" GENERATION_DIR="build/bin/release/x64" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="583760b5-4cf0-4319-ba42-b9c76a2702f5" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/../2.5-D Game/.idea/2.5-D Game.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2.5-D Game/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2.5-D Game/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2.5-D Game/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2.5-D Game/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2.5-D Game/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2.5-D Game/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../2.5-D Game/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/Project Aela.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Aela Game/AelaGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Aela Game/AelaGame.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Aela Game/AelaGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Aela Game/AelaGame.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Bullet/Bullet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Bullet/Bullet.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Bullet/Bullet.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Bullet/Bullet.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/Character.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/Character.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/Character.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/Character.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterInformationBlock.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterInformationBlock.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterModelGenerator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterModelGenerator.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterProvider.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterProvider.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterProvider.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterProvider.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Chunks/Chunk.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Chunks/Chunk.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Displays/Dialogue/DialogueDisplay.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Displays/Dialogue/DialogueDisplay.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Displays/Dialogue/DialogueDisplay.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Displays/Dialogue/DialogueDisplay.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Displays/Tiles/TileInventoryDisplay.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Displays/Tiles/TileInventoryDisplay.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/Door.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/Door.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/Door.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/Door.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/DoorProvider.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/DoorProvider.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/Lock.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/Lock.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/Lock.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/Lock.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/TileAmountLock.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/TileAmountLock.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/TileAmountLock.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/TileAmountLock.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Enemies/Enemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Enemies/Enemy.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Enemies/Enemy.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Enemies/Enemy.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Enemies/EnemyProvider.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Enemies/EnemyProvider.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Enemies/EnemyProvider.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Enemies/EnemyProvider.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Enemies/Turret.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Enemies/Turret.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Enemies/Turret.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Enemies/Turret.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Game Object Provider/GameObjectProvider.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Game Object Provider/GameObjectProvider.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Game Object Provider/GameObjectProvider.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Game Object Provider/GameObjectProvider.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Guns/TileSwitchGun.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Guns/TileSwitchGun.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Guns/TileSwitchGun.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Guns/TileSwitchGun.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Items/Item.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Items/Item.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Items/Item.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Items/Item.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Items/ItemAtlas.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Items/ItemAtlas.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Items/ItemAtlas.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Items/ItemAtlas.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Items/ItemInventory.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Items/ItemInventory.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Items/ItemInventory.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Items/ItemInventory.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Location/Location.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Location/Location.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Location/Location.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Location/Location.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Main/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Main/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Movement/Movement.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Movement/Movement.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/BulletParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/BulletParticleEmitter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/BulletParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/BulletParticleEmitter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterDeathParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterDeathParticleEmitter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterDeathParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterDeathParticleEmitter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterTeleportParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterTeleportParticleEmitter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterTeleportParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterTeleportParticleEmitter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/LaserParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/LaserParticleEmitter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/LaserParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/LaserParticleEmitter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/TileSwitchParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/TileSwitchParticleEmitter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/TileSwitchParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/TileSwitchParticleEmitter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Resources/ResourceInfo.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Resources/ResourceInfo.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Save States/SaveState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Save States/SaveState.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/AnimationScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/AnimationScript.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/GameScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/GameScript.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/GameScript.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/GameScript.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/MapScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/MapScript.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ResourceScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ResourceScript.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/SceneScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/SceneScript.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ScriptObjects.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ScriptObjects.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ScriptObjects.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ScriptObjects.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Teleporter/Teleporter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Teleporter/Teleporter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Teleporter/Teleporter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Teleporter/Teleporter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/Tile.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/Tile.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/Tile.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/Tile.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileAtlasLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileAtlasLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileBehaviourExecuter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileBehaviourExecutor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileBehaviourExecuter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileBehaviourExecutor.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileGroup.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileGroup.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/MapRebuilder.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/MapRebuilder.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Documentation and References/Ekkon Programming Style Guide.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Documentation and References/Ekkon Programming Style Guide.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Animation/AnimationTrack2D.h" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Animation/AnimationTrack2D.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Fonts/Font.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Fonts/Font.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Fonts/FontLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Fonts/FontLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Fonts/FontLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Fonts/FontLoader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Renderer/Basic2DGLRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Renderer/Basic2DGLRenderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Renderer/Basic2DRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Renderer/Basic2DRenderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Renderer/Basic2DRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Renderer/Basic2DRenderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Texture/GLSpriteSheetLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Texture/GLSpriteSheetLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Texture/GLSpriteSheetLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Texture/GLSpriteSheetLoader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Texture/GLTextureLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Texture/GLTextureLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Animation/KeyedAnimator3D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Animation/KeyedAnimator3D.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Animation/KeyedAnimator3D.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Animation/KeyedAnimator3D.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Camera/Camera3D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Camera/Camera3D.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Camera/Camera3D.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Camera/Camera3D.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Light/LightEntity.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Light/LightEntity.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Maps/Map3DExporter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Maps/Map3DExporter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Maps/Map3DLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Maps/Map3DLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Maps/Map3DLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Maps/Map3DLoader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Materials/GLMaterialLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Materials/GLMaterialLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Models/OBJLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Models/OBJLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Particles/ParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Particles/ParticleEmitter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Particles/ParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Particles/ParticleEmitter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Particles/PlanarParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Particles/PlanarParticleEmitter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Particles/PlanarParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Particles/PlanarParticleEmitter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Particles/PointParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Particles/PointParticleEmitter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Renderer/Basic3DGLModelRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Renderer/Basic3DGLModelRenderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Renderer/Basic3DGLModelRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Renderer/Basic3DGLModelRenderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Renderer/Basic3DGLRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Renderer/Basic3DGLRenderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Renderer/Basic3DGLShadowRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Renderer/Basic3DGLShadowRenderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Renderer/Basic3DGLSkyboxRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Renderer/Basic3DGLSkyboxRenderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Renderer/Basic3DGLSkyboxRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Renderer/Basic3DGLSkyboxRenderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Aela_Engine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Aela_Engine.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Aela_Engine.h" beforeDir="false" afterPath="$PROJECT_DIR$/Aela_Engine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Animation/Animator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Animation/Animator.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Animation/Animator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Animation/Animator.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Audio/AudioListener.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/AudioListener.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Audio/AudioPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/AudioPlayer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Audio/AudioPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/AudioPlayer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Control Manager/ControlManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Control Manager/ControlManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Control Manager/ControlManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Control Manager/ControlManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Events/EventConstants.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Events/EventConstants.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Events/EventConstants.h" beforeDir="false" afterPath="$PROJECT_DIR$/Events/EventConstants.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Events/EventListener.h" beforeDir="false" afterPath="$PROJECT_DIR$/Events/EventListener.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Menus/ImageComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/ImageComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Menus/Label.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/Label.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Menus/Label.h" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/Label.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Menus/RectComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/RectComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Old Garbage/shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Old Garbage/shader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Old Garbage/texture.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Old Garbage/texture.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project Aela.vcxproj.filters" beforeDir="false" afterPath="$PROJECT_DIR$/Project Aela.vcxproj.filters" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Renderer/GLRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Renderer/GLRenderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Renderer/GLRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Renderer/GLRenderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Renderer/Renderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Renderer/Renderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Renderer/Renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Renderer/Renderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resource Management/ResourceLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Resource Management/ResourceLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resource Management/ResourceLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/Resource Management/ResourceLoader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resource Management/ResourceManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Resource Management/ResourceManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resource Management/ResourceManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Resource Management/ResourceManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resource Management/ResourceMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Resource Management/ResourceMap.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resource Management/ResourceMap.h" beforeDir="false" afterPath="$PROJECT_DIR$/Resource Management/ResourceMap.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Time/Stopwatch/Stopwatch.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Time/Stopwatch/Stopwatch.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Time/Stopwatch/Stopwatch.h" beforeDir="false" afterPath="$PROJECT_DIR$/Time/Stopwatch/Stopwatch.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Time/Time.h" beforeDir="false" afterPath="$PROJECT_DIR$/Time/Clock.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Time/Timer/Timer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Time/Timer/Timer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Time/Timer/Timer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Time/Timer/Timer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Utilities/Colour/ColourRGB.h" beforeDir="false" afterPath="$PROJECT_DIR$/Utilities/Colour/ColourRGB.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Utilities/Colour/ColourRGBA.h" beforeDir="false" afterPath="$PROJECT_DIR$/Utilities/Colour/ColourRGBA.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Utilities/Rect/Cuboid.h" beforeDir="false" afterPath="$PROJECT_DIR$/Utilities/Rect/Cuboid.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Utilities/strut.h" beforeDir="false" afterPath="$PROJECT_DIR$/Utilities/strut.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/desktop.ini" beforeDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
+    <ignored path="$PROJECT_DIR$/build/bin/debug/x64/" />
+    <ignored path="$PROJECT_DIR$/build/bin/release/x64/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FUSProjectUsageTrigger">
+    <session id="1007905530">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="11" />
+          <entry key="project.open.time.0" value="2" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.10" value="2" />
+          <entry key="project.open.time.11" value="1" />
+          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.13" value="1" />
+          <entry key="project.open.time.14" value="1" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.7" value="1" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="12" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="cpp" value="89" />
+          <entry key="h" value="59" />
+          <entry key="hpp" value="1" />
+          <entry key="thread" value="2" />
+          <entry key="txt" value="5" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="CMakeLists.txt" value="5" />
+          <entry key="ObjectiveC" value="151" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="cpp" value="1589" />
+          <entry key="h" value="584" />
+          <entry key="mm" value="21" />
+          <entry key="txt" value="314" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="CMakeLists.txt" value="314" />
+          <entry key="ObjectiveC" value="2194" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret line="28" column="33" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/2D/Renderer/Basic2DGLRenderer.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="33" column="72" selection-start-line="33" selection-start-column="72" selection-end-line="33" selection-end-column="72" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/2D/Fonts/FontLoader.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="17" column="66" lean-forward="true" selection-start-line="17" selection-start-column="66" selection-end-line="17" selection-end-column="66" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/2D/Texture/GLSpriteSheetLoader.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="39">
+              <caret line="43" column="32" selection-start-line="43" selection-start-column="32" selection-end-line="43" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/3D/Models/OBJLoader.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="57" column="16" lean-forward="true" selection-start-line="57" selection-start-column="16" selection-end-line="57" selection-end-column="16" />
+              <folding>
+                <element signature="e#160#177#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Resource Management/ResourceManager.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="356">
+              <caret line="123" column="48" selection-start-line="123" selection-start-column="48" selection-end-line="123" selection-end-column="48" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Resource Management/ResourceManager.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="339">
+              <caret line="81" column="20" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
+              <folding>
+                <element signature="e#161#180#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>clock</find>
+      <find>Project_aela</find>
+      <find>SDL.h</find>
+      <find>\</find>
+      <find>error</find>
+      <find>requested vertex</find>
+      <find>TextToBuffer</find>
+      <find>~</find>
+      <find>Are you sure that you loaded the material before loading the object?</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>/</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Audio/AudioPlayer.h" />
+        <option value="$PROJECT_DIR$/Audio/AudioPlayer.cpp" />
+        <option value="$PROJECT_DIR$/Menus/ImageComponent.cpp" />
+        <option value="$PROJECT_DIR$/Menus/RectComponent.cpp" />
+        <option value="$PROJECT_DIR$/Old Garbage/texture.cpp" />
+        <option value="$PROJECT_DIR$/Events/EventHandler.cpp" />
+        <option value="$PROJECT_DIR$/Events/EventHandler.h" />
+        <option value="$PROJECT_DIR$/Utilities/Texture Splitter/GLTextureSplitter.cpp" />
+        <option value="$PROJECT_DIR$/Aela_Engine.cpp" />
+        <option value="$PROJECT_DIR$/Events/EventListener.h" />
+        <option value="$PROJECT_DIR$/3D/Camera/Camera3D.h" />
+        <option value="$PROJECT_DIR$/3D/Camera/Camera3D.cpp" />
+        <option value="$PROJECT_DIR$/Renderer/Renderer.cpp" />
+        <option value="$PROJECT_DIR$/Menus/Label.h" />
+        <option value="$PROJECT_DIR$/Events/EventConstants.h" />
+        <option value="$PROJECT_DIR$/Events/EventConstants.cpp" />
+        <option value="$PROJECT_DIR$/Physics/PhysicsManager.cpp" />
+        <option value="$PROJECT_DIR$/Aela_Engine.h" />
+        <option value="$PROJECT_DIR$/3D/Animation/KeyedAnimator3D.cpp" />
+        <option value="$PROJECT_DIR$/3D/Renderer/Basic3DGLModelRenderer.h" />
+        <option value="$PROJECT_DIR$/3D/Renderer/Basic3DGLSkyboxRenderer.h" />
+        <option value="$PROJECT_DIR$/Menus/Label.cpp" />
+        <option value="$PROJECT_DIR$/3D/Renderer/Basic3DGLSkyboxRenderer.cpp" />
+        <option value="$PROJECT_DIR$/2D/Fonts/FontLoader.cpp" />
+        <option value="$PROJECT_DIR$/2D/Animation/AnimationTrack2D.h" />
+        <option value="$PROJECT_DIR$/2D/Fonts/FontLoader.h" />
+        <option value="$PROJECT_DIR$/2D/Texture/GLSpriteSheetLoader.cpp" />
+        <option value="$PROJECT_DIR$/2D/Renderer/Basic2DRenderer.cpp" />
+        <option value="$PROJECT_DIR$/2D/Texture/GLSpriteSheetLoader.h" />
+        <option value="$PROJECT_DIR$/2D/Fonts/Font.cpp" />
+        <option value="$PROJECT_DIR$/2D/Texture/GLTextureLoader.cpp" />
+        <option value="$PROJECT_DIR$/3D/Maps/Map3DExporter.cpp" />
+        <option value="$PROJECT_DIR$/3D/Renderer/Basic3DGLModelRenderer.cpp" />
+        <option value="$PROJECT_DIR$/Time/Timer/Timer.h" />
+        <option value="$PROJECT_DIR$/Time/Timer/Timer.cpp" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/Old Garbage/shader.cpp" />
+        <option value="$PROJECT_DIR$/3D/Renderer/Basic3DGLRenderer.cpp" />
+        <option value="$PROJECT_DIR$/2D/Renderer/Basic2DGLRenderer.cpp" />
+        <option value="$PROJECT_DIR$/Renderer/GLRenderer.cpp" />
+        <option value="$PROJECT_DIR$/3D/Maps/Map3DLoader.h" />
+        <option value="$PROJECT_DIR$/Resource Management/ResourceManager.h" />
+        <option value="$PROJECT_DIR$/Resource Management/ResourceMap.h" />
+        <option value="$PROJECT_DIR$/Resource Management/ResourceManager.cpp" />
+        <option value="$PROJECT_DIR$/Resource Management/ResourceMap.cpp" />
+        <option value="$PROJECT_DIR$/Resource Management/ResourceLoader.h" />
+        <option value="$PROJECT_DIR$/Utilities/strut.h" />
+        <option value="$PROJECT_DIR$/Resource Management/ResourceLoader.cpp" />
+        <option value="$PROJECT_DIR$/3D/Models/OBJLoader.cpp" />
+        <option value="$PROJECT_DIR$/3D/Materials/GLMaterialLoader.cpp" />
+        <option value="$PROJECT_DIR$/3D/Maps/Map3DLoader.cpp" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="974" />
+    <option name="height" value="1047" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Aela" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Project Aela" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Aela" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Project Aela" type="462c0819:PsiDirectoryNode" />
+              <item name="2D" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Aela" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Project Aela" type="462c0819:PsiDirectoryNode" />
+              <item name="2D" type="462c0819:PsiDirectoryNode" />
+              <item name="Fonts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Aela" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Project Aela" type="462c0819:PsiDirectoryNode" />
+              <item name="2D" type="462c0819:PsiDirectoryNode" />
+              <item name="Texture" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Aela" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Project Aela" type="462c0819:PsiDirectoryNode" />
+              <item name="Error Handler" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Aela" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Project Aela" type="462c0819:PsiDirectoryNode" />
+              <item name="Error Handler" type="462c0819:PsiDirectoryNode" />
+              <item name="Error Handler" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Aela" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Project Aela" type="462c0819:PsiDirectoryNode" />
+              <item name="Error Handler" type="462c0819:PsiDirectoryNode" />
+              <item name="Simple Error" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SearchEverywhereHistoryKey" value="camera&#9;FILE&#9;file://E:/Programming/Repos/Project-Aela/Project Aela/3D/Camera/Camera3D.cpp" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="C:/Program Files/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/bin/g++.exe" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Aela" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Aela" TARGET_NAME="Aela" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="583760b5-4cf0-4319-ba42-b9c76a2702f5" name="Default" comment="" />
+      <created>1531629750771</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1531629750771</updated>
+      <workItem from="1531629754198" duration="4434000" />
+      <workItem from="1531635301630" duration="456000" />
+      <workItem from="1531672293739" duration="2346000" />
+      <workItem from="1531857634571" duration="34000" />
+      <workItem from="1531857710505" duration="4401000" />
+      <workItem from="1533001761731" duration="51000" />
+      <workItem from="1533002170670" duration="4236000" />
+      <workItem from="1533013753075" duration="2631000" />
+      <workItem from="1533175838137" duration="1645000" />
+      <workItem from="1533178218886" duration="5637000" />
+      <workItem from="1533262855697" duration="8263000" />
+      <workItem from="1533319238178" duration="6611000" />
+      <workItem from="1535499852918" duration="18267000" />
+      <workItem from="1535572764997" duration="7000000" />
+      <workItem from="1535590134721" duration="954000" />
+      <workItem from="1535610445556" duration="627000" />
+      <workItem from="1535670220799" duration="8763000" />
+      <workItem from="1535682665190" duration="5152000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="81508000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23560767" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3286334" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.329718" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.49895614" visible="true" weight="0.32212582" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.329718" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50104386" side_tool="true" weight="0.33261803" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="CMake" order="11" weight="0.329718" />
+      <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" id="Inspection Results" order="13" visible="true" weight="0.329718" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+    </layout>
+    <layout-to-restore>
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23560767" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3286334" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.329718" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.49895614" visible="true" weight="0.32212582" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.329718" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50104386" side_tool="true" weight="0.33261803" />
+      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="CMake" order="11" weight="0.329718" />
+      <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" id="Inspection Results" order="13" visible="true" weight="0.329718" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Aela_Engine.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="152" column="114" selection-start-line="152" selection-start-column="114" selection-end-line="152" selection-end-column="114" />
+          <folding>
+            <element signature="e#162#180#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scenes/SceneManager.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="28" column="27" lean-forward="true" selection-start-line="28" selection-start-column="27" selection-end-line="28" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Window/Window.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="10" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Animation/KeyedAnimator3D.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="39" column="38" lean-forward="true" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Camera/Camera3D.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="66" column="33" selection-start-line="66" selection-start-column="33" selection-end-line="66" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Utilities/Rect/Rect.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-409">
+          <caret line="31" column="17" selection-start-line="31" selection-start-column="17" selection-end-line="31" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Renderer/Renderer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Menus/Label.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="39" column="66" selection-start-line="39" selection-start-column="66" selection-end-line="39" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Renderer/GLRenderer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="107" column="17" selection-start-line="107" selection-start-column="17" selection-end-line="107" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Menus/Label.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="36" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Renderer/Basic3DGLModelRenderer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="373">
+          <caret line="52" column="94" selection-start-line="52" selection-start-column="94" selection-end-line="52" selection-end-column="94" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Renderer/Basic3DGLSkyboxRenderer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="26" column="52" selection-start-line="26" selection-start-column="52" selection-end-line="26" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Aela_Engine.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="12" column="43" selection-start-line="12" selection-start-column="43" selection-end-line="12" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Renderer/Basic3DGLSkyboxRenderer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="16" column="26" selection-start-line="16" selection-start-column="26" selection-end-line="16" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Animation/AnimationTrack2D.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="16" column="41" selection-start-line="16" selection-start-column="41" selection-end-line="16" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Fonts/FontLoader.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="22" column="6" lean-forward="true" selection-start-line="22" selection-start-column="6" selection-end-line="22" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Texture/GLSpriteSheetLoader.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="20" column="19" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Renderer/Basic2DRenderer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3">
+          <caret line="10" column="22" lean-forward="true" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Transformable/Transformable2D.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="58" column="8" selection-start-line="58" selection-start-column="8" selection-end-line="58" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Libraries/freetype 2.7.1/freetype-windows-binaries-master/include/freetype/fttypes.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="299" column="15" selection-start-line="299" selection-start-column="15" selection-end-line="299" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Fonts/Font.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-65">
+          <caret line="49" column="9" selection-start-line="49" selection-start-column="9" selection-end-line="49" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Renderer/Basic3DGLModelRenderer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="361" column="26" selection-start-line="361" selection-start-column="26" selection-end-line="361" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Time/Timer/Timer.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="17" column="25" selection-start-line="17" selection-start-column="25" selection-end-line="17" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Time/Timer/Timer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1496">
+          <caret line="88" column="34" lean-forward="true" selection-start-line="88" selection-start-column="34" selection-end-line="88" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Old Garbage/shader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="24" column="15" selection-start-line="24" selection-start-column="15" selection-end-line="24" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Renderer/Basic3DGLRenderer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="157" lean-forward="true" selection-start-line="157" selection-end-line="157" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Renderer/Basic2DRenderer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="32" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Renderer/GLRenderer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="90" column="20" selection-start-line="90" selection-start-column="20" selection-end-line="90" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Maps/Map3DLoader.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+          <folding>
+            <element signature="e#151#169#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resource Management/ResourcePaths.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="44" lean-forward="true" selection-start-line="12" selection-start-column="44" selection-end-line="12" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/x86_64-w64-mingw32/include/ctype.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="119" column="38" lean-forward="true" selection-start-line="119" selection-start-column="38" selection-end-line="119" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="28" column="33" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resource Management/Resource.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="10" selection-start-line="4" selection-start-column="10" selection-end-line="4" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Models/Model.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="13" column="42" lean-forward="true" selection-start-line="13" selection-start-column="42" selection-end-line="13" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resource Management/ResourceManager.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="123" column="48" selection-start-line="123" selection-start-column="48" selection-end-line="123" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Maps/Map3DExporter.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="566">
+          <caret line="122" column="20" selection-start-line="122" selection-start-column="20" selection-end-line="122" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resource Management/ResourceMap.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="19" column="29" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resource Management/ResourceMap.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="26" column="70" selection-start-line="26" selection-start-column="70" selection-end-line="26" selection-end-column="70" />
+          <folding>
+            <element signature="e#445#454#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resource Management/ResourceManager.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="339">
+          <caret line="81" column="20" selection-start-line="81" selection-start-column="20" selection-end-line="81" selection-end-column="20" />
+          <folding>
+            <element signature="e#161#180#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Program Files/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/basic_string.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="6323" column="49" lean-forward="true" selection-start-line="6323" selection-start-column="49" selection-end-line="6323" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resource Management/ResourceLoader.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="18" column="70" selection-start-line="18" selection-start-column="70" selection-end-line="18" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Utilities/strut.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1948">
+          <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resource Management/ResourceLoader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="36" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Models/OBJLoader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="57" column="16" lean-forward="true" selection-start-line="57" selection-start-column="16" selection-end-line="57" selection-end-column="16" />
+          <folding>
+            <element signature="e#160#177#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Maps/Map3DLoader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="37" column="11" selection-start-line="37" selection-start-column="11" selection-end-line="37" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Texture/GLTextureLoader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="96" column="22" selection-start-line="96" selection-start-column="22" selection-end-line="96" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Skybox/GLSkyboxLoader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="534">
+          <caret line="69" column="19" selection-start-line="69" selection-start-column="19" selection-end-line="69" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/3D/Materials/GLMaterialLoader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="48" column="35" selection-start-line="48" selection-start-column="35" selection-end-line="48" selection-end-column="35" />
+          <folding>
+            <element signature="e#130#147#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Renderer/Basic2DGLRenderer.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="33" column="72" selection-start-line="33" selection-start-column="72" selection-end-line="33" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Fonts/FontLoader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="17" column="66" lean-forward="true" selection-start-line="17" selection-start-column="66" selection-end-line="17" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Texture/GLSpriteSheetLoader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="39">
+          <caret line="43" column="32" selection-start-line="43" selection-start-column="32" selection-end-line="43" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

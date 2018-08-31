@@ -8,6 +8,7 @@
 #include "Camera3D.h"
 #include "../../Utilities/glmut.h"
 #include <glm\gtc\constants.hpp>
+#include "../../Events/EventConstants.h"
 
 using namespace Aela;
 
@@ -51,7 +52,7 @@ bool Camera3D::isForcingCursorToMiddle() {
 	return forceCursorToMiddle;
 }
 
-void Camera3D::setTime(Time* time) {
+void Camera3D::setTime(Clock* time) {
 	this->time = time;
 }
 

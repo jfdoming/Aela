@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "Item.h"
 
 void Game::Item::setType(size_t type) {
@@ -5,5 +7,5 @@ void Game::Item::setType(size_t type) {
 }
 
 void Game::Item::setName(std::string name) {
-	this->name = name;
+	this->name = std::move(name);
 }

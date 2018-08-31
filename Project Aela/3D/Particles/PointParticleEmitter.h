@@ -14,7 +14,7 @@
 namespace Aela {
 	class PointParticleEmitter : public ParticleEmitter {
 		public:
-			PointParticleEmitter(Time* time) : ParticleEmitter(time) {
+			PointParticleEmitter(Clock* time) : ParticleEmitter(time) {
 
 			}
 

@@ -23,9 +23,9 @@
 namespace Aela {
 	class Basic2DRenderer {
 		public:
-			Basic2DRenderer() {}
+			Basic2DRenderer();
 
-			~Basic2DRenderer() {}
+			~Basic2DRenderer();
 
 			// This is the setup function.
 			virtual void setup() = 0;

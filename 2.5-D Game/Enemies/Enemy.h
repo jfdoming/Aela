@@ -17,9 +17,9 @@ namespace Game {
 		friend class EnemyProvider;
 		public:
 			Enemy();
-			Enemy(std::string name, Location* location);
+			Enemy(std::string name, const Location& location);
 			Enemy(int strength, long long attackCooldown);
-			Enemy(std::string name, Location* location, int strength, long long attackCooldown);
+			Enemy(std::string name, const Location& location, int strength, long long attackCooldown);
 
 			virtual EnemyType getType();
 

@@ -8,4 +8,7 @@ namespace Aela {
 	typedef std::function<void(Event*)> EventListener;
 }
 
-#define bindListener(f, v) std::bind(&f, v, std::placeholders::_1)
+#define bindListener(f, v) ({                   \
+    auto fn = &f;                               \
+    std::bind(fn, v, std::placeholders::_1);    \
+})

@@ -47,7 +47,7 @@ void Aela::Font::prepareForRendering(unsigned int superSamplingFactor) {
 Rect<int> Aela::Font::getDimensionsOfText(std::string text) {
 	FT_GlyphSlot glyph = face->glyph;
 	FT_BBox bbox = face->bbox;
-	FT_Error error;
+	FT_Error error = 0;
 	Rect<int> dimensions;
 
 	// If the font just came back from rendering, it should recall FT_Set_Pixel_Size.
@@ -67,7 +67,8 @@ Rect<int> Aela::Font::getDimensionsOfText(std::string text) {
 		// features, I managed to catch the violation as an exception (to prevent crashing) and also found that
 		// FT_Load_Char gives various errors.
 		try {
-			if (error = FT_Load_Char(face, (char) (text.at(i)), FT_LOAD_RENDER)) {
+			error = FT_Load_Char(face, static_cast<FT_ULong>(text[i]), FT_LOAD_RENDER);
+			if (error) {
 				AelaErrorHandling::consoleWindowError("Aela Text Rendering", "FreeType Error: " + (std::string) AelaErrorHandling::getFreeTypeErrorMessage(error));
 				continue;
 			}

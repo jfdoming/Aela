@@ -12,7 +12,7 @@ namespace Game {
 	class Teleporter {
 		public:
 			Teleporter();
-			Teleporter(Location* location);
+			Teleporter(const Location& location);
 
 			Location* getDestination();
 

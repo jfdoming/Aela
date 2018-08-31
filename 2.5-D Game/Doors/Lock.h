@@ -12,7 +12,7 @@ namespace Game {
 		friend class Door;
 		public:
 			Lock();
-			Lock(bool locked);
+			explicit Lock(bool locked);
 			virtual ~Lock();
 
 			bool isLocked();

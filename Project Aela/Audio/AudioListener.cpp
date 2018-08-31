@@ -14,18 +14,13 @@ bool AudioListener::setPosition(ALfloat x, ALfloat y, ALfloat z) {
 	orientation[2] = z;
 
 	alListener3f(AL_POSITION, x, y, z);
-	if (alGetError() != AL_NO_ERROR) {
-		return false;
-	}
-	return true;
+	return alGetError() == AL_NO_ERROR;
+
 }
 
 bool AudioListener::setVelocity(ALfloat x, ALfloat y, ALfloat z) {
 	alListener3f(AL_VELOCITY, x, y, z);
-	if (alGetError() != AL_NO_ERROR) {
-		return false;
-	}
-	return true;
+	return alGetError() == AL_NO_ERROR;
 }
 
 bool AudioListener::setOrientation(ALfloat x, ALfloat y, ALfloat z) {
@@ -34,8 +29,5 @@ bool AudioListener::setOrientation(ALfloat x, ALfloat y, ALfloat z) {
 	orientation[5] = z;
 
 	alListenerfv(AL_ORIENTATION, orientation);
-	if (alGetError() != AL_NO_ERROR) {
-		return false;
-	}
-	return true;
+	return alGetError() == AL_NO_ERROR;
 }

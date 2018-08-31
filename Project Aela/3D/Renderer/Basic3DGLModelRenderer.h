@@ -50,7 +50,7 @@ namespace Aela {
 			glm::mat4 viewMatrix, projectionMatrix;
 			const unsigned int MAX_LIGHT_AMOUNT = 5;
 
-			GLuint vertexBuffer = NULL, UVBuffer = NULL, normalBuffer = NULL, elementBuffer = NULL, whichMatrixBuffer = NULL;
+			GLuint vertexBuffer = 0, UVBuffer = 0, normalBuffer = 0, elementBuffer = 0, whichMatrixBuffer = 0;
 
 			// These functions are here for debugging purposes.
 			void drawTestQuad();

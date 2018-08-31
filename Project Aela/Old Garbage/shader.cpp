@@ -36,7 +36,7 @@ GLuint loadShaders(std::string vertexShaderPath, std::string geometryShaderPath,
 	std::ifstream vertexShaderStream(vertexShaderPath);
 
 	if (vertexShaderStream.is_open()) {
-		std::string line = "";
+		std::string line;
 		while (getline(vertexShaderStream, line)) {
 			vertexShaderCode += "\n" + line;
 		}

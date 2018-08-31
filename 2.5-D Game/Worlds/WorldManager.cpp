@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
 * Class: WorldManager
 * Author: Robert Ciborowski
@@ -16,7 +18,7 @@
 #include "3D/Maps/Map3DLoader.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
 #include "../Player/Player.h"
-#include "../Tiles/TileBehaviourExecuter.h"
+#include "Tiles/TileBehaviourExecutor.h"
 #include "../Aela Game/AelaGame.h"
 #include <glm/gtc/constants.hpp>
 #include <iostream>
@@ -31,7 +33,7 @@ Game::WorldManager::WorldManager() {
 
 void Game::WorldManager::setup() {
 	characterProvider = GameObjectProvider::getCharacterProvider();
-	tileBehaviourExecuter = GameObjectProvider::getTileBehaviourExecuter();
+	tileBehaviourExecutor = GameObjectProvider::getTileBehaviourExecuter();
 	scriptManager = GameObjectProvider::getScriptManager();
 	tileAtlas = GameObjectProvider::getTileAtlas();
 	playerCharacter = GameObjectProvider::getPlayer()->getCharacter();
@@ -76,7 +78,7 @@ Map3D* Game::WorldManager::getMap3D() {
 	return worlds[playerCharacter->getLocation()->getWorld()].getMap3D();
 }
 
-Game::Teleporter* Game::WorldManager::getTeleporter(Location* location) {
+Game::Teleporter* Game::WorldManager::getTeleporter(const Location& location) {
 	TileGroup* tileGroup = getTileGroup(location);
 	if (tileGroup == nullptr) {
 		return nullptr;
@@ -94,7 +96,7 @@ Game::Teleporter* Game::WorldManager::getTeleporter(Location* location) {
 	return nullptr;
 }
 
-Game::Teleporter* Game::WorldManager::getTeleporter(Location* location, size_t tileType) {
+Game::Teleporter* Game::WorldManager::getTeleporter(const Location& location, size_t tileType) {
 	TileGroup* tileGroup = getTileGroup(location);
 	if (tileGroup == nullptr) {
 		return nullptr;
@@ -108,22 +110,22 @@ Game::Teleporter* Game::WorldManager::getTeleporter(Location* location, size_t t
 	return tile->getTeleporter();
 }
 
-Game::Chunk* Game::WorldManager::getChunk(Location* location) {
-	size_t worldID = location->getWorld();
+Game::Chunk* Game::WorldManager::getChunk(const Location& location) {
+	size_t worldID = location.getWorld();
 	if (worldID >= worlds.size()) {
 		return nullptr;
 	}
 
 	World* world = &worlds[worldID];
-	return world->getChunk(location->getChunk());
+	return world->getChunk(location.getChunk());
 }
 
-Game::TileGroup* Game::WorldManager::getTileGroup(Location* location) {
+Game::TileGroup* Game::WorldManager::getTileGroup(const Location& location) {
 	Chunk* chunk = getChunk(location);
 	if (chunk == nullptr) {
 		return nullptr;
 	}
-	return chunk->getTileGroup(location->getTileGroup());
+	return chunk->getTileGroup(location.getTileGroup());
 }
 
 glm::ivec3* Game::WorldManager::getChunkRenderDistances() {
@@ -178,31 +180,34 @@ void Game::WorldManager::getCoordinateOfNeighbouringTile(glm::ivec3& tile, glm::
 	}
 }
 
-void Game::WorldManager::addWalkedOnScript(std::string script, Location* location) {
-	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setWalkedOnScript(script);
+void Game::WorldManager::addWalkedOnScript(std::string script, const Location& location) {
+	worlds[location.getWorld()].getChunk(location.getChunk())->getTileGroup(location.getTileGroup())->setWalkedOnScript(
+			std::move(script));
 }
 
-void Game::WorldManager::addPromptedScript(std::string script, Location* location) {
-	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setPromptedScript(script);
+void Game::WorldManager::addPromptedScript(std::string script, const Location& location) {
+	worlds[location.getWorld()].getChunk(location.getChunk())->getTileGroup(location.getTileGroup())->setPromptedScript(
+			std::move(script));
 }
 
-void Game::WorldManager::addTileSwitchScript(std::string script, Location* location) {
-	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setSwitchScript(script);
+void Game::WorldManager::addTileSwitchScript(std::string script, const Location& location) {
+	worlds[location.getWorld()].getChunk(location.getChunk())->getTileGroup(location.getTileGroup())->setSwitchScript(
+			std::move(script));
 }
 
-void Game::WorldManager::removeWalkedOnScript(Location* location) {
-	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setWalkedOnScript("");
+void Game::WorldManager::removeWalkedOnScript(const Location& location) {
+	worlds[location.getWorld()].getChunk(location.getChunk())->getTileGroup(location.getTileGroup())->setWalkedOnScript("");
 }
 
-void Game::WorldManager::removePromptedScript(Location* location) {
-	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setPromptedScript("");
+void Game::WorldManager::removePromptedScript(const Location& location) {
+	worlds[location.getWorld()].getChunk(location.getChunk())->getTileGroup(location.getTileGroup())->setPromptedScript("");
 }
 
-void Game::WorldManager::removeTileSwitchScript(Location* location) {
-	worlds[location->getWorld()].getChunk(location->getChunk())->getTileGroup(location->getTileGroup())->setSwitchScript("");
+void Game::WorldManager::removeTileSwitchScript(const Location& location) {
+	worlds[location.getWorld()].getChunk(location.getChunk())->getTileGroup(location.getTileGroup())->setSwitchScript("");
 }
 
-bool Game::WorldManager::addTeleporterToFloorTile(Location* teleporterLocation, Location* teleporterDestination) {
+bool Game::WorldManager::addTeleporterToFloorTile(const Location& teleporterLocation, const Location& teleporterDestination) {
 	TileGroup* tileGroup = getTileGroup(teleporterLocation);
 	if (tileGroup == nullptr) {
 		return false;
@@ -217,7 +222,7 @@ bool Game::WorldManager::addTeleporterToFloorTile(Location* teleporterLocation, 
 	return true;
 }
 
-bool Game::WorldManager::addTeleporterToSwitchableFloorTile(Location* teleporterLocation, Location* teleporterDestination) {
+bool Game::WorldManager::addTeleporterToSwitchableFloorTile(const Location& teleporterLocation, const Location& teleporterDestination) {
 	TileGroup* tileGroup = getTileGroup(teleporterLocation);
 	if (tileGroup == nullptr) {
 		return false;
@@ -232,7 +237,7 @@ bool Game::WorldManager::addTeleporterToSwitchableFloorTile(Location* teleporter
 	return true;
 }
 
-bool Game::WorldManager::addTeleporterToTile(Location* teleporterLocation, Location* teleporterDestination, size_t tileType) {
+bool Game::WorldManager::addTeleporterToTile(const Location& teleporterLocation, const Location& teleporterDestination, size_t tileType) {
 	TileGroup* tileGroup = getTileGroup(teleporterLocation);
 	if (tileGroup == nullptr) {
 		return false;
@@ -247,12 +252,12 @@ bool Game::WorldManager::addTeleporterToTile(Location* teleporterLocation, Locat
 	return true;
 }
 
-void Game::WorldManager::runPromptedScriptOfTile(Location* location) {
-	size_t world = location->getWorld();
+void Game::WorldManager::runPromptedScriptOfTile(const Location& location) {
+	size_t world = location.getWorld();
 	if (world < worlds.size()) {
-		Chunk* chunk = worlds[world].getChunk(location->getChunk());
+		Chunk* chunk = worlds[world].getChunk(location.getChunk());
 		if (chunk != nullptr) {
-			TileGroup* tileGroup = worlds[world].getChunk(location->getChunk())->getTileGroup(location->getTileGroup());
+			TileGroup* tileGroup = worlds[world].getChunk(location.getChunk())->getTileGroup(location.getTileGroup());
 			if (tileGroup != nullptr) {
 				scriptManager->runScript(*tileGroup->getPromptedScriptID());
 			}
@@ -260,12 +265,12 @@ void Game::WorldManager::runPromptedScriptOfTile(Location* location) {
 	}
 }
 
-void Game::WorldManager::runTileSwitchScriptOfTileGroup(Location* location) {
-	size_t world = location->getWorld();
+void Game::WorldManager::runTileSwitchScriptOfTileGroup(const Location& location) {
+	size_t world = location.getWorld();
 	if (world < worlds.size()) {
-		Chunk* chunk = worlds[world].getChunk(location->getChunk());
+		Chunk* chunk = worlds[world].getChunk(location.getChunk());
 		if (chunk != nullptr) {
-			TileGroup* tileGroup = worlds[world].getChunk(location->getChunk())->getTileGroup(location->getTileGroup());
+			TileGroup* tileGroup = worlds[world].getChunk(location.getChunk())->getTileGroup(location.getTileGroup());
 			if (tileGroup != nullptr) {
 				scriptManager->runScript(*tileGroup->getSwitchScript());
 			}
@@ -278,7 +283,8 @@ void Game::WorldManager::rebuildMap() {
 }
 
 void Game::WorldManager::createChunkInCurrentWorld(glm::ivec2 coordinate) {
-	worlds[playerCharacter->getLocation()->getWorld()].addChunk(coordinate, &Chunk());
+	auto chunk = Chunk();
+	worlds[playerCharacter->getLocation()->getWorld()].addChunk(coordinate, &chunk);
 }
 
 void Game::WorldManager::createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, unsigned int layer) {
@@ -297,14 +303,14 @@ bool Game::WorldManager::autoExportCurrentWorld() {
 	return worldExporter->exportWorld((std::string) RESOURCE_ROOT + WORLD_AUTO_EXPORT_PATH, &worlds[playerCharacter->getLocation()->getWorld()]);
 }
 
-void Game::WorldManager::tileWasPlaced(Location* location, size_t tileType) {
+void Game::WorldManager::tileWasPlaced(const Location& location, size_t tileType) {
 	runTileSwitchScriptOfTileGroup(location);
-	tileBehaviourExecuter->runBehaviour(location, tileType);
+	tileBehaviourExecutor->runBehaviour(location, tileType);
 	mapNeedsToBeRebuilt = true;
 }
 
 void Game::WorldManager::saveDataToSaveState(SaveState* saveState) {
-	World* world = new World();
+	auto* world = new World();
 	(*world) = worlds[GameObjectProvider::getPlayer()->getCharacter()->getLocation()->getWorld()];
 	saveState->addData("world", world);
 }

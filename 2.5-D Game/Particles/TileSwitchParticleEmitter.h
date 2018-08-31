@@ -13,7 +13,7 @@
 namespace Game {
 	class TileSwitchParticleEmitter : public ParticleEmitter {
 		public:
-			TileSwitchParticleEmitter(Time* time);
+			TileSwitchParticleEmitter(Clock* time);
 			virtual ~TileSwitchParticleEmitter();
 
 			// These are the functions that are overwritten from the ParticleEmitter class.

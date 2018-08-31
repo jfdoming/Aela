@@ -1,14 +1,14 @@
+#include <utility>
+
 #include "GLTextureLoader.h"
 #include <windows.h>
 #include "../../Utilities/strut.h"
 
 using namespace Aela;
 
-GLTextureLoader::GLTextureLoader() {
-}
+GLTextureLoader::GLTextureLoader() = default;
 
-GLTextureLoader::~GLTextureLoader() {
-}
+GLTextureLoader::~GLTextureLoader() = default;
 
 void GLTextureLoader::expose(LuaManager& mgr) {
 	// only expose part of the class to Lua
@@ -38,7 +38,7 @@ bool GLTextureLoader::loadTexture(GLTexture*& result, std::string src) {
 	// This tells OpenGL that future functions will reference this texture.
 	glBindTexture(GL_TEXTURE_2D, modelTextureID);
 
-	unsigned int imageWidth, imageHeight;
+	unsigned int imageWidth = 0, imageHeight = 0;
 
 	std::string format = src.substr(src.size() - 4, 4);
 
@@ -118,7 +118,7 @@ bool GLTextureLoader::loadDDSToBoundId(std::ifstream& in, GLenum target, unsigne
 	bufferSize = (mipMapAmount > 1) ? (linearSize * 2) : linearSize;
 
 	// read the contents of the file.
-	unsigned char* buffer = new unsigned char[bufferSize * sizeof(unsigned char)];
+	auto* buffer = new unsigned char[bufferSize * sizeof(unsigned char)];
 	in.read(reinterpret_cast<char*>(buffer), bufferSize);
 
 	// determine the texture format
@@ -208,7 +208,8 @@ bool Aela::GLTextureLoader::loadBMPToBoundId(std::ifstream& in, GLenum target, u
 		validFile = false;
 	}
 
-	bytesPerPixel = *(int*)&(header[0x1C]) / 8;
+	// TODO determine if changing this to unsigned int, from int, crashes the program
+	bytesPerPixel = *(unsigned int*)&(header[0x1C]) / 8;
 
 	if (!(bytesPerPixel == 3 || bytesPerPixel == 4)) {
 		validFile = false;
@@ -220,10 +221,10 @@ bool Aela::GLTextureLoader::loadBMPToBoundId(std::ifstream& in, GLenum target, u
 		return false;
 	}
 
-	dataPosition = *(int*)&(header[10]);
-	bufferSize = *(int*)&(header[34]);
-	imageWidth = *(int*)&(header[18]);
-	imageHeight = *(int*)&(header[22]);
+	dataPosition = *(unsigned int*)&(header[10]);
+	bufferSize = *(unsigned int*)&(header[34]);
+	imageWidth = *(unsigned int*)&(header[18]);
+	imageHeight = *(unsigned int*)&(header[22]);
 
 	// If the BMP file is not formatted properly, these statements will trigger.
 
@@ -280,7 +281,7 @@ bool Aela::GLTextureLoader::loadBMPToBoundId(std::ifstream& in, GLenum target, u
 }
 
 bool GLTextureLoader::loadDDSUsingFILE(std::string src, GLenum target) {
-	return loadDDSUsingFILE(src, target, nullptr, nullptr);
+	return loadDDSUsingFILE(std::move(src), target, nullptr, nullptr);
 }
 
 // This loads a texture using FILE. If you're wondering why the first parameter is the src rather than a FILE* (similar to how
@@ -294,7 +295,7 @@ bool GLTextureLoader::loadDDSUsingFILE(std::string src, GLenum target, unsigned 
 
 	// This will try to open the DDS file.
 	fopen_s(&in, src.c_str(), "rb");
-	if (in == NULL) {
+	if (in == nullptr) {
 		AelaErrorHandling::windowError("Aela DDS Loader", "A DDS file was not found.");
 		return false;
 	}
@@ -318,7 +319,7 @@ bool GLTextureLoader::loadDDSUsingFILE(std::string src, GLenum target, unsigned 
 	bufferSize = (mipMapAmount > 1) ? (linearSize * 2) : linearSize;
 
 	// read the contents of the file.
-	unsigned char* buffer = new unsigned char[bufferSize * sizeof(unsigned char)];
+	auto* buffer = new unsigned char[bufferSize * sizeof(unsigned char)];
 	fread(buffer, 1, bufferSize, in);
 
 	// determine the texture format
@@ -373,7 +374,7 @@ bool GLTextureLoader::loadDDSUsingFILE(std::string src, GLenum target, unsigned 
 }
 
 bool Aela::GLTextureLoader::loadBMPUsingFILE(std::string src, GLenum target) {
-	return loadBMPUsingFILE(src, target, nullptr, nullptr);
+	return loadBMPUsingFILE(std::move(src), target, nullptr, nullptr);
 }
 
 bool Aela::GLTextureLoader::loadBMPUsingFILE(std::string src, GLenum target, unsigned int* width, unsigned int* height) {
@@ -415,10 +416,10 @@ bool Aela::GLTextureLoader::loadBMPUsingFILE(std::string src, GLenum target, uns
 		return false;
 	}
 
-	dataPosition = *(int*)&(header[10]);
-	imageSize = *(int*)&(header[34]);
-	imageWidth = *(int*)&(header[18]);
-	imageHeight = *(int*)&(header[22]);
+	dataPosition = *(unsigned int*)&(header[10]);
+	imageSize = *(unsigned int*)&(header[34]);
+	imageWidth = *(unsigned int*)&(header[18]);
+	imageHeight = *(unsigned int*)&(header[22]);
 
 	// If the BMP file is not formatted properly, these statements will trigger.
 
@@ -484,7 +485,7 @@ bool Aela::GLTextureLoader::loadPNGToBuffer(std::string src, png_bytep** rows, u
 	}
 
 	// This initialises the PNG struct.
-	pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
 	if (!pngPtr) {
 		AelaErrorHandling::consoleWindowError("Project Aela's PNG loader", (std::string) "There was a problem with" +
@@ -557,7 +558,7 @@ bool Aela::GLTextureLoader::loadPNGToBuffer(std::string src, png_bytep** rows, u
 }
 
 bool Aela::GLTextureLoader::loadPNGUsingFILE(std::string src, GLenum target) {
-	return loadPNGUsingFILE(src, target, NULL, NULL);
+	return loadPNGUsingFILE(std::move(src), target, nullptr, nullptr);
 }
 
 bool Aela::GLTextureLoader::loadPNGUsingFILE(std::string src, GLenum target, unsigned int* width, unsigned int* height) {
@@ -566,7 +567,7 @@ bool Aela::GLTextureLoader::loadPNGUsingFILE(std::string src, GLenum target, uns
 	unsigned int imageWidth = 0, imageHeight = 0;
 	unsigned int bytesPerPixel = 0;
 	
-	if (!loadPNGToBuffer(src, &rows, &imageWidth, &imageHeight, &bytesPerPixel)) {
+	if (!loadPNGToBuffer(std::move(src), &rows, &imageWidth, &imageHeight, &bytesPerPixel)) {
 		return false;
 	}
 

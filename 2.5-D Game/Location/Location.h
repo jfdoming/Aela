@@ -27,10 +27,10 @@ namespace Game {
 			void setWorld(size_t world);
 			void setChunk(glm::ivec2 chunk);
 			void setTile(glm::ivec3 tile);
-			size_t getWorld();
-			glm::ivec2 getChunk();
-			glm::ivec3 getTileGroup();
-			glm::vec3 getWorldSpaceLocation();
+			size_t getWorld() const;
+			glm::ivec2 getChunk() const;
+			glm::ivec3 getTileGroup() const;
+			glm::vec3 getWorldSpaceLocation() const;
 
 			inline friend std::ostream& operator<<(std::ostream &os, Location const& me) {
 				return (os << "World: " << me.world << ", Chunk: (" << me.chunk.x << ", " << me.chunk.y << "), Tile: (" << me.tile.x

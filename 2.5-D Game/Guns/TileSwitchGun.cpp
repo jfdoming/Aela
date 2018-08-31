@@ -1,21 +1,19 @@
 #include "TileSwitchGun.h"
 #include "../Player/Player.h"
 #include "../Character/Character.h"
-#include "../Location/Location.h"
 #include "../Worlds/WorldManager.h"
-#include "../Tiles/TileInventory.h"
 #include "../Particles/TileSwitchParticleEmitter.h"
 #include "../Displays/Tiles/TileInventoryDisplay.h"
-#include "../Tiles/TileBehaviourExecuter.h"
+#include "Tiles/TileBehaviourExecutor.h"
 #include "../Aela Game/AelaGame.h"
 
-Game::TileSwitchGun::TileSwitchGun() {}
+Game::TileSwitchGun::TileSwitchGun() = default;
 
 void Game::TileSwitchGun::setup() {
 	player = GameObjectProvider::getPlayer();
 	worldManager = GameObjectProvider::getWorldManager();
 	tileInventoryDisplay = GameObjectProvider::getTileInventoryDisplay();
-	tileBehaviourExecuter = GameObjectProvider::getTileBehaviourExecuter();
+	tileBehaviourExecutor = GameObjectProvider::getTileBehaviourExecuter();
 	tileAtlas = GameObjectProvider::getTileAtlas();
 	time = GameObjectProvider::getTime();
 	game = GameObjectProvider::getGame();
@@ -67,8 +65,8 @@ bool Game::TileSwitchGun::use(GameMode gameMode) {
 		Tile* switchedOutTile = tileInventory->switchCurrentTile(tileGroupPtr);
 
 		if (switchedOutTile != nullptr) {
-			GLTexture* texture = static_cast<GLTexture*>(switchedOutTile->getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
-			worldManager->tileWasPlaced(&location, switchedInTileType);
+			auto* texture = dynamic_cast<GLTexture*>(switchedOutTile->getEntity()->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
+			worldManager->tileWasPlaced(location, switchedInTileType);
 			addTileSwitchParticleEmitter(&location, texture);
 			tileInventoryDisplay->refreshSubMenu();
 		}
@@ -104,12 +102,13 @@ bool Game::TileSwitchGun::use(GameMode gameMode) {
 
 void Game::TileSwitchGun::addTileSwitchParticleEmitter(Location* location, GLTexture* texture) {
 	glm::vec3 worldSpacePosition = location->getWorldSpaceLocation();
-	TileSwitchParticleEmitter* particleEmitter = new TileSwitchParticleEmitter(time);
+	auto* particleEmitter = new TileSwitchParticleEmitter(time);
 	particleEmitter->setBaseDistance(worldSpacePosition.y + 10);
 	particleEmitter->setBaseSpeed(0.00000002f);
 	particleEmitter->setPathOffset(worldSpacePosition.y);
 	particleEmitter->setLifeTime(500000000);
-	particleEmitter->setupDimensions(&Rect<float>(worldSpacePosition.x, worldSpacePosition.z, 1, 1));
+	auto emitterDimensions = Rect<float>(worldSpacePosition.x, worldSpacePosition.z, 1, 1);
+	particleEmitter->setupDimensions(&emitterDimensions);
 
 	std::vector<GLTexture*> textures;
 	textures.push_back(texture);

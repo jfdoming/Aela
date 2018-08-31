@@ -74,5 +74,6 @@ void Aela::ImageComponent::setCropping(Rect<int>* cropping) {
 }
 
 void Aela::ImageComponent::setCropping(int x, int y, int width, int height) {
-	setCropping(&Rect<int>(x, y, width, height));
+	Rect<int> rect(x, y, width, height);
+	setCropping(&rect);
 }

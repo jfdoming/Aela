@@ -16,5 +16,7 @@ namespace Aela {
 			std::string errorMessage;
 
 			bool isValid(std::ifstream& in);
+			std::istream& getline(std::ifstream& in, std::string& line);
+			int fopen_s(FILE** f, const char* name, const char* mode);
 	};
 }

@@ -12,7 +12,7 @@
 */
 
 #pragma once
-#include "../Time.h"
+#include "Time/Clock.h"
 #include <unordered_map>
 #include <string>
 
@@ -45,6 +45,6 @@ namespace Aela {
 
 			std::unordered_map<std::string, Timeable> timeables;
 
-			Time time;
+			Clock time;
 	};
 }

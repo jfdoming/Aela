@@ -32,7 +32,7 @@ namespace Game {
 			void onEvent(Event* event);
 
 			// This should be run on a change of scenes. 
-			void switchScene(int sceneID);
+			void switchScene(unsigned int sceneID);
 
 			// These are called by scripts that run when title screen buttons are pressed.
 			void startNewGame();
@@ -63,13 +63,13 @@ namespace Game {
 			Scene* gameplayScene, *pauseScene;
 			EventHandler* eventHandler;
 			DialogueDisplay* dialogueDisplay;
-			Time* time;
+			Clock* time;
 			EnemyProvider* enemyProvider;
 			SceneManager* sceneManager;
 			Animator* animator;
 			Camera3D* camera;
 			CameraController* cameraController;
-			TileBehaviourExecuter* tileBehaviourExecuter;
+			TileBehaviourExecutor* tileBehaviourExecuter;
 			HintDisplay* hintDisplay;
 			GameSaver* gameSaver;
 
@@ -94,8 +94,8 @@ namespace Game {
 			long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 180000000;
 			const long long TIME_BETWEEN_TILE_SELECTS_ON_FIRST_PRESS = 300000000, TIME_BETWEEN_TILE_SELECTS_ON_HOLD = 100000000;
 
-			int currentScene = 0;
-			int sceneBeforePause = 0;
+			unsigned int currentScene = 0;
+			unsigned int sceneBeforePause = 0;
 
 			long long timeAtLastPlayerTurn = 0;
 			const long long TIME_BETWEEN_PLAYER_TURNS = 80000000;

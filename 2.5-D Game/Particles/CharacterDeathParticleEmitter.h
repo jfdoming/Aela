@@ -15,7 +15,7 @@
 namespace Game {
 	class CharacterDeathParticleEmitter : public ParticleEmitter {
 		public:
-			CharacterDeathParticleEmitter(Time* time);
+			CharacterDeathParticleEmitter(Clock* time);
 			virtual ~CharacterDeathParticleEmitter();
 
 			// These are the functions that are overwritten from the ParticleEmitter class.

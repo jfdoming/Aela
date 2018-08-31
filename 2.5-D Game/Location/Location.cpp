@@ -6,7 +6,6 @@
 */
 
 #include "Location.h"
-#include "../Chunks/Chunk.h"
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "../Worlds/WorldManager.h"
 
@@ -40,19 +39,19 @@ void Game::Location::setTile(glm::ivec3 tile) {
 	this->tile = tile;
 }
 
-size_t Game::Location::getWorld() {
+size_t Game::Location::getWorld() const {
 	return world;
 }
 
-glm::ivec2 Game::Location::getChunk() {
+glm::ivec2 Game::Location::getChunk() const {
 	return chunk;
 }
 
-glm::ivec3 Game::Location::getTileGroup() {
+glm::ivec3 Game::Location::getTileGroup() const {
 	return tile;
 }
 
-glm::vec3 Game::Location::getWorldSpaceLocation() {
+glm::vec3 Game::Location::getWorldSpaceLocation() const {
 	glm::ivec3 chunkRenderDistances = *GameObjectProvider::getWorldManager()->getChunkRenderDistances();
 	glm::vec2 chunkPositionOnMap;
 	chunkPositionOnMap.x = (float) ((-chunkRenderDistances.x) + chunk.x + 1) * CHUNK_WIDTH;

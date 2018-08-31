@@ -7,12 +7,11 @@
 
 #pragma once
 #include <glm/glm.hpp>
-#include <time.h>
+#include <Clock.h>
 #include "../Transformable/Transformable3D.h"
 #include "../../Events/EventListener.h"
 #include "../../Events/KeyEvent.h"
-#include "../../Events/EventConstants.h"
-#include "../../Time/Time.h"
+#include "Time/Clock.h"
 #include "../../Window/Window.h"
 
 using namespace Aela;
@@ -45,7 +44,7 @@ namespace Aela {
 			bool isUsingKeyboardControls();
 			void setForceCursorToMiddle(bool forceCursorToMiddle);
 			bool isForcingCursorToMiddle();
-			void setTime(Time* time);
+			void setTime(Clock* time);
 			void setWindow(Window* window);
 
 			// These functions allow the camera to rotate and look at a point that is on its plane.
@@ -59,8 +58,8 @@ namespace Aela {
 			glm::vec3 getPointInFrontOfCamera(float distanceFromCamera);
 
 		private:
-			Time* time;
-			Window* window;
+			Clock* time{};
+			Window* window{};
 
 			// These are the camera's matrices.
 			glm::mat4 viewMatrix, projectionMatrix;

@@ -1,7 +1,5 @@
 #include "EnemyProvider.h"
-#include "../Player/Player.h"
 #include "../Worlds/WorldManager.h"
-#include "../Character/CharacterProvider.h"
 
 using namespace Game;
 
@@ -37,14 +35,14 @@ void Game::EnemyProvider::returnWasPressed() {
 	glm::ivec3 tile = location.getTileGroup();
 
 	worldManager->getCoordinateOfNeighbouringTile(tile, chunk, direction);
-	Character* enemyCharacter = characterProvider->getCharacterByLocation(&Location(location.getWorld(), chunk, tile));
+	Character* enemyCharacter = characterProvider->getCharacterByLocation(Location(location.getWorld(), chunk, tile));
 
 	if (enemyCharacter == nullptr) {
 		return;
 	}
 
-	Enemy* enemy = dynamic_cast<Enemy*>(enemyCharacter);
-	if (enemy == NULL) {
+	auto* enemy = dynamic_cast<Enemy*>(enemyCharacter);
+	if (enemy == nullptr) {
 		return;
 	}
 

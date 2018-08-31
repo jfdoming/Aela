@@ -17,7 +17,7 @@ namespace Game {
 	class Tile {
 		public:
 			Tile();
-			Tile(size_t type);
+			explicit Tile(size_t type);
 			~Tile();
 
 			size_t getType();
@@ -26,7 +26,7 @@ namespace Game {
 			void setEntity(ModelEntity* entity);
 			Teleporter* getTeleporter();
 			
-			void createTeleporter(Location* locationToTeleportTo);
+			void createTeleporter(const Location& locationToTeleportTo);
 			void removeTeleporter();
 
 		private:

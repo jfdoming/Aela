@@ -10,9 +10,10 @@
 #include <alc.h>
 #include <string>
 #include <thread>
+#include <vector>
 #include "AudioListener.h"
 #include "AudioClip.h"
-#include "ctpl_stl.h"
+//#include "ctpl_stl.h"
 
 namespace Aela {
 	class AudioPlayer {

@@ -1,8 +1,12 @@
+#include <utility>
+
+#include <utility>
+
 #include "Timer.h"
 
 using namespace Aela;
 
-Timer::Timer(Time* time) {
+Timer::Timer(Clock* time) {
 	this->time = time;
 }
 
@@ -54,8 +58,8 @@ void Aela::Timer::scheduleEventInNanos(std::string tag, long long waitTime, std:
 	long long timeOfEvent = time->getCurrentTimeInNanos() + waitTime;
 	TimedEvent timedEvent;
 	timedEvent.time = timeOfEvent;
-	timedEvent.event = event;
-	timedEvent.tag = tag;
+	timedEvent.event = std::move(event);
+	timedEvent.tag = std::move(tag);
 	timedEvents.push_back(timedEvent);
 }
 
@@ -63,8 +67,8 @@ void Aela::Timer::scheduleEventInMicros(std::string tag, long long waitTime, std
 	long long timeOfEvent = time->getCurrentTimeInNanos() + waitTime * 1000;
 	TimedEvent timedEvent;
 	timedEvent.time = timeOfEvent;
-	timedEvent.event = event;
-	timedEvent.tag = tag;
+	timedEvent.event = std::move(event);
+	timedEvent.tag = std::move(tag);
 	timedEvents.push_back(timedEvent);
 }
 
@@ -72,8 +76,8 @@ void Aela::Timer::scheduleEventInMillis(std::string tag, long long waitTime, std
 	long long timeOfEvent = time->getCurrentTimeInNanos() + waitTime * 1000000;
 	TimedEvent timedEvent;
 	timedEvent.time = timeOfEvent;
-	timedEvent.event = event;
-	timedEvent.tag = tag;
+	timedEvent.event = std::move(event);
+	timedEvent.tag = std::move(tag);
 	timedEvents.push_back(timedEvent);
 }
 
@@ -81,8 +85,8 @@ void Aela::Timer::scheduleEventInSeconds(std::string tag, long long waitTime, st
 	long long timeOfEvent = time->getCurrentTimeInNanos() + waitTime * 1000000000;
 	TimedEvent timedEvent;
 	timedEvent.time = timeOfEvent;
-	timedEvent.event = event;
-	timedEvent.tag = tag;
+	timedEvent.event = std::move(event);
+	timedEvent.tag = std::move(tag);
 	timedEvents.push_back(timedEvent);
 }
 

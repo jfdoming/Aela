@@ -11,7 +11,7 @@
 // (which requires knowing what the resource root is). Keep in mind that a ResourceLoader does
 // not have access to the ResourceManager, so it must be able to know the resource root in some other
 // way.
-#define RESOURCE_ROOT "../../"
+#define RESOURCE_ROOT "../../../"
 #define TILED_MAP_LOCATION "res/tiled maps/"
 #define MAP_BEING_EDITED "res/tiled maps/interiors.txt"
 #define MAP_BEING_EDITED_WORLD_ID 0

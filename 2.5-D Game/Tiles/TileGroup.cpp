@@ -1,7 +1,5 @@
 #include "TileGroup.h"
-#include "../../Project Aela/Utilities/enumut.h"
 #include "../Game Object Provider/GameObjectProvider.h"
-#include "../Tiles/TileBehaviourExecuter.h"
 #include "../Worlds/WorldManager.h"
 
 using namespace Game;
@@ -15,7 +13,7 @@ void Game::TileGroup::addTile(Tile* tile) {
 	tiles[tile->getType()] = *tile;
 
 	// Maybe this should be done?
-	// GameObjectProvider::getTileBehaviourExecuter()->runBehaviour()
+	// GameObjectProvider::getTileBehaviourExecutor()->runBehaviour()
 
 	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 }
@@ -27,7 +25,7 @@ void Game::TileGroup::addTile(size_t type) {
 	tiles[type] = Tile(type);
 
 	// Maybe this should be done?
-	// GameObjectProvider::getTileBehaviourExecuter()->runBehaviour()
+	// GameObjectProvider::getTileBehaviourExecutor()->runBehaviour()
 
 	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 }
@@ -38,7 +36,8 @@ bool Game::TileGroup::removeTile(size_t type) {
 		tiles.erase(pos);
 
 		if (tiles.size() == 0) {
-			addTile(&Tile());
+			auto tile = Tile();
+			addTile(&tile);
 		}
 
 		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
@@ -49,7 +48,8 @@ bool Game::TileGroup::removeTile(size_t type) {
 
 void Game::TileGroup::clear() {
 	tiles.clear();
-	addTile(&Tile());
+	auto tile = Tile();
+	addTile(&tile);
 }
 
 TileMap* Game::TileGroup::getTiles() {

@@ -27,12 +27,12 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 
 		for (auto& pair : *map->getSkyboxes()) {
 			SkyboxEntity* entity = &pair.second;
-			if (entity->getSkybox() != nullptr && entity->getSkybox()->getSrc() != "") {
+			if (entity->getSkybox() != nullptr && !entity->getSkybox()->getSrc().empty()) {
 				file << "<Skybox src=\"";
-				std::string path = entity->getSkybox()->getSrc();
-				abbreviate(path, DEFAULT_SKYBOX_PATH);
+				std::string skyboxPath = entity->getSkybox()->getSrc();
+				abbreviate(skyboxPath, DEFAULT_SKYBOX_PATH);
 
-				file << path << "\">";
+				file << skyboxPath << "\">";
 				if (mapIsReadable) {
 					file << "\n";
 				}
@@ -41,12 +41,12 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 
 		for (auto& pair : *map->getModels()) {
 			ModelEntity* entity = &pair.second;
-			if (entity->getModel() != nullptr && entity->getModel()->getSrc() != "") {
+			if (entity->getModel() != nullptr && !entity->getModel()->getSrc().empty()) {
 				file << "<Model src=\"";
-				std::string path = entity->getModel()->getSrc();
-				abbreviate(path, DEFAULT_MODEL_PATH);
+				std::string modelPath = entity->getModel()->getSrc();
+				abbreviate(modelPath, DEFAULT_MODEL_PATH);
 
-				file << path << "\"";
+				file << modelPath << "\"";
 				file << getTransformableString(entity) << ">";
 				if (mapIsReadable) {
 					file << "\n";
@@ -66,12 +66,12 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 
 		for (auto& pair : *map->getBillboards()) {
 			BillboardEntity* entity = &pair.second;
-			if (entity->getTexture() != nullptr && entity->getTexture()->getSrc() != "") {
+			if (entity->getTexture() != nullptr && !entity->getTexture()->getSrc().empty()) {
 				file << "<Billboard src=\"";
-				std::string path = entity->getTexture()->getSrc();
-				abbreviate(path, DEFAULT_TEXTURE_PATH);
+				std::string texturePath = entity->getTexture()->getSrc();
+				abbreviate(texturePath, DEFAULT_TEXTURE_PATH);
 
-				file << path << "\"";
+				file << texturePath << "\"";
 				file << getBillboardString(entity);
 				file << getTransformableString(entity) << ">";
 				if (mapIsReadable) {
@@ -87,7 +87,7 @@ bool Aela::Map3DExporter::exportMap(std::string path, Map3D* map, bool mapIsRead
 }
 
 std::string Aela::Map3DExporter::getTransformableString(Transformable3D* transformable) {
-	std::string string = "";
+	std::string string;
 	if (*transformable->getPosition() != glm::vec3(0, 0, 0)) {
 		glm::vec3* vec3 = transformable->getPosition();
 		string += " position=\"" + toStringWithATrailingZero(vec3->x) + "," + toStringWithATrailingZero(vec3->y) + ","
@@ -107,7 +107,7 @@ std::string Aela::Map3DExporter::getTransformableString(Transformable3D* transfo
 }
 
 std::string Aela::Map3DExporter::getLightString(LightEntity* light) {
-	std::string string = "";
+	std::string string;
 	glm::vec3 colour = light->getColour()->getVec3();
 	if (colour != glm::vec3(1, 1, 1)) {
 		string += " colour=\"" + toStringWithATrailingZero(colour.x) + "," + toStringWithATrailingZero(colour.y) + ","
@@ -120,7 +120,7 @@ std::string Aela::Map3DExporter::getLightString(LightEntity* light) {
 }
 
 std::string Aela::Map3DExporter::getBillboardString(BillboardEntity* billboard) {
-	std::string string = "";
+	std::string string;
 	if (!billboard->usingSpecifiedRotation()) {
 		string += " useRotation=\"true\"";
 	}

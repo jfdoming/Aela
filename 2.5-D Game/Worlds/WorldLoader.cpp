@@ -5,7 +5,6 @@
 * Description: A class used to load Worlds.
 */
 
-#pragma once
 #include "WorldLoader.h"
 #include "../../Project Aela/Error Handler/ErrorHandling.h"
 #include "../Resources/ResourceInfo.h"
@@ -24,14 +23,14 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 		AelaErrorHandling::consoleWindowWarning("World Loader", "Loading: " + (std::string) RESOURCE_ROOT + path);
 
 		std::string line;
-		std::string currentTag = "";
+		std::string currentTag;
 		Chunk chunk;
 		glm::ivec2 chunkCoordinate;
 		std::stringstream dataWithinTag;
 		TileGroupMap tiles;
 		int height = 0;
 
-		while (std::getline(in, line)) {
+		while (getline(in, line)) {
 			while (line.length() > 0) {
 				char character = line.at(0);
 				size_t charactersToErase = 1;
@@ -67,8 +66,8 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 				} else if (character == '/' && line.at(1) == '/') {
 					// This is a comment. Stay calm and move to the next line.
 					break;
-				} else if (character != ' ' && character != '	' && currentTag != "") {
-					std::string propertyType = "";
+				} else if (character != ' ' && character != '	' && !currentTag.empty()) {
+					std::string propertyType;
 
 					size_t j = line.find('=');
 					if (j != std::string::npos) {
@@ -109,11 +108,7 @@ bool Game::WorldLoader::loadWorld(std::string path, World& world) {
 							world.setMap3D(map);
 						} else if (propertyType == "lights" && (currentTag == "Map3D" || currentTag == "map3D")) {
 							std::string value = line.substr(j + 1, k - j - 1);
-							if (value == "off") {
-								world.setUseLights(false);
-							} else {
-								world.setUseLights(true);
-							}
+							world.setUseLights(!(value == "off"));
 						}
 					} else if (currentTag == "Tiles" || currentTag == "tiles") {
 						dataWithinTag << line;
@@ -151,9 +146,12 @@ bool Game::WorldLoader::generateTileTypes(TileGroupMap& tiles, std::stringstream
 
 			value = values[z * CHUNK_WIDTH + x];
 			while ((pos = value.find('&')) != std::string::npos) {
-				tiles[glm::ivec3(CHUNK_WIDTH - x - 1, height, CHUNK_LENGTH - z - 1)].addTile(&Tile(std::stoi(value.substr(0, pos))));				value.erase(0, pos + 1);
+				auto tile = Tile(std::stoul(value.substr(0, pos)));
+				tiles[glm::ivec3(CHUNK_WIDTH - x - 1, height, CHUNK_LENGTH - z - 1)].addTile(&tile);
+				value.erase(0, pos + 1);
 			}
-			tiles[glm::ivec3(CHUNK_WIDTH - x - 1, height, CHUNK_LENGTH - z - 1)].addTile(&Tile(std::stoi(value)));
+			auto tile = Tile(std::stoul(value));
+			tiles[glm::ivec3(CHUNK_WIDTH - x - 1, height, CHUNK_LENGTH - z - 1)].addTile(&tile);
 		}
 	}
 	return true;

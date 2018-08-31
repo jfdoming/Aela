@@ -16,11 +16,11 @@ namespace Aela {
 
 			}
 
-			bool ColourRGBA::operator==(const ColourRGBA& other) {
+			bool operator==(const ColourRGBA& other) {
 				return r == other.r && b == other.b && g == other.g && a == other.a;
 			}
 			
-			bool ColourRGBA::operator!=(const ColourRGBA& other) {
+			bool operator!=(const ColourRGBA& other) {
 				return !(*this == other);
 			}
 

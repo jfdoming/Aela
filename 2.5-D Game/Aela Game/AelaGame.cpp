@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
 * Class: Aela Game
 * Author: Robert Ciborowski
@@ -22,7 +24,7 @@
 #include "../Particles/TileSwitchParticleEmitter.h"
 #include "../Utilities/GameConstants.h"
 #include "../Resources/ResourceInfo.h"
-#include "../Tiles/TileBehaviourExecuter.h"
+#include "Tiles/TileBehaviourExecutor.h"
 #include "../Worlds/WorldExporter.h"
 #include "../Scripts/Scripts to Move to LUA/ScriptObjects.h"
 #include "../Camera/CameraController.h"
@@ -43,12 +45,12 @@ Game::AelaGame::AelaGame() {
 	scriptManager = new ScriptManager();
 	dialogueDisplay = new DialogueDisplay();
 	tileInventoryDisplay = new TileInventoryDisplay();
-	TileAtlas* tileAtlas = new TileAtlas();
-	WorldExporter* worldExporter = new WorldExporter();
+	auto* tileAtlas = new TileAtlas();
+	auto* worldExporter = new WorldExporter();
 	cameraController = new CameraController();
-	tileBehaviourExecuter = new TileBehaviourExecuter();
+	tileBehaviourExecuter = new TileBehaviourExecutor();
 	hintDisplay = new HintDisplay();
-	DoorProvider* doorProvider = new DoorProvider();
+	auto* doorProvider = new DoorProvider();
 	gameSaver = new GameSaver();
 
 	GameObjectProvider::setWorldManager(worldManager);
@@ -115,6 +117,8 @@ void Game::AelaGame::loadAnimations() {
 }
 
 void Game::AelaGame::setup() {
+	resourceManager->setResourceRoot("../../../");
+
 	dialogueDisplay->setup();
 	enemyProvider->setup();
 	tileInventoryDisplay->setup();
@@ -249,11 +253,10 @@ void Game::AelaGame::update() {
 
 		if (pressedReturn) {
 			Location* playerLocation = playerCharacter->getLocation();
-			glm::ivec3 tile = playerLocation->getTileGroup();
+			glm::ivec3 playerTile = playerLocation->getTileGroup();
 			glm::ivec2 chunk = playerLocation->getChunk();
-			worldManager->getCoordinateOfNeighbouringTile(tile, chunk, playerCharacter->getDirectionFacing());
-			Location location(playerLocation->getWorld(), chunk, tile);
-			worldManager->runPromptedScriptOfTile(&location);
+			worldManager->getCoordinateOfNeighbouringTile(playerTile, chunk, playerCharacter->getDirectionFacing());
+			worldManager->runPromptedScriptOfTile(Location(playerLocation->getWorld(), chunk, playerTile));
 			enemyProvider->returnWasPressed();
 			pressingReturn = true;
 			pressedReturn = false;
@@ -278,7 +281,7 @@ void Game::AelaGame::onEvent(Event* event) {
 		// This processes events if the player is not in dialogue.
 		if (!dialogueDisplay->dialogueIsBeingShown()) {
 			if (event->getType() == EventConstants::KEY_PRESSED) {
-				KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+				auto* keyEvent = dynamic_cast<KeyEvent*>(event);
 				switch (keyEvent->getKeycode()) {
 					case SDLK_BACKSLASH:
 						if (!pressingTileSwitch) {
@@ -305,42 +308,48 @@ void Game::AelaGame::onEvent(Event* event) {
 							clearTilesAtPlayerLocation();
 						}
 						break;
+					default:
+						break;
 				}
 			}
 		}
 	} else if (currentScene == PAUSE_SCENE) {
 		if (event->getType() == EventConstants::KEY_PRESSED) {
-			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+			auto* keyEvent = dynamic_cast<KeyEvent*>(event);
 			switch (keyEvent->getKeycode()) {
-			case SDLK_ESCAPE:
-				if (!pressingPauseButton) {
-					sceneManager->setCurrentScene(sceneBeforePause);
-					switchScene(sceneBeforePause);
-					pressingPauseButton = true;
-					animator->unpause3DAnimations();
-				}
-				break;
+				case SDLK_ESCAPE:
+					if (!pressingPauseButton) {
+						sceneManager->setCurrentScene(sceneBeforePause);
+						switchScene(sceneBeforePause);
+						pressingPauseButton = true;
+						animator->unpause3DAnimations();
+					}
+					break;
+				default:
+					break;
 			}
 		}
 	} else if (currentScene == INVENTORY_SCENE) {
 		if (event->getType() == EventConstants::KEY_PRESSED) {
-			KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+			auto* keyEvent = dynamic_cast<KeyEvent*>(event);
 			switch (keyEvent->getKeycode()) {
-			case SDLK_i:
-				if (!pressingInventoryButton) {
-					sceneManager->setCurrentScene(WORLD_GAMEPLAY_SCENE);
-					switchScene(WORLD_GAMEPLAY_SCENE);
-					pressingInventoryButton = true;
-					// animator->unpause3DAnimations();
-				}
-				break;
+				case SDLK_i:
+					if (!pressingInventoryButton) {
+						sceneManager->setCurrentScene(WORLD_GAMEPLAY_SCENE);
+						switchScene(WORLD_GAMEPLAY_SCENE);
+						pressingInventoryButton = true;
+						// animator->unpause3DAnimations();
+					}
+					break;
+				default:
+					break;
 			}
 		}
 	}
 
 	// This occurs for any scene.
 	if (event->getType() == EventConstants::KEY_PRESSED) {
-		KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+		auto* keyEvent = dynamic_cast<KeyEvent*>(event);
 		if (!dialogueDisplay->dialogueIsBeingShown()) {
 			switch (keyEvent->getKeycode()) {
 				case SDLK_d:
@@ -425,6 +434,8 @@ void Game::AelaGame::onEvent(Event* event) {
 						animator->pause3DAnimations();
 					}
 					break;
+				default:
+					break;
 			}
 		}
 		switch (keyEvent->getKeycode()) {
@@ -434,11 +445,13 @@ void Game::AelaGame::onEvent(Event* event) {
 					changePlayerAnimationToRunning();
 				}
 				break;
+			default:
+				break;
 		}
 	}
 
 	if (event->getType() == EventConstants::KEY_RELEASED) {
-		KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+		auto* keyEvent = dynamic_cast<KeyEvent*>(event);
 		switch (keyEvent->getKeycode()) {
 			case SDLK_d:
 				if (movingRight) {
@@ -540,20 +553,20 @@ void Game::AelaGame::onEvent(Event* event) {
 					switchCameraMode(CameraMode::PLAYER_LOCKED);
 				}
 				break;
-			case SDLK_1:
+			case SDLK_1: {
 				// This is here for debugging!
 				Scripts::setupLevel(1, 2);
-				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-7, 0), glm::ivec3(14, 0, 1)),
-					TeleportationAnimation::RISE);
+				playerCharacter->teleportWithAnimation(Location(1, glm::ivec2(-7, 0), glm::ivec3(14, 0, 1)), TeleportationAnimation::RISE);
 				hintDisplay->clearAndDisplayHint("Cheat Activated: Rise Teleport", HintDisplayDuration::SHORT);
 				break;
-			case SDLK_2:
+			}
+			case SDLK_2: {
 				// This is here for debugging!
 				Scripts::setupLevel(1, 3);
-				playerCharacter->teleportWithAnimation(&Location(1, glm::ivec2(-15, 0), glm::ivec3(3, 0, 3)),
-					TeleportationAnimation::RISE);
+				playerCharacter->teleportWithAnimation(Location(1, glm::ivec2(-15, 0), glm::ivec3(3, 0, 3)), TeleportationAnimation::RISE);
 				hintDisplay->clearAndDisplayHint("Cheat Activated: Rise Teleport", HintDisplayDuration::SHORT);
 				break;
+			}
 			case SDLK_3:
 				// This is here for debugging!
 				player->kill();
@@ -577,19 +590,21 @@ void Game::AelaGame::onEvent(Event* event) {
 				// This is here for debugging!
 				// gameSaver->load("save_0");
 				break;
-			case SDLK_8:
+			case SDLK_8: {
 				// This is here for debugging!
 				Scripts::setupLevel(1, 2);
-				playerCharacter->teleportWithAnimation(&Location(1, -9, 3, 12, 0, 2),
-					TeleportationAnimation::FADE);
+				playerCharacter->teleportWithAnimation(Location(1, -9, 3, 12, 0, 2), TeleportationAnimation::FADE);
 				hintDisplay->clearAndDisplayHint("Cheat Activated: Fade Teleport", HintDisplayDuration::SHORT);
 				break;
+			}
 			case SDLK_9:
 				// This is here for debugging!
 				AudioClip* clip;
 				if (resourceManager->obtain<AudioClip>("res/audio/streams/Even the Tutorial Can Be Serious.wav", clip)) {
 					GameObjectProvider::getAudioPlayer()->playClip(clip);
 				}
+				break;
+			default:
 				break;
 		}
 	}
@@ -663,7 +678,7 @@ void Game::AelaGame::changePlayerAnimationToRunning() {
 
 	double originalTimeOfAnimation = 1000000.0f / playerCharacter->getWalkingSpeed();
 	double percentLeft = (originalTimeOfAnimation - playerTrack->getPositionInTrack()) / originalTimeOfAnimation;
-	long long newAnimationTime = (long long) ((1000000.0f / playerCharacter->getRunningSpeed()) * percentLeft
+	auto newAnimationTime = (long long) ((1000000.0f / playerCharacter->getRunningSpeed()) * percentLeft
 		+ playerTrack->getPositionInTrack());
 
 	std::vector<std::pair<long long, KeyFrame3D>>* playerFrames = playerTrack->getKeyFrames();
@@ -695,7 +710,7 @@ bool Game::AelaGame::useTileSwitchGun() {
 	return tileSwitchGun.use(gameMode);
 }
 
-void Game::AelaGame::switchScene(int sceneID) {
+void Game::AelaGame::switchScene(unsigned int sceneID) {
 	switch (sceneID) {
 		case MAIN_MENU_SCENE:
 			// Some cool camera shot for the main menu:
@@ -720,30 +735,38 @@ void Game::AelaGame::switchScene(int sceneID) {
 			pauseScene->setMap(gameplayScene->getMap());
 			engine->getWindow()->showCursor();
 			break;
+		default:
+			break;
 	}
 	currentScene = sceneID; 
 }
 
 void Game::AelaGame::startNewGame() {
 	gameMode = GameMode::GAMEPLAY;
+
 	sceneManager->setCurrentScene(WORLD_GAMEPLAY_SCENE);
 	switchScene(WORLD_GAMEPLAY_SCENE);
+
 	scriptManager->runScript("start_new_game");
 	tileInventoryDisplay->refreshSubMenu();
 }
 
 void Game::AelaGame::continueGame() {
 	gameMode = GameMode::GAMEPLAY;
+
 	sceneManager->setCurrentScene(WORLD_GAMEPLAY_SCENE);
 	switchScene(WORLD_GAMEPLAY_SCENE);
+
 	scriptManager->runScript("continue_game");
 	tileInventoryDisplay->refreshSubMenu();
 }
 
 void Game::AelaGame::editMap() {
 	gameMode = GameMode::MAP_EDITOR;
+
 	sceneManager->setCurrentScene(WORLD_GAMEPLAY_SCENE);
 	switchScene(WORLD_GAMEPLAY_SCENE);
+
 	player->setupTileInventoryForMapEditor();
 	scriptManager->runScript("edit_map");
 	tileInventoryDisplay->refreshSubMenu();
@@ -754,32 +777,36 @@ GameMode Game::AelaGame::getGameMode() {
 }
 
 void Game::AelaGame::setDeathMenuComponents(std::shared_ptr<RectComponent> deathRect, std::shared_ptr<Label> deathLabel) {
-	this->deathRect = deathRect;
-	this->deathLabel = deathLabel;
+	this->deathRect = std::move(deathRect);
+	this->deathLabel = std::move(deathLabel);
 }
 
 void Game::AelaGame::setFadeTeleportRect(std::shared_ptr<RectComponent> fadeTeleportRect) {
-	this->fadeTeleportRect = fadeTeleportRect;
+	this->fadeTeleportRect = std::move(fadeTeleportRect);
 }
 
 void Game::AelaGame::animatePlayerDeathScreen() {
-	deathRect->setTint(&ColourRGBA(0, 0, 0, 0));
+	ColourRGBA transparentBlack(0.0f);
+	ColourRGBA transparentWhite(0.0f);
+	ColourRGBA white(1, 1, 1, 1);
+
+	deathRect->setTint(&transparentBlack);
 	deathRect->show();
 
 	AnimationTrack2D track;
 	KeyFrame2D frame;
 	frame.setObject(deathRect);
-	frame.setTint(&ColourRGBA(1, 1, 1, 1));
+	frame.setTint(&white);
 	track.addKeyFrameUsingMillis(1000, &frame);
 	animator->addAnimationTrack2D(&track);
 
-	deathLabel->setTint(&ColourRGBA(0, 0, 0, 0));
+	deathLabel->setTint(&transparentBlack);
 	deathLabel->show();
 
 	AnimationTrack2D track2;
 	KeyFrame2D frame2;
 	frame2.setObject(deathLabel);
-	frame2.setTint(&ColourRGBA(1, 1, 1, 1));
+	frame2.setTint(&white);
 	track2.addKeyFrameUsingMillis(1000, &frame2);
 	animator->addAnimationTrack2D(&track2);
 }
@@ -790,30 +817,34 @@ void Game::AelaGame::hideDeathScreen() {
 }
 
 void Game::AelaGame::animateFadeTeleport() {
+	ColourRGBA transparentBlack(0.0f);
+	ColourRGBA transparentWhite(0.0f);
+	ColourRGBA white(1, 1, 1, 1);
+
 	fadeTeleportRect->show();
-	fadeTeleportRect->setTint(&ColourRGBA(0.0f));
+	fadeTeleportRect->setTint(&transparentBlack);
 
 	AnimationTrack2D rectTrack2D;
 	KeyFrame2D rectFrame;
 	rectFrame.setObject(fadeTeleportRect);
-	rectFrame.setTint(&ColourRGBA(1, 1, 1, 0));
+	rectFrame.setTint(&transparentWhite);
 	rectTrack2D.addKeyFrameUsingMillis(300, &rectFrame);
 
 	KeyFrame2D rectFrame2;
 	rectFrame2.setObject(fadeTeleportRect);
-	rectFrame2.setTint(&ColourRGBA(1, 1, 1, 1));
+	rectFrame2.setTint(&white);
 	rectTrack2D.addKeyFrameUsingMillis(300, &rectFrame2);
 	animator->addAnimationTrack2D(&rectTrack2D);
 
 	KeyFrame2D rectFrame3;
 	rectFrame3.setObject(fadeTeleportRect);
-	rectFrame3.setTint(&ColourRGBA(1, 1, 1, 1));
+	rectFrame3.setTint(&white);
 	rectTrack2D.addKeyFrameUsingMillis(500, &rectFrame3);
 	animator->addAnimationTrack2D(&rectTrack2D);
 
 	KeyFrame2D rectFrame4;
 	rectFrame4.setObject(fadeTeleportRect);
-	rectFrame4.setTint(&ColourRGBA(1, 1, 1, 0));
+	rectFrame4.setTint(&transparentWhite);
 	rectTrack2D.addKeyFrameUsingMillis(300, &rectFrame4);
 	animator->addAnimationTrack2D(&rectTrack2D);
 }

@@ -46,10 +46,10 @@ void Game::CharacterProvider::generateCharacterModelsForAllCharacters() {
 	CharacterModelGenerator generator;
 	generator.setCharacters(&characters);
 
-	std::string modelA = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_A.obj";
-	std::string modelB = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_B.obj";
-	std::string modelC = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_C.obj";
-	std::string modelD = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_D.obj";
+	std::string modelA = (std::string) DEFAULT_MODEL_PATH + "character_A.obj";
+	std::string modelB = (std::string) DEFAULT_MODEL_PATH + "character_B.obj";
+	std::string modelC = (std::string) DEFAULT_MODEL_PATH + "character_C.obj";
+	std::string modelD = (std::string) DEFAULT_MODEL_PATH + "character_D.obj";
 
 	resourceManager->bindLoader(&generator);
 	resourceManager->bindGroup("characters");
@@ -81,7 +81,7 @@ void Game::CharacterProvider::generateCharacterModelsForAllCharacters() {
 }
 
 bool Game::CharacterProvider::addCharacter(Character* character, size_t* id) {
-	if (getCharacterByName(character->getName()) != nullptr || getCharacterByLocation(character->getLocation()) != nullptr) {
+	if (getCharacterByName(character->getName()) != nullptr || getCharacterByLocation(*character->getLocation()) != nullptr) {
 		AelaErrorHandling::consoleWindowError("Character already exists by name (" + character->getName() + ") or at the location.");
 		return false;
 	}
@@ -149,16 +149,16 @@ Game::Character* Game::CharacterProvider::getCharacterByName(std::string name) {
 	return nullptr;
 }
 
-Game::Character* Game::CharacterProvider::getCharacterByLocation(Location* location) {
-	auto iter1 = charactersByLocation.find(location->getWorld());
+Game::Character* Game::CharacterProvider::getCharacterByLocation(const Location& location) {
+	auto iter1 = charactersByLocation.find(location.getWorld());
 	if (iter1 == charactersByLocation.end()) {
 		return nullptr;
 	}
-	auto iter2 = iter1->second.find(location->getChunk());
+	auto iter2 = iter1->second.find(location.getChunk());
 	if (iter2 == iter1->second.end()) {
 		return nullptr;
 	}
-	auto iter3 = iter2->second.find(location->getTileGroup());
+	auto iter3 = iter2->second.find(location.getTileGroup());
 	if (iter3 == iter2->second.end()) {
 		return nullptr;
 	}
@@ -179,7 +179,7 @@ std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFuncti
 }
 
 void Game::CharacterProvider::saveDataToSaveState(SaveState* saveState) {
-	std::unordered_map<size_t, CharacterInformationBlock>* characterInformation = new std::unordered_map<size_t, CharacterInformationBlock>();
+	auto* characterInformation = new std::unordered_map<size_t, CharacterInformationBlock>();
 	
 	for (auto& pair : characters) {
 		(*characterInformation)[pair.first] = pair.second->getCharacterInformationBlock();
@@ -209,10 +209,10 @@ void Game::CharacterProvider::generateCharacterModel(size_t character) {
 	generator.setCharacters(&map);
 	std::string groupName = "characters_" + std::to_string(character);
 
-	std::string modelA = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_A.obj";
-	std::string modelB = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_B.obj";
-	std::string modelC = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_C.obj";
-	std::string modelD = (std::string) RESOURCE_ROOT + DEFAULT_MODEL_PATH + "character_D.obj";
+	std::string modelA = (std::string) DEFAULT_MODEL_PATH + "character_A.obj";
+	std::string modelB = (std::string) DEFAULT_MODEL_PATH + "character_B.obj";
+	std::string modelC = (std::string) DEFAULT_MODEL_PATH + "character_C.obj";
+	std::string modelD = (std::string) DEFAULT_MODEL_PATH + "character_D.obj";
 
 	resourceManager->bindLoader(&generator);
 	resourceManager->bindGroup(groupName);

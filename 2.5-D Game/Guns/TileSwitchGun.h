@@ -26,9 +26,9 @@ namespace Game {
 			Player* player;
 			WorldManager* worldManager;
 			TileInventoryDisplay* tileInventoryDisplay;
-			TileBehaviourExecuter* tileBehaviourExecuter;
+			TileBehaviourExecutor* tileBehaviourExecutor;
 			TileAtlas* tileAtlas;
-			Time* time;
+			Clock* time;
 			AelaGame* game;
 
 			bool active = false;

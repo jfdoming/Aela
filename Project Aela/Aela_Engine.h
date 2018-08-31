@@ -7,10 +7,13 @@
 
 #pragma once
 
+// make sure SDL doesn't try to use WinMain
+#define SDL_MAIN_HANDLED
+
 // These are headers that are part of Project Aela.
 #include "Window/Window.h"
 #include "Error Handler/ErrorHandling.h"
-#include "Time/Time.h"
+#include "Time/Clock.h"
 #include "Time/Timer/Timer.h"
 #include "Scenes/SceneManager.h"
 #include "Resource Management/ResourceManager.h"
@@ -65,7 +68,7 @@ namespace Aela {
 			GLRenderer& getRendererReference();
 			GLRenderer* getRenderer();
 			EventHandler* getEventHandler();
-			Time* getTime();
+			Clock* getTime();
 			Timer* getTimer();
 			LuaManager* getLuaManager();
 			SceneManager* getSceneManager();
@@ -85,7 +88,7 @@ namespace Aela {
 			Window window;
 			GLRenderer renderer;
 			EventHandler eventHandler;
-			Time time;
+			Clock time;
 			Timer timer;
 			LuaManager luaManager;
 			SceneManager sceneManager;

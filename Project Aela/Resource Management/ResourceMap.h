@@ -1,3 +1,5 @@
+#include <utility>
+
 /*
 * Class: ResourceMap
 * Author: Julian Dominguez-Schatz
@@ -18,20 +20,29 @@ namespace Aela {
 			ResourceMap();
 			virtual ~ResourceMap();
 
-			void reserve(int count);
+			void reserve(unsigned int count);
 
 			bool contains(std::string key);
 
 			template <class T> bool get(std::string key, T*& result) {
-				result = (T*) get_impl(key);
+				result = (T*) get_impl(std::move(key));
 				return (result != nullptr);
 			}
 
 			void put(std::string key, Resource* value);
 
+			void setResourceRoot(std::string resourceRoot);
+			std::string getResourceRoot();
+
+			bool isResourceRootEnabled();
+			void useResourceRoot(bool resourceRootEnabled);
+
 		private:
 			std::unordered_map<std::string, Resource*> resources;
 
 			Resource* get_impl(std::string key);
+
+			std::string resourceRoot = "../../";
+			bool resourceRootEnabled = true;
 	};
 }

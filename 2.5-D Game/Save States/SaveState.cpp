@@ -4,7 +4,7 @@
 #include "../Worlds/WorldManager.h"
 #include "../Displays/Tiles/TileInventoryDisplay.h"
 
-Game::SaveState::SaveState() {}
+Game::SaveState::SaveState() = default;
 
 void Game::SaveState::save() {
 	for (auto& pair : data) {

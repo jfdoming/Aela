@@ -28,7 +28,7 @@ namespace Game {
 		private:
 			// These are obtained from GameObjectProvider.
 			Player* player;
-			Time* time;
+			Clock* time;
 			Scene* gameplayScene;
 			ResourceManager* resourceManager;
 

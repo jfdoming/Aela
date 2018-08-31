@@ -3,12 +3,14 @@
 * Author: Robert Ciborowski
 * Date: 30/07/2018
 * Description: A special type of lock that is only unlocked once a certain area
-*              contains a certain amout of tiles. Its name sounds silly but
+*              contains a certain amount of tiles. Its name sounds silly but
 *              idk what else to call it.
 */
 
 #pragma once
 #include "Lock.h"
+#include "Door.h"
+#include "Location.h"
 #include "../Tiles/TileGroup.h"
 #include "../../Project Aela/Utilities/Rect/Cuboid.h"
 #include <list>
@@ -18,9 +20,9 @@ namespace Game {
 	class TileAmountLock : public Lock {
 		public:
 			TileAmountLock();
-			~TileAmountLock();
+			virtual ~TileAmountLock();
 
-			void specifyRegionAsCuboid(Location* location, size_t width, size_t height, size_t depth);
+			void specifyRegionAsCuboid(const Location& location, size_t width, size_t height, size_t depth);
 			void specifyRegion(std::list<TileGroup*> region);
 			void addToRegion(TileGroup* addition);
 			void addToRegion(std::list<TileGroup*>* addition);

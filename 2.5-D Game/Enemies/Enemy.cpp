@@ -1,8 +1,10 @@
+#include <utility>
+
 #include "Enemy.h"
 
-Game::Enemy::Enemy() {}
+Game::Enemy::Enemy() = default;
 
-Game::Enemy::Enemy(std::string name, Location* location) : Character(name, location) {
+Game::Enemy::Enemy(std::string name, const Location& location) : Character(std::move(name), location) {
 	
 }
 
@@ -11,7 +13,8 @@ Game::Enemy::Enemy(int strength, long long attackCooldown) {
 	this->attackCooldown = attackCooldown;
 }
 
-Game::Enemy::Enemy(std::string name, Location* location, int strength, long long attackCooldown) : Character(name, location) {
+Game::Enemy::Enemy(std::string name, const Location& location, int strength, long long attackCooldown) : Character(
+		std::move(name), location) {
 	this->strength = strength;
 	this->attackCooldown = attackCooldown;
 }

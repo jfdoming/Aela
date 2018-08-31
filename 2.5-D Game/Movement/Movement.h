@@ -12,7 +12,7 @@
 namespace Game {
 	class Movement {
 		public:
-			Movement(TileDirection direction);
+			explicit Movement(TileDirection direction);
 			Movement(Location* destination, glm::vec3* worldSpaceTranslation, TileDirection direction, bool teleportation);
 			Movement(Location* destination, glm::vec3* worldSpaceTranslation, TileDirection direction, bool teleportation,
 				bool animated);

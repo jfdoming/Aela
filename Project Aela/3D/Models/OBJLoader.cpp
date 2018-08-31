@@ -15,15 +15,14 @@
 #include <glm/glm.hpp>
 
 #include "OBJLoader.h"
+#include "Resource Management/ResourcePaths.h"
 #include "../../Error Handler/ErrorHandling.h"
 
 using namespace Aela;
 
-OBJLoader::OBJLoader() {
-}
+OBJLoader::OBJLoader() = default;
 
-OBJLoader::~OBJLoader() {
-}
+OBJLoader::~OBJLoader() = default;
 
 bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 	// try to open the file
@@ -51,21 +50,27 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 	} else {
 		result->setSource(src);
 	}*/
-	std::string materialName = "";
+	std::string materialName;
 
 	// This actually reads the file.
 	std::string line;
 
-	while (std::getline(in, line)) {
+	while (getline(in, line)) {
 		// This reads the first word of the line.
 		if (line.find("o ") != std::string::npos) {
-			if (res->getSubModels()->size() != 0) {
+			if (!res->getSubModels()->empty()) {
 				setupSubModel(&res->getSubModels()->at(res->getSubModels()->size() - 1), &vertexIndices, &uvIndices, &normalIndices, &tempVertices, &tempUVs, &tempNormals);
 			}
 			SubModel subModel;
 			res->getSubModels()->push_back(subModel);
 		} else if (line.find("usemtl ") != std::string::npos) {
 			materialName = line.substr(7, line.size() - 7);
+
+			// use ~ for default path
+			if (materialName.at(0) == '~') {
+				materialName = materialName.substr(1);
+				materialName = DEFAULT_MATERIAL_PATH + materialName;
+			}
 			Material* material;
 			bool success = resources.get<Material>(materialName, material);
 			if (!success) {
@@ -77,32 +82,32 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 		} else if (line.find("v ") != std::string::npos) {
 			glm::vec3 vertex;
 			line.erase(0, 2);
-			sscanf_s(line.c_str(), "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+			sscanf(line.c_str(), "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
 			tempVertices.push_back(vertex);
 		} else if (line.find("vt ") != std::string::npos) {
 			glm::vec2 uv;
 			line.erase(0, 3);
-			sscanf_s(line.c_str(), "%f %f\n", &uv.x, &uv.y);
+			sscanf(line.c_str(), "%f %f\n", &uv.x, &uv.y);
 			// This wil invert the V coordinate since this uses a DDS texture, which are inverted. If you use BMPS then don't do this!
 			uv.y = -uv.y;
 			tempUVs.push_back(uv);
 		} else if (line.find("vn ") != std::string::npos) {
 			line.erase(0, 3);
 			glm::vec3 normal;
-			sscanf_s(line.c_str(), "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+			sscanf(line.c_str(), "%f %f %f\n", &normal.x, &normal.y, &normal.z);
 			tempNormals.push_back(normal);
 		} else if (line.find("f ") != std::string::npos) {
 			line.erase(0, 2);
 			std::string vertex1, vertex2, vertex3;
 			unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
 			int numberOfSlashes = 0;
-			for (unsigned int i = 0; i < line.length(); i++) {
-				if (line.at(i) == '/') {
+			for (char i : line) {
+				if (i == '/') {
 					numberOfSlashes++;
 				}
 			}
 			if (numberOfSlashes == 6) {
-				int combiner = sscanf_s(line.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+				int combiner = sscanf(line.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
 				if (combiner == 9) {
 					vertexIndices.push_back(vertexIndex[0]);
 					vertexIndices.push_back(vertexIndex[1]);
@@ -171,7 +176,7 @@ void Aela::OBJLoader::setupSubModel(SubModel* subModel, std::vector<unsigned int
 }
 
 bool Aela::OBJLoader::getSimilarVertex(OBJLoader::VertexPacket* data, std::map<VertexPacket, unsigned short>* vertexDataMap, unsigned short* result) {
-	std::map<VertexPacket, unsigned short>::iterator it = vertexDataMap->find(*data);
+	auto it = vertexDataMap->find(*data);
 	if (it == vertexDataMap->end()) {
 		return false;
 	} else {
@@ -198,7 +203,7 @@ void Aela::OBJLoader::indexVBO(std::vector<glm::vec3>* inputVertices, std::vecto
 			outputVertices->push_back(inputVertices->at(i));
 			outputUVs->push_back(inputUVs->at(i));
 			outputNormals->push_back(inputNormals->at(i));
-			unsigned short newindex = (unsigned short) outputVertices->size() - 1;
+			auto newindex = static_cast<unsigned short>(outputVertices->size() - 1);
 			outputIndices->push_back(newindex);
 			vertexDataMap[packed] = newindex;
 		}

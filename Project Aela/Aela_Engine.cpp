@@ -97,7 +97,7 @@ int Aela::Engine::setupWindow(unsigned int width, unsigned int height, unsigned 
 	window.addProperty(WindowFlag::AELA_WINDOW_OPENGL);
 	bool windowCreationSuccess = window.createWindow(width, height, windowXPosition, windowYPosition, "Project Aela");
 
-	if (windowCreationSuccess == false) {
+	if (!windowCreationSuccess) {
 		AelaErrorHandling::windowError("Project Aela Window", "The Aela Window failed to initialise!");
 		return -1;
 	} else {
@@ -139,6 +139,10 @@ int Aela::Engine::setupLUA() {
 	return 0;
 }
 
+#include <functional>
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "err_ovl_no_viable_oper"
 int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
 	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(Camera3D::onEvent, renderer.getCamera()));
@@ -148,6 +152,7 @@ int Aela::Engine::setupEventHandler() {
 	eventHandler.start();
 	return 0;
 }
+#pragma clang diagnostic pop
 
 int Engine::setupScenes() {
 	return sceneManager.init(eventHandler);
@@ -244,7 +249,7 @@ EventHandler* Engine::getEventHandler() {
 	return &eventHandler;
 }
 
-Time* Engine::getTime() {
+Clock* Engine::getTime() {
 	return &time;
 }
 

@@ -24,7 +24,7 @@ namespace Aela {
 
 		private:
 			glm::mat4 viewMatrix, projectionMatrix;
-			GLuint vertexBuffer = NULL, vertexArray = NULL;
+			GLuint vertexBuffer = 0, vertexArray = 0;
 
 			// These are the vertex values of the skybox. They never change.
 			const float vertexValues[108] = {

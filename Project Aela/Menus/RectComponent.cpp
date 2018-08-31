@@ -17,7 +17,8 @@ void RectComponent::updateComponent() {
 }
 
 void RectComponent::renderComponent(GLRenderer& renderer) {
-	renderer.renderRectangle(&dimensions, &ColourRGBA((colour.getVec4() * tint.getVec4())), positioningMode);
+	ColourRGBA colour(colour.getVec4() * tint.getVec4());
+	renderer.renderRectangle(&dimensions, &colour, positioningMode);
 }
 
 void RectComponent::setColour(ColourRGBA* colour) {

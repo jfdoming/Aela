@@ -15,7 +15,7 @@ void PlanarParticleEmitter::setupDimensions(Rect<GLfloat>* dimensions) {
 	this->dimensions = *dimensions;
 }
 
-Aela::PlanarParticleEmitter::PlanarParticleEmitter(Time* time) : ParticleEmitter(time) {
+Aela::PlanarParticleEmitter::PlanarParticleEmitter(Clock* time) : ParticleEmitter(time) {
 
 }
 

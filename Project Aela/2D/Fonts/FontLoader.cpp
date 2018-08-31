@@ -3,7 +3,7 @@
 
 FT_Library Aela::FontLoader::freetype = nullptr;
 
-Aela::FontLoader::FontLoader() {}
+Aela::FontLoader::FontLoader() = default;
 
 bool Aela::FontLoader::load(ResourceMap& resources, std::string src) {
 	if (freetype == nullptr) {

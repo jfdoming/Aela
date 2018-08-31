@@ -13,7 +13,7 @@
 
 using namespace Aela;
 
-Aela::ParticleEmitter::ParticleEmitter(Time* time) {
+Aela::ParticleEmitter::ParticleEmitter(Clock* time) {
 	this->time = time;
 	startTime = time->getCurrentTimeInNanos();
 }

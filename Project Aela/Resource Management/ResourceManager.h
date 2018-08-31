@@ -14,22 +14,22 @@
 #include "ResourceQuery.h"
 #include "ResourceGroup.h"
 #include "ResourceMap.h"
-#include "ResourceLoader.h"
 #include <unordered_map>
 #include <vector>
 
 namespace Aela {
+	class ResourceLoader;
+
 	class ResourceManager: public Exposable {
 		public:
 			enum class Status {
 				OK, FAILED, ABORT
 			};
 
-
-			ResourceManager(int resourceCount);
+			explicit ResourceManager(unsigned int resourceCount);
 			~ResourceManager();
 
-			void expose(LuaManager& mgr);
+			void expose(LuaManager& mgr) override;
 
 			void bindLoader(ResourceLoader* loader);
 			void bindGroup(std::string group);
@@ -60,11 +60,7 @@ namespace Aela {
 			Status load(ResourceQuery& query);
 
 			template <class T> bool obtain(std::string src, T*& result) {
-				if (resourceRootEnabled) {
-					return resources.get(resourceRoot + src, result);
-				} else {
-					return resources.get(src, result);
-				}
+				return resources.get(src, result);
 			}
 
 			/*
@@ -84,9 +80,6 @@ namespace Aela {
 		private:
 			std::unordered_map<std::string, ResourceGroup> groups;
 			ResourceMap resources;
-
-			std::string resourceRoot = "../../";
-			bool resourceRootEnabled = true;
 
 			std::vector<std::string> invalidResourceKeys;
 			std::string crucialInvalidResourceKey = "";

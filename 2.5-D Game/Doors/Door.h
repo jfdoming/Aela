@@ -16,7 +16,7 @@ namespace Game {
 	class Door {
 		public:
 			Door();
-			Door(int lockAmount);
+			explicit Door(int lockAmount);
 			Door(std::initializer_list<bool> locked);
 
 			void cleanup();

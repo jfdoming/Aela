@@ -14,6 +14,7 @@
 #include "CharacterModelGenerator.h"
 #include "../Movement/Movement.h"
 #include "CharacterInformationBlock.h"
+#include <list>
 #include <queue>
 
 using namespace Aela;
@@ -24,9 +25,9 @@ namespace Game {
 		friend class CharacterProvider;
 		public:
 			Character();
-			Character(std::string name);
-			Character(std::string name, Location* location);
-			Character(std::string name, Location* location, float walkingSpeed, float runningSpeed);
+			explicit Character(std::string name);
+			Character(std::string name, const Location& location);
+			Character(std::string name, const Location& location, float walkingSpeed, float runningSpeed);
 
 			// These are movement-related functions. Functions with the word "immediately" complete
 			// the movement on the spot, wherever the player currently is. Other functions add the
@@ -39,9 +40,9 @@ namespace Game {
 			void moveWithoutCollisionCheck(Movement* movement);
 			void clearFutureMovements();
 			void clearAllMovements();
-			void teleportImmediately(Location* location);
-			void teleportWithoutAnimation(Location* location);
-			void teleportWithAnimation(Location* location, TeleportationAnimation animation);
+			void teleportImmediately(const Location& location);
+			void teleportWithoutAnimation(const Location& location);
+			void teleportWithAnimation(const Location& location, TeleportationAnimation animation);
 
 			void kill();
 			void revive();

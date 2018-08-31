@@ -1,3 +1,7 @@
+#include <utility>
+
+#include <utility>
+
 /*
 * Class: Turret
 * Author: Robert Ciborowski
@@ -15,18 +19,19 @@ Game::Turret::Turret() {
 	setDetectionAngles(true, true, true, true);
 }
 
-Game::Turret::Turret(std::string name, Location* location, int detectionRange) : Enemy(name, location) {
+Game::Turret::Turret(std::string name, const Location& location, unsigned int detectionRange) : Enemy(std::move(name), location) {
 	setDetectionAngles(true, true, true, true);
 	this->detectionRange = detectionRange;
 }
 
-Game::Turret::Turret(std::string name, Location* location, int detectionRange, int strength, long long attackCooldown) : Turret(name, location, detectionRange) {
+Game::Turret::Turret(std::string name, const Location& location, unsigned int detectionRange, int strength, long long attackCooldown) : Turret(
+		std::move(name), location, detectionRange) {
 	this->strength = strength;
 	this->attackCooldown = attackCooldown;
 }
 
-Game::Turret::Turret(std::string name, Location* location, int detectionRange, bool detectRight, bool detectForward, bool detectLeft, bool detectBackward, int strength,
-	long long attackCooldown) : Turret(name, location, detectionRange, strength, attackCooldown) {
+Game::Turret::Turret(std::string name, const Location& location, unsigned int detectionRange, bool detectRight, bool detectForward, bool detectLeft, bool detectBackward, int strength,
+	long long attackCooldown) : Turret(std::move(name), location, detectionRange, strength, attackCooldown) {
 	setDetectionAngles(detectRight, detectForward, detectLeft, detectBackward);
 }
 
@@ -92,7 +97,7 @@ void Game::Turret::update() {
 		
 }
 
-void Game::Turret::addBulletEffects(Scene* gameplayScene, ResourceManager* resourceManager, Time* time) {
+void Game::Turret::addBulletEffects(Scene* gameplayScene, ResourceManager* resourceManager, Clock* time) {
 	std::vector<GLTexture*> textures;
 	GLTexture* texture;
 	if (!resourceManager->obtain<GLTexture>((std::string) "res/particles/laser.dds", texture)) {
@@ -105,7 +110,7 @@ void Game::Turret::addBulletEffects(Scene* gameplayScene, ResourceManager* resou
 		if (!direction.second) {
 			continue;
 		}
-		LaserParticleEmitter* particleEmitter = new LaserParticleEmitter(time);
+		auto* particleEmitter = new LaserParticleEmitter(time);
 		particleEmitter->setBaseDistance(10);
 		particleEmitter->setBaseSpeed(0.00000002f);
 		particleEmitter->setPathOffset(0);

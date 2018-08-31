@@ -4,7 +4,7 @@
 
 using namespace Game;
 
-Game::CharacterDeathParticleEmitter::CharacterDeathParticleEmitter(Time* time) : ParticleEmitter(time) {
+Game::CharacterDeathParticleEmitter::CharacterDeathParticleEmitter(Clock* time) : ParticleEmitter(time) {
 }
 
 Game::CharacterDeathParticleEmitter::~CharacterDeathParticleEmitter() {

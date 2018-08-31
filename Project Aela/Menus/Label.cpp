@@ -29,18 +29,20 @@ void Label::updateComponent() {
 
 void Label::renderComponent(GLRenderer& renderer) {
 	if (font != nullptr) {
-		renderer.renderText(text, font, size, &dimensions, &ColourRGBA(colour.getVec4() * tint.getVec4()), positioningMode);
+		ColourRGBA textColour(colour.getVec4() * tint.getVec4());
+		renderer.renderText(text, font, size, &dimensions, &textColour, positioningMode);
 	}
 }
 
 void Label::renderWithDifferentTint(GLRenderer& renderer, ColourRGBA* tint) {
 	if (font != nullptr) {
-		renderer.renderText(text, font, size, &dimensions, &ColourRGBA(colour.getVec4() * tint->getVec4()), positioningMode);
+		ColourRGBA textColour(colour.getVec4() * tint->getVec4());
+		renderer.renderText(text, font, size, &dimensions, &textColour, positioningMode);
 	}
 }
 
 void Label::setText(std::string text) {
-	this->text = text;
+	this->text = std::move(text);
 	setup();
 	markDirty();
 }

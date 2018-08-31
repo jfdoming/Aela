@@ -31,10 +31,10 @@ namespace Game {
 			World* getWorld(size_t id);
 			size_t getNumberOfWorlds();
 			Map3D* getMap3D();
-			Teleporter* getTeleporter(Location* location);
-			Teleporter* getTeleporter(Location* location, size_t tileType);
-			Chunk* getChunk(Location* location);
-			TileGroup* getTileGroup(Location* location);
+			Teleporter* getTeleporter(const Location& location);
+			Teleporter* getTeleporter(const Location& location, size_t tileType);
+			Chunk* getChunk(const Location& location);
+			TileGroup* getTileGroup(const Location& location);
 			glm::ivec3* getChunkRenderDistances();
 			float getCharacterYOffsetInWorldspace();
 
@@ -43,36 +43,36 @@ namespace Game {
 			void createChunkInCurrentWorld(glm::ivec2 coordinate);
 			void createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, unsigned int layer);
 
-			void addWalkedOnScript(std::string script, Location* location);
-			void addPromptedScript(std::string script, Location* location);
-			void addTileSwitchScript(std::string script, Location* location);
+			void addWalkedOnScript(std::string script, const Location& location);
+			void addPromptedScript(std::string script, const Location& location);
+			void addTileSwitchScript(std::string script, const Location& location);
 
-			void removeWalkedOnScript(Location* location);
-			void removePromptedScript(Location* location);
-			void removeTileSwitchScript(Location* location);
+			void removeWalkedOnScript(const Location& location);
+			void removePromptedScript(const Location& location);
+			void removeTileSwitchScript(const Location& location);
 
-			bool addTeleporterToFloorTile(Location* teleporterLocation, Location* teleporterDestination);
-			bool addTeleporterToSwitchableFloorTile(Location* teleporterLocation, Location* teleporterDestination);
-			bool addTeleporterToTile(Location* teleporterLocation, Location* teleporterDestination, size_t tileType);
+			bool addTeleporterToFloorTile(const Location& teleporterLocation, const Location& teleporterDestination);
+			bool addTeleporterToSwitchableFloorTile(const Location& teleporterLocation, const Location& teleporterDestination);
+			bool addTeleporterToTile(const Location& teleporterLocation, const Location& teleporterDestination, size_t tileType);
 
-			void runPromptedScriptOfTile(Location* location);
-			void runTileSwitchScriptOfTileGroup(Location* location);
+			void runPromptedScriptOfTile(const Location& location);
+			void runTileSwitchScriptOfTileGroup(const Location& location);
 
 			bool exportCurrentWorld();
 			bool exportCurrentWorld(std::string path);
 			bool autoExportCurrentWorld();
 
-			void tileWasPlaced(Location* location, size_t tileType);
+			void tileWasPlaced(const Location& location, size_t tileType);
 
-			void saveDataToSaveState(SaveState* saveState);
-			void loadDataFromSaveState(SaveState* saveState);
+			void saveDataToSaveState(SaveState* saveState) override;
+			void loadDataFromSaveState(SaveState* saveState) override;
 
 		private:
 			// These are obtained from GameObjectProvider.
 			ResourceManager* resourceManager;
 			AnimationLooper* animationLooper;
 			CharacterProvider* characterProvider;
-			TileBehaviourExecuter* tileBehaviourExecuter;
+			TileBehaviourExecutor* tileBehaviourExecutor;
 			ScriptManager* scriptManager;
 			TileAtlas* tileAtlas;
 			Character* playerCharacter;

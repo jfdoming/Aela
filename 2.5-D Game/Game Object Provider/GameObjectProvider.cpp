@@ -1,21 +1,16 @@
 #include "GameObjectProvider.h"
 #include "../Aela Game/AelaGame.h"
 #include "../Worlds/WorldManager.h"
-#include "../Character/CharacterProvider.h"
 #include "../Enemies/EnemyProvider.h"
 #include "../Scripts/ScriptManager.h"
-#include "../Player/Player.h"
 #include "../Displays/Dialogue/DialogueDisplay.h"
 #include "../Displays/Tiles/TileInventoryDisplay.h"
-#include "../Tiles/TileAtlas.h"
 #include "../Worlds/WorldExporter.h"
 #include "../Camera/CameraController.h"
-#include "../Tiles/TileBehaviourExecuter.h"
-#include "../../Project Aela/Events/EventListener.h"
+#include "Tiles/TileBehaviourExecutor.h"
 #include "../Displays/Hints/HintDisplay.h"
 #include "../Doors/DoorProvider.h"
 #include "../Save States/GameSaver.h"
-#include "../../Project Aela/Aela_Engine.h"
 
 using namespace Game;
 
@@ -33,7 +28,7 @@ Scene* GameObjectProvider::gameplayScene = nullptr;
 Scene* GameObjectProvider::pauseScene = nullptr;
 WorldExporter* GameObjectProvider::worldExporter = nullptr;
 CameraController* GameObjectProvider::cameraController = nullptr;
-TileBehaviourExecuter* GameObjectProvider::tileBehaviourExecuter = nullptr;
+TileBehaviourExecutor* GameObjectProvider::tileBehaviourExecuter = nullptr;
 HintDisplay* GameObjectProvider::hintDisplay = nullptr;
 DoorProvider* GameObjectProvider::doorProvider = nullptr;
 GameSaver* GameObjectProvider::gameSaver = nullptr;
@@ -61,7 +56,7 @@ EventHandler* GameObjectProvider::getEventHandler() {
 	return engine->getEventHandler();
 }
 
-Time* GameObjectProvider::getTime() {
+Clock* GameObjectProvider::getTime() {
 	return engine->getTime();
 }
 
@@ -149,7 +144,7 @@ CameraController* Game::GameObjectProvider::getCameraController() {
 	return cameraController;
 }
 
-TileBehaviourExecuter* Game::GameObjectProvider::getTileBehaviourExecuter() {
+TileBehaviourExecutor* Game::GameObjectProvider::getTileBehaviourExecuter() {
 	return tileBehaviourExecuter;
 }
 
@@ -216,7 +211,7 @@ void Game::GameObjectProvider::setCameraController(CameraController* setCameraCo
 	cameraController = setCameraController;
 }
 
-void Game::GameObjectProvider::setTileBehaviourExecuter(TileBehaviourExecuter* setTileBehaviourExecuter) {
+void Game::GameObjectProvider::setTileBehaviourExecuter(TileBehaviourExecutor* setTileBehaviourExecuter) {
 	tileBehaviourExecuter = setTileBehaviourExecuter;
 }
 

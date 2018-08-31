@@ -24,7 +24,7 @@ namespace Scripts {
 	extern Scene* gameplayScene, *pauseScene;
 	extern EventHandler* eventHandler;
 	extern DialogueDisplay* dialogueDisplay;
-	extern Time* time;
+	extern Clock* time;
 	extern Timer* timer;
 	extern EnemyProvider* enemyProvider;
 	extern SceneManager* sceneManager;
@@ -33,7 +33,7 @@ namespace Scripts {
 	extern TileAtlas* tileAtlas;
 	extern WorldExporter* worldExporter;
 	extern CameraController* cameraController;
-	extern TileBehaviourExecuter* tileBehaviourExecuter;
+	extern TileBehaviourExecutor* tileBehaviourExecuter;
 	extern HintDisplay* hintDisplay;
 	extern DoorProvider* doorProvider;
 	extern GameSaver* gameSaver;

@@ -96,6 +96,7 @@ void Basic3DGLShadowRenderer::startRenderingShadows(GLuint depthProgramID) {
 
 	glUseProgram(depthProgramID);
 
+	// This sets up necessary buffers.
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &elementBuffer);
 

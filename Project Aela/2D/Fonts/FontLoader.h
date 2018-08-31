@@ -15,7 +15,7 @@ namespace Aela {
 		public:
 			FontLoader();
 
-			bool load(ResourceMap& resources, std::string src);
+			bool load(ResourceMap& resources, std::string src) override;
 
 		private:
 			// This is the FreeType Library object.

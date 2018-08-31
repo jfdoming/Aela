@@ -11,7 +11,7 @@
 namespace Game {
 	class Item {
 		public:
-			Item() {}
+			Item() = default;
 
 			void setType(size_t type);
 			void setName(std::string name);

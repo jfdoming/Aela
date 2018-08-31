@@ -25,11 +25,11 @@ void Basic3DGLRenderer::setup(unsigned int multisampling) {
 
 // This creates and compiles the shaders.
 void Basic3DGLRenderer::setupShaders() {
-	depthProgramID = loadShaders("../../res/shaders/3D/Depth.vert", "../../res/shaders/3D/Depth.geom", "../../res/shaders/3D/Depth.frag");
-	modelProgramID = loadShaders("../../res/shaders/3D/Model.vert", "../../res/shaders/3D/Model.frag");
-	lightlessModelProgramID = loadShaders("../../res/shaders/3D/Model.vert", "../../res/shaders/3D/Model_Without_Lights.frag");
-	billboardProgramID = loadShaders("../../res/shaders/3D/Billboards.vert", "../../res/shaders/3D/Billboards.frag");
-	skyboxProgramID = loadShaders("../../res/shaders/3D/Skybox.vert", "../../res/shaders/3D/Skybox.frag");
+	depthProgramID = loadShaders("../../../res/shaders/3D/Depth.vert", "../../../res/shaders/3D/Depth.geom", "../../../res/shaders/3D/Depth.frag");
+	modelProgramID = loadShaders("../../../res/shaders/3D/Model.vert", "../../../res/shaders/3D/Model.frag");
+	lightlessModelProgramID = loadShaders("../../../res/shaders/3D/Model.vert", "../../../res/shaders/3D/Model_Without_Lights.frag");
+	billboardProgramID = loadShaders("../../../res/shaders/3D/Billboards.vert", "../../../res/shaders/3D/Billboards.frag");
+	skyboxProgramID = loadShaders("../../../res/shaders/3D/Skybox.vert", "../../../res/shaders/3D/Skybox.frag");
 }
 
 // This gets handles to GLSL uniforms.

@@ -12,7 +12,7 @@
 namespace Game {
 	class ItemAtlas {
 		public:
-			ItemAtlas() {}
+			ItemAtlas();
 
 			size_t addItemType(ItemType* type);
 			ItemType* getItemType(size_t id);

@@ -9,12 +9,9 @@
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "../Aela Game/AelaGame.h"
 
-#include <ft2build.h>
-#include <freetype/freetype.h>
-
 using namespace Game;
 
-int main(int argc, char *args[]) {
+int main(int argc, char* argv[]) {
 	Aela::Engine engine;
 
 	int error = engine.setupWindow(1024, 768, 50, 50);
@@ -81,13 +78,13 @@ int main(int argc, char *args[]) {
 
 	GameObjectProvider::setEngine(&engine);
 
-	AelaGame* game = new AelaGame();
+	auto* game = new AelaGame();
 
 	game->setup();
 
 	// This is temporary and is here for framerate.
 	FramerateCalculator calc;
-	int lastRemainder = engine.getTime()->getCurrentTimeInMillis() % 1000;
+	long long int lastRemainder = engine.getTime()->getCurrentTimeInMillis() % 1000;
 
 	do {
 		engine.update();

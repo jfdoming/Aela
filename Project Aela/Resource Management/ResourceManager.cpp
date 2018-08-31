@@ -1,15 +1,18 @@
+#include <utility>
+
+#include <utility>
+
 #include "ResourceManager.h"
 #include "../Error Handler/ErrorHandling.h"
 #include <ios>
 
 using namespace Aela;
 
-ResourceManager::ResourceManager(int resourceCount) {
+ResourceManager::ResourceManager(unsigned int resourceCount) {
 	resources.reserve(resourceCount);
 }
 
-ResourceManager::~ResourceManager() {
-}
+ResourceManager::~ResourceManager() = default;
 
 // don't call me yet!!!
 void ResourceManager::expose(LuaManager& mgr) {
@@ -93,23 +96,16 @@ ResourceManager::Status ResourceManager::unloadGroup(std::string name) {
 }
 
 void ResourceManager::setResourceRoot(std::string resourceRoot) {
-	this->resourceRoot = resourceRoot;
+	resources.setResourceRoot(std::move(resourceRoot));
 }
 
 std::string Aela::ResourceManager::getResourceRoot() {
-	// This is actually necessary. If a program wants to load a file without using the ResourceManager
-	// (such as if the file isn't meant to be an actual resource), they can have access to the root.
-	return resourceRoot;
+	return resources.getResourceRoot();
 }
 
 void ResourceManager::addToGroup(std::string src, bool crucial) {
-	if (resourceRootEnabled) {
-		ResourceQuery query(resourceRoot + src, crucial, boundLoader);
-		addToGroup(query);
-	} else {
-		ResourceQuery query(src, crucial, boundLoader);
-		addToGroup(query);
-	}
+	ResourceQuery query(src, crucial, boundLoader);
+	addToGroup(query);
 }
 
 void ResourceManager::addToGroup(ResourceQuery& query) {
@@ -117,20 +113,18 @@ void ResourceManager::addToGroup(ResourceQuery& query) {
 }
 
 ResourceManager::Status ResourceManager::load(std::string src, bool crucial, ResourceLoader& loader) {
-	if (resourceRootEnabled) {
-		ResourceQuery query(resourceRoot + src, crucial, &loader);
-		return load(query);
-	} else {
-		ResourceQuery query(src, crucial, &loader);
-		return load(query);
-	}
+	ResourceQuery query(src, crucial, &loader);
+	return load(query);
 }
 
 ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 	bool crucial = query.isCrucial();
 	std::string src = query.getSrc();
+	if (resources.isResourceRootEnabled()) {
+		src = resources.getResourceRoot() + src;
+	}
 	bool success = boundLoader->load(resources, src);
-	
+
 	if (!success) {
 		// cannot load the resource
 		if (crucial) {
@@ -148,15 +142,13 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 void ResourceManager::unload(std::string src) {
 	Resource* res;
 
-	if (resourceRootEnabled && resources.get(resourceRoot + src, res) && res != nullptr) {
-		delete res;
-	} else if (resources.get(src, res) && res != nullptr) {
+	if (resources.get(std::move(src), res) && res != nullptr) {
 		delete res;
 	}
 }
 
 void Aela::ResourceManager::useResourceRoot(bool resourceRootEnabled) {
-	this->resourceRootEnabled = resourceRootEnabled;
+	resources.useResourceRoot(resourceRootEnabled);
 }
 
 std::string Aela::ResourceManager::getNewCrucialInvalidResourceKey() {

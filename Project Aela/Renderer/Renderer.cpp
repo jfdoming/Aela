@@ -5,6 +5,7 @@
 * Description: A class used for representing a renderer, generically.
 */
 
+#include "Events/EventConstants.h"
 #include "Renderer.h"
 #include "../Events/WindowResizeEvent.h"
 
@@ -20,7 +21,7 @@ Aela::Renderer::Renderer(Window* window) : Renderer() {
 
 void Aela::Renderer::onEvent(Event* event) {
 	if (event->getType() == EventConstants::WINDOW_RESIZE) {
-		WindowResizeEvent* resizedEvent = static_cast<WindowResizeEvent*>(event);
+		auto resizedEvent = dynamic_cast<WindowResizeEvent*>(event);
 		if (resizedEvent->getWindow() == window) {
 			// Set this internal flag to true so that the resolution change can be handled later.
 			resolutionWasChangedFlag = true;
@@ -33,7 +34,7 @@ void Renderer::setWindow(Window* window) {
 	camera.setWindow(window);
 }
 
-void Renderer::setTime(Time* time) {
+void Renderer::setTime(Clock* time) {
 	this->time = time;
 	camera.setTime(time);
 }
@@ -70,7 +71,7 @@ Window* Renderer::getWindow() {
 	return window;
 }
 
-Time* Renderer::getTime() {
+Clock* Renderer::getTime() {
 	return time;
 }
 

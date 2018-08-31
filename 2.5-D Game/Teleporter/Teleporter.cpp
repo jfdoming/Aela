@@ -2,11 +2,10 @@
 
 using namespace Game;
 
-Game::Teleporter::Teleporter() {
-}
+Game::Teleporter::Teleporter() = default;
 
-Game::Teleporter::Teleporter(Location* destination) {
-	this->destination = *destination;
+Game::Teleporter::Teleporter(const Location& destination) {
+	this->destination = destination;
 }
 
 Location* Game::Teleporter::getDestination() {

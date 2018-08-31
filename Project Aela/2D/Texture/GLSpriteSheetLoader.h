@@ -14,11 +14,11 @@ namespace Aela {
 	class GLSpriteSheetLoader : public GLTextureLoader {
 		public:
 			GLSpriteSheetLoader();
-			~GLSpriteSheetLoader();
+			~GLSpriteSheetLoader() override;
 
-			virtual void expose(LuaManager& mgr);
+			void expose(LuaManager& mgr) override;
 
-			virtual bool load(ResourceMap& resources, std::string src);
+			bool load(ResourceMap& resources, std::string src) override;
 
 			void setSpriteWidth(unsigned int spriteWidth);
 			void setSpriteHeight(unsigned int spriteHeight);

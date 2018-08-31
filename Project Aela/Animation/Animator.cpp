@@ -307,7 +307,7 @@ void Animator::update() {
 	}
 }
 
-void Animator::setTime(Time* time) {
+void Animator::setTime(Clock* time) {
 	this->time = time;
 }
 

@@ -26,7 +26,7 @@ void Scripts::loadTiledMaps() {
 
 	WorldLoader worldLoader;
 
-	for (std::string worldName : worldNames) {
+	for (auto& worldName : worldNames) {
 		World world;
 		worldLoader.loadWorld("res/tiled maps/" + worldName + ".txt", world);
 		worldManager->addWorld(&world);

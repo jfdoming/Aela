@@ -1,11 +1,10 @@
 #include "BulletParticleEmitter.h"
 #include "../Utilities/MathConstants.h"
 
-Game::BulletParticleEmitter::BulletParticleEmitter(Time* time) : ParticleEmitter(time) {
+Game::BulletParticleEmitter::BulletParticleEmitter(Clock* time) : ParticleEmitter(time) {
 }
 
-Game::BulletParticleEmitter::~BulletParticleEmitter() {
-}
+Game::BulletParticleEmitter::~BulletParticleEmitter() = default;
 
 void Game::BulletParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight, unsigned int amount) {
 	ParticleEmitter::setupParticles(textures, particleWidth, particleHeight, amount);
@@ -31,6 +30,10 @@ void Game::BulletParticleEmitter::update() {
 				case TileDirection::BACKWARD:
 					particle->translate(0, 0, -translation);
 					break;
+				case TileDirection::UP:
+					break;
+				case TileDirection::DOWN:
+					break;
 			}
 		}
 	}
@@ -51,6 +54,10 @@ void Game::BulletParticleEmitter::setDirection(TileDirection direction) {
 			break;
 		case TileDirection::BACKWARD:
 			particleRotation = glm::vec3(QUARTER_PI, -HALF_PI, 0);
+			break;
+		case TileDirection::UP:
+			break;
+		case TileDirection::DOWN:
 			break;
 	}
 }

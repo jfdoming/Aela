@@ -15,7 +15,7 @@
 namespace Game {
 	class CharacterTeleportParticleEmitter : public ParticleEmitter {
 		public:
-			CharacterTeleportParticleEmitter(Time* time);
+			CharacterTeleportParticleEmitter(Clock* time);
 			virtual ~CharacterTeleportParticleEmitter();
 
 			// These are the functions that are overwritten from the ParticleEmitter class.

@@ -51,8 +51,8 @@ namespace Scripts {
 	void pressButton(Location location);
 
 	void setupDoor(Door* door, std::string name, std::function<void()> onOpen, std::function<void()> onClose);
-	void setupDoorSensor(Location* location, std::string doorName, std::string sensorScriptName, size_t tileType, size_t lockID);
-	void setupMultiTypeDoorSensor(Location* location, std::string doorName, std::string sensorScriptName, std::vector<size_t> correctTileTypes, size_t lockID);
+	void setupDoorSensor(const Location& location, std::string doorName, std::string sensorScriptName, size_t tileType, size_t lockID);
+	void setupMultiTypeDoorSensor(const Location& location, std::string doorName, std::string sensorScriptName, std::vector<size_t> correctTileTypes, size_t lockID);
 	void setupDoorTileAmountSensors(TileAmountLock* lock, std::string sensorScriptName);
 	void setupCheckPointWithRightSaveSign(std::string name, Location checkPointLocation, Location rightSaveSignLocation, TileDirection directionToMovePlayer);
 	void setupCheckPointWithLeftSaveSign(std::string name, Location checkPointLocation, Location leftSaveSignLocation, TileDirection directionToMovePlayer);

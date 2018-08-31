@@ -8,6 +8,7 @@
 #define GLEW_STATIC
 #endif
 
+#include <cstring>
 #include <GL/glew.h>
 
 #define FOURCC_DXT1 0x31545844 // Equivalent to "DXT1" in ASCII

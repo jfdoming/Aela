@@ -1,26 +1,29 @@
+#include <utility>
+
 #include "TileAmountLock.h"
 #include "Door.h"
+#include "Location.h"
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "../Worlds/WorldManager.h"
 #include "../../Project Aela/Utilities/intut.h"
 
-Game::TileAmountLock::TileAmountLock() {}
+Game::TileAmountLock::TileAmountLock() = default;
 
-Game::TileAmountLock::~TileAmountLock() {
-}
+Game::TileAmountLock::~TileAmountLock() = default;
 
-void Game::TileAmountLock::specifyRegionAsCuboid(Location* location, size_t width, size_t height, size_t depth) {
+void Game::TileAmountLock::specifyRegionAsCuboid(const Location& location, size_t width, size_t height, size_t depth) {
 	WorldManager* worldManager = GameObjectProvider::getWorldManager();
 
 	for (size_t x = 0; x < width; x++) {
 		for (size_t y = 0; y < height; y++) {
 			for (size_t z = 0; z < depth; z++) {
-				glm::ivec2 chunk = location->getChunk();
-				glm::ivec3 tile = location->getTileGroup();
+				glm::ivec2 chunk = location.getChunk();
+				glm::ivec3 tile = location.getTileGroup();
 				int x2 = tile.x + (int) x, z2 = tile.z + (int) z;
-				chunk.x += (int) forceWithinRange<int>(&x2, (signed int) CHUNK_WIDTH);
-				chunk.y += (int) forceWithinRange<int>(&z2, (signed int) CHUNK_LENGTH);
-				TileGroup* tileGroup = worldManager->getTileGroup(&Location(location->getWorld(), chunk, glm::ivec3(x2, tile.y + y, z2)));
+				chunk.x += forceWithinRange<int>(&x2, (signed int) CHUNK_WIDTH);
+				chunk.y += forceWithinRange<int>(&z2, (signed int) CHUNK_LENGTH);
+				Location tileLocation(location.getWorld(), chunk, glm::ivec3(x2, tile.y + y, z2));
+				TileGroup* tileGroup = worldManager->getTileGroup(tileLocation);
 				
 				glm::ivec3 tile2 = glm::ivec3(x2, tile.y + y, z2);
 
@@ -35,7 +38,7 @@ void Game::TileAmountLock::specifyRegionAsCuboid(Location* location, size_t widt
 }
 
 void Game::TileAmountLock::specifyRegion(std::list<TileGroup*> region) {
-	this->region = region;
+	this->region = std::move(region);
 	checkIfUnlocked();
 }
 

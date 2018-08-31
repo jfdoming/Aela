@@ -30,7 +30,7 @@ namespace Game {
 	class TileAtlas;
 	class WorldExporter;
 	class CameraController;
-	class TileBehaviourExecuter;
+	class TileBehaviourExecutor;
 	class HintDisplay;
 	class DoorProvider;
 	class GameSaver;
@@ -43,7 +43,7 @@ namespace Game {
 			static Window* getWindow();
 			static GLRenderer* getRenderer();
 			static EventHandler* getEventHandler();
-			static Time* getTime();
+			static Clock* getTime();
 			static Timer* getTimer();
 			static SceneManager* getSceneManager();
 			static ResourceManager* getResourceManager();
@@ -66,7 +66,7 @@ namespace Game {
 			static TileAtlas* getTileAtlas();
 			static WorldExporter* getWorldExporter();
 			static CameraController* getCameraController();
-			static TileBehaviourExecuter* getTileBehaviourExecuter();
+			static TileBehaviourExecutor* getTileBehaviourExecuter();
 			static HintDisplay* getHintDisplay();
 			static DoorProvider* getDoorProvider();
 			static GameSaver* getGameSaver();
@@ -85,7 +85,7 @@ namespace Game {
 			static void setTileAtlas(TileAtlas* tileAtlas);
 			static void setWorldExporter(WorldExporter* worldExporter);
 			static void setCameraController(CameraController* cameraController);
-			static void setTileBehaviourExecuter(TileBehaviourExecuter* tileBehaviourExecuter);
+			static void setTileBehaviourExecuter(TileBehaviourExecutor* tileBehaviourExecuter);
 			static void setHintDisplay(HintDisplay* hintDisplay);
 			static void setDoorProvider(DoorProvider* doorProvider);
 			static void setGameSaver(GameSaver* gameSaver);
@@ -112,7 +112,7 @@ namespace Game {
 			static TileAtlas* tileAtlas;
 			static WorldExporter* worldExporter;
 			static CameraController* cameraController;
-			static TileBehaviourExecuter* tileBehaviourExecuter;
+			static TileBehaviourExecutor* tileBehaviourExecuter;
 			static HintDisplay* hintDisplay;
 			static DoorProvider* doorProvider;
 			static GameSaver* gameSaver;

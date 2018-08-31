@@ -11,7 +11,7 @@ namespace Game {
 	class Bullet {
 		public:
 			Bullet();
-			Bullet(double speed);
+			explicit Bullet(double speed);
 
 			void setSpeed(double speed);
 			double getSpeed();

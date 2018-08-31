@@ -1,11 +1,10 @@
 #include "LaserParticleEmitter.h"
 #include "../Utilities/MathConstants.h"
 
-Game::LaserParticleEmitter::LaserParticleEmitter(Time* time) : ParticleEmitter(time) {
+Game::LaserParticleEmitter::LaserParticleEmitter(Clock* time) : ParticleEmitter(time) {
 }
 
-Game::LaserParticleEmitter::~LaserParticleEmitter() {
-}
+Game::LaserParticleEmitter::~LaserParticleEmitter() = default;
 
 void Game::LaserParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight, unsigned int amount) {
 	ParticleEmitter::setupParticles(textures, particleWidth, particleHeight, amount);
@@ -47,6 +46,10 @@ void Game::LaserParticleEmitter::setDirection(TileDirection direction) {
 		case TileDirection::BACKWARD:
 			particleRotation = glm::vec3(HALF_PI, -HALF_PI, 0);
 			break;
+		case TileDirection::UP:
+			break;
+		case TileDirection::DOWN:
+			break;
 	}
 }
 
@@ -65,6 +68,10 @@ void Game::LaserParticleEmitter::setupParticlePositioning(size_t whichParticle, 
 			break;
 		case TileDirection::BACKWARD:
 			position.z -= 1 + whichParticle;
+			break;
+		case TileDirection::UP:
+			break;
+		case TileDirection::DOWN:
 			break;
 	}
 	position.z += 0.5f;

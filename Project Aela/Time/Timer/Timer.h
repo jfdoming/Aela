@@ -6,7 +6,8 @@
 */
 
 #pragma once
-#include "../Time.h"
+#include "../Clock.h"
+#include <vector>
 #include <string>
 #include <unordered_map>
 #include <functional>
@@ -14,7 +15,7 @@
 namespace Aela {
 	class Timer {
 		public:
-			Timer(Time* time);
+			explicit Timer(Clock* time);
 
 			void update();
 
@@ -37,7 +38,7 @@ namespace Aela {
 				std::string tag;
 			};
 
-			Time* time;
+			Clock* time;
 
 			std::vector<TimedEvent> timedEvents;
 	};

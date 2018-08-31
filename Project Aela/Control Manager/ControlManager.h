@@ -9,9 +9,9 @@
 #include <glm/glm.hpp>
 #include "../Window/Window.h"
 #include "../3D/Camera/Camera3D.h"
-#include "../Time/Time.h"
+#include "Time/Clock.h"
 #include "../Events/Event.h"
-#include <time.h>
+#include <Clock.h>
 
 namespace Aela {
 	// These enums are used to set properties for the control manager.
@@ -42,7 +42,7 @@ namespace Aela {
 
 		// These are setters and getters of the control manager.
 		void setWindow(Window* setWindow);
-		void setTime(Time* setTime);
+		void setTime(Clock* setTime);
 		void setCameraUpsideDownAllowance(bool allowUpsdideDown);
 		void setProperty(ControlManagerProperty property, float value);
 		void updateKeystate(const Uint8* _keystate);
@@ -56,7 +56,7 @@ namespace Aela {
 
 		private:
 		// These are pointers to other Aela classes.
-		Time* time;
+		Clock* time;
 		Window* window;
 		const Uint8* keystate;
 

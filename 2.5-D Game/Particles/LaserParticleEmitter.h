@@ -15,7 +15,7 @@
 namespace Game {
 	class LaserParticleEmitter : public ParticleEmitter {
 	public:
-		LaserParticleEmitter(Time* time);
+		LaserParticleEmitter(Clock* time);
 		virtual ~LaserParticleEmitter();
 
 		// These are the functions that are overwritten from the ParticleEmitter class.

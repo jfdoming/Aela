@@ -14,7 +14,7 @@
 namespace Aela {
 	class PlanarParticleEmitter : public ParticleEmitter {
 		public:
-			PlanarParticleEmitter(Time* time);
+			PlanarParticleEmitter(Clock* time);
 			virtual ~PlanarParticleEmitter();
 
 			// These are the functions that are overwritten from the ParticleEmitter class.

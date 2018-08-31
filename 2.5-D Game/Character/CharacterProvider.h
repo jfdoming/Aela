@@ -39,12 +39,12 @@ namespace Game {
 			bool removeCharacterByID(size_t id);
 			Character* getCharacterByID(size_t id);
 			Character* getCharacterByName(std::string name);
-			Character* getCharacterByLocation(Location* location);
+			Character* getCharacterByLocation(const Location& location);
 			std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFunctions>*
 				getCharactersInChunk(size_t world, glm::ivec2 chunk);
 			
-			void saveDataToSaveState(SaveState* saveState);
-			void loadDataFromSaveState(SaveState* saveState);
+			void saveDataToSaveState(SaveState* saveState) override;
+			void loadDataFromSaveState(SaveState* saveState) override;
 
 		private:
 			// This is a map of characters, sorted by their unique IDs.

@@ -11,7 +11,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "../../Time/Time.h"
+#include "Time/Clock.h"
 #include "../../Window/Window.h"
 #include "../../Events/EventConstants.h"
 #include "../../Events/KeyEvent.h"
@@ -31,8 +31,8 @@ namespace Aela {
 			void update();
 
 			// These are getters and setters.
-			void setTime(Time* time);
-			Time* getTime();
+			void setTime(Clock* time);
+			Clock* getTime();
 			void setWindow(Window* window);
 			Window* getWindow();
 			bool addTransformable(int key, Transformable3D* transformable);
@@ -41,7 +41,7 @@ namespace Aela {
 
 		private:
 			// These are the objects from Project Aela that the class uses.
-			Time* time;
+			Clock* time;
 			Window* window;
 			std::unordered_map<size_t, Transformable3D*> transformables;
 

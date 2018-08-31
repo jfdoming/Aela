@@ -14,12 +14,12 @@ namespace Aela {
 	template <class T> class Cuboid : public Rect<T> {
 		public:
 			Cuboid() {
-				xPosition = 0;
-				yPosition = 0;
-				zPosition = 0;
-				width = 0;
-				height = 0;
-				depth = 0;
+				this->xPosition = 0;
+				this->yPosition = 0;
+				this->zPosition = 0;
+				this->width = 0;
+				this->height = 0;
+				this->depth = 0;
 			}
 
 			Cuboid(T xPosition, T yPosition, T zPosition, T width, T height, T depth) {
@@ -71,11 +71,11 @@ namespace Aela {
 			// This returns a string with all of the properties of the transformable.
 			std::string getPropertiesAsString() {
 				std::string s = "";
-				s += "Position: " + toStringWithATrailingZero((float) xPosition) + " " + toStringWithATrailingZero((float) yPosition)
-					+ " " + toStringWithATrailingZero((float) zPosition) + ", ";
-				s += "Width: " + toStringWithATrailingZero((float) width) + ", ";
-				s += "Height: " + toStringWithATrailingZero((float) height) + ", ";
-				s += "Depth: " + toStringWithATrailingZero((float) depth);
+				s += "Position: " + toStringWithATrailingZero((float) this->xPosition) + " " + toStringWithATrailingZero((float) this->yPosition)
+					+ " " + toStringWithATrailingZero((float) this->zPosition) + ", ";
+				s += "Width: " + toStringWithATrailingZero((float) this->width) + ", ";
+				s += "Height: " + toStringWithATrailingZero((float) this->height) + ", ";
+				s += "Depth: " + toStringWithATrailingZero((float) this->depth);
 				return s;
 			}
 

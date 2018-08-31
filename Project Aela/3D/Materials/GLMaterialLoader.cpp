@@ -20,11 +20,9 @@
 
 using namespace Aela;
 
-GLMaterialLoader::GLMaterialLoader() {
-}
+GLMaterialLoader::GLMaterialLoader() = default;
 
-GLMaterialLoader::~GLMaterialLoader() {
-}
+GLMaterialLoader::~GLMaterialLoader() = default;
 
 void GLMaterialLoader::expose(LuaManager& mgr) {
 	// only expose part of the class to Lua
@@ -48,7 +46,7 @@ bool Aela::GLMaterialLoader::load(ResourceMap& resources, std::string src) {
 
 	// This begins reading the file.
 	if (in.is_open()) {
-		while (std::getline(in, line)) {
+		while (getline(in, line)) {
 			if (line.find("newmtl ") != std::string::npos) {
 				material = new Material(src);
 				std::string name = line.substr(MATERIAL_NAME_START_POSITION, line.size() - MATERIAL_NAME_START_POSITION);

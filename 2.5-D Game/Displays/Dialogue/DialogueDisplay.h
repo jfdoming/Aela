@@ -48,7 +48,7 @@ namespace Game {
 		private:
 			// These are obtained from GameObjectProvider.
 			EventHandler* eventHandler;
-			Time* time;
+			Clock* time;
 			ScriptManager* scriptManager;
 			Animator* animator;
 

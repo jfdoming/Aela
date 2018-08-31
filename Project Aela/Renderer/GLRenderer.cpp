@@ -15,7 +15,7 @@ using namespace Aela;
 
 // This sets up 3D rendering, accounting for multisampling.
 void GLRenderer::setup3DRendering() {
-	if (mainFramebuffer == NULL) {
+	if (mainFramebuffer == 0) {
 		setupMainFrameBuffer();
 	}
 	basic3DRenderer.setup(multisampling3D);
@@ -23,7 +23,7 @@ void GLRenderer::setup3DRendering() {
 
 // This sets up 2D rendering, accounting for multisampling.
 void GLRenderer::setup2DRendering() {
-	if (mainFramebuffer == NULL) {
+	if (mainFramebuffer == 0) {
 		setupMainFrameBuffer();
 	}
 	basic2DRenderer.setup();
@@ -31,7 +31,7 @@ void GLRenderer::setup2DRendering() {
 
 // This sets up the main frame buffer.
 void GLRenderer::setupMainFrameBuffer() {
-	// This enabes depth comparisons/depth testing.
+	// This enables depth comparisons/depth testing.
 	glEnable(GL_DEPTH_TEST);
 
 	// This will accept a fragment if it closer to the camera than the previous one.
@@ -67,7 +67,7 @@ void Aela::GLRenderer::setupWindow() {
 
 // This initializes GLEW.
 bool GLRenderer::setupGLEW() {
-	glewExperimental = true;
+	glewExperimental = static_cast<GLboolean>(true);
 	if (glewInit() != GLEW_OK) {
 		AelaErrorHandling::windowError("OpenGL Extension Wrangler", "OpenGL Extension Wrangler failed to initialise!");
 		return false;
@@ -77,9 +77,9 @@ bool GLRenderer::setupGLEW() {
 
 // This sets up seAlteHaasGroteskBoldl 3D elements.
 void GLRenderer::setup3D() {
-	if (window != NULL) {
+	if (window != nullptr) {
 		setup3DRendering();
-		effects3DShader = loadShaders("../../res/shaders/3D/3DPostProcessing.vert", "../../res/shaders/3D/3DPostProcessing.frag");
+		effects3DShader = loadShaders("../../../res/shaders/3D/3DPostProcessing.vert", "../../../res/shaders/3D/3DPostProcessing.frag");
 		basic3DRenderer.setCamera(&camera);
 	} else {
 		AelaErrorHandling::windowError("Project Aela Rendering", "The window must be set before setting movingUp 3D.");
@@ -88,9 +88,9 @@ void GLRenderer::setup3D() {
 
 // This sets up seAlteHaasGroteskBoldl 2D elements.
 void GLRenderer::setup2D() {
-	if (window != NULL) {
+	if (window != nullptr) {
 		setup2DRendering();
-		effects2DShader = loadShaders("../../res/shaders/2D/2DPostProcessing.vert", "../../res/shaders/2D/2DPostProcessing.frag");
+		effects2DShader = loadShaders("../../../res/shaders/2D/2DPostProcessing.vert", "../../../res/shaders/2D/2DPostProcessing.frag");
 	} else {
 		AelaErrorHandling::windowError("Project Aela Rendering", "The winodw must be set before setting movingUp 3D.");
 	}
@@ -103,7 +103,7 @@ void GLRenderer::setWindow(Window* window) {
 	this->window = window;
 }
 
-void GLRenderer::setTime(Time* time) {
+void GLRenderer::setTime(Clock* time) {
 	this->time = time;
 	camera.setTime(time);
 }
@@ -162,9 +162,9 @@ void Aela::GLRenderer::renderMap(Map3D* map, unsigned int skybox) {
 
 		sendBoundLightDataToShader();
 
-		basic3DRenderer.renderModelEntitiesWithLights(map, !!multisampling3D);
+		basic3DRenderer.renderModelEntitiesWithLights(map, multisampling3D != 0);
 	} else {
-		basic3DRenderer.renderModelEntitiesWithoutLights(map, !!multisampling3D);
+		basic3DRenderer.renderModelEntitiesWithoutLights(map, multisampling3D != 0);
 	}
 
 	if (useBillboards) {
@@ -498,35 +498,27 @@ bool GLRenderer::checkFrameBuffer() {
 
 // This gets information from OpenGL, including information about the PC's graphics.
 std::string GLRenderer::getInformation(GLRendererInformation infoToGet) {
-	char* info;
 	switch (infoToGet) {
 		case GLRendererInformation::VENDOR:
-			info = (char*) glGetString(GL_VENDOR);
-			break;
+			return std::string((char*) glGetString(GL_VENDOR));
 		case GLRendererInformation::RENDERER:
-			info = (char*) glGetString(GL_RENDERER);
-			break;
+			return std::string((char*) glGetString(GL_RENDERER));
 		case GLRendererInformation::OPENGL_VERSION:
-			info = (char*) glGetString(GL_VERSION);
-			break;
+			return std::string((char*) glGetString(GL_VERSION));
 		case GLRendererInformation::GLSL_VERSION:
-			info = (char*) glGetString(GL_SHADING_LANGUAGE_VERSION);
-			break;
+			return std::string((char*) glGetString(GL_SHADING_LANGUAGE_VERSION));
 		case GLRendererInformation::OPENGL_EXTENSIONS:
-			info = (char*) glGetString(GL_EXTENSIONS);
-			break;
+			return std::string((char*) glGetString(GL_EXTENSIONS));
 		default:
-			info = "This information is not currently availabe.";
-			break;
+			return "This information is not currently available.";
 	}
-	return (std::string) info;
 }
 
 Window* GLRenderer::getWindow() {
 	return window;
 }
 
-Time* GLRenderer::getTime() {
+Clock* GLRenderer::getTime() {
 	return time;
 }
 

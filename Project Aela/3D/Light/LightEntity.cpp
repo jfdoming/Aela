@@ -37,8 +37,8 @@ void LightEntity::useDefaultValues() {
 }
 
 void LightEntity::setupForNewShadowMap() {
-	shadowMapBuffer = NULL;
-	shadowMapTexture = NULL;
+	shadowMapBuffer = 0;
+	shadowMapTexture = 0;
 	setUpForShadows = false;
 }
 

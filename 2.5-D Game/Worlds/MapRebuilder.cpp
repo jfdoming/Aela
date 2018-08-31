@@ -71,8 +71,9 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 
 						// The position of the character on the map. The distance the character is character->getModeltranslated up from its
 						// tileCoord is sin(PI/6) * 0.5 + 0.05;
-						glm::vec3 characterPositionOnMap((float) (chunkPositionOnMap.x + tileOfChunk.x),
-							(float) (tileOfChunk.y + characterYOffsetInWorldspace), (float) (chunkPositionOnMap.y + tileOfChunk.z));
+						glm::vec3 characterPositionOnMap(chunkPositionOnMap.x + tileOfChunk.x,
+														 tileOfChunk.y + characterYOffsetInWorldspace,
+														 chunkPositionOnMap.y + tileOfChunk.z);
 
 						modelEntity.setPosition(characterPositionOnMap);
 						modelEntity.setRotation((float) ELEVEN_SIXTHS_PI, 0, 0);
@@ -122,9 +123,9 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 								std::string textureName;
 								bool isGlass = false;
 
-								tilePositionOnMap.x = (float) (chunkPositionOnMap.x + tileGroupPair.first.x);
+								tilePositionOnMap.x = chunkPositionOnMap.x + tileGroupPair.first.x;
 								tilePositionOnMap.y = (float) tileGroupPair.first.y;
-								tilePositionOnMap.z = (float) (chunkPositionOnMap.y + tileGroupPair.first.z);
+								tilePositionOnMap.z = chunkPositionOnMap.y + tileGroupPair.first.z;
 
 								switch (tileAtlas->getTileType(tile.getType())->getShape()) {
 									case TileShape::FLOOR:

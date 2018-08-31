@@ -74,7 +74,7 @@ namespace Aela {
 			// These functions bind the Renderer with other Aela classes. They must be called
 			// before rendering.
 			void setWindow(Window* window);
-			void setTime(Time* time);
+			void setTime(Clock* time);
 			void setEventHandler(EventHandler* eventHandler);
 
 			virtual void renderMap(Map3D* map, unsigned int skybox) = 0;
@@ -125,13 +125,13 @@ namespace Aela {
 
 			// These are some getters.
 			Window* getWindow();
-			Time* getTime();
+			Clock* getTime();
 			Camera3D* getCamera();
 
 		protected:
 			// These are a bunch of Project Aela objects that the renderer uses.
 			Camera3D camera;
-			Time* time = nullptr;
+			Clock* time = nullptr;
 			Window* window = nullptr;
 			EventHandler* eventHandler;
 

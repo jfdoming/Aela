@@ -15,7 +15,7 @@
 #include "../3D/Animation/AnimationTrack3D.h"
 #include "../3D/Animation/AnimationTrackMaterial.h"
 #include "../3D/Animation/AnimationTrackModel.h"
-#include "../Time/Time.h"
+#include "Time/Clock.h"
 
 namespace Aela {
 	class Animator {
@@ -28,7 +28,7 @@ namespace Aela {
 			void update();
 
 			// These are getters and setters.
-			void setTime(Time* time);
+			void setTime(Clock* time);
 			void addAnimationTrack3D(AnimationTrack3D* track);
 			AnimationTrack3D* get3DTrack(std::string name);
 			void addAnimationTrack2D(AnimationTrack2D* track);
@@ -52,7 +52,7 @@ namespace Aela {
 
 		private:
 			// These are the Aela objects that this class uses.
-			Time* time;
+			Clock* time;
 
 			// These are basically the "tracks" in which the lists of keyframes are layed out. Note that 3D animation
 			// uses a seperate track from 2D animation.

@@ -22,23 +22,24 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 
 	// Clear all tiles and set tile 0 as the blank tile.
 	atlas.clearAllTiles();
-	atlas.addTile(TileType(false, TileShape::BLANK, "blank"), nullptr);
+	auto tile = TileType(false, TileShape::BLANK, "blank");
+	atlas.addTile(tile, nullptr);
 
 	std::ifstream in;
 	in.open(resourceRoot + path);
 	if (in.is_open()) {
 		std::string line;
-		std::string currentTag = "";
+		std::string currentTag;
 		Material* material = nullptr;
 		Texture* texture = nullptr;
 		bool collidable = false;
-		TileShape shape;
+		TileShape shape = TileShape::BOX;
 		std::string name = "tile";
 		TileLoader tileLoader;
 		tileLoader.setResourceManager(resourceManager);
 		resourceManager->bindLoader(&tileLoader);
 
-		while (std::getline(in, line)) {
+		while (getline(in, line)) {
 			while (line.length() > 0) {
 				char character = line.at(0);
 				size_t charactersToErase = 1;
@@ -129,7 +130,8 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 
 					// Add the model to the model list so that it can be referenced easily without spamming the resource
 					// manager.
-					atlas.addTile(TileType(collidable, shape, name), model);
+					auto tileType = TileType(collidable, shape, name);
+					atlas.addTile(tileType, model);
 					name = "tile";
 				} else if (character == '/' && line.at(1) == '/') {
 					// This is a comment. Stay calm and move to the next line.
@@ -158,11 +160,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 							std::string value = line.substr(j + 1, k - j - 1);
 
 							// Note: collidable is set to false by default.
-							if (value == "true") {
-								collidable = true;
-							} else {
-								collidable = false;
-							}
+							collidable = value == "true";
 						} else if ((propertyType == "type" || propertyType == "Type") && (currentTag == "Tile" || currentTag == "tile")) {
 							std::string value = line.substr(j + 1, k - j - 1);
 
@@ -246,7 +244,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 								resourceManager->addToGroup(DEFAULT_MATERIAL_PATH + value + "_mtl", false);
 
 								path2 = (std::string) DEFAULT_TEXTURE_PATH + value;
-								bool success = resourceManager->obtain<Texture>(path2, texture);
+								success = resourceManager->obtain<Texture>(path2, texture);
 								if (!success) {
 									AelaErrorHandling::consoleWindowError("Tile Atlas Loader", path2 + " was requested by "
 										+ path + " and was not found.");

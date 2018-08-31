@@ -1,13 +1,12 @@
 #include "Lock.h"
-#include <iostream>
 
-Game::Lock::Lock() {}
+Game::Lock::Lock() = default;
 
 Game::Lock::Lock(bool locked) {
 	this->locked = locked;
 }
 
-Game::Lock::~Lock() {}
+Game::Lock::~Lock() = default;
 
 bool Game::Lock::isLocked() {
 	return locked;

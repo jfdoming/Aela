@@ -10,6 +10,7 @@
 #include "../Location/Location.h"
 #include "../Player/Player.h"
 #include "../Movement/Movement.h"
+#include <list>
 
 namespace Game {
 	struct CharacterInformationBlock {

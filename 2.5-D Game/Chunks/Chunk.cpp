@@ -6,7 +6,6 @@
 */
 
 #include "Chunk.h"
-#include <iostream>
 
 void Game::Chunk::addTile(glm::ivec3 coordinate, Tile* tile) {
 	if (coordinate.x >= 0 && coordinate.x < CHUNK_WIDTH && coordinate.y >= 0 && coordinate.y < CHUNK_LENGTH) {
@@ -39,7 +38,8 @@ void Game::Chunk::generateBlankTiles(int height) {
 			tiles[glm::ivec3(x, height, y)] = TileGroup();
 
 			// Note that 0 represents a blank tile.
-			tiles[glm::ivec3(x, height, y)].addTile(&Tile());
+			auto tile = Tile();
+			tiles[glm::ivec3(x, height, y)].addTile(&tile);
 		}
 	}
 }

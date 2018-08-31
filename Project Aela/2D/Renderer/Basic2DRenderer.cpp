@@ -9,6 +9,10 @@
 
 using namespace Aela;
 
+Basic2DRenderer::Basic2DRenderer() = default;
+
+Basic2DRenderer::~Basic2DRenderer() = default;
+
 void Basic2DRenderer::setWindow(Window* setWindow) {
 	window = setWindow;
 	window->getDimensions(&windowWidth, &windowHeight);

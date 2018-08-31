@@ -1,3 +1,7 @@
+#include <utility>
+
+#include <utility>
+
 /*
 * Class: Dialogue Handler
 * Author: Robert Ciborowski
@@ -7,9 +11,9 @@
 
 #include "DialogueDisplay.h"
 #include "../Scripts/ScriptManager.h"
-#include "Time/Time.h"
 #include "../../../Project Aela/Resource Management/ResourcePaths.h"
 #include "../../Menus/FontSizes.h"
+#include "Time/Clock.h"
 
 Game::DialogueDisplay::DialogueDisplay() {
 	eventHandler = GameObjectProvider::getEventHandler();
@@ -65,7 +69,7 @@ void Game::DialogueDisplay::update() {
 
 void Game::DialogueDisplay::onEvent(Event* event) {
 	if (event->getType() == EventConstants::KEY_PRESSED) {
-		KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+		auto* keyEvent = dynamic_cast<KeyEvent*>(event);
 		switch (keyEvent->getKeycode()) {
 			case SDLK_RETURN:
 				if (!pressingReturn) {
@@ -75,7 +79,7 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 							// this could trigger right after the dialogue's initiation by AelaGame after a RETURN release.
 							positionInDialogue = maxCharactersOfText - 1;
 						} else if (positionInDialogue == maxCharactersOfText) {
-							if (scriptOnDialogueEnd == "") {
+							if (scriptOnDialogueEnd.empty()) {
 								closeDialog();
 							} else {
 								runScript = true;
@@ -83,7 +87,7 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 							justFinishedDialogue = true;
 						}
 					} else if (state == DialogueState::OPTIONS) {
-						if (options[currentOption].getActionOnSelection() == "") {
+						if (options[currentOption].getActionOnSelection().empty()) {
 							closeDialog();
 						} else {
 							scriptManager->runScript(options[currentOption].getActionOnSelection());
@@ -116,9 +120,11 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 					pressingRight = true;
 				}
 				return;
+			default:
+				break;
 		}
 	} else if (event->getType() == EventConstants::KEY_RELEASED) {
-		KeyEvent* keyEvent = static_cast<KeyEvent*>(event);
+		auto* keyEvent = dynamic_cast<KeyEvent*>(event);
 		switch (keyEvent->getKeycode()) {
 			case SDLK_RETURN:
 				pressingReturn = false;
@@ -136,12 +142,14 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 			case SDLK_d:
 				pressingRight = false;
 				break;
+			default:
+				break;
 		}
 	}
 }
 
 void Game::DialogueDisplay::showDialogue(std::string text, std::string scriptToRunOnceComplete) {
-	showDialogue("", "", text, scriptToRunOnceComplete);
+	showDialogue("", "", std::move(text), std::move(scriptToRunOnceComplete));
 }
 
 void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc, std::string text, std::string scriptToRunOnceComplete) {
@@ -149,14 +157,14 @@ void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc
 		nameLabel->setText(name);
 
 		GLTexture* texture;
-		if (avatarSrc != "" && GameObjectProvider::getResourceManager()->obtain<GLTexture>(DEFAULT_TEXTURE_PATH + avatarSrc, texture)) {
+		if (!avatarSrc.empty() && GameObjectProvider::getResourceManager()->obtain<GLTexture>(DEFAULT_TEXTURE_PATH + avatarSrc, texture)) {
 			avatar->setTexture(texture);
 			avatar->show();
 		} else {
 			avatar->hide();
 		}
 	};
-	
+
 	if (state == DialogueState::HIDDEN) {
 		AnimationTrack2D track;
 		KeyFrame2D frame;
@@ -196,7 +204,7 @@ void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc
 	}
 
 	positionInDialogue = 0;
-	scriptOnDialogueEnd = scriptToRunOnceComplete;
+	scriptOnDialogueEnd = std::move(scriptToRunOnceComplete);
 	timeSinceNewCharacter = time->getCurrentTimeInNanos();
 	label1->setText("");
 	label2->setText("");
@@ -262,7 +270,7 @@ void Game::DialogueDisplay::closeDialog() {
 }
 
 void Game::DialogueDisplay::setSubMenu(std::shared_ptr<SubMenu> setSubMenu) {
-	this->subMenu = setSubMenu;
+	this->subMenu = std::move(setSubMenu);
 }
 
 void Game::DialogueDisplay::setBackdrop(std::shared_ptr<ImageComponent> backdrop) {
@@ -274,19 +282,19 @@ void Game::DialogueDisplay::setBackdrop(std::shared_ptr<ImageComponent> backdrop
 }
 
 void Game::DialogueDisplay::setAvatar(std::shared_ptr<ImageComponent> avatar) {
-	this->avatar = avatar;
+	this->avatar = std::move(avatar);
 }
 
 void Game::DialogueDisplay::setDialogueLabels(std::shared_ptr<Label> label1, std::shared_ptr<Label> label2,
 	std::shared_ptr<Label> label3, std::shared_ptr<Label> label4) {
-	this->label1 = label1;
-	this->label2 = label2;
-	this->label3 = label3;
-	this->label4 = label4;
+	this->label1 = std::move(label1);
+	this->label2 = std::move(label2);
+	this->label3 = std::move(label3);
+	this->label4 = std::move(label4);
 }
 
 void Game::DialogueDisplay::setNameLabel(std::shared_ptr<Label> nameLabel) {
-	this->nameLabel = nameLabel;
+	this->nameLabel = std::move(nameLabel);
 }
 
 bool Game::DialogueDisplay::dialogueIsBeingShown() {
