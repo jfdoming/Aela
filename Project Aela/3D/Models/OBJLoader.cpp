@@ -8,15 +8,14 @@
 #include <vector>
 #include <stdio.h>
 #include <string>
-#include <cstring>
 #include <fstream>
-#include <iostream>
 
 #include <glm/glm.hpp>
 
 #include "OBJLoader.h"
-#include "Resource Management/ResourcePaths.h"
+#include "../Resource Management/ResourcePaths.h"
 #include "../../Error Handler/ErrorHandling.h"
+#include "../Utilities/Safe Functions.h"
 
 using namespace Aela;
 
@@ -82,19 +81,19 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 		} else if (line.find("v ") != std::string::npos) {
 			glm::vec3 vertex;
 			line.erase(0, 2);
-			sscanf(line.c_str(), "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+			sscanf_safe(line.c_str(), "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
 			tempVertices.push_back(vertex);
 		} else if (line.find("vt ") != std::string::npos) {
 			glm::vec2 uv;
 			line.erase(0, 3);
-			sscanf(line.c_str(), "%f %f\n", &uv.x, &uv.y);
+			sscanf_safe(line.c_str(), "%f %f\n", &uv.x, &uv.y);
 			// This wil invert the V coordinate since this uses a DDS texture, which are inverted. If you use BMPS then don't do this!
 			uv.y = -uv.y;
 			tempUVs.push_back(uv);
 		} else if (line.find("vn ") != std::string::npos) {
 			line.erase(0, 3);
 			glm::vec3 normal;
-			sscanf(line.c_str(), "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+			sscanf_safe(line.c_str(), "%f %f %f\n", &normal.x, &normal.y, &normal.z);
 			tempNormals.push_back(normal);
 		} else if (line.find("f ") != std::string::npos) {
 			line.erase(0, 2);
@@ -107,7 +106,7 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 				}
 			}
 			if (numberOfSlashes == 6) {
-				int combiner = sscanf(line.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+				int combiner = sscanf_safe(line.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
 				if (combiner == 9) {
 					vertexIndices.push_back(vertexIndex[0]);
 					vertexIndices.push_back(vertexIndex[1]);

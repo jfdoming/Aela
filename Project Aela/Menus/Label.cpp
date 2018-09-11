@@ -9,13 +9,19 @@ Label::Label(std::string text, Font* font, unsigned int size) : colour(1, 1, 1, 
 	setup();
 }
 
-Label::Label(std::string text, Font* font, unsigned int size, ColourRGBA* colour) {
-	this->text = text;
-	this->font = font;
-	this->size = size;
+Label::Label(std::string text, Font* font, unsigned int size, ColourRGBA* colour) : Label(text, font, size) {
 	this->colour = *colour;
-	setup();
 }
+
+Label::Label(std::string text, Font *font, unsigned int size, PositioningMode2D positioningMode) : Label(text, font, size) {
+	this->positioningMode = positioningMode;
+}
+
+
+Label::Label(std::string text, Font* font, unsigned int size, ColourRGBA* colour, PositioningMode2D positioningMode) : Label(text, font, size, colour) {
+	this->positioningMode = positioningMode;
+}
+
 
 Label::~Label() {
 }

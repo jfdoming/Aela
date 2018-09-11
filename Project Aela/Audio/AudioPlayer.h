@@ -11,8 +11,10 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <mutex>
 #include "AudioListener.h"
 #include "AudioClip.h"
+#include "AudioBuffer.h"
 //#include "ctpl_stl.h"
 
 namespace Aela {
@@ -39,5 +41,11 @@ namespace Aela {
 
 			std::thread backgroundThread;
 			std::vector<AudioClip*> playingClips;
+
+			// This is temporary stuff until the pools are added. I just want to listen
+			// to audio while doing other things.
+			std::mutex mutex;
+			std::vector<AudioBuffer> playingBuffers;
+			bool closeThread = false;
 	};
 }

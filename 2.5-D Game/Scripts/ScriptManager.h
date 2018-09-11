@@ -7,7 +7,7 @@
 
 #pragma once
 #include "../Game Object Provider/GameObjectProvider.h"
-#include "Animation/KeyFrame.h"
+#include "../../Project Aela/Animation/KeyFrame.h"
 #include <string>
 #include <unordered_map>
 #include <functional>

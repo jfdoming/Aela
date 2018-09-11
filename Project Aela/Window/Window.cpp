@@ -97,6 +97,7 @@ void Window::getPosition(int* xPositionVariable, int* yPositionVariable) {
 bool Window::makeWindowOpenGLContext() {
 	openGLContext = SDL_GL_CreateContext(window);
 	if (openGLContext == NULL) {
+		AelaErrorHandling::windowError("Window", "Could not create an Open GL context!");
 		return false;
 	}
 	return true;

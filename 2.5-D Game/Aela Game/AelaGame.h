@@ -6,15 +6,12 @@
 */
 
 #pragma once
-#include "Aela_Engine.h"
+#include "../../Project Aela/Aela_Engine.h"
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "../Camera/CameraMode.h"
 #include "../Game Mode/GameMode.h"
-#include "../Location/Location.h"
 #include "../Guns/TileSwitchGun.h"
 #include "../../Project Aela/Scenes/Scene.h"
-#include "../../Project Aela/Menus/SubMenu.h"
-#include "../../Project Aela/Menus/ImageComponent.h"
 #include "../../Project Aela/Menus/RectComponent.h"
 
 using namespace Aela;
@@ -41,12 +38,16 @@ namespace Game {
 
 			GameMode getGameMode();
 
-			void setDeathMenuComponents(std::shared_ptr<RectComponent> deathRect, std::shared_ptr<Label> deathLabel);
+			void setDeathMenuComponents(std::shared_ptr<RectComponent> deathRect, std::shared_ptr<Label> deathLabel,
+			                            std::shared_ptr<Label> deathLabel2);
 			void setFadeTeleportRect(std::shared_ptr<RectComponent> fadeTeleportRect);
 
 			void animatePlayerDeathScreen();
 			void hideDeathScreen();
 			void animateFadeTeleport();
+			void fadeOut();
+			void fadeIn();
+			void resetFadeRect();
 
 			TileSwitchGun* getTileSwitchGun();
 
@@ -81,7 +82,7 @@ namespace Game {
 			TileSwitchGun tileSwitchGun;
 
 			std::shared_ptr<RectComponent> deathRect;
-			std::shared_ptr<Label> deathLabel;
+			std::shared_ptr<Label> deathLabel, deathLabel2;
 			std::shared_ptr<RectComponent> fadeTeleportRect;
 
 			// These store the states of keys.
@@ -110,7 +111,7 @@ namespace Game {
 			void loadScenes();
 			void loadAnimations();
 
-			void tileSelectUpAction(), tileSelectDownAction();
+			void tileSelectLeftAction(), tileSelectRightAction();
 
 			void changePlayerAnimationToRunning();
 

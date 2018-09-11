@@ -2,7 +2,7 @@
 
 #include "TileAmountLock.h"
 #include "Door.h"
-#include "Location.h"
+#include "../Location/Location.h"
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "../Worlds/WorldManager.h"
 #include "../../Project Aela/Utilities/intut.h"

@@ -13,6 +13,8 @@ namespace Aela {
 		public:
 			Label(std::string text, Font* font, unsigned int size);
 			Label(std::string text, Font* font, unsigned int size, ColourRGBA* colour);
+			Label(std::string text, Font* font, unsigned int size, PositioningMode2D positioningMode);
+			Label(std::string text, Font* font, unsigned int size, ColourRGBA* colour, PositioningMode2D positioningMode);
 
 			virtual ~Label();
 

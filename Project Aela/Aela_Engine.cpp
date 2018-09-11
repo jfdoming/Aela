@@ -141,6 +141,7 @@ int Aela::Engine::setupLUA() {
 
 #include <functional>
 
+#ifdef __MINGW32__
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "err_ovl_no_viable_oper"
 int Aela::Engine::setupEventHandler() {
@@ -153,6 +154,19 @@ int Aela::Engine::setupEventHandler() {
 	return 0;
 }
 #pragma clang diagnostic pop
+#endif
+
+#if defined (_MSC_VER)
+	int Aela::Engine::setupEventHandler() {
+	eventHandler.bindWindow(&window);
+	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(Camera3D::onEvent, renderer.getCamera()));
+	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(Camera3D::onEvent, renderer.getCamera()));
+	eventHandler.addListener(EventConstants::WINDOW_RESIZE, bindListener(Renderer::onEvent, &renderer));
+	renderer.setEventHandler(&eventHandler);
+	eventHandler.start();
+	return 0;
+}
+#endif
 
 int Engine::setupScenes() {
 	return sceneManager.init(eventHandler);
@@ -204,6 +218,12 @@ void Engine::update() {
 		animator.update();
 		keyedAnimator.update();
 		stopwatch.stopRecording("Animation Updating");
+
+		while (!functionsToRunNextUpdate.empty()) {
+			std::cout << "Running!\n";
+			functionsToRunNextUpdate.front()();
+			functionsToRunNextUpdate.pop();
+		}
 	} else {
 		// Note: Events should be updated first.
 		eventHandler.updateSDLEvents();
@@ -212,6 +232,11 @@ void Engine::update() {
 		animationLooper.update();
 		animator.update();
 		keyedAnimator.update();
+
+		while (!functionsToRunNextUpdate.empty()) {
+			functionsToRunNextUpdate.front()();
+			functionsToRunNextUpdate.pop();
+		}
 	}
 }
 
@@ -303,4 +328,8 @@ Physics* Aela::Engine::getPhysics() {
 
 Stopwatch* Aela::Engine::getStopwatch() {
 	return &stopwatch;
+}
+
+void Engine::runNextUpdate(std::function<void()> function) {
+	functionsToRunNextUpdate.push(function);
 }

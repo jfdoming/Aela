@@ -9,7 +9,7 @@
 #pragma once
 #include <functional>
 #include "Particle.h"
-#include "Time/Clock.h"
+#include "../../Time/Clock.h"
 
 namespace Aela {
 	class ParticleEmitter : public Transformable3D {

@@ -9,8 +9,7 @@
 #include <string>
 #include <vector>
 #include "TileType.h"
-#include "Resource Management\ResourceManager.h"
-#include "3D\Materials\Material.h"
+#include "../../Project Aela/Resource Management\ResourceManager.h"
 
 #define BLANK_TILE_TYPE 0
 

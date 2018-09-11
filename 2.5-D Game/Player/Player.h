@@ -29,11 +29,22 @@ namespace Game {
 			void revive();
 			bool isAlive();
 
+			void lookAtWatch();
+			void stopLookingAtWatch();
+			void showTileGun();
+			void hideTileGun();
+
 		private:
 			// This stores the Character ID of the player, which is assigned by the Character Tracker.
 			size_t id;
 			Character* character;
 
 			TileInventory tileInventory;
+
+			bool lookingAtWatch = false, showingTileGun = false;
+
+			// Wtf, gcc won't let me make these const because doing so deletes operator=.
+			std::string TEXTURE_DEFAULT = "player_1", TEXTURE_WITH_WATCH = "player_2",
+				TEXTURE_WITH_GUN = "player_3", TEXTURE_WITH_GUN_AND_WATCH = "player_4";
 	};
 }

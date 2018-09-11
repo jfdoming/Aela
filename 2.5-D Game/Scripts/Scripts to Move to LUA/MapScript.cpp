@@ -1,6 +1,5 @@
 #include "MapScript.h"
 #include "ScriptObjects.h"
-#include "Resource Management/ResourceManager.h"
 #include "../../Worlds/World.h"
 #include "../../Worlds/WorldLoader.h"
 #include "../../Tiles/TileAtlas.h"

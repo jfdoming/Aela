@@ -13,12 +13,12 @@
 #include "../Character/CharacterProvider.h"
 #include "../Displays/Dialogue/DialogueDisplay.h"
 #include "../Tiles/TileAtlas.h"
-#include "Resource Management/ResourceManager.h"
+#include "../../Project Aela/Resource Management/ResourceManager.h"
 #include "../Scripts/ScriptManager.h"
-#include "3D/Maps/Map3DLoader.h"
+#include "../../Project Aela/3D/Maps/Map3DLoader.h"
 #include "../../Project Aela/Resource Management/ResourcePaths.h"
 #include "../Player/Player.h"
-#include "Tiles/TileBehaviourExecutor.h"
+#include "../Tiles/TileBehaviourExecutor.h"
 #include "../Aela Game/AelaGame.h"
 #include <glm/gtc/constants.hpp>
 #include <iostream>

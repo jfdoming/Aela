@@ -57,3 +57,44 @@ void Game::Player::revive() {
 bool Game::Player::isAlive() {
 	return character->isAlive();
 }
+
+void Game::Player::lookAtWatch() {
+	lookingAtWatch = true;
+
+	if (showingTileGun) {
+		character->setTexture(TEXTURE_WITH_GUN_AND_WATCH);
+	} else {
+		character->setTexture(TEXTURE_WITH_WATCH);
+	}
+}
+
+void Game::Player::stopLookingAtWatch() {
+	lookingAtWatch = false;
+
+	if (showingTileGun) {
+		character->setTexture(TEXTURE_WITH_GUN);
+	} else {
+		character->setTexture(TEXTURE_DEFAULT);
+	}
+
+}
+
+void Game::Player::showTileGun() {
+	showingTileGun = true;
+
+	if (lookingAtWatch) {
+		character->setTexture(TEXTURE_WITH_GUN_AND_WATCH);
+	} else {
+		character->setTexture(TEXTURE_WITH_GUN);
+	}
+}
+
+void Game::Player::hideTileGun() {
+	showingTileGun = false;
+
+	if (lookingAtWatch) {
+		character->setTexture(TEXTURE_WITH_WATCH);
+	} else {
+		character->setTexture(TEXTURE_DEFAULT);
+	}
+}

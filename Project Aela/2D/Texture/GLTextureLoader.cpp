@@ -1,8 +1,8 @@
 #include <utility>
-
 #include "GLTextureLoader.h"
 #include <windows.h>
 #include "../../Utilities/strut.h"
+#include "../../Utilities/Safe Functions.h"
 
 using namespace Aela;
 
@@ -294,7 +294,7 @@ bool GLTextureLoader::loadDDSUsingFILE(std::string src, GLenum target, unsigned 
 	unsigned char textureHeader[AELA_RESOURCE_DDS_HEADER_SIZE];
 
 	// This will try to open the DDS file.
-	fopen_s(&in, src.c_str(), "rb");
+	fopen_safe(&in, src.c_str(), "rb");
 	if (in == nullptr) {
 		AelaErrorHandling::windowError("Aela DDS Loader", "A DDS file was not found.");
 		return false;
@@ -386,7 +386,7 @@ bool Aela::GLTextureLoader::loadBMPUsingFILE(std::string src, GLenum target, uns
 
 	// This opens the file with the "read - binary" mode.
 	FILE* file;
-	fopen_s(&file, src.c_str(), "rb");
+	fopen_safe(&file, src.c_str(), "rb");
 	if (!file) {
 		AelaErrorHandling::consoleWindowError("Project Aela's BMP loader", src + " could not be found.");
 		return false;
@@ -463,15 +463,13 @@ bool Aela::GLTextureLoader::loadPNGToBuffer(std::string src, png_bytep** rows, u
 	unsigned int* height, unsigned int* bytesPerPixel) {
 	png_structp pngPtr;
 	png_infop infoPtr;
-	png_byte colourType;
-	png_byte bitDepth;
 
 	unsigned char header[AELA_RESOURCE_PNG_HEADER_SIZE];
 	png_bytep* rowBuffer;
 
 	// This opens the file.
 	FILE *file;
-	fopen_s(&file, src.c_str(), "rb");
+	fopen_safe(&file, src.c_str(), "rb");
 	if (!file) {
 		AelaErrorHandling::consoleWindowError("Project Aela's PNG loader", src + " could not be found.");
 		return false;
@@ -514,8 +512,6 @@ bool Aela::GLTextureLoader::loadPNGToBuffer(std::string src, png_bytep** rows, u
 
 	*width = png_get_image_width(pngPtr, infoPtr);
 	*height = png_get_image_height(pngPtr, infoPtr);
-	colourType = png_get_color_type(pngPtr, infoPtr);
-	bitDepth = png_get_bit_depth(pngPtr, infoPtr);
 
 	// unsigned int numberOfPasses = png_set_interlace_handling(pngPtr);
 	png_set_interlace_handling(pngPtr);

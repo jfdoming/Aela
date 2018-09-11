@@ -32,7 +32,15 @@ namespace Game {
 			glm::ivec3 getTileGroup() const;
 			glm::vec3 getWorldSpaceLocation() const;
 
-			inline friend std::ostream& operator<<(std::ostream &os, Location const& me) {
+			inline bool operator==(const Location& other) {
+				return world == other.world && chunk == other.chunk && tile == other.tile;
+			}
+
+			inline bool operator!=(const Location& other) {
+				return !(*this == other);
+			}
+
+		inline friend std::ostream& operator<<(std::ostream &os, Location const& me) {
 				return (os << "World: " << me.world << ", Chunk: (" << me.chunk.x << ", " << me.chunk.y << "), Tile: (" << me.tile.x
 					<< ", " << me.tile.y << ", " << me.tile.z << ")");
 			}

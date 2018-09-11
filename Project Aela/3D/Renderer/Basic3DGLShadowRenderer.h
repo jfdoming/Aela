@@ -46,6 +46,6 @@ namespace Aela {
 			const unsigned int DEPTH_TEXTURE_WIDTH = 2048, DEPTH_TEXTURE_HEIGHT = 2048;
 			const unsigned int MAX_LIGHT_AMOUNT = 5;
 
-			GLuint vertexBuffer, normalBuffer, elementBuffer;
+			GLuint vertexBuffer = 0, normalBuffer = 0, elementBuffer = 0;
 	};
 }

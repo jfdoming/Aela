@@ -8,7 +8,7 @@
 #pragma once
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "../../Project Aela/Menus/RectComponent.h"
-#include "Utilities/glmut.h"
+#include "../../Project Aela/Utilities/glmut.h"
 #include "../Character/Character.h"
 #include "../Worlds/World.h"
 #include "../Save States/Saveable.h"

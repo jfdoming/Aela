@@ -16,144 +16,69 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6cd7ddcd-32d5-4f51-b03a-a74ce2015e4f" name="Default Changelist" comment="Updated the repository to support the CMake build system. Note: contact Julian for the new .dll files to put inside the build folder.">
-      <change afterPath="$PROJECT_DIR$/.idea/2.5-D Game.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Project Aela/.idea/Project Aela.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Project Aela/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Project Aela/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Project Aela/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Project Aela/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Project Aela/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Project Aela/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Project Aela/CMakeLists.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Project Aela/Audio/AudioBuffer.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Project Aela/Audio/AudioBuffer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Aela Game/AelaGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Aela Game/AelaGame.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Aela Game/AelaGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Aela Game/AelaGame.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bullet/Bullet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Bullet/Bullet.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Bullet/Bullet.h" beforeDir="false" afterPath="$PROJECT_DIR$/Bullet/Bullet.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Character/Character.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Character/Character.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Character/Character.h" beforeDir="false" afterPath="$PROJECT_DIR$/Character/Character.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Character/CharacterInformationBlock.h" beforeDir="false" afterPath="$PROJECT_DIR$/Character/CharacterInformationBlock.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Character/CharacterModelGenerator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Character/CharacterModelGenerator.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Character/CharacterModelGenerator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Character/CharacterModelGenerator.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Character/CharacterProvider.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Character/CharacterProvider.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Character/CharacterProvider.h" beforeDir="false" afterPath="$PROJECT_DIR$/Character/CharacterProvider.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Chunks/Chunk.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Chunks/Chunk.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Displays/Dialogue/DialogueDisplay.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Displays/Dialogue/DialogueDisplay.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Displays/Dialogue/DialogueDisplay.h" beforeDir="false" afterPath="$PROJECT_DIR$/Displays/Dialogue/DialogueDisplay.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Displays/Tiles/TileInventoryDisplay.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Displays/Tiles/TileInventoryDisplay.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doors/Door.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Doors/Door.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doors/Door.h" beforeDir="false" afterPath="$PROJECT_DIR$/Doors/Door.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doors/DoorProvider.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Doors/DoorProvider.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doors/Lock.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Doors/Lock.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Doors/Lock.h" beforeDir="false" afterPath="$PROJECT_DIR$/Doors/Lock.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Displays/Hints/HintDisplay.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Displays/Hints/HintDisplay.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Doors/TileAmountLock.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Doors/TileAmountLock.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Doors/TileAmountLock.h" beforeDir="false" afterPath="$PROJECT_DIR$/Doors/TileAmountLock.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Enemies/Enemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Enemies/Enemy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Enemies/Enemy.h" beforeDir="false" afterPath="$PROJECT_DIR$/Enemies/Enemy.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Enemies/EnemyProvider.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Enemies/EnemyProvider.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Enemies/EnemyProvider.h" beforeDir="false" afterPath="$PROJECT_DIR$/Enemies/EnemyProvider.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Enemies/Turret.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Enemies/Turret.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Enemies/Turret.h" beforeDir="false" afterPath="$PROJECT_DIR$/Enemies/Turret.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Game Object Provider/GameObjectProvider.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Game Object Provider/GameObjectProvider.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Game Object Provider/GameObjectProvider.h" beforeDir="false" afterPath="$PROJECT_DIR$/Game Object Provider/GameObjectProvider.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Guns/TileSwitchGun.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Guns/TileSwitchGun.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Guns/TileSwitchGun.h" beforeDir="false" afterPath="$PROJECT_DIR$/Guns/TileSwitchGun.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Items/Item.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Items/Item.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Items/Item.h" beforeDir="false" afterPath="$PROJECT_DIR$/Items/Item.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Items/ItemAtlas.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Items/ItemAtlas.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Items/ItemAtlas.h" beforeDir="false" afterPath="$PROJECT_DIR$/Items/ItemAtlas.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Items/ItemInventory.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Items/ItemInventory.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Items/ItemInventory.h" beforeDir="false" afterPath="$PROJECT_DIR$/Items/ItemInventory.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Location/Location.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Location/Location.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Location/Location.h" beforeDir="false" afterPath="$PROJECT_DIR$/Location/Location.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Main/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Main/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Movement/Movement.h" beforeDir="false" afterPath="$PROJECT_DIR$/Movement/Movement.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Particles/BulletParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Particles/BulletParticleEmitter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Particles/BulletParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Particles/BulletParticleEmitter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Particles/CharacterDeathParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Particles/CharacterDeathParticleEmitter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Particles/CharacterDeathParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Particles/CharacterDeathParticleEmitter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Particles/CharacterTeleportParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Particles/CharacterTeleportParticleEmitter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Particles/CharacterTeleportParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Particles/CharacterTeleportParticleEmitter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Particles/LaserParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Particles/LaserParticleEmitter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Particles/LaserParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Particles/LaserParticleEmitter.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Particles/TileSwitchParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Particles/TileSwitchParticleEmitter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Particles/TileSwitchParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Particles/TileSwitchParticleEmitter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resources/ResourceInfo.h" beforeDir="false" afterPath="$PROJECT_DIR$/Resources/ResourceInfo.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Save States/SaveState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Save States/SaveState.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Player/Player.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player/Player.h" beforeDir="false" afterPath="$PROJECT_DIR$/Player/Player.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/ScriptManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/ScriptManager.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/AnimationScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/AnimationScript.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/AnimationScript.h" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/AnimationScript.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.h" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/MapScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/MapScript.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.h" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/SceneScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/SceneScript.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ScriptObjects.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ScriptObjects.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ScriptObjects.h" beforeDir="false" afterPath="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ScriptObjects.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Teleporter/Teleporter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Teleporter/Teleporter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Teleporter/Teleporter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Teleporter/Teleporter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tiles/Tile.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Tiles/Tile.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Tiles/Tile.h" beforeDir="false" afterPath="$PROJECT_DIR$/Tiles/Tile.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tiles/TileAtlasLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Tiles/TileAtlasLoader.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tiles/TileBehaviourExecuter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Tiles/TileBehaviourExecutor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tiles/TileBehaviourExecuter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Tiles/TileBehaviourExecutor.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tiles/TileGroup.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Tiles/TileGroup.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Worlds/MapRebuilder.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Worlds/MapRebuilder.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Worlds/WorldLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Worlds/WorldLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tiles/TileAtlas.h" beforeDir="false" afterPath="$PROJECT_DIR$/Tiles/TileAtlas.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tiles/TileBehaviourExecutor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Tiles/TileBehaviourExecutor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tiles/TileLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/Tiles/TileLoader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tiles/TileType.h" beforeDir="false" afterPath="$PROJECT_DIR$/Tiles/TileType.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Worlds/WorldManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Worlds/WorldManager.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Worlds/WorldManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Worlds/WorldManager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Documentation and References/Ekkon Programming Style Guide.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Documentation and References/Ekkon Programming Style Guide.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/2D/Animation/AnimationTrack2D.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/2D/Animation/AnimationTrack2D.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/2D/Fonts/Font.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/2D/Fonts/Font.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/2D/Fonts/FontLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/2D/Fonts/FontLoader.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/2D/Fonts/FontLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/2D/Fonts/FontLoader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project Aela/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/2D/Renderer/Basic2DGLRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/2D/Renderer/Basic2DGLRenderer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/2D/Renderer/Basic2DRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/2D/Renderer/Basic2DRenderer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/2D/Renderer/Basic2DRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/2D/Renderer/Basic2DRenderer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/2D/Texture/GLSpriteSheetLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/2D/Texture/GLSpriteSheetLoader.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/2D/Texture/GLSpriteSheetLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/2D/Texture/GLSpriteSheetLoader.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/2D/Texture/GLTextureLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/2D/Texture/GLTextureLoader.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Animation/KeyedAnimator3D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Animation/KeyedAnimator3D.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Animation/KeyedAnimator3D.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Animation/KeyedAnimator3D.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Camera/Camera3D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Camera/Camera3D.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Camera/Camera3D.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Camera/Camera3D.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Light/LightEntity.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Light/LightEntity.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Maps/Map3DExporter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Maps/Map3DExporter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Maps/Map3DLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Maps/Map3DLoader.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Maps/Map3DLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Maps/Map3DLoader.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Materials/GLMaterialLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Materials/GLMaterialLoader.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Models/OBJLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Models/OBJLoader.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Particles/ParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Particles/ParticleEmitter.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Particles/ParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Particles/ParticleEmitter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Particles/PlanarParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Particles/PlanarParticleEmitter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Particles/PlanarParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Particles/PlanarParticleEmitter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Particles/PointParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Particles/PointParticleEmitter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLModelRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLModelRenderer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLModelRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLModelRenderer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLRenderer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLShadowRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLShadowRenderer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLSkyboxRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLSkyboxRenderer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLSkyboxRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLSkyboxRenderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLRenderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLShadowRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/3D/Renderer/Basic3DGLShadowRenderer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Aela_Engine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Aela_Engine.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Aela_Engine.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Aela_Engine.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Animation/Animator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Animation/Animator.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Animation/Animator.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Animation/Animator.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Audio/AudioListener.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Audio/AudioListener.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Audio/AudioPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Audio/AudioPlayer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Audio/AudioPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Audio/AudioPlayer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Control Manager/ControlManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Control Manager/ControlManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project Aela/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Control Manager/ControlManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Control Manager/ControlManager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Events/EventConstants.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Events/EventConstants.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Events/EventConstants.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Events/EventConstants.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Events/EventListener.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Events/EventListener.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Menus/ImageComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Menus/ImageComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project Aela/Menus/Button.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Menus/Button.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Menus/Label.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Menus/Label.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Menus/Label.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Menus/Label.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Menus/RectComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Menus/RectComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Old Garbage/shader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Old Garbage/shader.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Old Garbage/texture.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Old Garbage/texture.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Project Aela.vcxproj.filters" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Project Aela.vcxproj.filters" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Renderer/GLRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Renderer/GLRenderer.cpp" afterDir="false" />
@@ -162,20 +87,154 @@
       <change beforePath="$PROJECT_DIR$/../Project Aela/Renderer/Renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Renderer/Renderer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceLoader.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceLoader.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceManager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceManager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceMap.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceMap.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceMap.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Time/Stopwatch/Stopwatch.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Time/Stopwatch/Stopwatch.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Time/Stopwatch/Stopwatch.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Time/Stopwatch/Stopwatch.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Time/Time.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Time/Clock.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Time/Timer/Timer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Time/Timer/Timer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Time/Timer/Timer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Time/Timer/Timer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Utilities/Colour/ColourRGB.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Utilities/Colour/ColourRGB.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Project Aela/Utilities/Colour/ColourRGBA.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Utilities/Colour/ColourRGBA.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Utilities/Rect/Cuboid.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Utilities/Rect/Cuboid.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Project Aela/Utilities/strut.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Utilities/strut.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/desktop.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Project Aela/Window/Window.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../Project Aela/Window/Window.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/audio/clips/Acoustic-Bass.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/audio/clips/test.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/audio/streams/Even the Tutorial Can Be Serious.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/audio/streams/Rondo.wav" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/fonts/xerox.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/maps/default_map.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/maps/interiors.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/maps/sample_map.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/maps/stage_1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/maps/title_screen.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/Thumbs.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/box.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/box.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/boxed_floor.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/boxed_floor.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/character.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/character.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/corner_depressed.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/corner_depressed.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/corner_elevated.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/corner_elevated.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/floor.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/floor.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass_corner_depressed.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass_corner_depressed.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass_corner_elevated.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass_corner_elevated.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/meme_mug.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/meme_mug.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/teleporter.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/teleporter.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/wall.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/wall_corner.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/water_0.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/water_0.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/water_1.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/materials/water_1.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/Thumbs.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/box.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/boxed_floor.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/boxed_floor.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/boxed_floor_old.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/character.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/character_A.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/character_B.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/character_C.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/character_D.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/corner_depressed.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/corner_elevated.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/export settings.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/floor.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/meme_mug.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/quarter_wall.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/wall.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/models/wall_corner.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/particles/laser.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/particles/particle_1.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/particles/particle_2.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/scripts/events.lua" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/scripts/test.lua" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DPostProcessing.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DPostProcessing.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DTextureBufferToBuffer.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DTextureBufferToBuffer.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DTextureToBuffer.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DTextureToBuffer.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/TextToBuffer.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/TextToBuffer.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/3DPostProcessing.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/3DPostProcessing.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Billboards.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Billboards.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Depth.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Depth.geom" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Depth.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Model.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Model.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Model_Without_Lights.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Skybox.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Skybox.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/old/Model.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/back.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/down.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/front.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/left.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/right.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/up.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/back.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/down.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/front.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/left.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/right.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/up.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/back.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/down.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/front.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/left.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/right.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/up.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/Julian.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/Thumbs.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/animations_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/animations_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/arrow.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/avatars_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/character.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/dialogue_box.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/doors_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/ekkon.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/floors_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/glass_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/gradient.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/hint_box.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/inventory_background.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/inventory_slot.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/locks_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/locks_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/lol_button.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/map_editor_main_background.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/map_editor_top_bar.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/numbered_tiles.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/rails_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/scientist_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/scientist_4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/selector_box.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/simple_button.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/simple_button_light.dds" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/soldier_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/soldier_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/the_looker.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/tiles.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/turret_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/walls_1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/textures/walls_2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/autosave.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/interiors.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/stage_1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/stage_2.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/template.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/test_map.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/tiles old.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/tiles.txt" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/bin/x64/" />
     <ignored path="$PROJECT_DIR$/build/bin/debug/x64/" />
@@ -233,36 +292,190 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="427152665">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="30" />
+          <entry key="project.open.time.0" value="6" />
+          <entry key="project.open.time.1" value="2" />
+          <entry key="project.open.time.11" value="2" />
+          <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.4" value="10" />
+          <entry key="project.open.time.5" value="4" />
+          <entry key="project.open.time.6" value="3" />
+          <entry key="project.open.time.8" value="2" />
+          <entry key="project.opened" value="31" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="2_5_D_Game (disassembly)" value="1" />
+          <entry key="cpp" value="36" />
+          <entry key="h" value="24" />
+          <entry key="log" value="1" />
+          <entry key="txt" value="2" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="CMakeLists.txt" value="2" />
+          <entry key="Disassembly" value="1" />
+          <entry key="ObjectiveC" value="60" />
+          <entry key="PLAIN_TEXT" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="cpp" value="4589" />
+          <entry key="h" value="994" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="ObjectiveC" value="5583" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/AnimationScript.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="423">
+              <caret line="118" column="22" selection-start-line="118" selection-start-column="22" selection-end-line="118" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Tiles/TileBehaviourExecutor.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="440">
+              <caret line="20" column="1" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
+              <folding>
+                <element signature="e#0#34#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1890">
+              <caret line="50" selection-start-line="50" selection-end-line="50" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="924">
+              <caret line="42" column="77" selection-start-line="42" selection-start-column="77" selection-end-line="42" selection-end-column="77" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Location/Location.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1298">
+              <caret line="59" column="1" selection-start-line="59" selection-start-column="1" selection-end-line="59" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Location/Location.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="990">
+              <caret line="45" selection-start-line="45" selection-end-line="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Save States/SaveState.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="220">
+              <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1408">
+              <caret line="64" column="18" selection-start-line="64" selection-start-column="18" selection-end-line="64" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Displays/Tiles/TileInventoryDisplay.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5170">
+              <caret line="235" column="39" selection-start-line="235" selection-start-column="39" selection-end-line="235" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Character/CharacterModelGenerator.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="550">
+              <caret line="25" column="28" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Time*</find>
-      <find>Warning: corrupt .drectve at end of def file</find>
-      <find>\</find>
-      <find>was</find>
-      <find>was res</find>
-      <find>load textures</find>
-      <find>font</find>
-      <find>addTil</find>
-      <find>-10, 3, 2, 0, 10</find>
-      <find>Location*</find>
-      <find>&amp;Location</find>
-      <find>Location</find>
-      <find>DoorProvider</find>
-      <find>Character Loader</find>
-      <find>Could not get</find>
-      <find>Could not get the following character baseModel template</find>
-      <find>There was a problem</find>
-      <find>enumToInteger</find>
+      <find>proce</find>
+      <find>process</find>
+      <find>Going to generate...</find>
+      <find>B\n</find>
+      <find>processP</find>
+      <find>if (movingUp</find>
+      <find>continue</find>
+      <find>Project Fox</find>
+      <find>What on</find>
+      <find>SDLK_2</find>
+      <find>start</find>
+      <find>What on ear</find>
+      <find>setDea</find>
+      <find>deathLabel\</find>
+      <find>deathLabel</find>
+      <find>You died</find>
+      <find>(5, 0, 3</find>
+      <find>6, 0, 3</find>
+      <find>setupCha</find>
+      <find>&quot;player</find>
+      <find>GAME</find>
+      <find>setupChara</find>
+      <find>SDLK_8</find>
+      <find>julian</find>
+      <find>operator</find>
+      <find>julia</find>
+      <find>shouldExit</find>
+      <find>end_dial</find>
+      <find>animation</find>
+      <find>loopSprite</find>
     </findStrings>
     <replaceStrings>
       <replace>/</replace>
       <replace>const Location&amp;</replace>
       <replace>Location</replace>
       <replace>location</replace>
+      <replace>&quot;Plaque&quot;, &quot;avatars_1/1/2.png&quot;,</replace>
+      <replace>tileSelectRightAction</replace>
+      <replace>tileSelectLeftAction</replace>
     </replaceStrings>
     <dirStrings>
       <dir>E:\Programming\Repos\Project-Aela\2.5-D Game\Elevator</dir>
@@ -274,57 +487,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Location/Location.cpp" />
-        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.h" />
-        <option value="$PROJECT_DIR$/Tiles/Tile.cpp" />
-        <option value="$PROJECT_DIR$/Tiles/Tile.h" />
-        <option value="$PROJECT_DIR$/Teleporter/Teleporter.h" />
-        <option value="$PROJECT_DIR$/Teleporter/Teleporter.cpp" />
-        <option value="$PROJECT_DIR$/Location/Location.h" />
-        <option value="$PROJECT_DIR$/Tiles/TileBehaviourExecutor.cpp" />
-        <option value="$PROJECT_DIR$/Tiles/TileBehaviourExecutor.h" />
-        <option value="$PROJECT_DIR$/Movement/Movement.cpp" />
         <option value="$PROJECT_DIR$/Movement/Movement.h" />
         <option value="$PROJECT_DIR$/Character/CharacterProvider.h" />
-        <option value="$PROJECT_DIR$/Doors/TileAmountLock.h" />
         <option value="$PROJECT_DIR$/Worlds/WorldManager.h" />
         <option value="$PROJECT_DIR$/Enemies/Enemy.h" />
         <option value="$PROJECT_DIR$/Enemies/Enemy.cpp" />
         <option value="$PROJECT_DIR$/Enemies/Turret.h" />
         <option value="$PROJECT_DIR$/Enemies/EnemyProvider.cpp" />
         <option value="$PROJECT_DIR$/Guns/TileSwitchGun.cpp" />
-        <option value="$PROJECT_DIR$/Save States/SaveState.cpp" />
-        <option value="$PROJECT_DIR$/Main/main.cpp" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/Character/Character.h" />
         <option value="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceMap.cpp" />
         <option value="$PROJECT_DIR$/../Project Aela/3D/Models/OBJLoader.cpp" />
-        <option value="$PROJECT_DIR$/Resources/ResourceInfo.h" />
         <option value="$PROJECT_DIR$/../Documentation and References/Ekkon Programming Style Guide.html" />
         <option value="$PROJECT_DIR$/Doors/DoorProvider.cpp" />
         <option value="$PROJECT_DIR$/Worlds/WorldManager.cpp" />
-        <option value="$PROJECT_DIR$/Character/CharacterModelGenerator.cpp" />
-        <option value="$PROJECT_DIR$/Character/Character.cpp" />
-        <option value="$PROJECT_DIR$/Aela Game/AelaGame.cpp" />
-        <option value="$PROJECT_DIR$/Displays/Dialogue/DialogueDisplay.cpp" />
         <option value="$PROJECT_DIR$/Displays/Tiles/TileInventoryDisplay.cpp" />
         <option value="$PROJECT_DIR$/Doors/Door.cpp" />
-        <option value="$PROJECT_DIR$/Character/CharacterProvider.cpp" />
         <option value="$PROJECT_DIR$/Particles/BulletParticleEmitter.cpp" />
         <option value="$PROJECT_DIR$/Enemies/Turret.cpp" />
         <option value="$PROJECT_DIR$/Doors/TileAmountLock.cpp" />
         <option value="$PROJECT_DIR$/Particles/CharacterDeathParticleEmitter.cpp" />
         <option value="$PROJECT_DIR$/Particles/CharacterTeleportParticleEmitter.cpp" />
-        <option value="$PROJECT_DIR$/Particles/TileSwitchParticleEmitter.cpp" />
         <option value="$PROJECT_DIR$/Particles/LaserParticleEmitter.cpp" />
-        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/AnimationScript.cpp" />
-        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.cpp" />
         <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/MapScript.cpp" />
         <option value="$PROJECT_DIR$/Tiles/TileAtlasLoader.cpp" />
-        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.cpp" />
-        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/SceneScript.cpp" />
         <option value="$PROJECT_DIR$/Worlds/MapRebuilder.cpp" />
         <option value="$PROJECT_DIR$/Worlds/WorldLoader.cpp" />
+        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.h" />
+        <option value="$PROJECT_DIR$/Doors/TileAmountLock.h" />
+        <option value="$PROJECT_DIR$/Displays/Dialogue/DialogueDisplay.cpp" />
+        <option value="$PROJECT_DIR$/Particles/TileSwitchParticleEmitter.cpp" />
+        <option value="$PROJECT_DIR$/Character/CharacterProvider.cpp" />
+        <option value="$PROJECT_DIR$/Character/Character.h" />
+        <option value="$PROJECT_DIR$/Player/Player.cpp" />
+        <option value="$PROJECT_DIR$/Save States/SaveState.cpp" />
+        <option value="$PROJECT_DIR$/Player/Player.h" />
+        <option value="$PROJECT_DIR$/Main/main.cpp" />
+        <option value="$PROJECT_DIR$/Character/CharacterModelGenerator.cpp" />
+        <option value="$PROJECT_DIR$/Character/Character.cpp" />
+        <option value="$PROJECT_DIR$/Displays/Hints/HintDisplay.cpp" />
+        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/SceneScript.cpp" />
+        <option value="$PROJECT_DIR$/Resources/ResourceInfo.h" />
+        <option value="$PROJECT_DIR$/Aela Game/AelaGame.h" />
+        <option value="$PROJECT_DIR$/Aela Game/AelaGame.cpp" />
+        <option value="$PROJECT_DIR$/Location/Location.cpp" />
+        <option value="$PROJECT_DIR$/Location/Location.h" />
+        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.cpp" />
+        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.h" />
+        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.cpp" />
+        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/AnimationScript.h" />
+        <option value="$PROJECT_DIR$/Scripts/Scripts to Move to LUA/AnimationScript.cpp" />
+        <option value="$PROJECT_DIR$/Tiles/TileBehaviourExecuter.cpp" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
       </list>
     </option>
   </component>
@@ -335,10 +548,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="974" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="812" />
+    <option name="width" value="1755" />
     <option name="height" value="1047" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -347,7 +559,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -358,7 +569,66 @@
             <path>
               <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
               <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Aela Game" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
               <item name="Character" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Displays" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Displays" type="462c0819:PsiDirectoryNode" />
+              <item name="Dialogue" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Displays" type="462c0819:PsiDirectoryNode" />
+              <item name="Hints" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Displays" type="462c0819:PsiDirectoryNode" />
+              <item name="Tiles" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Player" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="Scripts to Move to LUA" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="2.5-D Game" type="462c0819:PsiDirectoryNode" />
+              <item name="Tiles" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="2_5_D_Game" type="b2602c69:ProjectViewProjectNode" />
@@ -369,15 +639,16 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Project Aela/Resource Management/ResourceMap.cpp" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Project Aela" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
+    <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -412,13 +683,58 @@
       <workItem from="1535572752523" duration="8527000" />
       <workItem from="1535590154508" duration="11277000" />
       <workItem from="1535666744464" duration="22097000" />
+      <workItem from="1535742381340" duration="70000" />
+      <workItem from="1535742479822" duration="3764000" />
+      <workItem from="1535747146601" duration="844000" />
+      <workItem from="1535748020165" duration="2152000" />
+      <workItem from="1535753236368" duration="2954000" />
+      <workItem from="1535756683785" duration="176000" />
+      <workItem from="1535757192780" duration="6288000" />
+      <workItem from="1535802386798" duration="366000" />
+      <workItem from="1535802767676" duration="37000" />
+      <workItem from="1535802817807" duration="40000" />
+      <workItem from="1535802871305" duration="33000" />
+      <workItem from="1535802918084" duration="453000" />
+      <workItem from="1535803388596" duration="162000" />
+      <workItem from="1535804086306" duration="84000" />
+      <workItem from="1535804344566" duration="107000" />
+      <workItem from="1535804566849" duration="310000" />
+      <workItem from="1535804891606" duration="375000" />
+      <workItem from="1535805282590" duration="217000" />
+      <workItem from="1535805514141" duration="75000" />
+      <workItem from="1535805604518" duration="372000" />
+      <workItem from="1535805991308" duration="267000" />
+      <workItem from="1535806272411" duration="146000" />
+      <workItem from="1535806432907" duration="291000" />
+      <workItem from="1535806737701" duration="4937000" />
+      <workItem from="1535828669916" duration="13631000" />
+      <workItem from="1535898007631" duration="1766000" />
+      <workItem from="1535919661580" duration="1836000" />
+      <workItem from="1535930221018" duration="3151000" />
+      <workItem from="1536008805212" duration="2019000" />
+      <workItem from="1536016684900" duration="1784000" />
+      <workItem from="1536065767257" duration="2214000" />
+      <workItem from="1536069454748" duration="268000" />
+      <workItem from="1536109821344" duration="31000" />
+      <workItem from="1536234275408" duration="87000" />
+      <workItem from="1536243615249" duration="568000" />
+      <workItem from="1536244193058" duration="947000" />
+      <workItem from="1536245261232" duration="47000" />
+      <workItem from="1536245407176" duration="286000" />
+      <workItem from="1536245748405" duration="3679000" />
+      <workItem from="1536259893990" duration="145000" />
+      <workItem from="1536261378609" duration="199000" />
+      <workItem from="1536261606162" duration="1407000" />
+      <workItem from="1536451198967" duration="590000" />
+      <workItem from="1536502305246" duration="2804000" />
+      <workItem from="1536513209864" duration="473000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="63076000" />
+    <option name="totallyTimeSpent" value="125528000" />
   </component>
-  <component name="TodoView" selected-index="4">
+  <component name="TodoView">
     <todo-panel id="selected-file">
       <is-autoscroll-to-source value="true" />
     </todo-panel>
@@ -428,29 +744,31 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="812" y="0" width="1755" height="1047" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24946696" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info id="Structure" order="0" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="1" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="2" visible="true" weight="0.16224189" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.329718" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.1487965" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.24507658" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info active="true" anchor="bottom" id="TODO" order="6" visible="true" weight="0.329718" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32946146" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Messages" order="8" sideWeight="0.49946696" weight="0.329718" />
+      <window_info anchor="bottom" id="Messages" order="8" sideWeight="0.49946696" weight="0.2571116" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.329718" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50053304" side_tool="true" weight="0.329718" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50053304" side_tool="true" weight="0.32928476" />
       <window_info anchor="bottom" id="Version Control" order="11" weight="0.329718" />
-      <window_info anchor="bottom" id="CMake" order="12" sideWeight="0.49946696" weight="0.329718" />
+      <window_info anchor="bottom" id="CMake" order="12" sideWeight="0.49946696" weight="0.33260393" />
       <window_info anchor="bottom" id="Inspection Results" order="13" weight="0.329718" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="right" id="LuaJ" order="3" />
+      <window_info anchor="right" id="Database" order="4" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -485,353 +803,10 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../Project Aela/Renderer/GLRenderer.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="154" selection-start-line="154" selection-end-line="154" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/Menus/Menu.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/Scenes/Scene.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="59" selection-start-line="59" selection-end-line="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/Menus/Component.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="34" selection-start-line="34" selection-end-line="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/Aela_Engine.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="219" column="20" selection-start-line="219" selection-start-column="20" selection-end-line="219" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.h">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="183" column="27" selection-start-line="183" selection-start-column="27" selection-end-line="183" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Main/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="500">
-          <caret line="82" column="13" selection-start-line="82" selection-start-column="13" selection-end-line="82" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Program Files/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/functional">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="473" selection-start-line="473" selection-end-line="473" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Program Files/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/std_function.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="677" selection-start-line="677" selection-end-line="677" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Program Files/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/hashtable.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="388" selection-start-line="388" selection-end-line="388" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/Resource Management/ResourceManager.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="61" column="36" selection-start-line="61" selection-start-column="36" selection-end-line="61" selection-end-column="36" />
-          <folding>
-            <element signature="e#1774#1783#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Character/Character.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="28" column="45" selection-start-line="28" selection-start-column="40" selection-end-line="28" selection-end-column="45" />
-          <folding>
-            <element signature="e#140#195#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/2D/Texture/GLTextureLoader.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-24">
-          <caret line="34" column="49" lean-forward="true" selection-start-line="34" selection-start-column="49" selection-end-line="34" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/3D/Models/OBJLoader.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Program Files/mingw-w64/x86_64-8.1.0-posix-sjlj-rt_v6-rev0/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/move.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="99" selection-start-line="99" selection-end-line="99" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/Resource Management/ResourceMap.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/Resource Management/ResourceMap.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="80" selection-start-line="6" selection-start-column="80" selection-end-line="6" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/3D/Models/OBJLoader.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="84" column="29" selection-start-line="84" selection-start-column="28" selection-end-line="84" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/Resource Management/ResourceManager.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="125" selection-start-line="125" selection-end-line="125" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/ScriptManager.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-263" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ScriptObjects.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-408" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Resources/ResourceInfo.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="8" selection-start-line="13" selection-start-column="8" selection-end-line="13" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Project Aela/Resource Management/ResourcePaths.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="8" selection-start-line="9" selection-start-column="8" selection-end-line="9" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Worlds/WorldLoader.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="22" column="1" selection-start-line="22" selection-end-line="22" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Documentation and References/Ekkon Programming Style Guide.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#3892#3897#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Doors/DoorProvider.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="33" column="8" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Character/CharacterModelGenerator.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="32" column="28" lean-forward="true" selection-start-line="32" selection-start-column="28" selection-end-line="32" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Worlds/WorldManager.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="293" column="47" lean-forward="true" selection-start-line="293" selection-start-column="47" selection-end-line="293" selection-end-column="47" />
-          <folding>
-            <element signature="e#142#167#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Character/CharacterModelGenerator.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="31" column="33" selection-start-line="31" selection-start-column="33" selection-end-line="31" selection-end-column="33" />
-          <folding>
-            <element signature="e#190#226#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Character/Character.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="96" column="42" selection-start-line="96" selection-start-column="42" selection-end-line="96" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Aela Game/AelaGame.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="349">
-          <caret line="91" column="50" selection-start-line="91" selection-start-column="43" selection-end-line="91" selection-end-column="50" />
-          <folding>
-            <element signature="e#178#199#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Displays/Dialogue/DialogueDisplay.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="140" column="22" lean-forward="true" selection-start-line="140" selection-end-line="141" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#176#204#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Displays/Tiles/TileInventoryDisplay.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="85" column="40" selection-start-line="85" selection-start-column="25" selection-end-line="85" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Doors/Door.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="18" selection-start-line="1" selection-start-column="9" selection-end-line="1" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Character/CharacterProvider.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="195" column="5" selection-start-line="195" selection-start-column="5" selection-end-line="195" selection-end-column="5" />
-          <folding>
-            <element signature="e#132#151#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Particles/BulletParticleEmitter.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="46" column="41" selection-start-line="46" selection-start-column="41" selection-end-line="46" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Enemies/Turret.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="12" column="9" lean-forward="true" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#230#249#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Doors/TileAmountLock.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="24" column="44" lean-forward="true" selection-start-line="24" selection-start-column="44" selection-end-line="24" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Particles/CharacterDeathParticleEmitter.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="50" column="51" selection-start-line="50" selection-start-column="51" selection-end-line="50" selection-end-column="51" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Particles/CharacterTeleportParticleEmitter.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="80" column="5" lean-forward="true" selection-start-line="80" selection-start-column="5" selection-end-line="80" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#45#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Particles/TileSwitchParticleEmitter.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="34" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="34" />
-          <folding>
-            <element signature="e#163#201#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Particles/LaserParticleEmitter.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
           <caret line="37" column="41" selection-start-line="37" selection-start-column="41" selection-end-line="37" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -839,9 +814,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="287">
           <caret line="21" column="32" lean-forward="true" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -849,29 +821,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="12" column="18" lean-forward="true" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
-          <folding>
-            <element signature="e#129#157#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="128" column="36" selection-start-line="128" selection-start-column="36" selection-end-line="128" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/SceneScript.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="84" lean-forward="true" selection-start-line="84" selection-end-line="84" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -879,28 +828,326 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="19" column="12" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
-          <folding>
-            <element signature="e#119#143#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Programs/MinGW-w64/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/stl_vector.h" />
+    <entry file="file://D:/Programs/MinGW-w64/mingw64/x86_64-w64-mingw32/include/crtdefs.h" />
+    <entry file="file://$PROJECT_DIR$/Doors/Door.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="81" column="37" selection-start-line="81" selection-start-column="31" selection-end-line="81" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Displays/Dialogue/DialogueDisplay.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="26" column="34" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Particles/TileSwitchParticleEmitter.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="37" column="9" selection-start-line="37" selection-start-column="9" selection-end-line="37" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Doors/TileAmountLock.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="85" column="22" selection-start-line="85" selection-start-column="21" selection-end-line="85" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Doors/TileAmountLock.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="22" column="17" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Character/Character.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3476">
+          <caret line="158" column="25" selection-start-line="158" selection-start-column="25" selection-end-line="158" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Worlds/MapRebuilder.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="136" column="68" selection-start-line="136" selection-start-column="68" selection-end-line="136" selection-end-column="68" />
+        <state relative-caret-position="1474">
+          <caret line="67" column="47" selection-start-line="67" selection-start-column="36" selection-end-line="67" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Project Aela/Resource Management/ResourceManager.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="39">
+          <caret line="118" lean-forward="true" selection-start-line="118" selection-end-line="118" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Player/Player.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="92" column="27" selection-start-line="92" selection-start-column="27" selection-end-line="92" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Debug/2.5-D Game.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="35" column="2" selection-start-line="35" selection-start-column="2" selection-end-line="35" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Save States/GameSaver.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="14" column="38" selection-start-line="14" selection-start-column="38" selection-end-line="14" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Save States/SaveState.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="16" column="12" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Player/Player.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="32" column="38" selection-start-line="32" selection-start-column="38" selection-end-line="32" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Programs/MinGW-w64/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/bits/basic_string.h" />
+    <entry file="file://$PROJECT_DIR$/../Project Aela/Utilities/enumut.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/Programs/MinGW-w64/mingw64/lib/gcc/x86_64-w64-mingw32/8.1.0/include/c++/ext/string_conversions.h" />
+    <entry file="file://$PROJECT_DIR$/Character/CharacterModelGenerator.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="32" column="80" selection-start-line="32" selection-start-column="80" selection-end-line="32" selection-end-column="80" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Displays/Tiles/TileInventoryDisplay.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Character/Character.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2134">
+          <caret line="97" column="78" selection-start-line="97" selection-start-column="78" selection-end-line="97" selection-end-column="78" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Character/CharacterProvider.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4642">
+          <caret line="211" column="4" selection-start-line="211" selection-start-column="4" selection-end-line="229" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Displays/Hints/HintDisplayDuration.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Displays/Hints/HintDisplay.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1445">
+          <caret line="85" column="21" selection-start-line="85" selection-start-column="21" selection-end-line="85" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Resources/ResourceInfo.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="50" selection-start-line="15" selection-start-column="50" selection-end-line="15" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="24" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/SceneScript.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Aela Game/AelaGame.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="13178">
+          <caret line="599" column="80" selection-start-line="599" selection-start-column="80" selection-end-line="599" selection-end-column="80" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Character/CharacterProvider.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="16" column="19" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Aela Game/AelaGame.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1144">
+          <caret line="52" column="22" selection-start-line="52" selection-start-column="22" selection-end-line="52" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Project Aela/Error Handler/ErrorHandling.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="936">
+          <caret line="57" column="1" lean-forward="true" selection-start-line="57" selection-start-column="1" selection-end-line="57" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Project Aela/Window/Window.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="48" column="17" selection-start-line="48" selection-start-column="17" selection-end-line="48" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Project Aela/Aela_Engine.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="235" column="22" selection-start-line="235" selection-start-column="22" selection-end-line="235" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/SceneScript.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10406">
+          <caret line="473" column="35" selection-start-line="473" selection-start-column="35" selection-end-line="473" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Main/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2288">
+          <caret line="104" column="26" selection-start-line="104" selection-start-column="26" selection-end-line="104" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/AnimationScript.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="18" column="89" selection-start-line="18" selection-start-column="89" selection-end-line="18" selection-end-column="89" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42218">
+          <caret line="1919" column="1" selection-start-line="1919" selection-start-column="1" selection-end-line="1919" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/GameScript.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="924">
+          <caret line="42" column="77" selection-start-line="42" selection-start-column="77" selection-end-line="42" selection-end-column="77" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Location/Location.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1298">
+          <caret line="59" column="1" selection-start-line="59" selection-start-column="1" selection-end-line="59" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Location/Location.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="990">
+          <caret line="45" selection-start-line="45" selection-end-line="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Save States/SaveState.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/ResourceScript.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1408">
+          <caret line="64" column="18" selection-start-line="64" selection-start-column="18" selection-end-line="64" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Displays/Tiles/TileInventoryDisplay.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5170">
+          <caret line="235" column="39" selection-start-line="235" selection-start-column="39" selection-end-line="235" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Character/CharacterModelGenerator.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="25" column="28" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Scripts/Scripts to Move to LUA/AnimationScript.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="7" column="40" lean-forward="true" selection-start-line="7" selection-start-column="40" selection-end-line="7" selection-end-column="40" />
+        <state relative-caret-position="423">
+          <caret line="118" column="22" selection-start-line="118" selection-start-column="22" selection-end-line="118" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Tiles/TileBehaviourExecutor.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="20" column="1" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#0#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1890">
+          <caret line="50" selection-start-line="50" selection-end-line="50" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

@@ -85,28 +85,33 @@ void Game::Character::animateDeath() {
 	newMovementsAreAllowed = false;
 }
 
-void Game::Character::generateModel(ResourceManager* resourceManager) {
+void Game::Character::generateModel() {
+	ResourceManager* resourceManager = GameObjectProvider::getResourceManager();
 	std::unordered_map<size_t, Character*> characterList;
 	characterList[0] = this;
 
 	CharacterModelGenerator generator;
 	generator.setCharacters(&characterList);
 
+	std::string groupName = "ch/" + name + "/" + textureName;
 	std::string modelA = (std::string) DEFAULT_MODEL_PATH + "character_A.obj";
 	std::string modelB = (std::string) DEFAULT_MODEL_PATH + "character_B.obj";
-	std::string modelTemp = (std::string) DEFAULT_MODEL_PATH + "floor.obj";
+	std::string modelC = (std::string) DEFAULT_MODEL_PATH + "character_C.obj";
+	std::string modelD = (std::string) DEFAULT_MODEL_PATH + "character_D.obj";
 
 	resourceManager->bindLoader(&generator);
-	resourceManager->bindGroup("ch/" + name);
+	resourceManager->bindGroup(groupName);
 
 	for (unsigned int y = 0; y < 4; y++) {
 		for (unsigned int x = 0; x < 3; x++) {
 			if (x == 0 && (y == 1 || y == 3)) {
 				generator.setTemplateModelSource(modelA);
-			} else if (y == 0 || y == 2) {
-				generator.setTemplateModelSource(modelTemp);
-			} else {
+			} else if (x == 0 && (y == 0 || y == 2)) {
+				generator.setTemplateModelSource(modelC);
+			} else if (y == 1 || y == 3) {
 				generator.setTemplateModelSource(modelB);
+			} else {
+				generator.setTemplateModelSource(modelD);
 			}
 
 			generator.setSpriteSheetX(x);
@@ -115,7 +120,7 @@ void Game::Character::generateModel(ResourceManager* resourceManager) {
 			// We want to generate one set of models, so we'll tell the resource manager to run the generator once.
 			resourceManager->addToGroup("", false);
 
-			if (resourceManager->loadGroup("characters") != Aela::ResourceManager::Status::OK) {
+			if (resourceManager->loadGroup(groupName) != Aela::ResourceManager::Status::OK) {
 				std::cerr << "Failed to load a resource from group \"characters\": " << resourceManager->getNewInvalidResourceKeys()[0] << "\n";
 				break;
 			}
@@ -179,8 +184,9 @@ bool Game::Character::getRunning() {
 	return running;
 }
 
-void Game::Character::setTextureName(std::string textureName) {
+void Game::Character::setTexture(std::string textureName) {
 	this->textureName = std::move(textureName);
+	changeModel();
 }
 
 std::string Game::Character::getTextureName() {
@@ -246,14 +252,7 @@ void Game::Character::turnImmediately(TileDirection direction) {
 
 	directionFacing = direction;
 
-	Model* model;
-	if (GameObjectProvider::getResourceManager()->obtain<Model>("ch/" + textureName + "/0/" + std::to_string(enumToInteger(direction)) + "/mo", model)) {
-		baseModel = model;
-		if (entity != nullptr) {
-			entity->setModel(model);
-		}
-		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
-	}
+	changeModel();
 }
 
 void Game::Character::move(Movement* movement, std::string scriptOnCompletion) {
@@ -457,6 +456,7 @@ bool Game::Character::isVisible() {
 }
 
 void Game::Character::allowNewMovements(bool newMovementsAreAllowed) {
+	std::cout << "Setting newMovementsAReAloowed to " << newMovementsAreAllowed << "\n";
 	this->newMovementsAreAllowed = newMovementsAreAllowed;
 }
 
@@ -536,12 +536,13 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 	}
 
 	if (movement->isATeleportation()) {
+		bool newMovementsWereAllowed = newMovementsAreAllowed;
 		newMovementsAreAllowed = false;
 		TeleportationAnimation teleportationAnimation = movement->getTeleportationAnimation();
 
-		auto teleportationEndAction = [this, newLocation, scriptOnCompletion]() mutable {
+		auto teleportationEndAction = [this, newLocation, scriptOnCompletion, newMovementsWereAllowed]() mutable {
 			WorldManager* worldManager = GameObjectProvider::getWorldManager();
-			newMovementsAreAllowed = true;
+			newMovementsAreAllowed = newMovementsWereAllowed;
 			GameObjectProvider::getScriptManager()->runScript(scriptOnCompletion);
 			movementHasEnded();
 
@@ -699,7 +700,7 @@ void Game::Character::processPossibleMovement(Movement* movement) {
 	}
 
 	TileDirection direction = movement->getDirection();
-	if (direction != directionFacing) {
+	if (direction != directionFacing && direction != TileDirection::UP && direction != TileDirection::DOWN) {
 		turnImmediately(direction);
 		return;
 	}
@@ -827,4 +828,21 @@ void Game::Character::processPossibleMovement(Movement* movement) {
 			}
 		}
 	}
+}
+
+void Character::changeModel() {
+	Model* model;
+	std::string modelName = "ch/" + textureName + "/0/" + std::to_string(enumToInteger(directionFacing)) + "/mo";
+	if (!GameObjectProvider::getResourceManager()->obtain<Model>(modelName, model)) {
+		generateModel();
+		if (!GameObjectProvider::getResourceManager()->obtain<Model>(modelName, model)) {
+			// How did you get here? Something must have went terribly wrong!
+			return;
+		}
+	}
+	baseModel = model;
+	if (entity != nullptr) {
+		entity->setModel(model);
+	}
+	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 }

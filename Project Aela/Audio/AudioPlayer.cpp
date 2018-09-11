@@ -86,11 +86,49 @@ bool AudioPlayer::init() {
 }
 
 void AudioPlayer::update() {
-	ALuint source_state;
+	ALint source_state;
+
+	// This is temporary stuff until the pools are added. I just want to listen
+	// to audio while doing other things.
+	while (true) {
+		{
+			std::lock_guard<std::mutex> guard(mutex);
+			if (closeThread) {
+				break;
+			}
+		}
+		for (size_t i = 0; i < playingBuffers.size(); i++) {
+			{
+
+				std::lock_guard<std::mutex> guard(mutex);
+				AudioBuffer& audioBuffer = playingBuffers[i];
+
+				alDoWithErrorCheck_noret(alGetSourcei(audioBuffer.getSource(), AL_SOURCE_STATE, &source_state));
+
+				if (source_state != AL_PLAYING) {
+					ALuint source = audioBuffer.getSource();
+					ALuint buffer = audioBuffer.getBuffer();
+					alDoWithErrorCheck_noret(alDeleteSources(1, &source));
+					alDoWithErrorCheck_noret(alDeleteBuffers(1, &buffer));
+
+					playingBuffers.erase(playingBuffers.begin() + i);
+					i--;
+				}
+			}
+		}
+	}
+
+
+
+
+	// The old stuff:
 	for (auto clip : playingClips) {
 		while (source_state == AL_PLAYING) {
 			// TODO make source object
 //			alDoWithErrorCheck_noret(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
+
+
+
 		}
 	}
 }
@@ -107,6 +145,10 @@ void AudioPlayer::die() {
 
 	// I think you might want to do this lol
 	// - Robert
+	{
+		std::lock_guard<std::mutex> guard(mutex);
+		closeThread = true;
+	}
 	backgroundThread.join();
 }
 
@@ -141,10 +183,16 @@ void AudioPlayer::playClip(AudioClip* clip) {
 	alDoWithErrorCheck_noret(alSourcePlay(source));
 	alDoWithErrorCheck_noret(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
 
-	while (source_state == AL_PLAYING) {
-		alDoWithErrorCheck_noret(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
+	AudioBuffer audioBuffer(buffer, source);
+	{
+		std::lock_guard<std::mutex> guard(mutex);
+		playingBuffers.push_back(audioBuffer);
 	}
-	
-	alDoWithErrorCheck_noret(alDeleteSources(1, &source));
-	alDoWithErrorCheck_noret(alDeleteBuffers(1, &buffer));
+
+//	while (source_state == AL_PLAYING) {
+//		alDoWithErrorCheck_noret(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
+//	}
+//
+//	alDoWithErrorCheck_noret(alDeleteSources(1, &source));
+//	alDoWithErrorCheck_noret(alDeleteBuffers(1, &buffer));
 }

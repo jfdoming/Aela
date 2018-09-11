@@ -6,24 +6,14 @@
 * Description: A class used to manage characters.
 */
 
-#include "stdafx.h"
 #include "CharacterProvider.h"
 #include "../../Project Aela/Aela_Engine.h"
 #include "../Scripts/ScriptManager.h"
-#include "Resource Management/ResourceManager.h"
-#include "Animation/Animator.h"
-#include "Animation/AnimationLooper.h"
-#include "3D/Animation/AnimationTrack3D.h"
-#include "3D/Camera/Camera3D.h"
-#include "Resource Management/ResourcePaths.h"
-#include "../../Project Aela/3D/Animation/AnimationTrackMaterial.h"
-#include "../../Project Aela/Utilities/enumut.h"
-#include "../Utilities/GameConstants.h"
+#include "../../Project Aela/Resource Management/ResourceManager.h"
+#include "../../Project Aela/Resource Management/ResourcePaths.h"
 #include "../Particles/TileSwitchParticleEmitter.h"
 #include "../Particles/CharacterTeleportParticleEmitter.h"
-#include "../Resources/ResourceInfo.h"
 #include "../Worlds/WorldManager.h"
-#include "../Player/Player.h"
 
 using namespace Game;
 

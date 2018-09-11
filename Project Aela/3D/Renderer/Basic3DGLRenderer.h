@@ -84,17 +84,17 @@ namespace Aela {
 
 			// These are a bunch of handles to GLSL variables that get passed to the shadow and
 			// model renderer during rendering.
-			GLuint depthProgramID, modelProgramID, lightlessModelProgramID, billboardProgramID, skyboxProgramID;
-			GLuint projectionMatrixID, depthMatrixID, viewMatrixID, modelMatrixID, rotationMatrixID,
-				lightlessProjectionMatrixID, lightlessViewMatrixID, lightlessModelMatrixID, lightlessRotationMatrixID,
-				shadowMapID, shadowMatrixID, shadowModelMatrixID;
-			GLuint modelTextureID, lightlessModelTextureID, billboardTextureID, billboardMVPMatrixID;
-			GLuint skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID;
-			GLuint numberOfLightsID, lightPositionsID, lightDirectionsID, lightColoursID, lightPowersID, lightShadowPositionsID,
-				ambientLightingID, lightlessGlobalLightingID;
+			GLuint depthProgramID = 0, modelProgramID = 0, lightlessModelProgramID = 0, billboardProgramID = 0, skyboxProgramID = 0;
+			GLuint projectionMatrixID = 0, depthMatrixID = 0, viewMatrixID = 0, modelMatrixID = 0, rotationMatrixID = 0,
+				lightlessProjectionMatrixID = 0, lightlessViewMatrixID = 0, lightlessModelMatrixID = 0, lightlessRotationMatrixID = 0,
+				shadowMapID = 0, shadowMatrixID = 0, shadowModelMatrixID = 0;
+			GLuint modelTextureID = 0, lightlessModelTextureID = 0, billboardTextureID = 0, billboardMVPMatrixID = 0;
+			GLuint skyboxTextureID = 0, skyboxViewMatrixID = 0, skyboxProjectionMatrixID = 0;
+			GLuint numberOfLightsID = 0, lightPositionsID = 0, lightDirectionsID = 0, lightColoursID = 0, lightPowersID = 0, lightShadowPositionsID = 0,
+				ambientLightingID = 0, lightlessGlobalLightingID = 0;
 
 			// These properties are used for the framebuffers.
-			GLuint multisampledColourFrameBuffer, colourFrameBuffer, depthRenderBuffer;
+			GLuint multisampledColourFrameBuffer = 0, colourFrameBuffer = 0, depthRenderBuffer = 0;
 			GLImage multisampledColourFrameBufferTexture, colourFrameBufferTexture;
 
 			// These are some Project Aela objects that the 3D renderer uses.

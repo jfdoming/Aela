@@ -115,7 +115,6 @@
     <ClCompile Include="Utilities\Texture Splitter\GLTextureSplitter.cpp" />
     <ClCompile Include="Events\WindowResizeEvent.cpp" />
     <ClCompile Include="2D\Texture\GLSpriteSheetLoader.cpp" />
-    <ClCompile Include="Clock\Stopwatch\Stopwatch.cpp" />
     <ClCompile Include="Time\Timer\Timer.cpp" />
     <ClCompile Include="Utilities\Transformations\PointRotation3D.cpp" />
     <ClCompile Include="Window\Window.cpp" />
@@ -124,6 +123,8 @@
     <ClCompile Include="Error Handler\Simple Error\AelaSimpleError.cpp" />
     <ClCompile Include="2D\Fonts\Font.cpp" />
     <ClCompile Include="2D\Fonts\FontLoader.cpp" />
+    <ClCompile Include="Time\Stopwatch\Stopwatch.cpp" />
+    <ClCompile Include="Audio\AudioBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3D\Animation\AnimationTrackModel.h" />
@@ -222,7 +223,6 @@
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneManager.h" />
     <ClInclude Include="Scenes\stdafx.h" />
-    <ClInclude Include="Clock\Clock.h" />
     <ClInclude Include="Transformable\Transformable.h" />
     <ClInclude Include="User Environment\UserEnvironment.h" />
     <ClInclude Include="Utilities\Colour\ColourRGB.h" />
@@ -262,7 +262,6 @@
     <ClInclude Include="3D\Skybox\Skybox.h" />
     <ClInclude Include="Old Garbage\shader.hpp" />
     <ClInclude Include="Transformable\Transformable.h" />
-    <ClInclude Include="Clock\Clock.h" />
     <ClInclude Include="Utilities\enumut.h" />
     <ClInclude Include="Utilities\glmut.h" />
     <ClInclude Include="2D\Animation\AnimationTrack2D.h" />
@@ -293,7 +292,6 @@
     <ClInclude Include="Utilities\Paths\PathSegment3D.h" />
     <ClInclude Include="Events\WindowResizeEvent.h" />
     <ClInclude Include="2D\Texture\GLSpriteSheetLoader.h" />
-    <ClInclude Include="Clock\Stopwatch\Stopwatch.h" />
     <ClInclude Include="Time\Timer\Timer.h" />
     <ClInclude Include="Error Handler\ErrorHandling.h" />
     <ClInclude Include="Error Handler\Error Handler\AelaErrorHandler.h" />
@@ -302,5 +300,10 @@
     <ClInclude Include="2D\Positioning Mode\PositioningMode2D.h" />
     <ClInclude Include="2D\Fonts\Font.h" />
     <ClInclude Include="2D\Fonts\FontLoader.h" />
+    <ClInclude Include="Time\Stopwatch\Stopwatch.h" />
+    <ClInclude Include="Time\Time.h" />
+    <ClInclude Include="Time\Clock.h" />
+    <ClInclude Include="Utilities\Safe Functions.h" />
+    <ClInclude Include="Audio\AudioBuffer.h" />
   </ItemGroup>
 </Project>

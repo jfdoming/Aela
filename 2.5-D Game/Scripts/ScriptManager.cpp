@@ -28,9 +28,11 @@ bool Game::ScriptManager::addScript(std::string name, std::function<void()> scri
 bool Game::ScriptManager::runScript(std::string name) {
 	auto iter = scripts.find(name);
 	if (iter == scripts.end()) {
+		std::cout << "Could not find script of name: " << name << "\n";
 		return false;
 	}
 	iter->second();
+	std::cout << "Found script of name: " << name << "\n";
 	return true;
 }
 

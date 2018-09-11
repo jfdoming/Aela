@@ -1,3 +1,0 @@
-<AmbientLight power="0.85">
-<Light power="0.3" position="5,15,5" scaling="1.0,1.0,1.0" colour="0.7,0.7,0.7">
-<Skybox src="~black">

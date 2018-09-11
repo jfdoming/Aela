@@ -59,8 +59,11 @@ namespace Aela {
 			void render();
 
 			bool shouldExit();
+
 			void setUseStopwatch(bool useStopwatch);
 			bool isUsingStopwatch();
+
+			void runNextUpdate(std::function<void()> function);
 
 			// These are getters. Some of the Aela Objects inside of this class are not allowed to be accessed externally.
 			Window* getWindow();
@@ -104,6 +107,8 @@ namespace Aela {
 			Stopwatch stopwatch;
 
 			bool useStopwatch = false;
+
+			std::queue<std::function<void()>> functionsToRunNextUpdate;
 
 			int runningLoop();
 	};

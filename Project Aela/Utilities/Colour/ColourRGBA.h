@@ -8,12 +8,13 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <ostream>
+#include <iostream>
 
 namespace Aela {
 	class ColourRGBA {
 		public:
 			ColourRGBA() {
-
+				set(0, 0, 0, 0);
 			}
 
 			bool operator==(const ColourRGBA& other) {

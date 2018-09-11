@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.10)
 project(2_5_D_Game)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -8,13 +8,13 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 endif()
 
 # libraries
-include_directories(E:/Programming/Libraries/glm-0.9.7.1)
-include_directories(E:/Programming/Libraries/SDL2-devel-2.0.9-mingw/x86_64-w64-mingw32/include/SDL2)
-include_directories(E:/Programming/Libraries/glew-2.1.0/include)
-include_directories("E:/Programming/Libraries/freetype 2.7.1/freetype-windows-binaries-master/include")
-include_directories(E:/Programming/Libraries/lua-5.3.4-mingw/include)
-include_directories("E:/Programming/Libraries/OpenAL 1.1 SDK/include")
-include_directories(E:/Programming/Libraries/libpng-1.6.35-mingw/include)
+include_directories(C:/Users/Robert/Documents/CLion/Libraries/glm-0.9.7.1)
+include_directories(C:/Users/Robert/Documents/CLion/Libraries/glew-2.1.0/include)
+include_directories("C:/Users/Robert/Documents/CLion/Libraries/freetype 2.7.1/freetype-windows-binaries-master/include")
+include_directories(C:/Users/Robert/Documents/CLion/Libraries/SDL2-devel-2.0.9-mingw/x86_64-w64-mingw32/include/SDL2)
+include_directories(C:/Users/Robert/Documents/CLion/Libraries/libpng-1.6.35/include)
+include_directories(C:/Users/Robert/Documents/CLion/Libraries/lua-5.3.4-mingw/include)
+include_directories("C:/Users/Robert/Documents/CLion/Libraries/OpenAL 1.1 SDK/include")
 
 # in-house libraries
 include_directories("../Project Aela")
@@ -176,12 +176,12 @@ add_executable(2_5_D_Game
         Worlds/WorldLoader.h
         Worlds/WorldManager.cpp
         Worlds/WorldManager.h
-        )
+        Tiles/TileBehaviourExecutor.cpp)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    target_link_libraries(2_5_D_Game "E:/Programming/Repos/Project-Aela/Project Aela/build/bin/debug/x64/libAela.a")
+    target_link_libraries(2_5_D_Game "C:/Users/Robert/Documents/CLion/Projects/Project Aela/Project Aela/build/bin/debug/x64/libAela.a")
 elseif (CMAKE_BUILD_TYPE MATCHES Release)
-    target_link_libraries(2_5_D_Game "E:/Programming/Repos/Project-Aela/Project Aela/build/bin/release/x64/libAela.a")
+    target_link_libraries(2_5_D_Game "C:/Users/Robert/Documents/CLion/Projects/Project Aela/Project Aela/build/bin/release/x64/libAela.a")
 else ()
     message(WARNING "Unknown build type!")
 endif ()
@@ -189,16 +189,16 @@ endif ()
 # GLFW
 find_package(OpenGL REQUIRED)
 
-target_link_libraries(2_5_D_Game "E:/Programming/Libraries/libpng-1.6.35-mingw/lib/libpng16.dll.a")
-target_link_libraries(2_5_D_Game "E:/Programming/Libraries/freetype 2.7.1/freetype-windows-binaries-master/win64/freetype271.lib")
-target_link_libraries(2_5_D_Game "E:/Programming/Libraries/OpenAL 1.1 SDK/libs/Win64/OpenAl32.lib")
-target_link_libraries(2_5_D_Game "E:/Programming/Libraries/lua-5.3.4-mingw/liblua53.a")
+target_link_libraries(2_5_D_Game "C:/Users/Robert/Documents/CLion/Libraries/libpng-1.6.35/lib/libpng16.dll.a")
+target_link_libraries(2_5_D_Game "C:/Users/Robert/Documents/CLion/Libraries/freetype 2.7.1/freetype-windows-binaries-master/win64/freetype271.lib")
+target_link_libraries(2_5_D_Game "C:/Users/Robert/Documents/CLion/Libraries/OpenAL 1.1 SDK/libs/Win64/OpenAl32.lib")
+target_link_libraries(2_5_D_Game "C:/Users/Robert/Documents/CLion/Libraries/lua-5.3.4-mingw/liblua53.a")
 
 # the statements below must be in the below very specific order, otherwise they won't compile
-target_link_libraries(2_5_D_Game "E:/Programming/Libraries/glew-2.1.0-mingw/lib/libglew32.a")
+target_link_libraries(2_5_D_Game "C:/Users/Robert/Documents/CLion/Libraries/glew-2.1.0/lib/libglew32.a")
 target_link_libraries(2_5_D_Game ${OPENGL_gl_LIBRARY})
-target_link_libraries(2_5_D_Game "E:/Programming/Libraries/SDL2-devel-2.0.9-mingw/x86_64-w64-mingw32/lib/libSDL2main.a")
-target_link_libraries(2_5_D_Game "E:/Programming/Libraries/SDL2-devel-2.0.9-mingw/x86_64-w64-mingw32/lib/libSDL2.a")
+target_link_libraries(2_5_D_Game "C:/Users/Robert/Documents/CLion/Libraries/SDL2-devel-2.0.9-mingw/x86_64-w64-mingw32/lib/libSDL2main.a")
+target_link_libraries(2_5_D_Game "C:/Users/Robert/Documents/CLion/Libraries/SDL2-devel-2.0.9-mingw/x86_64-w64-mingw32/lib/libSDL2.a")
 
 # required to link SDL2, see here: https://stackoverflow.com/questions/27408853/cmake-failing-to-statically-link-sdl2
 target_link_libraries(2_5_D_Game m)

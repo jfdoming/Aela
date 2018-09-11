@@ -4,7 +4,7 @@
 #include "../Worlds/WorldManager.h"
 #include "../Particles/TileSwitchParticleEmitter.h"
 #include "../Displays/Tiles/TileInventoryDisplay.h"
-#include "Tiles/TileBehaviourExecutor.h"
+#include "../Tiles/TileBehaviourExecutor.h"
 #include "../Aela Game/AelaGame.h"
 
 Game::TileSwitchGun::TileSwitchGun() = default;

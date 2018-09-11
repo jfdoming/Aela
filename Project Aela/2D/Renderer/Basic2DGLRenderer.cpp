@@ -262,7 +262,7 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, Font* 
 	font->prepareForRendering(textScaling);
 
 	// This creates a bounding box for the text.
-	Rect<float> characterPositioning(output->getX(), output->getY(), 0, 0);
+	Rect<float> characterPositioning((float) output->getX(), (float) output->getY(), 0, 0);
 	// characterPositioning.setDimensions(0, 0);
 
 	unsigned int bufferWidth = 0, bufferHeight;
@@ -356,7 +356,7 @@ void Basic2DGLRenderer::renderTextToSimple2DFramebuffer(std::string text, Font* 
 
 	// This creates one buffer out of each glyph's individual buffer.
 	if (!glyphs.empty()) {
-		for (int i = 0; i < bufferHeight; i++) {
+		for (unsigned int i = 0; i < bufferHeight; i++) {
 			for (auto& iGlyph : glyphs) {
 				for (int whichChar = 0; whichChar < iGlyph.width; whichChar++) {
 					int whichRowToAccess = i - (originY - iGlyph.originY);

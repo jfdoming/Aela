@@ -9,7 +9,7 @@
 #include "../../Aela Game/AelaGame.h"
 #include "../../Displays/Dialogue/DialogueDisplay.h"
 #include "../../Worlds/WorldManager.h"
-#include "Tiles/TileBehaviourExecutor.h"
+#include "../Tiles/TileBehaviourExecutor.h"
 #include "../../Doors/DoorProvider.h"
 #include "../../Doors/TileAmountLock.h"
 #include "../../Save States/GameSaver.h"
@@ -19,6 +19,8 @@
 #include "../../Enemies/EnemyProvider.h"
 #include "../../Enemies/Turret.h"
 #include "../ScriptManager.h"
+#include "../../Location/Location.h"
+#include "../../../Project Aela/Window/Window.h"
 
 #define BUTTON_PRESSING_TIME 500
 
@@ -59,7 +61,7 @@ void Scripts::setupCharacters(int stage, int level) {
 			switch (level) {
 				case 1: {
 					Character* worker_1 = new Character("worker_1", Location(1, -3, 0, 4, 1, 9));
-					worker_1->setTextureName("scientist_1");
+					worker_1->setTexture("scientist_1");
 					characterProvider->addCharacter(worker_1);
 					break;
 				}
@@ -70,88 +72,96 @@ void Scripts::setupCharacters(int stage, int level) {
 					}
 
 					Character* soldier_1 = new Character("soldier_1", Location(1, -9, 4, 11, -4, 5), 0.00275f, 0);
-					soldier_1->setTextureName("soldier_2");
+					soldier_1->setTexture("soldier_2");
 					characterProvider->addCharacter(soldier_1);
 
 					Character* soldier_2 = new Character("soldier_2", Location(1, -9, 4, 12, -4, 4), 0.00275f, 0);
-					soldier_2->setTextureName("soldier_1");
+					soldier_2->setTexture("soldier_1");
 					characterProvider->addCharacter(soldier_2);
 
 					Character* soldier_3 = new Character("soldier_3", Location(1, -9, 4, 10, -4, 2), 0.00275f, 0);
-					soldier_3->setTextureName("soldier_1");
+					soldier_3->setTexture("soldier_1");
 					characterProvider->addCharacter(soldier_3);
 
 					Character* soldier_4 = new Character("soldier_4", Location(1, -9, 4, 11, -4, 1), 0.00275f, 0);
-					soldier_4->setTextureName("soldier_2");
+					soldier_4->setTexture("soldier_2");
 					characterProvider->addCharacter(soldier_4);
 
 					Character* scientist_1 = new Character("scientist_1", Location(1, -9, 4, 11, -4, 4), 0.00275f, 0);
-					scientist_1->setTextureName("scientist_1");
+					scientist_1->setTexture("scientist_1");
 					characterProvider->addCharacter(scientist_1);
 
 					Character* scientist_2 = new Character("scientist_2", Location(1, -9, 4, 11, -4, 3), 0.00275f, 0);
-					scientist_2->setTextureName("scientist_1");
+					scientist_2->setTexture("scientist_1");
 					characterProvider->addCharacter(scientist_2);
 
 					Character* scientist_3 = new Character("scientist_3", Location(1, -9, 4, 11, -4, 2), 0.00275f, 0);
-					scientist_3->setTextureName("scientist_1");
+					scientist_3->setTexture("scientist_1");
 					characterProvider->addCharacter(scientist_3);
 					break;
 				}
 				case 3: {
+					Character* julian = new Character("Julian", Location(0, -2, 0, 13, 0, 11));
+					julian->setTexture("Julian");
+					characterProvider->addCharacter(julian);
+
+					Character* robert = new Character("Robert", Location(0, -2, 0, 14, 0, 11));
+					robert->setTexture("Robert");
+					characterProvider->addCharacter(robert);
+
 					Character* looker = new Character("looker", Location(1, -22, 1, 7, 2, 2));
 
 					Turret* turret = new Turret("turret_1", Location(1, -15, 0, 0, 0, 11), 2);
-					turret->setTextureName("turret_1");
+					turret->setTexture("turret_1");
 					turret->setDetectionAngles(false, false, true, false);
 					turret->turnImmediately(TileDirection::LEFT);
 					characterProvider->addCharacter(turret);
 					enemyProvider->addTurret(turret);
 
 					Turret* turret_2 = new Turret("turret_2", Location(1, -16, 0, 9, 0, 9), 6);
-					turret_2->setTextureName("turret_2");
+					turret_2->setTexture("turret_1");
 					turret_2->setDetectionAngles(true, false, false, false);
 					turret_2->turnImmediately(TileDirection::RIGHT);
 					characterProvider->addCharacter(turret_2);
 					enemyProvider->addTurret(turret_2);
 
 					Turret* turret_3 = new Turret("turret_3", Location(1, -16, 0, 1, 0, 8), 6);
-					turret_3->setTextureName("turret_3");
+					turret_3->setTexture("turret_1");
 					turret_3->setDetectionAngles(true, false, false, false);
 					turret_3->turnImmediately(TileDirection::RIGHT);
 					characterProvider->addCharacter(turret_3);
 					enemyProvider->addTurret(turret_3);
 
 					Turret* turret_4 = new Turret("turret_4", Location(1, -16, 0, 1, 0, 10), 6);
-					turret_4->setTextureName("turret_4");
+					turret_4->setTexture("turret_1");
 					turret_4->setDetectionAngles(true, false, false, false);
 					turret_4->turnImmediately(TileDirection::RIGHT);
 					characterProvider->addCharacter(turret_4);
 					enemyProvider->addTurret(turret_4);
 
 					Turret* turret_5 = new Turret("turret_5", Location(1, -18, 0, 12, 0, 13), 4);
-					turret_5->setTextureName("turret_5");
+					turret_5->setTexture("turret_1");
 					turret_5->setDetectionAngles(false, true, false, false);
 					turret_5->turnImmediately(TileDirection::FORWARD);
 					characterProvider->addCharacter(turret_5);
 					enemyProvider->addTurret(turret_5);
 
 					Turret* turret_6 = new Turret("turret_6", Location(1, -18, 1, 6, 0, 3), 4);
-					turret_6->setTextureName("turret_6");
+					turret_6->setTexture("turret_1");
 					turret_6->setDetectionAngles(false, false, false, true);
 					turret_6->turnImmediately(TileDirection::BACKWARD);
 					characterProvider->addCharacter(turret_6);
 					enemyProvider->addTurret(turret_6);
 
 					Turret* turret_7 = new Turret("turret_7", Location(1, -19, 0, 6, 0, 13), 4);
-					turret_7->setTextureName("turret_7");
+					turret_7->setTexture("turret_1");
 					turret_7->setDetectionAngles(false, true, false, false);
 					turret_7->turnImmediately(TileDirection::FORWARD);
 					characterProvider->addCharacter(turret_7);
 					enemyProvider->addTurret(turret_7);
 
 					Turret* turret_8 = new Turret("turret_8", Location(1, -20, 0, 4, 0, 13), 4);
-					turret_8->setTextureName("turret_8");
+					turret_8->setTexture("turret_1");
 					turret_8->setDetectionAngles(true, false, false, false);
 					turret_8->turnImmediately(TileDirection::FORWARD);
 					characterProvider->addCharacter(turret_8);
@@ -191,9 +201,10 @@ void Scripts::setupTeleporters(int stage, int level) {
 					break;
 				}
 				case 3: {
-					auto location = Location(1, -17, 1, 7, 0, 2);
-					auto location1 = Location(1, -17, 3, 8, 0, 3);
-					worldManager->addTeleporterToFloorTile(location, location1);
+					worldManager->addTeleporterToFloorTile(Location(1, -17, 1, 7, 0, 2), Location(1, -17, 3, 8, 0, 3));
+					worldManager->addTeleporterToFloorTile(Location(1, -18, 3, 8, 0, 13), Location(1, -19, 3, 2, 0, 12));
+					worldManager->addTeleporterToFloorTile(Location(1, -19, 3, 2, 0, 12), Location(1, -18, 3, 8, 0, 13));
+
 					break;
 				}
 				default:
@@ -491,11 +502,11 @@ void Scripts::setupDoors(int stage, int level) {
 					auto function4 = (std::function<void()>) onClose_1_10;
 					door_1_10.setOnClose(&function4);
 					auto* door_1_10_lock_0 = new TileAmountLock();
-					door_1_10_lock_0->specifyRegionAsCuboid(Location(1, -4, 0, 1, 0, 3), 6, 1, 5);
+					door_1_10_lock_0->specifyRegionAsCuboid(Location(1, -4, 0, 1, 0, 4), 6, 1, 4);
 					door_1_10_lock_0->addTileTypeToCheckFor(9, 9);
-					door_1_10_lock_0->addTileTypeToCheckFor(10, 9);
+					door_1_10_lock_0->addTileTypeToCheckFor(10, 6);
 					door_1_10_lock_0->addTileTypeToCheckFor(11, 3);
-					door_1_10_lock_0->addTileTypeToCheckFor(13, 9);
+					door_1_10_lock_0->addTileTypeToCheckFor(13, 6);
 					Lock* door_1_10_lock_0_base = door_1_10_lock_0;
 					door_1_10.addLock(door_1_10_lock_0_base);
 					setupDoorTileAmountSensors(door_1_10_lock_0, "door_1_10 sensor_0");
@@ -507,21 +518,21 @@ void Scripts::setupDoors(int stage, int level) {
 					auto onOpen_1_11 = []() {
 						openDoor("door_1_11", 177, Location(1, glm::ivec2(-5, 0), glm::ivec3(13, 0, 10)));
 						worldManager->getTileGroup(Location(1, glm::ivec2(-4, 0), glm::ivec3(3, 0, 11)))->removeTile(
-								227);
-						worldManager->getTileGroup(Location(1, glm::ivec2(-4, 0), glm::ivec3(3, 0, 11)))->addTile(228);
+								225);
+						worldManager->getTileGroup(Location(1, glm::ivec2(-4, 0), glm::ivec3(3, 0, 11)))->addTile(226);
 					};
 
 					auto onClose_1_11 = []() {
 						closeDoor("door_1_11", 177, Location(1, glm::ivec2(-5, 0), glm::ivec3(13, 0, 10)));
-						worldManager->getTileGroup(Location(1, glm::ivec2(-4, 0), glm::ivec3(3, 0, 11)))->addTile(227);
+						worldManager->getTileGroup(Location(1, glm::ivec2(-4, 0), glm::ivec3(3, 0, 11)))->addTile(225);
 						worldManager->getTileGroup(Location(1, glm::ivec2(-4, 0), glm::ivec3(3, 0, 11)))->removeTile(
-								228);
+								225);
 					};
 
 					Door door_1_11(1);
 					setupDoor(&door_1_11, "door_1_11", onOpen_1_11, onClose_1_11);
 					setupDoorSensor(Location(1, glm::ivec2(-4, 0), glm::ivec3(3, 0, 10)), "door_1_11",
-									"door_1_11 sensor_0", 9, 0);
+									"door_1_11 sensor_0", 13, 0);
 
 					// World 1 Door 12
 					auto onOpen_1_12 = []() {
@@ -1271,22 +1282,28 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 		case 1:
 			switch (level) {
 				case 1: {
-					scriptManager->addScript("dialogue_0_1", std::bind(&showDialogue, "Aela", "", "Hi! My name is Aela! I will be your assisstant throughout your tests.", "dialogue_0_2"));
-					scriptManager->addScript("dialogue_0_2", std::bind(&showDialogue, "Aela", "", "As you know, Oxylabs has changed its testing protocols.", "dialogue_0_3"));
-					scriptManager->addScript("dialogue_0_3", std::bind(&showDialogue, "Aela", "", "According to the new protocols, testing can no longer be outsourced.", "dialogue_0_4"));
-					scriptManager->addScript("dialogue_0_4", std::bind(&showDialogue, "Aela", "", "So while our \"more intelligent\" higher ups look for testers to hire,", "dialogue_0_5"));
-					scriptManager->addScript("dialogue_0_5", std::bind(&showDialogue, "Aela", "", "us scientists are now responsible for testing each others' projects.", "dialogue_0_6"));
-					scriptManager->addScript("dialogue_0_6", std::bind(&showDialogue, "Aela", "", "Only our management could be this moronic, right?", "dialogue_0_7"));
-					scriptManager->addScript("dialogue_0_7", std::bind(&showDialogue, "Aela", "", "It says here that you, Player, are a computer engineer working on Project Foxtrot.", "dialogue_0_8"));
-					scriptManager->addScript("dialogue_0_8", std::bind(&showDialogue, "Aela", "", "I myself was a mechanical engineer under Project Bravo.", "dialogue_0_9"));
-					scriptManager->addScript("dialogue_0_9", std::bind(&showDialogue, "Aela", "", "Nevertheless, we've been forced to waste our time on the testing of Project Echo!", "dialogue_0_10"));
-					scriptManager->addScript("dialogue_0_10", std::bind(&showDialogue, "Aela", "", "Looks like your elevator has arrived.", "dialogue_0_11"));
-					scriptManager->addScript("dialogue_0_11", std::bind(&showDialogue, "Aela", "", "Once you leave the elevator, please walk to the kiosk marked with an \"i\".", "dialogue_0_12"));
+					scriptManager->addScript("dialogue_0_1", std::bind(&showDialogue, "Aela", "avatars_1/2/0.png", "Hi! My name is Aela! I will be your assisstant throughout your tests.", "dialogue_0_2"));
+					scriptManager->addScript("dialogue_0_2", std::bind(&showDialogue, "Aela", "avatars_1/1/0.png", "As you know, Oxylabs has changed its testing protocols.", "dialogue_0_3"));
+					scriptManager->addScript("dialogue_0_3", std::bind(&showDialogue, "Aela", "avatars_1/1/0.png", "According to the new protocols, testing can no longer be outsourced.", "dialogue_0_4"));
+					scriptManager->addScript("dialogue_0_4", std::bind(&showDialogue, "Aela", "avatars_1/4/0.png", "So while our \"more intelligent\" higher ups look for testers to hire,", "dialogue_0_5"));
+					scriptManager->addScript("dialogue_0_5", std::bind(&showDialogue, "Aela", "avatars_1/0/1.png", "us scientists are now responsible for testing each others' projects.", "dialogue_0_6"));
+					scriptManager->addScript("dialogue_0_6", std::bind(&showDialogue, "Aela", "avatars_1/2/0.png", "Only our management could be this moronic, right?", "dialogue_0_7"));
+					scriptManager->addScript("dialogue_0_7", std::bind(&showDialogue, "Aela", "avatars_1/1/1.png", "It says here that you, Player, are a computer engineer working on Project Foxtrot.", "dialogue_0_8"));
+					scriptManager->addScript("dialogue_0_8", std::bind(&showDialogue, "Aela", "avatars_1/1/0.png", "I myself was a mechanical engineer under Project Bravo.", "dialogue_0_9"));
+					scriptManager->addScript("dialogue_0_9", std::bind(&showDialogue, "Aela", "avatars_1/4/0.png", "Nevertheless, we've been forced to waste our time on the testing of Project Echo!", "dialogue_0_10"));
+
+					auto dialogue_0_10 = []() {
+						showDialogue("Aela", "avatars_1/1/0.png", "Looks like your elevator has arrived.", "dialogue_0_11");
+						stopAnimatingElevator();
+					};
+					scriptManager->addScript("dialogue_0_10", dialogue_0_10);
+					scriptManager->addScript("dialogue_0_11", std::bind(&showDialogue, "Aela", "avatars_1/1/0.png", "Once you leave the elevator, please walk to the kiosk marked with an \"i\".", "dialogue_0_12"));
 
 					auto dialogue_0_12 = []() {
 						dialogueDisplay->closeDialog();
 						hintDisplay->displayHint("You can use W, A, S and D to walk!", HintDisplayDuration::LONG);
 						hintDisplay->displayHint("Walk to the exit!", HintDisplayDuration::LONG);
+						player->stopLookingAtWatch();
 					};
 
 					scriptManager->addScript("dialogue_0_12", dialogue_0_12);
@@ -1312,63 +1329,73 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 						if (player->getCharacter()->getDirectionFacing() == TileDirection::FORWARD) {
 							turnDisplayOn(Location(1, 0, 0, 10, 0, 6));
 							hintDisplay->clear();
-							dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/0.png", "WELCOME TO LEVEL 1 OF THE PROJECT ECHO TESTING FACILITY.", "dialogue_1_1");
+							dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/2.png", "WELCOME TO LEVEL 1 OF THE PROJECT ECHO TESTING FACILITY.", "dialogue_1_1");
 						}
 					};
 
 					scriptManager->addScript("dialogue_1_0", dialogue_1_0);
 					worldManager->addPromptedScript("dialogue_1_0", Location(1, glm::ivec2(0, 0), glm::ivec3(10, 0, 6)));
 
-					scriptManager->addScript("dialogue_1_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "PROJECT ECHO IS ALL ABOUT HIGH-SPEED TRANSPORTATION OF MATTER.", "dialogue_1_2"));
-					scriptManager->addScript("dialogue_1_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "YOUR TESING WILL REVOLVE AROUND SEVERAL MATTER-PROPULSION DEVICES.", "dialogue_1_3"));
-					scriptManager->addScript("dialogue_1_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "HOWEVER, THE FOCUS OF YOUR TESTS WILL BE THE PROPULSION GUN.", "dialogue_1_4"));
-					scriptManager->addScript("dialogue_1_4", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "YOUR PROPULSION GUN HAS BEEN DESIGNED TO PICK UP MATTER BELOW YOUR WAIST.", "dialogue_1_5"));
-					scriptManager->addScript("dialogue_1_5", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "FOR EXAMPLE, YOU CAN USE YOUR PROPULSION GUN ON THE FLOOR IN FRONT OF YOU.", "dialogue_1_6"));
+					scriptManager->addScript("dialogue_1_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "PROJECT ECHO IS ALL ABOUT HIGH-SPEED TRANSPORTATION OF MATTER.", "dialogue_1_2"));
+					scriptManager->addScript("dialogue_1_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "YOUR TESING WILL REVOLVE AROUND SEVERAL MATTER-PROPULSION DEVICES.", "dialogue_1_3"));
+					scriptManager->addScript("dialogue_1_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "HOWEVER, THE FOCUS OF YOUR TESTS WILL BE THE PROPULSION GUN.", "dialogue_1_4"));
+					scriptManager->addScript("dialogue_1_4", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "YOUR PROPULSION GUN HAS BEEN DESIGNED TO PICK UP MATTER BELOW YOUR WAIST.", "dialogue_1_5"));
+					scriptManager->addScript("dialogue_1_5", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "FOR EXAMPLE, YOU CAN USE YOUR PROPULSION GUN ON THE FLOOR IN FRONT OF YOU.", "dialogue_1_6"));
 
 					auto dialogue_1_6 = []() {
 						game->getTileSwitchGun()->setActive(true);
-						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/0.png", "HERE IS YOUR PROPULSION GUN.", "dialogue_1_7");
+						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/2.png", "HERE IS YOUR PROPULSION GUN.", "dialogue_1_7");
 						tileInventoryDisplay->show();
+						player->showTileGun();
 					};
 
 					scriptManager->addScript("dialogue_1_6", dialogue_1_6);
 
 					auto dialogue_1_7 = []() {
+						player->lookAtWatch();
 						turnDisplayOff(Location(1, 0, 0, 10, 0, 6));
 						if (!aelaTalkedToPlayerInDialogue1) {
 							aelaTalkedToPlayerInDialogue1 = true;
-							dialogueDisplay->showDialogue("Aela", "", "Player!", "dialogue_1_8");
+							dialogueDisplay->showDialogue("Aela", "avatars_1/2/0.png", "Player!", "dialogue_1_8");
 						} else {
-							dialogueDisplay->showDialogue("Aela", "", "Are you still wondering what to do, Player?", "dialogue_1_12");
+							dialogueDisplay->showDialogue("Aela", "avatars_1/1/0.png", "Are you still wondering what to do, Player?", "dialogue_1_12");
 						}
 					};
 
 					scriptManager->addScript("dialogue_1_7", dialogue_1_7);
 
-					scriptManager->addScript("dialogue_1_8", std::bind(&showDialogue, "Aela", "", "Your propulsion gun has three slots, and each slot can hold a bit of matter.", "dialogue_1_9"));
-					scriptManager->addScript("dialogue_1_9", std::bind(&showDialogue, "Aela", "", "Currently, your three slots contain flooring.", "dialogue_1_10"));
-					scriptManager->addScript("dialogue_1_10", std::bind(&showDialogue, "Aela", "", "When you use your gun, you'll replace the matter in front of you with the matter in the slot.", "dialogue_1_11"));
-					scriptManager->addScript("dialogue_1_11", std::bind(&showDialogue, "Aela", "", "It's actually really simple stuff, so don't panic!", "dialogue_1_12"));
-					scriptManager->addScript("dialogue_1_12", std::bind(&showDialogue, "Aela", "", "Try using your gun to make a bridge across the water to your right!", "dialogue_1_13"));
+					scriptManager->addScript("dialogue_1_8", std::bind(&showDialogue, "Aela", "avatars_1/1/0.png", "Your propulsion gun has three slots, and each slot can hold a bit of matter.", "dialogue_1_9"));
+					scriptManager->addScript("dialogue_1_9", std::bind(&showDialogue, "Aela", "avatars_1/1/0.png", "Currently, your three slots contain flooring.", "dialogue_1_10"));
+					scriptManager->addScript("dialogue_1_10", std::bind(&showDialogue, "Aela", "avatars_1/1/0.png", "When you use your gun, you'll replace the matter in front of you with the matter in the slot.", "dialogue_1_11"));
+					scriptManager->addScript("dialogue_1_11", std::bind(&showDialogue, "Aela", "avatars_1/2/0.png", "It's actually really simple stuff, so don't panic!", "dialogue_1_12"));
+					scriptManager->addScript("dialogue_1_12", std::bind(&showDialogue, "Aela", "avatars_1/1/0.png", "Try using your gun to make a bridge across the water to your right!", "dialogue_1_13"));
 
 					auto dialogue_1_13 = []() {
 						hideDialogue();
+						player->stopLookingAtWatch();
 						hintDisplay->displayHint("Press BACKSLASH to use the Propulsion Gun.", HintDisplayDuration::LONG);
 						hintDisplay->displayHint("Use the LEFT and RIGHT arrow keys to select a slot.", HintDisplayDuration::LONG);
 					};
 
 					scriptManager->addScript("dialogue_1_13", dialogue_1_13);
 
+					auto hint_3_0 = []() {
+						hintDisplay->displayHint("You can hold left shift to run while moving.", HintDisplayDuration::LONG);
+					};
+
+					scriptManager->addScript("hint_3_0", hint_3_0);
+					worldManager->addWalkedOnScript("hint_3_0", Location(1, -1, 0, 10, 0, 10));
+
 					auto dialogue_2_0 = []() {
 						turnDisplayOn(Location(1, -3, 0, 15, 0, 5));
-						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/0.png", "DID YOU KNOW?", "dialogue_2_1");
+						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/2.png", "DID YOU KNOW?", "dialogue_2_1");
 					};
 
 					scriptManager->addScript("dialogue_2_0", dialogue_2_0);
 					worldManager->addPromptedScript("dialogue_2_0", Location(1, -3, 0, 15, 0, 5));
 
-					scriptManager->addScript("dialogue_2_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "LAVA IS ACTUALLY HOT, MELTED ROCK!", "dialogue_2_1"));
-					scriptManager->addScript("dialogue_2_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "WHEN LAVA INTERACTS WITH WATER, IT COOLS OFF AND BECOMES SOLID!", "dialogue_2_2"));
+					scriptManager->addScript("dialogue_2_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "LAVA IS ACTUALLY HOT, MELTED ROCK!", "dialogue_2_2"));
+					scriptManager->addScript("dialogue_2_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "WHEN LAVA INTERACTS WITH WATER, IT COOLS OFF AND BECOMES SOLID!", "dialogue_2_3"));
 
 					auto dialogue_2_3 = []() {
 						turnDisplayOff(Location(1, -3, 0, 15, 0, 5));
@@ -1379,7 +1406,7 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 
 					auto dialogue_3_0 = []() {
 						turnDisplayOn(Location(1, -3, 0, 5, 0, 5));
-						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/0.png", "DID YOU KNOW?", "dialogue_3_1");
+						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/2.png", "DID YOU KNOW?", "dialogue_3_1");
 					};
 
 					scriptManager->addScript("dialogue_3_0", dialogue_3_0);
@@ -1387,12 +1414,14 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 
 					auto dialogue_3_1 = []() {
 						// Insert that one animation here!
-						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/0.png", "THE FOUNDER OF OXYLABS, ARTHUR WRIGHT, MIGHT HAVE BEEN AN ENTREPRENEUR.", "dialogue_3_2");
+						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/2.png", "THE FOUNDER OF OXYLABS, ARTHUR WRIGHT, MIGHT HAVE BEEN AN ENTREPRENEUR.", "dialogue_3_2");
 					};
 
-					scriptManager->addScript("dialogue_3_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "HOWEVER, IN HIS HEART, HE WAS AN ENTHUSIASTIC SCIENTIST.", "dialogue_3_3"));
-					scriptManager->addScript("dialogue_3_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "THE CURRENT PROJECT YOU ARE TESTING, PROJECT ECHO, WAS HIS LAST.", "dialogue_3_4"));
-					scriptManager->addScript("dialogue_3_4", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "HIS DAUGHTER TOOK OVER AND STARTED OXYLABS' MOST FAMOUS DEVELOPMENT, PROJECT FOXTROT.", "dialogue_3_5"));
+					scriptManager->addScript("dialogue_3_1", dialogue_3_1);
+
+					scriptManager->addScript("dialogue_3_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "HOWEVER, IN HIS HEART, HE WAS AN ENTHUSIASTIC SCIENTIST.", "dialogue_3_3"));
+					scriptManager->addScript("dialogue_3_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "THE CURRENT PROJECT YOU ARE TESTING, PROJECT ECHO, WAS HIS LAST.", "dialogue_3_4"));
+					scriptManager->addScript("dialogue_3_4", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "HIS DAUGHTER TOOK OVER AND STARTED OXYLABS' MOST FAMOUS DEVELOPMENT, PROJECT FOXTROT.", "dialogue_3_5"));
 
 					auto dialogue_3_5 = []() {
 						turnDisplayOff(Location(1, -3, 0, 5, 0, 5));
@@ -1403,15 +1432,15 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 
 					auto dialogue_4_0 = []() {
 						turnDisplayOn(Location(1, -4, 0, 3, 0, 2));
-						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/0.png", "DID YOU KNOW?", "dialogue_4_1");
+						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/2.png", "DID YOU KNOW?", "dialogue_4_1");
 					};
 
 					scriptManager->addScript("dialogue_4_0", dialogue_4_0);
 					worldManager->addPromptedScript("dialogue_4_0", Location(1, -4, 0, 3, 0, 2));
 
-					scriptManager->addScript("dialogue_4_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "THE PROPULSION GUN USES STATE OF THE ART TECHNOLOGY.", "dialogue_4_2"));
-					scriptManager->addScript("dialogue_4_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "THIS TECHNOLOGY IS BASED ON MANY RECENT BREAKTHROUGHS IN PHYSICS.", "dialogue_4_3"));
-					scriptManager->addScript("dialogue_4_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "THE MOST IMPORTANT BREAKTHROUGH IS MR. READ'S OWN EXPANSION OF MEMERSTOTLE'S THEORY OF THE POLYGON.", "dialogue_4_4"));
+					scriptManager->addScript("dialogue_4_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "THE PROPULSION GUN USES STATE OF THE ART TECHNOLOGY.", "dialogue_4_2"));
+					scriptManager->addScript("dialogue_4_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "THIS TECHNOLOGY IS BASED ON MANY RECENT BREAKTHROUGHS IN PHYSICS.", "dialogue_4_3"));
+					scriptManager->addScript("dialogue_4_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "THE MOST IMPORTANT BREAKTHROUGH IS MR. READ'S OWN EXPANSION OF MEMERSTOTLE'S THEORY OF THE POLYGON.", "dialogue_4_4"));
 
 					auto dialogue_4_4 = []() {
 						turnDisplayOff(Location(1, -4, 0, 3, 0, 2));
@@ -1458,13 +1487,16 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 				}
 				case 2: {
 					auto dialogue_8_0 = []() {
+						worldManager->removeWalkedOnScript(Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
+						player->lookAtWatch();
 						player->getCharacter()->allowNewMovements(true);
-						dialogueDisplay->showDialogue("Aela", "", "Congratulations on making it through the first level!", "dialogue_8_1");
+						animateElevator();
+						dialogueDisplay->showDialogue("Aela", "avatars_1/2/0.png", "Congratulations on making it through the first level!", "dialogue_8_1");
 					};
 					scriptManager->addScript("dialogue_8_0", dialogue_8_0);
 					worldManager->addWalkedOnScript("dialogue_8_0", Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
 
-					scriptManager->addScript("dialogue_8_1", std::bind(&showDialogue, "Aela", "", "Was it easy?", "dialogue_8_2"));
+					scriptManager->addScript("dialogue_8_1", std::bind(&showDialogue, "Aela", "avatars_1/1/0.png", "Was it easy?", "dialogue_8_2"));
 
 					auto dialogue_8_2 = []() {
 						auto yesOption = DialogueOption("Yes", "dialogue_8_3_1");
@@ -1473,14 +1505,18 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 						hintDisplay->displayHint("You can use W/S or A/D to select how to respond.", HintDisplayDuration::LONG);
 					};
 
-					scriptManager->addScript("dialogue_8_3_1", std::bind(&showDialogue, "Aela", "", "Well, I'm sure it was for you!", "dialogue_8_4"));
-					scriptManager->addScript("dialogue_8_3_2", std::bind(&showDialogue, "Aela", "", "Really? Well you made it look easy.", "dialogue_8_4"));
-					scriptManager->addScript("dialogue_8_4", std::bind(&showDialogue, "Aela", "", "Apparently, the next level ups the difficulty. We'll see if that's true.", "dialogue_8_5"));
+					scriptManager->addScript("dialogue_8_2", dialogue_8_2);
+
+					scriptManager->addScript("dialogue_8_3_1", std::bind(&showDialogue, "Aela", "avatars_1/2/0.png", "Well, I'm sure it was for you!", "dialogue_8_4"));
+					scriptManager->addScript("dialogue_8_3_2", std::bind(&showDialogue, "Aela", "avatars_1/1/0.png", "Really? Well you made it look easy.", "dialogue_8_4"));
+					scriptManager->addScript("dialogue_8_4", std::bind(&showDialogue, "Aela", "avatars_1/1/0.png", "Apparently, the next level ups the difficulty. We'll see if that's true.", "dialogue_8_5"));
 
 					auto dialogue_8_5 = []() {
 						// End elevator animation here
+						player->stopLookingAtWatch();
 						hideDialogue();
 						worldManager->removeWalkedOnScript(Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
+						stopAnimatingElevator();
 					};
 
 					scriptManager->addScript("dialogue_8_5", dialogue_8_5);
@@ -1490,15 +1526,15 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 
 					auto dialogue_5_0 = []() {
 						turnDisplayOn(Location(1, -6, 0, 2, 0, 6));
-						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/0.png", "WELCOME TO LEVEL 2 OF THE PROJECT ECHO TESTING FACILITY.", "dialogue_5_1");
+						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/2.png", "WELCOME TO LEVEL 2 OF THE PROJECT ECHO TESTING FACILITY.", "dialogue_5_1");
 					};
 
 					scriptManager->addScript("dialogue_5_0", dialogue_5_0);
 					worldManager->addPromptedScript("dialogue_5_0", Location(1, -6, 0, 2, 0, 6));
 
-					scriptManager->addScript("dialogue_5_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "THIS LEVEL HAS BEEN DESIGNED SO THAT YOUR TESTING IS MORE ENJOYABLE.", "dialogue_5_2"));
-					scriptManager->addScript("dialogue_5_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "YOU WILL FIND PUZZLES THAT FORCE YOU TO THINK BEFORE YOU ACT.", "dialogue_5_3"));
-					scriptManager->addScript("dialogue_5_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "GOOD LUCK!", "dialogue_5_4"));
+					scriptManager->addScript("dialogue_5_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "THIS LEVEL HAS BEEN DESIGNED SO THAT YOUR TESTING IS MORE ENJOYABLE.", "dialogue_5_2"));
+					scriptManager->addScript("dialogue_5_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "YOU WILL FIND PUZZLES THAT FORCE YOU TO THINK BEFORE YOU ACT.", "dialogue_5_3"));
+					scriptManager->addScript("dialogue_5_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "GOOD LUCK!", "dialogue_5_4"));
 
 					auto dialogue_5_4 = []() {
 						turnDisplayOff(Location(1, -6, 0, 2, 0, 6));
@@ -1509,15 +1545,15 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 
 					auto dialogue_6_0 = []() {
 						turnDisplayOn(Location(1, -10, 4, 3, 0, 2));
-						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/0.png", "DID YOU KNOW?", "dialogue_6_1");
+						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/2.png", "DID YOU KNOW?", "dialogue_6_1");
 					};
 
 					scriptManager->addScript("dialogue_6_0", dialogue_6_0);
 					worldManager->addPromptedScript("dialogue_6_0", Location(1, -10, 4, 3, 0, 2));
 
-					scriptManager->addScript("dialogue_6_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "THE PADS YOU HAVE USED TO REACH THIS KIOSK ARE SIMPLY CALLED \"TELEPORTERS\".", "dialogue_6_2"));
-					scriptManager->addScript("dialogue_6_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "YOUR PROPULSION GUN USES A MINIMIZED VERSION OF THE TECHNOLOGY IN TELEPORTERS.", "dialogue_6_3"));
-					scriptManager->addScript("dialogue_6_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "CURRENTLY, OXYLAB ENGINEERS ARE TRYING TO ADAPT THIS TECHNOLOGY FOR MAINSTREAM USE.", "dialogue_6_4"));
+					scriptManager->addScript("dialogue_6_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "THE PADS YOU HAVE USED TO REACH THIS KIOSK ARE SIMPLY CALLED \"TELEPORTERS\".", "dialogue_6_2"));
+					scriptManager->addScript("dialogue_6_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "YOUR PROPULSION GUN USES A MINIMIZED VERSION OF THE TECHNOLOGY IN TELEPORTERS.", "dialogue_6_3"));
+					scriptManager->addScript("dialogue_6_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "CURRENTLY, OXYLAB ENGINEERS ARE TRYING TO ADAPT THIS TECHNOLOGY FOR MAINSTREAM USE.", "dialogue_6_4"));
 
 					auto dialogue_6_4 = []() {
 						turnDisplayOff(Location(1, -10, 4, 3, 0, 2));
@@ -1563,19 +1599,28 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 						scientist = characterProvider->getCharacterByName("scientist_3");
 						scientist->moveIfPossible(&movements);
 
-						auto walked_on_3_1 = [character]() {
-							character->allowNewMovements(true);
-							showDialogue("Aela", "", "What on earth?", "walked_on_3_2");
+						auto walked_on_3_1 = []() {
+							player->lookAtWatch();
+							player->getCharacter()->allowNewMovements(true);
+							showDialogue("Aela", "avatars_1/1/0.png", "What on earth?", "walked_on_3_2");
 						};
 
 						timer->scheduleEventInSeconds(4, walked_on_3_1);
-						scriptManager->addScript("walked_on_3_2", std::bind(&showDialogue, "Aela", "", "What are those soldiers doing with those scientists?", "walked_on_3_3"));
-						scriptManager->addScript("walked_on_3_3", std::bind(&showDialogue, "Aela", "", "I might have to tell a supervisor about this.", "hide_dialogue"));
 					};
 
 					scriptManager->addScript("walked_on_3_0", walked_on_3_0);
 					worldManager->addWalkedOnScript("walked_on_3_0", Location(1, -9, 3, 11, 0, 2));
 					worldManager->addWalkedOnScript("walked_on_3_0", Location(1, -9, 3, 11, 0, 1));
+
+					scriptManager->addScript("walked_on_3_2", std::bind(&showDialogue, "Aela", "avatars_1/0/1.png", "What are those soldiers doing with those scientists?", "walked_on_3_3"));
+					scriptManager->addScript("walked_on_3_3", std::bind(&showDialogue, "Aela", "avatars_1/0/1.png", "I might have to tell a supervisor about this.", "walked_on_3_4"));
+
+					auto walked_on_3_4 = []() {
+						player->stopLookingAtWatch();
+						hideDialogue();
+					};
+
+					scriptManager->addScript("walked_on_3_4", walked_on_3_4);
 
 					auto button_1_1 = []() {
 						Character* character = player->getCharacter();
@@ -1596,11 +1641,18 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 							character->moveIfPossible(TileDirection::FORWARD);
 							character->turn(TileDirection::BACKWARD);
 							character->allowNewMovements(false);
+							animateElevator();
 							setupLevel(1, 3);
+						};
+
+						auto event4 = [character]() {
+							character->allowNewMovements(true);
+							stopAnimatingElevator();
 						};
 
 						timer->scheduleEventInMillis(1000, event2);
 						timer->scheduleEventInMillis(1500, event3);
+						timer->scheduleEventInMillis(6000, event4);
 					};
 
 					scriptManager->addScript("button_1_1", button_1_1);
@@ -1609,76 +1661,146 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 					break;
 				}
 				case 3: {
-					auto dialogue_9_0 = []() {
-						worldManager->removeWalkedOnScript(Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
-						player->getCharacter()->allowNewMovements(true);
-						dialogueDisplay->showDialogue("Aela", "", "Apparently, all employees are being called down for some emergency meeting.", "dialogue_9_1");
-					};
-					scriptManager->addScript("dialogue_9_0", dialogue_9_0);
-					worldManager->addWalkedOnScript("dialogue_9_0", Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
+					scriptManager->addScript("walked_on_2_0", std::bind(&fadeTeleportPlayer, 0, glm::ivec2(-2, 0), glm::ivec3(11, 0, 4)), true);
+					worldManager->addWalkedOnScript("walked_on_2_0", Location(0, glm::ivec2(0, -1), glm::ivec3(1, 0, 15)));
 
-					scriptManager->addScript("dialogue_9_1", std::bind(&showDialogue, "Aela", "", "The only way for you to exit these testing facilities is to finish this upcoming level.", "dialogue_9_2"));
-					scriptManager->addScript("dialogue_9_2", std::bind(&showDialogue, "Aela", "", "I'm in a surveillance room that's close to the meeting point.", "dialogue_9_3"));
-					scriptManager->addScript("dialogue_9_3", std::bind(&showDialogue, "Aela", "", "When the meeting is over, I'll try and come back to fill you in on the details.", "dialogue_9_4"));
-					scriptManager->addScript("dialogue_9_4", std::bind(&showDialogue, "Aela", "", "Good luck with the level!", "hide_dialogue"));
+					auto end_dialogue_0_0 = []() {
+						worldManager->removeWalkedOnScript(Location(0, -2, 0, 13, 0, 10));
+						if (*player->getCharacter()->getLocation() == Location(0, -2, 0, 13, 0, 10)) {
+							dialogueDisplay->showDialogue("??? (Julian)", "avatars_1/0/4.png", "Hi!",
+							                              "end_dialogue_1");
 
-					scriptManager->addScript("walked_on_2_0", std::bind(&fadeTeleportPlayer, 1, glm::ivec2(-15, 0), glm::ivec3(13, 0, 14)), true);
-					worldManager->addWalkedOnScript("walked_on_2_0", Location(1, glm::ivec2(0, -1), glm::ivec3(1, 0, 15)));
-
-					auto dialogue_7_0 = []() {
-						turnDisplayOn(Location(1, -15, 0, 10, 0, 3));
-						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/0.png", "WELCOME TO LEVEL 3 OF THE PROJECT ECHO TESTING FACILITY.", "dialogue_7_1");
+							Character *robert = characterProvider->getCharacterByName("Robert");
+							robert->moveIfPossible(TileDirection::BACKWARD);
+							robert->turn(TileDirection::RIGHT);
+						}
 					};
 
-					scriptManager->addScript("dialogue_7_0", dialogue_7_0);
-					worldManager->addPromptedScript("dialogue_7_0", Location(1, -15, 0, 10, 0, 3));
 
-					scriptManager->addScript("dialogue_7_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "REMEMBER THE ADVICE \"THINK BEFORE YOUR ACT\"?", "dialogue_7_2"));
-					scriptManager->addScript("dialogue_7_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "WELL NOW YOU MAY NOT EVEN HAVE THE TIME TO THINK!", "dialogue_7_3"));
-					scriptManager->addScript("dialogue_7_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/0.png", "ANY MISTAKE OF YOURS COULD BE LETHAL, SO TRY YOUR BEST!", "dialogue_7_4"));
+					scriptManager->addScript("end_dialogue_0_0", end_dialogue_0_0);
+					worldManager->addWalkedOnScript("end_dialogue_0_0", Location(0, -2, 0, 13, 0, 10));
 
-					auto dialogue_7_4 = []() {
-						turnDisplayOff(Location(1, -15, 0, 10, 0, 3));
-						hideDialogue();
+
+					auto end_dialogue_0_1 = []() {
+						worldManager->removeWalkedOnScript(Location(0, -2, 0, 14, 0, 10));
+						if (*player->getCharacter()->getLocation() == Location(0, -2, 0, 14, 0, 10)) {
+							dialogueDisplay->showDialogue("??? (Julian)", "avatars_1/0/4.png", "Hi!",
+							                              "end_dialogue_1");
+
+							Character *julian = characterProvider->getCharacterByName("Julian");
+							julian->moveIfPossible(TileDirection::BACKWARD);
+							julian->turn(TileDirection::LEFT);
+						}
 					};
 
-					scriptManager->addScript("dialogue_7_4", dialogue_7_4);
+					scriptManager->addScript("end_dialogue_0_1", end_dialogue_0_1);
+					worldManager->addWalkedOnScript("end_dialogue_0_1", Location(0, -2, 0, 14, 0, 10));
 
-					scriptManager->addScript("dialogue_10_0", std::bind(&showDialogue, "Plaque", "", "\"Hills outside of the first Oxylabs facility - 1905\"", "hide_dialogue"));
-					worldManager->addPromptedScript("dialogue_10_0", Location(1, -16, 1, 13, 0, 2));
+					scriptManager->addScript("end_dialogue_1", std::bind(&showDialogue, "??? (Robert)", "avatars_1/1/4.png", "I'm Robert and this is Julian.", "end_dialogue_2"));
+					scriptManager->addScript("end_dialogue_2", std::bind(&showDialogue, "Robert", "avatars_1/1/4.png", "We're the developers of this game.", "end_dialogue_3"));
+					scriptManager->addScript("end_dialogue_3", std::bind(&showDialogue, "Julian", "avatars_1/0/4.png", "How'd you like the third level?", "end_dialogue_4"));
+					scriptManager->addScript("end_dialogue_4", std::bind(&showDialogue, "Julian", "avatars_1/0/4.png", "Was it difficult?", "end_dialogue_5"));
+					scriptManager->addScript("end_dialogue_5", std::bind(&showDialogue, "Robert", "avatars_1/1/4.png", "Wait-- didn't we remove the third level from this demo?", "end_dialogue_6"));
+					scriptManager->addScript("end_dialogue_6", std::bind(&showDialogue, "Robert", "avatars_1/1/4.png", "Because we wanted to change it?", "end_dialogue_7"));
+					scriptManager->addScript("end_dialogue_7", std::bind(&showDialogue, "Julian", "avatars_1/0/4.png", "Right, we did...", "end_dialogue_8"));
+					scriptManager->addScript("end_dialogue_8", std::bind(&showDialogue, "Julian", "avatars_1/0/4.png", "Well that kind of sucks. Only two levels in a demo?", "end_dialogue_9"));
+					scriptManager->addScript("end_dialogue_9", std::bind(&showDialogue, "Julian", "avatars_1/0/4.png", "Don't worry, Player, we plan on making more demos with more levels!", "end_dialogue_10"));
+					scriptManager->addScript("end_dialogue_10", std::bind(&showDialogue, "Robert", "avatars_1/1/4.png", "And we'll hopefully not stumble into development hell along the way.", "end_dialogue_11"));
+					scriptManager->addScript("end_dialogue_11", std::bind(&showDialogue, "Julian", "avatars_1/0/4.png", "If you found any bugs, feel free to tell us about them! We appreciate it!", "end_dialogue_12"));
+					scriptManager->addScript("end_dialogue_12", std::bind(&showDialogue, "Robert", "avatars_1/1/4.png", "And we hope you enjoyed the game!", "end_dialogue_13"));
+					scriptManager->addScript("end_dialogue_13", std::bind(&showDialogue, "Julian and Robert", "avatars_1/2/4.png", "See you in the next version of the game!", "end_dialogue_14"));
 
-					scriptManager->addScript("dialogue_11_0", std::bind(&showDialogue, "Plaque", "", "\"The Beauty of Memester Bay - 1908\"", "dialogue_11_1"));
-					worldManager->addPromptedScript("dialogue_11_0", Location(1, -19, 1, 15, 0, 6));
-					scriptManager->addScript("dialogue_11_1", std::bind(&showDialogue, "Plaque", "", "The following depicts Memester Bay - a rocket launch site of Oxylabs rocketry.", "hide_dialogue"));
+					auto end_dialogue_14 = []() {
+						game->fadeOut();
 
-					scriptManager->addScript("dialogue_12_0", std::bind(&showDialogue, "Plaque", "", "\"Firstname Lastname - 1907\"", "dialogue_12_1"));
-					worldManager->addPromptedScript("dialogue_12_0", Location(1, -21, 1, 14, 0, 5));
-					scriptManager->addScript("dialogue_12_1", std::bind(&showDialogue, "Plaque", "", "This is a portrait of Arthur Wright's wife.", "dialogue_12_2"));
-					scriptManager->addScript("dialogue_12_2", std::bind(&showDialogue, "Plaque", "", "She was supportive of Mr. Wright's hard-working spirit.", "dialogue_12_3"));
-					scriptManager->addScript("dialogue_12_3", std::bind(&showDialogue, "Plaque", "", "Unfortunately, she died alongside Mr. Wright due to an automative accident in 1909.", "hide_dialogue"));
+						auto event = []() {
+							GameObjectProvider::getWindow()->quit();
+						};
 
-					scriptManager->addScript("dialogue_13_0", std::bind(&showDialogue, "Plaque", "", "\"A Picture of Mr. Wright on Kozack's first colour camera - 1909\"", "dialogue_11_1"));
-					worldManager->addPromptedScript("dialogue_13_0", Location(1, -17, 3, 9, 0, 11));
-					scriptManager->addScript("dialogue_13_1", std::bind(&showDialogue, "Plaque", "", "During early development of Project Echo, a scientist set two teleporters to teleport to one another.", "dialogue_13_2"));
-					scriptManager->addScript("dialogue_13_2", std::bind(&showDialogue, "Plaque", "", "One of his unsuspecting coworkers walked into one of those teleporters.", "dialogue_13_3"));
-					scriptManager->addScript("dialogue_13_3", std::bind(&showDialogue, "Plaque", "", "The coworker ended up teleporting in an endless loop.", "dialogue_13_4"));
-					scriptManager->addScript("dialogue_13_4", std::bind(&showDialogue, "Plaque", "", "The following photo depicts Mr. Wright's reaction to the mess.", "hide_dialogue"));
+						timer->scheduleEventInSeconds(2, event);
+					};
+					scriptManager->addScript("end_dialogue_14", end_dialogue_14);
 
-					scriptManager->addScript("dialogue_14_0", std::bind(&showDialogue, "Plaque", "", "Mr. Wright got the idea for Project Echo after watching the film this poster promotes.", "hide_dialogue"));
-					worldManager->addPromptedScript("dialogue_14_0", Location(1, -17, 3, 4, 0, 11));
 
-					scriptManager->addScript("dialogue_15_0", std::bind(&showDialogue, "Plaque", "", "The following is an early prototype for a teleporter.", "dialogue_15_1"));
-					worldManager->addPromptedScript("dialogue_15_0", Location(1, -17, 3, 9, 0, 14));
-					scriptManager->addScript("dialogue_15_1", std::bind(&showDialogue, "Plaque", "", "Many prototypes had to be tethered to a large computer.", "hide_dialogue"));
 
-					scriptManager->addScript("dialogue_16_0", std::bind(&showDialogue, "Plaque", "", "This is what a teleporter looks like before its paint is applied.", "hide_dialogue"));
-					worldManager->addPromptedScript("dialogue_16_0", Location(1, -17, 3, 4, 0, 14));
-
-					scriptManager->addScript("dialogue_17_0", std::bind(&showDialogue, "Plaque", "", "Museum of the teleporter, right this way! Includes free cake!", "hide_dialogue"));
-					worldManager->addPromptedScript("dialogue_17_0", Location(1, -17, 0, 8, 0, 13));
-
-					scriptManager->addScript("dialogue_18_0", std::bind(&showDialogue, "Plaque", "", "Museum of the teleporter, right this way! Fun for the whole extended family!", "hide_dialogue"));
-					worldManager->addPromptedScript("dialogue_18_0", Location(1, -17, 0, 6, 0, 13));
+//					auto dialogue_9_0 = []() {
+//						player->lookAtWatch();
+//						worldManager->removeWalkedOnScript(Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
+//						player->getCharacter()->allowNewMovements(true);
+//						dialogueDisplay->showDialogue("Aela", "avatars_1/0/1.png", "Apparently, all employees are being called down for some emergency meeting.", "dialogue_9_1");
+//					};
+//					scriptManager->addScript("dialogue_9_0", dialogue_9_0);
+//					worldManager->addWalkedOnScript("dialogue_9_0", Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 1)));
+//
+//					scriptManager->addScript("dialogue_9_1", std::bind(&showDialogue, "Aela", "avatars_1/0/1.png", "The only way for you to exit these testing facilities is to finish this upcoming level.", "dialogue_9_2"));
+//					scriptManager->addScript("dialogue_9_2", std::bind(&showDialogue, "Aela", "avatars_1/0/1.png", "I'm in a surveillance room that's close to the meeting point.", "dialogue_9_3"));
+//					scriptManager->addScript("dialogue_9_3", std::bind(&showDialogue, "Aela", "avatars_1/0/1.png", "When the meeting is over, I'll try and come back to fill you in on the details.", "dialogue_9_4"));
+//					scriptManager->addScript("dialogue_9_4", std::bind(&showDialogue, "Aela", "avatars_1/2/0.png", "Good luck with the level!", "dialogue_9_5"));
+//
+//					auto dialogue_9_5 = []() {
+//						player->stopLookingAtWatch();
+//						hideDialogue();
+//					};
+//
+//					scriptManager->addScript("dialogue_9_5", dialogue_9_5);
+//
+//					scriptManager->addScript("walked_on_2_0", std::bind(&fadeTeleportPlayer, 0, glm::ivec2(-15, 0), glm::ivec3(13, 0, 14)), true);
+//					worldManager->addWalkedOnScript("walked_on_2_0", Location(1, glm::ivec2(0, -1), glm::ivec3(1, 0, 15)));
+//
+//					auto dialogue_7_0 = []() {
+//						turnDisplayOn(Location(1, -15, 0, 10, 0, 3));
+//						dialogueDisplay->showDialogue("Kiosk", "avatars_1/0/2.png", "WELCOME TO LEVEL 3 OF THE PROJECT ECHO TESTING FACILITY.", "dialogue_7_1");
+//					};
+//
+//					scriptManager->addScript("dialogue_7_0", dialogue_7_0);
+//					worldManager->addPromptedScript("dialogue_7_0", Location(1, -15, 0, 10, 0, 3));
+//
+//					scriptManager->addScript("dialogue_7_1", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "REMEMBER THE ADVICE \"THINK BEFORE YOUR ACT\"?", "dialogue_7_2"));
+//					scriptManager->addScript("dialogue_7_2", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "WELL NOW YOU MAY NOT EVEN HAVE THE TIME TO THINK!", "dialogue_7_3"));
+//					scriptManager->addScript("dialogue_7_3", std::bind(&showDialogue, "Kiosk", "avatars_1/0/2.png", "ANY MISTAKE OF YOURS COULD BE LETHAL, SO TRY YOUR BEST!", "dialogue_7_4"));
+//
+//					auto dialogue_7_4 = []() {
+//						turnDisplayOff(Location(1, -15, 0, 10, 0, 3));
+//						hideDialogue();
+//					};
+//
+//					scriptManager->addScript("dialogue_7_4", dialogue_7_4);
+//
+//					scriptManager->addScript("dialogue_10_0", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "\"Hills outside of the first Oxylabs facility - 1905\"", "hide_dialogue"));
+//					worldManager->addPromptedScript("dialogue_10_0", Location(1, -16, 1, 13, 0, 2));
+//
+//					scriptManager->addScript("dialogue_11_0", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "\"The Beauty of Memester Bay - 1908\"", "dialogue_11_1"));
+//					worldManager->addPromptedScript("dialogue_11_0", Location(1, -19, 1, 15, 0, 6));
+//					scriptManager->addScript("dialogue_11_1", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "The following depicts Memester Bay - a rocket launch site of Oxylabs rocketry.", "hide_dialogue"));
+//
+//					scriptManager->addScript("dialogue_12_0", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "\"Firstname Lastname - 1907\"", "dialogue_12_1"));
+//					worldManager->addPromptedScript("dialogue_12_0", Location(1, -21, 1, 14, 0, 5));
+//					scriptManager->addScript("dialogue_12_1", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "This is a portrait of Arthur Wright's wife.", "dialogue_12_2"));
+//					scriptManager->addScript("dialogue_12_2", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "She was supportive of Mr. Wright's hard-working spirit.", "dialogue_12_3"));
+//					scriptManager->addScript("dialogue_12_3", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "Unfortunately, she died alongside Mr. Wright due to an automative accident in 1909.", "hide_dialogue"));
+//
+//					scriptManager->addScript("dialogue_13_0", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "\"A Picture of Mr. Wright on Kozack's first colour camera - 1909\"", "dialogue_13_1"));
+//					worldManager->addPromptedScript("dialogue_13_0", Location(1, -17, 3, 9, 0, 11));
+//					scriptManager->addScript("dialogue_13_1", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "During early development of Project Echo, a scientist set two teleporters to teleport to one another.", "dialogue_13_2"));
+//					scriptManager->addScript("dialogue_13_2", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "One of his unsuspecting coworkers walked into one of those teleporters.", "dialogue_13_3"));
+//					scriptManager->addScript("dialogue_13_3", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "The coworker ended up teleporting in an endless loop.", "dialogue_13_4"));
+//					scriptManager->addScript("dialogue_13_4", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "The following photo depicts Mr. Wright's reaction to the mess.", "hide_dialogue"));
+//
+//					scriptManager->addScript("dialogue_14_0", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "Mr. Wright got the idea for Project Echo after watching the film this poster promotes.", "hide_dialogue"));
+//					worldManager->addPromptedScript("dialogue_14_0", Location(1, -17, 3, 4, 0, 11));
+//
+//					scriptManager->addScript("dialogue_15_0", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "The following is an early prototype for a teleporter.", "dialogue_15_1"));
+//					worldManager->addPromptedScript("dialogue_15_0", Location(1, -17, 3, 9, 0, 14));
+//					scriptManager->addScript("dialogue_15_1", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "Many prototypes had to be tethered to a large computer.", "hide_dialogue"));
+//
+//					scriptManager->addScript("dialogue_16_0", std::bind(&showDialogue, "Plaque", "avatars_1/1/2.png", "This is what a teleporter looks like before its paint is applied.", "hide_dialogue"));
+//					worldManager->addPromptedScript("dialogue_16_0", Location(1, -17, 3, 4, 0, 14));
+//
+//					scriptManager->addScript("dialogue_17_0", std::bind(&showDialogue, "Plaque", "avatars_1/2/2.png", "Museum of the teleporter, right this way! Includes free cake!", "hide_dialogue"));
+//					worldManager->addPromptedScript("dialogue_17_0", Location(1, -17, 0, 8, 0, 13));
+//
+//					scriptManager->addScript("dialogue_18_0", std::bind(&showDialogue, "Plaque", "avatars_1/2/2.png", "Museum of the teleporter, right this way! Fun for the whole extended family!", "hide_dialogue"));
+//					worldManager->addPromptedScript("dialogue_18_0", Location(1, -17, 0, 6, 0, 13));
 					break;
 				}
 				default:
@@ -1693,6 +1815,7 @@ void Scripts::setupGeneralEvents(int stage, int level) {
 void Scripts::startNewGame() {
 	player->getCharacter()->teleportWithoutAnimation(Location(0, glm::ivec2(0, 0), glm::ivec3(1, 0, 2)));
 	// worldManager->setCurrentWorld(0);
+	animateElevator();
 
 	// This sets up the player's tile inventory for a new game.
 	for (int i = 0; i < 3; i++) {
@@ -1704,8 +1827,17 @@ void Scripts::startNewGame() {
 	// game->getTileSwitchGun()->setActive(false);
 
 	setupLevel(1, 1);
-	dialogueDisplay->showDialogue("???", "", "Welcome to the OXYLABS Test Facility.", "dialogue_0_1");
 	tileInventoryDisplay->hide();
+
+	player->getCharacter()->allowNewMovements(false);
+
+	auto event = []() {
+		dialogueDisplay->showDialogue("???", "avatars_1/1/0.png", "Welcome to the OXYLABS Test Facility.", "dialogue_0_1");
+		player->lookAtWatch();
+		player->getCharacter()->allowNewMovements(true);
+	};
+
+	timer->scheduleEventInSeconds(2, event);
 }
 
 void Scripts::continueGame() {}
@@ -1911,6 +2043,10 @@ void Scripts::setupDoorSensor(const Location& location, std::string doorName, st
 		return triggerDoorSensor(location, tileType, doorName, lockID);
 	});
 	worldManager->addTileSwitchScript(sensorScriptName, location);
+
+	if (worldManager->getTileGroup(location)->getTile(tileType) != nullptr) {
+		triggerDoorSensor(location, tileType, doorName, lockID);
+	}
 }
 
 void Scripts::setupMultiTypeDoorSensor(const Location& location, std::string doorName, std::string sensorScriptName, std::vector<size_t> correctTileTypes, size_t lockID) {

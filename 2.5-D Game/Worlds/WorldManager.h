@@ -9,7 +9,7 @@
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "World.h"
 #include "MapRebuilder.h"
-#include "3D/Maps/Map3D.h"
+#include "../../Project Aela/3D/Maps/Map3D.h"
 #include "../Teleporter/Teleporter.h"
 #include "../Save States/Saveable.h"
 #include <unordered_map>

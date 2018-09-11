@@ -15,4 +15,9 @@ namespace Scripts {
 	void loadMaterialAnimations();
 
 	bool loadLogoMaterialAnimation(int whichLevel);
+	bool animateElevator();
+	void stopAnimatingElevator();
+
+	bool loopSpriteSheetAnimation(std::string spriteSheet, std::string materialToAnimate, int spriteSheetWidth,
+			int startX, int startY, int endX, int endY, std::vector<int> framesToPauseOn, std::vector<long long> framePauseTimes);
 }

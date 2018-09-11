@@ -5,7 +5,7 @@
 * Description: The main.cpp of a 2.5-dimensional game.
 */
 
-#include "Aela_Engine.h"
+#include "../../Project Aela/Aela_Engine.h"
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "../Aela Game/AelaGame.h"
 
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 	renderer->activateFeature(RendererFeature::MSAA_3D_X4);
 	renderer->activateFeature(RendererFeature::MSAA_2D_X8);
 	// renderer->activateFeature(RendererFeature::MSAA_2D_X0);
-	// renderer->activateFeature(RendererFeature::SSAA_TEXT_X4);
+	renderer->activateFeature(RendererFeature::SSAA_TEXT_X6);
 
 	// If a world tells the game to use lights (because the world is outdoors), then shadows and lights are turned on.
 	// Most of this game takes place indoors with well let rooms, so the only source of lighting is ambient light.
@@ -95,8 +95,8 @@ int main(int argc, char* argv[]) {
 
 		if (engine.getTime()->getCurrentTimeInMillis() % 1000 < lastRemainder || engine.getTime()->getTimeBetweenFramesInMillis() >= 1000) {
 			calc.calculate(engine.getTime()->getCurrentTimeInNanos(), engine.getTime()->getTimeBetweenFramesInNanos());
-			/*std::cout << "True FPS: " << calc.getTrueFPS() << "\n";
-			std::cout << "Smoothed FPS: " << calc.getSmoothedFPS() << "\n";*/
+			std::cout << "True FPS: " << calc.getTrueFPS() << "\n";
+			/*std::cout << "Smoothed FPS: " << calc.getSmoothedFPS() << "\n";*/
 			// engine.getStopwatch()->outputTimesIntoConsole();
 			engine.getStopwatch()->reset();
 		}

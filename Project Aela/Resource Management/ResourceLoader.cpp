@@ -14,12 +14,3 @@ std::istream& Aela::ResourceLoader::getline(std::ifstream& in, std::string& line
 	trim(line);
 	return ret;
 }
-
-int Aela::ResourceLoader::fopen_s(FILE **f, const char *name, const char *mode) {
-	int ret = 0;
-	assert(f);
-	*f = fopen(name, mode);
-	if (!*f)
-		ret = errno;
-	return ret;
-}

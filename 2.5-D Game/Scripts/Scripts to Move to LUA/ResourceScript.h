@@ -10,8 +10,8 @@
 
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
-#define AVATAR_WIDTH 64
-#define AVATAR_HEIGHT 64
+#define AVATAR_WIDTH 48
+#define AVATAR_HEIGHT 48
 
 namespace Scripts {
 	void loadMaterials();

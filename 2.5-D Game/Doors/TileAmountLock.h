@@ -10,7 +10,7 @@
 #pragma once
 #include "Lock.h"
 #include "Door.h"
-#include "Location.h"
+#include "../Location/Location.h"
 #include "../Tiles/TileGroup.h"
 #include "../../Project Aela/Utilities/Rect/Cuboid.h"
 #include <list>
@@ -38,7 +38,7 @@ namespace Game {
 		private:
 			std::list<TileGroup*> region;
 			std::unordered_map<size_t, size_t> amounts;
-			Door* door;
-			size_t id;
+			Door* door = nullptr;
+			size_t id = 0;
 	};
 }

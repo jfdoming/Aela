@@ -6,7 +6,7 @@
 */
 
 #pragma once
-#include "3D/Materials/Material.h"
+#include "../../Project Aela/3D/Materials/Material.h"
 
 using namespace Aela;
 

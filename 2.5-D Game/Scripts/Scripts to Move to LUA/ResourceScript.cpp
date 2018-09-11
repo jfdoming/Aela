@@ -1,13 +1,13 @@
 #include "ResourceScript.h"
 #include "ScriptObjects.h"
-#include "Resource Management/ResourceManager.h"
-#include "Resource Management/ResourcePaths.h"
-#include "3D/Materials/GLMaterialLoader.h"
-#include "2D/Texture/GLSpriteSheetLoader.h"
-#include "3D/Models/OBJLoader.h"
-#include "3D/Skybox/GLSkyboxLoader.h"
-#include "3D/Maps/Map3DLoader.h"
-#include "2D/Fonts/FontLoader.h"
+#include "../../../Project Aela/Resource Management/ResourceManager.h"
+#include "../../../Project Aela/Resource Management/ResourcePaths.h"
+#include "../../../Project Aela/3D/Materials/GLMaterialLoader.h"
+#include "../../../Project Aela/2D/Texture/GLSpriteSheetLoader.h"
+#include "../../../Project Aela/3D/Models/OBJLoader.h"
+#include "../../../Project Aela/3D/Skybox/GLSkyboxLoader.h"
+#include "../../../Project Aela/3D/Maps/Map3DLoader.h"
+#include "../../../Project Aela/2D/Fonts/FontLoader.h"
 
 namespace Scripts {
 	using namespace Game;
@@ -65,11 +65,16 @@ namespace Scripts {
 		"doors_1",
 		"animations_1",
 		"animations_2",
+		"animations_3",
 		"locks_1",
 		"locks_2",
 		"numbered_tiles",
 		"rails_1",
-		"character",
+		"player_1",
+		"player_2",
+		"player_3",
+		"player_4",
+		"player_5",
 		"turret_1",
 		"soldier_1",
 		"scientist_1",

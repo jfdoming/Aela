@@ -7,11 +7,10 @@
 
 #pragma once
 #include <glm/glm.hpp>
-#include <Clock.h>
 #include "../Transformable/Transformable3D.h"
 #include "../../Events/EventListener.h"
 #include "../../Events/KeyEvent.h"
-#include "Time/Clock.h"
+#include "../Time/Clock.h"
 #include "../../Window/Window.h"
 
 using namespace Aela;

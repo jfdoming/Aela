@@ -9,9 +9,8 @@
 #include <glm/glm.hpp>
 #include "../Window/Window.h"
 #include "../3D/Camera/Camera3D.h"
-#include "Time/Clock.h"
+#include "../Time/Clock.h"
 #include "../Events/Event.h"
-#include <Clock.h>
 
 namespace Aela {
 	// These enums are used to set properties for the control manager.

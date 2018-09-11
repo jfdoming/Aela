@@ -48,5 +48,4 @@ void TileSwitchParticleEmitter::setupParticlePositioning(size_t whichParticle, s
 	particles[whichParticle].getPosition()->z = dimensions.getY() + particles[whichParticle].getScaling()->y / 2;
 	particles[whichParticle].getPosition()->y = pathOffset;
 	particles[whichParticle].setRotation(glm::vec3(HALF_PI, 0, 0));
-	std::cout << "SET UP!\n";
 }

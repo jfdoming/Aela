@@ -2,12 +2,12 @@
 #include "../../Game Object Provider/GameObjectProvider.h"
 #include "../../Worlds/WorldManager.h"
 #include "ScriptObjects.h"
-#include "Scenes/SceneManager.h"
-#include "Menus/Label.h"
-#include "Menus/ImageComponent.h"
-#include "Menus/Button.h"
-#include "Menus/RectComponent.h"
-#include "Menus/SubMenu.h"
+#include "../../../Project Aela/Scenes/SceneManager.h"
+#include "../../../Project Aela/Menus/Label.h"
+#include "../../../Project Aela/Menus/ImageComponent.h"
+#include "../../../Project Aela/Menus/Button.h"
+#include "../../../Project Aela/Menus/RectComponent.h"
+#include "../../../Project Aela/Menus/SubMenu.h"
 #include "../Aela Game/AelaGame.h"
 #include "../../Resources/ResourceInfo.h"
 #include "../../Displays/Dialogue/DialogueDisplay.h"
@@ -65,8 +65,8 @@ void Scripts::setupScenes() {
 	ekkonScene->getMenu()->add(ekkonImage);
 
 	// This sets up text.
-	auto titleText = std::make_shared<Label>("Pokemon Meitnerium", xerox, FontSizes::LARGE_FONT_SIZE, almostWhitePtr);
-	titleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() / 1.6f));
+	auto titleText = std::make_shared<Label>("Project Foxtrot (Alpha)", xerox, FontSizes::LARGE_FONT_SIZE, almostWhitePtr);
+	titleText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.05), (int) (windowDimensions.getHeight() * 0.62));
 	auto ekkonGamesText = std::make_shared<Label>("Ekkon Games", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
 	ekkonGamesText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.8), ((int) (windowDimensions.getHeight() * 0.95)));
 
@@ -165,10 +165,11 @@ void Scripts::setupScenes() {
 	dialgoueBoxImage->setTexture(dialgueBoxTexture);
 
 	auto avatarImage = std::make_shared<ImageComponent>();
+	avatarImage->setPositioningMode(PositioningMode2D::CENTER);
 	GLTexture* avatarTexture;
 	success = resourceManager->obtain<GLTexture>("res/textures/avatars_1/0/0.png", avatarTexture);
-	Rect<int> avatarDimensions(0, windowDimensions.getHeight() * 21 / 32, windowDimensions.getWidth() / 3,
-			  windowDimensions.getHeight() / 3);
+	Rect<int> avatarDimensions(windowDimensions.getWidth() / 8, windowDimensions.getHeight() * 7 / 8, windowDimensions.getHeight() / 8,
+	                           windowDimensions.getHeight() / 8);
 	avatarImage->setDimensions(&avatarDimensions);
 	avatarImage->setTexture(avatarTexture);
 	avatarImage->hide();
@@ -239,15 +240,21 @@ void Scripts::setupScenes() {
 
 	auto deathBackgroundRect = std::make_shared<RectComponent>();
 	deathBackgroundRect->setDimensions(&windowDimensions);
-	ColourRGBA deathBackgroundColour(0.15f, 0.15f, 0.15f, 0.95f);
+	ColourRGBA deathBackgroundColour(0.225f, 0.15f, 0.15f, 0.95f);
 	deathBackgroundRect->setColour(&deathBackgroundColour);
 	deathBackgroundRect->hide();
 
-	auto deathText = std::make_shared<Label>("You died. Press 'R' to go back to your last checkpoint.", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
-	deathText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.30), (int) (windowDimensions.getHeight() * 0.30));
+	auto deathText = std::make_shared<Label>("You died.", xerox, FontSizes::LARGE_FONT_SIZE, almostWhitePtr);
+	deathText->setPositioningMode(PositioningMode2D::CENTER);
+	deathText->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.5), (int) (windowDimensions.getHeight() * 0.4));
 	deathText->hide();
 
-	game->setDeathMenuComponents(deathBackgroundRect, deathText);
+	auto deathText2 = std::make_shared<Label>("Press 'R' to go back to your last checkpoint.", xerox, FontSizes::MEDIUM_FONT_SIZE, almostWhitePtr);
+	deathText2->setPositioningMode(PositioningMode2D::CENTER);
+	deathText2->getDimensions()->setXY((int) (windowDimensions.getWidth() * 0.5), (int) (windowDimensions.getHeight() * 0.6));
+	deathText2->hide();
+
+	game->setDeathMenuComponents(deathBackgroundRect, deathText, deathText2);
 
 	auto fadeTeleportRect = std::make_shared<RectComponent>();
 	fadeTeleportRect->setDimensions(&windowDimensions);
@@ -279,6 +286,7 @@ void Scripts::setupScenes() {
 	worldGameplayScene->getMenu()->add(tileInventorySubMenu2);
 	worldGameplayScene->getMenu()->add(deathBackgroundRect);
 	worldGameplayScene->getMenu()->add(deathText);
+	worldGameplayScene->getMenu()->add(deathText2);
 	worldGameplayScene->getMenu()->add(fadeTeleportRect);
 	worldGameplayScene->getMenu()->add(hintImage);
 	worldGameplayScene->getMenu()->add(hintText);
@@ -377,7 +385,6 @@ void Scripts::setupScenes() {
 	pauseMenuOptionsButton->setFont(xerox);
 	pauseMenuOptionsButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	pauseMenuOptionsButton->setTextColour(almostWhitePtr);
-	pauseMenuOptionsButton->wrapAroundText();
 
 	pauseMenuMapEditorButton->setTexture(simpleButtonTextureLight);
 	auto pauseMenuMapEditorButtonRect = Rect<int>((int) (windowDimensions.getWidth() * 0.125), (int) (windowDimensions.getHeight() * 0.4444),
@@ -388,7 +395,6 @@ void Scripts::setupScenes() {
 	pauseMenuMapEditorButton->setFont(xerox);
 	pauseMenuMapEditorButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	pauseMenuMapEditorButton->setTextColour(almostWhitePtr);
-	pauseMenuMapEditorButton->wrapAroundText();
 
 	auto pauseMenuExportButtonRect = Rect<int>((int) (windowDimensions.getWidth() * 0.4), (int) (windowDimensions.getHeight() * 0.3333),
 														   (int) (windowDimensions.getWidth() * 0.1875), (int) (windowDimensions.getHeight() * 0.1111));
@@ -398,6 +404,7 @@ void Scripts::setupScenes() {
 	pauseMenuExportButton->setFont(xerox);
 	pauseMenuExportButton->setFontSize(FontSizes::MEDIUM_FONT_SIZE);
 	pauseMenuExportButton->setTextColour(almostWhitePtr);
+	pauseMenuExportButton->wrapAroundText();
 	pauseMenuMapEditorSubMenu->add(pauseMenuExportButton);
 
 	pauseMenuGameSubMenu->show();

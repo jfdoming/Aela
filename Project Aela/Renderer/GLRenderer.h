@@ -140,11 +140,11 @@ namespace Aela {
 			Simple2DFramebuffer* bound2DFramebuffer = nullptr;
 
 			// This represents the framebuffer that is attached to the screen.
-			GLuint mainFramebuffer;
+			GLuint mainFramebuffer = 0;
 			GLImage mainFramebufferImage;
 
 			// These are the post process shaders.
-			GLuint effects3DShader, effects2DShader;
+			GLuint effects3DShader = 0, effects2DShader = 0;
 			// These specify the features that the renderer is allowed to use during rendering.
 			/*bool useShadows = false, useBillboards = false, useSkybox = false;
 			unsigned int multisampling3D = 0, multisampling2D = 0;*/

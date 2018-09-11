@@ -214,7 +214,7 @@ void loadDDSToCubemapSide(GLuint* cubeMap, int side, std::string filePath) {
 	FILE* imageFile;
 
 	// This will try to open the DDS file.
-	fopen_s(&imageFile, filePath.c_str(), "rb");
+	fopen_safe(&imageFile, filePath.c_str(), "rb");
 	if (imageFile == NULL) {
 		AelaErrorHandling::windowError("Aela DDS Loader", "A DDS file that the program tried to read was not found.");
 		return NULL;

@@ -13,10 +13,10 @@
 
 #pragma once
 
-#include "3D/Models/Model.h"
-#include "Resource Management/ResourceLoader.h"
-#include "Resource Management/ResourceMap.h"
-#include "Resource Management\ResourceManager.h"
+#include "../../Project Aela/3D/Models/Model.h"
+#include "../../Project Aela/Resource Management/ResourceLoader.h"
+#include "../../Project Aela/Resource Management/ResourceMap.h"
+#include "../../Project Aela/Resource Management/ResourceManager.h"
 #include <map>
 
 using namespace Aela;

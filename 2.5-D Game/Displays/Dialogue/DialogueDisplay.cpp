@@ -13,7 +13,7 @@
 #include "../Scripts/ScriptManager.h"
 #include "../../../Project Aela/Resource Management/ResourcePaths.h"
 #include "../../Menus/FontSizes.h"
-#include "Time/Clock.h"
+#include "../../Project Aela/Time/Clock.h"
 
 Game::DialogueDisplay::DialogueDisplay() {
 	eventHandler = GameObjectProvider::getEventHandler();
@@ -33,6 +33,15 @@ void Game::DialogueDisplay::update() {
 	if (runScript) {
 		scriptManager->runScript(scriptOnDialogueEnd);
 		runScript = false;
+	}
+
+	if (optionWasSelected) {
+		if (options[currentOption].getActionOnSelection().empty()) {
+			closeDialog();
+		} else {
+			scriptManager->runScript(options[currentOption].getActionOnSelection());
+		}
+		optionWasSelected = false;
 	}
 
 	if (state == DialogueState::MESSAGE && positionInDialogue < maxCharactersOfText
@@ -87,11 +96,7 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 							justFinishedDialogue = true;
 						}
 					} else if (state == DialogueState::OPTIONS) {
-						if (options[currentOption].getActionOnSelection().empty()) {
-							closeDialog();
-						} else {
-							scriptManager->runScript(options[currentOption].getActionOnSelection());
-						}
+						optionWasSelected = true;
 					}
 					pressingReturn = true;
 				}
@@ -154,7 +159,9 @@ void Game::DialogueDisplay::showDialogue(std::string text, std::string scriptToR
 
 void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc, std::string text, std::string scriptToRunOnceComplete) {
 	auto onAnimationComplete = [this, name, avatarSrc]() {
-		nameLabel->setText(name);
+		// We might not end up actually showing the name.
+		// nameLabel->setText(name);
+		nameLabel->setText("");
 
 		GLTexture* texture;
 		if (!avatarSrc.empty() && GameObjectProvider::getResourceManager()->obtain<GLTexture>(DEFAULT_TEXTURE_PATH + avatarSrc, texture)) {

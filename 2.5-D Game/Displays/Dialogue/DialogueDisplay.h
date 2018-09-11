@@ -84,6 +84,8 @@ namespace Game {
 			// (which runs on the main thread) know that it should run the script on dialogue end.
 			bool runScript = false;
 
+			bool optionWasSelected = false;
+
 			// These are option-related properties.
 			std::vector<DialogueOption> options;
 			size_t numberOfCurrentOptions, currentOption;

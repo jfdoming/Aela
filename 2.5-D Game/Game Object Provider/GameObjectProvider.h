@@ -11,8 +11,7 @@
 */
 
 #pragma once
-
-#include "Aela_Engine.h"
+#include "../../Project Aela/Aela_Engine.h"
 
 namespace Game {
 	// To avoid headers including each other, we can just declare game-related classes here. If

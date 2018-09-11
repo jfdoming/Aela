@@ -1,18 +1,19 @@
 #include "Button.h"
 #include "../Events/EventConstants.h"
 
-Aela::Button::Button() : hoverTint(0.0f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0), textLabel("", nullptr, 0) {
+Aela::Button::Button() : hoverTint(0.0f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0),
+	textLabel("", nullptr, 0, PositioningMode2D::CENTER) {
 }
 
 Aela::Button::Button(GLTexture* texture) : ImageComponent(texture), hoverTint(0.7f, 0.7f, 0.7f, 1.0f),
-	clickTint(0.5f, 0.5f, 0.5f, 1.0), textLabel("", nullptr, 0) {
+	clickTint(0.5f, 0.5f, 0.5f, 1.0), textLabel("", nullptr, 0, PositioningMode2D::CENTER) {
 }
 
 Aela::Button::Button(GLTexture* texture, Rect<int>* dimensions) : ImageComponent(texture, dimensions),
-	hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0), textLabel("", nullptr, 0) {
+	hoverTint(0.9f, 0.9f, 0.9f, 1.0f), clickTint(0.8f, 0.8f, 0.8f, 1.0), textLabel("", nullptr, 0, PositioningMode2D::CENTER) {
 }
 
-Aela::Button::Button(ColourRGBA* hoverTint, ColourRGBA* clickTint) : textLabel("", nullptr, 0) {
+Aela::Button::Button(ColourRGBA* hoverTint, ColourRGBA* clickTint) : textLabel("", nullptr, 0, PositioningMode2D::CENTER) {
 	this->hoverTint = *hoverTint;
 	this->clickTint = *clickTint;
 }
@@ -147,8 +148,6 @@ void Aela::Button::wrapAroundText() {
 
 void Aela::Button::setupLabelDimensions() {
 	Rect<int>* textDimensions = textLabel.getDimensions();
-	int width = textDimensions->getWidth();
-	int height = textDimensions->getHeight();
-	textDimensions->setXY(dimensions.getX() + dimensions.getWidth() / 2 - width / 2,
-		dimensions.getY() + dimensions.getHeight() / 2 + height / 2);
+	textDimensions->setXY(dimensions.getX() + dimensions.getWidth() / 2,
+		dimensions.getY() + dimensions.getHeight() / 2);
 }

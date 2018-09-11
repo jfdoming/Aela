@@ -8,7 +8,7 @@
 */
 
 #include "CharacterModelGenerator.h"
-#include "Resource Management/ResourcePaths.h"
+#include "../../Project Aela/Resource Management/ResourcePaths.h"
 #include "../Resources/ResourceInfo.h"
 #include "../../Project Aela/Utilities/enumut.h"
 
@@ -16,6 +16,7 @@ using namespace Aela;
 
 bool Game::CharacterModelGenerator::load(ResourceMap& resources, std::string src) {
 	// This gets the template model.
+
 	Model* templateModel;
 	if (!resources.get<Model>(templateModelSource, templateModel)) {
 		AelaErrorHandling::windowError("Character Loader", "Could not get the following character baseModel template: "
@@ -50,7 +51,9 @@ bool Game::CharacterModelGenerator::load(ResourceMap& resources, std::string src
 					+ "/" + std::to_string(yOfSpriteSheet) + ".png"
 					+ ", as requested by the character " + character->getName() + " with an ID of "
 					+ std::to_string(charactersLoaded) + ".");
+				return false;
 			}
+
 			material->setTexture(texture);
 			resources.put((std::string) RESOURCE_ROOT + "ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet) + "/"
 				+ std::to_string(yOfSpriteSheet) + "/ma", material);
@@ -58,12 +61,15 @@ bool Game::CharacterModelGenerator::load(ResourceMap& resources, std::string src
 			for (auto& subModel : *model->getSubModels()) {
 				subModel.setMaterial(material);
 			}
+
 			resources.put((std::string) RESOURCE_ROOT + "ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet) + "/"
 				+ std::to_string(yOfSpriteSheet) + "/mo", model);
 		}
+
 		if (yOfSpriteSheet == directionAsInteger && xOfSpriteSheet == 0) {
 			character->setModel(model);
 		}
+
 		charactersLoaded++;
 	}
 	return true;

@@ -7,9 +7,9 @@
 
 #pragma once
 #include "../Game Object Provider/GameObjectProvider.h"
-#include "3D/Models/Model.h"
+#include "../../Project Aela/3D/Models/Model.h"
 #include "../Location/Location.h"
-#include "3D/Models/ModelEntity.h"
+#include "../../Project Aela/3D/Models/ModelEntity.h"
 #include "CharacterStep.h"
 #include "CharacterModelGenerator.h"
 #include "../Movement/Movement.h"
@@ -47,8 +47,6 @@ namespace Game {
 			void kill();
 			void revive();
 
-			void generateModel(ResourceManager* resourceManager);
-
 			// These are getters, setters and adders.
 			Location* getLocation();
 			Location* getLocationBeforeAnimation();
@@ -63,7 +61,7 @@ namespace Game {
 			float getCurrentSpeed();
 			void setRunning(bool running);
 			bool getRunning();
-			void setTextureName(std::string name);
+			void setTexture(std::string name);
 			std::string getTextureName();
 			TileDirection getDirectionFacing();
 			ModelEntity* getEntity();
@@ -118,7 +116,7 @@ namespace Game {
 
 			std::list<Movement> possibleMovementsToProcess;
 
-			std::string textureName;
+			std::string textureName = "";
 
 			// This stores the translations that the animator should use next to animate the character.
 			std::vector<std::pair<Movement, std::string>> translations;
@@ -156,5 +154,8 @@ namespace Game {
 
 			// This processes movements added using moveIfPossible(...).
 			void processPossibleMovement(Movement* movement);
+
+			void generateModel();
+			void changeModel();
 	};
 }

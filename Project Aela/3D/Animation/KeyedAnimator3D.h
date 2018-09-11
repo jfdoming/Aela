@@ -7,13 +7,9 @@
 */
 
 #pragma once
-
-#include <vector>
 #include <unordered_map>
-
-#include "Time/Clock.h"
+#include "../../Time/Clock.h"
 #include "../../Window/Window.h"
-#include "../../Events/EventConstants.h"
 #include "../../Events/KeyEvent.h"
 #include "../Transformable/Transformable3D.h"
 

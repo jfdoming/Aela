@@ -12,6 +12,8 @@ void Game::HintDisplay::displayHint(std::string text, HintDisplayDuration hintDi
 	hintQueue.push(hint);
 
 	if (!displayingHint || hint.duration == HintDisplayDuration::FOREVER) {
+		displayingHint = true;
+
 		auto processHint = [this]() {
 				processNextHint();
 		};
@@ -29,6 +31,8 @@ void Game::HintDisplay::displayHint(std::string text, HintDisplayDuration hintDi
 	hintQueue.push(hint);
 
 	if (!displayingHint || hint.duration == HintDisplayDuration::FOREVER) {
+		displayingHint = true;
+
 		auto processHint = [this]() {
 			processNextHint();
 		};
@@ -100,9 +104,9 @@ void Game::HintDisplay::processNextHint() {
 inline long long Game::HintDisplay::getDisplayDurationInMillis(HintDisplayDuration hintDisplayDuration) {
 	switch (hintDisplayDuration) {
 		case HintDisplayDuration::SHORT:
-			return 1500;
+			return 1750;
 		case HintDisplayDuration::LONG:
-			return 3250;
+			return 3500;
 		default:
 			return 1000;
 	}

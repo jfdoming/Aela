@@ -15,6 +15,7 @@ using namespace Aela;
 
 // This sets up 3D rendering, accounting for multisampling.
 void GLRenderer::setup3DRendering() {
+	std::cout << mainFramebuffer << " is mainframebuffer\n";
 	if (mainFramebuffer == 0) {
 		setupMainFrameBuffer();
 	}
@@ -23,6 +24,7 @@ void GLRenderer::setup3DRendering() {
 
 // This sets up 2D rendering, accounting for multisampling.
 void GLRenderer::setup2DRendering() {
+	std::cout << mainFramebuffer << " is mainframebuffer\n";
 	if (mainFramebuffer == 0) {
 		setupMainFrameBuffer();
 	}
@@ -41,6 +43,9 @@ void GLRenderer::setupMainFrameBuffer() {
 	glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
 
 	glGenTextures(1, mainFramebufferImage.getTexture());
+
+	std::cout << glewGetErrorString(glGetError()) << " is an opengl error!\n";
+
 	glBindTexture(GL_TEXTURE_2D, *(mainFramebufferImage.getTexture()));
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window->getDimensions()->getWidth(), window->getDimensions()->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 	/* Clamping to edges is important to prevent artifacts when scaling */
@@ -245,6 +250,7 @@ void GLRenderer::endRendering3D() {
 }
 
 void GLRenderer::endRenderingFrame() {
+	// std::cout << *mainFramebufferImage.getTexture() << " is the text\n";
 	basic2DRenderer.renderImageToFramebuffer(&mainFramebufferImage, 0, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), nullptr, PositioningMode2D::TOP_LEFT);
 	window->updateBuffer();
 }
@@ -330,6 +336,9 @@ void GLRenderer::activateFeature(RendererFeature feature) {
 		case RendererFeature::SSAA_TEXT_X4:
 			basic2DRenderer.setTextScaling(4);
 			break;
+		case RendererFeature::SSAA_TEXT_X6:
+			basic2DRenderer.setTextScaling(6);
+			break;
 		case RendererFeature::SSAA_TEXT_X8:
 			basic2DRenderer.setTextScaling(8);
 			break;
@@ -413,6 +422,9 @@ void GLRenderer::deactivateFeature(RendererFeature feature) {
 			basic2DRenderer.setTextScaling(1);
 			break;
 		case RendererFeature::SSAA_TEXT_X4:
+			basic2DRenderer.setTextScaling(1);
+			break;
+		case RendererFeature::SSAA_TEXT_X6:
 			basic2DRenderer.setTextScaling(1);
 			break;
 		case RendererFeature::SSAA_TEXT_X8:

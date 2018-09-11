@@ -15,7 +15,7 @@
 #include "../3D/Animation/AnimationTrack3D.h"
 #include "../3D/Animation/AnimationTrackMaterial.h"
 #include "../3D/Animation/AnimationTrackModel.h"
-#include "Time/Clock.h"
+#include "../Time/Clock.h"
 
 namespace Aela {
 	class Animator {

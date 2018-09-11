@@ -24,7 +24,7 @@ namespace Game {
 			virtual void update(Character* playerCharacter, long long time);
 
 			bool isInLineOfSight(Location* location);
-			void setDetectionRange(unsigned int detectionRange);
+			void setDetectionRange(int detectionRange);
 			void setDetectionAngle(TileDirection direction, bool detect);
 			void setDetectionAngles(bool detectRight, bool detectForward, bool detectLeft, bool detectBackward);
 			bool hasRecentlyAttacked();
@@ -35,7 +35,7 @@ namespace Game {
 			virtual void update();
 
 		private:
-			unsigned int detectionRange = 0;
+			int detectionRange = 0;
 			std::unordered_map<TileDirection, bool> detectionAngles;
 			bool recentlyAttacked = false;
 

@@ -8,7 +8,13 @@ namespace Aela {
 	typedef std::function<void(Event*)> EventListener;
 }
 
+#ifdef __MINGW32__
 #define bindListener(f, v) ({                   \
     auto fn = &f;                               \
     std::bind(fn, v, std::placeholders::_1);    \
 })
+#endif
+
+#if defined (_MSC_VER)
+#define bindListener(f, v) std::bind(&f, v, std::placeholders::_1)
+#endif

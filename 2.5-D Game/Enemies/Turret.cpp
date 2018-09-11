@@ -70,7 +70,7 @@ bool Game::Turret::isInLineOfSight(Location* location) {
 	return false;
 }
 
-void Game::Turret::setDetectionRange(unsigned int detectionRange) {
+void Game::Turret::setDetectionRange(int detectionRange) {
 	this->detectionRange = detectionRange;
 }
 

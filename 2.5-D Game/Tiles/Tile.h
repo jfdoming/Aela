@@ -7,9 +7,9 @@
 
 #pragma once
 #include <string>
-#include "2D/Texture/Texture.h"
+#include "../../Project Aela/2D/Texture/Texture.h"
 #include "../Teleporter/Teleporter.h"
-#include "3D/Models/ModelEntity.h"
+#include "../../Project Aela/3D/Models/ModelEntity.h"
 
 using namespace Aela;
 

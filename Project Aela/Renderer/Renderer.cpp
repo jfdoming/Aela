@@ -5,7 +5,7 @@
 * Description: A class used for representing a renderer, generically.
 */
 
-#include "Events/EventConstants.h"
+#include "../Events/EventConstants.h"
 #include "Renderer.h"
 #include "../Events/WindowResizeEvent.h"
 
