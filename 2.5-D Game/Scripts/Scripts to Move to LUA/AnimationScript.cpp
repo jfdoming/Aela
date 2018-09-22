@@ -16,7 +16,7 @@ bool Scripts::loadLogoMaterialAnimation(int whichLevel) {
 	std::vector<long long> framePauseTimes = {2000, 2000};
 
 	return loopSpriteSheetAnimation("animations_2", "walls_1/3/0.png_mtl", 8, 0, whichLevel* 2 - 2, 7, whichLevel* 2 - 1,
-	                                framesToPauseOn, framePauseTimes);
+	                                &framesToPauseOn, &framePauseTimes, 16);
 
 	/*AnimationLooper* animationLooper = engine->getAnimationLooper();
 
@@ -73,14 +73,14 @@ bool Scripts::animateElevator() {
 
 	std::vector<long long> framePauseTimes = {500};
 	bool returnValue = loopSpriteSheetAnimation("animations_3", "walls_1/2/2.png_mtl", 8, 0, 2, 1, 3,
-	                                framesToPauseOn, framePauseTimes);
+	                                &framesToPauseOn, &framePauseTimes, 16);
 
 	if (!returnValue) {
 		return false;
 	}
 
 	return loopSpriteSheetAnimation("animations_3", "walls_1/3/2.png_mtl", 8, 0, 4, 1, 5,
-	                                framesToPauseOn, framePauseTimes);
+	                                &framesToPauseOn, &framePauseTimes, 16);
 }
 
 void Scripts::stopAnimatingElevator() {
@@ -89,9 +89,16 @@ void Scripts::stopAnimatingElevator() {
 	looper->stopLoopingMaterialTrack("walls_1/3/2.png_mtl");
 }
 
+void Scripts::setupMainAnimations() {
+	loopSpriteSheetAnimation("animations_3", "walls_1/3/3.png_mtl", 8, 0, 0, 1, 0,
+	                                nullptr, nullptr, 500);
+	loopSpriteSheetAnimation("animations_3", "walls_1/4/3.png_mtl", 8, 2, 0, 6, 0,
+	                                nullptr, nullptr, 128);
+}
+
 bool Scripts::loopSpriteSheetAnimation(std::string spriteSheet, std::string materialToAnimate, int spriteSheetWidth,
-		int startX, int startY,
-		int endX, int endY, std::vector<int> framesToPauseOn, std::vector<long long> framePauseTimes) {
+		int startX, int startY, int endX, int endY, std::vector<int>* framesToPauseOn,
+	std::vector<long long>* framePauseTimes, long long timeBetweenFrames) {
 	AnimationLooper* animationLooper = engine->getAnimationLooper();
 
 	int numberOfFrames = spriteSheetWidth - startX + spriteSheetWidth * (endY - startY - 1) + endX + 1;
@@ -131,23 +138,25 @@ bool Scripts::loopSpriteSheetAnimation(std::string spriteSheet, std::string mate
 		frames[i].setTexture(textures[i]);
 		frames[i].setMaterial(material);
 
-		std::cout << textures[i] << " " << material << "\n";
+		if (framesToPauseOn != nullptr && framePauseTimes != nullptr) {
+			bool pause = false;
+			size_t j;
 
-		bool pause = false;
-		size_t j;
-
-		for (j = 0; j < framesToPauseOn.size(); j++) {
-			if (framesToPauseOn[j] == i) {
-				pause = true;
-				break;
+			for (j = 0; j < framesToPauseOn->size(); j++) {
+				if (framesToPauseOn->at(j) == i) {
+					pause = true;
+					break;
+				}
 			}
-		}
 
-		if (pause) {
-			track.addKeyFrameUsingMillis(16, &frames[i]);
-			track.addKeyFrameUsingMillis(framePauseTimes[j], &frames[i]);
+			if (pause) {
+				track.addKeyFrameUsingMillis(timeBetweenFrames, &frames[i]);
+				track.addKeyFrameUsingMillis(framePauseTimes->at(j), &frames[i]);
+			} else {
+				track.addKeyFrameUsingMillis(timeBetweenFrames, &frames[i]);
+			}
 		} else {
-			track.addKeyFrameUsingMillis(16, &frames[i]);
+			track.addKeyFrameUsingMillis(timeBetweenFrames, &frames[i]);
 		}
 	}
 

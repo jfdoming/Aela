@@ -18,6 +18,9 @@ namespace Scripts {
 	bool animateElevator();
 	void stopAnimatingElevator();
 
+	void setupMainAnimations();
+
 	bool loopSpriteSheetAnimation(std::string spriteSheet, std::string materialToAnimate, int spriteSheetWidth,
-			int startX, int startY, int endX, int endY, std::vector<int> framesToPauseOn, std::vector<long long> framePauseTimes);
+			int startX, int startY, int endX, int endY, std::vector<int>* framesToPauseOn, std::vector<long long>* framePauseTimes,
+		long long timeBetweenFrames);
 }

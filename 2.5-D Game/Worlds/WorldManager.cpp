@@ -213,7 +213,7 @@ bool Game::WorldManager::addTeleporterToFloorTile(const Location& teleporterLoca
 		return false;
 	}
 
-	Tile* tile = tileGroup->getFloorTile(tileAtlas);
+	Tile* tile = tileGroup->getFloorTile();
 	if (tile == nullptr) {
 		return false;
 	}
@@ -228,7 +228,7 @@ bool Game::WorldManager::addTeleporterToSwitchableFloorTile(const Location& tele
 		return false;
 	}
 
-	Tile* tile = tileGroup->getSwitchableFloorTile(tileAtlas);
+	Tile* tile = tileGroup->getSwitchableFloorTile();
 	if (tile == nullptr) {
 		return false;
 	}
@@ -285,6 +285,14 @@ void Game::WorldManager::rebuildMap() {
 void Game::WorldManager::createChunkInCurrentWorld(glm::ivec2 coordinate) {
 	auto chunk = Chunk();
 	worlds[playerCharacter->getLocation()->getWorld()].addChunk(coordinate, &chunk);
+}
+
+void Game::WorldManager::getCoordinateOfNeighbouringTile(Location& location, TileDirection direction) {
+	glm::ivec3 tile = location.getTileGroup();
+	glm::ivec2 chunk = location.getChunk();
+	getCoordinateOfNeighbouringTile(tile, chunk, direction);
+	location.setTile(tile);
+	location.setChunk(chunk);
 }
 
 void Game::WorldManager::createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, unsigned int layer) {

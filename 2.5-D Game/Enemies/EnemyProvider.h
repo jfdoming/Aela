@@ -22,8 +22,9 @@ namespace Game {
 
 			void returnWasPressed();
 
-			size_t addTurret(Turret* turret);
-			Turret* getTurret(size_t id);
+			size_t addEnemy(Enemy* enemy);
+			Enemy* getEnemy(size_t id);
+			Enemy* getEnemy(std::string name);
 
 		private:
 			// These are obtained from GameObjectProvider.
@@ -32,6 +33,6 @@ namespace Game {
 			Scene* gameplayScene;
 			ResourceManager* resourceManager;
 
-			std::vector<Turret*> turrets;
+			std::vector<Enemy*> enemies;
 	};
 }

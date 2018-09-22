@@ -120,6 +120,10 @@ bool Game::Door::lock(size_t lockID) {
 	return true;
 }
 
+bool Game::Door::isOpen() {
+	return open;
+}
+
 void Game::Door::setOnOpen(std::function<void()>* onOpen) {
 	this->onOpen = *onOpen;
 }

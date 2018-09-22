@@ -103,6 +103,10 @@ void Scene::putParticleEmitter(ParticleEmitter* emitter) {
 	particleEmitters.push_back(emitter);
 }
 
+void Scene::clearParticleEmitters() {
+	particleEmitters.clear();
+}
+
 void Scene::handleMousePressed(Event* event) {
 	if (!menu.isInitialized()) {
 		return;

@@ -33,6 +33,7 @@ namespace Game {
 			// These lock/unlock locks and return the success.
 			bool unlock(size_t lockID);
 			bool lock(size_t lockID);
+			bool isOpen();
 
 			void setOnOpen(std::function<void()>* onOpen);
 			void setOnClose(std::function<void()>* onClose);

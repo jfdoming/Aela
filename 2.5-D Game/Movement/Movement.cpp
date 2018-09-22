@@ -105,3 +105,19 @@ void Game::Movement::setPreprocessed(bool preprocessed) {
 bool Game::Movement::isPreprocessed() {
 	return preprocessed;
 }
+
+void Movement::setScriptOnCompletion(std::string scriptOnCompletion) {
+	this->scriptOnCompletion = scriptOnCompletion;
+}
+
+std::string Movement::getScriptOnCompletion() {
+	return scriptOnCompletion;
+}
+
+void Movement::setCollidable(bool collidable) {
+	this->collidable = collidable;
+}
+
+bool Movement::isCollidable() {
+	return collidable;
+}

@@ -8,7 +8,7 @@ Game::CharacterDeathParticleEmitter::CharacterDeathParticleEmitter(Clock* time) 
 }
 
 Game::CharacterDeathParticleEmitter::~CharacterDeathParticleEmitter() {
-	character->setVisibility(true);
+	// character->setVisibility(true);
 }
 
 void CharacterDeathParticleEmitter::setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight, unsigned int amount) {

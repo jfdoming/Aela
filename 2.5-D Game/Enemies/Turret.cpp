@@ -14,6 +14,7 @@
 #include "../Chunks/Chunk.h"
 #include "../Particles/LaserParticleEmitter.h"
 #include "../Particles/TileSwitchParticleEmitter.h"
+#include "../Character/CharacterProvider.h"
 
 Game::Turret::Turret() {
 	setDetectionAngles(true, true, true, true);
@@ -35,39 +36,39 @@ Game::Turret::Turret(std::string name, const Location& location, unsigned int de
 	setDetectionAngles(detectRight, detectForward, detectLeft, detectBackward);
 }
 
-void Game::Turret::update(Character* playerCharacter, long long time) {
-	recentlyAttacked = false;
-	if (hostile && isInLineOfSight(playerCharacter->getLocationBeforeAnimation())) {
-		if (attackIfPossible(playerCharacter, time)) {
-			recentlyAttacked = true;
-		}
-	}
+Game::Turret::~Turret() {
 }
 
-bool Game::Turret::isInLineOfSight(Location* location) {
-	if (location->getWorld() != this->location.getWorld()) {
-		return false;
-	}
+void Game::Turret::update() {
+	Enemy::update();
 
-	if (location->getTileGroup().x == this->location.getTileGroup().x && this->location.getChunk().x == location->getChunk().x) {
-		int differenceInZ = this->location.getChunk().y * CHUNK_LENGTH + this->location.getTileGroup().z
-			- location->getChunk().y * CHUNK_LENGTH - location->getTileGroup().z;
-		if ((differenceInZ > 0 && detectionAngles[TileDirection::BACKWARD] && differenceInZ <= detectionRange) || (differenceInZ < 0 &&
-			detectionAngles[TileDirection::FORWARD] && differenceInZ >= -detectionRange)) {
-			return true;
+	for (size_t i = 0; i < targets.size(); i++) {
+		Character* character = GameObjectProvider::getCharacterProvider()->getCharacterByID(targets[i]);
+
+		if (character == nullptr) {
+			targets.erase(targets.begin() + i);
+			continue;
+		}
+
+		if (!character->isAlive()) {
+			continue;
+		}
+
+		const bool isInSight = (isInLineOfSight(character->getLocationBeforeAnimation(), TileDirection::RIGHT, detectionRange)
+		&& detectionAngles[TileDirection::RIGHT])
+		|| (isInLineOfSight(character->getLocationBeforeAnimation(), TileDirection::FORWARD, detectionRange)
+			&& detectionAngles[TileDirection::FORWARD])
+		|| (isInLineOfSight(character->getLocationBeforeAnimation(), TileDirection::LEFT, detectionRange)
+			&& detectionAngles[TileDirection::LEFT])
+		|| (isInLineOfSight(character->getLocationBeforeAnimation(), TileDirection::BACKWARD, detectionRange)
+			&& detectionAngles[TileDirection::BACKWARD]);
+
+		if (hostile && isInSight) {
+			if (attackIfPossible(character)) {
+				addBulletEffects(GameObjectProvider::getGameplayScene(), GameObjectProvider::getResourceManager(), GameObjectProvider::getTime());
+			}
 		}
 	}
-
-	if (location->getTileGroup().z == this->location.getTileGroup().z && this->location.getChunk().y == location->getChunk().y) {
-		int differenceInX = this->location.getChunk().x * CHUNK_WIDTH + this->location.getTileGroup().x
-			- location->getChunk().x * CHUNK_WIDTH - location->getTileGroup().x;
-		if ((differenceInX > 0 && detectionAngles[TileDirection::RIGHT] && differenceInX <= detectionRange) || (differenceInX < 0 &&
-			detectionAngles[TileDirection::LEFT] && differenceInX >= -detectionRange)) {
-			return true;
-		}
-	}
-
-	return false;
 }
 
 void Game::Turret::setDetectionRange(int detectionRange) {
@@ -85,16 +86,8 @@ void Game::Turret::setDetectionAngles(bool detectRight, bool detectForward, bool
 	detectionAngles[TileDirection::BACKWARD] = detectBackward;
 }
 
-bool Game::Turret::hasRecentlyAttacked() {
-	return recentlyAttacked;
-}
-
 Game::EnemyType Game::Turret::getType() {
 	return EnemyType::TURRET;
-}
-
-void Game::Turret::update() {
-		
 }
 
 void Game::Turret::addBulletEffects(Scene* gameplayScene, ResourceManager* resourceManager, Clock* time) {

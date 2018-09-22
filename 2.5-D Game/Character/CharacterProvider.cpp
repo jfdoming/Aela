@@ -98,29 +98,41 @@ bool Game::CharacterProvider::removeCharacterByID(size_t id) {
 	if (getCharacterByID(id) == nullptr) {
 		return false;
 	}
+
 	Character* character = characters[id];
 	Location* location = character->getLocation();
+	delete character;
 	charactersByName.erase(character->getName());
 	charactersByLocation[location->getWorld()][location->getChunk()].erase(location->getTileGroup());
 	characters.erase(id);
 
-	for (auto& pair : charactersByName) {
-		if (pair.second > id) {
-			pair.second--;
-		}
-	}
+	// for (auto& pair : charactersByName) {
+	// 	if (pair.second > id) {
+	// 		pair.second--;
+	// 	}
+	// }
 
-	for (auto& pair1 : charactersByLocation) {
-		for (auto& pair2 : pair1.second) {
-			for (auto& pair3 : pair2.second) {
-				if (pair3.second > id) {
-					pair3.second--;
-				}
-			}
-		}
-	}
+	// for (auto& pair1 : charactersByLocation) {
+	// 	for (auto& pair2 : pair1.second) {
+	// 		for (auto& pair3 : pair2.second) {
+	// 			if (pair3.second > id) {
+	// 				pair3.second--;
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	return true;
+}
+
+bool CharacterProvider::removeCharacterByName(std::string name) {
+	auto pos = charactersByName.find(name);
+
+	if (pos == charactersByName.end()) {
+		return false;
+	}
+
+	return removeCharacterByID(pos->second);
 }
 
 Game::Character* Game::CharacterProvider::getCharacterByID(size_t id) {
@@ -152,7 +164,18 @@ Game::Character* Game::CharacterProvider::getCharacterByLocation(const Location&
 	if (iter3 == iter2->second.end()) {
 		return nullptr;
 	}
+
 	return characters[iter3->second];
+}
+
+size_t CharacterProvider::getCharacterID(std::string name) {
+	for (auto pos : characters) {
+		if (pos.second->getName() == name) {
+			return pos.first;
+		}
+	}
+
+	return 0;
 }
 
 std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFunctions>*

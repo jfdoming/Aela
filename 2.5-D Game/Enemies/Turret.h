@@ -21,13 +21,11 @@ namespace Game {
 			Turret(std::string name, const Location& location, unsigned int detectionRange, bool detectRight, bool detectForward, bool detectLeft, bool detectBackward,
 				int strength, long long attackCooldown);
 
-			virtual void update(Character* playerCharacter, long long time);
+			virtual ~Turret();
 
-			bool isInLineOfSight(Location* location);
 			void setDetectionRange(int detectionRange);
 			void setDetectionAngle(TileDirection direction, bool detect);
 			void setDetectionAngles(bool detectRight, bool detectForward, bool detectLeft, bool detectBackward);
-			bool hasRecentlyAttacked();
 
 			virtual EnemyType getType();
 
@@ -37,7 +35,6 @@ namespace Game {
 		private:
 			int detectionRange = 0;
 			std::unordered_map<TileDirection, bool> detectionAngles;
-			bool recentlyAttacked = false;
 
 			void addBulletEffects(Scene* gameplayScene, ResourceManager* resourceManager, Clock* time);
 	};

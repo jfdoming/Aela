@@ -26,13 +26,13 @@ namespace Game {
 			TileMap* getTiles();
 			Tile* getTile(size_t type);
 
-			Tile* getFloorTile(TileAtlas* tileAtlas);
-			Tile* getLiquidFloorTile(TileAtlas* tileAtlas);
-			Tile* getSwitchableFloorTile(TileAtlas* tileAtlas);
-			bool containsCollidableTile(TileAtlas* tileAtlas);
-			bool isCollidable(TileAtlas* tileAtlas);
+			Tile* getFloorTile();
+			Tile* getLiquidFloorTile();
+			Tile* getSwitchableFloorTile();
+			bool containsCollidableTile();
+			bool isCollidable();
 			bool containsTile(size_t type);
-			bool containsCollidableNonSwitchableTile(TileAtlas* tileAtlas);
+			bool containsCollidableNonSwitchableTile();
 
 			// Note: if the IDs of the scripts are stored as nothing (""), then these functions
 			// return nullptr. Otherwise, they return a pointer to the name of the script, which

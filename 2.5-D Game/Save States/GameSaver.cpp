@@ -25,6 +25,8 @@ bool Game::GameSaver::load(std::string saveStateName) {
 
 	pos->second.load();
 
+	GameObjectProvider::getGameplayScene()->clearParticleEmitters();
+
 	auto mapRebuild = []() {
 		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 	};

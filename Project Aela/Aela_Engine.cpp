@@ -20,7 +20,7 @@ using namespace Aela;
 
 Aela::Engine::Engine() : resourceManager(0), timer(&time) {
 	// This is crucial for many error handling-related features.
-	AelaErrorHandling::handleSignal(SIGSEGV);
+	// AelaErrorHandling::handleSignal(SIGSEGV);
 }
 
 // Thi function is old and will be deleted. It still contains code for elements which will be moved.

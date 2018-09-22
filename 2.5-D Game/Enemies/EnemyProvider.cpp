@@ -17,11 +17,8 @@ void Game::EnemyProvider::scenesWereSetUp() {
 }
 
 void Game::EnemyProvider::updateRegisteredEnemies() {
-	for (Turret* turret : turrets) {
-		turret->update(player->getCharacter(), time->getCurrentTimeInNanos());
-		if (turret->hasRecentlyAttacked()) {
-			turret->addBulletEffects(gameplayScene, resourceManager, time);
-		}
+	for (Enemy* enemy : enemies) {
+		enemy->update();
 	}
 }
 
@@ -52,11 +49,19 @@ void Game::EnemyProvider::returnWasPressed() {
 	}
 }
 
-size_t Game::EnemyProvider::addTurret(Turret* turret) {
-	turrets.push_back(turret);
-	return turrets.size() - 1;
+size_t Game::EnemyProvider::addEnemy(Enemy* enemy) {
+	enemies.push_back(enemy);
+	return enemies.size() - 1;
 }
 
-Game::Turret* Game::EnemyProvider::getTurret(size_t id) {
-	return turrets[id];
+Game::Enemy* Game::EnemyProvider::getEnemy(size_t id) {
+	return enemies[id];
+}
+
+Enemy* EnemyProvider::getEnemy(std::string name) {
+	for (auto* ptr : enemies) {
+		if (ptr->getName() == name) {
+			return ptr;
+		}
+	}
 }

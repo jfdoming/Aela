@@ -1,14 +1,3 @@
-#include <utility>
-
-#include <utility>
-
-/*
-* Class: Character
-* Author: Robert Ciborowski
-* Date: 07/08/2017
-* Description: A class used to represent an character.
-*/
-
 #include "Character.h"
 #include "../Worlds/WorldManager.h"
 #include "../Particles/TileSwitchParticleEmitter.h"
@@ -24,6 +13,7 @@
 #include "../../Project Aela/Utilities/enumut.h"
 #include "../../Project Aela/Time/Timer/Timer.h"
 #include <iostream>
+#include <utility>
 
 using namespace Game;
 
@@ -52,6 +42,9 @@ Game::Character::Character(std::string name, const Location& location, float wal
 	this->runningSpeed = runningSpeed;
 }
 
+Character::~Character() {
+}
+
 void Game::Character::setLocation(Location* location) {
 	this->location = *location;
 }
@@ -70,6 +63,8 @@ void Game::Character::animateDeath() {
 	std::vector<GLTexture*> textures;
 	auto* texture = dynamic_cast<GLTexture*>(entity->getModel()->getSubModels()->at(0).getMaterial()->getTexture());
 	textures.push_back(texture);
+
+	std::cout << "SRC: " << entity->getModel()->getSubModels()->at(0).getMaterial()->getTexture()->getSrc() << "\n";
 
 	if (this == GameObjectProvider::getPlayer()->getCharacter()) {
 		auto endingAction = [this]() {
@@ -279,14 +274,14 @@ void Game::Character::moveIfPossible(std::list<Movement>* directions) {
 void Game::Character::moveWithoutCollisionCheck(TileDirection direction) {
 	if (newMovementsAreAllowed) {
 		Movement movement(direction);
-		movement.setPreprocessed(true);
+		movement.setCollidable(false);
 		possibleMovementsToProcess.push_back(movement);
 	}
 }
 
 void Game::Character::moveWithoutCollisionCheck(Movement* movement) {
 	if (newMovementsAreAllowed) {
-		movement->setPreprocessed(true);
+		movement->setCollidable(false);
 		possibleMovementsToProcess.push_back(*movement);
 	}
 }
@@ -330,6 +325,15 @@ void Game::Character::teleportWithAnimation(const Location& location, Teleportat
 void Game::Character::kill() {
 	alive = false;
 	animateDeath();
+
+	try {
+		onKill();
+	} catch (std::bad_function_call e) {
+		// If you reach this point, onKill probably wasn't set.
+		// Q: Why don't I just do "if (onKill)" instead of a try-catch?
+		// A: Because it doesn't seem to work.
+	}
+
 	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 }
 
@@ -341,6 +345,11 @@ void Game::Character::revive() {
 	}
 
 	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+}
+
+void Character::setOnKill(std::function<void()> onKill) {
+	this->onKill = onKill;
+	std::cout << name << " has set onKill\n";
 }
 
 bool Game::Character::isAlive() {
@@ -411,10 +420,12 @@ void Game::Character::increaseHealth(int amount) {
 }
 
 void Game::Character::decreaseHealth(int amount) {
-	health -= amount;
-	if (health < 0) {
-		health = 0;
-		kill();
+	if (alive) {
+		health -= amount;
+		if (health < 0) {
+			health = 0;
+			kill();
+		}
 	}
 }
 
@@ -513,10 +524,13 @@ void Game::Character::addTranslation(Movement* movement, std::string scriptOnceC
 }
 
 void Game::Character::completeMovement(Movement* movement, std::string scriptOnCompletion) {
+	std::cout << name << " is moving to " << *movement->getDestination() << "\n";
+
 	if (movement->isATurnOnly()) {
 		// The movement doesn't go anywhere. Just turn the character without moving it.
 		turnImmediately(movement->getDirection());
 		moving = false;
+		GameObjectProvider::getScriptManager()->runScript(movement->getScriptOnCompletion());
 		return;
 	}
 
@@ -531,22 +545,31 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 		location = newLocation;
 		GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
 		GameObjectProvider::getScriptManager()->runScript(scriptOnCompletion);
+		GameObjectProvider::getScriptManager()->runScript(movement->getScriptOnCompletion());
 		movementHasEnded();
 		return;
 	}
+
+	std::string endScript = movement->getScriptOnCompletion();
 
 	if (movement->isATeleportation()) {
 		bool newMovementsWereAllowed = newMovementsAreAllowed;
 		newMovementsAreAllowed = false;
 		TeleportationAnimation teleportationAnimation = movement->getTeleportationAnimation();
 
-		auto teleportationEndAction = [this, newLocation, scriptOnCompletion, newMovementsWereAllowed]() mutable {
+		auto teleportationEndAction = [this, endScript, newLocation, scriptOnCompletion, newMovementsWereAllowed]() mutable {
 			WorldManager* worldManager = GameObjectProvider::getWorldManager();
+			TileGroup* tileGroup = worldManager->getTileGroup(newLocation);
 			newMovementsAreAllowed = newMovementsWereAllowed;
 			GameObjectProvider::getScriptManager()->runScript(scriptOnCompletion);
+			GameObjectProvider::getScriptManager()->runScript(endScript);
 			movementHasEnded();
 
-			if (worldManager->getTileGroup(newLocation)->getLiquidFloorTile(GameObjectProvider::getTileAtlas()) != nullptr) {
+			if (tileGroup == nullptr) {
+				return;
+			}
+
+			if (tileGroup->getLiquidFloorTile() != nullptr) {
 				// The character teleported into a liquid. They must die.
 				kill();
 			}
@@ -613,17 +636,12 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 	}
 
 	switchStep();
-	turnImmediately(movement->getDirection());
+	if (movement->getDirection() != TileDirection::UP && movement->getDirection() != TileDirection::DOWN) {
+		turnImmediately(movement->getDirection());
+	}
 	characterProvider->characterWasMoved(name, &oldLocation, &newLocation);
 	location = newLocation;
 	glm::vec3 translationForAnimation = *movement->getWorldspaceTranslation();
-	long long timeToAdvanceTrackBy;
-
-	if (movementEnded) {
-		timeToAdvanceTrackBy = timePassedAfterAnimationEnd;
-	} else {
-		timeToAdvanceTrackBy = 0;
-	}
 
 	AnimationTrack3D track3D;
 
@@ -634,8 +652,10 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 	frame.setObject(entity);
 	glm::vec3 characterTranslation = *entity->getPosition() + translationForAnimation;
 	frame.setTranslation(&characterTranslation);
-	auto action = [this, scriptOnCompletion]() {
+
+	auto action = [this, endScript, scriptOnCompletion]() {
 		GameObjectProvider::getScriptManager()->runScript(scriptOnCompletion);
+		GameObjectProvider::getScriptManager()->runScript(endScript);
 		movementHasEnded();
 	};
 
@@ -682,7 +702,7 @@ void Game::Character::completeMovement(Movement* movement, std::string scriptOnC
 	step2Frame.setEndingAction(action2);
 	modelTrack.addKeyFrame((long long) (1000000.0f / getCurrentSpeed() / 2), &step2Frame);
 
-	frame.setEndingAction(std::bind(action));
+	frame.setEndingAction(action);
 	animator->addAnimationTrackModel(&modelTrack);
 }
 
@@ -708,28 +728,7 @@ void Game::Character::processPossibleMovement(Movement* movement) {
 	Location newLocation = location;
 	glm::ivec2 chunkCoord = newLocation.getChunk();
 	glm::ivec3 tileCoord = newLocation.getTileGroup();
-	glm::vec3 translation;
-
-	switch (direction) {
-		case TileDirection::RIGHT:
-			translation = glm::vec3(-1, 0, 0);
-			break;
-		case TileDirection::FORWARD:
-			translation = glm::vec3(0, 0, 1);
-			break;
-		case TileDirection::LEFT:
-			translation = glm::vec3(1, 0, 0);
-			break;
-		case TileDirection::BACKWARD:
-			translation = glm::vec3(0, 0, -1);
-			break;
-		case TileDirection::UP:
-			translation = glm::vec3(0, 1, 0);
-			break;
-		case TileDirection::DOWN:
-			translation = glm::vec3(0, -1, 0);
-			break;
-	}
+	glm::vec3 translation = getWorldSpaceTranslation(direction);
 
 	tileCoord += translation;
 
@@ -766,7 +765,7 @@ void Game::Character::processPossibleMovement(Movement* movement) {
 			if (chunk != nullptr) {
 				TileGroup* tileGroup = worldManager->getTileGroup(newLocation);
 
-				if (tileGroup == nullptr || (collidable && tileGroup->isCollidable(GameObjectProvider::getTileAtlas()))) {
+				if (tileGroup == nullptr || (collidable && movement->isCollidable() && tileGroup->isCollidable())) {
 					// If the movement is impossible, don't do it!
 					turnImmediately(direction);
 					return; 
@@ -774,6 +773,8 @@ void Game::Character::processPossibleMovement(Movement* movement) {
 
 				if (characterProvider->getCharacterByLocation(newLocation) != nullptr) {
 					// If the movement is impossible, don't do it!
+					std::cout << "A character is blocking the way.\n";
+					std::cout << characterProvider->getCharacterByLocation(newLocation)->getName() << "\n";
 					turnImmediately(direction);
 					return;
 				}
@@ -845,4 +846,23 @@ void Character::changeModel() {
 		entity->setModel(model);
 	}
 	GameObjectProvider::getWorldManager()->rebuildMapNextUpdate();
+}
+
+glm::vec3 Character::getWorldSpaceTranslation(TileDirection direction) {
+	switch (direction) {
+		case TileDirection::RIGHT:
+			return glm::vec3(-1, 0, 0);
+		case TileDirection::FORWARD:
+			return glm::vec3(0, 0, 1);
+		case TileDirection::LEFT:
+			return glm::vec3(1, 0, 0);
+		case TileDirection::BACKWARD:
+			return glm::vec3(0, 0, -1);
+		case TileDirection::UP:
+			return glm::vec3(0, 1, 0);
+		case TileDirection::DOWN:
+			return glm::vec3(0, -1, 0);
+		default:
+			return glm::vec3();
+	}
 }

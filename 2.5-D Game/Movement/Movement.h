@@ -34,16 +34,21 @@ namespace Game {
 			bool isATurnOnly();
 			void setPreprocessed(bool preprocessed);
 			bool isPreprocessed();
-
+			void setScriptOnCompletion(std::string scriptOnCompletion);
+			std::string getScriptOnCompletion();
+			void setCollidable(bool collidable);
+			bool isCollidable();
 
 		private:
 			Location destination;
 			glm::vec3 worldSpaceTranslation;
 			TileDirection direction;
 			TeleportationAnimation teleportationAnimation;
+			std::string scriptOnCompletion = "";
 			bool teleportation = false;
 			bool animated = true;
 			bool turnOnly = false;
 			bool preprocessed = false;
+			bool collidable = true;
 	};
 }

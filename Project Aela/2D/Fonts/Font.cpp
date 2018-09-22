@@ -61,7 +61,7 @@ Rect<int> Aela::Font::getDimensionsOfText(std::string text) {
 	// Update: Actually, calculating width with CBox may not make sense. I will investigate further.
 	int width = 0;
 	for (unsigned int i = 0; i < text.size(); i++) {
-		AelaErrorHandling::handleSignal(SIGSEGV);
+		// AelaErrorHandling::handleSignal(SIGSEGV);
 
 		// FT_Load_Char was causing memory access violations. After using AelaErrorHandling's signal.h-related
 		// features, I managed to catch the violation as an exception (to prevent crashing) and also found that

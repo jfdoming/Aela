@@ -41,6 +41,7 @@ namespace Game {
 			void setChunkRenderDistances(glm::vec3 chunkRenderDistances);
 			void getCoordinateOfNeighbouringTile(glm::ivec3& tile, glm::ivec2& chunk, TileDirection direction);
 			void createChunkInCurrentWorld(glm::ivec2 coordinate);
+			void getCoordinateOfNeighbouringTile(Location& location, TileDirection direction);
 			void createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, unsigned int layer);
 
 			void addWalkedOnScript(std::string script, const Location& location);

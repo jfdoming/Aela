@@ -19,7 +19,6 @@
 
 void Scripts::setupScenes() {
 	using namespace Game;
-
 	Font* xerox;
 
 	if (!resourceManager->obtain<Font>("res/fonts/xerox.ttf", xerox)) {

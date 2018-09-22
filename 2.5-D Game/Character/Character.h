@@ -29,6 +29,8 @@ namespace Game {
 			Character(std::string name, const Location& location);
 			Character(std::string name, const Location& location, float walkingSpeed, float runningSpeed);
 
+			virtual ~Character();
+
 			// These are movement-related functions. Functions with the word "immediately" complete
 			// the movement on the spot, wherever the player currently is. Other functions add the
 			// movements to a list of movements to perform sequencially.
@@ -46,6 +48,7 @@ namespace Game {
 
 			void kill();
 			void revive();
+			void setOnKill(std::function<void()> onKill);
 
 			// These are getters, setters and adders.
 			Location* getLocation();
@@ -142,6 +145,8 @@ namespace Game {
 			bool visible = true;
 			bool newMovementsAreAllowed = true;
 
+			std::function<void()> onKill = {};
+
 			// To be accessed by this class's friends.
 			void addTranslation(Movement* movement, std::string scriptOnceComplete);
 
@@ -157,5 +162,7 @@ namespace Game {
 
 			void generateModel();
 			void changeModel();
+
+			glm::vec3 getWorldSpaceTranslation(TileDirection direction);
 	};
 }

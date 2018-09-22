@@ -76,6 +76,7 @@ namespace Scripts {
 		"player_4",
 		"player_5",
 		"turret_1",
+		"destroyer_1",
 		"soldier_1",
 		"scientist_1",
 		"scientist_4",

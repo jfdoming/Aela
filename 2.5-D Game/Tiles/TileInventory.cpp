@@ -12,7 +12,7 @@
 using namespace Game;
 
 Tile* Game::TileInventory::switchTile(TileGroup* tileGroup, size_t whichTile) {
-	Tile* floorTilePtr = tileGroup->getSwitchableFloorTile(GameObjectProvider::getTileAtlas());
+	Tile* floorTilePtr = tileGroup->getSwitchableFloorTile();
 
 	if (floorTilePtr != nullptr) {
 		Tile floorTile = *floorTilePtr;

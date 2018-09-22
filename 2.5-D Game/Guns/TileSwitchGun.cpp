@@ -52,7 +52,7 @@ bool Game::TileSwitchGun::use(GameMode gameMode) {
 		}
 
 		TileGroup* tileGroupPtr = chunkPtr->getTileGroup(tile);
-		if (tileGroupPtr == nullptr || tileGroupPtr->containsCollidableNonSwitchableTile(tileAtlas)) {
+		if (tileGroupPtr == nullptr || tileGroupPtr->containsCollidableNonSwitchableTile()) {
 			return false;
 		}
 		//if (worldManager->getTileAtlas()->getTileType(tilePtr->getType())->getShape() != TileShape::FLOOR

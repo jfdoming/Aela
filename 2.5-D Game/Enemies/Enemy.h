@@ -21,25 +21,35 @@ namespace Game {
 			Enemy(int strength, long long attackCooldown);
 			Enemy(std::string name, const Location& location, int strength, long long attackCooldown);
 
+			virtual ~Enemy();
+
 			virtual EnemyType getType();
 
 			void setStrength(int strength);
 			int getStrength();
 			void setAttackCooldown(long long attackCooldown);
 
-			bool attackIfPossible(Character* character, long long currentTime);
+			bool attackIfPossible(Character* character);
 
 			bool isHostile();
 			void setHostile(bool hostile);
 			void toggleHostility();
 
+			void addTarget(size_t characterID);
+			void removeTarget(size_t characterID);
+			void clearTargets();
+
 		protected:
 			virtual void update();
+			virtual void attack(Character* character);
+			bool isInLineOfSight(Location* enemyLocation, TileDirection direction, int detectionRange);
 			
 			int strength = 0;
 			long long attackCooldown = 1;
 			long long timeOnLastAttack = 0;
 
 			bool hostile = true;
+
+			std::vector<size_t> targets;
 	};
 }

@@ -92,6 +92,7 @@ namespace Game {
 			bool pressingTileSelectLeft = false, pressingTileSelectRight = false, pressingTileSwitch = false;
 			bool pressingPauseButton = false, pressingInventoryButton = false;
 			bool pressingReturn = false, pressedReturn = false, pressingBackspace = false;
+			bool pressedTileSwitch = false;
 			long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 180000000;
 			const long long TIME_BETWEEN_TILE_SELECTS_ON_FIRST_PRESS = 300000000, TIME_BETWEEN_TILE_SELECTS_ON_HOLD = 100000000;
 

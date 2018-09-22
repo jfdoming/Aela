@@ -31,7 +31,7 @@
 #include "../Doors/DoorProvider.h"
 #include "../Save States/GameSaver.h"
 #include "../../Project Aela/Events/EventListener.h"
-
+#include "../Enemies/TileDestroyer.h"
 using namespace Aela;
 
 Game::AelaGame::AelaGame() {
@@ -142,8 +142,8 @@ void Game::AelaGame::setup() {
 	playerCharacter = new Character();
 	playerCharacter->setTexture("player_1");
 	playerCharacter->setName(PLAYER_NAME);
-	playerCharacter->setMaxHealth(100);
-	playerCharacter->setHealth(100);
+	playerCharacter->setMaxHealth(1);
+	playerCharacter->setHealth(1);
 	size_t playerID;
 	if (!characterProvider->addCharacter(playerCharacter, &playerID)) {
 		// Is this even possible to reach?!
@@ -221,6 +221,10 @@ void Game::AelaGame::update() {
 						playerCharacter->moveIfPossible(TileDirection::BACKWARD);
 					}
 				}
+				if (pressedTileSwitch) {
+					pressedTileSwitch = false;
+					useTileSwitchGun();
+				}
 				if (gameMode == GameMode::MAP_EDITOR) {
 					if (movingUp) {
 						if (time->getCurrentTimeInNanos() >= timeAtLastPlayerTurn + TIME_BETWEEN_PLAYER_TURNS) {
@@ -284,7 +288,7 @@ void Game::AelaGame::onEvent(Event* event) {
 				switch (keyEvent->getKeycode()) {
 					case SDLK_BACKSLASH:
 						if (!pressingTileSwitch) {
-							useTileSwitchGun();
+							pressedTileSwitch = true;
 							pressingTileSwitch = true;
 						}
 						break;
@@ -613,19 +617,23 @@ void Game::AelaGame::onEvent(Event* event) {
 				break;
 			case SDLK_8: {
 				// This is here for debugging!
+				// This is here for debugging!
 				Scripts::setupLevel(1, 3);
 				player->showTileGun();
-				playerCharacter->teleportWithAnimation(Location(0, -2, 0, 11, 0, 4), TeleportationAnimation::FADE);
-				hintDisplay->clearAndDisplayHint("Cheat Activated: Fade Teleport", HintDisplayDuration::SHORT);
+				playerCharacter->teleportWithAnimation(Location(1, glm::ivec2(-22, 1), glm::ivec3(1, 0, 14)), TeleportationAnimation::RISE);
+				hintDisplay->clearAndDisplayHint("Cheat Activated: Rise Teleport", HintDisplayDuration::SHORT);
 				break;
 			}
 			case SDLK_9:
 				// This is here for debugging!
-				AudioClip* clip;
+				/*AudioClip* clip;
 				if (resourceManager->obtain<AudioClip>("res/audio/streams/Even the Tutorial Can Be Serious.wav", clip)) {
 					GameObjectProvider::getAudioPlayer()->playClip(clip);
 					hintDisplay->clearAndDisplayHint("Now Playing: Even the Tutorial Can Be Serious", HintDisplayDuration::LONG);
-				}
+				}*/
+
+				dynamic_cast<TileDestroyer*>(enemyProvider->getEnemy("destroyer_1"))->toggleHostility();
+				scriptManager->runScript("walked_on_4_0");
 				break;
 			default:
 				break;
@@ -730,7 +738,22 @@ void Game::AelaGame::switchCameraMode(CameraMode cameraMode) {
 }
 
 bool Game::AelaGame::useTileSwitchGun() {
-	return tileSwitchGun.use(gameMode);
+	if (tileSwitchGun.use(gameMode)) {
+		if (!playerCharacter->isMoving()) {
+			// playerCharacter->allowNewMovements(false);
+			playerCharacter->setTexture("player_5");
+
+			auto event = [this]() {
+				playerCharacter->setTexture("player_3");
+				// playerCharacter->allowNewMovements(true);
+			};
+
+			engine->getTimer()->scheduleEventInMillis(200, event);
+		}
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void Game::AelaGame::switchScene(unsigned int sceneID) {

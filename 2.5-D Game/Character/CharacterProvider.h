@@ -37,9 +37,11 @@ namespace Game {
 			bool addCharacter(Character* character);
 			bool addCharacter(Character* character, size_t* id);
 			bool removeCharacterByID(size_t id);
+			bool removeCharacterByName(std::string name);
 			Character* getCharacterByID(size_t id);
 			Character* getCharacterByName(std::string name);
 			Character* getCharacterByLocation(const Location& location);
+			size_t getCharacterID(std::string name);
 			std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFunctions>*
 				getCharactersInChunk(size_t world, glm::ivec2 chunk);
 			
