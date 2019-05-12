@@ -87,3 +87,15 @@ static void forceWithinRange(glm::vec3* vec3, float minimum, float maximum) {
 		vec3->z -= (maximum - minimum) * ceil(abs((maximum - vec3->z) / (maximum - minimum)));
 	}
 }
+
+static std::string vecToString(glm::vec2* vec) {
+	return "(" + std::to_string(vec->x) + ", " + std::to_string(vec->y) + ")";
+}
+
+static std::string vecToString(glm::vec3* vec) {
+	return "(" + std::to_string(vec->x) + ", " + std::to_string(vec->y) + ", " + std::to_string(vec->z) + ")";
+}
+
+static std::string vecToString(glm::vec4* vec) {
+	return "(" + std::to_string(vec->x) + ", " + std::to_string(vec->y) + ", " + std::to_string(vec->z) + ", " + std::to_string(vec->w) + ")";
+}

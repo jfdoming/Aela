@@ -14,14 +14,21 @@
 
 
 #include <al.h>
+#include "AudioClip.h"
+
+// Shouldn't this actually be in the Aela namespace?
+using namespace Aela;
 
 class AudioBuffer {
 	public:
-		AudioBuffer(ALuint buffer, ALuint source);
+		AudioBuffer(ALuint buffer, ALuint source, AudioClip* clip);
 
 		ALuint getBuffer();
 		ALuint getSource();
+		AudioClip* getClip();
+
 	private:
 		ALuint buffer, source;
+		AudioClip* clip;
 };
 

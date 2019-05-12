@@ -7,7 +7,16 @@
 */
 
 #pragma once
+#include <string>
 
 namespace Scripts {
-	void loadTiledMaps();
+	void loadTileAtlas();
+	void loadAllTiledMaps();
+	void loadStartingTiledMaps();
+	void loadTiledMap(std::string name, size_t mapID);
+
+	static int stageMapAssociations[] = {
+		// Stage 1 = map ID 1
+		1
+	};
 };

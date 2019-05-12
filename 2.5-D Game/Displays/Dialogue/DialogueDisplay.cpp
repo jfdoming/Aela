@@ -14,26 +14,30 @@
 #include "../../../Project Aela/Resource Management/ResourcePaths.h"
 #include "../../Menus/FontSizes.h"
 #include "../../Project Aela/Time/Clock.h"
+#include "../../Audio/GameAudioPlayer.h"
+#include "../../Scripts/Scripts to Move to LUA/SceneIDs.h"
+#include "../../Aela Game/AelaGame.h"
 
-Game::DialogueDisplay::DialogueDisplay() {
+Game::DialogueDisplay::DialogueDisplay() : MultiLineTextDisplay(2) {
 	eventHandler = GameObjectProvider::getEventHandler();
-	time = GameObjectProvider::getTime();
+	usingFontSize = true;
 
 	eventHandler->addListener(EventConstants::KEY_RELEASED, bindListener(DialogueDisplay::onEvent, this));
 	eventHandler->addListener(EventConstants::KEY_PRESSED, bindListener(DialogueDisplay::onEvent, this));
 }
 
+Game::DialogueDisplay::~DialogueDisplay() {
+}
+
 void Game::DialogueDisplay::setup() {
-	scriptManager = GameObjectProvider::getScriptManager();
+	MultiLineTextDisplay::setup();
 	animator = GameObjectProvider::getAnimator();
-	maxWidthOfText = (int) (GameObjectProvider::getWindow()->getDimensions()->getWidth() * 0.75f);
+	maxWidthOfText = (int) (GameObjectProvider::getWindow()->getDimensions()->getWidth() * 0.7f);
 }
 
 void Game::DialogueDisplay::update() {
-	if (runScript) {
-		scriptManager->runScript(scriptOnDialogueEnd);
-		runScript = false;
-	}
+	MultiLineTextDisplay::update();
+	AvatarDisplay::update();
 
 	if (optionWasSelected) {
 		if (options[currentOption].getActionOnSelection().empty()) {
@@ -44,20 +48,12 @@ void Game::DialogueDisplay::update() {
 		optionWasSelected = false;
 	}
 
-	if (state == DialogueState::MESSAGE && positionInDialogue < maxCharactersOfText
-		&& time->getCurrentTimeInNanos() >= timeSinceNewCharacter + timeBetweenCharacterReveals) {
-		positionInDialogue++;
-		timeSinceNewCharacter = time->getCurrentTimeInNanos();
-		if (positionInDialogue < maxCharactersInLabel1) {
-			label1->setText(line1OfText.substr(0, positionInDialogue));
-			label2->setText("");
-		} else {
-			label1->setText(line1OfText.substr(0, maxCharactersInLabel1));
-			label2->setText(line2OfText.substr(0, positionInDialogue - maxCharactersInLabel1));
-		}
+	if (finishDialogueAnimations) {
+		finishDialogueAnimationImmediately();
+		finishDialogueAnimations = false;
 	}
 
-	if (time->getCurrentTimeInNanos() > timeAtLastOptionSelect + timeBetweenOptionSelects) {
+	if (state == DialogueState::OPTIONS && time->getCurrentTimeInMillis() > timeAtLastOptionSelect + timeBetweenOptionSelects) {
 		if (pressingUp) {
 			pressUpAction();
 		}
@@ -82,18 +78,20 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 		switch (keyEvent->getKeycode()) {
 			case SDLK_RETURN:
 				if (!pressingReturn) {
-					if (state == DialogueState::MESSAGE) {
+					if (state == DialogueState::MESSAGE && continueOnReturnPress && GameObjectProvider::getSceneManager()->getCurrentSceneId() == WORLD_GAMEPLAY_SCENE) {
 						if (positionInDialogue > 1 && positionInDialogue < maxCharactersOfText) {
 							// Note that the dialogue must have scrolled past the first character in order for this to trigger. Otherwise,
 							// this could trigger right after the dialogue's initiation by AelaGame after a RETURN release.
-							positionInDialogue = maxCharactersOfText - 1;
-						} else if (positionInDialogue == maxCharactersOfText) {
+							// positionInDialogue = maxCharactersOfText - 1;
+							// timeSinceNewCharacter = 0;
+							finishDialogueAnimations = true;
+						} else if (textScrollingHasCompleted()) {
 							if (scriptOnDialogueEnd.empty()) {
 								closeDialog();
 							} else {
 								runScript = true;
 							}
-							justFinishedDialogue = true;
+							justSkippedDialogue = true;
 						}
 					} else if (state == DialogueState::OPTIONS) {
 						optionWasSelected = true;
@@ -103,25 +101,41 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 				break;
 			case SDLK_w:
 				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
-					pressUpAction();
 					pressingUp = true;
 				}
 				return;
 			case SDLK_s:
 				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
-					pressDownAction();
 					pressingDown = true;
 				}
 				return;
 			case SDLK_a:
 				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
-					pressLeftAction();
 					pressingLeft = true;
 				}
 				return;
 			case SDLK_d:
 				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
-					pressRightAction();
+					pressingRight = true;
+				}
+				return;
+			case SDLK_UP:
+				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
+					pressingUp = true;
+				}
+				return;
+			case SDLK_DOWN:
+				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
+					pressingDown = true;
+				}
+				return;
+			case SDLK_LEFT:
+				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
+					pressingLeft = true;
+				}
+				return;
+			case SDLK_RIGHT:
+				if (state == DialogueState::OPTIONS && !(pressingUp || pressingDown || pressingLeft || pressingRight)) {
 					pressingRight = true;
 				}
 				return;
@@ -133,7 +147,7 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 		switch (keyEvent->getKeycode()) {
 			case SDLK_RETURN:
 				pressingReturn = false;
-				justFinishedDialogue = false;
+				justSkippedDialogue = false;
 				break;
 			case SDLK_w:
 				pressingUp = false;
@@ -147,29 +161,41 @@ void Game::DialogueDisplay::onEvent(Event* event) {
 			case SDLK_d:
 				pressingRight = false;
 				break;
+			case SDLK_UP:
+				pressingUp = false;
+				break;
+			case SDLK_DOWN:
+				pressingDown = false;
+				break;
+			case SDLK_LEFT:
+				pressingLeft = false;
+				break;
+			case SDLK_RIGHT:
+				pressingRight = false;
+				break;
 			default:
 				break;
 		}
 	}
 }
 
-void Game::DialogueDisplay::showDialogue(std::string text, std::string scriptToRunOnceComplete) {
+void Game::DialogueDisplay::showDialogue(std::string name, std::string text, std::string scriptToRunOnceComplete) {
 	showDialogue("", "", std::move(text), std::move(scriptToRunOnceComplete));
 }
 
 void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc, std::string text, std::string scriptToRunOnceComplete) {
-	auto onAnimationComplete = [this, name, avatarSrc]() {
+	showDialogue(name, avatarSrc, "", text, scriptToRunOnceComplete);
+}
+
+void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc, std::string blinkingAvatarSrc,
+	std::string text, std::string scriptToRunOnceComplete) {
+	MultiLineTextDisplay::showDialogue(name, text, scriptToRunOnceComplete);
+
+	auto onAnimationComplete = [this, name, avatarSrc, blinkingAvatarSrc]() {
 		// We might not end up actually showing the name.
 		// nameLabel->setText(name);
 		nameLabel->setText("");
-
-		GLTexture* texture;
-		if (!avatarSrc.empty() && GameObjectProvider::getResourceManager()->obtain<GLTexture>(DEFAULT_TEXTURE_PATH + avatarSrc, texture)) {
-			avatar->setTexture(texture);
-			avatar->show();
-		} else {
-			avatar->hide();
-		}
+		showAvatar(avatarSrc, blinkingAvatarSrc);
 	};
 
 	if (state == DialogueState::HIDDEN) {
@@ -184,40 +210,12 @@ void Game::DialogueDisplay::showDialogue(std::string name, std::string avatarSrc
 		onAnimationComplete();
 	}
 
+	selectorImage->hide();
 	state = DialogueState::MESSAGE;
-
-	std::string splitText = text;
-	Font* font = label1->getFont();
-	font->setSize(FontSizes::MEDIUM_FONT_SIZE);
-	int width = font->getDimensionsOfText(splitText).getWidth();
-	while (width > maxWidthOfText) {
-		size_t position = splitText.find_last_of(' ');
-		if (position == std::string::npos) {
-			break;
-		}
-		splitText = splitText.substr(0, position);
-		width = font->getDimensionsOfText(splitText).getWidth();
-	}
-
-	maxCharactersInLabel1 = (int) splitText.size();
-	maxCharactersOfText = (int) text.size();
-
-	if (maxCharactersInLabel1 == maxCharactersOfText) {
-		line1OfText = text;
-		line2OfText = "";
-	} else {
-		line1OfText = splitText;
-		line2OfText = text.substr(splitText.size() + 1, text.size() - splitText.size());
-	}
-
-	positionInDialogue = 0;
-	scriptOnDialogueEnd = std::move(scriptToRunOnceComplete);
-	timeSinceNewCharacter = time->getCurrentTimeInNanos();
-	label1->setText("");
-	label2->setText("");
-	label3->setText("");
-	label4->setText("");
 	subMenu->show();
+
+	// Lower any music volume.
+	GameObjectProvider::getGameAudioPlayer()->setAllStreamVolumes(0.6f);
 }
 
 void Game::DialogueDisplay::showOptions(DialogueOption* option1, DialogueOption* option2) {
@@ -252,6 +250,8 @@ void Game::DialogueDisplay::showOptions(DialogueOption* option1, DialogueOption*
 }
 
 void Game::DialogueDisplay::closeDialog() {
+	MultiLineTextDisplay::closeDialog();
+
 	// Note that if the submenu changes visibility, it has to be rerendered. If it is already hidden,
 	// there's no point in rerendering it as hidden again as that is a waste of resources.
 	if (state == DialogueState::MESSAGE || state == DialogueState::OPTIONS) {
@@ -266,14 +266,16 @@ void Game::DialogueDisplay::closeDialog() {
 		frame.setEndingAction(endingAction);
 		track.addKeyFrame(BACKDROP_ANIMATION_PERIOD, &frame);
 		animator->addAnimationTrack2D(&track);
-		label1->setText("");
-		label2->setText("");
-		label3->setText("");
-		label4->setText("");
+		labels[0]->setText("");
+		labels[1]->setText("");
+		labels[2]->setText("");
+		labels[3]->setText("");
 		nameLabel->setText("");
-		avatar->hide();
+		stopShowingAvatar();
 	}
 	state = DialogueState::HIDDEN;
+
+	GameObjectProvider::getGameAudioPlayer()->setAllStreamVolumes(1);
 }
 
 void Game::DialogueDisplay::setSubMenu(std::shared_ptr<SubMenu> setSubMenu) {
@@ -288,28 +290,20 @@ void Game::DialogueDisplay::setBackdrop(std::shared_ptr<ImageComponent> backdrop
 	backdrop->setDimensions(&backdropClosedDimensions);
 }
 
-void Game::DialogueDisplay::setAvatar(std::shared_ptr<ImageComponent> avatar) {
-	this->avatar = std::move(avatar);
-}
-
-void Game::DialogueDisplay::setDialogueLabels(std::shared_ptr<Label> label1, std::shared_ptr<Label> label2,
-	std::shared_ptr<Label> label3, std::shared_ptr<Label> label4) {
-	this->label1 = std::move(label1);
-	this->label2 = std::move(label2);
-	this->label3 = std::move(label3);
-	this->label4 = std::move(label4);
-}
-
 void Game::DialogueDisplay::setNameLabel(std::shared_ptr<Label> nameLabel) {
 	this->nameLabel = std::move(nameLabel);
 }
 
-bool Game::DialogueDisplay::dialogueIsBeingShown() {
-	return state != DialogueState::HIDDEN;
+void Game::DialogueDisplay::setSelectorImage(std::shared_ptr<ImageComponent> selectorImage) {
+	this->selectorImage = selectorImage;
 }
 
-bool Game::DialogueDisplay::hadJustFinishedDialogue() {
-	return justFinishedDialogue;
+bool Game::DialogueDisplay::hadJustSkippedDialogue() {
+	return justSkippedDialogue;
+}
+
+void Game::DialogueDisplay::setContinueOnReturnPress(bool continueOnReturnPress) {
+	this->continueOnReturnPress = continueOnReturnPress;
 }
 
 float Game::DialogueDisplay::getDialogueTextStartX() {
@@ -317,92 +311,130 @@ float Game::DialogueDisplay::getDialogueTextStartX() {
 }
 
 void Game::DialogueDisplay::setupOptions() {
-	if (currentOption == 0) {
-		label1->setText("> " + options[0].getText());
-	} else {
-		label1->setText(options[0].getText());
-	}
-	if (currentOption == 1) {
-		label2->setText("> " + options[1].getText());
-	} else {
-		label2->setText(options[1].getText());
-	}
+	labels[0]->setText(options[0].getText());
+	labels[1]->setText(options[1].getText());
+
 	if (numberOfCurrentOptions > 2) {
-		if (currentOption == 2) {
-			label3->setText("> " + options[2].getText());
-		} else {
-			label3->setText(options[2].getText());
-		}
+			labels[2]->setText(options[2].getText());
 	} else {
-		label3->setText("");
+		labels[2]->setText("");
 	}
+
 	if (numberOfCurrentOptions > 3) {
-		if (currentOption == 0) {
-			label4->setText("> " + options[3].getText());
-		} else {
-			label4->setText(options[3].getText());
-		}
+		labels[3]->setText(options[3].getText());
 	} else {
-		label4->setText("");
+		labels[3]->setText("");
 	}
+
+	for (auto label : labels) {
+		label->setFont(defaultFont);
+		label->setSize(defaultFont->getDefaultSize());
+	}
+
+	updateSelectorImagePosition();
 	subMenu->show();
+	selectorImage->show();
 	state = DialogueState::OPTIONS;
 }
 
 void Game::DialogueDisplay::pressUpAction() {
-	size_t oldOption = currentOption;
+	int oldOption = currentOption;
+
 	if (currentOption % 2 == 0) {
 		currentOption++;
 	} else {
 		currentOption--;
 	}
+
 	if (currentOption < numberOfCurrentOptions) {
 		setupOptions();
 	} else {
 		currentOption = oldOption;
 	}
-	timeAtLastOptionSelect = time->getCurrentTimeInNanos();
+
+	/*if (currentOption != oldOption) {
+		GameObjectProvider::getGameAudioPlayer()->playAudio("option");
+	}*/
+
+	timeAtLastOptionSelect = time->getCurrentTimeInMillis();
 }
 
 void Game::DialogueDisplay::pressDownAction() {
-	size_t oldOption = currentOption;
+	int oldOption = currentOption;
+
 	if (currentOption % 2 == 0) {
 		currentOption++;
 	} else {
 		currentOption--;
 	}
+
 	if (currentOption < numberOfCurrentOptions) {
 		setupOptions();
 	} else {
 		currentOption = oldOption;
 	}
-	timeAtLastOptionSelect = time->getCurrentTimeInNanos();
+
+	/*if (currentOption != oldOption) {
+		GameObjectProvider::getGameAudioPlayer()->playAudio("option");
+	}*/
+
+	timeAtLastOptionSelect = time->getCurrentTimeInMillis();
 }
 
 void Game::DialogueDisplay::pressLeftAction() {
-	size_t oldOption = currentOption;
+	int oldOption = currentOption;
 	currentOption -= 2;
+
 	if (currentOption < 0) {
 		currentOption += 4;
 	}
+
 	if (currentOption < numberOfCurrentOptions) {
 		setupOptions();
 	} else {
 		currentOption = oldOption;
 	}
-	timeAtLastOptionSelect = time->getCurrentTimeInNanos();
+
+	/*if (currentOption != oldOption) {
+		GameObjectProvider::getGameAudioPlayer()->playAudio("option");
+	}*/
+
+	timeAtLastOptionSelect = time->getCurrentTimeInMillis();
 }
 
 void Game::DialogueDisplay::pressRightAction() {
-	size_t oldOption = currentOption;
+	int oldOption = currentOption;
 	currentOption += 2;
+
 	if (currentOption > 3) {
 		currentOption -= 4;
 	}
+
 	if (currentOption < numberOfCurrentOptions) {
 		setupOptions();
 	} else {
 		currentOption = oldOption;
 	}
-	timeAtLastOptionSelect = time->getCurrentTimeInNanos();
+
+	/*if (currentOption != oldOption) {
+		GameObjectProvider::getGameAudioPlayer()->playAudio("option");
+	}*/
+
+	timeAtLastOptionSelect = time->getCurrentTimeInMillis();
+}
+
+void Game::DialogueDisplay::updateSelectorImagePosition() {
+	Rect<int>* dimensions;
+
+	if (currentOption == 0) {
+		dimensions = labels[0]->getDimensions();
+	} else if (currentOption == 1) {
+		dimensions = labels[1]->getDimensions();
+	} else if (currentOption == 2) {
+		dimensions = labels[2]->getDimensions();
+	} else {
+		dimensions = labels[3]->getDimensions();
+	}
+
+	selectorImage->setXY(dimensions->getX() - selectorImage->getDimensions()->getWidth() - SELECTOR_IMAGE_X_OFFSET, dimensions->getY() - dimensions->getHeight());
 }

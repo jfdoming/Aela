@@ -8,6 +8,7 @@
 #include "EventListenerList.h"
 
 namespace Aela {
+	class Renderer;
 	class EventHandler {
 		public:
 			EventHandler();
@@ -23,10 +24,12 @@ namespace Aela {
 			void addListener(int type, EventListener listener);
 
 			void bindWindow(Window* window);
+			void bindRenderer(Renderer* renderer);
+
 		private:
 			SDL_Event event;
 			Window* window;
-
+			Renderer* renderer;
 			EventDispatcher dispatcher;
 	};
 }

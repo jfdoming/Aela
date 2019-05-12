@@ -21,7 +21,8 @@ namespace Aela {
 			}
 
 			KeyFrameType getType();
-			virtual void start();
+			virtual void setup();
+			virtual void setup(KeyFrame* previousKeyFrame);
 
 			// These are getters and setters.
 			void setMaterial(Material* material), setTexture(Texture* texture);

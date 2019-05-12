@@ -21,7 +21,7 @@ namespace Scripts {
 	void loadParticles();
 	void loadSkyboxes();
 	void loadMaps();
-	void loadAudio();
+	void loadSoundEffects();
 	void loadFonts();
 	void unloadResources();
 }

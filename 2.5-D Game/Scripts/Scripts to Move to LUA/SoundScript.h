@@ -8,15 +8,12 @@
 
 #pragma once
 #include <string>
-#include "../../../Project Aela/Audio/AudioClip.h"
+#include <vector>
+#include <unordered_map>
 
 namespace Scripts {
-	void playElevatorSound();
-	void stopElevatorSound();
-	void playElevatorDing();
-	void playDoorSound();
-	void playGunSound();
-
-	void playTrack(std::string trackName);
-	Aela::AudioClip* getAudioClip(std::string path);
+	void setupSound();
+	void setupMusicForLevel(int stage, int level);
+	void startPlayingMainMenuMusic();
+	void stopPlayingMainMenuMusic();
 }

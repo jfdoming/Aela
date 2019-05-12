@@ -13,13 +13,26 @@ KeyFrameType KeyFrame3D::getType() {
 	return KeyFrameType::THREE_DIMENSIONAL;
 }
 
-void KeyFrame3D::start() {
+void KeyFrame3D::setup() {
 	if (object != nullptr) {
 		originalPosition = *object->getPosition();
 		originalRotation = *object->getRotation();
 		originalScaling = *object->getScaling();
 	}
-	started = true;
+
+	KeyFrame::setup();
+}
+
+void KeyFrame3D::setup(KeyFrame* previousKeyFrame) {
+	KeyFrame3D* other = (KeyFrame3D*) previousKeyFrame;
+
+	if (object != nullptr) {
+		originalPosition = *other->getPosition();
+		originalRotation = *other->getRotation();
+		originalScaling = *other->getScaling();
+	}
+
+	KeyFrame::setup(previousKeyFrame);
 }
 
 void KeyFrame3D::setObject(Transformable3D* object) {

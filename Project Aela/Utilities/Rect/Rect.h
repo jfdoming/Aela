@@ -99,6 +99,22 @@ namespace Aela {
 				return (os << "Rect(" << me.xPosition << ", " << me.yPosition << ", " << me.width << ", " << me.height << ")");
 			}
 
+			Rect<T> operator+(Rect<T> const& other) {
+				return Rect(xPosition + other.xPosition, yPosition + other.yPosition, width + other.width, height + other.height);
+			}
+
+			Rect<T> operator-(Rect<T> const& other) {
+				return Rect(xPosition - other.xPosition, yPosition - other.yPosition, width - other.width, height - other.height);
+			}
+
+			void operator+=(Rect<T> other) {
+				*this = *this + other;
+			}
+
+			void operator-=(Rect<T> other) {
+				*this = *this - other;
+			}
+
 		protected:
 			T xPosition, yPosition, width, height;
 	};

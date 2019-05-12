@@ -22,7 +22,7 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 
 	// Clear all tiles and set tile 0 as the blank tile.
 	atlas.clearAllTiles();
-	auto tile = TileType(false, TileShape::BLANK, "blank");
+	auto tile = TileType(true, TileShape::BLANK, "blank");
 	atlas.addTile(tile, nullptr);
 
 	std::ifstream in;
@@ -71,7 +71,8 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 						|| shape == TileShape::RAMP_LEFT
 						|| shape == TileShape::RAMP_DOWN
 						|| shape == TileShape::LIQUID_FLOOR
-						|| shape == TileShape::GLASS_FLOOR) {
+						|| shape == TileShape::GLASS_FLOOR
+						|| shape == TileShape::CEILING) {
 						templateTile += "floor.obj";
 					}
 					if (shape == TileShape::BOXED_FLOOR) {
@@ -111,6 +112,30 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 						|| shape == TileShape::QUARTER_WALL_DOWN_LEFT
 						|| shape == TileShape::QUARTER_WALL_DOWN_RIGHT) {
 						templateTile += "quarter_wall.obj";
+					}
+					if (shape == TileShape::LIQUID_BOX) {
+						templateTile += "liquid_box.obj";
+					}
+					if (shape == TileShape::TELEPORTER) {
+						templateTile += "teleporter.obj";
+					}
+					if (shape == TileShape::DOOR_1) {
+						templateTile += "door_1.obj";
+					}
+					if (shape == TileShape::DOOR_2) {
+						templateTile += "door_2.obj";
+					}
+					if (shape == TileShape::DOOR_3) {
+						templateTile += "door_3.obj";
+					}
+					if (shape == TileShape::DOOR_4) {
+						templateTile += "door_4.obj";
+					}
+					if (shape == TileShape::TELECOM) {
+						templateTile += "telecom.obj";
+					}
+					if (shape == TileShape::HALF_FLOOR) {
+						templateTile += "half_floor.obj";
 					}
 
 					resourceManager->addToGroup(templateTile, false);
@@ -227,6 +252,24 @@ bool Game::TileAtlasLoader::loadAtlas(std::string resourceRoot, std::string path
 								shape = TileShape::QUARTER_WALL_DOWN_RIGHT;
 							} else if (value == "glass_floor") {
 								shape = TileShape::GLASS_FLOOR;
+							} else if (value == "liquid_box") {
+								shape = TileShape::LIQUID_BOX;
+							} else if (value == "teleporter") {
+								shape = TileShape::TELEPORTER;
+							} else if (value == "door_1") {
+								shape = TileShape::DOOR_1;
+							} else if (value == "door_2") {
+								shape = TileShape::DOOR_2;
+							} else if (value == "door_3") {
+								shape = TileShape::DOOR_3;
+							} else if (value == "door_4") {
+								shape = TileShape::DOOR_4;
+							} else if (value == "ceiling") {
+								shape = TileShape::CEILING;
+							} else if (value == "telecom") {
+								shape = TileShape::TELECOM;
+							} else if (value == "half_floor") {
+								shape = TileShape::HALF_FLOOR;
 							} else {
 								shape = TileShape::FLOOR;
 							}

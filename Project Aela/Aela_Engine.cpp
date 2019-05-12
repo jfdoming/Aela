@@ -73,7 +73,7 @@ int Aela::Engine::runningLoop() {
 		// This updates and renders the current scene.
 		/*Aela::Scene* currentScene = sceneManager.getCurrentScene();
 		if (currentScene != nullptr) {
-			currentScene->updateRegisteredEnemies();
+			currentScene->update();
 			currentScene->render(&renderer);
 		}*/
 	} while (!window.quitCheck() && !AelaErrorHandling::programCloseWasRequested());
@@ -91,11 +91,11 @@ int Aela::Engine::runningLoop() {
 	return 0;
 }
 
-int Aela::Engine::setupWindow(unsigned int width, unsigned int height, unsigned int windowXPosition, unsigned int windowYPosition) {
+int Aela::Engine::setupWindow(unsigned int width, unsigned int height, unsigned int windowXPosition, unsigned int windowYPosition, std::string name) {
 	// Note: the renderer will render black and then set the window to be shown rather than hidden once the window is bound with it.
 	window.addProperty(WindowFlag::AELA_WINDOW_HIDDEN);
 	window.addProperty(WindowFlag::AELA_WINDOW_OPENGL);
-	bool windowCreationSuccess = window.createWindow(width, height, windowXPosition, windowYPosition, "Project Aela");
+	bool windowCreationSuccess = window.createWindow(width, height, windowXPosition, windowYPosition, name);
 
 	if (!windowCreationSuccess) {
 		AelaErrorHandling::windowError("Project Aela Window", "The Aela Window failed to initialise!");
@@ -121,7 +121,6 @@ int Aela::Engine::setupRenderer() {
 	renderer.setup3D();
 	renderer.setup2D();
 	renderer.setupWindow();
-
 	return 0;
 }
 
@@ -146,6 +145,7 @@ int Aela::Engine::setupLUA() {
 #pragma ide diagnostic ignored "err_ovl_no_viable_oper"
 int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
+	eventHandler.bindRenderer(&renderer);
 	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(Camera3D::onEvent, renderer.getCamera()));
 	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(Camera3D::onEvent, renderer.getCamera()));
 	eventHandler.addListener(EventConstants::WINDOW_RESIZE, bindListener(Renderer::onEvent, &renderer));
@@ -159,6 +159,7 @@ int Aela::Engine::setupEventHandler() {
 #if defined (_MSC_VER)
 	int Aela::Engine::setupEventHandler() {
 	eventHandler.bindWindow(&window);
+	eventHandler.bindRenderer(&renderer);
 	eventHandler.addListener(EventConstants::KEY_PRESSED, bindListener(Camera3D::onEvent, renderer.getCamera()));
 	eventHandler.addListener(EventConstants::KEY_RELEASED, bindListener(Camera3D::onEvent, renderer.getCamera()));
 	eventHandler.addListener(EventConstants::WINDOW_RESIZE, bindListener(Renderer::onEvent, &renderer));
@@ -172,7 +173,10 @@ int Engine::setupScenes() {
 	return sceneManager.init(eventHandler);
 }
 
-int Aela::Engine::setupAudioPlayer() {
+int Aela::Engine::setupAudio() {
+	audioLooper.setAudioPlayer(&audioPlayer);
+	audioLooper.setClock(&time);
+	audioLooper.setResourceManager(&resourceManager);
 	return audioPlayer.init() ? 0 : -1;
 }
 
@@ -219,9 +223,14 @@ void Engine::update() {
 		keyedAnimator.update();
 		stopwatch.stopRecording("Animation Updating");
 
+		stopwatch.startRecording("Audio Looper Updating");
+		audioLooper.update();
+		stopwatch.stopRecording("Audio Looper Updating");
+
 		while (!functionsToRunNextUpdate.empty()) {
-			std::cout << "Running!\n";
-			functionsToRunNextUpdate.front()();
+			if (functionsToRunNextUpdate.front() != nullptr) {
+				functionsToRunNextUpdate.front()();
+			}
 			functionsToRunNextUpdate.pop();
 		}
 	} else {
@@ -296,6 +305,10 @@ ResourceManager* Engine::getResourceManager() {
 
 AudioPlayer* Engine::getAudioPlayer() {
 	return &audioPlayer;
+}
+
+AudioLooper* Engine::getAudioLooper() {
+	return &audioLooper;
 }
 
 Animator* Engine::getAnimator() {

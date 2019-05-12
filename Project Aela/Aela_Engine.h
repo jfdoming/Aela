@@ -38,19 +38,20 @@
 #include "Framerate Calculator/FramerateCalculator.h"
 #include "3D/Maps/Map3DExporter.h"
 #include "Time/Stopwatch/Stopwatch.h"
+#include "Audio/AudioLooper.h"
 
 namespace Aela {
 	class Engine {
 		public:
 			Engine();
 
-			int setupWindow(unsigned int width, unsigned int height, unsigned int windowXPosition, unsigned int windowYPosition);
+			int setupWindow(unsigned int width, unsigned int height, unsigned int windowXPosition, unsigned int windowYPosition, std::string name);
 			int setupRenderer();
 			int setupControlManager();
 			int setupLUA();
 			int setupEventHandler();
 			int setupScenes();
-			int setupAudioPlayer();
+			int setupAudio();
 			int setupAnimation();
 			int loadUserEnvironmentInformation();
 
@@ -77,6 +78,7 @@ namespace Aela {
 			SceneManager* getSceneManager();
 			ResourceManager* getResourceManager();
 			AudioPlayer* getAudioPlayer();
+			AudioLooper* getAudioLooper();
 			Animator* getAnimator();
 			AnimationLooper* getAnimationLooper();
 			UserEnvironment* getUserEnvironment();
@@ -97,6 +99,7 @@ namespace Aela {
 			SceneManager sceneManager;
 			ResourceManager resourceManager;
 			AudioPlayer audioPlayer;
+			AudioLooper audioLooper;
 			Animator animator;
 			AnimationLooper animationLooper;
 			UserEnvironment userEnvironment;

@@ -64,4 +64,6 @@ Enemy* EnemyProvider::getEnemy(std::string name) {
 			return ptr;
 		}
 	}
+
+	return nullptr;
 }

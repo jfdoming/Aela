@@ -2,7 +2,7 @@
 #include "../Player/Player.h"
 #include "WorldManager.h"
 #include "../Character/CharacterProvider.h"
-#include "../Utilities/MathConstants.h"
+#include "../Constants/MathConstants.h"
 #include "../../Project Aela/Renderer/GLRenderer.h"
 
 Game::MapRebuilder::MapRebuilder() {
@@ -25,14 +25,25 @@ void Game::MapRebuilder::scenesWereSetup() {
 void Game::MapRebuilder::rebuildMap(World* world) {
 	size_t currentWorldID = playerCharacter->getLocation()->getWorld();
 	map = worldManager->getMap3D();
-	gameplayScene->setMap(map);
+
+	if (map == nullptr) {
+		return;
+	}
+
+	// Map3D* oldMap = gameplayScene->getMap();
+	// if (oldMap != map) {
+		gameplayScene->setMap(map);
+		// I need to create this, which calls every map::remove() function.
+		// oldMap->removeEverything();
+	// }
 
 	// Clean the map here (by removing entities and such).
 	map->removeAllModels();
 
 	if (world->isUsingLights()) {
 		renderer->activateFeature(RendererFeature::LIGHTS);
-		renderer->activateFeature(RendererFeature::SHADOWS);
+		// renderer->activateFeature(RendererFeature::SHADOWS);
+		renderer->deactivateFeature(RendererFeature::SHADOWS);
 	} else {
 		renderer->deactivateFeature(RendererFeature::LIGHTS);
 		renderer->deactivateFeature(RendererFeature::SHADOWS);
@@ -43,7 +54,6 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 	map->addModelTransparencyLayer(GLASS_LAYER);
 
 	Location* playerLocation = playerCharacter->getLocation();
-	glm::ivec3 playerTile = playerLocation->getTileGroup();
 	glm::ivec2 playerChunk = playerLocation->getChunk();
 
 	for (double z = playerChunk.y - chunkRenderDistances.z; z <= playerChunk.y + chunkRenderDistances.z; z++) {
@@ -53,6 +63,7 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 			glm::vec2 chunkPositionOnMap;
 			chunkPositionOnMap.x = (float) ((-chunkRenderDistances.x) + x + 1) * CHUNK_WIDTH + 0.5f;
 			chunkPositionOnMap.y = (float) ((-chunkRenderDistances.z) + z + 1) * CHUNK_LENGTH + 0.5f;
+
 			// In addition to adding tiles to the world, characters must also be added.
 			auto charactersPointer = characterProvider->getCharactersInChunk(currentWorldID, chunkCoord);
 			if (charactersPointer != nullptr) {
@@ -67,16 +78,15 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 						// Note that characters are represented by models.
 						ModelEntity modelEntity;
 						size_t entityInMap;
-						glm::ivec3 tileOfChunk = character->getLocation()->getTileGroup();
+						glm::vec3 tileOfChunk = character->getLocation()->getTileGroup();
 
 						// The position of the character on the map. The distance the character is character->getModeltranslated up from its
 						// tileCoord is sin(PI/6) * 0.5 + 0.05;
-						glm::vec3 characterPositionOnMap(chunkPositionOnMap.x + tileOfChunk.x,
+						glm::vec3 characterPositionOnMap(chunkPositionOnMap.x + tileOfChunk.x - 0.5f,
 														 tileOfChunk.y + characterYOffsetInWorldspace,
-														 chunkPositionOnMap.y + tileOfChunk.z);
-
+														 chunkPositionOnMap.y + tileOfChunk.z - 0.5f);
 						modelEntity.setPosition(characterPositionOnMap);
-						modelEntity.setRotation((float) ELEVEN_SIXTHS_PI, 0, 0);
+						modelEntity.setRotation((float) CHARACTER_ANGLE, 0, 0);
 						modelEntity.setVisibility(character->isVisible());
 						modelEntity.setModel(character->getModel());
 						entityInMap = map->getModels()->size();
@@ -189,7 +199,7 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 										break;
 									case TileShape::WALL_FRONT:
 										tilePositionOnMap.z--;
-										modelEntity.setRotation(0, (float) 0, 0);
+										modelEntity.setRotation(0, 0, 0);
 										break;
 									case TileShape::WALL_LEFT:
 										tilePositionOnMap.x--;
@@ -202,7 +212,7 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 										break;
 									case TileShape::GLASS_FRONT:
 										tilePositionOnMap.z--;
-										modelEntity.setRotation(0, (float) 0, 0);
+										modelEntity.setRotation(0, 0, 0);
 										isGlass = true;
 										break;
 									case TileShape::GLASS_LEFT:
@@ -225,6 +235,34 @@ void Game::MapRebuilder::rebuildMap(World* world) {
 									case TileShape::GLASS_FLOOR:
 										tilePositionOnMap.y += 0.0001f;
 										isGlass = true;
+										break;
+									case TileShape::LIQUID_BOX:
+										break;
+									case TileShape::TELEPORTER:
+										break;
+									case TileShape::DOOR_1:
+										modelEntity.setRotation(0, 0, 0);
+										// isGlass = true;
+										break;
+									case TileShape::DOOR_2:
+										modelEntity.setRotation(0, 0, 0);
+										// isGlass = true;
+										break;
+									case TileShape::DOOR_3:
+										modelEntity.setRotation(0, 0, 0);
+										// isGlass = true;
+										break;
+									case TileShape::DOOR_4:
+										modelEntity.setRotation(0, 0, 0);
+										// isGlass = true;
+										break;
+									case TileShape::CEILING:
+										modelEntity.setRotation((float) PI, 0, 0);
+										// tilePositionOnMap.y += 0.0001f;
+										break;
+									case TileShape::TELECOM:
+										break;
+									case TileShape::HALF_FLOOR:
 										break;
 									default:
 										// This type is unknown.

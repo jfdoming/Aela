@@ -12,25 +12,17 @@ using namespace Aela;
 
 void Window::addProperty(WindowFlag flag) {
 	bool flagExists = false;
+
 	for (unsigned int i = 0; i < flags.size(); i++) {
 		if (flags[i] == flag) {
 			flagExists = true;
-			AelaErrorHandling::windowError("Flag exists.");
+			AelaErrorHandling::windowError("Flag already exists.");
 			break;
 		}
 	}
-	if (flagExists == false) {
-		if (flag == WindowFlag::AELA_WINDOW_RESIZABLE) {
-			flags.insert(flags.begin() + flags.size(), WindowFlag::AELA_WINDOW_RESIZABLE);
-		} else if (flag == WindowFlag::AELA_WINDOW_SHOWN) {
-			flags.insert(flags.begin() + flags.size(), WindowFlag::AELA_WINDOW_SHOWN);
-		} else if (flag == WindowFlag::AELA_WINDOW_BORDERLESS) {
-			flags.insert(flags.begin() + flags.size(), WindowFlag::AELA_WINDOW_BORDERLESS);
-		} else if (flag == WindowFlag::AELA_WINDOW_MINIMIZED) {
-			flags.insert(flags.begin() + flags.size(), WindowFlag::AELA_WINDOW_MINIMIZED);
-		} else if (flag == WindowFlag::AELA_WINDOW_OPENGL) {
-			flags.insert(flags.begin() + flags.size(), WindowFlag::AELA_WINDOW_OPENGL);
-		}
+
+	if (!flagExists) {
+		flags.push_back(flag);
 	}
 }
 
@@ -60,6 +52,9 @@ bool Window::createWindow(int setWidth, int setHeight, int setXPosition, int set
 			minimizedFlag = SDL_WINDOW_MINIMIZED;
 		} else if (flags[i] == WindowFlag::AELA_WINDOW_OPENGL) {
 			openGLFlag = SDL_WINDOW_OPENGL;
+		} else if (flags[i] == WindowFlag::AELA_WINDOW_FULLSCREEN|| flags[i] == WindowFlag::AELA_WINDOW_FULLSCREEN_DESKTOP
+			|| flags[i] == WindowFlag::AELA_WINDOW_WINDOWED) {
+			setFullscreen(flags[i]);
 		}
 	}
 
@@ -86,6 +81,14 @@ void Window::getDimensions(int* widthVariable, int* heightVariable) {
 	*heightVariable = height;
 }
 
+int Window::getWidth() {
+	return width;
+}
+
+int Window::getHeight() {
+	return height;
+}
+
 Rect<unsigned int>* Window::getDimensions() {
 	return &dimensions;
 }
@@ -109,8 +112,8 @@ void Window::updateBuffer() {
 
 void Aela::Window::setDimensions(int width, int height) {
 	SDL_SetWindowSize(window, width, height);
-	width = width;
-	height = height;
+	this->width = width;
+	this->height = height;
 	dimensions = Rect<unsigned int>(0, 0, width, height);
 	recentlyResized = true;
 }
@@ -135,13 +138,20 @@ void Window::setFocus(bool focus) {
 	hasFocus = focus;
 }
 
-void Aela::Window::setFullscreen(bool fullscreen) {
-	if (fullscreen) {
-		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-	} else {
-		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+void Aela::Window::setFullscreen(WindowFlag type) {
+	switch (type) {
+		case WindowFlag::AELA_WINDOW_FULLSCREEN:
+			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+			fullscreen = true;
+			break;
+		case WindowFlag::AELA_WINDOW_FULLSCREEN_DESKTOP:
+			SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+			fullscreen = true;
+			break;
+		default:
+			SDL_SetWindowFullscreen(window, 0);
+			fullscreen = false;
 	}
-	this->fullscreen = fullscreen;
 }
 
 bool Aela::Window::isFullscreen() {

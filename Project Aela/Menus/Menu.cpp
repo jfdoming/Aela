@@ -10,13 +10,19 @@ Menu::~Menu() {
 }
 
 void Menu::init(Rect<int>* renderDimensions, GLRenderer& renderer) {
-	init(renderDimensions, renderer, 0, 0);
+	if (!initialized) {
+		renderer.setupSimple2DFramebuffer(&buffer, renderDimensions, renderDimensions);
+		dimensions = Rect<int>(renderDimensions->getX(), renderDimensions->getY(), renderDimensions->getWidth(), renderDimensions->getHeight());
+		initialized = true;
+	}
 }
 
 void Menu::init(Rect<int>* renderDimensions, GLRenderer& renderer, int x, int y) {
-	renderer.setupSimple2DFramebuffer(&buffer, renderDimensions, renderDimensions);
-	dimensions = Rect<int>(x, y, renderDimensions->getWidth(), renderDimensions->getHeight());
-	initialized = true;
+	if (!initialized) {
+		renderer.setupSimple2DFramebuffer(&buffer, renderDimensions, renderDimensions);
+		dimensions = Rect<int>(x, y, renderDimensions->getWidth(), renderDimensions->getHeight());
+		initialized = true;
+	}
 }
 
 void Menu::render(GLRenderer& renderer) {

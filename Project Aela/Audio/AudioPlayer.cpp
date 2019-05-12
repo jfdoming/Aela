@@ -158,6 +158,8 @@ void AudioPlayer::playClip(AudioClip* clip) {
 		return;
 	}
 
+	// std::cout << "Now playing clip: " << clip << "\n";
+
 	// TEMPORARY audio playing code
 	// TODO refactor to use a source pool, and a buffer pool
 	// TODO determine cause of corruption noise
@@ -183,7 +185,9 @@ void AudioPlayer::playClip(AudioClip* clip) {
 	alDoWithErrorCheck_noret(alSourcePlay(source));
 	alDoWithErrorCheck_noret(alGetSourcei(source, AL_SOURCE_STATE, &source_state));
 
-	AudioBuffer audioBuffer(buffer, source);
+	alSourcef(source, AL_GAIN, clip->getDefaultVolume());
+
+	AudioBuffer audioBuffer(buffer, source, clip);
 	{
 		std::lock_guard<std::mutex> guard(mutex);
 		playingBuffers.push_back(audioBuffer);
@@ -195,4 +199,46 @@ void AudioPlayer::playClip(AudioClip* clip) {
 //
 //	alDoWithErrorCheck_noret(alDeleteSources(1, &source));
 //	alDoWithErrorCheck_noret(alDeleteBuffers(1, &buffer));
+}
+
+void AudioPlayer::stopClip(AudioClip* clip) {
+	{
+		std::lock_guard<std::mutex> guard(mutex);
+
+		// I don't think that playingClips was ever finished, so more stuff
+		// will have to be done inside of the if statement of this loop.
+		for (size_t i = 0; i < playingClips.size(); i++) {
+			if (playingClips[i] == clip) {
+			}
+		}
+
+		for (size_t i = 0; i < playingBuffers.size(); i++) {
+			if (playingBuffers[i].getClip() == clip) {
+				alSourceStop(playingBuffers[i].getSource());
+			}
+		}
+	}
+}
+
+bool AudioPlayer::isPlaying(AudioClip* clip) {
+	// return std::find(playingClips.begin(), playingClips.end(), clip) != playingClips.end();
+
+	for (size_t i = 0; i < playingBuffers.size(); i++) {
+		if (playingBuffers[i].getClip() == clip) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool AudioPlayer::changeVolumeOfPlayingClip(AudioClip* clip, float volume) {
+	// This kind of linear search sucks. Maybe we should instead use some sort of a map that uses AudioClip*.
+	for (size_t i = 0; i < playingBuffers.size(); i++) {
+		if (playingBuffers[i].getClip() == clip) {
+			alSourcef(playingBuffers[i].getSource(), AL_GAIN, volume);
+			return true;
+		}
+	}
+
+	return false;
 }

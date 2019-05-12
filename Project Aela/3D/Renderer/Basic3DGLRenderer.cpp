@@ -14,7 +14,10 @@ using namespace Aela;
 
 // This sets up the class.
 void Basic3DGLRenderer::setup(unsigned int multisampling) {
-	setupShaders();
+	if (!shadersAreSetup) {
+		setupShaders();
+		shadersAreSetup = true;
+	}
 	setupFrameBuffers(multisampling);
 	getIDs();
 
@@ -72,13 +75,18 @@ void Basic3DGLRenderer::getIDs() {
 // This sets up all of the framebuffers, including the MSAA framebuffer.
 // It is also called if the MSAA amount changes.
 void Basic3DGLRenderer::setupFrameBuffers(unsigned int multisampling) {
+	if (colourFrameBuffer != 0) {
+		glDeleteFramebuffers(1, &colourFrameBuffer);
+		glDeleteTextures(1, colourFrameBufferTexture.getTexture());
+	}
+
 	// This generates the colour framebuffer.
 	glGenFramebuffers(1, &colourFrameBuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, colourFrameBuffer);
 
 	glGenTextures(1, colourFrameBufferTexture.getTexture());
 	glBindTexture(GL_TEXTURE_2D, *(colourFrameBufferTexture.getTexture()));
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, windowWidth, windowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, outputWidth, outputHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
 	// Clamping to edges is important to prevent artifacts when scaling.
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -88,18 +96,23 @@ void Basic3DGLRenderer::setupFrameBuffers(unsigned int multisampling) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	colourFrameBufferTexture.setDimensions(0, 0, windowWidth, windowHeight);
+	colourFrameBufferTexture.setDimensions(0, 0, outputWidth, outputHeight);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, *(colourFrameBufferTexture.getTexture()), 0);
 
 	if (multisampling > 0) {
+		if (multisampledColourFrameBuffer != 0) {
+			glDeleteFramebuffers(1, &multisampledColourFrameBuffer);
+			glDeleteTextures(1, multisampledColourFrameBufferTexture.getTexture());
+		}
+
 		// This generates the multisampled colour framebuffer, which later is blitted to the regular colour framebuffer.
 		glGenFramebuffers(1, &multisampledColourFrameBuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, multisampledColourFrameBuffer);
 
 		glGenTextures(1, multisampledColourFrameBufferTexture.getTexture());
 		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, *(multisampledColourFrameBufferTexture.getTexture()));
-		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, windowWidth, windowHeight, GL_TRUE);
+		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGBA, outputWidth, outputHeight, GL_TRUE);
 
 		// Clamping to edges is important to prevent artifacts when scaling.
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -109,7 +122,7 @@ void Basic3DGLRenderer::setupFrameBuffers(unsigned int multisampling) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-		multisampledColourFrameBufferTexture.setDimensions(0, 0, windowWidth, windowHeight);
+		multisampledColourFrameBufferTexture.setDimensions(0, 0, outputWidth, outputHeight);
 		glDrawBuffer(GL_COLOR_ATTACHMENT0);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, *(multisampledColourFrameBufferTexture.getTexture()), 0);
 	} else {
@@ -118,14 +131,20 @@ void Basic3DGLRenderer::setupFrameBuffers(unsigned int multisampling) {
 		glDeleteTextures(1, multisampledColourFrameBufferTexture.getTexture());
 	}
 
+	if (depthRenderBuffer != 0) {
+		glDeleteRenderbuffers(1, &depthRenderBuffer);
+	}
+
 	// This generates the depth renderbuffer, which is used alongside the multisampled colour framebuffer.
 	glGenRenderbuffers(1, &depthRenderBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer);
+
 	if (multisampling > 0) {
-		glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT, windowWidth, windowHeight);
+		glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT, outputWidth, outputHeight);
 	} else {
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, windowWidth, windowHeight);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, outputWidth, outputHeight);
 	}
+
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -158,7 +177,6 @@ void Basic3DGLRenderer::generateShadowMap(LightEntity* light) {
 
 void Basic3DGLRenderer::setWindow(Window* setWindow) {
 	window = setWindow;
-	window->getDimensions(&windowWidth, &windowHeight);
 }
 
 void Basic3DGLRenderer::setCamera(Camera3D* setCamera) {
@@ -197,6 +215,11 @@ Image* Aela::Basic3DGLRenderer::getMultisampledColourFrameBufferTexture() {
 	return &multisampledColourFrameBufferTexture;
 }
 
+void Basic3DGLRenderer::setOutputWidthAndHeight(int outputWidth, int outputHeight) {
+	this->outputWidth = outputWidth;
+	this->outputHeight = outputHeight;
+}
+
 Aela::Basic3DGLRenderer::Basic3DGLRenderer() {}
 
 Aela::Basic3DGLRenderer::~Basic3DGLRenderer() {
@@ -226,7 +249,7 @@ void Aela::Basic3DGLRenderer::renderShadows(Map3D* map) {
 }
 
 void Aela::Basic3DGLRenderer::renderModelEntitiesWithLights(Map3D* map, bool multisampling) {
-	glViewport(0, 0, windowWidth, windowHeight);
+	glViewport(0, 0, outputWidth, outputHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 
 	if (multisampling) {
@@ -271,7 +294,7 @@ void Aela::Basic3DGLRenderer::renderModelEntitiesWithLights(Map3D* map, bool mul
 }
 
 void Aela::Basic3DGLRenderer::renderModelEntitiesWithoutLights(Map3D* map, bool multisampling) {
-	glViewport(0, 0, windowWidth, windowHeight);
+	glViewport(0, 0, outputWidth, outputHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 
 	if (multisampling) {
@@ -335,7 +358,7 @@ void Basic3DGLRenderer::clearColourFrameBuffer(bool multisampling) {
 void Basic3DGLRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, glm::vec3* position, glm::vec3* scaling, glm::vec3* lookAt, bool inverseRotation, bool multisampling) {
 	// Note: for regular texture rendering, use:
 	// renderTextureIn3DSpace((texture, false, position, position + glm::vec3(0.0, 0.0, 1.0), false);
-	glViewport(0, 0, windowWidth, windowHeight);
+	glViewport(0, 0, outputWidth, outputHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	if (multisampling) {
 		modelRenderer.renderTextureIn3DSpace(cullFaces, *texture, billboardTextureID, billboardProgramID, multisampledColourFrameBuffer, billboardMVPMatrixID, position, scaling, lookAt, inverseRotation);
@@ -347,7 +370,7 @@ void Basic3DGLRenderer::renderTextureIn3DSpace(GLuint* texture, bool cullFaces, 
 // This renders a billboard, accounting for multisampling.
 void Basic3DGLRenderer::renderBillboard(BillboardEntity* billboard, bool multisampling) {
 	if (billboard->getTexture() != nullptr) {
-		glViewport(0, 0, windowWidth, windowHeight);
+		glViewport(0, 0, outputWidth, outputHeight);
 		modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 		if (billboard->usingSpecifiedRotation()) {
 			if (multisampling) {
@@ -384,7 +407,7 @@ void Basic3DGLRenderer::sendLightDataToShader() {
 
 // This renders a skybox, accounting for multisampling.
 void Basic3DGLRenderer::renderSkybox(Skybox* skybox, bool multisampling) {
-	glViewport(0, 0, windowWidth, windowHeight);
+	glViewport(0, 0, outputWidth, outputHeight);
 	skyboxRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	if (multisampling) {
 		skyboxRenderer.renderSkybox(skybox, skyboxProgramID, multisampledColourFrameBuffer, skyboxTextureID, skyboxViewMatrixID, skyboxProjectionMatrixID);
@@ -399,7 +422,7 @@ void Basic3DGLRenderer::renderSkybox(Skybox* skybox, bool multisampling) {
 // from the greatest z-distance to the smallest z distance relative to position 0, 0, 0 in the camera space, their alpha blending will screw up and
 // look bad.
 void Aela::Basic3DGLRenderer::renderParticles(ParticleEmitter* particleEmitter, Camera3D* camera, bool multisampling) {
-	glViewport(0, 0, windowWidth, windowHeight);
+	glViewport(0, 0, outputWidth, outputHeight);
 	modelRenderer.setMatrices(camera->getViewMatrix(), camera->getProjectionMatrix());
 	glm::vec3 actualCameraRotation = glm::vec3(camera->getRotation()->y, camera->getRotation()->x, camera->getRotation()->z);
 	glm::vec3 differenceA = actualCameraRotation - *particleEmitter->getRotation();

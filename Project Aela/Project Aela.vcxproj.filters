@@ -125,6 +125,8 @@
     <ClCompile Include="2D\Fonts\FontLoader.cpp" />
     <ClCompile Include="Time\Stopwatch\Stopwatch.cpp" />
     <ClCompile Include="Audio\AudioBuffer.cpp" />
+    <ClCompile Include="Compression\Compressor.cpp" />
+    <ClCompile Include="Audio\AudioLooper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3D\Animation\AnimationTrackModel.h" />
@@ -305,5 +307,10 @@
     <ClInclude Include="Time\Clock.h" />
     <ClInclude Include="Utilities\Safe Functions.h" />
     <ClInclude Include="Audio\AudioBuffer.h" />
+    <ClInclude Include="Compression\Compressor.h" />
+    <ClInclude Include="Compression\CompressionError.h" />
+    <ClInclude Include="Audio\AudioLooper.h" />
+    <ClInclude Include="Utilities\pairut.h" />
+    <ClInclude Include="Utilities\dirut.h" />
   </ItemGroup>
 </Project>

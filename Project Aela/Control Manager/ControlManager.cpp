@@ -45,7 +45,7 @@ void ControlManager::updateCameraTransforms(Camera3D* camera) {
 		float verticalAngle = camera->getRotation()->y;
 
 		// If the renderer is in charge of updating the camera controls (rather than an animator being responsible for doing so),
-		// the renderer must updateRegisteredEnemies the camera's rotation.
+		// the renderer must update the camera's rotation.
 		if (camera->isUsingKeyboardControls()) {
 			// This computes the new horizontal angle.
 			horizontalAngle += mouseSpeed * float(width / 2 - xpos);

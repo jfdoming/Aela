@@ -1,0 +1,20 @@
+<Head defaultTiming="4000" duration="20000" avatar="avatars_1/5/3.png" track="Japanese Cat Superheroes.wav" onEnd="battle_tutorial_9">
+<Dialogue time="1000" text="Hi guys this is some dialogue" name="Aela">
+// <HideDialogue time="3000">
+<Notes direction="right">
+0, 500, 1000, 1200
+</Notes>
+<AvatarChange avatar="avatars_1/3/3.png" blinkingAvatar="avatars_1/3/4.png"time="4000">
+<RunScript name="" time="5000">
+<Notes direction="up">
+2000, 2500, 4000, 4200
+</Notes>
+<Notes direction="left">
+2000, 2500, 5000, 6000
+</Notes>
+<Notes direction="down">
+6500, 7000, 7500, 8000
+</Notes>
+<Notes direction="random" timing="6000" tail="1000">
+11000, 11500, 12000, 12500
+</Notes>

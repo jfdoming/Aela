@@ -26,10 +26,7 @@ namespace Scripts {
 	std::string otherMaterialNames[] = {
 		"grass",
 		"grass_corner_depressed",
-		"grass_corner_elevated",
-		"water_0",
-		"water_1",
-		"teleporter"
+		"grass_corner_elevated"
 	};
 
 	std::string otherModelNames[] = {
@@ -37,16 +34,31 @@ namespace Scripts {
 		"character_B",
 		"character_C",
 		"character_D",
-		"quarter_wall"
+		"player_0_0",
+		"player_0_1",
+		"player_0_2",
+		"player_0_3",
+		"player_1_0",
+		"player_1_1",
+		"player_1_2",
+		"player_1_3",
+		"player_2_0",
+		"player_2_1",
+		"player_2_2",
+		"player_2_3",
+		"quarter_wall",
+		"liquid_box",
+		"teleporter",
+		"door_1",
+		"door_2",
+		"door_3",
+		"door_4",
+		"telecom",
+		"half_floor"
 	};
 
-	std::string ddsTextureNames[] = {
-		"map_editor_main_background",
-		"map_editor_top_bar",
-		"simple_button",
-		"simple_button_light",
-		"arrow"
-	};
+	/*std::string ddsTextureNames[] = {
+	};*/
 
 	std::string pngTextureNames[] = {
 		"selector_box",
@@ -54,13 +66,26 @@ namespace Scripts {
 		"black",
 		"dialogue_box",
 		"hint_box",
-		"inventory_background"
+		"inventory_background",
+		"main menu",
+		"selector",
+		"battle_1_1",
+		"speech_bubble",
+		"start_screen",
+		"battle_2_1",
+		"battle_4_1",
+		"battle_5_1",
+		"battle_5_2",
+		"battle_5_3",
+		"battle_5_4",
+		"battle_5_5"
 	};
 
 	std::string spriteSheetNames[] = {
 		"floors_1",
 		"walls_1",
 		"walls_2",
+		"walls_3",
 		"glass_1",
 		"doors_1",
 		"animations_1",
@@ -70,30 +95,45 @@ namespace Scripts {
 		"locks_2",
 		"numbered_tiles",
 		"rails_1",
+		"icons_1",
 		"player_1",
 		"player_2",
 		"player_3",
 		"player_4",
 		"player_5",
-		"turret_1",
-		"destroyer_1",
+		"player_6",
 		"soldier_1",
 		"scientist_1",
+		"scientist_2",
+		"scientist_3",
 		"scientist_4",
+		"scientist_5",
+		"scientist_6",
+		"scientist_7",
+		"scientist_8",
+		"scientist_9",
+		"scientist_10",
+		"Ferdinand",
+		"Aela",
+		"Annabelle",
 		"soldier_1",
 		"soldier_2",
-		"the_looker",
-		"Julian",
-		"Robert"
+		"soldier_3",
+		"robot_1",
+		"robot_2",
+		"dr_cephei",
+		"Robert",
+		"shadow",
+		"battle"
 	};
 
 	std::string avatarNames[] = {
-		"avatars_1"
+		"avatars_1",
+		"avatars_2"
 	};
 
-	std::string billboardNames[] = {
-		"ekkon"
-	};
+	/*std::string billboardNames[] = {
+	};*/
 
 	std::string particleNames[] = {
 		"particle_1",
@@ -102,27 +142,52 @@ namespace Scripts {
 	};
 
 	std::string skyboxNames[] = {
-		"skybox_1",
-		"skybox_2",
+		/*"skybox_1",
+		"skybox_2",*/
 		"black"
 	};
 
 	std::string mapNames[] = {
 		"title_screen",
 		"interiors",
-		"stage_1"
-	};
-
-	std::string waveAudioStreamNames[] = {
-		"Even the Tutorial Can Be Serious"
+		"stage_1",
+		"interiors_lighted"
 	};
 
 	std::string waveAudioClipNames[] = {
-		"test"
+		"big ambience",
+		"default footstep",
+		"elevator ding",
+		"fade",
+		"footstep 6_1",
+		"footstep 6_2",
+		"footstep 7_1",
+		"footstep 7_2",
+		"footstep 8_1",
+		"footstep 8_2",
+		"footstep 9_1",
+		"footstep 9_2",
+		"lava",
+		"option",
+		"select",
+		"shoot",
+		"shoot",
+		"speech 1",
+		"speech 2",
+		"speech 3",
+		"speech 4",
+		"speech 5",
+		"speech 6",
+		"speech 7",
+		"speech 8",
+		"speech 9",
+		"speech 10",
+		"splurt"
 	};
 
 	std::string ttfFontNames[] = {
-		"xerox"
+		"pressStart2P",
+		"pressStart2PItalics"
 	};
 }
 
@@ -167,23 +232,22 @@ void Scripts::loadTextures() {
 	resourceManager->bindLoader(&textureLoader);
 	resourceManager->bindGroup("textures");
 
-	for (auto& path : billboardNames) {
+	// We're not using billboards.
+	/*for (auto& path : billboardNames) {
 		resourceManager->addToGroup(DEFAULT_TEXTURE_PATH + path + ".dds", false);
-	}
+	}*/
 
-	for (auto& path : ddsTextureNames) {
+	/*for (auto& path : ddsTextureNames) {
 		resourceManager->addToGroup(DEFAULT_TEXTURE_PATH + path + ".dds", false);
-	}
+	}*/
 
 	for (auto& path : pngTextureNames) {
 		resourceManager->addToGroup(DEFAULT_TEXTURE_PATH + path + ".png", false);
 	}
-	std::cout << "done adding\n";
 
 	if (resourceManager->loadGroup("textures") != Aela::ResourceManager::Status::OK) {
 		std::cerr << "Failed to load a resource from group \"textures\"!" << std::endl;
 	}
-	std::cout << "done loading\n";
 }
 
 void Scripts::loadSpriteSheets() {
@@ -234,6 +298,8 @@ void Scripts::loadSkyboxes() {
 	resourceManager->bindLoader(&skyboxLoader);
 	resourceManager->bindGroup("skybox");
 
+	std::cout << "Loading skyboxes...\n";
+
 	for (auto& path : skyboxNames) {
 		resourceManager->addToGroup(DEFAULT_SKYBOX_PATH + path, false);
 	}
@@ -258,21 +324,18 @@ void Scripts::loadMaps() {
 	}
 }
 
-void Scripts::loadAudio() {
+void Scripts::loadSoundEffects() {
 	WAVEClipLoader waveClipLoader;
 	resourceManager->bindLoader(&waveClipLoader);
-	resourceManager->bindGroup("wave audio");
-
-	for (auto& path : waveAudioStreamNames) {
-		resourceManager->addToGroup(DEFAULT_AUDIO_STREAM_PATH + path + ".wav", false);
-	}
+	resourceManager->bindGroup("wave sound effects");
 
 	for (auto& path : waveAudioClipNames) {
 		resourceManager->addToGroup(DEFAULT_AUDIO_CLIP_PATH + path + ".wav", false);
+		std::cout << DEFAULT_AUDIO_CLIP_PATH + path + ".wav" << "\n";
 	}
 
-	if (resourceManager->loadGroup("wave audio") != Aela::ResourceManager::Status::OK) {
-		std::cerr << "Failed to load a resource from group \"wave audio\"!" << std::endl;
+	if (resourceManager->loadGroup("wave sound effects") != Aela::ResourceManager::Status::OK) {
+		std::cerr << "Failed to load a resource from group \"wave sound effects\"!" << std::endl;
 	}
 }
 

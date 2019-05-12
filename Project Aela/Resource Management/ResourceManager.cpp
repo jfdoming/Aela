@@ -112,6 +112,14 @@ void ResourceManager::addToGroup(ResourceQuery& query) {
 	boundGroup->getQueries()->push_back(query);
 }
 
+bool ResourceManager::groupExists(std::string name) {
+	auto iter = groups.find(name);
+	if (iter == groups.end()) {
+		return false;
+	}
+	return true;
+}
+
 ResourceManager::Status ResourceManager::load(std::string src, bool crucial, ResourceLoader& loader) {
 	ResourceQuery query(src, crucial, &loader);
 	return load(query);
@@ -123,6 +131,8 @@ ResourceManager::Status ResourceManager::load(ResourceQuery& query) {
 	if (resources.isResourceRootEnabled()) {
 		src = resources.getResourceRoot() + src;
 	}
+
+	// TODO: Bug where if a resource loader has duplicate resources, the line below crashes.
 	bool success = boundLoader->load(resources, src);
 
 	if (!success) {
@@ -149,6 +159,10 @@ void ResourceManager::unload(std::string src) {
 
 void Aela::ResourceManager::useResourceRoot(bool resourceRootEnabled) {
 	resources.useResourceRoot(resourceRootEnabled);
+}
+
+bool ResourceManager::isResourceRootEnabled() {
+	return resources.isResourceRootEnabled();
 }
 
 std::string Aela::ResourceManager::getNewCrucialInvalidResourceKey() {

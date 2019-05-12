@@ -24,14 +24,20 @@ namespace Aela {
 			// These are the getters and setters.
 			void setFace(FT_Face face);
 			FT_Face getFace();
-			void setSize(unsigned int size);
-			unsigned int getSize();
-			void prepareForRendering(unsigned int superSamplingFactor);
+			void setDefaultSize(unsigned int defaultSize);
+			unsigned int getDefaultSize();
+			void prepareForRendering(unsigned int superSamplingFactor, unsigned int size);
 			Rect<int> getDimensionsOfText(std::string text);
+			Rect<int> getDimensionsOfText(std::string text, unsigned int size);
+			void setAntialiasing(bool antialiasing);
+			bool isAntialiased();
 
 		private:
 			FT_Face face;
-			unsigned int size = 0;
+			unsigned int defaultSize = 0;
+			unsigned int renderingSize = 0;
 			unsigned int superSamplingFactor = 1;
+			bool antialiasing = true;
+			bool fixSizeNextRender = false;
 	};
 }

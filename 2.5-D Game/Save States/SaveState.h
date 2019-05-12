@@ -6,10 +6,7 @@
 */
 
 #pragma once
-#include "../Character/CharacterInformationBlock.h"
-#include "../Worlds/World.h"
 #include "../Player/Player.h"
-#include "../Doors/Door.h"
 
 namespace Game {
 	class SaveState {
@@ -23,7 +20,7 @@ namespace Game {
 			void* getData(std::string tag);
 
 		private:
-			Player player;
+			Player* player;
 
 			std::unordered_map<std::string, void*> data;
 	};

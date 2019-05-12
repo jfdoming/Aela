@@ -17,9 +17,14 @@ namespace Game {
 
 			bool save(std::string saveStateName);
 			bool load(std::string saveStateName);
+			bool loadFromFile(std::string saveStateName);
+			void disableLoading();
+			void enableLoading();
 
 		private:
 			// For now, we'll have one save state. Later, we can have a whole bunch of them.
 			std::unordered_map<std::string, SaveState> saveStates;
+			std::string userPath;
+			bool allowLoading = true;
 	};
 }

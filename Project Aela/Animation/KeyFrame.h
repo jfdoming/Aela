@@ -21,8 +21,10 @@ namespace Aela {
 				return KeyFrameType::GENERIC;
 			}
 
-			virtual void start();
-			bool hasBeenStarted();
+			virtual void setup();
+			virtual void setup(KeyFrame* previousKeyFrame);
+			virtual void end();
+			bool hasBeenSetUp();
 
 			void setEndingAction(std::function<void()> endingAction);
 			std::function<void()> getEndingAction();
@@ -31,6 +33,6 @@ namespace Aela {
 			// A keyframe can run an std::function after its life has been completed.
 			std::function<void()> endingAction = nullptr;
 
-			bool started = false;
+			bool wasSetUp = false;
 	};
 }

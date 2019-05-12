@@ -6,49 +6,25 @@
 */
 
 #pragma once
-#include "../Location/Location.h"
-#include "TeleportationAnimation.h"
+#include "../Tiles/Tile.h"
 
 namespace Game {
+	class Character;
 	class Movement {
 		public:
-			explicit Movement(TileDirection direction);
-			Movement(Location* destination, glm::vec3* worldSpaceTranslation, TileDirection direction, bool teleportation);
-			Movement(Location* destination, glm::vec3* worldSpaceTranslation, TileDirection direction, bool teleportation,
-				bool animated);
-			Movement(Location* destination, glm::vec3* worldSpaceTranslation, TileDirection direction, bool teleportation,
-				TeleportationAnimation teleportationAnimation);
+			Movement();
+			virtual ~Movement();
 
-			void setDestination(Location* destination);
-			Location* getDestination();
-			void setWorldspaceTranslation(glm::vec3* worldSpaceTranslation);
-			glm::vec3* getWorldspaceTranslation();
+			// This lets the movement do its thing on a character and returns whether the movement has completed.
+			virtual bool moveCharacter(Character* character);
+
+			bool isStarted();
+			virtual void start(Character* character);
 			void setDirection(TileDirection direction);
 			TileDirection getDirection();
-			bool isATeleportation();
-			void setAnimated(bool animated);
-			bool isAnimated();
-			void setTeleportationAnimation(TeleportationAnimation teleportationAnimation);
-			TeleportationAnimation getTeleportationAnimation();
-			void setTurnOnly(bool turnOnly);
-			bool isATurnOnly();
-			void setPreprocessed(bool preprocessed);
-			bool isPreprocessed();
-			void setScriptOnCompletion(std::string scriptOnCompletion);
-			std::string getScriptOnCompletion();
-			void setCollidable(bool collidable);
-			bool isCollidable();
 
-		private:
-			Location destination;
-			glm::vec3 worldSpaceTranslation;
-			TileDirection direction;
-			TeleportationAnimation teleportationAnimation;
-			std::string scriptOnCompletion = "";
-			bool teleportation = false;
-			bool animated = true;
-			bool turnOnly = false;
-			bool preprocessed = false;
-			bool collidable = true;
+		protected:
+			bool started = false;
+			TileDirection direction = TileDirection::NONE;
 	};
 }

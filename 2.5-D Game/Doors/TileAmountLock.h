@@ -23,22 +23,26 @@ namespace Game {
 			virtual ~TileAmountLock();
 
 			void specifyRegionAsCuboid(const Location& location, size_t width, size_t height, size_t depth);
-			void specifyRegion(std::list<TileGroup*> region);
-			void addToRegion(TileGroup* addition);
-			void addToRegion(std::list<TileGroup*>* addition);
-			std::list<TileGroup*>* getRegion();
+			void specifyRegion(std::list<Location>& region);
+			void addToRegion(Location* addition);
+			void addToRegion(std::list<Location>* addition);
+			std::list<Location>* getRegion();
 
 			void addTileTypeToCheckFor(size_t type, size_t amountOfTiles);
 
 			void checkIfUnlocked();
 
-			void setDoor(Door* door);
+			void setDoorByID(std::string doorID);
 			void setIDInDoor(size_t id);
 
 		private:
-			std::list<TileGroup*> region;
+			// Don't use TileGroup* for this, use Location. That's because TileGroup* can change when you reload a save.
+			std::list<Location> region;
+
+			// This isn't a Door* because it seems to change when you reload a save (sometimes).
+			std::string doorID = "";
+
 			std::unordered_map<size_t, size_t> amounts;
-			Door* door = nullptr;
 			size_t id = 0;
 	};
 }

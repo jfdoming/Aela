@@ -22,9 +22,9 @@ namespace Game {
 
 			void hide();
 			void show();
+			void toggleVisiblity();
 
 			void refreshSubMenu();
-			void animateSelectorBox();
 			void setMenuItems(std::shared_ptr<SubMenu> subMenu, std::shared_ptr<Label> label, std::shared_ptr<ImageComponent> backgroundImage,
 				std::shared_ptr<ImageComponent> tileImages);
 
@@ -34,7 +34,7 @@ namespace Game {
 			TileInventory* tileInventory;
 			WorldManager* worldManager;
 			TileAtlas* tileAtlas;
-			Window* window;
+			AelaGame* game;
 			ResourceManager* resourceManager;
 			Animator* animator;
 
@@ -52,5 +52,7 @@ namespace Game {
 			const float VERTICAL_CENTER = 0.15f;
 			const float BACKGROUND_BORDER = 0.015f;
 			const float HEIGHT_MULTIPLIER = 1.35f;
+
+			void animateSelectorBox();
 	};
 }

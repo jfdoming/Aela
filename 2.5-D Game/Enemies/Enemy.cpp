@@ -96,8 +96,8 @@ bool Game::Enemy::isInLineOfSight(Location* location, TileDirection direction, i
 	}
 
 	if (location->getTileGroup().x == this->location.getTileGroup().x && this->location.getChunk().x == location->getChunk().x) {
-		int differenceInZ = this->location.getChunk().y * CHUNK_LENGTH + this->location.getTileGroup().z
-			- location->getChunk().y * CHUNK_LENGTH - location->getTileGroup().z;
+		int differenceInZ = (int) (this->location.getChunk().y * CHUNK_LENGTH + this->location.getTileGroup().z
+			- location->getChunk().y * CHUNK_LENGTH - location->getTileGroup().z);
 		if ((differenceInZ > 0 && direction == TileDirection::BACKWARD && differenceInZ <= detectionRange) || (differenceInZ < 0 &&
 			direction == TileDirection::FORWARD && differenceInZ >= -detectionRange)) {
 			return true;
@@ -105,8 +105,8 @@ bool Game::Enemy::isInLineOfSight(Location* location, TileDirection direction, i
 	}
 
 	if (location->getTileGroup().z == this->location.getTileGroup().z && this->location.getChunk().y == location->getChunk().y) {
-		int differenceInX = this->location.getChunk().x * CHUNK_WIDTH + this->location.getTileGroup().x
-			- location->getChunk().x * CHUNK_WIDTH - location->getTileGroup().x;
+		int differenceInX = (int) (this->location.getChunk().x * CHUNK_WIDTH + this->location.getTileGroup().x
+			- location->getChunk().x * CHUNK_WIDTH - location->getTileGroup().x);
 		if ((differenceInX > 0 && direction == TileDirection::RIGHT && differenceInX <= detectionRange) || (differenceInX < 0 &&
 			direction == TileDirection::LEFT && differenceInX >= -detectionRange)) {
 			return true;

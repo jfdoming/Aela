@@ -9,6 +9,6 @@
 
 namespace Game {
 	enum class CharacterStep {
-		LEFT, RIGHT
+		LEFT, RIGHT, POST_LEFT, POST_RIGHT
 	};
 }

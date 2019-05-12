@@ -13,7 +13,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
-#include <iostream>
+#include <sstream>
 
 // trim from start (in place)
 static inline void ltrim(std::string& s) {
@@ -63,6 +63,47 @@ static inline bool startsWith(std::string& haystack, std::string& needle) {
 	return needle.length() <= haystack.length()
 		&& equal(needle.begin(), needle.end(), haystack.begin());
 }
+
+static std::vector<std::string> split(const std::string& s, char delimiter) {
+    std::vector<std::string> values;
+    std::string value;
+    std::istringstream stream(s);
+    while (std::getline(stream, value, delimiter)) {
+		values.push_back(value);
+    }
+	if (stream.rdbuf()->in_avail() != 0) {
+		std::getline(stream, value);
+		values.push_back(value);
+	}
+	return values;
+}
+
+static std::vector<std::string> split(std::istringstream& s, char delimiter) {
+    std::vector<std::string> values;
+    std::string value;
+    while (std::getline(s, value, delimiter)) {
+		values.push_back(value);
+    }
+	if (s.rdbuf()->in_avail() != 0) {
+		std::getline(s, value);
+		values.push_back(value);
+	}
+   return values;
+}
+
+static std::vector<std::string> split(std::stringstream& s, char delimiter) {
+    std::vector<std::string> values;
+    std::string value;
+	while (std::getline(s, value, delimiter)) {
+		values.push_back(value);
+	}
+	if (s.rdbuf()->in_avail() != 0) {
+		std::getline(s, value);
+		values.push_back(value);
+	}
+    return values;
+}
+	
 
 static void setVec2UsingString(std::string* value, glm::vec2* vec2) {
 	std::vector<std::string> values;
@@ -175,4 +216,17 @@ static void setVec3UsingString(std::string* value, glm::ivec3* ivec3) {
 
 		*ivec3 = glm::ivec3(intValues[0], intValues[1], intValues[2]);
 	}
+}
+// This returns a string that express the individual bits of an unsigned char.
+static std::string stringOfBits(unsigned char input) {
+	std::string s = "";
+	for (int i = 0; i < 8; i++) {
+		if (input % 2 == 0) {
+			s = "0" + s;
+		} else {
+			s = "1" + s;
+		}
+		input = input >> 1;
+	}
+	return s;
 }

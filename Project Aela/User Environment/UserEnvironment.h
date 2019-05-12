@@ -35,6 +35,7 @@ namespace Aela {
 			unsigned int getL1CacheLineSize();
 			unsigned int getLogicalCPUCores();
 			unsigned int getSystemRAM();
+			void getNativeDisplayResolution(int displayID, int* width, int* height);
 
 			void getDisplayDPI(int whichDisplay, float* diagonalDPI, float* horizontalDPI, float* verticalDPI);
 

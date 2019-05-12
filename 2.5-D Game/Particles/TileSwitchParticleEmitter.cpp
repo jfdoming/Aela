@@ -6,7 +6,7 @@
 */
 
 #include "TileSwitchParticleEmitter.h"
-#include "../Utilities/MathConstants.h"
+#include "../Constants/MathConstants.h"
 #include <glm/gtc/constants.hpp>
 #include "BulletParticleEmitter.h"
 

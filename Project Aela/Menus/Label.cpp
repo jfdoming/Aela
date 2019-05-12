@@ -47,6 +47,10 @@ void Label::renderWithDifferentTint(GLRenderer& renderer, ColourRGBA* tint) {
 	}
 }
 
+void Label::useFontSize() {
+	size = font->getDefaultSize();
+}
+
 void Label::setText(std::string text) {
 	this->text = std::move(text);
 	setup();
@@ -60,6 +64,7 @@ std::string Label::getText() {
 void Label::setFont(Font* font) {
 	this->font = font;
 	setupWidthAndHeight();
+	markDirty();
 }
 
 Font* Label::getFont() {
@@ -76,6 +81,7 @@ unsigned int Aela::Label::getSize() {
 
 void Label::setColour(ColourRGBA* colour) {
 	this->colour = *colour;
+	markDirty();
 }
 
 ColourRGBA* Label::getColour() {
@@ -84,7 +90,7 @@ ColourRGBA* Label::getColour() {
 
 void Label::setupWidthAndHeight() {
 	if (font != nullptr) {
-		Rect<int> newDimensions = font->getDimensionsOfText(text);
+		Rect<int> newDimensions = font->getDimensionsOfText(text, size);
 		dimensions.setDimensions(newDimensions.getWidth(), newDimensions.getHeight());
 	}
 }

@@ -26,6 +26,9 @@ namespace Aela {
 			bool init();
 			void die();
 			void playClip(AudioClip* clip);
+			void stopClip(AudioClip* clip);
+			bool isPlaying(AudioClip* clip);
+			bool changeVolumeOfPlayingClip(AudioClip* clip, float volume);
 
 			void update();
 

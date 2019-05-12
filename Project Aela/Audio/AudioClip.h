@@ -20,15 +20,18 @@ namespace Aela {
 			ALenum getFormat();
 			ALsizei getSize();
 			ALsizei getSampleRate();
+			float getDefaultVolume();
 
 			void setFormat(ALenum format);
 			void setFormat(int channelCount, int bitsPerSample);
 			void setSize(ALsizei size);
 			void setSampleRate(ALsizei sampleRate);
+			void setDefaultVolume(float defaultVolume);
 		private:
 			const char* data;
 			ALenum format;
 			ALsizei size;
 			ALsizei sampleRate;
+			float defaultVolume = 1.0f;
 	};
 }

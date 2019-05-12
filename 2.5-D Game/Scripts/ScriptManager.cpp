@@ -14,7 +14,7 @@ void Game::ScriptManager::loadScript(std::string path) {
 }
 
 void Game::ScriptManager::addScript(std::string name, std::function<void()> script) {
-	addScript(name, script, false);
+	addScript(name, script, true);
 }
 
 bool Game::ScriptManager::addScript(std::string name, std::function<void()> script, bool replaceExistingScript) {
@@ -25,13 +25,45 @@ bool Game::ScriptManager::addScript(std::string name, std::function<void()> scri
 	return true;
 }
 
-bool Game::ScriptManager::runScript(std::string name) {
-	auto iter = scripts.find(name);
-	if (iter == scripts.end()) {
+void Game::ScriptManager::addEssentialScript(std::string name, std::function<void()> script) {
+	addEssentialScript(name, script, true);
+}
+
+bool Game::ScriptManager::addEssentialScript(std::string name, std::function<void()> script, bool replaceExistingScript) {
+	if (!replaceExistingScript && !(essentialScripts.find(name) == essentialScripts.end())) {
 		return false;
 	}
-	iter->second();
+	essentialScripts[name] = script;
 	return true;
+}
+
+bool Game::ScriptManager::runScript(std::string name) {
+	// std::cout << "Attempting to run script: " << name << "\n";
+
+	if (name == "") {
+		return false;
+	}
+
+	bool found = false;
+	auto iter = scripts.find(name);
+
+	if (iter != scripts.end()) {
+		iter->second();
+		found = true;
+	}
+
+	iter = essentialScripts.find(name);
+
+	if (iter != essentialScripts.end()) {
+		iter->second();
+		found = true;
+	}
+
+	return found;
+}
+
+void Game::ScriptManager::clearNonEssentialScripts() {
+	scripts.clear();
 }
 
 bool Game::ScriptManager::bindScriptToFrame(std::string name, KeyFrame* keyFrame) {

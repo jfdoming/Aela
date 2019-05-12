@@ -10,6 +10,7 @@
 #include <utility>
 #include <functional>
 #include <iostream>
+#include "../Time/Clock.h"
 
 namespace Aela {
 	template <class T> class AnimationTrack {
@@ -25,18 +26,77 @@ namespace Aela {
 				return positionInTrack;
 			}
 
+			unsigned long long getPositionInFirstFrameAtTime(unsigned long long timeInNanos) {
+				Clock clock;
+				return timeInNanos - clock.getCurrentTimeInNanos() + positionInTrack;
+			}
+
+			void getKeyFrameInfoAtTime(long long nanoSecondsAway, long long* timeUntilKeyFrame, T** keyFrame, size_t* keyFramePosition) {
+				if (keyFrames.empty()) {
+					*timeUntilKeyFrame = 0;
+					*keyFrame = nullptr;
+					*keyFramePosition = 0;
+					return;
+				}
+
+				long long addedTime = 0;
+				for (size_t i = 0; i < keyFrames.size(); i++) {
+					auto pair = keyFrames[i];
+
+					if (pair.first + addedTime - positionInTrack > nanoSecondsAway) {
+						*timeUntilKeyFrame = pair.first + addedTime - positionInTrack;
+						*keyFrame = &pair.second;
+						*keyFramePosition = i;
+						return;
+					}
+
+					addedTime += pair.first;
+				}
+
+				*keyFramePosition = keyFrames.size() - 1;
+				auto& pair = keyFrames[*keyFramePosition];
+				*timeUntilKeyFrame = pair.first + addedTime - positionInTrack;
+				*keyFrame = &pair.second;
+			}
+
+			bool frameIsFirst(T* frame) {
+				if (keyFrames.empty()) {
+					return false;
+				}
+
+				return &keyFrames[0].second == frame;
+			}
+
+			long long getTimeUntilKeyFrame(T* frame) {
+				long long addedTime = 0;
+
+				for (auto& pair : keyFrames) {
+					if (&pair.second == frame) {
+						return pair.first + addedTime - positionInTrack;
+					}
+
+					addedTime += pair.first;
+				}
+
+				return 0;
+			}
+
 			bool addKeyFrame(long long time, T* keyFrame) {
 				if (time <= positionInTrack) {
 					// Nice try, but your time has passed.
 					return false;
 				}
 
-				for (auto& pair : keyFrames) {
+				if (!keyFrames.empty()) {
+					keyFrame->setup(&keyFrames[keyFrames.size() - 1].second);
+				}
+
+				/*for (auto& pair : keyFrames) {
 					if (pair.first > time) {
 						keyFrames.push_back(std::pair<long long, T>(time, *keyFrame));
 						return true;
 					}
-				}
+				}*/
 
 				keyFrames.push_back(std::pair<long long, T>(time, *keyFrame));
 				return true;

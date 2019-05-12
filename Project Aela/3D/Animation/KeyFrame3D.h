@@ -22,7 +22,8 @@ namespace Aela {
 			}
 
 			KeyFrameType getType();
-			virtual void start();
+			virtual void setup();
+			virtual void setup(KeyFrame* previousKeyFrame) override;
 
 			// These are getters and setters.
 			void setObject(Transformable3D* object), setTranslation(glm::vec3* position), setRotation(glm::vec3* rotation),

@@ -17,7 +17,15 @@ namespace Aela {
 		public:
 			KeyFrame2D() : tint(1, 1, 1, 1), dimensions(0, 0, 0, 0) {}
 
-			virtual void start();
+			virtual void setup();
+			virtual void setup(KeyFrame* previousKeyFrame);
+			virtual void end();
+
+			ColourRGBA* getTintAtTime(long long currentTime, long long endTime);
+			Rect<int>* getDimensionsAtTime(long long currentTime, long long endTime);
+
+			// I have to make a copy of this function. Otherwise, this awful compiler breaks.
+			Rect<int>* getDimensionsAtTime2(long long currentTime, long long endTime);
 
 			KeyFrameType getType();
 			void setObject(std::shared_ptr<Transformable2D> object);
@@ -29,6 +37,10 @@ namespace Aela {
 			Rect<int>* getDimensions();
 			Rect<int>* getOriginalDimensions();
 			bool isUsingDimensions();
+			bool isUsingTint();
+			void setCurvatureToMovement(float curvatureMultiplier);
+			bool isUsingCurvature();
+			glm::vec2 getCurvatureOffset(float ratioOfTimeTaken);
 
 		private:
 			std::shared_ptr<Transformable2D> object = nullptr;
@@ -36,5 +48,15 @@ namespace Aela {
 			Rect<int> dimensions, originalDimensions;
 
 			bool useDimensions = false;
+			bool useTint = false;
+
+			// These are precalculated and used internally if the object is to move along a
+			// simple, elliptical curve when going to its destination.
+			bool useCurvature = false;
+			float curvatureMultiplier = 0.0f;
+			float sinA, cosA, mSquared, d, r, rSquared, curvatureSign;
+
+			void setupCurvatureVariables();
+			float curvatureFunction(float linearDistanceTravelled);
 	};
 }

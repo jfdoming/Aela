@@ -24,7 +24,7 @@ void Aela::TextInput::setup() {
 	FT_BBox bbox = face->bbox;
 
 	// determine the height of this textfield
-	dimensions.setHeight((bbox.yMax - bbox.yMin) / POINTS_PER_PIXEL);
+	dimensions.setHeight((int) ((bbox.yMax - bbox.yMin) / POINTS_PER_PIXEL));
 }
 
 void TextInput::updateComponent() {

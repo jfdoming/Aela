@@ -38,23 +38,23 @@ namespace Aela {
 			void setup();
 
 			// These functions are accessible to Project Aela's main renderer in order to render 2D components.
-			void renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint,
+			void renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint,
 				PositioningMode2D positioningMode);
-			void renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint,
+			void renderImageToSimple2DFramebuffer(Image* image, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint,
 				PositioningMode2D positioningMode, unsigned int customShader);
-			void renderImageToFramebuffer(Image* image, unsigned int framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint,
+			void renderImageToFramebuffer(Image* image, unsigned int framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<int>* bufferDimensions, ColourRGBA* tint,
 				PositioningMode2D positioningMode);
-			void renderImageToFramebuffer(Image* image, unsigned int framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<unsigned int>* windowDimensions, ColourRGBA* tint,
+			void renderImageToFramebuffer(Image* image, unsigned int framebuffer, Rect<int>* output, Rect<int>* cropping, Rect<int>* bufferDimensions, ColourRGBA* tint,
 				PositioningMode2D positioningMode, unsigned int customShader);
-			void renderTextToSimple2DFramebuffer(std::string text, Font* font, unsigned int size, Simple2DFramebuffer* framebuffer, Rect<int>* output, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
-				PositioningMode2D positioningMode, unsigned int pointsPerPixel);
-			void renderMultisampledBufferToBuffer(unsigned int multisampledBuffer, unsigned int secondaryBuffer, Rect<unsigned int>* windowDimensions);
-			void renderRectangle(Rect<int>* output, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour, PositioningMode2D positioningMode);
-			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour,
+			void renderTextToSimple2DFramebuffer(std::string text, Font* font, unsigned int size, Simple2DFramebuffer* framebuffer, Rect<int>* output,
+				ColourRGBA* colour, PositioningMode2D positioningMode, unsigned int pointsPerPixel);
+			void renderMultisampledBufferToBuffer(unsigned int multisampledBuffer, unsigned int secondaryBuffer, Rect<int>* bufferDimensions);
+			void renderRectangle(Rect<int>* output, Simple2DFramebuffer* framebuffer, ColourRGBA* colour, PositioningMode2D positioningMode);
+			void renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, Simple2DFramebuffer* framebuffer, ColourRGBA* colour,
 				PositioningMode2D positioningMode);
-			void renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
+			void renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, Simple2DFramebuffer* framebuffer, ColourRGBA* colour);
 			void renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX, unsigned int pointCY,
-				Simple2DFramebuffer* framebuffer, Rect<unsigned int>* windowDimensions, ColourRGBA* colour);
+				  Simple2DFramebuffer* framebuffer, ColourRGBA* colour);
 
 			// These are some useful, self-explanatory functions.
 			void drawTestQuad();
@@ -66,10 +66,22 @@ namespace Aela {
 			void clearSimple2DFramebuffer(Simple2DFramebuffer* framebuffer);
 
 			void setTextScaling(unsigned int textScaling);
+			unsigned int getTextScaling();
 
 		private:
+			// These are handles to shaders.
+			unsigned int bufferTextureToBufferProgramID, textToBufferProgramID, imageToBufferProgramID;
+			// These are handles to variables inside of the image shader. Note: shaders that use the same uniforms and buffers as the
+			// 2DTextureBufferToBuffer shader (bufferTextureToBufferProgramID) should set the same locations of uniforms as they are in
+			// the 2DTextureBufferToBuffer shader.
+			unsigned int imageTextureID, imageVertexBufferID, imageUVBufferID, imageTopLeftCoordID, imageWindowDimensionsID, imageTintID;
+			// These are handles to variables inside of the text shader as well as the actual texture used for text.
+			unsigned int characterTextureID, characterTexture, characterQuadVertexBufferID, characterColourID, characterAntialiasingID,
+				characterUVBufferID;
+
 			// This function is used to render a single character.
-			void renderCharacterBuffer(Simple2DFramebuffer* framebuffer, Rect<float>* output, Rect<unsigned int>* windowDimensions, std::vector<unsigned char>* buffer, unsigned int width, unsigned int rows, ColourRGBA* colour);
+			void renderCharacterBuffer(Simple2DFramebuffer* framebuffer, Rect<float>* output, Rect<int>* outputBufferDimensions,
+				std::vector<unsigned char>* buffer, unsigned int width, unsigned int rows, ColourRGBA* colour, bool antialiasing);
 
 			// These functions are used in the setup of the 2D renderer.
 			void load2DShaders();
@@ -77,5 +89,13 @@ namespace Aela {
 
 			// This is used for text super sampling.
 			unsigned int textScaling = 1;
+
+			bool shadersAreSetup = false;
+
+			struct RenderableGlyph {
+				unsigned char* buffer;
+				int width, rows, originY;
+				char character;
+			};
 	};
 }

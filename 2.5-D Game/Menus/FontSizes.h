@@ -9,8 +9,8 @@
 
 namespace Game {
 	namespace FontSizes {
-		const unsigned int SMALL_FONT_SIZE = 18;
-		const unsigned int MEDIUM_FONT_SIZE = 22;
-		const unsigned int LARGE_FONT_SIZE = 28;
+		const unsigned int SMALL_FONT_SIZE = 12;
+		const unsigned int MEDIUM_FONT_SIZE = 16;
+		const unsigned int LARGE_FONT_SIZE = 32;
 	}
 }

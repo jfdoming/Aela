@@ -27,6 +27,7 @@ namespace Aela {
 			void setTint(ColourRGBA* tint);
 			ColourRGBA* getTint();
 			virtual void setDimensions(Rect<int>* dimensions);
+			virtual void setXY(int x, int y);
 			Rect<int>* getDimensions();
 			void setPositioningMode(PositioningMode2D positioningMode);
 			PositioningMode2D getPositioningMode();

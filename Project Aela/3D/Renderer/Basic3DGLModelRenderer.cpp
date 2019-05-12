@@ -26,6 +26,13 @@ Aela::Basic3DGLModelRenderer::~Basic3DGLModelRenderer() {
 }
 
 void Aela::Basic3DGLModelRenderer::setup() {
+	if (vertexBuffer != 0) {
+		glDeleteBuffers(1, &vertexBuffer);
+		glDeleteBuffers(1, &UVBuffer);
+		glDeleteBuffers(1, &normalBuffer);
+		glDeleteBuffers(1, &elementBuffer);
+	}
+
 	// This sets up buffers.
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &UVBuffer);
@@ -34,7 +41,7 @@ void Aela::Basic3DGLModelRenderer::setup() {
 	glGenBuffers(1, &whichMatrixBuffer);
 }
 
-// This function is called in order to updateRegisteredEnemies camera-related matrices.
+// This function is called in order to update camera-related matrices.
 void Basic3DGLModelRenderer::setMatrices(glm::mat4 setViewMatrix, glm::mat4 setProjectionMatrix) {
 	viewMatrix = setViewMatrix;
 	projectionMatrix = setProjectionMatrix;
@@ -139,6 +146,11 @@ void Basic3DGLModelRenderer::renderInstancedModelEntities(Map3D* map, std::vecto
 
 	if (entities != nullptr && !entities->empty()) {
 		Model* model = map->getModel(entities->at(start))->getModel();
+
+		if (model == nullptr) {
+			return;
+		}
+
 		std::vector<glm::mat4> modelMatrices, rotationMatrices;
 		size_t primitiveCount = 0;
 

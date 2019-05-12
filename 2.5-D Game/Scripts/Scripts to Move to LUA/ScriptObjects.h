@@ -36,7 +36,13 @@ namespace Scripts {
 	extern TileBehaviourExecutor* tileBehaviourExecuter;
 	extern HintDisplay* hintDisplay;
 	extern DoorProvider* doorProvider;
+	extern TimerDisplay* timerDisplay;
 	extern GameSaver* gameSaver;
+	extern MainMenuDisplay* mainMenuDisplay;
+	extern BattleDisplay* battleDisplay;
+	extern BattleDialogueDisplay* battleDialogueDisplay;
+	extern GameAudioPlayer* gameAudioPlayer;
+	extern FootstepAudioPlayer* footstepAudioPlayer;
 
 	void setupScriptObjects();
 }

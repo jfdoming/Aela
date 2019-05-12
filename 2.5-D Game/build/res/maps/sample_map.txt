@@ -1,0 +1,13 @@
+// Note: using '~' tells the MapLoader to use the default path for that type of resource. For example,
+// <Model src="~cat.obj"> tries to load the model from "res/models/cat.obj".
+<Skybox src="~skybox_2">
+<Skybox src="~skybox_1">
+<Model src="~meme_mug.obj" position="20,0,20">
+<Model src="~cat.obj" position="5,0,0" scaling="1.5,1.5,1.5">
+<Model src="~house_1.obj" position="0,0,-6" rotation="0,3.1415,0">
+<Model src="~jeep_1.obj" position="-2,0,10" rotation="0,0,0" scaling="0.75,0.75,0.75">
+<Model src="~lamp_post_1.obj" position="1,-1,5">
+<Model src="~sample_terrain_1.obj" position="0,0,1" scaling="2,0,2">
+<Light colour="1,0.5,1" power="0.8" position="-18,10,10">
+<Light colour="1,1,0.5" power="0.8" position="1,6.8,5">
+<Billboard src="~character.dds" useRotation="true" position="0,1,-1.5" rotation="0,PI,0" scaling="2,2,1">

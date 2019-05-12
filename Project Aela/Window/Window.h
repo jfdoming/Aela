@@ -17,7 +17,8 @@ namespace Aela {
 		AELA_WINDOW_SHOWN, AELA_WINDOW_HIDDEN,
 		AELA_WINDOW_BORDERLESS,
 		AELA_WINDOW_MINIMIZED, AELA_WINDOW_MAXIMIZED,
-		AELA_WINDOW_OPENGL
+		AELA_WINDOW_OPENGL, AELA_WINDOW_FULLSCREEN,
+		AELA_WINDOW_FULLSCREEN_DESKTOP, AELA_WINDOW_WINDOWED 
 	};
 
 	class Window {
@@ -31,6 +32,8 @@ namespace Aela {
 			void addProperty(WindowFlag flag);
 			bool createWindow(int setWidth, int setHeight, int setXPosition, int setYPosition, std::string setName);
 			void getDimensions(int* widthVariable, int* heightVariable);
+			int getWidth();
+			int getHeight();
 			Rect<unsigned int>* getDimensions();
 			void getPosition(int* xPositionVariable, int* yPositionVariable);
 			bool makeWindowOpenGLContext();
@@ -41,7 +44,7 @@ namespace Aela {
 			void setCursorPositionInWindow(int x, int y);
 			void setCursorPositionGlobally(int x, int y);
 			void setFocus(bool focus);
-			void setFullscreen(bool fullscreen);
+			void setFullscreen(WindowFlag type);
 			bool isFullscreen();
 			void show();
 			std::string getWindowName();

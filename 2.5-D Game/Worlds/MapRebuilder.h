@@ -11,6 +11,7 @@
 #include "World.h"
 #include "../Tiles/TileAtlas.h"
 #include "../Character/CharacterProvider.h"
+#include "../Constants/MathConstants.h"
 
 namespace Game {
 	class MapRebuilder {
@@ -48,5 +49,6 @@ namespace Game {
 
 			const size_t CHARACTER_LAYER = 0;
 			const size_t GLASS_LAYER = 1;
+			const float CHARACTER_ANGLE = (float) ELEVEN_SIXTHS_PI;
 	};
 }

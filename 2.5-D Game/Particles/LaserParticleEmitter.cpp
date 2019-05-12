@@ -1,5 +1,5 @@
 #include "LaserParticleEmitter.h"
-#include "../Utilities/MathConstants.h"
+#include "../Constants/MathConstants.h"
 
 Game::LaserParticleEmitter::LaserParticleEmitter(Clock* time) : ParticleEmitter(time) {
 }

@@ -13,8 +13,12 @@ KeyFrameType Aela::KeyFrameModel::getType() {
 	return KeyFrameType::MODEL;
 }
 
-void Aela::KeyFrameModel::start() {
-	started = true;
+void Aela::KeyFrameModel::setup() {
+	KeyFrame::setup();
+}
+
+void KeyFrameModel::setup(KeyFrame* previousKeyFrame) {
+	KeyFrame::setup(previousKeyFrame);
 }
 
 void Aela::KeyFrameModel::setModelEntity(ModelEntity* modelEntity) {

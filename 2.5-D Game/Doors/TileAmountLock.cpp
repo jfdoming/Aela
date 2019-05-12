@@ -6,7 +6,7 @@
 #include "../Game Object Provider/GameObjectProvider.h"
 #include "../Worlds/WorldManager.h"
 #include "../../Project Aela/Utilities/intut.h"
-
+#include "DoorProvider.h"
 Game::TileAmountLock::TileAmountLock() = default;
 
 Game::TileAmountLock::~TileAmountLock() = default;
@@ -24,11 +24,9 @@ void Game::TileAmountLock::specifyRegionAsCuboid(const Location& location, size_
 				chunk.y += forceWithinRange<int>(&z2, (signed int) CHUNK_LENGTH);
 				Location tileLocation(location.getWorld(), chunk, glm::ivec3(x2, tile.y + y, z2));
 				TileGroup* tileGroup = worldManager->getTileGroup(tileLocation);
-				
-				glm::ivec3 tile2 = glm::ivec3(x2, tile.y + y, z2);
 
 				if (tileGroup != nullptr) {
-					region.push_back(tileGroup);
+					region.push_back(tileLocation);
 				}
 			}
 		}
@@ -37,22 +35,37 @@ void Game::TileAmountLock::specifyRegionAsCuboid(const Location& location, size_
 	checkIfUnlocked();
 }
 
-void Game::TileAmountLock::specifyRegion(std::list<TileGroup*> region) {
-	this->region = std::move(region);
+void Game::TileAmountLock::specifyRegion(std::list<Location>& region) {
+	std::list<Location> newRegion;
+
+	for (auto location : region) {
+		if (GameObjectProvider::getWorldManager()->getTileGroup(location) != nullptr) {
+			newRegion.push_back(location);
+		}
+	}
+
+	this->region = newRegion;
 	checkIfUnlocked();
 }
 
-void Game::TileAmountLock::addToRegion(TileGroup* addition) {
-	region.push_back(addition);
+void Game::TileAmountLock::addToRegion(Location* addition) {
+	if (GameObjectProvider::getWorldManager()->getTileGroup(*addition) != nullptr) {
+		this->region.push_back(*addition);
+	}
 	checkIfUnlocked();
 }
 
-void Game::TileAmountLock::addToRegion(std::list<TileGroup*>* addition) {
-	region.splice(region.end(), *addition);
+void Game::TileAmountLock::addToRegion(std::list<Location>* addition) {
+	for (auto location : region) {
+		if (GameObjectProvider::getWorldManager()->getTileGroup(location) != nullptr) {
+			this->region.push_back(location);
+		}
+	}
+
 	checkIfUnlocked();
 }
 
-std::list<Game::TileGroup*>* Game::TileAmountLock::getRegion() {
+std::list<Game::Location>* Game::TileAmountLock::getRegion() {
 	return &region;
 }
 
@@ -62,33 +75,38 @@ void Game::TileAmountLock::addTileTypeToCheckFor(size_t type, size_t amountOfTil
 }
 
 void Game::TileAmountLock::checkIfUnlocked() {
-	if (door != nullptr) {
-		std::unordered_map<size_t, size_t> tileAmounts;
-		for (auto pair : amounts) {
-			tileAmounts[pair.first] = 0;
-		}
+	Door* door = GameObjectProvider::getDoorProvider()->getDoor(doorID);
 
-		for (auto tileGroup : region) {
-			for (auto& pair : tileAmounts) {
-				if (tileGroup->getTile(pair.first) != nullptr) {
-					pair.second++;
-				}
-			}
-		}
-
-		for (auto pair : amounts) {
-			if (tileAmounts[pair.first] < amounts[pair.first]) {
-				door->lock(id);
-				return;
-			}
-		}
-
-		door->unlock(id);
+	if (door == nullptr) {
+		return;
 	}
+
+	std::unordered_map<size_t, size_t> tileAmounts;
+	for (auto pair : amounts) {
+		tileAmounts[pair.first] = 0;
+	}
+
+	for (auto location : region) {
+		for (auto& pair : tileAmounts) {
+			auto tileGroup = GameObjectProvider::getWorldManager()->getTileGroup(location);
+			if (tileGroup != nullptr && tileGroup->getTile(pair.first) != nullptr) {
+				pair.second++;
+			}
+		}
+	}
+
+	for (auto pair : amounts) {
+		if (tileAmounts[pair.first] < amounts[pair.first]) {
+			door->lock(id);
+			return;
+		}
+	}
+
+	door->unlock(id);
 }
 
-void Game::TileAmountLock::setDoor(Door* door) {
-	this->door = door;
+void Game::TileAmountLock::setDoorByID(std::string doorID) {
+	this->doorID = doorID;
 }
 
 void Game::TileAmountLock::setIDInDoor(size_t id) {

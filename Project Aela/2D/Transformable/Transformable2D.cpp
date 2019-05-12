@@ -17,6 +17,11 @@ void Transformable2D::setDimensions(Rect<int>* dimensions) {
 	modified = true;
 }
 
+void Aela::Transformable2D::setXY(int x, int y) {
+	dimensions.setXY(x, y);
+	modified = true;
+}
+
 Rect<int>* Transformable2D::getDimensions() {
 	return &dimensions;
 }

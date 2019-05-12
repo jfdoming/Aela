@@ -45,19 +45,10 @@ namespace Aela {
 
 	class GLRenderer : public Renderer {
 		public:
-			GLRenderer() {
-				windowFocus = false;
-			}
+			GLRenderer();
+			GLRenderer(Window* windowToSet);
 
-			GLRenderer(Window* windowToSet) {
-				setWindow(windowToSet);
-				basic3DRenderer.setCamera(&camera);
-				setup3DRendering();
-			}
-
-			~GLRenderer() {
-
-			}
+			~GLRenderer();
 
 			// This is triggered on an event.
 			void onEvent(Event* event);
@@ -117,12 +108,13 @@ namespace Aela {
 			void activateFeature(RendererFeature feature);
 			void deactivateFeature(RendererFeature feature);
 			void toggleFeature(RendererFeature feature);
-
-			// This sets the field of view of the bounded camera.
-			void setFOV(float value);
+			bool isUsingFeature(RendererFeature feature);
 
 			void scissor(int x, int y, size_t width, size_t height);
 			void resetScissor();
+
+			virtual void resolutionWasChanged();
+			virtual void setOutputToWindow(Rect<int>* outputToWindow);
 
 			// These are some getters.
 			std::string getInformation(GLRendererInformation infoToGet);
@@ -148,7 +140,6 @@ namespace Aela {
 			// These specify the features that the renderer is allowed to use during rendering.
 			/*bool useShadows = false, useBillboards = false, useSkybox = false;
 			unsigned int multisampling3D = 0, multisampling2D = 0;*/
-
 
 			// These are some setup functions used internally by the GLRenderer.
 			void setup3DRendering();

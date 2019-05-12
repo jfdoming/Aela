@@ -28,6 +28,7 @@ namespace Game {
 
 			Tile* getFloorTile();
 			Tile* getLiquidFloorTile();
+			Tile* getTeleporterTile();
 			Tile* getSwitchableFloorTile();
 			bool containsCollidableTile();
 			bool isCollidable();

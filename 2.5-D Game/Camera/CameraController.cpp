@@ -1,6 +1,6 @@
 #include "CameraController.h"
 #include "../Player/Player.h"
-#include "../Utilities/GameConstants.h"
+#include "../Constants/CameraConstants.h"
 
 Game::CameraController::CameraController() {
 	camera = GameObjectProvider::getCamera();

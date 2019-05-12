@@ -1,5 +1,5 @@
 #include "CharacterDeathParticleEmitter.h"
-#include "../Utilities/MathConstants.h"
+#include "../Constants/MathConstants.h"
 #include <glm/gtc/constants.hpp>
 
 using namespace Game;
@@ -28,7 +28,7 @@ void CharacterDeathParticleEmitter::update() {
 			// There's no point in resetting the particle for this type of emitter.
 			// setupParticlePositioning(i, particles.size());
 		} else {
-			particle->translate(0, time->getTimeBetweenFramesInNanos() * particle->getSpeed(), 0);
+			particle->translate(0, -(float) (time->getTimeBetweenFramesInNanos() * particle->getSpeed()), 0);
 		}
 	}
 }
@@ -40,7 +40,8 @@ void Game::CharacterDeathParticleEmitter::setCharacter(Character* character) {
 
 void Game::CharacterDeathParticleEmitter::setLocation(Location* oldLocation) {
 	glm::vec3 oldWorldSpacePosition = oldLocation->getWorldSpaceLocation();
-	dimensions = Rect<float>(oldWorldSpacePosition.x, oldWorldSpacePosition.z, 1, 1);
+	// dimensions = Rect<float>(oldWorldSpacePosition.x, oldWorldSpacePosition.z, 1, 1);
+	dimensions = Rect<float>(oldWorldSpacePosition.x - 0.5f, oldWorldSpacePosition.z - 0.5f, 1, 1);
 }
 
 void CharacterDeathParticleEmitter::setupParticlePositioning(size_t whichParticle, size_t numberOfParticles) {

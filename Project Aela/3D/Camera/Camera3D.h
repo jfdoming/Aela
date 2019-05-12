@@ -51,7 +51,9 @@ namespace Aela {
 			void focusAtPointOnPlane(glm::vec3 point);
 			void focusAtPointOnPlane(float x, float y, float z);
 
-			// These functions are mainly used by the renderer to updateRegisteredEnemies the camera.
+			void calculateMatrices(int width, int height);
+
+			// These functions are mainly used by the renderer to update the camera.
 			void calculateCartesionalDirection(), calculateRightVector(), calculateUpVector();
 			glm::vec3* getCartesionalDirection(), *getRightVector(), *getUpVector();
 			glm::vec3 getPointInFrontOfCamera(float distanceFromCamera);

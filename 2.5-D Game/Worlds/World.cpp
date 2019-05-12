@@ -13,6 +13,17 @@ Game::World::World(ChunkMap* chunks) {
 	this->chunks = *chunks;
 }
 
+Game::World::~World() {
+	// I'm only putting this here to debug some strange exception.
+	chunks.clear();
+}
+
+void Game::World::operator=(World& world) {
+	chunks = world.chunks;
+	map3D = world.map3D;
+	useLights = world.useLights;
+}
+
 void Game::World::addChunk(glm::ivec2 coordinate, Chunk* chunk) {
 	chunks[coordinate] = *chunk;
 }

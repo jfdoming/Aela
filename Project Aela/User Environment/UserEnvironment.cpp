@@ -69,6 +69,17 @@ unsigned int Aela::UserEnvironment::getSystemRAM() {
 	return systemRAM;
 }
 
+void UserEnvironment::getNativeDisplayResolution(int displayID, int* width, int* height) {
+	SDL_DisplayMode mode;
+	if (SDL_GetCurrentDisplayMode(displayID, &mode) == 0) {
+		*width = mode.w;
+		*height = mode.h;
+	} else {
+		*width = 0;
+		*height = 0;
+	}
+}
+
 void Aela::UserEnvironment::getDisplayDPI(int whichDisplay, float* diagonalDPI, float* horizontalDPI, float* verticalDPI) {
 	SDL_GetDisplayDPI(whichDisplay, diagonalDPI, horizontalDPI, verticalDPI);
 }

@@ -60,6 +60,9 @@ namespace Aela {
 			// Maybe it should be deleted?
 			void removeAdditionalModelData(bool modelsAreTransparent);
 
+			// Calls every remove function.
+			void removeEverything();
+
 			void setAmbientLighting(float ambientLighting);
 			float getAmbientLighting();
 

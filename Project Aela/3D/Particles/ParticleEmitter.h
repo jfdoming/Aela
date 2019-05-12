@@ -22,7 +22,7 @@ namespace Aela {
 			virtual void setupParticles(std::vector<GLTexture*>* textures, float particleWidth, float particleHeight,
 				unsigned int amount);
 
-			// This is the updateRegisteredEnemies function, which has no actual implementation.
+			// This is the update function, which has no actual implementation.
 			virtual void update() = 0;
 
 			// These are getters and setters.
@@ -62,7 +62,7 @@ namespace Aela {
 			float pathOffset = 0;
 
 			// These times are in nanoseconds.
-			long long lifeTime = 1, startTime;
+			unsigned long long lifeTime = 1, startTime;
 
 			std::function<void()> onEnd = NULL;
 

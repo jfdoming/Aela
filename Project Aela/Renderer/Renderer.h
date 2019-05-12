@@ -109,6 +109,7 @@ namespace Aela {
 			virtual void activateFeature(RendererFeature feature) = 0;
 			virtual void deactivateFeature(RendererFeature feature) = 0;
 			virtual void toggleFeature(RendererFeature feature) = 0;
+			virtual bool isUsingFeature(RendererFeature feature) = 0;
 
 			unsigned int getMultisampling3D();
 			unsigned int getMultisampling2D();
@@ -122,6 +123,12 @@ namespace Aela {
 			// This allows for only a certain portion of a framebuffer to be rendered to.
 			virtual void scissor(int x, int y, size_t width, size_t height);
 			virtual void resetScissor();
+
+			virtual void resolutionWasChanged();
+
+			virtual void setOutputToWindow(Rect<int>* outputToWindow);
+			Rect<int>* getOutputToWindow();
+			void outputToEntireWindow();
 
 			// These are some getters.
 			Window* getWindow();
@@ -138,10 +145,15 @@ namespace Aela {
 			// This is a general tint.
 			ColourRGBA tint3D;
 
+			// If the output is meant to only be put into a certain portion of the window (such as during letterboxing),
+			// this should represent that output. By default, this will equal the window dimensions (so that the full
+			// window is rendered to).
+			Rect<int> outputToWindow;
+
 			// These specify the features that the renderer is allowed to use during rendering.
-			bool useShadows = false, useBillboards = false, useSkybox = false, useLights = false;
+			std::unordered_map<RendererFeature, bool> features;
+			std::atomic<bool> resolutionWasChangedFlag = false;
 			unsigned int multisampling3D = 0, multisampling2D = 0;
-			bool resolutionWasChangedFlag = false;
 
 			virtual void resetResolution() = 0;
 	};

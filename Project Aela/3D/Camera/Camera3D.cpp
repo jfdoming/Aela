@@ -9,7 +9,7 @@
 #include "../../Utilities/glmut.h"
 #include <glm\gtc\constants.hpp>
 #include "../../Events/EventConstants.h"
-
+#include <glm/gtc/matrix_transform.inl>
 using namespace Aela;
 
 glm::mat4 Camera3D::getViewMatrix() {
@@ -226,6 +226,11 @@ void Camera3D::focusAtPointOnPlane(glm::vec3 point) {
 void Camera3D::focusAtPointOnPlane(float x, float y, float z) {
 	glm::vec3 point(x, y, z);
 	focusAtPointOnPlane(point);
+}
+
+void Camera3D::calculateMatrices(int width, int height) {
+	projectionMatrix = glm::perspective(fieldOfView, (float) width / height, 0.1f, 100.0f);
+	viewMatrix = glm::lookAt(position, position + cartesionalDirection, up);
 }
 
 void Camera3D::calculateCartesionalDirection() {

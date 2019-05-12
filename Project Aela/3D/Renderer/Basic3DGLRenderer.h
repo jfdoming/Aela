@@ -67,6 +67,7 @@ namespace Aela {
 			Image* getColourFrameBufferTexture();
 			GLuint* getMultisampledColourFrameBuffer();
 			Image* getMultisampledColourFrameBufferTexture();
+			void setOutputWidthAndHeight(int outputWidth, int outputHeight);
 
 			// Although this function is called in setup(), it should also be called to change the MSAA amount.
 			void setupFrameBuffers(unsigned int multisampling);
@@ -104,9 +105,7 @@ namespace Aela {
 			// This stores the lights to render.
 			std::unordered_map<long long, LightEntity>* lights;
 
-			// These are used by the renderer so that "window->getDimensions()->getWidth()"
-			// (and "...getHeight()") does not have to called all the time.
-			int windowWidth, windowHeight;
+			int outputWidth = 1, outputHeight = 1;
 
 			// These variables store the resolution of the depth textures.
 			const unsigned int DEPTH_TEXTURE_WIDTH = 2048, DEPTH_TEXTURE_HEIGHT = 2048;
@@ -114,6 +113,8 @@ namespace Aela {
 			// This stores the limit to the number of instances that may occur, based on potential hardware limitations.
 			const size_t SHADOW_INSTANCE_LIMIT = 100;
 			const size_t MODEL_INSTANCE_LIMIT = 100;
+
+			bool shadersAreSetup = false;
 
 			// These are some setup related functions.
 			void setupShaders();

@@ -121,10 +121,10 @@ bool Aela::OBJLoader::load(ResourceMap& resources, std::string src) {
 					// Error, somehow.
 				}
 			} else if (numberOfSlashes == 3) {
-				AelaErrorHandling::windowError("Aela OBJ Model Loader", (std::string) "The requested baseModel's normal (vn) information is missing.\n"
+				AelaErrorHandling::windowError("Aela OBJ Model Loader", src + (std::string) ": The requested baseModel's normal (vn) information is missing.\n"
 					+ "Try exporting the baseModel with different information.");
 			} else {
-				AelaErrorHandling::windowError("Aela OBJ Model Loader", (std::string) "The formatting of the face ('f') section of the OBJ file\nis "
+				AelaErrorHandling::windowError("Aela OBJ Model Loader", src + (std::string) ": The formatting of the face ('f') section of the OBJ file\nis "
 					+ "not the same that the loader uses.\nMake sure to specify vertex, UV\nand normal data in your OBJ file!");
 				in.close();
 				delete res;

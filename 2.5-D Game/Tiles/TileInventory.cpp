@@ -11,6 +11,9 @@
 
 using namespace Game;
 
+Game::TileInventory::TileInventory() {
+}
+
 Tile* Game::TileInventory::switchTile(TileGroup* tileGroup, size_t whichTile) {
 	Tile* floorTilePtr = tileGroup->getSwitchableFloorTile();
 
@@ -21,6 +24,7 @@ Tile* Game::TileInventory::switchTile(TileGroup* tileGroup, size_t whichTile) {
 		tiles[whichTile] = floorTile;
 		return &tiles[whichTile];
 	}
+
 	return nullptr;
 }
 
@@ -77,4 +81,7 @@ void Game::TileInventory::placeTile(TileGroup* tileGroup) {
 
 void Game::TileInventory::clear(size_t tileToFillBlanksWith) {
 	tiles = std::vector<Tile>(tiles.size(), Tile(tileToFillBlanksWith));
+	if (currentTile >= tileToFillBlanksWith) {
+		currentTile = 0;
+	}
 }

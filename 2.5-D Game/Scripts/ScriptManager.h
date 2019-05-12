@@ -25,13 +25,17 @@ namespace Game {
 			// However, since Project Aela's LUA functionality was never completed...
 			void addScript(std::string name, std::function<void()> script);
 			bool addScript(std::string name, std::function<void()> script, bool replaceExistingScript);
+			void addEssentialScript(std::string name, std::function<void()> script);
+			bool addEssentialScript(std::string name, std::function<void()> script, bool replaceExistingScript);
 
 			bool runScript(std::string name);
+			void clearNonEssentialScripts();
 
 			// This causes a script to run at as the ending action of a keyframe.
 			bool bindScriptToFrame(std::string name, KeyFrame* keyFrame);
 
 		private:
 			std::unordered_map<std::string, std::function<void()>> scripts;
+			std::unordered_map<std::string, std::function<void()>> essentialScripts;
 	};
 }

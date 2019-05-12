@@ -59,6 +59,11 @@ size_t Game::Door::addLock(Lock* lock) {
 		if (onClose != nullptr) {
 			onClose();
 		}
+	} else if (locks.empty()) {
+		open = true;
+		if (onOpen != nullptr) {
+			onOpen();
+		}
 	}
 
 	return locks.size() - 1;
@@ -75,17 +80,36 @@ void Game::Door::addLocks(int lockAmount, ...) {
 	va_end(args);
 }
 
+size_t Game::Door::addLockWithoutCallingOnClose(bool locked) {
+	locks.push_back(new Lock(locked));
+
+	if (locked) {
+		open = false;
+	}
+
+	return locks.size() - 1;
+}
+
 Game::Lock* Game::Door::getLock(size_t id) {
 	return locks[id];
 }
 
+std::vector<Game::Lock*>* Game::Door::getLocks() {
+	return &locks;
+}
+
 bool Game::Door::unlock(size_t lockID) {
+	if (open) {
+		return true;
+	}
+
 	if (lockID >= locks.size()) {
 		return false;
 	}
-	locks[lockID]->locked = false;
 
+	locks[lockID]->locked = false;
 	bool containsLockedLock = false;
+
 	for (Lock* lock : locks) {
 		if (lock->isLocked()) {
 			containsLockedLock = true;
@@ -103,10 +127,25 @@ bool Game::Door::unlock(size_t lockID) {
 	return true;
 }
 
+void Game::Door::unlock() {
+	if (!open) {
+		open = true;
+
+		if (onOpen != nullptr) {
+			onOpen();
+		}
+	}
+
+	for (auto lock : locks) {
+		lock->locked = false;
+	}
+}
+
 bool Game::Door::lock(size_t lockID) {
 	if (lockID >= locks.size()) {
 		return false;
 	}
+
 
 	locks[lockID]->locked = true;
 
@@ -120,6 +159,30 @@ bool Game::Door::lock(size_t lockID) {
 	return true;
 }
 
+void Game::Door::lock() {
+	for (auto lock : locks) {
+		lock->locked = false;
+	}
+
+	if (open) {
+		open = false;
+
+		if (onClose != nullptr) {
+			onClose();
+		}
+	}
+}
+
+void Game::Door::lockWithoutLockingLocks() {
+	if (open) {
+		open = false;
+
+		if (onClose != nullptr) {
+			onClose();
+		}
+	}
+}
+
 bool Game::Door::isOpen() {
 	return open;
 }
@@ -128,6 +191,33 @@ void Game::Door::setOnOpen(std::function<void()>* onOpen) {
 	this->onOpen = *onOpen;
 }
 
+std::function<void()>* Game::Door::getOnOpen() {
+	return &onOpen;
+}
+
 void Game::Door::setOnClose(std::function<void()>* onClose) {
 	this->onClose = *onClose;
+}
+
+std::function<void()>* Game::Door::getOnClose() {
+	return &onClose;
+}
+
+void Game::Door::makeBackupOfLockData() {
+	copyOfLockData.clear();
+
+	for (auto lock : locks) {
+		copyOfLockData.push_back(lock->isLocked());
+	}
+}
+
+void Game::Door::useBackupOfLockData() {
+	if (copyOfLockData.size() != locks.size()) {
+		// Something went wrong.
+		return;
+	}
+
+	for (size_t i = 0; i < copyOfLockData.size(); i++) {
+		locks[i]->locked = copyOfLockData[i];
+	}
 }

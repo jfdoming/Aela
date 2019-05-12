@@ -6,7 +6,7 @@
 */
 
 #pragma once
-#include "3D/Models/ModelEntity.h"
+#include "../../Project Aela/3D/Models/ModelEntity.h"
 #include "../NPCs/NPC.h"
 
 using namespace Aela;

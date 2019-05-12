@@ -15,6 +15,9 @@ using namespace Aela;
 // but its easier to read what is going on when everything is layed out for you. Besides, those functions would be
 // called once anyways.
 void Animator::update() {
+	// TODO: rework this function's 3D stuff so that it isn't organized in a garbage way. Also, optimize it a bit!
+	// For help, look at how the 2D stuff is done.
+
 	long long timePassed = time->getTimeBetweenFramesInNanos();
 
 	if (!paused3D) {
@@ -28,8 +31,8 @@ void Animator::update() {
 			KeyFrame3D& keyFrame = firstFramePair.second;
 			Transformable3D* object = keyFrame.getObject();
 
-			if (!keyFrame.hasBeenStarted()) {
-				keyFrame.start();
+			if (!keyFrame.hasBeenSetUp()) {
+				keyFrame.setup();
 			}
 
 			long long endTime = firstFramePair.first;
@@ -89,7 +92,7 @@ void Animator::update() {
 				continue;
 			}
 
-			// This occurs if the keyframe has not ended yet, and must updateRegisteredEnemies the object its linked to accordingly.
+			// This occurs if the keyframe has not ended yet, and must update the object its linked to accordingly.
 			if (object != nullptr) {
 				// This figures out a bunch of transformational values and finds the final scaling value to use.
 				glm::vec3* originalPosition = keyFrame.getOriginalPosition();
@@ -157,8 +160,8 @@ void Animator::update() {
 			KeyFrameMaterial& keyFrame = firstFramePair.second;
 			Material* material = keyFrame.getMaterial();
 
-			if (!keyFrame.hasBeenStarted()) {
-				keyFrame.start();
+			if (!keyFrame.hasBeenSetUp()) {
+				keyFrame.setup();
 			}
 
 			// Check if this keyframe should have ended by now. If it has, perform the actions necessary.
@@ -201,8 +204,8 @@ void Animator::update() {
 			KeyFrameModel& keyFrame = firstFramePair.second;
 			ModelEntity* modelEntity = keyFrame.getModelEntity();
 
-			if (!keyFrame.hasBeenStarted()) {
-				keyFrame.start();
+			if (!keyFrame.hasBeenSetUp()) {
+				keyFrame.setup();
 			}
 
 			// Check if this keyframe should have ended by now. If it has, perform the actions necessary.
@@ -247,22 +250,13 @@ void Animator::update() {
 			KeyFrame2D& keyFrame = firstFramePair.second;
 			std::shared_ptr<Transformable2D> object = keyFrame.getObject();
 
-			if (!keyFrame.hasBeenStarted()) {
-				keyFrame.start();
+			if (!keyFrame.hasBeenSetUp()) {
+				keyFrame.setup();
 			}
 
 			// Check if this keyframe should have ended by now. If it has, perform the actions necessary.
 			if (firstFramePair.first <= track.getPositionInTrack()) {
-				if (object != nullptr) {
-					object->setTint(keyFrame.getTint());
-					if (keyFrame.isUsingDimensions()) {
-						object->setDimensions(keyFrame.getDimensions());
-					}
-				}
-
-				if (keyFrame.getEndingAction() != nullptr) {
-					keyFrame.getEndingAction()();
-				}
+				keyFrame.end();
 
 				if (track.getKeyFrames()->size() != 0) {
 					track.getKeyFrames()->erase(track.getKeyFrames()->begin());
@@ -279,28 +273,17 @@ void Animator::update() {
 				continue;
 			}
 
-			// This occurs if the keyframe has not ended yet, and must updateRegisteredEnemies the object its linked to accordingly.
+			// This occurs if the keyframe has not ended yet, and must update the object its linked to accordingly.
 			if (object != nullptr) {
 				long long endTime = firstFramePair.first;
 				long long timeSinceKeyFrameStart = track.getPositionInTrack() + 1;
 
-				// This figures out a bunch of transformational values and finds the final value to use.
-				ColourRGBA* originalTint = keyFrame.getOriginalTint();
-				ColourRGBA* finalTint = keyFrame.getTint();
-				ColourRGBA newTint((float)((finalTint->getR() - originalTint->getR()) / endTime) * timeSinceKeyFrameStart + originalTint->getR(),
-					(float)((finalTint->getG() - originalTint->getG()) / endTime) * timeSinceKeyFrameStart + originalTint->getG(),
-					(float)((finalTint->getB() - originalTint->getB()) / endTime) * timeSinceKeyFrameStart + originalTint->getB(),
-					(float)((finalTint->getA() - originalTint->getA()) / endTime) * timeSinceKeyFrameStart + originalTint->getA());
-				object->setTint(&newTint);
+				if (keyFrame.isUsingTint()) {
+					object->setTint(keyFrame.getTintAtTime(timeSinceKeyFrameStart, endTime));
+				}
 
 				if (keyFrame.isUsingDimensions()) {
-					Rect<int>* originalDimensions = keyFrame.getOriginalDimensions();
-					Rect<int>* finalDimensions = keyFrame.getDimensions();
-					Rect<int> newDimensions((int)((float)(finalDimensions->getX() - originalDimensions->getX()) / endTime * timeSinceKeyFrameStart + originalDimensions->getX()),
-						(int)((float)(finalDimensions->getY() - originalDimensions->getY()) / endTime * timeSinceKeyFrameStart + originalDimensions->getY()),
-						(int)((float)(finalDimensions->getWidth() - originalDimensions->getWidth()) / endTime * timeSinceKeyFrameStart + originalDimensions->getWidth()),
-						(int)((float)(finalDimensions->getHeight() - originalDimensions->getHeight()) / endTime * timeSinceKeyFrameStart + originalDimensions->getHeight()));
-					object->setDimensions(&newDimensions);
+					object->setDimensions(keyFrame.getDimensionsAtTime(timeSinceKeyFrameStart, endTime));
 				}
 			}
 		}
@@ -376,9 +359,8 @@ int Animator::delete3DTracksByTag(std::string tag) {
 	for (unsigned int i = 0; i < tracks3D.size(); i++) {
 		if (tracks3D[i].getTag() == tag) {
 			counter++;
-			if (i != 0) {
-				tracks3D.erase(tracks3D.begin() + i);
-			}
+			tracks3D.erase(tracks3D.begin() + i);
+			i--;
 		}
 	}
 	return counter;
@@ -389,9 +371,8 @@ int Aela::Animator::deleteModelTracksByTag(std::string tag) {
 	for (unsigned int i = 0; i < tracksModel.size(); i++) {
 		if (tracksModel[i].getTag() == tag) {
 			counter++;
-			if (i != 0) {
-				tracksModel.erase(tracksModel.begin() + i);
-			}
+			tracksModel.erase(tracksModel.begin() + i);
+			i--;
 		}
 	}
 	return counter;
@@ -402,9 +383,8 @@ int Aela::Animator::deleteMaterialTracksByTag(std::string tag) {
 	for (unsigned int i = 0; i < tracksMaterial.size(); i++) {
 		if (tracksMaterial[i].getTag() == tag) {
 			counter++;
-			if (i != 0) {
-				tracksMaterial.erase(tracksMaterial.begin() + i);
-			}
+			tracksMaterial.erase(tracksMaterial.begin() + i);
+			i--;
 		}
 	}
 	return counter;
@@ -415,9 +395,8 @@ int Animator::delete2DTracksByTag(std::string tag) {
 	for (unsigned int i = 0; i < tracks2D.size(); i++) {
 		if (tracks2D[i].getTag() == tag) {
 			counter++;
-			if (i != 0) {
-				tracks2D.erase(tracks2D.begin() + i);
-			}
+			tracks2D.erase(tracks2D.begin() + i);
+			i--;
 		}
 	}
 	return counter;

@@ -26,6 +26,14 @@ ALsizei AudioClip::getSampleRate() {
 	return sampleRate;
 }
 
+float AudioClip::getDefaultVolume() {
+	return defaultVolume;
+}
+
+void AudioClip::setDefaultVolume(float defaultVolume) {
+	this->defaultVolume = defaultVolume;
+}
+
 void AudioClip::setFormat(ALenum format) {
 	this->format = format;
 }

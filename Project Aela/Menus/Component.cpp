@@ -47,7 +47,7 @@ void Component::handleMousePressed(MouseEvent* event) {
 		return;
 	}
 
-	if (alwaysTriggerMouseEvents || dimensions.contains(event->getMouseX(), event->getMouseY())) {
+	if (alwaysTriggerMouseEvents || dimensions.contains(event->getMouseXInRendererOutput(), event->getMouseYInRendererOutput())) {
 		onMousePressed(event);
 		listeners.fire(event);
 
@@ -60,7 +60,7 @@ void Component::handleMouseReleased(MouseEvent* event) {
 		return;
 	}
 
-	if (alwaysTriggerMouseEvents || dimensions.contains(event->getMouseX(), event->getMouseY())) {
+	if (alwaysTriggerMouseEvents || dimensions.contains(event->getMouseXInRendererOutput(), event->getMouseYInRendererOutput())) {
 		onMouseReleased(event);
 		listeners.fire(event);
 
@@ -75,7 +75,7 @@ void Component::handleMouseMoved(MouseEvent* event) {
 
 	onMouseMoved(event);
 
-	bool contains = alwaysTriggerMouseEvents || dimensions.contains(event->getMouseX(), event->getMouseY());
+	bool contains = alwaysTriggerMouseEvents || dimensions.contains(event->getMouseXInRendererOutput(), event->getMouseYInRendererOutput());
 
 	if (contains) {
 		if (!hovered) {

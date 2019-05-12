@@ -9,6 +9,6 @@
 
 namespace Game {
 	enum class TeleportationAnimation {
-		RISE, FADE
+		NONE, RISE, FADE
 	};
 }

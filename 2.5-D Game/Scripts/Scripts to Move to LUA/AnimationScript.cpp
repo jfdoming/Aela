@@ -2,6 +2,7 @@
 #include "ScriptObjects.h"
 #include "../../../Project Aela/3D/Animation/AnimationTrackMaterial.h"
 #include "../../../Project Aela/Resource Management/ResourcePaths.h"
+#include "../../Audio/GameAudioPlayer.h"
 
 void Scripts::loadMaterialAnimations() {
 	AnimationLooper* animationLooper = engine->getAnimationLooper();
@@ -67,26 +68,35 @@ bool Scripts::loadLogoMaterialAnimation(int whichLevel) {
 	return true;*/
 }
 
+bool Scripts::animateTelevision() {
+	return loopSpriteSheetAnimation("animations_1", "walls_2/4/2.png_mtl", 8, 2, 3, 5, 3, 256);
+}
+
 bool Scripts::animateElevator() {
 	std::vector<int> framesToPauseOn;
 	framesToPauseOn.push_back(9);
 
 	std::vector<long long> framePauseTimes = {500};
 	bool returnValue = loopSpriteSheetAnimation("animations_3", "walls_1/2/2.png_mtl", 8, 0, 2, 1, 3,
-	                                &framesToPauseOn, &framePauseTimes, 16);
+	                                &framesToPauseOn, &framePauseTimes, 32);
 
 	if (!returnValue) {
 		return false;
 	}
 
 	return loopSpriteSheetAnimation("animations_3", "walls_1/3/2.png_mtl", 8, 0, 4, 1, 5,
-	                                &framesToPauseOn, &framePauseTimes, 16);
+	                                &framesToPauseOn, &framePauseTimes, 32);
 }
 
 void Scripts::stopAnimatingElevator() {
 	AnimationLooper* looper = engine->getAnimationLooper();
 	looper->stopLoopingMaterialTrack("walls_1/2/2.png_mtl");
 	looper->stopLoopingMaterialTrack("walls_1/3/2.png_mtl");
+	gameAudioPlayer->playAudio("elevator ding");
+}
+
+void Scripts::loadAelaWatchAvatarAnimations() {
+
 }
 
 void Scripts::setupMainAnimations() {
@@ -94,6 +104,10 @@ void Scripts::setupMainAnimations() {
 	                                nullptr, nullptr, 500);
 	loopSpriteSheetAnimation("animations_3", "walls_1/4/3.png_mtl", 8, 2, 0, 6, 0,
 	                                nullptr, nullptr, 128);
+	loopSpriteSheetAnimation("animations_3", "walls_2/5/4.png_mtl", 8, 0, 1, 1, 1,
+	                                nullptr, nullptr, 500);
+
+	animateTelevision();
 }
 
 bool Scripts::loopSpriteSheetAnimation(std::string spriteSheet, std::string materialToAnimate, int spriteSheetWidth,
@@ -163,4 +177,9 @@ bool Scripts::loopSpriteSheetAnimation(std::string spriteSheet, std::string mate
 	animationLooper->loopAnimation(&track);
 
 	return true;
+}
+
+bool Scripts::loopSpriteSheetAnimation(std::string spriteSheet, std::string materialToAnimate, int spriteSheetWidth,
+	int startX, int startY, int endX, int endY, long long timeBetweenFrames) {
+	return loopSpriteSheetAnimation(spriteSheet, materialToAnimate, spriteSheetWidth, startX, startY, endX, endY, nullptr, nullptr, timeBetweenFrames);
 }

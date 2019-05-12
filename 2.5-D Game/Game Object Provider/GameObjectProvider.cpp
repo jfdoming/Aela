@@ -11,7 +11,10 @@
 #include "../Displays/Hints/HintDisplay.h"
 #include "../Doors/DoorProvider.h"
 #include "../Save States/GameSaver.h"
-
+#include "../Displays/Timer/TimerDisplay.h"
+#include "../Displays/Main Menu/MainMenuDisplay.h"
+#include "../Displays/Battle/BattleDisplay.h"
+#include "../Displays/Battle Dialogue/BattleDialogueDisplay.h"
 using namespace Game;
 
 Engine* GameObjectProvider::engine = nullptr;
@@ -30,8 +33,14 @@ WorldExporter* GameObjectProvider::worldExporter = nullptr;
 CameraController* GameObjectProvider::cameraController = nullptr;
 TileBehaviourExecutor* GameObjectProvider::tileBehaviourExecuter = nullptr;
 HintDisplay* GameObjectProvider::hintDisplay = nullptr;
+TimerDisplay* GameObjectProvider::timerDisplay = nullptr;
 DoorProvider* GameObjectProvider::doorProvider = nullptr;
 GameSaver* GameObjectProvider::gameSaver = nullptr;
+MainMenuDisplay* GameObjectProvider::mainMenuDisplay = nullptr;
+BattleDisplay* GameObjectProvider::battleDisplay = nullptr;
+BattleDialogueDisplay* GameObjectProvider::battleDialogueDisplay = nullptr;
+GameAudioPlayer* GameObjectProvider::gameAudioPlayer = nullptr;
+FootstepAudioPlayer* GameObjectProvider::footstepAudioPlayer = nullptr;
 
 // These are pointers to scenes are should be set by a script that constructs the scenes.
 static Scene* gameplayScene, *pauseScene;
@@ -100,6 +109,10 @@ AnimationLooper* GameObjectProvider::getAnimationLooper() {
 	return engine->getAnimationLooper();
 }
 
+AudioLooper* GameObjectProvider::getAudioLooper() {
+	return engine->getAudioLooper();
+}
+
 AelaGame* GameObjectProvider::getGame() {
 	return game;
 }
@@ -152,12 +165,36 @@ HintDisplay* Game::GameObjectProvider::getHintDisplay() {
 	return hintDisplay;
 }
 
+TimerDisplay* Game::GameObjectProvider::getTimerDisplay() {
+	return timerDisplay;
+}
+
 DoorProvider * Game::GameObjectProvider::getDoorProvider() {
 	return doorProvider;
 }
 
 GameSaver* Game::GameObjectProvider::getGameSaver() {
 	return gameSaver;
+}
+
+MainMenuDisplay* GameObjectProvider::getMainMenuDisplay() {
+	return mainMenuDisplay;
+}
+
+BattleDisplay * Game::GameObjectProvider::getBattleDisplay() {
+	return battleDisplay;
+}
+
+BattleDialogueDisplay* GameObjectProvider::getBattleDialogueDisplay() {
+	return battleDialogueDisplay;
+}
+
+GameAudioPlayer* GameObjectProvider::getGameAudioPlayer() {
+	return gameAudioPlayer;
+}
+
+FootstepAudioPlayer* Game::GameObjectProvider::getFootstepAudioPlayer() {
+	return footstepAudioPlayer;
 }
 
 Scene* GameObjectProvider::getGameplayScene() {
@@ -219,12 +256,36 @@ void Game::GameObjectProvider::setHintDisplay(HintDisplay* setHintDisplay) {
 	hintDisplay = setHintDisplay;
 }
 
+void Game::GameObjectProvider::setTimerDisplay(TimerDisplay* setTimerDisplay) {
+	timerDisplay = setTimerDisplay;
+}
+
 void Game::GameObjectProvider::setDoorProvider(DoorProvider* setDoorProvider) {
 	doorProvider = setDoorProvider;
 }
 
 void Game::GameObjectProvider::setGameSaver(GameSaver* setGameSaver) {
 	gameSaver = setGameSaver;
+}
+
+void GameObjectProvider::setMainMenuDisplay(MainMenuDisplay* setMainMenuDisplay) {
+	mainMenuDisplay = setMainMenuDisplay;
+}
+
+void Game::GameObjectProvider::setBattleDisplay(BattleDisplay* setBattleDisplay) {
+	battleDisplay = setBattleDisplay;
+}
+
+void GameObjectProvider::setBattleDialogueDisplay(BattleDialogueDisplay* setBattleDialogueDisplay) {
+	battleDialogueDisplay = setBattleDialogueDisplay;
+}
+
+void GameObjectProvider::setGameAudioPlayer(GameAudioPlayer* setGameAudioPlayer) {
+	gameAudioPlayer = setGameAudioPlayer;
+}
+
+void Game::GameObjectProvider::setFootstepAudioPlayer(FootstepAudioPlayer* setFootstepAudioPlayer) {
+	footstepAudioPlayer = setFootstepAudioPlayer;
 }
 
 void GameObjectProvider::setGameplayScene(Scene* setGameplayScene) {
@@ -249,7 +310,13 @@ void GameObjectProvider::cleanupGameObjects() {
 	delete cameraController;
 	delete tileBehaviourExecuter;
 	delete hintDisplay;
+	delete timerDisplay;
 	delete doorProvider;
+	delete mainMenuDisplay;
+	delete battleDisplay;
+	delete battleDialogueDisplay;
+	delete gameAudioPlayer;
+	delete footstepAudioPlayer;
 }
 
 GameObjectProvider::GameObjectProvider() {

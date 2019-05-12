@@ -13,225 +13,118 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="583760b5-4cf0-4319-ba42-b9c76a2702f5" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/Audio/AudioBuffer.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Audio/AudioBuffer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Aela Game/AelaGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Aela Game/AelaGame.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Aela Game/AelaGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Aela Game/AelaGame.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/Character.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/Character.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/Character.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/Character.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterModelGenerator.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterModelGenerator.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterModelGenerator.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterModelGenerator.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterProvider.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterProvider.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterProvider.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterProvider.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterStep.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Character/CharacterStep.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Displays/Dialogue/DialogueDisplay.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Displays/Dialogue/DialogueDisplay.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Displays/Dialogue/DialogueDisplay.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Displays/Dialogue/DialogueDisplay.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Displays/Hints/HintDisplay.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Displays/Hints/HintDisplay.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/TileAmountLock.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/TileAmountLock.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/TileAmountLock.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/TileAmountLock.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Enemies/Turret.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Enemies/Turret.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Enemies/Turret.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Enemies/Turret.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Displays/Hints/HintDisplay.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Displays/Hints/HintDisplay.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Displays/Hints/HintDisplayDuration.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Displays/Hints/HintDisplayDuration.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Displays/Tiles/TileInventoryDisplay.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Displays/Tiles/TileInventoryDisplay.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Displays/Tiles/TileInventoryDisplay.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Displays/Tiles/TileInventoryDisplay.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/Door.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/Door.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/Door.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/Door.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/DoorProvider.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/DoorProvider.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Doors/DoorProvider.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Doors/DoorProvider.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Enemies/Enemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Enemies/Enemy.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Game Object Provider/GameObjectProvider.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Game Object Provider/GameObjectProvider.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Game Object Provider/GameObjectProvider.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Game Object Provider/GameObjectProvider.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Guns/TileSwitchGun.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Guns/TileSwitchGun.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Location/Location.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Location/Location.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Location/Location.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Location/Location.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Main/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Main/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/TileSwitchParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/TileSwitchParticleEmitter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Menus/FontSizes.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Menus/FontSizes.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Movement/Movement.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Movement/Movement.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Movement/Movement.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Movement/Movement.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Movement/TeleportationAnimation.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Movement/TeleportationAnimation.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterDeathParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterDeathParticleEmitter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterTeleportParticleEmitter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Particles/CharacterTeleportParticleEmitter.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Player/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Player/Player.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Player/Player.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Player/Player.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/ScriptManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/ScriptManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Resources/ResourceInfo.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Resources/ResourceInfo.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Save States/GameSaver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Save States/GameSaver.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Save States/GameSaver.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Save States/GameSaver.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Save States/SaveState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Save States/SaveState.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Save States/SaveState.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Save States/SaveState.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Save States/Saveable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Save States/Saveable.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Save States/Saveable.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Save States/Saveable.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/ScriptManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/ScriptManager.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/AnimationScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/AnimationScript.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/AnimationScript.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/AnimationScript.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/GameScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/GameScript.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/GameScript.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/GameScript.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/MapScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/MapScript.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/MapScript.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/MapScript.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ResourceScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ResourceScript.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ResourceScript.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ResourceScript.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/SceneScript.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/SceneScript.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/Tile.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/Tile.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileAtlas.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileAtlas.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileBehaviourExecutor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileBehaviourExecutor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileLoader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/SceneScript.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/SceneScript.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ScriptObjects.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ScriptObjects.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ScriptObjects.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Scripts/Scripts to Move to LUA/ScriptObjects.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileAtlasLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileAtlasLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileGroup.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileGroup.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileGroup.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileGroup.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileInventory.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileInventory.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileInventory.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileInventory.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileType.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Tiles/TileType.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Utilities/GameConstants.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Utilities/GameConstants.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Utilities/MathConstants.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Utilities/MathConstants.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/MapRebuilder.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/MapRebuilder.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/MapRebuilder.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/MapRebuilder.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/World.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/World.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/World.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/World.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldExporter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldExporter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldExporter.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldExporter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldLoader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldLoader.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldManager.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/../2.5-D Game/Worlds/WorldManager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Aela Program/Player/Player.h" beforeDir="false" afterPath="$PROJECT_DIR$/../Aela Program/Player/Player.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Fonts/Font.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Fonts/Font.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Fonts/Font.h" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Fonts/Font.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/2D/Renderer/Basic2DGLRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Renderer/Basic2DGLRenderer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2D/Texture/GLTextureLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Texture/GLTextureLoader.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/3D/Animation/KeyedAnimator3D.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Animation/KeyedAnimator3D.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Renderer/Basic2DGLRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Renderer/Basic2DGLRenderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Renderer/Basic2DRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Renderer/Basic2DRenderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Texture/GLImage.h" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Texture/GLImage.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Transformable/Transformable2D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Transformable/Transformable2D.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D/Transformable/Transformable2D.h" beforeDir="false" afterPath="$PROJECT_DIR$/2D/Transformable/Transformable2D.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Camera/Camera3D.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Camera/Camera3D.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/3D/Camera/Camera3D.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Camera/Camera3D.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/3D/Models/OBJLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Models/OBJLoader.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/3D/Particles/ParticleEmitter.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Particles/ParticleEmitter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Renderer/Basic3DGLModelRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Renderer/Basic3DGLModelRenderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/3D/Renderer/Basic3DGLRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Renderer/Basic3DGLRenderer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/3D/Renderer/Basic3DGLRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Renderer/Basic3DGLRenderer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/3D/Renderer/Basic3DGLShadowRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/3D/Renderer/Basic3DGLShadowRenderer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Aela_Engine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Aela_Engine.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Aela_Engine.h" beforeDir="false" afterPath="$PROJECT_DIR$/Aela_Engine.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Animation/Animator.h" beforeDir="false" afterPath="$PROJECT_DIR$/Animation/Animator.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Audio/AudioPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/AudioPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Audio/AudioPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/AudioPlayer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Control Manager/ControlManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Control Manager/ControlManager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Events/EventListener.h" beforeDir="false" afterPath="$PROJECT_DIR$/Events/EventListener.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Events/EventHandler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Events/EventHandler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Events/EventHandler.h" beforeDir="false" afterPath="$PROJECT_DIR$/Events/EventHandler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Events/MouseEvent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Events/MouseEvent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Events/MouseEvent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Events/MouseEvent.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Menus/Button.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/Button.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Menus/Label.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/Label.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Menus/Label.h" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/Label.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Menus/RectComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/RectComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Old Garbage/texture.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Old Garbage/texture.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Menus/Component.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/Component.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Menus/Container.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/Container.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Menus/Container.h" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/Container.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Menus/Menu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/Menu.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Menus/TextInput.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Menus/TextInput.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Project Aela.vcxproj.filters" beforeDir="false" afterPath="$PROJECT_DIR$/Project Aela.vcxproj.filters" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Renderer/GLRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Renderer/GLRenderer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Renderer/GLRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Renderer/GLRenderer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Renderer/Renderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Renderer/Renderer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Renderer/Renderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Renderer/Renderer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resource Management/ResourceLoader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Resource Management/ResourceLoader.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Resource Management/ResourceLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/Resource Management/ResourceLoader.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Time/Stopwatch/Stopwatch.h" beforeDir="false" afterPath="$PROJECT_DIR$/Time/Stopwatch/Stopwatch.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Utilities/Colour/ColourRGBA.h" beforeDir="false" afterPath="$PROJECT_DIR$/Utilities/Colour/ColourRGBA.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scenes/Scene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Scenes/Scene.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Time/Clock.h" beforeDir="false" afterPath="$PROJECT_DIR$/Time/Clock.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Time/Timer/Timer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Time/Timer/Timer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Time/Timer/Timer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Time/Timer/Timer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/User Environment/UserEnvironment.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/User Environment/UserEnvironment.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/User Environment/UserEnvironment.h" beforeDir="false" afterPath="$PROJECT_DIR$/User Environment/UserEnvironment.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Utilities/glmut.h" beforeDir="false" afterPath="$PROJECT_DIR$/Utilities/glmut.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Utilities/strut.h" beforeDir="false" afterPath="$PROJECT_DIR$/Utilities/strut.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Window/Window.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Window/Window.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/audio/clips/Acoustic-Bass.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/audio/clips/test.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/audio/streams/Even the Tutorial Can Be Serious.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/audio/streams/Rondo.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/fonts/xerox.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/maps/default_map.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/maps/interiors.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/maps/sample_map.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/maps/stage_1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/maps/title_screen.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/Thumbs.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/box.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/box.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/boxed_floor.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/boxed_floor.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/character.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/character.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/corner_depressed.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/corner_depressed.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/corner_elevated.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/corner_elevated.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/floor.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/floor.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass_corner_depressed.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass_corner_depressed.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass_corner_elevated.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/grass_corner_elevated.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/meme_mug.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/meme_mug.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/teleporter.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/teleporter.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/wall.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/wall_corner.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/water_0.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/water_0.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/water_1.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/materials/water_1.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/Thumbs.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/box.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/boxed_floor.mtl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/boxed_floor.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/boxed_floor_old.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/character.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/character_A.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/character_B.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/character_C.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/character_D.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/corner_depressed.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/corner_elevated.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/export settings.PNG" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/floor.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/meme_mug.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/quarter_wall.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/wall.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/models/wall_corner.obj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/particles/laser.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/particles/particle_1.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/particles/particle_2.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/scripts/events.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/scripts/test.lua" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DPostProcessing.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DPostProcessing.vert" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DTextureBufferToBuffer.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DTextureBufferToBuffer.vert" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DTextureToBuffer.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/2DTextureToBuffer.vert" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/TextToBuffer.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/2D/TextToBuffer.vert" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/3DPostProcessing.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/3DPostProcessing.vert" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Billboards.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Billboards.vert" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Depth.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Depth.geom" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Depth.vert" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Model.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Model.vert" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Model_Without_Lights.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Skybox.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/Skybox.vert" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/shaders/3D/old/Model.frag" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/back.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/down.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/front.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/left.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/right.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/black/up.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/back.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/down.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/front.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/left.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/right.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_1/up.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/back.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/down.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/front.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/left.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/right.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/skyboxes/skybox_2/up.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/Julian.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/Thumbs.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/animations_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/animations_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/arrow.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/avatars_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/black.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/character.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/dialogue_box.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/doors_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/ekkon.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/floors_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/glass_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/gradient.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/hint_box.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/inventory_background.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/inventory_slot.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/locks_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/locks_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/lol_button.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/map_editor_main_background.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/map_editor_top_bar.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/numbered_tiles.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/rails_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/scientist_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/scientist_4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/selector_box.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/simple_button.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/simple_button_light.dds" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/soldier_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/soldier_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/the_looker.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/tiles.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/turret_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/walls_1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/textures/walls_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/autosave.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/interiors.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/stage_1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/stage_2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/template.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/test_map.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/tiles old.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Release/res/tiled maps/tiles.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Window/Window.h" beforeDir="false" afterPath="$PROJECT_DIR$/Window/Window.h" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <ignored path="$PROJECT_DIR$/build/bin/debug/x64/" />
@@ -294,18 +187,18 @@
     <session id="-1968926462">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="15" />
+          <entry key="project.closed" value="16" />
           <entry key="project.open.time.0" value="5" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.open.time.5" value="2" />
+          <entry key="project.open.time.5" value="3" />
           <entry key="project.open.time.6" value="2" />
           <entry key="project.open.time.7" value="2" />
           <entry key="project.open.time.8" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="17" />
+          <entry key="project.opened" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -357,7 +250,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Aela_Engine.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="410">
+            <state relative-caret-position="2596">
               <caret line="118" column="32" selection-start-line="118" selection-start-column="32" selection-end-line="118" selection-end-column="32" />
             </state>
           </provider>
@@ -375,8 +268,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Utilities/Safe Functions.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
-              <caret line="22" column="26" lean-forward="true" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
+            <state relative-caret-position="344">
+              <caret line="22" column="26" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
               <folding>
                 <element signature="e#745#781#0" expanded="true" />
               </folding>
@@ -532,6 +425,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -591,7 +485,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -677,16 +570,17 @@
       <workItem from="1536450906684" duration="99000" />
       <workItem from="1536451124760" duration="660000" />
       <workItem from="1536513223806" duration="460000" />
+      <workItem from="1546738162570" duration="7000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="115540000" />
+    <option name="totallyTimeSpent" value="115547000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14427663" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.145469" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -700,7 +594,7 @@
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.329718" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50104386" side_tool="true" weight="0.33261803" />
       <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info anchor="bottom" id="CMake" order="11" weight="0.24181627" />
+      <window_info active="true" anchor="bottom" id="CMake" order="11" visible="true" weight="0.24160346" />
       <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
       <window_info active="true" anchor="bottom" id="Inspection Results" order="13" visible="true" weight="0.329718" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -1026,6 +920,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Aela_Engine.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2596">
+          <caret line="118" column="32" selection-start-line="118" selection-start-column="32" selection-end-line="118" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/2D/Texture/GLTextureLoader.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Menus/Button.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="418">
@@ -1060,24 +968,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Aela_Engine.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="410">
-          <caret line="118" column="32" selection-start-line="118" selection-start-column="32" selection-end-line="118" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/2D/Texture/GLTextureLoader.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Utilities/Safe Functions.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="22" column="26" lean-forward="true" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
+        <state relative-caret-position="344">
+          <caret line="22" column="26" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
           <folding>
             <element signature="e#745#781#0" expanded="true" />
           </folding>

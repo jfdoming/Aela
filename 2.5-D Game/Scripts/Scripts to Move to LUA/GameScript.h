@@ -18,9 +18,10 @@ namespace Scripts {
 	using namespace Game;
 
 	void showDialogue(std::string name, std::string avatar, std::string text, std::string scriptToRunOnceComplete);
-	void showTwoOptions(DialogueOption option1, DialogueOption option2);
-	void showThreeOptions(DialogueOption option1, DialogueOption option2, DialogueOption option3);
-	void showFourOptions(DialogueOption option1, DialogueOption option2, DialogueOption option3, DialogueOption option4);
+	void showBlinkingDialogue(std::string name, std::string avatar, std::string blinkingAvatar, std::string text, std::string scriptToRunOnceComplete);
+	void showTwoOptions(bool showAvatar, DialogueOption option1, DialogueOption option2);
+	void showThreeOptions(bool showAvatar, DialogueOption option1, DialogueOption option2, DialogueOption option3);
+	void showFourOptions(bool showAvatar, DialogueOption option1, DialogueOption option2, DialogueOption option3, DialogueOption option4);
 	void showHint(std::string text, HintDisplayDuration duration);
 	void hideDialogue();
 
@@ -30,6 +31,7 @@ namespace Scripts {
 	void setupDoors(int stage, int level);
 	void setupCheckPoints(int stage, int level);
 	void setupGeneralEvents(int stage, int level);
+	void setupCharacterFontAssociations();
 
 	void startNewGame();
 	void continueGame();
@@ -39,8 +41,8 @@ namespace Scripts {
 
 	void addTileBehaviours();
 
-	void fadeTeleportPlayer(size_t world, glm::ivec2 chunk, glm::ivec3 tile);
-	void riseTeleportPlayer(size_t world, glm::ivec2 chunk, glm::ivec3 tile);
+	void fadeTeleportPlayer(Location& location);
+	void riseTeleportPlayer(Location& location);
 
 	void unlockDoorLock(std::string doorID, size_t lockID);
 	void openDoor(std::string doorID, size_t tileType, Location location);
@@ -48,10 +50,18 @@ namespace Scripts {
 	void clearDoorAnimations(std::string doorID);
 	void turnDisplayOn(Location location);
 	void turnDisplayOff(Location location);
+	void turnScannerOn(Location location);
+	void turnScannerOff(Location location);
+	void turnTelecomOn(Location location);
+	void turnTelecomOff(Location location);
 	void pressButton(Location location);
+	void showAndEnableGun();
+	void hideAndDisableGun();
 
 	void setupDoor(Door* door, std::string name, std::function<void()> onOpen, std::function<void()> onClose);
 	void setupDoorSensor(const Location& location, std::string doorName, std::string sensorScriptName, size_t tileType, size_t lockID);
+	void setupTimedDoorSensor(const Location& location, std::string doorName, std::string sensorScriptName, size_t tileType, size_t lockID);
+	void lockTimedDoorSensorIfNecessary(const Location& location, std::string doorName, size_t tileType, size_t lockID);
 	void setupMultiTypeDoorSensor(const Location& location, std::string doorName, std::string sensorScriptName, std::vector<size_t> correctTileTypes, size_t lockID);
 	void setupDoorTileAmountSensors(TileAmountLock* lock, std::string sensorScriptName);
 	void setupCheckPointWithRightSaveSign(std::string name, Location checkPointLocation, Location rightSaveSignLocation, TileDirection directionToMovePlayer);
@@ -59,6 +69,7 @@ namespace Scripts {
 	void setupCheckPointWithBothSaveSigns(std::string name, Location checkPointLocation, Location leftSaveSignLocation, Location rightSaveSignLocation, TileDirection directionToMovePlayer);
 	
 	void triggerDoorSensor(Location location, size_t correctTileType, std::string doorTag, size_t lockID);
+	void triggerTimedDoorSensor(Location location, size_t correctTileType, std::string doorTag, size_t lockID);
 	void triggerMultiTypeDoorSensor(Location location, std::vector<size_t> correctTileTypes, std::string doorTag, size_t lockID);
 
 	// This adds all gameplay scripts to the ScriptManager and also binds tile-related scripts to their tiles.

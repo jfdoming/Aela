@@ -26,6 +26,26 @@ Container::~Container() {
 	delete layout;
 }
 
+bool Container::remove(std::shared_ptr<Component> component) {
+	// Normally, I would use an id system so that the user could call remove(id),
+	// but I don't want to modify someone else's code too much, so I made this for now.
+	// - Robert
+
+	auto iter = std::find(children.begin(), children.end(), component);
+
+	if (iter != children.end()) {
+		children.erase(iter);
+		markDirty();
+		return true;
+	}
+	return false;
+}
+
+void Container::clear() {
+	children.clear();
+	markDirty();
+}
+
 void Container::add(std::shared_ptr<Component> component) {
 	component->setParent(this);
 	component.get()->onAdd(std::bind(&Component::markDirty, this));
@@ -69,8 +89,8 @@ void Container::renderComponent(GLRenderer& renderer) {
 }
 
 void Container::onMousePressed(MouseEvent* event) {
-	int x = event->getMouseX();
-	int y = event->getMouseY();
+	int x = event->getMouseXInRendererOutput();
+	int y = event->getMouseYInRendererOutput();
 
 	for (auto i = children.rbegin(); i != children.rend(); ++i) {
 		auto child = *i;
@@ -79,8 +99,8 @@ void Container::onMousePressed(MouseEvent* event) {
 }
 
 void Container::onMouseReleased(MouseEvent* event) {
-	int x = event->getMouseX();
-	int y = event->getMouseY();
+	int x = event->getMouseXInRendererOutput();
+	int y = event->getMouseYInRendererOutput();
 
 	for (auto i = children.rbegin(); i != children.rend(); ++i) {
 		auto child = *i;
@@ -89,8 +109,8 @@ void Container::onMouseReleased(MouseEvent* event) {
 }
 
 void Container::onMouseMoved(MouseEvent* event) {
-	int x = event->getMouseX();
-	int y = event->getMouseY();
+	int x = event->getMouseXInRendererOutput();
+	int y = event->getMouseYInRendererOutput();
 
 	for (auto i = children.rbegin(); i != children.rend(); ++i) {
 		auto child = *i;

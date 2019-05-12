@@ -3,6 +3,9 @@
 Game::Saveable::Saveable() {
 }
 
+Game::Saveable::~Saveable() {
+}
+
 void Game::Saveable::saveDataToSaveState(SaveState* saveState) {
 }
 

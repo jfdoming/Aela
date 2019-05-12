@@ -23,8 +23,14 @@ WorldExporter* Scripts::worldExporter = nullptr;
 CameraController* Scripts::cameraController = nullptr;
 TileBehaviourExecutor* Scripts::tileBehaviourExecuter = nullptr;
 HintDisplay* Scripts::hintDisplay = nullptr;
+TimerDisplay* Scripts::timerDisplay = nullptr;
 DoorProvider* Scripts::doorProvider = nullptr;
 GameSaver* Scripts::gameSaver = nullptr;
+MainMenuDisplay* Scripts::mainMenuDisplay = nullptr;
+BattleDisplay* Scripts::battleDisplay = nullptr;
+BattleDialogueDisplay* Scripts::battleDialogueDisplay = nullptr;
+GameAudioPlayer* Scripts::gameAudioPlayer = nullptr;
+FootstepAudioPlayer* Scripts::footstepAudioPlayer = nullptr;
 
 void Scripts::setupScriptObjects() {
 	engine = GameObjectProvider::getEngine();
@@ -49,6 +55,12 @@ void Scripts::setupScriptObjects() {
 	cameraController = GameObjectProvider::getCameraController();
 	tileBehaviourExecuter = GameObjectProvider::getTileBehaviourExecuter();
 	hintDisplay = GameObjectProvider::getHintDisplay();
+	timerDisplay = GameObjectProvider::getTimerDisplay();
 	doorProvider = GameObjectProvider::getDoorProvider();
 	gameSaver = GameObjectProvider::getGameSaver();
+	mainMenuDisplay = GameObjectProvider::getMainMenuDisplay();
+	battleDisplay = GameObjectProvider::getBattleDisplay();
+	battleDialogueDisplay = GameObjectProvider::getBattleDialogueDisplay();
+	gameAudioPlayer = GameObjectProvider::getGameAudioPlayer();
+	footstepAudioPlayer = GameObjectProvider::getFootstepAudioPlayer();
 }

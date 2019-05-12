@@ -29,7 +29,6 @@ void Aela::AnimationLooper::update() {
 	for (auto pair : trackModels) {
 		if (animator->getModelTrack(pair.second.getTag()) == nullptr) {
 			animator->addAnimationTrackModel(&pair.second);
-			std::cout << "Nullptr!\n";
 		}
 	}
 }

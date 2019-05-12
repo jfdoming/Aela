@@ -7,14 +7,12 @@
 
 #pragma once
 #include "../Game Object Provider/GameObjectProvider.h"
-#include "../../Project Aela/Menus/RectComponent.h"
 #include "../../Project Aela/Utilities/glmut.h"
 #include "../Character/Character.h"
-#include "../Worlds/World.h"
 #include "../Save States/Saveable.h"
 #include <unordered_map>
 
-#define PLAYER_NAME "player"
+#define PLAYER_NAME std::string("Apollo")
 
 namespace Game {
 	// The following represents a map of characters, in which characters are organized by map, chunk and position in 
@@ -38,6 +36,7 @@ namespace Game {
 			bool addCharacter(Character* character, size_t* id);
 			bool removeCharacterByID(size_t id);
 			bool removeCharacterByName(std::string name);
+			void overwriteCharacter(Character* newCharacter, size_t id);
 			Character* getCharacterByID(size_t id);
 			Character* getCharacterByName(std::string name);
 			Character* getCharacterByLocation(const Location& location);
@@ -45,8 +44,8 @@ namespace Game {
 			std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFunctions>*
 				getCharactersInChunk(size_t world, glm::ivec2 chunk);
 			
-			void saveDataToSaveState(SaveState* saveState) override;
-			void loadDataFromSaveState(SaveState* saveState) override;
+			virtual void saveDataToSaveState(SaveState* saveState);
+			virtual void loadDataFromSaveState(SaveState* saveState);
 
 		private:
 			// This is a map of characters, sorted by their unique IDs.
@@ -59,6 +58,6 @@ namespace Game {
 			CharacterMap charactersByLocation;
 
 			void characterWasMoved(std::string name, Location* oldLocation, Location* newLocation);
-			void generateCharacterModel(size_t character);
+			void generateCharacterModel(Character* character);
 	};
 }

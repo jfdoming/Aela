@@ -19,6 +19,7 @@ namespace Game {
 			void addDoor(std::string tag, Door* door);
 			Door* getDoor(std::string tag);
 			bool removeDoor(std::string tag);
+			void removeAllDoors();
 			std::unordered_map<std::string, Door>* getDoors();
 
 			void saveDataToSaveState(SaveState* saveState);

@@ -2,25 +2,72 @@
 #include "../../Project Aela/Resource Management\ResourcePaths.h"
 #include "../Resources/ResourceInfo.h"
 #include <fstream>
+#include "../../Project Aela/Compression/CompressionError.h"
+#include "../../Project Aela/Compression/Compressor.h"
 
 Game::WorldExporter::WorldExporter() {
 }
 
 bool Game::WorldExporter::exportWorld(std::string path, World* world) {
+	std::stringstream stringstream;
+	bool success = exportWorldToStream(stringstream, world);
+
+	if (!success) {
+		return false;
+	}
+
+	CompressionError ret;
+	std::ofstream output;
+	Compressor compressor;
+
+	output.open(path, std::ofstream::out | std::ofstream::binary);
+	// output.open("../../../res/tiled maps/stage_1.txt", std::ofstream::out | std::ofstream::binary);
+
+	if (!output.is_open()) {
+		AelaErrorHandling::consoleWindowError("World Exporter", "Could not open " + path + "!!!!!!!!");
+		return false;
+	}
+
+	ret = compressor.compressStream(&stringstream, &output, 1);
+	if (ret != CompressionError::OK) {
+		AelaErrorHandling::consoleWindowError("World Exporter", "An error occured while compressing " + path + "!");
+	}
+	output.close();
+	return true;
+}
+
+bool Game::WorldExporter::exportWorldAsText(std::string path, World* world) {
 	std::ofstream stream;
 
 	stream.open(path, std::ofstream::out);
 
 	if (!stream.is_open()) {
+		AelaErrorHandling::consoleWindowError("World Exporter", "Could not open " + path + "!");
 		return false;
 	}
 
 	AelaErrorHandling::consoleWindowWarning("Attempting to Export Map: ", path);
 
+	return exportWorldToStream(stream, world);
+}
+
+void Game::WorldExporter::abbreviate(std::string& src, std::string defaultPath) {
+	if (startsWith(src, defaultPath)) {
+		// Note: the " - 4" makes sure to get rid of ".txt".
+		src = src.substr(defaultPath.size(), src.size() - defaultPath.size() - 4);
+	}
+}
+
+bool Game::WorldExporter::exportWorldToStream(std::ostream& stream, World* world) {
+	if (world->getMap3D() == nullptr) {
+		return false;
+	}
+
 	stream << "<Map3D name=\"";
 	std::string mapPath = world->getMap3D()->getSrc();
-	abbreviate(mapPath, (std::string) RESOURCE_ROOT + DEFAULT_MAP_PATH);
+	abbreviate(mapPath, RESOURCE_ROOT + DEFAULT_MAP_PATH);
 	stream << mapPath << "\" lights=\"";
+
 	if (world->isUsingLights()) {
 		stream << "on";
 	} else {
@@ -66,13 +113,5 @@ bool Game::WorldExporter::exportWorld(std::string path, World* world) {
 
 		stream << "</Chunk>\n";
 	}
-	stream.close();
 	return true;
-}
-
-void Game::WorldExporter::abbreviate(std::string& src, std::string defaultPath) {
-	if (startsWith(src, defaultPath)) {
-		// Note: the " - 4" makes sure to get rid of ".txt".
-		src = src.substr(defaultPath.size(), src.size() - defaultPath.size() - 4);
-	}
 }

@@ -11,7 +11,7 @@ void Aela::GenericMaterialLoader::expose(LuaManager & mgr) {
 		.beginClass<Aela::GenericMaterialLoader>("GenericMaterialLoader")
 		.endClass();
 
-	// Sorry Waseef, Julian had to comment this out in order to compile.
+	// Sorry Waseef, Robert_2 had to comment this out in order to compile.
 	// mgr.exposeObject(this, "textureLoader");
 }
 

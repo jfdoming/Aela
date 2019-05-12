@@ -38,6 +38,7 @@ namespace Aela {
 			Status unloadGroup(std::string name);
 			void addToGroup(std::string src, bool crucial);
 			void addToGroup(ResourceQuery& query);
+			bool groupExists(std::string name);
 
 			/*
 			* The following Resource loading methods have similar parameters and return values.
@@ -72,6 +73,7 @@ namespace Aela {
 			std::string getResourceRoot();
 
 			void useResourceRoot(bool resourceRootEnabled);
+			bool isResourceRootEnabled();
 
 			// error handling
 			std::string getNewCrucialInvalidResourceKey();

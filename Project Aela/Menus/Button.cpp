@@ -64,8 +64,8 @@ void Aela::Button::renderComponent(GLRenderer& renderer) {
 }
 
 void Button::onMousePressed(MouseEvent* event) {
-	int x = event->getMouseX();
-	int y = event->getMouseY();
+	int x = event->getMouseXInRendererOutput();
+	int y = event->getMouseYInRendererOutput();
 
 	if (dimensions.contains(x, y)) {
 		clickStarted = true;
@@ -79,8 +79,8 @@ void Button::onMouseReleased(MouseEvent* event) {
 		return;
 	}
 
-	int x = event->getMouseX();
-	int y = event->getMouseY();
+	int x = event->getMouseXInRendererOutput();
+	int y = event->getMouseYInRendererOutput();
 
 	if (dimensions.contains(x, y)) {
 		onClick();

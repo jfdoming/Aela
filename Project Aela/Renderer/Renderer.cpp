@@ -13,6 +13,12 @@ using namespace Aela;
 
 Aela::Renderer::Renderer() {
 	tint3D = ColourRGBA(1, 1, 1, 1);
+
+	// Set feature deaults here.
+	features[RendererFeature::BILLBOARDS] = false;
+	features[RendererFeature::SKYBOX] = false;
+	features[RendererFeature::SHADOWS] = false;
+	features[RendererFeature::LIGHTS] = false;
 }
 
 Aela::Renderer::Renderer(Window* window) : Renderer() {
@@ -44,7 +50,7 @@ void Aela::Renderer::setEventHandler(EventHandler* eventHandler) {
 }
 
 unsigned int Aela::Renderer::getMultisampling3D() {
-	return multisampling3D;
+	return multisampling2D;
 }
 
 unsigned int Aela::Renderer::getMultisampling2D() {
@@ -66,6 +72,22 @@ void Aela::Renderer::clear3DTint() {
 void Aela::Renderer::scissor(int x, int y, size_t width, size_t height) {}
 
 void Aela::Renderer::resetScissor() {}
+
+void Renderer::resolutionWasChanged() {
+	resolutionWasChangedFlag = true;
+}
+
+void Renderer::setOutputToWindow(Rect<int>* outputToWindow) {
+	this->outputToWindow = *outputToWindow;
+}
+
+Rect<int>* Renderer::getOutputToWindow() {
+	return &outputToWindow;
+}
+
+void Renderer::outputToEntireWindow() {
+	setOutputToWindow(&Rect<int>(0, 0, window->getWidth(), window->getHeight()));
+}
 
 Window* Renderer::getWindow() {
 	return window;

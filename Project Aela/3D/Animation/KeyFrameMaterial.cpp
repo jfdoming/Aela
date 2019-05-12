@@ -16,8 +16,12 @@ KeyFrameType Aela::KeyFrameMaterial::getType() {
 	return KeyFrameType::MATERIAL;
 }
 
-void Aela::KeyFrameMaterial::start() {
-	started = true;
+void Aela::KeyFrameMaterial::setup() {
+	KeyFrame::setup();
+}
+
+void KeyFrameMaterial::setup(KeyFrame* previousKeyFrame) {
+	KeyFrame::setup(previousKeyFrame);
 }
 
 void Aela::KeyFrameMaterial::setMaterial(Material* material) {

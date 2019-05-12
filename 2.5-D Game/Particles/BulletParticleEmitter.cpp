@@ -1,5 +1,5 @@
 #include "BulletParticleEmitter.h"
-#include "../Utilities/MathConstants.h"
+#include "../Constants/MathConstants.h"
 
 Game::BulletParticleEmitter::BulletParticleEmitter(Clock* time) : ParticleEmitter(time) {
 }

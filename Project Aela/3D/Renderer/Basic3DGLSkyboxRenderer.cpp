@@ -21,6 +21,11 @@ Aela::Basic3DSkyboxRenderer::~Basic3DSkyboxRenderer() {
 }
 
 void Aela::Basic3DSkyboxRenderer::setup() {
+	if (vertexBuffer == 0) {
+		glDeleteBuffers(1, &vertexBuffer);
+		glDeleteVertexArrays(1, &vertexArray);
+	}
+
 	glGenBuffers(1, &vertexBuffer);
 	glGenVertexArrays(1, &vertexArray);
 }

@@ -19,7 +19,8 @@ namespace Aela {
 		}
 
 		KeyFrameType getType();
-		virtual void start();
+		virtual void setup();
+		virtual void setup(KeyFrame* previousKeyFrame) override;
 
 		// These are getters and setters.
 		void setModelEntity(ModelEntity* modelEntity), setModel(Model* model);

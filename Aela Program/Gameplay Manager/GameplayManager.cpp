@@ -8,7 +8,7 @@
 
 #include "GameplayManager.h"
 
-#define EKKON_INTRO_SCENE 1
+#define INTRO_SCENE 1
 #define MAIN_MENU_SCENE 2
 #define GAMEPLAY_SCENE 3
 

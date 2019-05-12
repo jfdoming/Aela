@@ -46,7 +46,6 @@ void PlanarParticleEmitter::setupParticlePositioning(size_t whichParticle, size_
 	float particleZ = dimensions.getHeight() - (dimensions.getHeight() / numberOfParticles) * whichParticle + dimensions.getY();
 	particles[whichParticle].setPosition((rand() % 100) / 100.0f * dimensions.getWidth() + dimensions.getX(),
 		pathOffset * (rand() % 100) / 100.0f, particleZ);
-	std::cout << particles[whichParticle].getPosition()->x << " " << particleZ << " are things.\n";
 	for (size_t i = 0; i < particles.size(); i++) {
 		if (particles[i].getPosition()->z >= particles[whichParticle].getPosition()->z) {
 			particles.insert(particles.begin() + i, particles[whichParticle]);

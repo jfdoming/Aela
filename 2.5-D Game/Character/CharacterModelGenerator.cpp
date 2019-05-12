@@ -16,7 +16,6 @@ using namespace Aela;
 
 bool Game::CharacterModelGenerator::load(ResourceMap& resources, std::string src) {
 	// This gets the template model.
-
 	Model* templateModel;
 	if (!resources.get<Model>(templateModelSource, templateModel)) {
 		AelaErrorHandling::windowError("Character Loader", "Could not get the following character baseModel template: "
@@ -34,7 +33,7 @@ bool Game::CharacterModelGenerator::load(ResourceMap& resources, std::string src
 
 		// The following will generate new Models and Materials for the character. This is done so that every
 		// character gets their own model and material.
-		if (!resources.get<Model>((std::string) RESOURCE_ROOT + "ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet)
+		if (!resources.get<Model>(RESOURCE_ROOT + "ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet)
 			+ "/" + std::to_string(yOfSpriteSheet) + "/mo", model)) {
 			model = new Model("ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet) + "/"
 				+ std::to_string(yOfSpriteSheet) + "/mo");
@@ -55,14 +54,14 @@ bool Game::CharacterModelGenerator::load(ResourceMap& resources, std::string src
 			}
 
 			material->setTexture(texture);
-			resources.put((std::string) RESOURCE_ROOT + "ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet) + "/"
+			resources.put(RESOURCE_ROOT + "ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet) + "/"
 				+ std::to_string(yOfSpriteSheet) + "/ma", material);
 
 			for (auto& subModel : *model->getSubModels()) {
 				subModel.setMaterial(material);
 			}
 
-			resources.put((std::string) RESOURCE_ROOT + "ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet) + "/"
+			resources.put(RESOURCE_ROOT + "ch/" + character->getTextureName() + "/" + std::to_string(xOfSpriteSheet) + "/"
 				+ std::to_string(yOfSpriteSheet) + "/mo", model);
 		}
 

@@ -27,8 +27,10 @@ namespace Game {
 			void rebuildMapNextUpdate();
 			void rebuildMap();
 
-			size_t addWorld(World* world);
+			void addWorld(World* world, size_t worldID);
 			World* getWorld(size_t id);
+			bool removeWorld(size_t id);
+			bool doesWorldExist(size_t id);
 			size_t getNumberOfWorlds();
 			Map3D* getMap3D();
 			Teleporter* getTeleporter(const Location& location);
@@ -39,9 +41,10 @@ namespace Game {
 			float getCharacterYOffsetInWorldspace();
 
 			void setChunkRenderDistances(glm::vec3 chunkRenderDistances);
+			void getCoordinateOfNeighbouringTile(glm::vec3& tile, glm::ivec2& chunk, TileDirection direction);
 			void getCoordinateOfNeighbouringTile(glm::ivec3& tile, glm::ivec2& chunk, TileDirection direction);
-			void createChunkInCurrentWorld(glm::ivec2 coordinate);
 			void getCoordinateOfNeighbouringTile(Location& location, TileDirection direction);
+			void createChunkInCurrentWorld(glm::ivec2 coordinate);
 			void createLayerInCurrentWorld(glm::ivec2 chunkCoordinate, unsigned int layer);
 
 			void addWalkedOnScript(std::string script, const Location& location);
@@ -56,6 +59,7 @@ namespace Game {
 			bool addTeleporterToSwitchableFloorTile(const Location& teleporterLocation, const Location& teleporterDestination);
 			bool addTeleporterToTile(const Location& teleporterLocation, const Location& teleporterDestination, size_t tileType);
 
+			void runWalkedScriptOfTile(const Location& location);
 			void runPromptedScriptOfTile(const Location& location);
 			void runTileSwitchScriptOfTileGroup(const Location& location);
 
@@ -64,9 +68,8 @@ namespace Game {
 			bool autoExportCurrentWorld();
 
 			void tileWasPlaced(const Location& location, size_t tileType);
-
-			void saveDataToSaveState(SaveState* saveState) override;
-			void loadDataFromSaveState(SaveState* saveState) override;
+			virtual void saveDataToSaveState(SaveState* saveState) override;
+			virtual void loadDataFromSaveState(SaveState* saveState) override;
 
 		private:
 			// These are obtained from GameObjectProvider.
@@ -80,7 +83,7 @@ namespace Game {
 			AelaGame* game;
 			WorldExporter* worldExporter;
 
-			std::vector<World> worlds;
+			std::unordered_map<size_t, World> worlds;
 			MapRebuilder mapRebuilder;
 
 			// This is a handle to an Aela 3D map. The chunks of a world are loaded into this map. Because Aela's 3D

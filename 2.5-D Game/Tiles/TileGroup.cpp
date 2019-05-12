@@ -91,7 +91,7 @@ void Game::TileGroup::setSwitchScript(std::string name) {
 Tile* Game::TileGroup::getFloorTile() {
 	for (auto& pair : tiles) {
 		TileShape shape = GameObjectProvider::getTileAtlas()->getTileType(pair.second.getType())->getShape();
-		if (shape == TileShape::FLOOR || shape == TileShape::LIQUID_FLOOR || shape == TileShape::BOXED_FLOOR) {
+		if (shape == TileShape::FLOOR || shape == TileShape::LIQUID_FLOOR || shape == TileShape::BOXED_FLOOR || shape == TileShape::TELEPORTER) {
 			return &pair.second;
 		}
 	}
@@ -108,10 +108,20 @@ Tile* Game::TileGroup::getLiquidFloorTile() {
 	return nullptr;
 }
 
+Tile* TileGroup::getTeleporterTile() {
+	for (auto& pair : tiles) {
+		TileShape shape = GameObjectProvider::getTileAtlas()->getTileType(pair.second.getType())->getShape();
+		if (shape == TileShape::TELEPORTER) {
+			return &pair.second;
+		}
+	}
+	return nullptr;
+}
+
 Tile* Game::TileGroup::getSwitchableFloorTile() {
 	for (auto& pair : tiles) {
 		TileShape shape = GameObjectProvider::getTileAtlas()->getTileType(pair.second.getType())->getShape();
-		if (shape == TileShape::LIQUID_FLOOR || shape == TileShape::BOXED_FLOOR) {
+		if (shape == TileShape::LIQUID_FLOOR || shape == TileShape::BOXED_FLOOR || shape == TileShape::TELEPORTER) {
 			return &pair.second;
 		}
 	}
@@ -158,7 +168,7 @@ bool Game::TileGroup::containsCollidableNonSwitchableTile() {
 	for (auto pair : tiles) {
 		TileType* type = GameObjectProvider::getTileAtlas()->getTileType(pair.second.getType());
 		TileShape shape = type->getShape();
-		if (type->isCollidable() && shape != TileShape::BOXED_FLOOR && shape != TileShape::LIQUID_FLOOR) {
+		if (type->isCollidable() && shape != TileShape::BOXED_FLOOR && shape != TileShape::LIQUID_FLOOR && shape != TileShape::TELEPORTER) {
 			return true;
 		}
 	}

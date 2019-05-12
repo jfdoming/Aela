@@ -28,6 +28,8 @@ namespace Aela {
 				if (texture != 0) {
 					deleteImage();
 				}
+				// const GLclampf priority = {(GLclampf) 1.0};
+				// glPrioritizeTextures(1, &texture, &priority);
 				this->texture = texture;
 			}
 

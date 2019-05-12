@@ -6,15 +6,25 @@
 */
 
 #include "KeyFrame.h"
-
+#include <iostream>
 using namespace Aela;
 
-void KeyFrame::start() {
-	started = true;
+void KeyFrame::setup() {
+	wasSetUp = true;
 }
 
-bool KeyFrame::hasBeenStarted() {
-	return started;
+void KeyFrame::setup(KeyFrame* previousKeyFrame) {
+	wasSetUp = true;
+}
+
+void KeyFrame::end() {
+	if (endingAction != nullptr) {
+		endingAction();
+	}
+}
+
+bool KeyFrame::hasBeenSetUp() {
+	return wasSetUp;
 }
 
 void KeyFrame::setEndingAction(std::function<void()> endingAction) {

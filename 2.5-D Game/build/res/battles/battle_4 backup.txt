@@ -1,0 +1,242 @@
+<Head defaultTiming="1500" duration="145500" reward="3" avatar="avatars_2/2/1.png" track="Boss Theme Perhaps.wav" onEnd="dialogue_38_10" onReturnToGameplay="dialogue_38_11" background="main menu.png">
+<EndDialogue text="You killed the soldier and took 3 coins!">
+<Dialogue time="1000" text="Any last words?" name="Soldier">
+<HideDialogue time="5000">
+<BackgroundChange time="5000" src="start_screen.png">
+
+<Notes direction="left" timeTillDestination="2200">
+05:38, 05:88, 06:38, 06:66, 07:22, 07:72, 08:00, 08:55, 09:00, 09:38, 09:88, 10:38, 10:72, 11:21,
+11:73, 12:07, 12:58, 13:11, 13:47, 14:00, 14:56, 14:93, 15:51, 16:10
+</Notes>
+
+<Notes direction="right" timeTillDestination="2200">
+05:38, 05:88, 06:38, 06:66, 07:22, 07:72, 08:00, 08:55, 09:00, 09:38, 09:88, 10:38, 10:72, 11:21,
+11:73, 12:07, 12:58, 13:11, 13:47, 14:00, 14:56, 14:93, 15:51, 16:10
+</Notes>
+
+// Regular notes
+<Notes direction="right" timeTillDestination="3000">
+16:52, 17:34, 18:58
+</Notes>
+
+<Notes direction="up" timeTillDestination="3000">
+16:72, 18:38
+</Notes>
+
+<Notes direction="left" timeTillDestination="3000">
+16:93, 18:17, 18:99
+</Notes>
+
+<Notes direction="down" timeTillDestination="3000">
+17:13, 18:78
+</Notes>
+
+<Notes direction="random">
+19:82, 20:27, 20:72, 21:02, 21:47, 21:92, 22:21, 22:66, 23:11, 23:41, 23:86, 24:31,
+24:60, 25:06, 25:50, 25:80, 26:25, 26:70, 27:00, 27:45, 27:89, 28:19, 28:64, 29:09,
+29:39, 29:84, 30:29, 30:58, 30:88, 31:03, 31:50,
+31:78, 32:23, 32:68, 32:98, 33:43, 33:88,
+34:18, 34:63, 35:08, 35:38, 35:83, 36:27, 36:57, 37:02, 37:47, 37:77, 38:22, 38:67
+</Notes>
+
+// Some doubles thing
+<Notes direction="right">
+// 30:58, 31:03, 31:50
+</Notes>
+
+<Notes direction="left">
+// 30:88, 31:03, 31:50
+</Notes>
+
+
+
+// Lead #1. Note: skip some notes that are harder to hit, this is just a beginner battle.
+<Notes direction="random">
+39:40, 39:52, 39:86, 40:61, 40:76, 41:05,
+41:75, 42:22, 42:49, 43:12, 43:45,
+43:74, 44:19, 44:32, 44:64, 44:94, 45:38, 45:84,
+46:55, 46:74, 47:04, 47:78, 47:90, 48:23,
+48:98, 49:13, 49:43, 50:18, 50:33, 50:63,
+50:93, 51:38, 51:83, 51:98, 52:10, 52:58, 52:73, 53:02,
+53:77, 53:92, 54:22, 54:97, 55:12, 55:42,
+55:72, 56:17, 56:31, 56:61, 56:91, 57:36, 57:50, 57:80
+</Notes>
+
+<Notes direction="random" tail="400">
+38:97, 40:16,
+41:36, 43:00,
+46:14, 47:28,
+48:50, 49:68,
+53:32, 54:52
+</Notes>
+
+// Some doubles thing
+<Notes direction="right">
+// 43:12, 43:45, 47:90, 48:23
+</Notes>
+
+<Notes direction="left">
+// 43:12, 43:45, 47:90, 48:23
+</Notes>
+
+
+
+// Regular notes
+<Notes direction="right">
+58:09, 58:70, 59:60
+</Notes>
+
+<Notes direction="up">
+58:25, 59:45
+</Notes>
+
+<Notes direction="left">
+58:40, 59:30, 59:90
+</Notes>
+
+<Notes direction="down">
+58:55, 59:75
+</Notes>
+
+// Tempo change!
+<Notes direction="random" timeTillDestination="1200">
+1:00:50, 1:00:91, 1:01:33, 1:01:61, 1:02:03, 1:02:45,
+1:02:72, 1:03:14, 1:03:56, 1:03:83, 1:04:25, 1:04:68,
+1:04:95, 1:05:38, 1:05:78, 1:06:06, 1:06:48, 1:06:89,
+1:07:18, 1:07:59, 1:08:00, 1:08:30, 1:08:70, 01:09:13,
+1:09:45
+</Notes>
+
+// Signal thing
+<Notes direction="right" timeTillDestination="1200">
+1:09:70, 1:09:97, 1:10:24, 1:10:79, 1:11:07, 1:11:35,
+1:11:91, 1:12:18, 1:12:50, 1:13:02, 1:13:30, 1:13:58,
+1:14:14, 1:14:41, 1:14:70, 1:15:25, 1:15:53, 1:15:81,
+1:16:37, 1:16:63, 1:16:92, 1:17:48, 1:17:75, 1:18:03
+</Notes>
+
+<Notes direction="left" timeTillDestination="1200">
+1:09:70, 1:09:97, 1:10:24, 1:10:79, 1:11:07, 1:11:35,
+1:11:91, 1:12:18, 1:12:50, 1:13:02, 1:13:30, 1:13:58,
+1:14:14, 1:14:41, 1:14:70, 1:15:25, 1:15:53, 1:15:81,
+1:16:37, 1:16:63, 1:16:92, 1:17:48, 1:17:75, 1:18:03
+</Notes>
+
+// Lead #2. Note: skip some notes that are harder to hit, this is just a beginner battle.
+<Notes direction="random" timeTillDestination="1200">
+1:18:73, 1:18:87, 1:19:15, 1:19:85, 1:20:00, 1:20:27,
+1:21:10, 1:21:38, 1:22:08, 1:22:21, 1:22:50,
+1:23:18, 1:23:33, 1:23:60, 1:24:30, 1:24:43, 1:24:72, 45:54, 45:84,
+1:26:53, 1:26:67, 1:26:95, 
+1:27:63, 1:27:78, 1:28:05, 1:28:75, 1:28:90, 1:29:20,
+1:30:98, 1:31:12, 1:31:39,
+1:32:09, 1:32:23, 1:32:51, 1:33:20, 1:33:62,
+1:34:32, 1:34:46, 1:34:73,
+1:35:43, 1:35:57, 1:35:85
+</Notes>
+
+<Notes direction="random" tail="400" timeTillDestination="1200">
+1:18:32, 1:19:43,
+1:21:65,
+1:22:77, 1:23:88, 
+1:26:11,
+1:27:22, 1:28:33,
+1:30:28, 1:30:56,
+1:31:67, 1:32:78,
+1:35:00
+</Notes>
+
+<Notes direction="random" tail="250" timeTillDestination="1200">
+1:20:55, 1:20:82,
+1:25:00, 1:25:28, 1:25:55, 1:25:83,
+1:29:44, 1:29:86,
+1:33:90
+</Notes>
+
+// Regular notes
+<Notes direction="right" timeTillDestination="1200">
+1:36:40, 1:37:24, 1:37:80
+</Notes>
+
+<Notes direction="up" timeTillDestination="1200">
+1:36:27, 1:37:38
+</Notes>
+
+<Notes direction="left" timeTillDestination="1200">
+1:36:13, 1:36:68, 1:37:51
+</Notes>
+
+<Notes direction="down" timeTillDestination="1200">
+1:36:55, 1:37:65
+</Notes>
+
+// Tempo change!
+<Notes direction="random" timeTillDestination="1200">
+1:38:35, 1:38:73, 1:39:13, 1:39:39, 1:39:78, 1:40:17,
+1:40:43, 1:40:82, 1:41:21, 1:41:48, 1:41:90, 1:42:25,
+1:42:51, 1:42:90, 1:43:30, 1:43:55, 1:43:95, 1:44:33,
+1:44:60, 1:44:98, 1:45:38, 1:45:63, 1:46:03, 1:46:42,
+1:46:68
+</Notes>
+
+// Signal thing
+<Notes direction="right" timeTillDestination="1000">
+1:46:93, 1:47:20, 1:47:56, 1:47:98, 1:48:23, 1:48:49,
+1:49:02, 1:49:28, 1:49:53, 1:50:06, 1:50:32, 1:50:58,
+1:51:10, 1:51:36, 1:51:62, 1:52:14, 1:52:40, 1:52:67,
+1:53:18, 1:53:44, 1:53:70, 1:54:23, 1:54:48, 1:54:75
+</Notes>
+
+<Notes direction="left" timeTillDestination="1000">
+1:46:93, 1:47:20, 1:47:56, 1:47:98, 1:48:23, 1:48:49,
+1:49:02, 1:49:28, 1:49:53, 1:50:06, 1:50:32, 1:50:58,
+1:51:10, 1:51:36, 1:51:62, 1:52:14, 1:52:40, 1:52:67,
+1:53:18, 1:53:44, 1:53:70, 1:54:23, 1:54:48, 1:54:75
+</Notes>
+
+// Lead #3. Note: skip some notes that are harder to hit, this is just a beginner battle.
+<Notes direction="random" timeTillDestination="1000">
+1:55:80, 1:56:05, 1:56:30, 1:56:83,
+1:57:08, 1:57:35, 1:57:87, 1:58:90,
+1:59:95, 2:00:21, 2:00:47, 2:01:00,
+2:01:25, 2:01:51, 2:02:03, 2:03:07,
+2:04:11, 2:04:37, 2:04:63, 2:05:02, 2:05:15,
+2:06:19, 2:07:23,
+2:08:28, 2:08:53, 2:08:92, 2:09:32,
+2:09:58, 2:09:83, 2:10:35, 2:11:39
+</Notes>
+
+<Notes direction="random" tail="400" timeTillDestination="1000">
+1:55:00, 1:55:40, 1:56:43,
+1:57:50, 1:58:12, 1:58:51,
+1:59:17, 1:59:56, 2:00:60,
+2:01:65, 2:02:28, 2:02:69,
+2:03:33, 2:03:73,
+2:05:41, 2:05:80, 2:06:45, 2:06:84,
+2:07:49, 2:07:88, 2:08:80,
+2:09:96, 2:10:63, 2:11:00
+</Notes>
+
+<Notes direction="random" tail="250" timeTillDestination="1000">
+2:04:76,
+</Notes>
+
+// Tempo slows down here.
+// Signal thing
+<Notes direction="random" timeTillDestination="1000">
+2:11:66, 2:12:00, 2:12:44, 2:12:71, 2:13:09, 2:13:50,
+2:13:76, 2:14:17, 2:14:58, 2:14:84, 2:15:26, 2:15:67,
+2:16:00
+</Notes>
+
+<Notes direction="left" timeTillDestination="1000">
+2:16:23, 2:16:53, 2:16:81, 2:17:39, 2:17:69, 2:18:00,
+2:18:60, 2:18:90, 2:19:22, 2:19:87, 2:20:20, 2:20:55,
+2:20:88
+</Notes>
+
+<Notes direction="right" timeTillDestination="1000">
+2:16:23, 2:16:53, 2:16:81, 2:17:39, 2:17:69, 2:18:00,
+2:18:60, 2:18:90, 2:19:22, 2:19:87, 2:20:20, 2:20:55,
+2:20:88
+</Notes>

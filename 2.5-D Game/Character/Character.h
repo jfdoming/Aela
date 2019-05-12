@@ -11,16 +11,16 @@
 #include "../Location/Location.h"
 #include "../../Project Aela/3D/Models/ModelEntity.h"
 #include "CharacterStep.h"
-#include "CharacterModelGenerator.h"
+#include "../Movement/TeleportationAnimation.h"
 #include "../Movement/Movement.h"
 #include "CharacterInformationBlock.h"
-#include <list>
 #include <queue>
 
 using namespace Aela;
 
 namespace Game {
 	class Character {
+		// I know friend classes may be bad, they allow certain functions to only be accessible by certain classes.
 		friend class WorldManager;
 		friend class CharacterProvider;
 		public:
@@ -31,22 +31,28 @@ namespace Game {
 
 			virtual ~Character();
 
-			// These are movement-related functions. Functions with the word "immediately" complete
-			// the movement on the spot, wherever the player currently is. Other functions add the
-			// movements to a list of movements to perform sequencially.
+			void changeLocation(Location& location);
+			void turnFreely(TileDirection direction);
 			void turn(TileDirection direction);
-			void turnImmediately(TileDirection direction);
-			void moveIfPossible(TileDirection direction);
-			void moveIfPossible(std::list<Movement>* directions);
-			void moveWithoutCollisionCheck(TileDirection direction);
-			void moveWithoutCollisionCheck(Movement* movement);
-			void clearFutureMovements();
-			void clearAllMovements();
-			void teleportImmediately(const Location& location);
-			void teleportWithoutAnimation(const Location& location);
-			void teleportWithAnimation(const Location& location, TeleportationAnimation animation);
+			void startMovingInDirection(TileDirection direction);
+			void addTileMovementToQueue(TileDirection direction), addTileMovementToQueue(TileDirection direction, bool running);
+			void addTileMovementsToQueue(std::queue<TileDirection>& directions), addTileMovementsToQueue(std::queue<TileDirection>& directions, bool running);
+			void addMovementToQueue(TileDirection direction, float magnitude), addMovementToQueue(TileDirection direction, float magnitude, bool running);
+			void addMovementsToQueue(std::queue<TileDirection>& directions, std::queue<float>& magnitudes),
+				addMovementsToQueue(std::queue<TileDirection>& directions, std::queue<float>& magnitudes, bool running);
+			void addNoCollisionTileMovementToQueue(TileDirection direction), addNoCollisionTileMovementToQueue(TileDirection direction, bool running);
+			void addNoCollisionMovementToQueue(TileDirection direction, float magnitude), addNoCollisionMovementToQueue(TileDirection direction, float magnitude, bool running);
+			void addTurnToQueue(TileDirection direction);
+			void addTeleportToQueue(Location& location, TeleportationAnimation animation);
+			void addTeleportToQueue(Location& location, TeleportationAnimation animation, std::string scriptOnHalfLife);
+			void stopMoving();
+			void clearMovementQueue();
+
+			// This is generally used by Movements to move the character, but could techncially be used by anything else.
+			void translate(glm::vec3 vector);
 
 			void kill();
+			void killWithoutAnimation();
 			void revive();
 			void setOnKill(std::function<void()> onKill);
 
@@ -63,31 +69,43 @@ namespace Game {
 			float getRunningSpeed();
 			float getCurrentSpeed();
 			void setRunning(bool running);
-			bool getRunning();
-			void setTexture(std::string name);
+			bool isRunning();
+			void setTexture(std::string textureName);
 			std::string getTextureName();
 			TileDirection getDirectionFacing();
+			TileDirection getOppositeDirectionFacing();
+			TileDirection getMovementDirection();
 			ModelEntity* getEntity();
 			void setEntity(ModelEntity* entity);
 			CharacterStep getCurrentStep();
-			void switchStep();
+			
 			bool isMoving();
+			bool isMovingFreely();
+			bool hasMovementsInQueue();
 			bool isAlive();
 			void setPropertiesUsingCharacterInformationBlock(CharacterInformationBlock* block);
 			CharacterInformationBlock getCharacterInformationBlock();
 
-			void movementHasEnded();
-			bool hasMovementJustEnded();
-			void stopMoving();
-
 			void setHealth(int health);
 			int getHealth();
+			float getHealthLeftAsFraction();
 			void increaseHealth(int amount);
 			void decreaseHealth(int amount);
 			void setMaxHealth(int maxHealth);
 			int getMaxHealth();
 			void increaseMaxHealth(int amount);
 			void decreaseMaxHealth(int amount);
+
+			void setMoney(int money);
+			int getMoney();
+
+			// These return whether the money went below zero.
+			bool increaseMoney(int amount);
+			bool decreaseMoney(int amount);
+
+			// This returns whether the purchase was successful.
+			bool makePurchase(int cost);
+
 			void setVisibility(bool visible);
 			bool isVisible();
 			void allowNewMovements(bool newMovementsAreAllowed);
@@ -95,8 +113,11 @@ namespace Game {
 			void setCollidable(bool collidable);
 			bool isCollidable();
 			void toggleCollidability();
+			bool hasAModel();
 
 		protected:
+			// I don't even know why there's a protected section because I don't think any classes extend this one
+			// (at least not anymore).
 			Location location;
 			Location locationBeforeAnimation;
 			TileDirection directionFacing;
@@ -107,62 +128,76 @@ namespace Game {
 			bool collidable = true;
 
 			int health, maxHealth;
+			int money = 0;
 
 			virtual void update();
 
 		private:
-			void move(Movement* movement, std::string scriptOnCompletion);
-
 			// Unlike tiles, characters are unique and get their own models.
 			Model* baseModel = nullptr;
 			ModelEntity* entity = nullptr;
 
-			std::list<Movement> possibleMovementsToProcess;
+			std::queue<Movement*> movementQueue;
 
 			std::string textureName = "";
-
-			// This stores the translations that the animator should use next to animate the character.
-			std::vector<std::pair<Movement, std::string>> translations;
 
 			// These represent several speeds, in units/millisecond.
 			float walkingSpeed, runningSpeed;
 
 			// These store the states of player movement.
 			bool moving = false;
+			bool movingFreely = true;
 			bool running = false;
+			TileDirection movementDirection;
+			unsigned long long timeSinceLastMovement = 0;
+			unsigned long long timeSinceLastCharacterStep = 0;
 
 			bool alive = true;
 
-			// This stores the foot that the player is using to step. It can be a 0, 1 or 2.
-			CharacterStep currentStep = CharacterStep::LEFT;
+			// This stores the foot that the player is using to step.
+			CharacterStep currentStep = CharacterStep::POST_RIGHT;
 
-			// This stores at to whether the animation had ended during the current tick/frame. This is used
-			// to smoothen out character animation.
-			bool movementEnded = false;
-
-			long long timePassedAfterAnimationEnd = 0;
+			const long long TIME_BETWEEN_CHARACTER_STEPS_WALKING = 175;
+			const long long TIME_BETWEEN_CHARACTER_STEPS_RUNNING = 125;
 
 			bool visible = true;
 			bool newMovementsAreAllowed = true;
 
 			std::function<void()> onKill = {};
 
-			// To be accessed by this class's friends.
-			void addTranslation(Movement* movement, std::string scriptOnceComplete);
+			// This stores the min and max tile position remainder the player must be from the teleporter center
+			// for them to activate it.
+			const float TELEPORTER_ACTIVATION_MIN_X = 0.2f;
+			const float TELEPORTER_ACTIVATION_MAX_X = 0.8f;
+			const float TELEPORTER_ACTIVATION_MIN_Z = 0.4f;
+			const float TELEPORTER_ACTIVATION_MAX_Z = 0.85f;
+
+			// Instead of having some big, bulky collision system, we instead have 4 points to check for when
+			// any character moves. This makes the game run a little faster. xCollisionPoints stores the i of
+			// 2 of the collision points, which are defined as origin + (i, 0, 0). zCollision points stores the
+			// i of the other 2, which are defined as origin + (0, 0, i).
+			/*float xCollisionPoints[2] = {0.25f, -0.25f};
+			float zCollisionPoints[2] = {0.36f, -0.3f};*/
+			glm::vec3 collisionPoints[4] = {
+				glm::vec3(0.26f, 0, 0), glm::vec3(-0.26f, 0, 0),
+				glm::vec3(0, 0, 0.36f), glm::vec3(0, 0, -0.3f)
+			};
+
+			void startMovement(TileDirection direction);
 
 			void setLocation(Location* location);
 
 			void animateDeath();
 
-			// This completes movements.
-			void completeMovement(Movement* movement, std::string scriptOnCompletion);
-
-			// This processes movements added using moveIfPossible(...).
-			void processPossibleMovement(Movement* movement);
-
 			void generateModel();
+			void generatePlayerModel();
 			void changeModel();
 
+			void switchStep();
+			void bothFeetOnGround();
+			void playFootstepSound();
+
 			glm::vec3 getWorldSpaceTranslation(TileDirection direction);
+			bool collisionCheck(Location& location);
 	};
 }

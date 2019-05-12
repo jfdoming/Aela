@@ -83,6 +83,10 @@ Aela::Basic3DGLShadowRenderer::~Basic3DGLShadowRenderer() {
 }
 
 void Aela::Basic3DGLShadowRenderer::setup() {
+	if (vertexBuffer != 0) {
+		glDeleteBuffers(1, &vertexBuffer);
+		glDeleteBuffers(1, &elementBuffer);
+	}
 	// This sets up necessary buffers.
 	glGenBuffers(1, &vertexBuffer);
 	glGenBuffers(1, &elementBuffer);

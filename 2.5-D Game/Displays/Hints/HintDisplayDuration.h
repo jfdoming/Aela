@@ -9,6 +9,6 @@
 
 namespace Game {
 	enum class HintDisplayDuration {
-		SHORT, LONG, FOREVER
+		SHORT, LONG, FOREVER, UNTIL_KEY
 	};
 }

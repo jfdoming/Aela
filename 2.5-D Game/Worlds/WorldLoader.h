@@ -16,8 +16,10 @@ namespace Game {
 			WorldLoader() {}
 
 			bool loadWorld(std::string path, World& world);
+			bool loadWorldAsTextFile(std::string path, World& world);
 
 		private:
 			bool generateTileTypes(TileGroupMap& tiles, std::stringstream& data, int height);
+			bool interpretText(std::istream& in, World& world);
 	};
 }

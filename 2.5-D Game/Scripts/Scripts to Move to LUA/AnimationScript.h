@@ -13,14 +13,18 @@ namespace Scripts {
 	using namespace Game;
 
 	void loadMaterialAnimations();
-
 	bool loadLogoMaterialAnimation(int whichLevel);
+	bool animateTelevision();
 	bool animateElevator();
 	void stopAnimatingElevator();
+
+	void loadAelaWatchAvatarAnimations();
 
 	void setupMainAnimations();
 
 	bool loopSpriteSheetAnimation(std::string spriteSheet, std::string materialToAnimate, int spriteSheetWidth,
 			int startX, int startY, int endX, int endY, std::vector<int>* framesToPauseOn, std::vector<long long>* framePauseTimes,
 		long long timeBetweenFrames);
+	bool loopSpriteSheetAnimation(std::string spriteSheet, std::string materialToAnimate, int spriteSheetWidth,
+			int startX, int startY, int endX, int endY, long long timeBetweenFrames);
 }

@@ -11,11 +11,31 @@
 #include "../Events/EventConstants.h"
 #include <signal.h>
 
+// Need this for DWORD and NVIDIA Optimus. Idk how to enable Optimus in order to use the dedicated GPU in Linux/Mac.
+#include <windows.h>
+
 using namespace Aela;
+
+// Force to use dedicated graphics. Maybe find a way to make this optional?
+extern "C" {
+	__declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+}
+
+Aela::GLRenderer::GLRenderer() {
+	windowFocus = false;
+}
+
+Aela::GLRenderer::GLRenderer(Window* windowToSet) {
+	setWindow(windowToSet);
+	basic3DRenderer.setCamera(&camera);
+	setup3DRendering();
+}
+
+Aela::GLRenderer::~GLRenderer() {}
 
 // This sets up 3D rendering, accounting for multisampling.
 void GLRenderer::setup3DRendering() {
-	std::cout << mainFramebuffer << " is mainframebuffer\n";
 	if (mainFramebuffer == 0) {
 		setupMainFrameBuffer();
 	}
@@ -43,8 +63,6 @@ void GLRenderer::setupMainFrameBuffer() {
 	glBindFramebuffer(GL_FRAMEBUFFER, mainFramebuffer);
 
 	glGenTextures(1, mainFramebufferImage.getTexture());
-
-	std::cout << glewGetErrorString(glGetError()) << " is an opengl error!\n";
 
 	glBindTexture(GL_TEXTURE_2D, *(mainFramebufferImage.getTexture()));
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window->getDimensions()->getWidth(), window->getDimensions()->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
@@ -80,32 +98,35 @@ bool GLRenderer::setupGLEW() {
 	return true;
 }
 
-// This sets up seAlteHaasGroteskBoldl 3D elements.
+// This sets up the 3D elements.
 void GLRenderer::setup3D() {
 	if (window != nullptr) {
 		setup3DRendering();
-		effects3DShader = loadShaders("../../../res/shaders/3D/3DPostProcessing.vert", "../../../res/shaders/3D/3DPostProcessing.frag");
+		if (effects3DShader == 0) {
+			effects3DShader = loadShaders("../../../res/shaders/3D/3DPostProcessing.vert", "../../../res/shaders/3D/3DPostProcessing.frag");
+		}
 		basic3DRenderer.setCamera(&camera);
 	} else {
 		AelaErrorHandling::windowError("Project Aela Rendering", "The window must be set before setting movingUp 3D.");
 	}
 }
 
-// This sets up seAlteHaasGroteskBoldl 2D elements.
+// This sets up the 2D elements.
 void GLRenderer::setup2D() {
 	if (window != nullptr) {
 		setup2DRendering();
-		effects2DShader = loadShaders("../../../res/shaders/2D/2DPostProcessing.vert", "../../../res/shaders/2D/2DPostProcessing.frag");
+		if (effects2DShader == 0) {
+			effects2DShader = loadShaders("../../../res/shaders/2D/2DPostProcessing.vert", "../../../res/shaders/2D/2DPostProcessing.frag");
+		}
 	} else {
 		AelaErrorHandling::windowError("Project Aela Rendering", "The winodw must be set before setting movingUp 3D.");
 	}
 }
 
 void GLRenderer::setWindow(Window* window) {
+	Renderer::setWindow(window);
 	basic3DRenderer.setWindow(window);
 	basic2DRenderer.setWindow(window);
-	camera.setWindow(window);
-	this->window = window;
 }
 
 void GLRenderer::setTime(Clock* time) {
@@ -153,15 +174,15 @@ void GLRenderer::startRenderingFrame() {
 }
 
 void Aela::GLRenderer::renderMap(Map3D* map, unsigned int skybox) {
-	if (useSkybox) {
+	if (features[RendererFeature::SKYBOX]) {
 		renderSkybox(map->getSkybox(skybox));
 	}
 
-	if (useLights) {
+	if (features[RendererFeature::LIGHTS]) {
 		// Don't put this in the if statement below. Just trust me.
 		basic3DRenderer.prepareLightShadows();
 
-		if (useShadows) {
+		if (features[RendererFeature::SHADOWS]) {
 			basic3DRenderer.renderShadows(map);
 		}
 
@@ -172,7 +193,7 @@ void Aela::GLRenderer::renderMap(Map3D* map, unsigned int skybox) {
 		basic3DRenderer.renderModelEntitiesWithoutLights(map, multisampling3D != 0);
 	}
 
-	if (useBillboards) {
+	if (features[RendererFeature::BILLBOARDS]) {
 		for (auto& entity : *map->getBillboards()) {
 			renderBillboard(&entity.second);
 		}
@@ -186,14 +207,14 @@ void GLRenderer::sendBoundLightDataToShader() {
 
 // This renders a billboard, if billboards are enabled.
 void GLRenderer::renderBillboard(BillboardEntity* billboard) {
-	if (useBillboards) {
+	if (features[RendererFeature::BILLBOARDS]) {
 		basic3DRenderer.renderBillboard(billboard, multisampling3D > 0);
 	}
 }
 
 // This renders a skybox, if skyboxes are enabled.
 void GLRenderer::renderSkybox(SkyboxEntity* skybox) {
-	if (useSkybox) {
+	if (features[RendererFeature::SKYBOX]) {
 		basic3DRenderer.renderSkybox(skybox->getSkybox(), multisampling3D > 0);
 	}
 }
@@ -204,54 +225,56 @@ void Aela::GLRenderer::renderParticles(ParticleEmitter* particleEmitter) {
 
 // This renders a 2D texture using the 2D renderer.
 void GLRenderer::render2DImage(Image* image, Rect<int>* output, Rect<int>* cropping, ColourRGBA* tint, PositioningMode2D positioningMode) {
-	basic2DRenderer.renderImageToSimple2DFramebuffer(image, bound2DFramebuffer, output, cropping, window->getDimensions(), tint, positioningMode);
+	basic2DRenderer.renderImageToSimple2DFramebuffer(image, bound2DFramebuffer, output, cropping, tint, positioningMode);
 }
 
 // This renders text using the 2D renderer.
 void GLRenderer::renderText(std::string text, Font* font, unsigned int size, Rect<int>* output, ColourRGBA* colour, PositioningMode2D positioningMode) {
-	basic2DRenderer.renderTextToSimple2DFramebuffer(text, font, size, bound2DFramebuffer, output, window->getDimensions(), colour,
-		positioningMode, POINTS_PER_PIXEL);
+	basic2DRenderer.renderTextToSimple2DFramebuffer(text, font, size, bound2DFramebuffer, output, colour, positioningMode, POINTS_PER_PIXEL);
 }
 
 // This renders a rectangle using the 2D renderer.
 void GLRenderer::renderRectangle(Rect<int>* output, ColourRGBA* colour, PositioningMode2D positioningMode) {
-	basic2DRenderer.renderRectangle(output, bound2DFramebuffer, window->getDimensions(), colour, positioningMode);
+	basic2DRenderer.renderRectangle(output, bound2DFramebuffer, colour, positioningMode);
 }
 
 void GLRenderer::renderRectangle(unsigned int xPosition, unsigned int yPosition, int width, int height, ColourRGBA* colour, PositioningMode2D positioningMode) {
-	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, bound2DFramebuffer, window->getDimensions(), colour, positioningMode);
+	basic2DRenderer.renderRectangle(xPosition, yPosition, width, height, bound2DFramebuffer, colour, positioningMode);
 }
 
 // This renders a triangle using the 2D renderer.
 void GLRenderer::renderTriangle(glm::vec2 pointA, glm::vec2 pointB, glm::vec2 pointC, ColourRGBA* colour) {
-	basic2DRenderer.renderTriangle(pointA, pointB, pointC, bound2DFramebuffer, window->getDimensions(), colour);
+	basic2DRenderer.renderTriangle(pointA, pointB, pointC, bound2DFramebuffer, colour);
 }
 
 void GLRenderer::renderTriangle(unsigned int pointAX, unsigned int pointAY, unsigned int pointBX, unsigned int pointBY, unsigned int pointCX,
 	unsigned int pointCY, ColourRGBA * colour) {
-	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, bound2DFramebuffer, window->getDimensions(), colour);
+	basic2DRenderer.renderTriangle(pointAX, pointAY, pointBX, pointBY, pointCX, pointCY, bound2DFramebuffer, colour);
 }
 
 void GLRenderer::renderSimple2DFramebuffer() {
 	// basic2DRenderer.renderMultisampledBufferToBuffer(*framebuffer->getFramebuffer(), mainFramebuffer, window->getDimensions());
 	if (bound2DFramebuffer->getMultisampling() > 0) {
-		basic2DRenderer.renderMultisampledBufferToBuffer(*bound2DFramebuffer->getMultisampledFramebuffer(), *bound2DFramebuffer->getFramebuffer(), window->getDimensions());
+		basic2DRenderer.renderMultisampledBufferToBuffer(*bound2DFramebuffer->getMultisampledFramebuffer(), *bound2DFramebuffer->getFramebuffer(), &outputToWindow);
 	}
-	basic2DRenderer.renderImageToFramebuffer(bound2DFramebuffer->getFramebufferImage(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), nullptr, PositioningMode2D::TOP_LEFT, effects2DShader);
+
+	// basic2DRenderer.renderImageToFramebuffer(bound2DFramebuffer->getFramebufferImage(), mainFramebuffer, &output2, &output, (Rect<unsigned int>*) &outputToWindow, nullptr, PositioningMode2D::TOP_LEFT);
+	basic2DRenderer.renderImageToFramebuffer(bound2DFramebuffer->getFramebufferImage(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), nullptr, PositioningMode2D::TOP_LEFT, effects2DShader);
 }
 
 void GLRenderer::endRendering3D() {
 	basic3DRenderer.endRendering();
 
 	if (multisampling3D > 0) {
-		basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultisampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), window->getDimensions());
+		basic2DRenderer.renderMultisampledBufferToBuffer(*basic3DRenderer.getMultisampledColourFrameBuffer(), *basic3DRenderer.getColourFrameBuffer(), (Rect<int>*) window->getDimensions());
 	}
-	basic2DRenderer.renderImageToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), &tint3D, PositioningMode2D::TOP_LEFT, effects3DShader);
+
+	basic2DRenderer.renderImageToFramebuffer(basic3DRenderer.getColourFrameBufferTexture(), mainFramebuffer, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), &tint3D, PositioningMode2D::TOP_LEFT, effects3DShader);
 }
 
 void GLRenderer::endRenderingFrame() {
-	// std::cout << *mainFramebufferImage.getTexture() << " is the text\n";
-	basic2DRenderer.renderImageToFramebuffer(&mainFramebufferImage, 0, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), nullptr, PositioningMode2D::TOP_LEFT);
+	basic2DRenderer.renderImageToFramebuffer(&mainFramebufferImage, 0, &outputToWindow, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), nullptr, PositioningMode2D::TOP_LEFT);
+	// basic2DRenderer.renderImageToFramebuffer(&mainFramebufferImage, 0, (Rect<int>*) window->getDimensions(), (Rect<int>*) window->getDimensions(), window->getDimensions(), nullptr, PositioningMode2D::TOP_LEFT);
 	window->updateBuffer();
 }
 
@@ -281,16 +304,16 @@ void GLRenderer::clearSimple2DFramebuffer() {
 void GLRenderer::activateFeature(RendererFeature feature) {
 	switch (feature) {
 		case RendererFeature::SHADOWS:
-			useShadows = true;
+			features[RendererFeature::SHADOWS] = true;
 			break;
 		case RendererFeature::BILLBOARDS:
-			useBillboards = true;
+			features[RendererFeature::BILLBOARDS] = true;
 			break;
 		case RendererFeature::SKYBOX:
-			useSkybox = true;
+			features[RendererFeature::SKYBOX] = true;
 			break;
 		case RendererFeature::LIGHTS:
-			useLights = true;
+			features[RendererFeature::LIGHTS] = true;
 			break;
 		case RendererFeature::MSAA_3D_X0:
 			multisampling3D = 0;
@@ -352,16 +375,16 @@ void GLRenderer::activateFeature(RendererFeature feature) {
 void GLRenderer::deactivateFeature(RendererFeature feature) {
 	switch (feature) {
 		case RendererFeature::SHADOWS:
-			useShadows = false;
+			features[RendererFeature::SHADOWS] = false;
 			break;
 		case RendererFeature::BILLBOARDS:
-			useBillboards = false;
+			features[RendererFeature::BILLBOARDS] = false;
 			break;
 		case RendererFeature::SKYBOX:
-			useSkybox = false;
+			features[RendererFeature::SKYBOX] = false;
 			break;
 		case RendererFeature::LIGHTS:
-			useLights = false;
+			features[RendererFeature::LIGHTS] = false;
 			break;
 		case RendererFeature::MSAA_3D_X0:
 			// You want to deactivate having no MSAA? What does that even mean?
@@ -440,22 +463,65 @@ void GLRenderer::deactivateFeature(RendererFeature feature) {
 void Aela::GLRenderer::toggleFeature(RendererFeature feature) {
 	switch (feature) {
 		case RendererFeature::SHADOWS:
-			useShadows = !useShadows;
+			features[RendererFeature::SHADOWS] = !features[RendererFeature::SHADOWS];
 			break;
 		case RendererFeature::BILLBOARDS:
-			useBillboards = !useBillboards;
+			features[RendererFeature::BILLBOARDS] = !features[RendererFeature::BILLBOARDS];
 			break;
 		case RendererFeature::SKYBOX:
-			useSkybox = !useSkybox;
+			features[RendererFeature::SKYBOX] = !features[RendererFeature::SKYBOX];
 			break;
 		case RendererFeature::LIGHTS:
-			useLights = !useLights;
+			features[RendererFeature::LIGHTS] = !features[RendererFeature::LIGHTS];
 			break;
 	}
 }
 
-void Aela::GLRenderer::setFOV(float value) {
-	camera.setFieldOfView(value);
+bool GLRenderer::isUsingFeature(RendererFeature feature) {
+	switch (feature) {
+		case RendererFeature::BILLBOARDS:
+			return features[RendererFeature::BILLBOARDS];
+		case RendererFeature::LIGHTS:
+			return features[RendererFeature::LIGHTS];
+		case RendererFeature::MSAA_2D_X0:
+			return multisampling2D == 0;
+		case RendererFeature::MSAA_2D_X2:
+			return multisampling2D == 2;
+		case RendererFeature::MSAA_2D_X4:
+			return multisampling2D == 4;
+		case RendererFeature::MSAA_2D_X8:
+			return multisampling2D == 8;
+		case RendererFeature::MSAA_2D_X16:
+			return multisampling2D == 16;
+		case RendererFeature::MSAA_3D_X0:
+			return multisampling3D == 0;
+		case RendererFeature::MSAA_3D_X2:
+			return multisampling3D == 2;
+		case RendererFeature::MSAA_3D_X4:
+			return multisampling3D == 4;
+		case RendererFeature::MSAA_3D_X8:
+			return multisampling3D == 8;
+		case RendererFeature::MSAA_3D_X16:
+			return multisampling3D == 16;
+		case RendererFeature::SHADOWS:
+			return features[RendererFeature::SHADOWS];
+		case RendererFeature::SKYBOX:
+			return features[RendererFeature::SKYBOX];
+		case RendererFeature::SSAA_TEXT_X1:
+			return basic2DRenderer.getTextScaling() == 1;
+		case RendererFeature::SSAA_TEXT_X2:
+			return basic2DRenderer.getTextScaling() == 2;
+		case RendererFeature::SSAA_TEXT_X4:
+			return basic2DRenderer.getTextScaling() == 4;
+		case RendererFeature::SSAA_TEXT_X6:
+			return basic2DRenderer.getTextScaling() == 6;
+		case RendererFeature::SSAA_TEXT_X8:
+			return basic2DRenderer.getTextScaling() == 8;
+		case RendererFeature::SSAA_TEXT_X16:
+			return basic2DRenderer.getTextScaling() == 16;
+		default:
+			return false;
+	}
 }
 
 void Aela::GLRenderer::scissor(int x, int y, size_t width, size_t height) {
@@ -467,22 +533,30 @@ void Aela::GLRenderer::resetScissor() {
 	glDisable(GL_SCISSOR_TEST);
 }
 
+void GLRenderer::resolutionWasChanged() {
+	Renderer::resolutionWasChanged();
+	setWindow(window);
+	setTime(time);
+	// setup3D();
+	// setup2D();
+	// setupWindow();
+}
+
+void GLRenderer::setOutputToWindow(Rect<int>* outputToWindow) {
+	Renderer::setOutputToWindow(outputToWindow);
+	int width = outputToWindow->getWidth(), height = outputToWindow->getHeight();
+	basic3DRenderer.setOutputWidthAndHeight(width, height);
+	basic3DRenderer.setup(multisampling3D);
+}
+
 void Aela::GLRenderer::updateCameraMatrices() {
 	if (window->isFocused() && camera.isInUse()) {
-		int width, height;
-		window->getDimensions(&width, &height);
-
-
 		// Theis calculates vectors for the cartesian-plane system. Note: It is important to calculate the right vector before the up vector as the up
 		// vector is calculated using the right vector.
 		camera.calculateCartesionalDirection();
 		camera.calculateRightVector();
 		camera.calculateUpVector();
-
-		glm::mat4 projectionMatrix = glm::perspective(camera.getFieldOfView(), (float) width / height, 0.1f, 100.0f);
-		glm::mat4 viewMatrix = glm::lookAt(*camera.getPosition(), *camera.getPosition() + *camera.getCartesionalDirection(), *camera.getUpVector());
-		camera.setProjectionMatrix(projectionMatrix);
-		camera.setViewMatrix(viewMatrix);
+		camera.calculateMatrices(outputToWindow.getWidth(), outputToWindow.getHeight());
 	}
 }
 
@@ -494,7 +568,7 @@ void Aela::GLRenderer::resetResolution() {
 	setupMainFrameBuffer();
 
 	basic3DRenderer.setWindow(window);
-	basic3DRenderer.rebuildFrameBuffers(multisampling3D != 0);
+	// basic3DRenderer.rebuildFrameBuffers(multisampling3D != 0);
 }
 
 // This is a useful function that checks the currently bound framebuffer to see if it was set up properly.

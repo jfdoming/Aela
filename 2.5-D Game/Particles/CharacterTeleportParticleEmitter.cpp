@@ -1,5 +1,5 @@
 #include "CharacterTeleportParticleEmitter.h"
-#include "../Utilities/MathConstants.h"
+#include "../Constants/MathConstants.h"
 #include <glm/gtc/constants.hpp>
 
 using namespace Game;
@@ -61,8 +61,8 @@ void Game::CharacterTeleportParticleEmitter::setCharacter(Character* character) 
 void Game::CharacterTeleportParticleEmitter::setLocations(Location* oldLocation, Location* newLocation) {
 	glm::vec3 oldWorldSpacePosition = oldLocation->getWorldSpaceLocation();
 	glm::vec3 newWorldSpacePosition = newLocation->getWorldSpaceLocation();
-	dimensions1 = Rect<float>(oldWorldSpacePosition.x, oldWorldSpacePosition.z, 1, 1);
-	dimensions2 = Rect<float>(newWorldSpacePosition.x, newWorldSpacePosition.z, 1, 1);
+	dimensions1 = Rect<float>(oldWorldSpacePosition.x - 0.5f, oldWorldSpacePosition.z - 0.5f, 1, 1);
+	dimensions2 = Rect<float>(newWorldSpacePosition.x - 0.5f, newWorldSpacePosition.z - 0.5f, 1, 1);
 }
 
 void Game::CharacterTeleportParticleEmitter::setActionOnHalfLife(std::function<void()> onHalfLife) {

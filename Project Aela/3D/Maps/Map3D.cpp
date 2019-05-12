@@ -161,6 +161,15 @@ void Map3D::removeAdditionalModelData(bool modelsAreTransparent) {
 	}
 }
 
+void Map3D::removeEverything() {
+	removeAllModels();
+	removeAdditionalModelData(true);
+	removeAdditionalModelData(false);
+	removeAllBillboards();
+	removeAllLights();
+	removeAllSkyboxes();
+}
+
 void Aela::Map3D::setAmbientLighting(float ambientLighting) {
 	this->ambientLighting = ambientLighting;
 }

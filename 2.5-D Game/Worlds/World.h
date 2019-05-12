@@ -18,6 +18,9 @@ namespace Game {
 		public:
 			World();
 			World(ChunkMap* chunks);
+			~World();
+
+			void operator=(World& world);
 
 			void addChunk(glm::ivec2 coordinate, Chunk* chunk);
 			void setChunks(ChunkMap* chunks);

@@ -14,9 +14,7 @@
 namespace Game {
 	class TileInventory {
 		public:
-			TileInventory() {
-
-			}
+			TileInventory();
 
 			Tile* switchTile(TileGroup* tileGroup, size_t whichTile);
 			Tile* switchCurrentTile(TileGroup* tileGroup);

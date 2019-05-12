@@ -19,6 +19,8 @@ namespace Aela {
 			virtual ~Container();
 
 			void add(std::shared_ptr<Component> component);
+			bool remove(std::shared_ptr<Component> component);
+			void clear();
 
 			virtual void onMousePressed(MouseEvent* event);
 			virtual void onMouseReleased(MouseEvent* event);

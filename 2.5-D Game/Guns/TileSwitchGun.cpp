@@ -6,7 +6,7 @@
 #include "../Displays/Tiles/TileInventoryDisplay.h"
 #include "../Tiles/TileBehaviourExecutor.h"
 #include "../Aela Game/AelaGame.h"
-
+#include "../Audio/GameAudioPlayer.h"
 Game::TileSwitchGun::TileSwitchGun() = default;
 
 void Game::TileSwitchGun::setup() {
@@ -52,7 +52,8 @@ bool Game::TileSwitchGun::use(GameMode gameMode) {
 		}
 
 		TileGroup* tileGroupPtr = chunkPtr->getTileGroup(tile);
-		if (tileGroupPtr == nullptr || tileGroupPtr->containsCollidableNonSwitchableTile()) {
+		if (tileGroupPtr == nullptr || tileGroupPtr->containsCollidableNonSwitchableTile() || GameObjectProvider::getCharacterProvider()->getCharacterByLocation(location) != nullptr) {
+			// Maybe play a sound here?
 			return false;
 		}
 		//if (worldManager->getTileAtlas()->getTileType(tilePtr->getType())->getShape() != TileShape::FLOOR
@@ -69,6 +70,7 @@ bool Game::TileSwitchGun::use(GameMode gameMode) {
 			worldManager->tileWasPlaced(location, switchedInTileType);
 			addTileSwitchParticleEmitter(&location, texture);
 			tileInventoryDisplay->refreshSubMenu();
+			GameObjectProvider::getGameAudioPlayer()->playAudio("shoot");
 		}
 		return true;
 	} else if (gameMode == GameMode::MAP_EDITOR) {

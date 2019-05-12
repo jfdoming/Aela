@@ -14,7 +14,8 @@
 #include "../Particles/TileSwitchParticleEmitter.h"
 #include "../Particles/CharacterTeleportParticleEmitter.h"
 #include "../Worlds/WorldManager.h"
-
+#include "CharacterModelGenerator.h"
+#include "../Save States/SaveState.h"
 using namespace Game;
 
 Game::CharacterProvider::CharacterProvider() {}
@@ -84,7 +85,9 @@ bool Game::CharacterProvider::addCharacter(Character* character, size_t* id) {
 		*id = nextCharacterID;
 	}
 
-	generateCharacterModel(nextCharacterID);
+	if (!character->hasAModel()) {
+		generateCharacterModel(character);
+	}
 
 	nextCharacterID++;
 	return true;
@@ -105,23 +108,6 @@ bool Game::CharacterProvider::removeCharacterByID(size_t id) {
 	charactersByName.erase(character->getName());
 	charactersByLocation[location->getWorld()][location->getChunk()].erase(location->getTileGroup());
 	characters.erase(id);
-
-	// for (auto& pair : charactersByName) {
-	// 	if (pair.second > id) {
-	// 		pair.second--;
-	// 	}
-	// }
-
-	// for (auto& pair1 : charactersByLocation) {
-	// 	for (auto& pair2 : pair1.second) {
-	// 		for (auto& pair3 : pair2.second) {
-	// 			if (pair3.second > id) {
-	// 				pair3.second--;
-	// 			}
-	// 		}
-	// 	}
-	// }
-
 	return true;
 }
 
@@ -133,6 +119,23 @@ bool CharacterProvider::removeCharacterByName(std::string name) {
 	}
 
 	return removeCharacterByID(pos->second);
+}
+
+void CharacterProvider::overwriteCharacter(Character* newCharacter, size_t id) {
+	auto pair = characters.find(id);
+	if (pair == characters.end()) {
+		characters[id] = newCharacter;
+		if (nextCharacterID < id) {
+			nextCharacterID = id + 1;
+		}
+	} else {
+		pair->second = newCharacter;
+	}
+
+	Location* location = newCharacter->getLocation();
+	charactersByName[newCharacter->getName()] = id;
+	charactersByLocation[location->getWorld()][location->getChunk()][location->getTileGroup()] = id;
+	generateCharacterModel(newCharacter);
 }
 
 Game::Character* Game::CharacterProvider::getCharacterByID(size_t id) {
@@ -192,7 +195,12 @@ std::unordered_map<glm::ivec3, size_t, IVec3HashMapFunctions, IVec3HashMapFuncti
 }
 
 void Game::CharacterProvider::saveDataToSaveState(SaveState* saveState) {
-	auto* characterInformation = new std::unordered_map<size_t, CharacterInformationBlock>();
+	std::unordered_map<size_t, CharacterInformationBlock>* characterInformation = (std::unordered_map<size_t, CharacterInformationBlock>*) saveState->getData("characters");
+	if (characterInformation != nullptr) {
+		delete characterInformation;
+	}
+
+	characterInformation = new std::unordered_map<size_t, CharacterInformationBlock>();
 	
 	for (auto& pair : characters) {
 		(*characterInformation)[pair.first] = pair.second->getCharacterInformationBlock();
@@ -210,17 +218,34 @@ void Game::CharacterProvider::loadDataFromSaveState(SaveState* saveState) {
 }
 
 void Game::CharacterProvider::characterWasMoved(std::string name, Location* oldLocation, Location* newLocation) {
-	charactersByLocation[oldLocation->getWorld()][oldLocation->getChunk()].erase(oldLocation->getTileGroup());
-	charactersByLocation[newLocation->getWorld()][newLocation->getChunk()][newLocation->getTileGroup()] = charactersByName[name];
+	size_t id = charactersByName[name];
+
+	// If the character's id is still being stored in its old location, remove it from there. Note that this character could have already
+	// been removed from its location if another character was also walking and happened to be following close behind this character.
+	auto pair = charactersByLocation.find(oldLocation->getWorld());
+	if (pair != charactersByLocation.end()) {
+		auto pair2 = pair->second.find(oldLocation->getChunk());
+		if (pair2 != pair->second.end()) {
+			auto pair3 = pair2->second.find(oldLocation->getTileGroup());
+			if (pair3 != pair2->second.end() && pair3->second == id) {
+				pair2->second.erase(pair3);
+			}
+		}
+	}
+
+	// This stores the character ID at its new location.
+	charactersByLocation[newLocation->getWorld()][newLocation->getChunk()][newLocation->getTileGroup()] = id;
 }
 
-void Game::CharacterProvider::generateCharacterModel(size_t character) {
-	ResourceManager* resourceManager = GameObjectProvider::getResourceManager();
+void Game::CharacterProvider::generateCharacterModel(Character* character) {
+	character->generateModel();
+	/*ResourceManager* resourceManager = GameObjectProvider::getResourceManager();
 	CharacterModelGenerator generator;
 	std::unordered_map<size_t, Character*> map;
-	map[character] = characters[character];
+	// map[character] = characters[character];
+	map[0] = character;
 	generator.setCharacters(&map);
-	std::string groupName = "characters_" + std::to_string(character);
+	std::string groupName = "ch/" + std::to_string((long long) character);
 
 	std::string modelA = (std::string) DEFAULT_MODEL_PATH + "character_A.obj";
 	std::string modelB = (std::string) DEFAULT_MODEL_PATH + "character_B.obj";
@@ -253,5 +278,5 @@ void Game::CharacterProvider::generateCharacterModel(size_t character) {
 				break;
 			}
 		}
-	}
+	}*/
 }

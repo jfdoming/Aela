@@ -61,7 +61,7 @@ int main(int argc, char *args[]) {
 	resourceManager.bindGroup("test");
 	WAVEClipLoader waveClipLoader;
 	resourceManager.bindLoader(&waveClipLoader);
-	resourceManager.addToGroup("res/audio/streams/Rondo.wav", false);
+	resourceManager.addToGroup("res/audio/streams/Boss Theme Perhaps.wav", false);
 
 	// load test textures
 	if (resourceManager.loadGroup("test") != Aela::ResourceManager::Status::OK) {
@@ -69,7 +69,7 @@ int main(int argc, char *args[]) {
 	}
 
 	AudioClip* acResult;
-	resourceManager.obtain<AudioClip>("res/audio/streams/Rondo.wav", acResult);
+	resourceManager.obtain<AudioClip>("res/audio/streams/Boss Theme Perhaps.wav", acResult);
 	engine.getAudioPlayer()->playClip(acResult);
 
 	//AelaGame game(&engine);

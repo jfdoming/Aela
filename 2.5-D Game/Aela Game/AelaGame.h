@@ -13,7 +13,9 @@
 #include "../Guns/TileSwitchGun.h"
 #include "../../Project Aela/Scenes/Scene.h"
 #include "../../Project Aela/Menus/RectComponent.h"
-
+#include "../Battle/Battle.h"
+#include "../Battle/BattlePlayer.h"
+#include "../Audio/FootstepAudioPlayer.h"
 using namespace Aela;
 
 namespace Game {
@@ -29,31 +31,45 @@ namespace Game {
 			void onEvent(Event* event);
 
 			// This should be run on a change of scenes. 
-			void switchScene(unsigned int sceneID);
+			void sceneWasSwitched(unsigned int sceneID);
 
 			// These are called by scripts that run when title screen buttons are pressed.
 			void startNewGame();
 			void continueGame();
 			void editMap();
 
-			GameMode getGameMode();
+			void startBattle(std::string fileName);
+			void endBattle();
 
+			GameMode getGameMode();
 			void setDeathMenuComponents(std::shared_ptr<RectComponent> deathRect, std::shared_ptr<Label> deathLabel,
 			                            std::shared_ptr<Label> deathLabel2);
 			void setFadeTeleportRect(std::shared_ptr<RectComponent> fadeTeleportRect);
+			void setPlayer(Player* player);
+			TileSwitchGun* getTileSwitchGun();
+			int getDefaultWidth();
+			int getDefaultHeight();
+			Rect<int>* getRenderingDimensions();
+			void setAnimateDeaths(bool animateDeaths);
+			bool isAnimatingDeaths();
 
 			void animatePlayerDeathScreen();
 			void hideDeathScreen();
 			void animateFadeTeleport();
 			void fadeOut();
+			void fadeOut(unsigned long long timeInMillis);
 			void fadeIn();
+			void fadeIn(unsigned long long timeInMillis);
+			void showBlackness();
+			void hideBlackness();
 			void resetFadeRect();
-
-			TileSwitchGun* getTileSwitchGun();
+			void setFullscreen(bool fullscreen);
+			void toggleFullscreen();
 
 		private:
 			// These are obtained from GameObjectProvider.
 			Engine* engine;
+			Window* window;
 			ResourceManager* resourceManager;
 			ScriptManager* scriptManager;
 			Renderer* renderer;
@@ -64,6 +80,7 @@ namespace Game {
 			Scene* gameplayScene, *pauseScene;
 			EventHandler* eventHandler;
 			DialogueDisplay* dialogueDisplay;
+			TimerDisplay* timerDisplay;
 			Clock* time;
 			EnemyProvider* enemyProvider;
 			SceneManager* sceneManager;
@@ -73,53 +90,67 @@ namespace Game {
 			TileBehaviourExecutor* tileBehaviourExecuter;
 			HintDisplay* hintDisplay;
 			GameSaver* gameSaver;
+			MainMenuDisplay* mainMenuDisplay;
+			BattleDisplay* battleDisplay;
+			BattleDialogueDisplay* battleDialogueDisplay;
+			FootstepAudioPlayer* footstepAudioPlayer;
 
 			Character* playerCharacter;
 			Map3D* map;
+			BattlePlayer battlePlayer;
 
 			// For now, this is here. Eventually, once more types of guns are created,
 			// this will probably go elsewhere.
 			TileSwitchGun tileSwitchGun;
+
+			// This represents the current battle the player is in.
+			Battle currentBattle;
+
+			bool animateDeaths = true;
 
 			std::shared_ptr<RectComponent> deathRect;
 			std::shared_ptr<Label> deathLabel, deathLabel2;
 			std::shared_ptr<RectComponent> fadeTeleportRect;
 
 			// These store the states of keys.
-			bool movingRight = false, movingForward = false, movingLeft = false, movingBackward = false,
+			std::atomic<bool> movingRight = false, movingForward = false, movingLeft = false, movingBackward = false,
 				movingUp = false, movingDown = false;
-			bool pressingRight = false, pressingForward = false, pressingLeft = false, pressingBackward = false;
-			bool pressingTileSelectLeft = false, pressingTileSelectRight = false, pressingTileSwitch = false;
-			bool pressingPauseButton = false, pressingInventoryButton = false;
-			bool pressingReturn = false, pressedReturn = false, pressingBackspace = false;
-			bool pressedTileSwitch = false;
-			long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 180000000;
-			const long long TIME_BETWEEN_TILE_SELECTS_ON_FIRST_PRESS = 300000000, TIME_BETWEEN_TILE_SELECTS_ON_HOLD = 100000000;
+			std::atomic<bool> pressingRight = false, pressingForward = false, pressingLeft = false, pressingBackward = false;
+			std::atomic<bool> pressingTileSelectLeft = false, pressingTileSelectRight = false, pressingTileSwitch = false;
+			std::atomic<bool> pressedPauseButton = false, pressingInventoryButton = false, pressedSaveReload = false;
+			std::atomic<bool> pressingReturn = false, pressedReturn = false, pressingBackspace = false;
+			std::atomic<bool> pressingLeftShift = false, pressingLeftAlt = false;
+			std::atomic<bool> pressedTileSwitch = false, pressedGoToTile1 = false, pressedGoToTile2 = false, pressedGoToTile3 = false;
+			std::atomic<bool> fullscreen;
+			unsigned long long timeAtLastTileSelect = 0, timeBetweenTileSelects = 180000000;
+			const unsigned long long TIME_BETWEEN_TILE_SELECTS_ON_FIRST_PRESS = 300000000, TIME_BETWEEN_TILE_SELECTS_ON_HOLD = 100000000;
 
 			unsigned int currentScene = 0;
 			unsigned int sceneBeforePause = 0;
 
-			long long timeAtLastPlayerTurn = 0;
-			const long long TIME_BETWEEN_PLAYER_TURNS = 80000000;
-			long long timeAtLastAutoWorldExport = 0;
-			const long long TIME_BETWEEN_AUTO_WORLD_EXPORTS = 20;
+			unsigned long long timeAtLastPlayerTurn = 0;
+			const unsigned long long TIME_BETWEEN_PLAYER_TURNS = 80000000;
+			unsigned long long timeAtLastAutoWorldExport = 0;
+			const unsigned long long TIME_BETWEEN_AUTO_WORLD_EXPORTS = 20;
+
+			Rect<int> renderingDimensions;
 
 			CameraMode cameraMode;
 			GameMode gameMode;
 
+			// These are some setup and loading functions.
 			void setupScripts();
 			void loadResources();
 			void loadScenes();
 			void loadAnimations();
 
+			// These are some other random useful functions.
 			void tileSelectLeftAction(), tileSelectRightAction();
-
 			void changePlayerAnimationToRunning();
-
 			void switchCameraMode(CameraMode cameraMode);
-
 			bool useTileSwitchGun();
-
 			void clearTilesAtPlayerLocation();
+			void fadeToBattleScene();
+			void fadeOutOfBattleScene();
 	};
 }

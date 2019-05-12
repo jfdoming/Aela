@@ -30,6 +30,12 @@ namespace Aela {
 			void scheduleEventInSeconds(std::string tag, long long waitTime, std::function<void()> event);
 
 			bool removeEvent(std::string tag);
+			void removeAllEvents();
+			void endAllEventsNextUpdate();
+
+			void pause();
+			void unpause();
+			bool isPaused();
 
 		private:
 			struct TimedEvent {
@@ -39,7 +45,9 @@ namespace Aela {
 			};
 
 			Clock* time;
-
 			std::vector<TimedEvent> timedEvents;
+			bool clearTimedEvents = false;
+			bool paused = false;
+			unsigned long long pauseTime = 0;
 	};
 }
