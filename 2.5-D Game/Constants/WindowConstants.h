@@ -1,5 +1,0 @@
-#pragma once
-
-#define DEFAULT_WINDOW_WIDTH 1024
-#define DEFAULT_WINDOW_HEIGHT 768
-#define WIDTH_TO_HEIGHT_RATIO (4.0f / 3.0f)

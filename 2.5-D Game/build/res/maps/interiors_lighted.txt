@@ -1,4 +1,0 @@
-// <Light colour="1,1,1" power="0.2" position="-1.5,2,6.5">
-// <Light colour="1,1,1" power="0.35" position="11.5,0.75,17.5">
-<AmbientLight power="0.35">
-<Skybox src="~black">
