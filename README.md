@@ -9,3 +9,6 @@ An in-house game engine developed by Ekkon Games. The engine currently supports 
 </ul>
 
 Collaborators: 3
+
+## Notes
+The latest version of this project is not available, because it is being used in a new game! Check it out: https://www.neozerogame.com/
